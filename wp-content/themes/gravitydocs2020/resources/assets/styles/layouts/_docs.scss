@@ -1,0 +1,27 @@
+.docs-content {
+	position: relative;
+	margin-left: 35px;
+	margin-top: 72px;
+	padding: 1.5rem;
+
+	@include media-breakpoint-up(lg) {
+		margin-left: 290px;
+		padding: 2.5rem;
+	}
+}
+
+.doc__background-image,
+.page__background-image {
+    background-position: right top;
+    background-repeat: no-repeat;
+    height: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+	width: 100%;
+	max-width: 30vw;
+
+	@include media-breakpoint-up(lg) {
+		height: 300px;
+	}
+}

@@ -1,0 +1,87 @@
+{
+    "key": "group_5ff76e401bb3e",
+    "title": "Page Settings",
+    "fields": [
+        {
+            "key": "field_5ff76e4506314",
+            "label": "Background Image",
+            "name": "background_image",
+            "type": "image",
+            "instructions": "Add an optional background image to this page. The background image gets placed in the upper right corner of the page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "35",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_5ff76e5306315",
+            "label": "Background Image Opacity",
+            "name": "background_image_opacity",
+            "type": "range",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "35",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 100,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "prepend": "",
+            "append": "%"
+        },
+        {
+            "key": "field_5ff771ee2a385",
+            "label": "Background Image Top Gap",
+            "name": "background_image_top_gap",
+            "type": "true_false",
+            "instructions": "Adds space above the background image.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "30",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Yes",
+            "ui_off_text": "No"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "modified": 1624645109
+}

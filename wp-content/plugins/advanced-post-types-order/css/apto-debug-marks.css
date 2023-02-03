@@ -1,0 +1,5 @@
+
+#apto_debug_block_info {display: none}
+.apto_debug_block {position: absolute;background-color: #f7be16;color: #000;display: block;line-height: normal;padding: 4px;z-index: 9999; border-bottom: solid 2px #293462; cursor : pointer}
+.apto_debug_block.force-visibility {background-color: #7c0a02; color: #FFF}
+.apto_debug_block_tooltip {    display:none;    position:absolute;    border:1px solid #333;    background-color:#161616;    border-radius:5px;    padding:10px;    color:#fff;    font-size:12px Arial;    z-index: 9999;    font-size: 10px;line-height: 12px; max-height: 700px; max-width: 700px;overflow: auto}

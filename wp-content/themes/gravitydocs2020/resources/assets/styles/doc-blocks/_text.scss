@@ -1,0 +1,39 @@
+.doc-block {
+	&__text {
+		position: relative;
+
+		> * {
+			position: relative;
+			z-index: 1;
+		}
+
+		* > :last-child {
+			margin-bottom: 0;
+		}
+
+		&[id]::before { 
+		  display: block; 
+		  content: ' '; 
+		  margin-top: -95px; 
+		  height: 95px; 
+		  visibility: hidden; 
+		  pointer-events: none;
+		  position: relative;
+		  z-index: 0;
+		}
+
+		&:hover {
+			.section-link {
+				opacity: 1;
+			}
+		}
+
+		.section-link {
+			position: absolute;
+    	left: -1.5rem;
+    	opacity: 0;
+    	top: 100px;
+    	transition: $transition-speed-med;
+		}
+	}
+}

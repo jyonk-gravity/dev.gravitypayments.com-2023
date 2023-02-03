@@ -1,0 +1,38 @@
+.page-block__downloads-list {
+	padding: 0 20px 2.5rem 55px;
+
+	@include media-breakpoint-up(lg) {
+		padding: 0 3.5rem 2.5rem;
+	}
+}
+
+.downloads-list {
+	&__header {
+		display: none;
+
+		@include media-breakpoint-up(lg) {
+			border-bottom: 4px solid #efeff1;
+			display: flex;
+			font-weight: $font-weight-semibold;
+			margin-bottom: 1rem;
+			padding-bottom: 0.25rem;
+		}
+	}
+
+	&__item {
+		border-bottom: 1px solid #efeff1; 
+		font-size: 0.875rem; 
+		margin-bottom: 0.5rem; 
+		padding-bottom: 0.5rem;
+
+		&__products {
+			font-weight: $font-weight-semibold;
+		}
+	}	
+
+	.download-hash {
+		font-size: 0.75rem;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+	}
+}

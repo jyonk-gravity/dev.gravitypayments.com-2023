@@ -1,0 +1,363 @@
+=== Event Tracking for Gravity Forms ===
+Contributors: ronalfy, bigwing, nmarks, kzeni
+Tags: gravity forms, google analytics, google tag manager, matomo, piwik, event tracking
+Requires at least: 5.5
+Tested up to: 5.9
+Stable tag: 2.4.11
+Requires PHP: 5.6
+Donate link: https://github.com/mediaron
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+Easily add event tracking using Gravity Forms and your Google Analytics or Google Tag Manager account. Supports Google Analytics v3 and Gravity Forms 2.5+ only at this time.
+
+== Description ==
+
+> Gravity Forms is launching their own <a href="https://www.gravityforms.com/blog/google-analytics-add-on-install-the-beta/">official Google Analytics plugin</a>. It will be the successor to this plugin. <a href="https://www.gravityforms.com/blog/google-analytics-add-on-install-the-beta/">Join the official beta.</a>
+
+This plugin provides an easy way to add event tracking to your Gravity Forms using Google Analytics and Google Tag Manager.
+
+This plugin support Google Analytics 3 and <a href="https://mediaron.com/event-tracking-with-gravity-forms-and-google-analytics-4/">Google Analytics 4</a>.
+
+https://www.youtube.com/watch?v=rHW3roCuNSI&t=2s
+
+https://youtube.com/playlist?list=PLw2fSxxzure57usQNLMZrIAwn3DbRmaaF
+
+Also supports:
+
+* Pagination events
+* JS only events
+* Google Tag Manager
+
+= Setup Guide =
+Looking for help setting things up? [Read Our Setup Guide](https://mediaron.com/event-tracking-for-gravity-forms/?utm_source=wordpress_org&utm_medium=documentation&utm_campaign=event_tracking)
+
+= Minimum Requirements =
+- Gravity Forms 2.5
+- Google Analytics Universal Analytics v3
+- Google Tag Manager (optional)
+
+= Features =
+- Submit events to Google Analytics using the Measurement Protocol, JavaScript, or using Google Tag Manager
+- Add multiple event feeds with conditionals
+- Custom event categories, actions, labels and even values
+- Track form pagination events
+- Dynamic event value on payment forms (integration with the payment add-ons including Paypal Standard, PayPal Pro, Stripe, etc...)
+
+For payment based forms, you can leave the value blank to convert using the total payment amount.
+
+Development happens on <a href="https://github.com/ronalfy/wordpress-gravity-forms-event-tracking/">GitHub</a>.
+
+> Please <a href="https://wordpress.org/support/plugin/gravity-forms-google-analytics-event-tracking/reviews/#new-post">Rate the Plugin</a> or <a href="https://mediaron.com/give/">Give Back</a> to show support.
+
+<h2>Join the Gravity Forms Google Analytics Beta</h2>
+
+The official Gravity Forms add-on is coming and will be the successor to this plugin.
+
+Find out more details about the <a href="https://www.gravityforms.com/blog/google-analytics-add-on-install-the-beta/">Gravity Forms Google Analytics Beta</a>.
+
+== Installation ==
+
+= Minimum Requirements =
+- Gravity Forms 2.5+
+
+= Using The WordPress Dashboard =
+
+1. Navigate to the 'Add New' in the plugins dashboard
+2. Search for Event Tracking for Gravity Forms
+3. Click 'Install Now'
+4. Activate the plugin on the Plugin dashboard
+
+= Uploading in WordPress Dashboard =
+
+1. Navigate to the 'Add New' in the plugins dashboard
+2. Navigate to the 'Upload' area
+3. Select `gravity-forms-event-tracking.zip` from your computer
+4. Click 'Install Now'
+5. Activate the plugin in the Plugin dashboard
+
+= Using FTP =
+
+1. Download `gravity-forms-event-tracking.zip`
+2. Extract the `gravity-forms-event-tracking` directory to your computer
+3. Upload the `gravity-forms-event-tracking` directory to the `/wp-content/plugins/` directory
+4. Activate the plugin in the Plugin dashboard
+
+
+== Frequently Asked Questions ==
+
+= Do you support Google Analytics 4? =
+
+Check out <a href="https://mediaron.com/event-tracking-with-gravity-forms-and-google-analytics-4/">this post</a> and YouTube Playlist for how to integrate with Google Analytics 4.
+
+https://youtube.com/playlist?list=PLw2fSxxzure57usQNLMZrIAwn3DbRmaaF
+
+= How do I track pagination? =
+
+<a href="https://mediaron.com/event-tracking-for-gravity-forms/pagination/">Read our Guide on Pagination</a>.
+
+= How do I track using JavaScript only? =
+
+https://www.youtube.com/watch?v=9749XKDOXLw
+
+
+See <a href="https://mediaron.com/event-tracking-for-gravity-forms/google-analytics-mode/">Going Advanced</a>.
+
+= Does this work with Google Tag Manager? =
+
+https://www.youtube.com/watch?v=a0Mg5Nw3lxc
+
+Yes. <a href="https://mediaron.com/event-tracking-for-gravity-forms/google-tag-manager/">Read our Guide on Google Tag Manager</a>.
+
+= Can I set values for my form conversions? =
+
+https://www.youtube.com/watch?v=GBFOE1QvQeI
+
+Yes, the video above shows you how. Please note that values can be integers only, so the result may be rounded up or down.
+
+= Can I set a value for pagination? =
+
+Yes, check out <a href="https://github.com/ronalfy/wordpress-gravity-forms-event-tracking#gform_pagination_event_action">our filters on GitHub</a>.
+
+
+= Can I track when a user has filled out a form field, but not submitted? =
+
+You may use the Partial Entries add-on, but it is not recommended. Use pagination events instead.
+
+Check out the video below for an explanation:
+
+https://www.youtube.com/watch?v=x0UpV4RjVAY&rel=0
+
+= Are there any filters/hooks? =
+
+Check out the documentation on [github](https://github.com/ronalfy/wordpress-gravity-forms-event-tracking)
+
+== Screenshots ==
+
+1. The Gravity Forms setting screen where you setup your event tracking.
+2. The form settings feed list.
+3. The feed settings page
+4. Partial entries add-on section
+
+== Changelog ==
+
+= 2.4.11 =
+* Released 2022-01-28
+* WordPress 5.9 testing/compatibility
+* Testing with Gravity Forms 2.6 beta
+* Add option to disable beta banner under Advanced settings.
+
+= 2.4.10 =
+* Released 2021-08-23
+* Fixing a bug caused another. Fixing GTM not sending any events.
+
+= 2.4.9 =
+* Released 2021=08-22
+* Prevent GTM from sending events more than once (props @zahadum).
+
+= 2.4.8 =
+* Released 2021-07-29
+* When a feed is successful, it'll show up under the Form entry notes.
+
+= 2.4.6 =
+* Released 2021-07-26
+* Fixing SVG width/height in Safari.
+* Fixing height of labels in Safari.
+* Adding payment deferred option for feed settings (Stripe, PayPal, etc).
+
+= 2.4.5 =
+* Released 2021-07-26
+* Cleaning up settings page.
+
+= 2.4.2 =
+* Released 2021-06-22
+* Fixing preview and ajax-only forms.
+
+= 2.4.1 =
+* Released 2021-05-12
+* Fixing index errors in PHP logs related to GTM.
+
+= 2.4.0 =
+* Released 2021-05-01
+* Requires: Gravity Forms 2.5 and above.
+* Feature: Options to install gtag and Tag Manager are available.
+* Bug Fix: Google Tag Manager no longer requires a UA code.
+* Feature: Improved interface inline with Gravity Forms 2.5.
+* Feature: Track UTM variables using Google Tag Manager.
+* Miscelleanous bug fixes and code cleanup.
+
+= 2.3.12 =
+* Released 2021-03-11
+* Testing Matomo to ensure it is tracked correctly.
+* Testing compatibility with WordPress 5.7.
+* Testing with Gravity Forms 2.5 RC-1.
+
+= 2.3.10 =
+* Released 2019-06-17
+* Prevent empty values to be sent to analytics when using partial entries.
+
+= 2.3.9 =
+* Released 2019-05-16
+* Fixing pagination settings for the form with correct default values
+* Fixed PHP 7.3 error with partial entries add-on showing incorrect offset
+
+= 2.3.8 =
+* Released 2019-03-24
+* Added support for noninteractive hits
+
+= 2.3.5 =
+* Released 2018-11-14
+* Added pagination settings to Gravity Forms form settings screen for per-form override
+
+= 2.3.2 =
+* Released 2018-11-07
+* Removed some checks for better event tracking
+* Updating filter for partial entries
+* Tested successfully with WordPress 5.0 Beta 3
+* Tested successfully with Gravity Forms 2.4 Beta 2
+
+= 2.3.0 =
+* Released 2018-10-03
+* Added support for the Partial Entries add-on.
+
+= 2.2.4 =
+* Released 2018-10-02
+* Adding support for custom trackers
+
+= 2.2.2 =
+* Released 2018-08-27
+* Adding support for gtag
+
+= 2.2.1 =
+* Released 2018-08-23
+* Bug fix: Blank event values were being sent in Google Analytics mode, which resulted in failed conversions
+
+= 2.2.0 =
+* Released 2018-08-19
+* Bug fix: Non-integer values being sent to Google Analytics weren't tracking as conversions
+* Enhancement: Event values are now sent using the Measurement Protocol, Google Tag Manager, Matamo, and Google Analytics
+* Enhancement: Can now set event values to pagination <a href="https://github.com/ronalfy/wordpress-gravity-forms-event-tracking#gform_pagination_event_value">using filters</a>
+* Note: Google only accepts integer values, so total fields and such will be rounded up or down when viewing your conversion reports
+
+= 2.1.1 =
+* Released 2018-06-22
+* Documentation update
+
+= 2.1.0 =
+* Released 2018-01-10
+* Enhancement: Added Matomo (formerly Piwik) support
+
+= 2.0.9 =
+* Released 2017-11-29
+* Bug fix: added host name to measurement protocol due to filters blocking the conversion.
+* Bug fix: fixed document location using the measurement protocol
+* Bug fix: changed measurement protocol server-to-server call to something less strict to prevent inadvertent blocking on some servers.
+
+= 2.0.7 =
+* Released 2017-11-03
+* Bug fix: events were not being sent using the measurement protocol on some installations
+
+= 2.0.5 =
+* Released 2017-10-17
+* Bug fix: events were not being sent using the measurement protocol
+* Bug fix: fixing various conflicts with PHP7.
+
+= 2.0.3 =
+* Released 2016-09-24
+* Bug fix: Conflict with role management plugins
+
+= 2.0.1 =
+* Released 2016-09-23
+* Bug fix: Google Tag Manager had an extra "s" in the action dataLayer variable.
+
+= 2.0.0 =
+* Released 2016-09-22
+* Enhancement: Can track pagination events
+* Enhancement: Can track events using JavaScript only (a highly requested feature)
+* Enhancement: Can use Google Tag Manager
+
+= 1.7.3 =
+* Bugfix - Some users were experiencing PHP fatal errors upon form submission. Reverting to previously used library.
+
+= 1.7.1 =
+* Released 2016-03-28
+* Hotfix - Removing SSL requirement. Needs more testing.
+
+= 1.7.0 =
+* Released 2016-03-28
+* Plugin will now display an error if an incompatible version of PHP is installed.
+* Bug Fix: Plugin no longer shows a notice if a UA code isn't set
+* Bug Fix: Plugin will now trigger events if a UA code is set in the feed but not in the settings
+* Enhancement: Document Path will now be set as part of event creation
+* Enhancement: Measurement protocol updated
+* Enhancement: Measurement protocol will not detect SSL and use the appropriate protocol
+
+= 1.6.5 =
+* Released 2015-12-11
+* Ability to add multiple UA codes in the feed settings.
+
+= 1.6.4 =
+* Released 2015-09-22
+* Testing with WordPress 4.3.
+* Better internationalization
+
+= 1.6.3 =
+* Released 2015-02-10
+* Integration with members plugin
+
+= 1.6.2 =
+* Released 2015-02-06
+* Fixed bug where manual event values were not sent properly.
+
+= 1.6.1 =
+* Released 2015-01-28
+* Hotfix to remove echo'd text bug
+
+= 1.6.0 =
+* Released 2015-01-25
+* Refactored the plugin to use feeds. Now you can have multiple feeds with conditions!
+
+= 1.5.5 =
+* Released 2015-01-19
+* Hotfix for issue with paypal standard converting early
+
+= 1.5.3 =
+* Released 2014-12-20
+* Ensured page title and location are properly being sent to Google
+
+= 1.5.2 =
+* Released 2014-12-16
+* Hotfix for PHP strict standards warning
+
+= 1.5.0 =
+* Released 2014-12-15
+* Moved the form specific settings to their own tab.
+* Re-structured the plugin code to fall in line with the official Gravity Forms plugins.
+* Added a disable option to prevent a form from tracking any events.
+* Added merge tag (choose a form field dropdown) to the settings fields for more dynamic tracking capabilities.
+
+= 1.4.5 =
+* Released 2014-12-04
+* Fixed a bug where the source/medium was not being tracked correctly for PayPal Standard IPN Notification based conversions.
+
+= 1.4.4 =
+* Released 2014-12-03
+* Added some information to the event settings section
+
+= 1.4.3 =
+* Released 2014-12-02
+* Fixed backwards-compat issue
+
+= 1.4 =
+* Released 2014-12-01-
+* Added value for events
+* Properly integrated with payment based forms
+
+= 1.3 =
+* Properly integrated with Gravity Forms settings API (thanks ronalfy!)
+* Enabled custom category/action/label on a per form basis.
+
+== Upgrade Notice ==
+
+= 2.4.11 =
+Tested with WP 5.9, Gravity Forms 2.6. <a href="https://www.gravityforms.com/blog/google-analytics-add-on-install-the-beta/">Try out the official Google Analytics beta from Gravity Forms</a>.

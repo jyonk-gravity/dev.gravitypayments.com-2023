@@ -1,0 +1,892 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced Post Types Order\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-05-22 00:08+0200\n"
+"PO-Revision-Date: 2019-05-26 00:49+0900\n"
+"Language-Team: NspCode <contact@nsp-code.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 2.2.3\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: ja_JP\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: include/apto_admin_functions-class.php:90
+msgid "Re-Order"
+msgstr "並べ替え"
+
+#: include/apto_admin_functions-class.php:293
+#, fuzzy
+msgid ""
+"All interfaces are set to hide, at least a visible is required. You can "
+"change tht from Settings"
+msgstr ""
+"すべてのインターフェイスは、少なくとも可視が必要とされ、非表示に設定されてい"
+"ます。 [設定]からTHTを変更することができます"
+
+#: include/apto_admin_functions-class.php:342
+msgid "Advanced Post Types Order - At least one menu has changed:"
+msgstr "Advanced Post Types Order - 少なくとも1つのメニューが変更されました:"
+
+#: include/apto_admin_functions-class.php:532
+#: include/apto_admin_functions-class.php:593
+msgid "Notice: There is"
+msgstr "注意してください：あり"
+
+#: include/apto_admin_functions-class.php:532
+#: include/apto_admin_functions-class.php:593
+msgid "another"
+msgstr "別の"
+
+#: include/apto_admin_functions-class.php:532
+#: include/apto_admin_functions-class.php:593
+msgid "similar sort"
+msgstr "同様のソート"
+
+#: include/apto_functions-class.php:1937
+msgid "Subscriber"
+msgstr "購読者"
+
+#: include/apto_functions-class.php:1941
+msgid "Contributor"
+msgstr "寄稿者"
+
+#: include/apto_functions-class.php:1945 include/apto_interface-class.php:586
+#: include/apto_interface_helper-class.php:1633
+msgid "Author"
+msgstr "投稿者"
+
+#: include/apto_functions-class.php:1949
+msgid "Editor"
+msgstr "編集者"
+
+#: include/apto_functions-class.php:1953
+msgid "Administrator"
+msgstr "管理者"
+
+#: include/apto_functions-class.php:2271 include/apto_functions-class.php:2366
+#, php-format
+msgid "Use commas instead of %s to separate excluded terms."
+msgstr "除外する項目の区切りとして %s の代わりにカンマを使ってください。"
+
+#: include/apto_functions-class.php:2549
+msgid "Previous Post"
+msgstr "前の投稿"
+
+#: include/apto_functions-class.php:2549
+msgid "Next Post"
+msgstr "次の投稿"
+
+#: include/apto_interface-class.php:141
+msgid "Re-order"
+msgstr "並べ替え"
+
+#: include/apto_interface-class.php:145
+msgid ""
+"This plugin can't work without javascript, because it's use drag and drop "
+"and AJAX."
+msgstr ""
+"Javascriptが動作していないため、ドラッグ＆ドロップ(AJAX)が利用出来ません。"
+
+#: include/apto_interface-class.php:176
+msgid ""
+"WPML: The Sort Rules couldn't be translated automatically. You need to set/"
+"translate this manually for"
+msgstr ""
+"WPML：ソート規則は自動的に翻訳することができませんでした。手動でこれを設定/翻"
+"訳する必要があります"
+
+#: include/apto_interface-class.php:335
+msgid "Click to toggle"
+msgstr "クリックで切り替え"
+
+#: include/apto_interface-class.php:336 include/apto_interface-class.php:678
+msgid "Sort List Settings"
+msgstr "並べ替えリストの設定"
+
+#: include/apto_interface-class.php:347
+msgid "Query Rules"
+msgstr "クエリルール"
+
+#: include/apto_interface-class.php:348
+msgid ""
+"Create a set of criteria rules which match your query. This will determine "
+"what to show on the following sort list and the order will apply on front "
+"side."
+msgstr ""
+"クエリに一致する一連の条件ルールを作成します。これは、次のソートリストに表示"
+"するかを決定し、順序は、フロント側に適用されます。"
+
+#: include/apto_interface-class.php:349
+msgid ""
+"All rules are compared to a query using AND operator. For more details check"
+msgstr ""
+"すべてのルールは AND 演算子を使用したクエリと比較されます。詳細については"
+"チェック"
+
+#: include/apto_interface-class.php:349
+msgid "Query Rules examples"
+msgstr "クエリルールの例"
+
+#: include/apto_interface-class.php:370
+msgid "Show Advanced"
+msgstr "詳細オプションを表示"
+
+#: include/apto_interface-class.php:429
+msgid "Add Post Type"
+msgstr "投稿タイプを追加"
+
+#: include/apto_interface-class.php:436 include/apto_interface-class.php:450
+msgid "Taxonomy"
+msgstr "タクソノミー"
+
+#: include/apto_interface-class.php:450 include/apto_interface-class.php:458
+msgid "invalid"
+msgstr "無効です"
+
+#: include/apto_interface-class.php:458
+msgid "Term"
+msgstr "ターム"
+
+#: include/apto_interface-class.php:485
+msgid "Add Taxonomy"
+msgstr "タクソノミーを追加"
+
+#: include/apto_interface-class.php:493
+msgid "Taxonomy Relation"
+msgstr "関連（タクソノミー）"
+
+#: include/apto_interface-class.php:519
+msgid "Meta"
+msgstr "メタ"
+
+#: include/apto_interface-class.php:553
+msgid "Add Meta"
+msgstr "メタを追加"
+
+#: include/apto_interface-class.php:561
+msgid "Meta Relation"
+msgstr "関連（メタ）"
+
+#: include/apto_interface-class.php:610
+msgid "Add Author"
+msgstr "作成者を追加"
+
+#: include/apto_interface-class.php:624
+msgid ""
+"Certain changes has been done to your site and some of Query Rules cannot be "
+"displayed anymore. You should review the settings Query Rules area and click "
+"Update button."
+msgstr ""
+"サイトに対していくつかの変更が行われ、クエリルールの一部が表示できなくなりま"
+"した。設定クエリルール領域を確認し、[更新] ボタンをクリックする必要がありま"
+"す。"
+
+#: include/apto_interface-class.php:639
+msgid "Conditionals"
+msgstr "条件"
+
+#: include/apto_interface-class.php:640
+msgid "Apply the order only if conditions are true. For more details check"
+msgstr "条件が true の場合にのみ、並べ替えを適用します。詳細についてはチェック"
+
+#: include/apto_interface-class.php:640
+msgid "Conditionals Usage"
+msgstr "条件の使用"
+
+#: include/apto_interface-class.php:643
+msgid "Apply if"
+msgstr ""
+
+#: include/apto_interface-class.php:668
+msgid "Add Group"
+msgstr "グループを追加"
+
+#: include/apto_interface-class.php:677
+msgid "Interface"
+msgstr "インターフェイス"
+
+#: include/apto_interface-class.php:678
+msgid "This sort interface settings. For more details check"
+msgstr "並べ替えインターフェースの設定。詳細についてはチェック"
+
+#: include/apto_interface-class.php:685
+#: include/apto_interface_helper-class.php:1636
+msgid "Title"
+msgstr "タイトル"
+
+#: include/apto_interface-class.php:686
+msgid "Sort list tab title"
+msgstr "ソートリストタブのタイトル"
+
+#: include/apto_interface-class.php:690
+msgid "Description"
+msgstr "説明"
+
+#: include/apto_interface-class.php:691
+msgid ""
+"Sort list description. This will appear for others (non-admin users) when "
+"doing re-sort, it should include a description for what area this sort will "
+"apply."
+msgstr ""
+"並べ替えリストの説明。 これは、再ソートを行うときに他のユーザー（管理者以外の"
+"ユーザー）に表示されます。この並べ替えが適用されるエリアの説明が含まれている"
+"必要があります。"
+
+#: include/apto_interface-class.php:695
+msgid "Menu Location"
+msgstr "メニューの位置"
+
+#: include/apto_interface-class.php:696
+msgid "Relocate this Sort Interface to another menu"
+msgstr "このソート・インターフェースを別のメニューに再配置する"
+
+#: include/apto_interface-class.php:718
+msgid "Auto Apply Sort"
+msgstr "自動並べ替え"
+
+#: include/apto_interface-class.php:719
+msgid "Automatically apply the sort to theme queries if match."
+msgstr "一致する場合は、テーマのクエリに並べ替えを自動的に適用します。"
+
+#: include/apto_interface-class.php:721 include/apto_interface-class.php:729
+#: include/apto_interface-class.php:780 include/apto_interface-class.php:835
+#: include/apto_interface-class.php:843 include/apto_interface-class.php:853
+#: include/apto_interface-class.php:878 include/apto_interface-class.php:1460
+msgid "Yes"
+msgstr "はい"
+
+#: include/apto_interface-class.php:722 include/apto_interface-class.php:730
+#: include/apto_interface-class.php:781 include/apto_interface-class.php:836
+#: include/apto_interface-class.php:844 include/apto_interface-class.php:854
+#: include/apto_interface-class.php:879 include/apto_interface-class.php:1457
+msgid "No"
+msgstr "いいえ"
+
+#: include/apto_interface-class.php:726
+msgid "Admin Sort"
+msgstr "管理画面での並べ替え"
+
+#: include/apto_interface-class.php:727
+msgid "Automatically apply the sort to admin queries if match."
+msgstr "一致する場合は、管理画面のクエリに並べ替えを自動的に適用します。"
+
+#: include/apto_interface-class.php:735
+msgid "Allow sorting within default post type interface"
+msgstr ""
+
+#: include/apto_interface-class.php:736
+msgid ""
+"A Drag & Drop functionality is available to be used within default WordPress "
+"post type interface."
+msgstr ""
+"ドラッグ & ドロップ機能は、デフォルトの WordPress ポストタイプのインターフェ"
+"イス内で使用することができます。"
+
+#: include/apto_interface-class.php:792
+msgid "Need to Create Sort first"
+msgstr ""
+
+#: include/apto_interface-class.php:809
+msgid "Not a primary sort, this feature can apply only to"
+msgstr ""
+
+#: include/apto_interface-class.php:814
+msgid "This feature can't apply when conditionals set"
+msgstr "この機能は、条件設定時に適用できません"
+
+#: include/apto_interface-class.php:819
+msgid "Admin Sort need to be Yes"
+msgstr "管理画面での並べ替えは Yes である必要がある"
+
+#: include/apto_interface-class.php:832
+msgid "Send new items to bottom of list"
+msgstr "リストの一番下に新しいアイテムを送ります"
+
+#: include/apto_interface-class.php:833
+msgid ""
+"All new posts / custom types will append at the end instead top. This will "
+"apply when manual ordering."
+msgstr ""
+"すべての新しい記事/カスタムタイプは、最後ではなく最上部に追加されます。これは"
+"手動の順序を適用します。"
+
+#: include/apto_interface-class.php:840
+msgid "Thumbnails"
+msgstr "サムネイル"
+
+#: include/apto_interface-class.php:841
+msgid "Show thumbnails on sort list"
+msgstr "並べ替え一覧にサムネイルを表示する"
+
+#: include/apto_interface-class.php:850
+msgid "Pagination"
+msgstr "ページ送り"
+
+#: include/apto_interface-class.php:851
+msgid "Set pagination for sort list"
+msgstr "ソート・リストのためのページ送りを設定"
+
+#: include/apto_interface-class.php:859
+msgid "Posts Per Page"
+msgstr "１ページの表示数"
+
+#: include/apto_interface-class.php:860
+msgid "The number of posts to show on page"
+msgstr "ページに表示する投稿の数"
+
+#: include/apto_interface-class.php:866
+msgid "Offset Posts"
+msgstr ""
+
+#: include/apto_interface-class.php:867
+msgid "The offset number of posts"
+msgstr "投稿のオフセット数"
+
+#: include/apto_interface-class.php:875
+msgid "WPML Synchronize"
+msgstr "WPML 同期"
+
+#: include/apto_interface-class.php:876
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting. For this to work, all other languages must contain the "
+"same translated objects."
+msgstr ""
+"他のすべての言語間の順序を同期します。これは、他の言語の並べ替えが上書きされ"
+"ます。これが機能するためには、他のすべての言語に同じ翻訳オブジェクトが含まれ"
+"ている必要があります。"
+
+#: include/apto_interface-class.php:885
+msgid "Capability / Role"
+msgstr "権限/役割"
+
+#: include/apto_interface-class.php:886
+msgid "Minimum Capability to see this Sort"
+msgstr "このソートを表示する最小の権限"
+
+#: include/apto_interface-class.php:910
+msgid "Status"
+msgstr "状態"
+
+#: include/apto_interface-class.php:911
+msgid "Show objects status"
+msgstr "オブジェクトの状態を表示"
+
+#: include/apto_interface-class.php:934
+msgid "Settings Update"
+msgstr "設定を更新"
+
+#: include/apto_interface-class.php:936
+msgid "Create"
+msgstr "作成"
+
+#: include/apto_interface-class.php:949
+msgid "Delete Sort"
+msgstr "並べ替えを削除"
+
+#: include/apto_interface-class.php:1001
+msgid "Automatic Order"
+msgstr "自動で並べ替え"
+
+#: include/apto_interface-class.php:1002
+msgid "Manual Order"
+msgstr "手動で並べ替え"
+
+#: include/apto_interface-class.php:1052
+msgid "Select area and customise your order list <br />or switch to automatic"
+msgstr "エリアを選択し、並べ替えリストをカスタマイズ<br />または自動に切り替え"
+
+#: include/apto_interface-class.php:1077 include/apto_interface-class.php:1103
+msgid "Archive"
+msgstr "一覧"
+
+#: include/apto_interface-class.php:1077
+msgid "Total Archive Objects"
+msgstr "アーカイブの投稿数"
+
+#: include/apto_interface-class.php:1133
+msgid "Taxonomy Title"
+msgstr "タクソノミータイトル"
+
+#: include/apto_interface-class.php:1133
+msgid "Total"
+msgstr "合計"
+
+#: include/apto_interface-class.php:1133 include/apto_interface-class.php:1250
+msgid "Posts"
+msgstr "投稿"
+
+#: include/apto_interface-class.php:1250
+msgid "Forum Title"
+msgstr "フォーラムタイトル"
+
+#: include/apto_interface-class.php:1250
+msgid "Total Topics"
+msgstr "トピックの合計"
+
+#: include/apto_interface-class.php:1423
+msgid "Add Fallback"
+msgstr "フォールバックを追加"
+
+#: include/apto_interface-class.php:1447
+msgid "Batch Terms Automatic Update"
+msgstr ""
+
+#: include/apto_interface-class.php:1448
+msgid "<b>WARNING!</b></i> using this option all existing"
+msgstr "<b>警告!</b> このオプションを使用する"
+
+#: include/apto_interface-class.php:1453
+msgid ""
+"terms order type will update to Automatic Order and change for currrent "
+"settings."
+msgstr ""
+
+#: include/apto_interface-class.php:1453
+msgid ""
+"Existing manual/custom sort lists will be kept, but order type will be "
+"switched to Automatic Order."
+msgstr ""
+
+#: include/apto_interface-class.php:1539
+msgid "Show all dates"
+msgstr "すべての日付を表示"
+
+#: include/apto_interface-class.php:1540
+msgid "Today"
+msgstr "今日"
+
+#: include/apto_interface-class.php:1541
+msgid "Yesterday"
+msgstr "昨日"
+
+#: include/apto_interface-class.php:1542
+msgid "Last Week"
+msgstr "先週"
+
+#: include/apto_interface-class.php:1588
+msgid "Toggle Thumbnails"
+msgstr "サムネイルを表示"
+
+#: include/apto_interface-class.php:1597 include/apto_interface-class.php:1702
+msgid "Update"
+msgstr "更新"
+
+#: include/apto_interface-class.php:1610
+msgid "Reverse"
+msgstr "順序を逆にする"
+
+#: include/apto_interface-class.php:1611
+msgid "Title Asc"
+msgstr "タイトル昇順"
+
+#: include/apto_interface-class.php:1612
+msgid "Title Desc"
+msgstr "タイトル降順"
+
+#: include/apto_interface-class.php:1613
+msgid "Id order Asc"
+msgstr "ID順昇順"
+
+#: include/apto_interface-class.php:1614
+msgid "Id order Desc"
+msgstr "ID順降順"
+
+#: include/apto_interface-class.php:1619
+msgid "List view"
+msgstr "リスト表示"
+
+#: include/apto_interface-class.php:1620
+msgid "Grid view"
+msgstr "グリッド表示"
+
+#: include/apto_interface-class.php:1715
+msgid "Reset Order"
+msgstr "リセット"
+
+#: include/apto_interface-class.php:1721
+msgid "Are you sure you want to reset the order??"
+msgstr "本当にリセットしてもいいですか？"
+
+#: include/apto_interface_helper-class.php:326
+msgid "Sort order reset successfully"
+msgstr "並べ替えをリセットしました"
+
+#: include/apto_interface_helper-class.php:330
+#: include/apto_interface_helper-class.php:2337
+#: include/apto_interface_helper-class.php:2362
+msgid "Invalid Nonce"
+msgstr "無効な nonce"
+
+#: include/apto_interface_helper-class.php:1039
+msgid ""
+"**WARNING!! This will load all post types objects. Recommended to be used "
+"with Advanced Query Rules"
+msgstr ""
+"**警告！！これは、すべてのポストタイプのオブジェクトをロードします。高度なク"
+"エリルールを使用することを推奨"
+
+#: include/apto_interface_helper-class.php:1621
+msgid "Order By"
+msgstr "並び順"
+
+#: include/apto_interface_helper-class.php:1622
+msgid "More details about Order By paramether can be found at"
+msgstr ""
+
+#: include/apto_interface_helper-class.php:1622
+#: include/apto_interface_helper-class.php:1717
+msgid "Order & Orderby Parameters"
+msgstr "Order & Orderby パラメータ"
+
+#: include/apto_interface_helper-class.php:1623
+msgid ""
+"Additional details and example of usage for Custom Function can be found at"
+msgstr ""
+
+#: include/apto_interface_helper-class.php:1623
+#: include/apto_interface_helper-class.php:1699
+msgid "Custom Function"
+msgstr "カスタム関数"
+
+#: include/apto_interface_helper-class.php:1627
+msgid "Default / None"
+msgstr "デフォルト / なし"
+
+#: include/apto_interface_helper-class.php:1630
+msgid "Post ID"
+msgstr "ポストID"
+
+#: include/apto_interface_helper-class.php:1639
+msgid "Slug"
+msgstr "スラッグ"
+
+#: include/apto_interface_helper-class.php:1642
+#: include/apto_interface_helper-class.php:1684
+msgid "Date"
+msgstr "日時"
+
+#: include/apto_interface_helper-class.php:1645
+msgid "Modified"
+msgstr "更新日"
+
+#: include/apto_interface_helper-class.php:1648
+msgid "Comments Count"
+msgstr "コメント数"
+
+#: include/apto_interface_helper-class.php:1651
+msgid "Random"
+msgstr "ランダム"
+
+#: include/apto_interface_helper-class.php:1654
+msgid "Custom Field"
+msgstr "カスタムフィールド"
+
+#: include/apto_interface_helper-class.php:1662
+msgid "Field Name"
+msgstr "フィールド名"
+
+#: include/apto_interface_helper-class.php:1663
+msgid "The name of custom field"
+msgstr "カスタムフィールドの名前"
+
+#: include/apto_interface_helper-class.php:1668
+msgid "Field Type"
+msgstr "フィールド形式"
+
+#: include/apto_interface_helper-class.php:1669
+msgid "MySql Type of field, more details at"
+msgstr "MySql タイプのフィールド、詳細は"
+
+#: include/apto_interface_helper-class.php:1669
+msgid "Cast Functions and Operators"
+msgstr "キャスト関数と演算子"
+
+#: include/apto_interface_helper-class.php:1672
+msgid "None / Default"
+msgstr "なし/デフォルト"
+
+#: include/apto_interface_helper-class.php:1675
+msgid "Signed (Integer)"
+msgstr "符号付き（整数）"
+
+#: include/apto_interface_helper-class.php:1678
+msgid "Unsigned (Integer)"
+msgstr "符号なし（整数）"
+
+#: include/apto_interface_helper-class.php:1681
+msgid "Float (Decimal)"
+msgstr "フロート（10進数）"
+
+#: include/apto_interface_helper-class.php:1687
+msgid "Datetime"
+msgstr "日時"
+
+#: include/apto_interface_helper-class.php:1690
+msgid "Time"
+msgstr "時刻"
+
+#: include/apto_interface_helper-class.php:1716
+msgid "Order"
+msgstr "順序"
+
+#: include/apto_interface_helper-class.php:1717
+msgid "More details about Order paramether can be found at"
+msgstr ""
+
+#: include/apto_interface_helper-class.php:1721
+msgid "Descending"
+msgstr "降順"
+
+#: include/apto_interface_helper-class.php:1724
+msgid "Ascending"
+msgstr "昇順"
+
+#: include/apto_interface_helper-class.php:2572
+msgid "Items Order Updated"
+msgstr "並べ替えを保存しました"
+
+#: include/apto_interface_helper-class.php:2712
+#: include/apto_interface_helper-class.php:2722
+#: include/apto_interface_helper-class.php:2730
+#: include/apto_interface_helper-class.php:2741
+#: include/apto_interface_helper-class.php:2793
+msgid "A syncronization could not be completed"
+msgstr "同期を完了できませんでした"
+
+#: include/apto_interface_helper-class.php:2712
+msgid "as post type is not translatable."
+msgstr "投稿タイプは翻訳対象ではありません。"
+
+#: include/apto_interface_helper-class.php:2722
+#: include/apto_interface_helper-class.php:2793
+msgid "for"
+msgstr "から"
+
+#: include/apto_interface_helper-class.php:2722
+#: include/apto_interface_helper-class.php:2793
+msgid "language"
+msgstr "言語"
+
+#: include/apto_interface_helper-class.php:2722
+#: include/apto_interface_helper-class.php:2793
+msgid "as it contain a different number of objects."
+msgstr "それは、オブジェクトの異なる数が含まれています。"
+
+#: include/apto_interface_helper-class.php:2730
+msgid "as taxonomy is not translatable."
+msgstr "タクソノミーは翻訳可能ではありません。"
+
+#: include/apto_interface_helper-class.php:2741
+msgid "as term is not translated."
+msgstr "タームは翻訳されません。"
+
+#: include/apto_options_class.php:96 include/apto_options_class.php:492
+#: include/apto_options_class.php:542 include/apto_options_class.php:594
+msgid "General Settings"
+msgstr "一般設定"
+
+#: include/apto_options_class.php:106
+msgid "Show / Hide re-order interface"
+msgstr "並べ替えインターフェースを表示 / 非表示"
+
+#: include/apto_options_class.php:119
+msgid "Show"
+msgstr "表示"
+
+#: include/apto_options_class.php:120
+msgid "Hide"
+msgstr "非表示"
+
+#: include/apto_options_class.php:134
+msgid "General"
+msgstr "一般"
+
+#: include/apto_options_class.php:140
+msgid "Ignore Suppress Filters"
+msgstr "フィルタの抑制を無視"
+
+#: include/apto_options_class.php:144
+msgid ""
+"Set FALSE the <b>suppress_filters</b> arguments for get_posts() default "
+"WordPress function. Use this feature if Autosort does not work with your "
+"theme, otherwise you should leave un-checked."
+msgstr ""
+"デフォルトの WordPress 関数 get_posts() の <b>suppress_filters</b> の引数を "
+"FALSE に設定します。自動並べ替えがテーマで動作しない場合は、この機能を使用し"
+"てください、そうでなければ、チェックを外したままにする必要があります。"
+
+#: include/apto_options_class.php:149
+msgid "Ignore Sticky Posts"
+msgstr "先頭固定表示を無効化"
+
+#: include/apto_options_class.php:153
+msgid ""
+"Ignore any Sticky posts, those will not appear on top of the list but per "
+"customised order."
+msgstr ""
+
+#: include/apto_options_class.php:158
+msgid "Next / Previous Apply"
+msgstr "次へ / 前への適用"
+
+#: include/apto_options_class.php:162
+msgid "Apply the sort to default Next / Previous site-wide navigation."
+msgstr "サイト全体の「次 / 前」ナビゲーションに並べ替えを適用する。"
+
+#: include/apto_options_class.php:162
+msgid "For advanced Next / Previous navigation check"
+msgstr ""
+
+#: include/apto_options_class.php:162 include/apto_options_class.php:183
+msgid "read more"
+msgstr "続きを読む"
+
+#: include/apto_options_class.php:168
+msgid "bbPress Replies"
+msgstr "bbPress 返信"
+
+#: include/apto_options_class.php:172
+msgid "Reverse the order of bbPress replies, show newest posts first"
+msgstr "BbPress の返信の順序を逆にし、最初に最新の投稿を表示する"
+
+#: include/apto_options_class.php:179
+msgid "WooCommerce Up-sells Sort"
+msgstr ""
+
+#: include/apto_options_class.php:183
+msgid "Allow drag & drop for WooCommerce Up-sells products"
+msgstr ""
+
+#: include/apto_options_class.php:190
+msgid "Create Logs"
+msgstr "ログを作成"
+
+#: include/apto_options_class.php:194
+msgid ""
+"Create logs which may be usefull when debug or help to identify applied sort "
+"list."
+msgstr ""
+"デバッグまたは適用された並べ替えリストを識別するのに役立つ場合に便利なログを"
+"作成します。"
+
+#: include/apto_options_class.php:203
+msgid "Logs"
+msgstr "ログ"
+
+#: include/apto_options_class.php:229
+msgid "Save Settings"
+msgstr "設定を保存"
+
+#: include/apto_options_class.php:270
+msgid "Settings Saved"
+msgstr "設定を保存しました"
+
+#: include/apto_options_class.php:317 include/apto_options_class.php:324
+msgid "Advanced Post Types Order plugin is inactive, please enter your"
+msgstr ""
+"Advanced Post Types Order プラグインが非アクティブです、入力してください"
+
+#: include/apto_options_class.php:317 include/apto_options_class.php:324
+msgid "Licence Key"
+msgstr "ライセンスキー"
+
+#: include/apto_options_class.php:356 include/apto_options_class.php:438
+msgid "There was a problem connecting to "
+msgstr "接続に問題が発生しました to "
+
+#: include/apto_options_class.php:364 include/apto_options_class.php:401
+#: include/apto_options_class.php:446 include/apto_options_class.php:478
+msgid "There was a problem with the data block received from "
+msgstr "受信したデータブロックに問題がありました from "
+
+#: include/apto_options_class.php:386
+msgid ""
+"There was a problem deactivating the licence on other side, however locally "
+"the key is now removed: "
+msgstr ""
+
+#: include/apto_options_class.php:417
+msgid "Licence Key can't be empty"
+msgstr "ライセンスキーを空にすることはできません"
+
+#: include/apto_options_class.php:472
+msgid "There was a problem activating the licence: "
+msgstr "ライセンスのアクティブ化に問題がありました: "
+
+#: include/apto_options_class.php:496 include/apto_options_class.php:549
+#: include/apto_options_class.php:596
+msgid "Software License"
+msgstr "ソフトウェアライセンス"
+
+#: include/apto_options_class.php:505 include/apto_options_class.php:557
+msgid "License Key"
+msgstr "ライセンスキー"
+
+#: include/apto_options_class.php:510 include/apto_options_class.php:602
+msgid ""
+"Enter the License Key you got when bought this product. If you lost the key, "
+"you can always retrieve it from"
+msgstr ""
+"この製品を購入したときに取得したライセンスキーを入力します。キーを紛失した場"
+"合は、いつでもそれを元に戻すことができます"
+
+#: include/apto_options_class.php:510 include/apto_options_class.php:511
+#: include/apto_options_class.php:602 include/apto_options_class.php:603
+msgid "My Account"
+msgstr "アカウント"
+
+#: include/apto_options_class.php:511 include/apto_options_class.php:603
+msgid "More keys can be generate from"
+msgstr "より多くのキーを生成することができます"
+
+#: include/apto_options_class.php:520
+msgid "Save"
+msgstr "保存"
+
+#: include/apto_options_class.php:572
+msgid "You can generate more keys from"
+msgstr "ここから複数のキーを生成することができます"
+
+#: include/apto_options_class.php:600
+msgid "License Key Required"
+msgstr ""
+
+#: include/apto_plugin_updater.class.php:72
+msgid "An error occour when try to identify the pluguin."
+msgstr ""
+
+#: include/apto_plugin_updater.class.php:72
+#: include/apto_plugin_updater.class.php:83
+msgid "Try again"
+msgstr "もう一度試す"
+
+#: include/apto_plugin_updater.class.php:83
+msgid "An Unexpected HTTP Error occurred during the API request."
+msgstr "APIリクエストで予期しないHTTPエラーが発生しました。"
+
+#: include/walkers/post-types-order-walker-class.php:147
+msgid "Move to Top"
+msgstr "先頭へ移動"
+
+#: include/walkers/post-types-order-walker-class.php:148
+msgid "Move to Bottom"
+msgstr "最後尾に移動"
+
+#: include/walkers/post-types-order-walker-class.php:149
+msgid "Make Sticky"
+msgstr "固定する"
+
+#: include/walkers/post-types-order-walker-class.php:150
+msgid "Edit"
+msgstr "編集"
+
+#: include/walkers/post-types-order-walker-class.php:173
+msgid "Sticky"
+msgstr "先頭に固定表示"

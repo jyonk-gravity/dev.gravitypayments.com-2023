@@ -1,0 +1,31 @@
+.doc-block {
+	&__dropdown-section {
+		background: #F7F7F9;
+		margin-bottom: 2.5rem;
+		padding: 1.5rem; 
+		position: relative;
+		z-index: 1;
+
+		@include media-breakpoint-up(md) {
+			padding: 2.5rem;
+		}
+
+		.dropdown-section {
+			&__content-blocks {
+				&__block {
+					display: none;
+					padding-top: 2rem;
+
+					&.active {
+						display: block;
+					}
+				}
+			}
+
+		}
+		
+		.doc-block__info-box .info-box__inner {
+			background: $white;
+		}
+	}
+}

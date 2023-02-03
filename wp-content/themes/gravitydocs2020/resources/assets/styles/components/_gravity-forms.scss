@@ -1,0 +1,228 @@
+.gform_wrapper {
+  .validation_error {
+    font-weight: $font-weight-semibold;
+    margin-bottom: 1rem;
+  }
+
+  .gform_footer {
+    margin-top: 0;
+  }
+}
+
+.gform_fields {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @include media-breakpoint-up(md) {
+    justify-content: space-between;
+  }
+
+  .gfield {
+    list-style: none;
+    margin-bottom: 0.625rem !important;
+    width: 100%;
+    
+    input,
+    textarea {
+      background: theme-color("lightest-gray");
+      border: 1px solid theme-color("light-gray");
+      border-radius: $border-radius-base;
+      font-family: proxima-nova, sans-serif;
+      font-size: 1rem !important;
+      padding: 0.25rem 0.75rem;
+      transition: background $transition-fast;
+      width: 100%;
+
+      &:focus {
+        // background: lighten(theme-color("lightest-gray"), 2);
+        outline: none;
+      }
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 0.5rem;
+      width: auto;
+    }
+
+    textarea {
+      height: 80px;
+    }
+
+    select {
+      width: 100%;
+    }
+
+    &_label {
+      font-weight: $font-weight-semibold;
+    }
+
+    &.hidden_label label {
+      display: none;
+    }
+
+    &.gf_left_half,
+    &.gf_right_half {
+      @include media-breakpoint-up(md) {
+        width: 49%;
+      }
+    }
+
+    &.textarea--large {
+      textarea {
+        @include media-breakpoint-up(md) {
+          height: 200px;
+        }
+      }
+    }
+
+    &.gform_hidden,
+    &_visibility_hidden {
+      display: none;
+    }
+
+    &_radio {
+      list-style: none;
+      padding-left: 0;
+    }
+  }
+
+  .gfield_error {
+    input,
+    textarea,
+    select {
+      background: $dsm-color-red-10 !important;
+      border: 1px solid $dsm-color-red-50;
+    }
+  }
+
+  .gfield_error .validation_message {
+    border-radius: 4px;
+    color: $dsm-color-red-80;
+    font-size: 0.8125rem;
+    font-weight: $font-weight-semibold;
+    margin-top: 2px;
+    padding: 4px;
+  }
+}
+
+.gfield select {
+  @extend .form-control;
+
+  background: theme-color("lightest-gray");
+  border: 1px solid theme-color("light-gray");
+  border-radius: $border-radius-base;
+  text-indent: 0.25rem;
+  transition: background $transition-fast;
+
+  option:first-child {
+    color: theme-color("secondary");
+  }
+}
+
+.gform_button,
+.gform_next_button {
+  background-color: theme-color('btn-primary');
+  border: none;
+  border-radius: $border-radius-base;
+  // box-shadow: $btn-shadow;
+  color: $white !important;
+  display: block;
+  font-family: proxima-nova, sans-serif;
+  font-size: 1rem;
+  font-weight: $font-weight-bold;
+  margin-top: 0.5rem;
+  padding: 0.375rem 1.5rem;
+  transition: background-color $transition-speed-fast;
+  width: 100%;
+
+  &:hover {
+    background-color: theme-color('btn-primary-hover');
+    // box-shadow: $btn-shadow-hover;
+  }
+}
+
+.gfield_chainedselect.vertical select {
+  width: 100% !important;
+}
+
+.gsection {
+  margin-top: 1rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+h2.gsection_title {
+  font-size: 1.625rem;
+  margin-bottom: 0.25rem;
+}
+
+.gfmc-column {
+  width: 100% !important;
+
+  @include media-breakpoint-up(md) {
+    width: 48% !important;
+  }
+}
+
+.gf-form--centered {
+  .gform_footer {
+    margin-top: 0.5rem;
+    text-align: center;
+
+    .gform_button {
+      display: inline-block;
+      width: auto;
+    }
+  }
+}
+
+.ginput_container_consent {
+  display: flex;
+
+  input[type="checkbox"] {
+    margin-top: 0.25rem;
+  }
+}
+
+.gf_browser_ie {
+  display: block !important;
+}
+
+/* Section background specific styling */
+
+.bg--light {
+  .gform_fields {
+    .gfield {
+      input,
+      textarea,
+      select {
+        background: $white;
+      }
+    }
+  }
+}
+
+.bg--dark,
+.bg--green,
+.bg--gradient {
+  .gform_fields {
+    .gfield {
+      input,
+      textarea,
+      select {
+        background: $white;
+        border-color: $white;
+      }
+    }
+  }
+
+  .gform_confirmation_message {
+    color: $white;
+  }
+}

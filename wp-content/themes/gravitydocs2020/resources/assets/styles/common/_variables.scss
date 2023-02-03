@@ -1,0 +1,180 @@
+/** Import Bootstrap functions */
+@import "~bootstrap/scss/functions";
+
+$dsm-color-primary-green: #91c73d;
+$dsm-color-primary-blue: #253750;
+$dsm-color-green-05: #dff0d2;
+$dsm-color-green-10: #c7e5aa;
+$dsm-color-green-20: #aada74;
+$dsm-color-green-30: #91c73d;
+$dsm-color-green-40: #6fb227;
+$dsm-color-green-50: #519d18;
+$dsm-color-green-60: #37880e;
+$dsm-color-green-70: #237209;
+$dsm-color-green-80: #155d07;
+$dsm-color-green-90: #0a5304;
+$dsm-color-green-100: #073307;
+$dsm-color-blue-10: #d6dcf0;
+$dsm-color-blue-20: #b1bee2;
+$dsm-color-blue-30: #8fa2d5;
+$dsm-color-blue-40: #718ac7;
+$dsm-color-blue-50: #5977b7;
+$dsm-color-blue-60: #4767a7;
+$dsm-color-blue-70: #3b5b95;
+$dsm-color-blue-80: #325081;
+$dsm-color-blue-90: #2c4469;
+$dsm-color-blue-100: #253750;
+$dsm-color-violet-10: #e9eaf1;
+$dsm-color-violet-20: #d4d5e7;
+$dsm-color-violet-30: #b5b5da;
+$dsm-color-violet-40: #9590ce;
+$dsm-color-violet-50: #7b6bc2;
+$dsm-color-violet-60: #6d50b9;
+$dsm-color-violet-70: #5f30aa;
+$dsm-color-violet-80: #521695;
+$dsm-color-violet-90: #400c73;
+$dsm-color-violet-100: #2d0952;
+$dsm-color-neutral-10: #f0f0f0;
+$dsm-color-neutral-20: #cccccc;
+$dsm-color-neutral-30: #adadad;
+$dsm-color-neutral-40: #939393;
+$dsm-color-neutral-50: #7e7e7e;
+$dsm-color-neutral-60: #646464;
+$dsm-color-neutral-70: #535353;
+$dsm-color-neutral-80: #424242;
+$dsm-color-neutral-90: #2a2a2a;
+$dsm-color-neutral-100: #0a0a0a;
+$dsm-color-red-10: #fcefe8;
+$dsm-color-red-20: #f6d5c7;
+$dsm-color-red-30: #efb09d;
+$dsm-color-red-40: #e9826e;
+$dsm-color-red-50: #e64c3b;
+$dsm-color-red-60: #c62a1d;
+$dsm-color-red-70: #aa170a;
+$dsm-color-red-80: #920b01;
+$dsm-color-red-90: #7d0700;
+$dsm-color-red-100: #6b0802;
+$dsm-color-yellow-10: #fdf9a8;
+$dsm-color-yellow-20: #f8ec58;
+$dsm-color-yellow-30: #ead539;
+$dsm-color-yellow-40: #d7bb2c;
+$dsm-color-yellow-50: #bb9621;
+$dsm-color-yellow-60: #986f19;
+$dsm-color-yellow-70: #845c16;
+$dsm-color-yellow-80: #724a12;
+$dsm-color-yellow-90: #603c10;
+$dsm-color-yellow-100: #502f0d;
+$dsm-color-orange-10: #f5dfc9;
+$dsm-color-orange-20: #ebbf97;
+$dsm-color-orange-30: #e0a06d;
+$dsm-color-orange-40: #d6854c;
+$dsm-color-orange-50: #cb6d32;
+$dsm-color-orange-60: #bf5920;
+$dsm-color-orange-70: #b24812;
+$dsm-color-orange-80: #a43909;
+$dsm-color-orange-90: #932d03;
+$dsm-color-orange-100: #7d2100;
+$dsm-color-teal-10: #c3ecf6;
+$dsm-color-teal-20: #89dbed;
+$dsm-color-teal-30: #53cbe4;
+$dsm-color-teal-40: #34b4cd;
+$dsm-color-teal-50: #1d9fb7;
+$dsm-color-teal-60: #0f8ba0;
+$dsm-color-teal-70: #077989;
+$dsm-color-teal-80: #036772;
+$dsm-color-teal-90: #03545c;
+$dsm-color-teal-100: #044145;
+$dsm-color-base-red: #e64c3b;
+$dsm-color-base-violet: #7b6bc2;
+$dsm-color-base-teal: #1d9fb7;
+$dsm-color-base-yellow: #ead539;
+$dsm-color-base-orange: #cb6d32;
+$dsm-color-base-blue: #5977b7;
+$dsm-color-base-green: #519d18;
+$dsm-color-base-dark: #2a2a2a;
+$dsm-color-base-gray: #7e7e7e;
+$dsm-color-base-light: #cccccc;
+
+$bg-gradient-primary: linear-gradient(180deg, $dsm-color-blue-10 0%, $dsm-color-blue-30 100%);
+$bg-gradient-dark: linear-gradient(135deg, $dsm-color-blue-80 0%, $dsm-color-blue-100 100%);
+
+$black:		$dsm-color-neutral-100;
+$white:		#fff;
+
+$theme-colors: (
+  primary: $dsm-color-primary-blue,
+  secondary: $dsm-color-green-50,
+  secondary-20: $dsm-color-green-20,
+  gray: $dsm-color-neutral-80,
+  light-gray: $dsm-color-neutral-20,
+  lighter-gray: #efeff1,
+  lightest-gray: #f9f9fa,
+  body: $dsm-color-neutral-100,
+  body-muted: $dsm-color-neutral-50,
+  body-link: $dsm-color-green-50,
+  body-link-hover: $dsm-color-green-40,
+  highlight: $dsm-color-green-05,
+  btn-text-dark: $dsm-color-base-dark,
+  btn-text-light: $white,
+  btn-primary: $dsm-color-base-blue,
+  btn-primary-hover: $dsm-color-blue-70,
+  btn-secondary: $dsm-color-primary-green,
+  btn-secondary-hover: $dsm-color-green-40,
+  btn-white: $white,
+  btn-white-hover: $dsm-color-base-light,
+  btn-nav: $dsm-color-primary-green,
+  btn-nav-hover: $dsm-color-green-40,
+  icon-green-bg: $dsm-color-green-10,
+  icon-green-light: $dsm-color-primary-green,
+  icon-green-dark: $dsm-color-base-green,
+  icon-violet-bg: $dsm-color-violet-10,
+  icon-violet-light: $dsm-color-violet-30,
+  icon-violet-dark: $dsm-color-violet-50,
+  icon-red-bg: $dsm-color-red-10,
+  icon-red-light: $dsm-color-red-30,
+  icon-red-dark: $dsm-color-red-50,
+  icon-blue-bg: $dsm-color-blue-10,
+  icon-blue-light: $dsm-color-blue-30,
+  icon-blue-dark: $dsm-color-blue-50,
+  icon-teal-bg: $dsm-color-teal-10,
+  icon-teal-light: $dsm-color-teal-30,
+  icon-teal-dark: $dsm-color-teal-50
+);
+
+
+/** Bootstrap navbar fix (https://git.io/fADqW) */
+$navbar-dark-toggler-icon-bg: none;
+$navbar-light-toggler-icon-bg: none;
+
+$border-radius-base: 	0.25rem;
+
+$transition-fast: 0.15s;
+
+/* sage/assets/styles/common/_variables.scss */
+// Slick Carousel font path
+$slick-font-path: "~slick-carousel/slick/fonts/";
+
+// Slick Carousel ajax-loader.gif path
+$slick-loader-path: "~slick-carousel/slick/";
+
+// Fonts
+$font-weight-normal:	400;
+$font-weight-semibold:	600;
+$font-weight-bold: 		700; //700
+$font-weight-extrabold:	700; //800
+
+// Transitions
+$transition-speed-slow:	0.5s;
+$transition-speed-med: 0.3s;
+$transition-speed-fast: 0.15s;
+
+// Buttons
+$btn-shadow: 0 4px 15px rgba(10,10,10,0.3);
+$btn-shadow-hover: 0 8px 20px rgba(10,10,10,0.3);
+
+// Cards
+$card-border-radius: 8px;
+$card-box-shadow: 0 50px 100px rgba(10,10,10,0.15);
+
+// Documentation Sidebar
+$main-sidebar-width: 290px;

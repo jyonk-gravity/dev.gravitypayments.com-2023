@@ -1,0 +1,25 @@
+.single-docs {
+	.docs-content {
+		position: relative;
+
+		&::before {
+			background: linear-gradient(180deg, rgba(236, 245, 253, 0.6) 0%, #FFFFFF 100%);
+			content: '';
+			display: block;
+			height: 200px;
+			left: 0;
+			position: absolute;
+			top: 0;
+			width: 100%;
+		}
+	}
+}
+
+.page-content {
+	position: relative;
+	margin-top: 72px;
+
+	@include media-breakpoint-up(lg) {
+		margin-left: 290px;
+	}
+}

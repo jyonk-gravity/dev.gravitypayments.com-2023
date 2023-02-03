@@ -1,0 +1,72 @@
+.page-block__icon-content-columns {
+	padding: 1.5rem 15px 0 55px;
+
+	@include media-breakpoint-up(lg) {
+		padding: 2.5rem 3.5rem 2.5rem 3.5rem;
+	}
+
+	.row {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.icon-content-column {
+		margin-bottom: 1.25rem;
+
+		@include media-breakpoint-up(lg) {
+			margin-bottom: 0;
+		}
+	}
+
+	.icon-content-column__card {
+		border-radius: 0.375rem;
+		box-shadow: 0 2px 8px rgba($black, 0.05);
+		display: flex;
+		height: 100%;
+		justify-content: space-between;
+		padding: 1.5rem;
+		transition: $transition-speed-fast;
+
+		&:hover {
+			box-shadow: 0 8px 20px rgba($black, 0.1);
+			text-decoration: none;
+
+			h2,
+			p,
+			ul {
+				color: theme-color(primary);
+				text-decoration: none;
+			}
+		}
+
+		h2,
+		p,
+		ul {
+			color: theme-color(primary);
+		}
+
+		h2 {
+			margin-bottom: 0.25rem;
+		}
+
+		h3.eyebrow-text {
+			margin-bottom: 0.45rem;
+		}
+
+		&__icon {
+			width: 40px;
+
+			@include media-breakpoint-up(lg) {
+				width: 60px;
+			}
+		}
+
+		&__content {
+			width: calc(100% - 60px);
+
+			@include media-breakpoint-up(lg) {
+				width: calc(100% - 80px);
+			}
+		}
+	}
+}

@@ -1,0 +1,295 @@
+{
+    "key": "group_5f57d53b1dd45",
+    "title": "Doc Settings",
+    "fields": [
+        {
+            "key": "field_5fca6cd314a22",
+            "label": "Hide Sidebar Nav?",
+            "name": "hide_sidebar_nav",
+            "type": "true_false",
+            "instructions": "Select this if you would like to completely hide the sidebar nav on this doc page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Hide",
+            "ui_off_text": "Show"
+        },
+        {
+            "key": "field_5fad98b7b779d",
+            "label": "Hide in Left Sidebar Nav?",
+            "name": "hide_in_left_sidebar_nav",
+            "type": "true_false",
+            "instructions": "Select this to hide the link to this page from the parent page's sidebar navigation.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Hide",
+            "ui_off_text": "Show"
+        },
+        {
+            "key": "field_5f57d5ea229ba",
+            "label": "Include Table of Contents?",
+            "name": "include_table_of_contents",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5fa311f5c6fbd",
+            "label": "Hide Page Title?",
+            "name": "hide_page_title",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Hide",
+            "ui_off_text": "Show"
+        },
+        {
+            "key": "field_5f624ca7f1679",
+            "label": "Include Demo Link?",
+            "name": "include_demo_link",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5f624f03f167a",
+            "label": "Demo Link",
+            "name": "demo_link",
+            "type": "link",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5f624ca7f1679",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array"
+        },
+        {
+            "key": "field_5fe225afb9445",
+            "label": "Include API Link?",
+            "name": "include_api_link",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_5fe225e1b9446",
+            "label": "API Link",
+            "name": "api_link",
+            "type": "link",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_5fe225afb9445",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array"
+        },
+        {
+            "key": "field_5fbd69df53270",
+            "label": "Custom Links",
+            "name": "custom_links",
+            "type": "repeater",
+            "instructions": "Add optional custom links to the left sidebar.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "collapsed": "field_5fbd6a0653271",
+            "min": 0,
+            "max": 0,
+            "layout": "row",
+            "button_label": "Add Custom Link",
+            "sub_fields": [
+                {
+                    "key": "field_5fbd6a0653271",
+                    "label": "Custom Link",
+                    "name": "custom_link",
+                    "type": "link",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array"
+                }
+            ]
+        },
+        {
+            "key": "field_5ff89f1e1b53f",
+            "label": "Background Image",
+            "name": "background_image",
+            "type": "image",
+            "instructions": "Add an optional background image to this doc. The background image get placed in the upper right corner of the doc. *Note that if you also have the Table of Contents turned on, you should use a light colored background or turn the background image opacity down so that the Table of Contents text is still legible.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_5ff8a10a1b540",
+            "label": "Background Image Opacity",
+            "name": "background_image_opacity",
+            "type": "range",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 100,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "prepend": "",
+            "append": "%"
+        },
+        {
+            "key": "field_5ff8a12b1b541",
+            "label": "Background Image Top Gap",
+            "name": "background_image_top_gap",
+            "type": "true_false",
+            "instructions": "Adds space above the background image.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "20",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "docs"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [
+        "the_content",
+        "excerpt",
+        "discussion",
+        "comments",
+        "slug",
+        "author",
+        "format",
+        "featured_image",
+        "categories",
+        "tags",
+        "send-trackbacks"
+    ],
+    "active": true,
+    "description": "",
+    "modified": 1624645053
+}

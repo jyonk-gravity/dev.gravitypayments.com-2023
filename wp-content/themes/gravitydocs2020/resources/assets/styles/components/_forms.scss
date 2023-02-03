@@ -1,0 +1,38 @@
+/** Search form */
+.search-form {
+  @extend .form-inline;
+}
+
+.search-form label {
+  @extend .form-group;
+
+  font-weight: normal;
+  position: relative;
+  min-width: 230px;
+  width: 60%;
+}
+
+.search-form .search-field {
+  @extend .form-control;
+  border: none;
+  border-radius: 3rem;
+  padding: 0.375rem 1.25rem;
+  width: 100%;
+}
+
+.search-form .search-submit {
+  @extend .btn;
+  @extend .btn-light;
+  border: none;
+  background: none;
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: color $transition-speed-fast;
+
+  &:hover {
+  	background: none;
+  	color: theme-color(secondary);
+  }
+}

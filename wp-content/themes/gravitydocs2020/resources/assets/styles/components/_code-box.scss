@@ -1,0 +1,20 @@
+.doc-block__code-box {
+	position: relative;
+	z-index: 1;
+	
+	.nav-tabs {
+		border-bottom: 0;
+
+		.nav-link {
+			background-color: rgba(theme-color(primary), 0.7);
+			border: 0;
+			color: $white;
+			text-decoration: none;
+
+			&.active {
+				background-color: darken(theme-color(primary), 5);
+				border: 0;
+			}
+		}
+	}
+}

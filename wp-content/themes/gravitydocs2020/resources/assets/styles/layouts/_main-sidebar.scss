@@ -1,0 +1,152 @@
+.main-sidebar {
+	background: rgba($white, 0.96);
+	border-right: 1px solid #efeff1;
+	height: 100%;
+	left: -255px;
+	overflow: auto;
+	padding: 1.5rem;
+	position: fixed;
+	top: 72px;
+	transition: 0.4s;
+	width: 290px;
+	z-index: 2;
+
+	@include media-breakpoint-up(lg) {
+		left: 0;
+	}
+
+	&.active {
+		left: 0;
+	}
+
+	.mobile-trigger--main-sidebar {
+		right: 5px;
+	    position: absolute;
+	    top: 1.5rem;
+
+	    @include media-breakpoint-up(lg) {
+	    	display: none;
+	    }
+
+	    &.open {
+	    	a {
+	    		transform: scaleX(-1);
+	    	}
+	    }
+
+	    a {
+	    	color: theme-color(primary);
+	    	display: inline-block;
+	    	padding: 0 8px;
+	    	transition: 0.1s;
+	    }
+	}
+
+	a {
+		text-decoration: none;
+	}
+
+	&__section-title {
+		font-size: 1.0625rem;
+		margin-top: 1.5rem;
+	}
+
+	&__child-pages {
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+
+		a {
+			color: lighten(theme-color(gray), 10);
+			display: block;
+			font-size: 0.9375rem;
+			margin-bottom: 0.5rem;
+			text-decoration: none;
+			transition: color $transition-speed-fast;
+
+			&:hover {
+				color: theme-color(secondary);
+			}
+		}
+	}
+
+	.breadcrumb-link {
+		color: theme-color(secondary);
+		display: block;
+		padding-right: 20px;
+
+		@include media-breakpoint-up(lg) {
+			padding-left: 0;
+		}
+
+		&--static {
+			color: theme-color(light-gray);
+		}
+	}
+
+	.demo-link,
+	.api-link {
+		border-top: 1px solid theme-color(lightest-gray);
+		color: theme-color(primary);
+		display: block;
+		margin-top: 1rem;
+		padding-top: 1rem;
+
+		&:hover {
+			color: $dsm-color-base-blue;
+		}
+	}
+
+	.api-link {
+		svg {
+			margin-right: 4px;
+		}
+	}
+
+	.nav--sidebar {
+		a {
+			color: lighten(theme-color(gray), 5);
+			display: block;
+			font-size: 0.9375rem;
+			margin-bottom: 0.5rem;
+			text-decoration: none;
+			transition: color $transition-speed-fast;
+
+			&:hover {
+				color: theme-color(secondary);
+			}
+		}
+
+		#menu-main-sidebar-menu {
+			display: block;
+
+			> li {
+				margin-top: 1.5rem;
+			}
+
+			> li.menu-item-has-children {
+				> a {
+					color: theme-color(primary);
+					cursor: initial;
+					display: block;
+					font-size: 1.0625rem;
+					font-weight: $font-weight-semibold;
+					margin-top: 1.5rem;
+
+					&:hover {
+						color: theme-color(primary);
+					}
+				}
+			}
+
+			li {
+				list-style: none;
+				padding: 0;
+			}
+
+			.sub-menu {
+				margin-top: 1rem;
+				padding: 0;
+			}
+		}
+	}
+}

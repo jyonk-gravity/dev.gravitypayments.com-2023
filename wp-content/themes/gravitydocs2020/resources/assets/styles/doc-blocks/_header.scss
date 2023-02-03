@@ -1,0 +1,14 @@
+.doc-block {
+	&__header {
+		position: relative;
+		z-index: 1;
+
+		.eyebrow-text {
+			margin-bottom: 0.5rem;
+		}
+
+		h1 {
+			margin-bottom: 2rem;
+		}
+	}
+}

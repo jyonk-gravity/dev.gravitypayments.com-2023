@@ -1,0 +1,822 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-03 14:47+0200\n"
+"PO-Revision-Date: 2018-12-03 14:49+0200\n"
+"Last-Translator: NspCode <contact@nsp-code.com>\n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 2.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ..\n"
+
+#: ../include/apto_interface-class.php:141
+#, fuzzy
+msgid "Re-order"
+msgstr " -  Re-ordenar"
+
+#: ../include/apto_interface-class.php:145
+msgid ""
+"This plugin can't work without javascript, because it's use drag and drop "
+"and AJAX."
+msgstr ""
+"Este plugin no funciona sin javascript, porque usa arrastrar y soltar y AJAX"
+
+#: ../include/apto_interface-class.php:176
+msgid ""
+"WPML: The Sort Rules couldn't be translated automatically. You need to set/"
+"translate this manually for"
+msgstr ""
+
+#: ../include/apto_interface-class.php:335
+msgid "Click to toggle"
+msgstr ""
+
+#: ../include/apto_interface-class.php:336
+#: ../include/apto_interface-class.php:678
+#, fuzzy
+msgid "Sort List Settings"
+msgstr "Guardar Ajustes"
+
+#: ../include/apto_interface-class.php:347
+msgid "Query Rules"
+msgstr ""
+
+#: ../include/apto_interface-class.php:348
+msgid ""
+"Create a set of criteria rules which match your query. This will determine "
+"what to show on the following sort list and the order will apply on front "
+"side."
+msgstr ""
+
+#: ../include/apto_interface-class.php:349
+msgid ""
+"All rules are compared to a query using AND operator. For more details check"
+msgstr ""
+
+#: ../include/apto_interface-class.php:349
+msgid "Query Rules examples"
+msgstr ""
+
+#: ../include/apto_interface-class.php:370
+msgid "Show Advanced"
+msgstr ""
+
+#: ../include/apto_interface-class.php:429
+msgid "Add Post Type"
+msgstr ""
+
+#: ../include/apto_interface-class.php:436
+#, fuzzy
+msgid "Taxonomy"
+msgstr "Título de Taxonomia"
+
+#: ../include/apto_interface-class.php:485
+#, fuzzy
+msgid "Add Taxonomy"
+msgstr "Título de Taxonomia"
+
+#: ../include/apto_interface-class.php:493
+#, fuzzy
+msgid "Taxonomy Relation"
+msgstr "Título de Taxonomia"
+
+#: ../include/apto_interface-class.php:519
+msgid "Meta"
+msgstr ""
+
+#: ../include/apto_interface-class.php:553
+msgid "Add Meta"
+msgstr ""
+
+#: ../include/apto_interface-class.php:561
+msgid "Meta Relation"
+msgstr ""
+
+#: ../include/apto_interface-class.php:586
+#: ../include/apto_interface_helper-class.php:1633
+msgid "Author"
+msgstr "Autor"
+
+#: ../include/apto_interface-class.php:610
+#, fuzzy
+msgid "Add Author"
+msgstr "Autor"
+
+#: ../include/apto_interface-class.php:624
+msgid ""
+"Certain changes has been done to your site and some of Query Rules cannot be "
+"displayed anymore. You should review the settings Query Rules area and click "
+"Update button."
+msgstr ""
+
+#: ../include/apto_interface-class.php:639
+msgid "Conditionals"
+msgstr ""
+
+#: ../include/apto_interface-class.php:640
+msgid "Apply the order only if conditions are true. For more details check"
+msgstr ""
+
+#: ../include/apto_interface-class.php:640
+msgid "Conditionals Usage"
+msgstr ""
+
+#: ../include/apto_interface-class.php:643
+msgid "Apply if"
+msgstr ""
+
+#: ../include/apto_interface-class.php:668
+msgid "Add Group"
+msgstr ""
+
+#: ../include/apto_interface-class.php:677
+msgid "Interface"
+msgstr ""
+
+#: ../include/apto_interface-class.php:678
+msgid "This sort interface settings. For more details check"
+msgstr ""
+
+#: ../include/apto_interface-class.php:685
+#: ../include/apto_interface_helper-class.php:1636
+msgid "Title"
+msgstr ""
+
+#: ../include/apto_interface-class.php:686
+msgid "Sort list tab title"
+msgstr ""
+
+#: ../include/apto_interface-class.php:690
+msgid "Description"
+msgstr ""
+
+#: ../include/apto_interface-class.php:691
+msgid ""
+"Sort list description. This will appear for others (non-admin users) when "
+"doing re-sort, it should include a description for what area this sort will "
+"apply."
+msgstr ""
+
+#: ../include/apto_interface-class.php:695
+msgid "Menu Location"
+msgstr ""
+
+#: ../include/apto_interface-class.php:696
+msgid "Relocate this Sort Interface to another menu"
+msgstr ""
+
+#: ../include/apto_interface-class.php:718
+#, fuzzy
+msgid "Auto Apply Sort"
+msgstr "Orden automático"
+
+#: ../include/apto_interface-class.php:719
+msgid "Automatically apply the sort to theme queries if match."
+msgstr ""
+
+#: ../include/apto_interface-class.php:721
+#: ../include/apto_interface-class.php:729
+#: ../include/apto_interface-class.php:780
+#: ../include/apto_interface-class.php:835
+#: ../include/apto_interface-class.php:843
+#: ../include/apto_interface-class.php:853
+#: ../include/apto_interface-class.php:878
+#: ../include/apto_interface-class.php:1460
+msgid "Yes"
+msgstr ""
+
+#: ../include/apto_interface-class.php:722
+#: ../include/apto_interface-class.php:730
+#: ../include/apto_interface-class.php:781
+#: ../include/apto_interface-class.php:836
+#: ../include/apto_interface-class.php:844
+#: ../include/apto_interface-class.php:854
+#: ../include/apto_interface-class.php:879
+#: ../include/apto_interface-class.php:1457
+msgid "No"
+msgstr ""
+
+#: ../include/apto_interface-class.php:726
+msgid "Admin Sort"
+msgstr "Orden de Administrador"
+
+#: ../include/apto_interface-class.php:727
+msgid "Automatically apply the sort to admin queries if match."
+msgstr ""
+
+#: ../include/apto_interface-class.php:735
+msgid "Allow sorting within default post type interface"
+msgstr ""
+
+#: ../include/apto_interface-class.php:736
+msgid ""
+"A Drag & Drop functionality is available to be used within default WordPress "
+"post type interface."
+msgstr ""
+
+#: ../include/apto_interface-class.php:792
+msgid "Need to Create Sort first"
+msgstr ""
+
+#: ../include/apto_interface-class.php:809
+msgid "Not a primary sort, this feature can apply only to"
+msgstr ""
+
+#: ../include/apto_interface-class.php:814
+msgid "This feature can't apply when conditionals set"
+msgstr ""
+
+#: ../include/apto_interface-class.php:819
+msgid "Admin Sort need to be Yes"
+msgstr ""
+
+#: ../include/apto_interface-class.php:832
+#, fuzzy
+msgid "Send new items to bottom of list"
+msgstr "Envíe nuevos elementos a abajo"
+
+#: ../include/apto_interface-class.php:833
+msgid ""
+"All new posts / custom types will append at the end instead top. This will "
+"apply when manual ordering."
+msgstr ""
+"Todos los nuevos tipos de mensajes / personalizados se anexará al final en "
+"vez de arriba. Esto se aplicará al realizar el pedido manual."
+
+#: ../include/apto_interface-class.php:840
+#, fuzzy
+msgid "Thumbnails"
+msgstr "Alternar Miniaturas"
+
+#: ../include/apto_interface-class.php:841
+msgid "Show thumbnails on sort list"
+msgstr ""
+
+#: ../include/apto_interface-class.php:850
+msgid "Pagination"
+msgstr ""
+
+#: ../include/apto_interface-class.php:851
+msgid "Set pagination for sort list"
+msgstr ""
+
+#: ../include/apto_interface-class.php:859
+msgid "Posts Per Page"
+msgstr ""
+
+#: ../include/apto_interface-class.php:860
+msgid "The number of posts to show on page"
+msgstr ""
+
+#: ../include/apto_interface-class.php:866
+msgid "Offset Posts"
+msgstr ""
+
+#: ../include/apto_interface-class.php:867
+msgid "The offset number of posts"
+msgstr ""
+
+#: ../include/apto_interface-class.php:875
+msgid "WPML Synchronize"
+msgstr ""
+
+#: ../include/apto_interface-class.php:876
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting. For this to work, all other languages must contain the "
+"same translated objects."
+msgstr ""
+
+#: ../include/apto_interface-class.php:885
+msgid "Capability / Role"
+msgstr ""
+
+#: ../include/apto_interface-class.php:886
+#, fuzzy
+msgid "Minimum Capability to see this Sort"
+msgstr "Mínimo nivel para usar este plugin"
+
+#: ../include/apto_interface-class.php:910
+msgid "Status"
+msgstr ""
+
+#: ../include/apto_interface-class.php:911
+msgid "Show objects status"
+msgstr ""
+
+#: ../include/apto_interface-class.php:949
+#, fuzzy
+msgid "Delete Sort"
+msgstr "Order de Feed"
+
+#: ../include/apto_interface-class.php:1052
+msgid "Select area and customise your order list <br />or switch to automatic"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1077
+#: ../include/apto_interface-class.php:1103
+msgid "Archive"
+msgstr "Archivo"
+
+#: ../include/apto_interface-class.php:1077
+msgid "Total Archive Objects"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1133
+msgid "Taxonomy Title"
+msgstr "Título de Taxonomia"
+
+#: ../include/apto_interface-class.php:1133
+msgid "Total"
+msgstr "Total"
+
+#: ../include/apto_interface-class.php:1133
+#: ../include/apto_interface-class.php:1250
+msgid "Posts"
+msgstr "Entradas"
+
+#: ../include/apto_interface-class.php:1250
+#, fuzzy
+msgid "Forum Title"
+msgstr "Título de Taxonomia"
+
+#: ../include/apto_interface-class.php:1250
+msgid "Total Topics"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1423
+msgid "Add Fallback"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1447
+msgid "Batch Terms Automatic Update"
+msgstr "Términos lotes Actualización automática"
+
+#: ../include/apto_interface-class.php:1448
+#, fuzzy
+msgid "<b>WARNING!</b></i> using this option all existing"
+msgstr ""
+"<b> ADVERTENCIA! </ b> </ i> el uso de este a actualizar todos los existentes"
+
+#: ../include/apto_interface-class.php:1453
+#, fuzzy
+msgid ""
+"terms order type will update to Automatic Order and change for currrent "
+"settings."
+msgstr ""
+"Términos de la orden de tipo con el tipo de clasificación automática "
+"mediante la configuración currrent."
+
+#: ../include/apto_interface-class.php:1453
+#, fuzzy
+msgid ""
+"Existing manual/custom sort lists will be kept, but order type will be "
+"switched to Automatic Order."
+msgstr ""
+"Sin embargo todas las listas Manual / custom sort existentes se mantendrán, "
+"pero el tipo de orden pasaron a automático."
+
+#: ../include/apto_interface-class.php:1544
+msgid "Show all dates"
+msgstr "Mostrar todos los datos"
+
+#: ../include/apto_interface-class.php:1545
+msgid "Today"
+msgstr "Hoy"
+
+#: ../include/apto_interface-class.php:1546
+msgid "Yesterday"
+msgstr "Ayer"
+
+#: ../include/apto_interface-class.php:1547
+msgid "Last Week"
+msgstr "Ultima semana"
+
+#: ../include/apto_interface-class.php:1593
+msgid "Toggle Thumbnails"
+msgstr "Alternar Miniaturas"
+
+#: ../include/apto_interface-class.php:1602
+#: ../include/apto_interface-class.php:1709
+msgid "Update"
+msgstr "Actualizar"
+
+#: ../include/apto_interface-class.php:1615
+msgid "Reverse"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1616
+msgid "Title Asc"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1617
+msgid "Title Desc"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1618
+msgid "Id order Asc"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1619
+msgid "Id order Desc"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1624
+msgid "List view"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1625
+msgid "Grid view"
+msgstr ""
+
+#: ../include/apto_interface-class.php:1722
+msgid "Reset Order"
+msgstr "Restablecer Orden"
+
+#: ../include/apto_interface-class.php:1728
+msgid "Are you sure you want to reset the order??"
+msgstr "Está seguro que desea restablecer el orden??"
+
+#: ../include/apto_interface_helper-class.php:1039
+msgid ""
+"**WARNING!! This will load all post types objects. Recommended to be used "
+"with Advanced Query Rules"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1621
+msgid "Order By"
+msgstr "Ordenar por"
+
+#: ../include/apto_interface_helper-class.php:1622
+msgid "More details about Order By paramether can be found at"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1622
+#: ../include/apto_interface_helper-class.php:1717
+msgid "Order & Orderby Parameters"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1623
+msgid ""
+"Additional details and example of usage for Custom Function can be found at"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1623
+#: ../include/apto_interface_helper-class.php:1699
+msgid "Custom Function"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1627
+msgid "Default / None"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1630
+#, fuzzy
+msgid "Post ID"
+msgstr "Entradas"
+
+#: ../include/apto_interface_helper-class.php:1639
+msgid "Slug"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1642
+#: ../include/apto_interface_helper-class.php:1684
+msgid "Date"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1645
+msgid "Modified"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1648
+msgid "Comments Count"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1651
+msgid "Random"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1654
+msgid "Custom Field"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1662
+msgid "Field Name"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1663
+msgid "The name of custom field"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1668
+msgid "Field Type"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1669
+msgid "MySql Type of field, more details at"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1669
+msgid "Cast Functions and Operators"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1672
+msgid "None / Default"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1675
+msgid "Signed (Integer)"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1678
+msgid "Unsigned (Integer)"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1681
+msgid "Float (Decimal)"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1687
+msgid "Datetime"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1690
+msgid "Time"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1716
+#, fuzzy
+msgid "Order"
+msgstr "Restablecer Orden"
+
+#: ../include/apto_interface_helper-class.php:1717
+msgid "More details about Order paramether can be found at"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1721
+msgid "Descending"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:1724
+msgid "Ascending"
+msgstr ""
+
+#: ../include/apto_interface_helper-class.php:2338
+#: ../include/apto_interface_helper-class.php:2363
+msgid "Invalid Nonce"
+msgstr "Nonce inválido"
+
+#: ../include/apto_options_class.php:96 ../include/apto_options_class.php:492
+#: ../include/apto_options_class.php:542 ../include/apto_options_class.php:594
+msgid "General Settings"
+msgstr "Ajustes Generales"
+
+#: ../include/apto_options_class.php:106
+#, fuzzy
+msgid "Show / Hide re-order interface"
+msgstr "Siempre muestra las Miniaturas dentro de la interfaz reordenar"
+
+#: ../include/apto_options_class.php:119
+msgid "Show"
+msgstr ""
+
+#: ../include/apto_options_class.php:120
+msgid "Hide"
+msgstr ""
+
+#: ../include/apto_options_class.php:134
+msgid "General"
+msgstr "General"
+
+#: ../include/apto_options_class.php:140
+msgid "Ignore Suppress Filters"
+msgstr "pasar por alto  Suppress Filters"
+
+#: ../include/apto_options_class.php:144
+#, fuzzy
+msgid ""
+"Set FALSE the <b>suppress_filters</b> arguments for get_posts() default "
+"WordPress function. Use this feature if Autosort does not work with your "
+"theme, otherwise you should leave un-checked."
+msgstr ""
+"Establecer FALSO <b> suppress_filters </ b> para get_posts () función "
+"predeterminada. Utilice esta función si Autosort no funcionará con usted, si "
+"usted debe dejar desmarcado."
+
+#: ../include/apto_options_class.php:149
+msgid "Ignore Sticky Posts"
+msgstr "Ignorar Entradas Fijas"
+
+#: ../include/apto_options_class.php:153
+msgid ""
+"Ignore any Sticky posts, those will not appear on top of the list but per "
+"customised order."
+msgstr ""
+
+#: ../include/apto_options_class.php:158
+msgid "Next / Previous Apply"
+msgstr ""
+
+#: ../include/apto_options_class.php:162
+msgid "Apply the sort to default Next / Previous site-wide navigation."
+msgstr ""
+
+#: ../include/apto_options_class.php:162
+msgid "For advanced Next / Previous navigation check"
+msgstr ""
+
+#: ../include/apto_options_class.php:162 ../include/apto_options_class.php:183
+msgid "read more"
+msgstr ""
+
+#: ../include/apto_options_class.php:168
+msgid "bbPress Replies"
+msgstr "respuestas bbPress"
+
+#: ../include/apto_options_class.php:172
+msgid "Reverse the order of bbPress replies, show newest posts first"
+msgstr ""
+"Revertir el orden de las respuestas bbPress, mostrar entradas más nuevas "
+"primero"
+
+#: ../include/apto_options_class.php:179
+msgid "WooCommerce Up-sells Sort"
+msgstr ""
+
+#: ../include/apto_options_class.php:183
+msgid "Allow drag & drop for WooCommerce Up-sells products"
+msgstr ""
+
+#: ../include/apto_options_class.php:190
+msgid "Create Logs"
+msgstr "Crear registros"
+
+#: ../include/apto_options_class.php:194
+msgid ""
+"Create logs which may be usefull when debug or help to identify applied sort "
+"list."
+msgstr ""
+"Cree registros que pueden ser útiles cuando se depuran o ayudan a "
+"identificar la lista de ordenación aplicada."
+
+#: ../include/apto_options_class.php:203
+msgid "Logs"
+msgstr "Registros"
+
+#: ../include/apto_options_class.php:229
+msgid "Save Settings"
+msgstr "Guardar Ajustes"
+
+#: ../include/apto_options_class.php:317 ../include/apto_options_class.php:324
+msgid "Advanced Post Types Order plugin is inactive, please enter your"
+msgstr ""
+"El plugin Advanced Post Types Order esta inactivo, por favor ingrese su"
+
+#: ../include/apto_options_class.php:317 ../include/apto_options_class.php:324
+msgid "Licence Key"
+msgstr "Clave de Licencia"
+
+#: ../include/apto_options_class.php:496 ../include/apto_options_class.php:549
+#: ../include/apto_options_class.php:596
+msgid "Software License"
+msgstr "Licencia de software"
+
+#: ../include/apto_options_class.php:505 ../include/apto_options_class.php:557
+msgid "License Key"
+msgstr "Clave de Licencia"
+
+#: ../include/apto_options_class.php:510 ../include/apto_options_class.php:602
+#, fuzzy
+msgid ""
+"Enter the License Key you got when bought this product. If you lost the key, "
+"you can always retrieve it from"
+msgstr ""
+"Ingrese su Clave de Licencia la cual recibió cuando adquirió este producto. "
+"Si pierde la clave, siempre la puede recuperar desde"
+
+#: ../include/apto_options_class.php:510 ../include/apto_options_class.php:511
+#: ../include/apto_options_class.php:602 ../include/apto_options_class.php:603
+msgid "My Account"
+msgstr "Mi Cuenta"
+
+#: ../include/apto_options_class.php:511 ../include/apto_options_class.php:603
+msgid "More keys can be generate from"
+msgstr "Más claves se pueden generar a partir de"
+
+#: ../include/apto_options_class.php:520
+msgid "Save"
+msgstr "Guardar"
+
+#: ../include/apto_options_class.php:572
+#, fuzzy
+msgid "You can generate more keys from"
+msgstr "Puede generar más claves desde"
+
+#: ../include/apto_options_class.php:600
+#, fuzzy
+msgid "License Key Required"
+msgstr "Clave de Licencia"
+
+#~ msgid "Items Order Updated"
+#~ msgstr "Orden de Items Actualizado"
+
+#~ msgid ""
+#~ "Enter your License Key that you got when bought this product. If you lost "
+#~ "the key, you can always retrieve that from"
+#~ msgstr ""
+#~ "Ingrese su Clave de Licencia la cual recibió cuando adquirió este "
+#~ "producto. Si pierde la clave, siempre la puede recuperar desde"
+
+#~ msgid "Allow reorder"
+#~ msgstr "Permitir reordenar"
+
+#~ msgid ""
+#~ "<b>OFF</b> - If checked, you will need to manually update the queries to "
+#~ "use the menu_order"
+#~ msgstr ""
+#~ "<b>APAGADO</b> - Si se marca, tendrá que actualizar manualmente las "
+#~ "consultas (queries) para utilizar: menu_order"
+
+#~ msgid "Show Example"
+#~ msgstr "Ver Ejemplo"
+
+#~ msgid "You must include a 'orderby' parameter with value as 'menu_order'"
+#~ msgstr "Debe incluir un parámetro 'orderby' con un valor 'menu_order '"
+
+#~ msgid ""
+#~ "<b>ON</b> - If checked, the plug-in will automatically update the wp-"
+#~ "queries to use the new order (<b>No code update is necessarily</b>)."
+#~ msgstr ""
+#~ "<b>ENCENDIDO</ b> - Si se marca, el plugin actualizará automáticamente el "
+#~ "'wp-queries' para utilizar el nuevo orden (<b> No es necesario actualizar "
+#~ "el código </ b>)."
+
+#~ msgid ""
+#~ "<b>ON/Custom</b> - If checked, the plug-in will automatically update the "
+#~ "wp-queries to use the new order, but if a query already contain a "
+#~ "'orderby' parameter then this will be used instead."
+#~ msgstr ""
+#~ "<b>ENCENDIDO/Personalizado</ b> - Si se marca, el plugin actualizará "
+#~ "automáticamente el 'wp-queries' para utilizar el nuevo orden, pero si una "
+#~ "consulta 'query' ya contiene un parámetro 'orderby' entonces esto va a "
+#~ "ser utilizado en su lugar."
+
+#~ msgid "The following code will return the posts ordered by title"
+#~ msgstr "El siguiente código devolverá las entradas ordenadas por título"
+
+#~ msgid "Ignore Sticky Posts when Auto Sort is ON."
+#~ msgstr "Ignorar Entradas Fijas cuando el Orden Automático esté ENCENDIDO"
+
+#~ msgid ""
+#~ "You can overwrite this from code using the 'ignore_sticky_posts' within "
+#~ "your query"
+#~ msgstr ""
+#~ "Puede sobrescribir esto desde el código usando 'ignore_sticky_posts' "
+#~ "dentro de su consulta 'query'"
+
+#~ msgid ""
+#~ "The following code will return the Stiky posts first even if the Autosort "
+#~ "is ON"
+#~ msgstr ""
+#~ "El siguiente código devuelve los Mensajes Fijos primero aunque el Orden "
+#~ "Automático este ENCENDIDO"
+
+#~ msgid ""
+#~ "To update the admin interface and see the post types per your new sort, "
+#~ "this need to be checked"
+#~ msgstr ""
+#~ "Para actualizar la interfaz de administrador y ver los tipos de entradas "
+#~ "por su nuevo orden, esto debe estar marcado"
+
+#~ msgid ""
+#~ "Use defined order when gernerate a feed. Leave unchecked to use the "
+#~ "default date order"
+#~ msgstr ""
+#~ "Utiliza un orden definido cuando gernerate un feed. Dejar sin marcar para "
+#~ "utilizar el orden predeterminado por fecha"
+
+#~ msgid "Archive & Taxonomies"
+#~ msgstr "Archivo & Taxonomías"
+
+#~ msgid "Archive Posts"
+#~ msgstr "Entradas de Archivo"
+
+#~ msgid "Subscriber"
+#~ msgstr "Suscriptor"
+
+#~ msgid "Contributor"
+#~ msgstr "Colaborador"
+
+#~ msgid "Editor"
+#~ msgstr "Editor"
+
+#~ msgid "Administrator"
+#~ msgstr "Administrador"

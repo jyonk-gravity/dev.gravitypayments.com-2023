@@ -1,0 +1,34 @@
+.search-results {
+	.main__content {
+		padding: 2.5rem 3.5rem;
+	}
+
+	.hentry {
+		border-bottom: 1px solid #efeff1;
+		margin-bottom: 1rem;
+		padding-bottom: 1rem;
+
+		h2,
+		p:last-child {
+			margin-bottom: 0;
+		}
+	}	
+
+	.nav-links {
+		display: flex;
+		flex-wrap: wrap;
+		margin-top: 2rem;
+
+		a,
+		span {
+			@extend .btn;
+			@extend .btn--teal;
+			font-size: 0.875rem;
+			margin: 0 0.25rem 0.25rem 0;
+
+			&.current {
+				@extend .btn--violet;
+			}
+		}
+	}
+}

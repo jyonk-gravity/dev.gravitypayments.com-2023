@@ -1,0 +1,43 @@
+{
+    "key": "group_5f57d9f23a455",
+    "title": "Doc Content Block Settings",
+    "fields": [
+        {
+            "key": "field_5f91d2c400565",
+            "label": "Hide from Table of Contents?",
+            "name": "hide_from_table_of_contents",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Hide",
+            "ui_off_text": "Show"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "docs"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": false,
+    "description": "",
+    "modified": 1624645003
+}

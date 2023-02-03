@@ -1,0 +1,108 @@
+.footer {
+	&__helpful-form {
+		margin-top: 3rem;
+
+		.gform_wrapper ul li.field_description_below div.ginput_container_radio {
+			margin-top: 0;
+		}
+
+		.gform_wrapper form .gform_body .gform_fields .gfield .ginput_container.ginput_container_radio .gfield_radio {
+			display: flex;
+		}
+
+		.gform_wrapper form .gform_body .gform_fields .gfield .ginput_container.ginput_container_radio .gfield_radio li input[type=radio] {
+			display: none;
+		}
+
+		.gform_wrapper ul.gfield_radio li label {
+			-webkit-box-align: center;
+		    -ms-flex-align: center;
+		    align-items: center;
+		    display: -webkit-box;
+		    display: -ms-flexbox;
+		    display: flex;
+		    margin: 0 4px;
+		    padding: 0.5rem 1rem;
+		    border: 1px solid theme-color(lightest-gray);
+		    border-radius: 5px;
+		    transition: $transition-speed-fast;
+		}
+
+		.gform_wrapper ul.gfield_radio {
+			margin: 0;
+		}
+
+		#field_2_3 {
+			align-items: center;
+			display: flex;
+		}
+
+		.gform_wrapper .top_label .gfield_label {
+			color: theme-color(primary);
+			margin-bottom: 0;
+			margin-right: 1rem;
+		}
+
+		.gform_wrapper ul.gfield_radio li {
+			margin: 0;
+		}
+
+		#label_2_3_0 {
+			color: theme-color(primary);
+
+			&:hover {
+		    	border: 1px solid theme-color(secondary);
+		    	color: theme-color(secondary);
+		    }
+
+			// &::before {
+			// 	display: inline-block;
+			//     font-style: normal;
+			//     font-variant: normal;
+			//     text-rendering: auto;
+			//     -webkit-font-smoothing: antialiased;
+			//     font-family: "Font Awesome 5 Free";
+			//     font-weight: 400;
+			//     content: "\f164";
+			//     margin-right: 0.375rem;
+			// }
+		}
+
+		#label_2_3_1 {
+			color: theme-color(primary);
+
+			&:hover {
+		    	border: 1px solid $dsm-color-red-50;
+		    	color: $dsm-color-red-50;
+		    }
+
+			// &::before {
+			// 	display: inline-block;
+			//     font-style: normal;
+			//     font-variant: normal;
+			//     text-rendering: auto;
+			//     -webkit-font-smoothing: antialiased;
+			//     font-family: "Font Awesome 5 Free";
+			//     font-weight: 400;
+			//     content: "\f165";
+			//     margin-right: 0.375rem;
+			// }
+		}
+
+		#choice_2_3_0:checked {
+			+ #label_2_3_0 {
+				background: theme-color(secondary);
+				border: 1px solid theme-color(secondary);
+				color: $white;
+			}
+		}
+
+		#choice_2_3_1:checked {
+			+ #label_2_3_1 {
+				background: $dsm-color-red-50;
+				border: 1px solid $dsm-color-red-50;
+				color: $white;
+			}
+		}
+	}
+}

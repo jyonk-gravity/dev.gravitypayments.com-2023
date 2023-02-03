@@ -1,0 +1,29 @@
+.table-of-contents {
+	@include media-breakpoint-up(lg) {
+		padding-left: 2rem;
+		position: sticky;
+		top: 100px;
+	}
+
+	ul {
+		margin: 1rem 0 1.5rem;
+		padding: 0;
+	}
+
+	li {
+		font-size: 0.875rem;
+		list-style: none;
+		margin-bottom: 0.5rem;
+	}	
+
+	a {
+		color: $dsm-color-neutral-80;
+		display: block;
+		line-height: 1.35;
+
+		&:hover {
+			color: theme-color(secondary);
+			text-decoration: none;
+		}
+	}
+}
