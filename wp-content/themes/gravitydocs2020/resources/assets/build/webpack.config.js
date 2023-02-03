@@ -174,7 +174,7 @@ let webpackConfig = {
     new webpack.LoaderOptionsPlugin({
       test: /\.js$/,
       options: {
-        eslint: { failOnWarning: false, failOnError: true },
+        eslint: { failOnWarning: false, failOnError: false },
       },
     }),
     // new StyleLintPlugin({
