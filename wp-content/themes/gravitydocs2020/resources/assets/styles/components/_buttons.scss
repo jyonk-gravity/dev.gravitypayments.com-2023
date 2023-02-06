@@ -1,48 +1,52 @@
 .btn {
+	min-width: 130px;
+	padding: 0.1875rem 0.75rem;
+
 	&--blue {
-		background: theme-color(primary);
+		background: $blue;
 		color: $white;
-		font-weight: $font-weight-semibold;
+		font-weight: $font-weight-medium;
 		text-decoration: none;
 
 		&:hover {
-			background: lighten($dsm-color-primary-blue, 10);
+			background: #348EBC;
 			color: $white;
 		}
 	}
 
 	&--green {
-		background: theme-color(secondary);
+		background: $green;
 		color: $white;
-		font-weight: $font-weight-semibold;
+		font-weight: $font-weight-medium;
 		text-decoration: none;
 
 		&:hover {
-			background: lighten($dsm-color-green-50, 10);
+			background: #6BAC3B;
 			color: $white;
 		}
 	}
 
 	&--teal {
-		background: $dsm-color-teal-60;
+		background: $teal;
 		color: $white;
-		font-weight: $font-weight-semibold;
+		font-weight: $font-weight-medium;
 		text-decoration: none;
 
 		&:hover {
-			background: lighten($dsm-color-teal-60, 10);
+			background: #49B2AB;
 			color: $white;
 		}
 	}
 
-	&--violet {
-		background: $dsm-color-violet-60;
+	&--violet,
+	&--purple {
+		background: $purple;
 		color: $white;
-		font-weight: $font-weight-semibold;
+		font-weight: $font-weight-medium;
 		text-decoration: none;
 
 		&:hover {
-			background: lighten($dsm-color-violet-60, 10);
+			background: #6E75B6;
 			color: $white;
 		}
 	}

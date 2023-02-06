@@ -95,34 +95,65 @@ $dsm-color-base-dark: #2a2a2a;
 $dsm-color-base-gray: #7e7e7e;
 $dsm-color-base-light: #cccccc;
 
+
+// Gravity Brand Colors 2022
+
+// Primary
+$lime:          #91C73D;
+$navy:          #253750;
+
+// Secondary
+$green:         #519D18;
+$teal:          #29A59C;
+$blue:          #107AB0;
+$purple:        #545DA9;
+
+// Tertiary
+$red:           #DC2E50;
+$orange:        #DC7539;
+$yellow:        #E7A239;
+
+// Grays
+$cloud:         #FAFAFB;
+$silver:        #CACED0;
+$pewter:        #7E868C;
+$charcoal:      #20282F;
+
+// Backgrounds
+$mint:          #EDF3EC;
+$indigo:        #353F69;
+
+
+
 $bg-gradient-primary: linear-gradient(180deg, $dsm-color-blue-10 0%, $dsm-color-blue-30 100%);
 $bg-gradient-dark: linear-gradient(135deg, $dsm-color-blue-80 0%, $dsm-color-blue-100 100%);
 
-$black:		$dsm-color-neutral-100;
+
+$black:		#000;
 $white:		#fff;
 
 $theme-colors: (
-  primary: $dsm-color-primary-blue,
-  secondary: $dsm-color-green-50,
+  primary: $navy,
+  secondary: $green,
   secondary-20: $dsm-color-green-20,
-  gray: $dsm-color-neutral-80,
-  light-gray: $dsm-color-neutral-20,
-  lighter-gray: #efeff1,
-  lightest-gray: #f9f9fa,
-  body: $dsm-color-neutral-100,
+  gray: $pewter,
+  light-gray: $silver,
+  lighter-gray: $cloud,
+  lightest-gray: $cloud,
+  body: $charcoal,
   body-muted: $dsm-color-neutral-50,
-  body-link: $dsm-color-green-50,
+  body-link: $green,
   body-link-hover: $dsm-color-green-40,
   highlight: $dsm-color-green-05,
   btn-text-dark: $dsm-color-base-dark,
   btn-text-light: $white,
   btn-primary: $dsm-color-base-blue,
   btn-primary-hover: $dsm-color-blue-70,
-  btn-secondary: $dsm-color-primary-green,
+  btn-secondary: $green,
   btn-secondary-hover: $dsm-color-green-40,
   btn-white: $white,
   btn-white-hover: $dsm-color-base-light,
-  btn-nav: $dsm-color-primary-green,
+  btn-nav: $green,
   btn-nav-hover: $dsm-color-green-40,
   icon-green-bg: $dsm-color-green-10,
   icon-green-light: $dsm-color-primary-green,
@@ -158,10 +189,12 @@ $slick-font-path: "~slick-carousel/slick/fonts/";
 $slick-loader-path: "~slick-carousel/slick/";
 
 // Fonts
-$font-weight-normal:	400;
-$font-weight-semibold:	600;
-$font-weight-bold: 		700; //700
-$font-weight-extrabold:	700; //800
+$font-weight-normal:      400;
+$font-weight-medium:      500;
+$font-weight-semibold:    600;
+$font-weight-bold:        700;
+$font-weight-extrabold:	  800;
+$font-weight-black:       900;
 
 // Transitions
 $transition-speed-slow:	0.5s;

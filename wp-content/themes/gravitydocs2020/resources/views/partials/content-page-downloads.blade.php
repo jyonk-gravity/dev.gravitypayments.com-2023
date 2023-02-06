@@ -6,7 +6,7 @@
 		@php the_row(); @endphp
 
 		@if ( get_row_layout() == 'intro' )
-			<section class="page-block__intro" style="padding: 2.5rem 0 2.5rem 3.5rem; background: linear-gradient(180deg, rgba(236, 245, 253, 0.6) 0%, #FFFFFF 100%);">
+			<section class="page-block__intro" style="padding: 2.5rem 0 2.5rem 3.5rem;">
 				<div class="row align-items-center">
 					<div class="col-lg-6">
 						@if ( get_sub_field('heading') )
@@ -244,7 +244,7 @@
 
 								<a href="{{ esc_url($download_link) }}" 
 									download 
-									class="btn btn--teal btn-sm d-block btn-download">Download</a>
+									class="btn btn--green btn-sm d-block btn-download">Download</a>
 
 								@if ( get_field('download_hash') )
 								<p class="download-hash mt-2"><strong>SHA-256 hash:</strong> {!! get_field('download_hash') !!}</p>
@@ -360,7 +360,7 @@
 
 								<a href="{{ esc_url($download_link) }}" 
 									download 
-									class="btn btn--teal btn-sm d-block btn-download">Download</a>
+									class="btn btn--green btn-sm d-block btn-download">Download</a>
 							@endif
 						</div>	
 					</div>
