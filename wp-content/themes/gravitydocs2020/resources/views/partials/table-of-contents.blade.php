@@ -22,7 +22,7 @@
             $content_block_id = preg_replace("/[\s_]/", "-", $content_block_id);
             @endphp
 
-            <li><a href="#{{ $content_block_id }}">{!! get_sub_field('heading') !!}</a></li>
+            <li><a href="#{{ $content_block_id }}" class="table-of-contents__link">{!! get_sub_field('heading') !!}</a></li>
           @endif
         @endif
 

@@ -4,7 +4,7 @@
 	height: 100%;
 	left: -255px;
 	overflow: auto;
-	padding: 1.5rem;
+	padding: 2.5rem 1.5rem;
 	position: fixed;
 	top: 72px;
 	transition: 0.4s;
@@ -56,21 +56,21 @@
 		margin-bottom: 1rem;
 
 		a {
-			color: lighten(theme-color(gray), 10);
+			color: darken($pewter, 8);
 			display: block;
 			font-size: 0.9375rem;
-			margin-bottom: 0.5rem;
+			margin-bottom: 0.75rem;
 			text-decoration: none;
 			transition: color $transition-speed-fast;
 
 			&:hover {
-				color: theme-color(secondary);
+				color: $green;
 			}
 		}
 	}
 
 	.breadcrumb-link {
-		color: theme-color(secondary);
+		color: $green;
 		display: block;
 		padding-right: 20px;
 
@@ -86,13 +86,13 @@
 	.demo-link,
 	.api-link {
 		border-top: 1px solid theme-color(lightest-gray);
-		color: theme-color(primary);
+		color: $navy;
 		display: block;
 		margin-top: 1rem;
 		padding-top: 1rem;
 
 		&:hover {
-			color: $dsm-color-base-blue;
+			color: $green;
 		}
 	}
 
@@ -104,7 +104,7 @@
 
 	.nav--sidebar {
 		a {
-			color: lighten(theme-color(gray), 5);
+			color: darken($pewter, 8);
 			display: block;
 			font-size: 0.9375rem;
 			margin-bottom: 0.5rem;
@@ -112,7 +112,7 @@
 			transition: color $transition-speed-fast;
 
 			&:hover {
-				color: theme-color(secondary);
+				color: $green;
 			}
 		}
 

@@ -6,13 +6,13 @@
 		border-bottom: 0;
 
 		.nav-link {
-			background-color: rgba(theme-color(primary), 0.7);
+			background-color: rgba($navy, 0.8);
 			border: 0;
 			color: $white;
 			text-decoration: none;
 
 			&.active {
-				background-color: darken(theme-color(primary), 5);
+				background-color: $navy;
 				border: 0;
 			}
 		}

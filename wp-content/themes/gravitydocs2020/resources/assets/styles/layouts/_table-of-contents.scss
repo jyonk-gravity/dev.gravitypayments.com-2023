@@ -17,12 +17,13 @@
 	}	
 
 	a {
-		color: $dsm-color-neutral-80;
+		color: darken($pewter, 8);
 		display: block;
 		line-height: 1.35;
+		transition: $transition-speed-fast;
 
 		&:hover {
-			color: theme-color(secondary);
+			color: $green;
 			text-decoration: none;
 		}
 	}

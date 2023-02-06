@@ -6,7 +6,7 @@
 		@php the_row(); @endphp
 
 		@if ( get_row_layout() == 'intro' )
-			<section class="page-block__intro" style="padding: 2.5rem 0 2.5rem 3.5rem; background: linear-gradient(180deg, rgba(236, 245, 253, 0.6) 0%, #FFFFFF 100%);">
+			<section class="page-block__intro" style="padding: 2.5rem 0 2.5rem 3.5rem;">
 				<div class="row align-items-center">
 					<div class="col-lg-6">
 						@if ( get_sub_field('heading') )

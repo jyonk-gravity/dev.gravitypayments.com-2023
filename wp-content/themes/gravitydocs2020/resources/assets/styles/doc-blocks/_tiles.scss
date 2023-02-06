@@ -3,18 +3,18 @@
 		.tile {
 			background: $white;
 			border-radius: 0.25rem;
-			border: 1px solid theme-color('lighter-gray');
+			border: 1px solid rgba($silver, 0.4);
 			display: block;
 			height: 100%;
 			padding: 1.75rem;
 			transition: box-shadow $transition-fast;
 
 			&:hover {
-				box-shadow: 0 0.1875rem 1.5rem rgba($black, 0.15);
+				box-shadow: 0 0.5rem 2rem rgba($black, 0.1);
 				text-decoration: none;
 
 				h3 {
-					color: lighten($dsm-color-primary-blue, 10);
+					color: $green;
 					text-decoration: none;
 				}
 
