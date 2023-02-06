@@ -91,14 +91,14 @@ class GFGAET_Submission_Feeds extends GFFeedAddOn {
 	 */
 	public function add_settings_link( $links ) {
 
-		$settings_url = admin_url( 'admin.php?page=gf_settings&subview=GFGAET_UA');
+		$settings_url = admin_url( 'admin.php?page=gf_settings&subview=GFGAET_UA' );
 		if ( current_user_can( 'manage_options' ) ) {
 			$options_link = sprintf( '<a href="%s">%s</a>', esc_url( $settings_url ), _x( 'Settings', 'Gravity Forms Event Tracking Settings page', 'gravity-forms-google-analytics-event-tracking' ) );
 			$links[]      = $options_link;
 		}
 		$docs_link = sprintf( '<a href="%s" target="_blank">%s</a>', esc_url( 'https://mediaron.com/event-tracking-for-gravity-forms/?utm_source=wordpress_plugins_page&utm_medium=documentation&utm_campaign=event_tracking' ), _x( 'Documentation', 'Gravity Forms Event Tracking Documentation page', 'gravity-forms-google-analytics-event-tracking' ) );
 
-	 	$beta_link = sprintf( '<a href="%s" target="_blank" style="color: green; font-weight: 700;">%s</a>', esc_url( 'https://www.gravityforms.com/blog/google-analytics-add-on-install-the-beta/' ), _x( 'Join the Beta!', 'Gravity Forms Google Analytics Page', 'gravity-forms-google-analytics-event-tracking' ) );
+		$beta_link = sprintf( '<a href="%s" target="_blank" style="color: green; font-weight: 700;">%s</a>', esc_url( 'https://www.gravityforms.com/add-ons/google-analytics/' ), _x( 'Get the Google Analytics Add-on', 'Gravity Forms Google Analytics Page', 'gravity-forms-google-analytics-event-tracking' ) );
 		$links[]   = $docs_link;
 		$links[]   = $beta_link;
 
@@ -407,15 +407,50 @@ gtag('config', '<?php echo esc_js( $ga_code ); ?>');
 		$ua_options = get_option( 'gravityformsaddon_GFGAET_UA_settings', array() );
 		if ( isset( $ua_options['gravity_forms_event_tracking_gtm_utm_vars'] ) ) {
 			if ( 'utm_on' === $ua_options['gravity_forms_event_tracking_gtm_utm_vars'] ) {
-				wp_enqueue_script(
-					'gforms_event_tracking_utm_gtm',
-					GFGAET::get_plugin_url( '/js/utm-tag-manager.js' ),
-					array( 'jquery', 'wp-ajax-response' ),
-					$this->_version,
-					true
+				$utm_vars            = array(
+					'utm_id',
+					'utm_source',
+					'utm_medium',
+					'utm_campaign',
+					'utm_term',
+					'utm_content',
 				);
+				$can_load_utm_script = false;
+				foreach ( $utm_vars as $utm_var ) {
+					if ( isset( $_GET[ $utm_var ] ) ) { // phpcs:ignore
+						$can_load_utm_script = true;
+						break;
+					}
+				}
+				if ( $can_load_utm_script || $this->has_form() ) {
+					$script_location = GFGAET::get_plugin_url( '/js/utm-tag-manager.min.js' );
+					if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+						$script_location = GFGAET::get_plugin_url( '/js/utm-tag-manager.js' );
+					}
+					wp_enqueue_script(
+						'gforms_event_tracking_utm_gtm',
+						$script_location,
+						array( 'jquery', 'wp-ajax-response' ),
+						$this->_version,
+						true
+					);
+				}
 			}
 		}
+	}
+
+	/**
+	 * Determines if a page has a form on it.
+	 *
+	 * @return bool Whether post/page has gravity form.
+	 */
+	private function has_form() {
+		if ( ! class_exists( 'GFCommon' ) || ! is_singular() ) {
+			return;
+		}
+		require_once GFCommon::get_base_path() . '/form_display.php';
+		GFFormDisplay::parse_forms( get_queried_object()->post_content, $forms, $blocks );
+		return ! empty( $forms );
 	}
 
 	/**
@@ -1116,11 +1151,11 @@ gtag('config', '<?php echo esc_js( $ga_code ); ?>');
 	 */
 	public function feed_settings_fields() {
 		$ga_id_placeholder = $this->get_ga_id();
-		$ua_options = get_option( 'gravityformsaddon_GFGAET_UA_settings', array() );
-		$beta_notification = rgar( $ua_options, 'beta_notification');
-		$beta_field = array(
-			'name'       => 'gravityforms_ga',
-			'type'       => $beta_notification === 'on' || rgblank( $beta_notification ) ? 'gforms_beta_cta' : 'hidden',
+		$ua_options        = get_option( 'gravityformsaddon_GFGAET_UA_settings', array() );
+		$beta_notification = rgar( $ua_options, 'beta_notification' );
+		$beta_field        = array(
+			'name' => 'gravityforms_ga',
+			'type' => $beta_notification === 'on' || rgblank( $beta_notification ) ? 'gforms_beta_cta' : 'hidden',
 		);
 		return array(
 			array(
@@ -1202,9 +1237,9 @@ gtag('config', '<?php echo esc_js( $ga_code ); ?>');
 		?>
 		
 		<div class="alert info">
-		<div style="padding-top: 25px; padding-bottom: 25px"><a href="https://www.gravityforms.com/blog/google-analytics-add-on-install-the-beta" target="_blank"><img src="<?php echo esc_url( GFGAET::get_plugin_url( '/img/gravity-forms-logo-horizontal.svg' ) ); ?>" width="800" height="103" /></a></div>
-			<h3 style="font-size: 18px; line-height: 1.2; font-weight: 400">The team behind Gravity Forms is releasing their own Google Analytics plugin soon. Currently it is in beta and you are invited to try it out. It should make things so much easier.</h3>
-			<p><a class="button primary" href="https://www.gravityforms.com/blog/google-analytics-add-on-install-the-beta" target="_blank">Check out the Beta Today</a>
+		<div style="padding-top: 25px; padding-bottom: 25px"><a href="https://www.gravityforms.com/add-ons/google-analytics/" target="_blank"><img src="<?php echo esc_url( GFGAET::get_plugin_url( '/img/gravity-forms-ga-addon-horizontal.png' ) ); ?>" width="800" height="214" /></a></div>
+			<h3 style="font-size: 18px; line-height: 1.2; font-weight: 400">The team behind Gravity Forms has developed and released an official Google Analytics Add-on.</h3>
+			<p><a class="button primary" href="https://www.gravityforms.com/add-ons/google-analytics/" target="_blank">Check out the new Google Analytics Add-On</a>
 		</div>
 		<?php
 		echo wp_kses_post( ob_get_clean() );

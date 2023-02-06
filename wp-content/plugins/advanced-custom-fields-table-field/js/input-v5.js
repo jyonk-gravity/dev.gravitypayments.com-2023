@@ -4,7 +4,7 @@
 
 		var t = this;
 
-		t.version = '1.3.14';
+		t.version = '1.3.19';
 
 		t.param = {};
 
@@ -104,7 +104,34 @@
 
 		t.init = function() {
 
-			t.init_workflow();
+			// classic editor
+			if ( $( '.acf-table-root' ).not( '.acf-table-rendered' ).length > 0 ) {
+
+				t.init_workflow();
+			}
+
+			// try again multiple times if gutenberg editor or other delayed appearances
+			var loops = 0;
+			var table_exists = false;
+			var table_exists_interval = setInterval( function() {
+
+				loops++;
+
+				if ( $( '.acf-table-root' ).not( '.acf-table-rendered' ).length > 0 ) {
+
+					table_exists = true;
+					t.init_workflow();
+				}
+
+				if (
+					table_exists ||
+					loops >= 4
+				) {
+
+					clearInterval( table_exists_interval );
+				}
+
+			}, 500 );
 		};
 
 		t.init_workflow = function() {
@@ -155,7 +182,27 @@
 
 		t.get_field_key = function( that ) {
 
-			return that.closest( '[data-key]').data( 'key' );
+			// DETECT BLOCK, GETS BLOCK ID {
+
+				var block_id = '';
+
+				$wp_block = that.closest( '.wp-block' );
+
+				if ( $wp_block.length > 0 ) {
+
+					var block_id = $wp_block.attr( 'id' );
+				}
+
+			// }
+
+			var target = that.closest( '[data-key^="field_"]' );
+
+			if ( target.length > 0 ) {
+
+				return block_id + ':' + target.data( 'key' );
+			}
+
+			return false;
 		};
 
 		t.each_table = function( ) {

@@ -26,6 +26,7 @@ class WPSEO_Tracking_Settings_Data implements WPSEO_Collection {
 		'alternate_website_name',
 		'company_logo',
 		'company_name',
+		'company_alternate_name',
 		'person_name',
 		'person_logo',
 		'person_logo_id',
@@ -54,6 +55,11 @@ class WPSEO_Tracking_Settings_Data implements WPSEO_Collection {
 		'zapier_api_key',
 		'wincher_tokens',
 		'wincher_website_id',
+		'least_readability_ignore_list',
+		'least_seo_score_ignore_list',
+		'most_linked_ignore_list',
+		'least_linked_ignore_list',
+		'indexables_page_reading_list',
 	];
 
 	/**
@@ -209,7 +215,11 @@ class WPSEO_Tracking_Settings_Data implements WPSEO_Collection {
 		'search_cleanup_emoji',
 		'search_cleanup_patterns',
 		'search_character_limit',
+		'redirect_search_pretty_urls',
 		'wordproof_integration_active',
+		'indexables_overview_state',
+		'deny_search_crawling',
+		'deny_wp_json_crawling',
 	];
 
 	/**

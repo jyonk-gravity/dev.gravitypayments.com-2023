@@ -45,11 +45,17 @@ class Replacer
       if (function_exists('wp_get_original_image_path')) // WP 5.3+
       {
           $source_file = wp_get_original_image_path($post_id);
+
           if ($source_file === false) // if it's not an image, returns false, use the old way.
+					{
             $source_file = trim(get_attached_file($post_id, apply_filters( 'emr_unfiltered_get_attached_file', true )));
+					}
+					else {
+						$this->source_is_scaled = true;
+					}
       }
       else
-        $source_file = trim(get_attached_file($post_id, apply_filters( 'emr_unfiltered_get_attached_file', true )));
+      	$source_file = trim(get_attached_file($post_id, apply_filters( 'emr_unfiltered_get_attached_file', true )));
 
       /* It happens that the SourceFile returns relative / incomplete when something messes up get_upload_dir with an error something.
          This case shoudl be detected here and create a non-relative path anyhow..
@@ -78,8 +84,7 @@ class Replacer
       }
       else
         $this->source_url = wp_get_attachment_url($post_id);
-    //  $this->ThumbnailUpdater = new \ThumbnailUpdater($post_id);
-      //$this->ThumbnailUpdater->setOldMetadata($this->source_metadata);
+
   }
 
 	private function fs()
@@ -139,11 +144,16 @@ class Replacer
 
         if (false === $result_moved)
         {
-          $ex = sprintf( esc_html__('The uploaded file could not be moved to %1$s. This is most likely an issue with permissions, or upload failed.', "enable-media-replace"), $targetFile );
-          throw new \RuntimeException($ex);
+					if ($targetFileObj->exists())
+					{
+						 Log::addDebug('Could remove file from tmp directory?');
+					}
+					else {
+						$ex = sprintf( esc_html__('The uploaded file could not be moved to %1$s. This is most likely an issue with permissions, or upload failed.', "enable-media-replace"), $targetFile );
+	          throw new \RuntimeException($ex);
+					}
+
         }
-
-
 
       // init targetFile.
       $this->targetFile = $fs->getFile($targetFile);
@@ -154,8 +164,10 @@ class Replacer
         Log::addWarn('Setting permissions failed');
       }
 
+
       // update the file attached. This is required for wp_get_attachment_url to work.
-      $updated = update_attached_file($this->post_id, $this->targetFile->getFullPath() );
+			// Using RawFullPath because FullPath does normalize path, which update_attached_file doesn't so in case of windows / strange Apspaths it fails.
+      $updated = update_attached_file($this->post_id, $this->targetFile->getRawFullPath() );
       if (! $updated)
         Log::addError('Update Attached File reports as not updated or same value');
 
@@ -450,7 +462,7 @@ class Replacer
        @unlink($attached_file);
     }
 
-
+    do_action( 'emr_after_remove_current', $this->post_id, $meta, $backup_sizes, $file );
   }
 
   /** Handle new dates for the replacement */
@@ -513,10 +525,11 @@ class Replacer
     // get relurls of both source and target.
     $urls = $this->getRelativeURLS();
 
-
     if ($args['thumbnails_only'])
     {
-      foreach($urls as $side => $data)
+//			if (isset($urls['source']['file']) && $urls['source'])
+
+      /*foreach($urls as $side => $data)
       {
         if (isset($data['base']))
         {
@@ -526,7 +539,7 @@ class Replacer
         {
           unset($urls[$side]['file']);
         }
-      }
+      } */
     }
 
     $search_urls = $urls['source'];
@@ -543,8 +556,18 @@ class Replacer
       }
     }
 
-    Log::addDebug('Source', $this->source_metadata);
-    Log::addDebug('Target', $this->target_metadata);
+		// Original can be unbalanced
+		if (isset($search_urls['original']))
+		{
+			 if (! isset($replace_urls['original']))
+			 {
+				  $replace_urls['original'] = $replace_urls['file'];
+			 }
+		}
+
+
+    Log::addDebug('Source', $search_urls);
+    Log::addDebug('Target', $replace_urls);
     /* If on the other hand, some sizes are available in source, but not in target, try to replace them with something closeby.  */
     foreach($search_urls as $size => $url)
     {
@@ -563,6 +586,11 @@ class Replacer
              Log::addDebug('Unset size ' . $size . ' - no closest found in source');
            }
         }
+				elseif ($url === $replace_urls[$size]) { // identical
+						unset($replace_urls[$size]);
+						unset($search_urls[$size]);
+						Log::addDebug('Unset size '  . $size . ' - search and replace identical');
+				}
     }
 
     /* If source and target are the same, remove them from replace. This happens when replacing a file with same name, and +/- same dimensions generated.
@@ -602,7 +630,7 @@ class Replacer
        Log::addDebug('Running additional replace for : '. $component, $run);
        $updated += $this->doReplaceQuery($run['base_url'], $run['search_urls'], $run['replace_urls']);
     }
-    //do_action('')
+
 
     Log::addDebug("Updated Records : " . $updated);
     return $updated;
@@ -655,8 +683,18 @@ class Replacer
   {
     global $wpdb;
 
-    $meta_options = apply_filters('emr/metadata_tables', array('post', 'comment', 'term', 'user', 'options'));
+		$options = array('post', 'comment', 'term', 'user', 'options');
+    $meta_options = apply_filters('emr/metadata_tables', $options);
+
+
+		// fields in options to look for.
+		$option_fields = array('widget_block');
+		$option_fields = apply_filters('emr/replacer/option_fields', $option_fields);
+
+
+
     $number_of_updates = 0;
+		$prepare = array('%' . $url . '%');
 
     foreach($meta_options as $type)
     {
@@ -670,9 +708,14 @@ class Replacer
               $update_sql = ' UPDATE ' . $wpdb->postmeta . ' SET meta_value = %s WHERE meta_id = %d';
           break;
 					case "options": // basked case (for guten widgets).
+						 $in_str_arr = array_fill( 0, count( $option_fields ), '%s' );
+				 	 	 $in_str = join( ',', $in_str_arr );
+
 							$sql = 'SELECT option_id as id, option_name, option_value as meta_value FROM ' . $wpdb->options . '
-								WHERE option_value like %s and option_name = "widget_block" ';
+								WHERE option_value like %s and option_name in (' . $in_str . ')';
 							$type = 'option';
+
+							$prepare = array_merge($prepare, $option_fields);
 
 							$update_sql = ' UPDATE ' . $wpdb->options . ' SET option_value = %s WHERE option_id = %d';
 					break;
@@ -691,8 +734,7 @@ class Replacer
           break;
         }
 
-        $sql = $wpdb->prepare($sql, '%' . $url . '%');
-				Log::addTemp('Handle MEta SQL ' . $sql);
+        $sql = $wpdb->prepare($sql, $prepare);
 
 				if ($wpdb->last_error)
 					Log::addWarn('Error' . $wpdb->last_error, $wpdb->last_query);
@@ -813,6 +855,10 @@ class Replacer
         $fileArray = array();
         if (isset($meta['file']))
           $fileArray['file'] = $meta['file'];
+			  if (isset($meta['original_image']))
+				{
+					$fileArray['original'] = $meta['original_image'];
+				}
 
         if (isset($meta['sizes']))
         {
@@ -824,6 +870,8 @@ class Replacer
             }
           }
         }
+
+				// scaled
       return $fileArray;
   }
 
@@ -845,9 +893,6 @@ class Replacer
           'target' => array('url' => $this->target_url, 'metadata' => $this->getFilesFromMetadata($this->target_metadata) ),
       );
 
-    //  Log::addDebug('Source Metadata', $this->source_metadata);
-  //    Log::addDebug('Target Metadata', $this->target_metadata);
-
       $result = array();
 
       foreach($dataArray as $index => $item)
@@ -865,7 +910,7 @@ class Replacer
           }
 
       }
-  //    Log::addDebug('Relative URLS', $result);
+     Log::addDebug('Relative URLS', $result);
       return $result;
   }
 

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Search Exclude
 Description: Hide any page or post from the WordPress search results by checking off the checkbox.
-Version: 1.2.7
+Version: 1.3.0
 Author: Roman Pronskiy
 Author URI: http://pronskiy.com
 Plugin URI: http://wordpress.org/plugins/search-exclude/
@@ -50,14 +50,24 @@ class SearchExclude
         add_filter('manage_pages_columns', array($this, 'addColumn'));
         add_action('manage_posts_custom_column', array($this, 'populateColumnValue'), 10, 2);
         add_action('manage_pages_custom_column', array($this, 'populateColumnValue'), 10, 2);
-        add_action('bulk_edit_custom_box', array($this, 'addBulkEditCustomBox'));
+
         add_action('quick_edit_custom_box', array($this, 'addQuickEditCustomBox'));
         add_action('admin_print_scripts-edit.php', array($this, 'enqueueEditScripts'));
-        add_action('wp_ajax_search_exclude_save_bulk_edit', array($this, 'saveBulkEdit'));
         add_action('admin_enqueue_scripts', array($this, 'addStyle'));
 
+        /** Bulk edit */
+        foreach ( get_post_types() as $post_type ) {
+            add_filter( "bulk_actions-edit-$post_type", array($this, 'bulk_edit') ); // Add dropdown
+            add_filter( "handle_bulk_actions-edit-$post_type", array($this, 'bulk_action_handler'), 10, 3 ); // process the action
+        }
+        add_action( 'admin_notices', array($this, 'bulk_action_notices') ); // display messages
+        add_filter( 'removable_query_args', function($args) {
+            $args[] = 'se_saved';
+            return $args;
+        });
+
         /**
-         * Hook can be used outside of the plugin.
+         * Hook can be used outside the plugin.
          *
          * You can pass any post/page/custom_post ids in the array with first parameter.
          * The second parameter specifies states of visibility in search to be set.
@@ -82,6 +92,57 @@ class SearchExclude
          * @param bool $hide
          */
         add_action('searchexclude_hide_from_search', array($this, 'savePostIdsToSearchExclude'), 10, 2);
+    }
+
+    public function bulk_action_notices() {
+        if ( empty( $_GET[ 'se_saved' ] ) ) {
+            return;
+        }
+
+        $count = (int) $_GET[ 'se_saved' ];
+        $message = sprintf(
+            _n(
+                '%d item updated.',
+                '%d items updated.',
+                $count
+            ),
+            $count
+        );
+
+        echo "<div class=\"notice notice-success is-dismissible\"><p>{$message}</p></div>";
+    }
+
+    public function bulk_action_handler( $redirect, $doaction, $object_ids ) {
+
+        // let's remove query args first
+        $redirect = remove_query_arg(
+            array( 'se_saved' ),
+            $redirect
+        );
+
+        if ($doaction !== 'se_show' && $doaction !== 'se_hide') {
+            return $redirect;
+        }
+
+        // do something for "Make Draft" bulk action
+        $exclude = ('se_hide' === $doaction);
+        $this->savePostIdsToSearchExclude($object_ids, $exclude);
+
+        $redirect = add_query_arg(
+            'se_saved', // just a parameter for URL
+            count( $object_ids ), // how many posts have been selected
+            $redirect
+        );
+
+        return $redirect;
+    }
+
+    public function bulk_edit( $bulk_array ) {
+
+        $bulk_array[ 'se_hide' ] = 'Hide from Search';
+        $bulk_array[ 'se_show' ] = 'Show in Search';
+
+        return $bulk_array;
     }
 
     /**
@@ -138,19 +199,6 @@ class SearchExclude
         include(dirname(__FILE__) . '/views/' . $view . '.php');
     }
 
-    public function saveBulkEdit()
-    {
-        check_ajax_referer( 'search_exclude_bulk_edit', '_wpnonce_search_exclude_bulk_edit' );
-        $this->checkPermissions();
-        $postIds = !empty($_POST['post_ids']) ? $this->filterPostIds($_POST[ 'post_ids' ]) : false;
-        $exclude = isset($_POST['sep_exclude']) && '' !== $_POST['sep_exclude']
-            ? filter_var($_POST['sep_exclude'], FILTER_VALIDATE_BOOLEAN)
-            : null;
-        if (is_array($postIds) && null !== $exclude) {
-            $this->savePostIdsToSearchExclude($postIds, $exclude);
-        }
-    }
-
     private function filterPostIds($postIds)
     {
         return array_filter(filter_var($postIds, FILTER_VALIDATE_INT, FILTER_FORCE_ARRAY));
@@ -177,13 +225,6 @@ class SearchExclude
     {
         if ('search_exclude' == $columnName) {
             $this->view('quick_edit');
-        }
-    }
-
-    public function addBulkEditCustomBox($columnName)
-    {
-        if ('search_exclude' == $columnName) {
-            $this->view('bulk_edit');
         }
     }
 
