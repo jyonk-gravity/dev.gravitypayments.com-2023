@@ -29,7 +29,7 @@
 		@if ( get_row_layout() == 'intro' )
 			<section class="page-block__intro">
 				<div class="row align-items-center">
-					<div class="col-xl-6">
+					<div class="col-xl-7">
 						@if ( get_sub_field('heading') )
 							<h1>{!! get_sub_field('heading') !!}</h1>
 						@endif
@@ -104,7 +104,7 @@
 						$image_alt = $image['alt'];
 						@endphp
 
-						<div class="col-xl-6">
+						<div class="col-xl-5">
 							<img src="{{ esc_url($image_url) }}" alt="{{ esc_attr($image_alt) }}" class="img-fluid">
 						</div>
 					@endif
