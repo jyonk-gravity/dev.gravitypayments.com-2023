@@ -4,7 +4,7 @@
   		<div class="col-8 col-lg-4">
     		<a class="brand" href="{{ home_url('/') }}"><img src="@asset('images/gravity-documentation-logo.svg')" alt="Gravity Payments Developer Documentation"></a>
     		@if ( is_page('reference') )
-    		<a href="/" class="btn btn-light btn-sm ml-3 px-3 d-inline-flex align-items-center" style="border-radius: 40px;"><i class="far fa-angle-left mr-1"></i> <span>Back</span></a>
+    		<a href="/" class="btn btn-light btn-sm ml-3 px-3 d-inline-flex align-items-center" style="border-radius: 40px; min-width: 0;"><i class="far fa-angle-left mr-1"></i> <span>Back</span></a>
     		@endif
     	</div>
     	<div class="d-none d-lg-block col-4 justify-content-center">

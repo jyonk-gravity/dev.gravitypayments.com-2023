@@ -1,9 +1,9 @@
 .page-block__intro {
   // background: linear-gradient(180deg, rgba(236, 245, 253, 0.6) 0%, #FFFFFF 100%);
-  padding: 1.5rem 20px 0 55px;
+  padding: 1.5rem 3.4375rem 0;
 
   @include media-breakpoint-up(lg) {
-    padding: 2.5rem 0 0 3.5rem;
+    padding: 2.5rem 3.4375rem 0;
   }
 
   .intro-buttons {
@@ -32,6 +32,7 @@
       }
 
       h3 {
+        font-weight: $font-weight-extrabold;
         margin-bottom: 0.75rem;
       }
     }
