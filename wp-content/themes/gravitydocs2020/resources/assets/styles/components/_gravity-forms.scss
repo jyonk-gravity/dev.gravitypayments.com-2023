@@ -125,7 +125,7 @@
 
 .gform_button,
 .gform_next_button {
-  background-color: theme-color('btn-primary');
+  background-color: $green;
   border: none;
   border-radius: $border-radius-base;
   // box-shadow: $btn-shadow;
@@ -140,7 +140,7 @@
   width: 100%;
 
   &:hover {
-    background-color: theme-color('btn-primary-hover');
+    background-color: #6BAC3B;
     // box-shadow: $btn-shadow-hover;
   }
 }

@@ -1,9 +1,9 @@
 .page-block__intro {
   // background: linear-gradient(180deg, rgba(236, 245, 253, 0.6) 0%, #FFFFFF 100%);
-  padding: 1.5rem 3.4375rem;
+  padding: 1.5rem 3.4375rem 0;
 
   @include media-breakpoint-up(lg) {
-    padding: 2.5rem 3.75rem;
+    padding: 2.5rem 3.75rem 0;
   }
 
   h1 {
