@@ -2,11 +2,11 @@
 	position: relative;
 	margin-left: 35px;
 	margin-top: 72px;
-	padding: 1.5rem;
+	padding: 1.5rem 3.4375rem;
 
 	@include media-breakpoint-up(lg) {
 		margin-left: 290px;
-		padding: 2.5rem;
+		padding: 2.5rem 3.75rem;
 	}
 }
 
@@ -16,7 +16,7 @@
     background-repeat: no-repeat;
     height: 0;
     position: absolute;
-    right: 0;
+    right: 3.75rem;
     top: 0;
 	width: 100%;
 	max-width: 30vw;
