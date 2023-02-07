@@ -4,7 +4,7 @@ h3, .h3,
 h4, .h4,
 h5, .h5,
 h6, .h6 {
-  color: theme-color("primary");
+  color: $navy;
   font-weight: $font-weight-semibold;
 }
 
@@ -183,12 +183,12 @@ ol.numbered-list {
 }
 
 a {
-  color: theme-color('body-link');
+  color: $green;
   text-decoration: none;
   transition: $transition-speed-fast;
 
   &:hover {
-    color: theme-color('body-link-hover');
+    color: #6BAC3B;
   }
 }
 
@@ -208,14 +208,17 @@ a {
   color: #f6f6f8 !important;
 }
 
-.text--dark,
 .text--primary {
-  color: theme-color("primary") !important;
+  color: $navy !important;
+}
+
+.text--dark {
+  color: $charcoal !important;
 }
 
 .text--green,
 .text--secondary {
-  color: theme-color("secondary") !important;
+  color: $green !important;
 }
 
 .text-muted {
@@ -254,11 +257,16 @@ a {
 
   th {
     border-top: 0;
+    color: $navy;
   }
 
   th,
   td {
     font-size: 0.875rem;
+  }
+
+  td {
+    color: $charcoal;
   }
 }
 
@@ -296,11 +304,11 @@ a {
   }
 
   a {
-    color: theme-color(primary);
+    color: $navy;
     opacity: 0.6;
 
     &:hover {
-      color: theme-color(secondary);
+      color: $green;
     }
   }
 }
