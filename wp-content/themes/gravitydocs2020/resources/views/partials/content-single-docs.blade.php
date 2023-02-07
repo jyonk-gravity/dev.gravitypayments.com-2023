@@ -683,16 +683,16 @@ $page_path = substr($req_uri,0,strrpos($req_uri,'/'));
   </div>
   <footer>
     <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-7">
+        <div class="footer__helpful-form">
+          {!! do_shortcode('[gravityform id="2" title="false" description="false"]') !!}
+        </div>
         <p class="text-muted">
           @php 
           $last_modified = get_the_modified_date( 'F j, Y' ); 
           @endphp
           <small><strong>Last Modified:</strong> {!! $last_modified !!}</small>
         </p>
-        <div class="footer__helpful-form">
-          {!! do_shortcode('[gravityform id="2" title="false" description="false"]') !!}
-        </div>
       </div>
     </div>
   </footer>
