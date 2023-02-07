@@ -1,6 +1,6 @@
 .page-block__intro {
   // background: linear-gradient(180deg, rgba(236, 245, 253, 0.6) 0%, #FFFFFF 100%);
-  padding: 1.5rem 3.4375rem 0;
+  padding: 1.5rem 2rem 0 4.25rem;
 
   @include media-breakpoint-up(lg) {
     padding: 2.5rem 3.75rem 0;
@@ -15,10 +15,16 @@
   .intro-buttons {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: 2.5rem;
     margin-top: 2rem;
+
+    @include media-breakpoint-up(xl) {
+      margin-bottom: 0;
+    }
 
     &__button {
       margin-bottom: 1.5rem;
+      width: 100%;
 
       @include media-breakpoint-up(xl) {
         align-items: center;
@@ -42,6 +48,12 @@
         margin-bottom: 0.75rem;
       }
     }
+  }
+
+  img {
+    width: 480px;
+    margin: 0 auto;
+    display: block;
   }
 
   .intro__cards {

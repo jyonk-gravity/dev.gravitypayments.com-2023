@@ -139,7 +139,7 @@
 }
 
 .mobile-search {
-	background: linear-gradient(135deg, rgba(177,219,240,0.9556197478991597) 0%, rgba(217,240,201,0.958420868347339) 100%);
+	background: rgba($pewter, 0.975);
 	height: 100%;
 	opacity: 0;
 	position: fixed;
@@ -168,7 +168,7 @@
 		z-index: 1;
 
 		a {
-			color: theme-color(primary);
+			color: $white;
 			font-size: 1.25rem;
 			text-decoration: none;
 		}

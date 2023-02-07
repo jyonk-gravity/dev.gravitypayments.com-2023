@@ -203,4 +203,9 @@
     @endif
   @endif
 
+ {{--  <div class="main-sidebar__footer">
+    <p class="mb-0"><small><a href="https://gravitypayments.com/privacy-policy/" target="_blank">Privacy Policy</a> &bull; <a href="https://gravitypayments.com/terms-of-use/" target="_blank">Terms of Use</a></small></p>
+    <p><small>&copy; {!! Date('Y') !!} Gravity Payments. All Rights Reserved.</small></p>
+  </div> --}}
+
 </aside>

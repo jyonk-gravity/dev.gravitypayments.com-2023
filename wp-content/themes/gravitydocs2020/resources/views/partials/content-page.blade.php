@@ -271,7 +271,7 @@
 							the_row();
 							@endphp
 
-							<div class="col icon-content-column {{ $columns }}">
+							<div class="col-12 icon-content-column {{ $columns }}">
 								@if ( get_sub_field('link') )
 									@php
 									$link = get_sub_field('link');

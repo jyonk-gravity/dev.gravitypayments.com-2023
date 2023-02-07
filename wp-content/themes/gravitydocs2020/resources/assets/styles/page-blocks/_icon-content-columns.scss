@@ -1,8 +1,8 @@
 .page-block__icon-content-columns {
-	padding: 2.5rem 15px 0 55px;
+	padding: 2.5rem 2rem 1.5rem 4.25rem;
 
 	@include media-breakpoint-up(lg) {
-		padding: 4rem 3.75rem 2.5rem;
+		padding: 5rem 3.75rem 2.5rem;
 	}
 
 	.row {
@@ -11,7 +11,7 @@
 	}
 
 	.icon-content-column {
-		margin-bottom: 1.25rem;
+		margin-bottom: 3.5rem;
 
 		@include media-breakpoint-up(lg) {
 			margin-bottom: 0;

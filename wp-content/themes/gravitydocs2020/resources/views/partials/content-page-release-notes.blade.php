@@ -6,7 +6,7 @@
 		@php the_row(); @endphp
 
 		@if ( get_row_layout() == 'intro' )
-			<section class="page-block__intro" style="padding: 2.5rem 0 2.5rem 3.5rem;">
+			<section class="page-block__intro">
 				<div class="row align-items-center">
 					<div class="col-lg-6">
 						@if ( get_sub_field('heading') )
@@ -149,7 +149,7 @@
 
 @endif	
 
-<section class="page-block__release-notes" style="padding: 0 3.5rem 2.5rem;">
+<section class="page-block__release-notes">
 	<div class="row">
 		<div class="col-lg-12">
 			@php
