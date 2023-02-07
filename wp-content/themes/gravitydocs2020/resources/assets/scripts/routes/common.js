@@ -15,11 +15,6 @@ export default {
       console.log('Documentation Dropdown Section Title:'+ $section_title);
       console.log('Documentation Dropdown Value: '+ $selection_text);
 
-      // wp.mixpanel.track('Dropdown Selection Change', {
-      // 'Documentation Page': $path_name,
-      // 'Documentation Dropdown Location': $(this).data('content-block-id'),
-      // 'Documentation Dropdown Value': $dropdown_section});
-
       $('.dropdown-section__content-blocks__block').removeClass('active');      
       $('.dropdown-section__content-blocks__block[data-blockid="'+ $dropdown_section +'"]').addClass('active');
 

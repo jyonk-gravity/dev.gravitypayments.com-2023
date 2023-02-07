@@ -15,7 +15,7 @@
 		background: #e0e0e0; //linear-gradient(180deg, rgba(224,224,224,0) 0%, rgba(224,224,224,1) 5%);
 		content: '';
 		display: block;
-		height: 100%;
+		height: calc(100% - 20px);
 		left: 0;
 		position: absolute;
 		width: 1px;

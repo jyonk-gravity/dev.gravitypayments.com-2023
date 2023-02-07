@@ -4,9 +4,6 @@ import 'jquery';
 // Import everything from autoload
 import './autoload/**/*'
 
-// Mixpanel
-// import './vendor/mixpanel';
-
 // import local dependencies
 import Router from './util/Router';
 import common from './routes/common';
