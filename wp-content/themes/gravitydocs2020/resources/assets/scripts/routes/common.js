@@ -45,6 +45,22 @@ export default {
       $('.mobile-trigger--main-sidebar').toggleClass('open');
     });
 
+    // Table of Contents Smooth Scrolling
+    var linkElements = document.querySelectorAll('.table-of-contents__link');
+
+    for (var i = 0; i < linkElements.length; i++) {
+        linkElements[i].addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            var anchor = document.querySelector(e.target.hash);
+            console.log(anchor);
+            anchor.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
+        });
+    }
+
   },
   finalize() {
     // JavaScript to be fired on all pages, after page specific JS is fired

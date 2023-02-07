@@ -1,7 +1,7 @@
 .main-sidebar {
 	background: rgba($white, 0.96);
 	border-right: 1px solid #efeff1;
-	height: 100%;
+	height: calc(100% - 72px);
 	left: -255px;
 	overflow: auto;
 	padding: 2.5rem 1.5rem;

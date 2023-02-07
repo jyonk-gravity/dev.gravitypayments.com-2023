@@ -32,18 +32,24 @@
 			// box-shadow: 0 8px 20px rgba($black, 0.1);
 			text-decoration: none;
 
-			h2,
+			h2 {
+				color: $navy;
+			}
+			
 			p,
 			ul {
-				color: theme-color(primary);
+				color: $charcoal;
 				text-decoration: none;
 			}
 		}
 
-		h2,
+		h2 {
+			color: $navy;
+		}
+
 		p,
 		ul {
-			color: theme-color(primary);
+			color: $charcoal;
 		}
 
 		h2 {
