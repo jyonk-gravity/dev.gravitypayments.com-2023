@@ -681,7 +681,7 @@ $page_path = substr($req_uri,0,strrpos($req_uri,'/'));
       @endif
     </div>    
   </div>
-  <footer>
+  <footer class="footer--docs">
     <div class="row">
       <div class="col-md-7">
         <div class="footer__helpful-form">

@@ -1,6 +1,9 @@
 .footer {
-	&__helpful-form {
+	&--docs {
+		padding-top: 2.5rem;
+	}
 
+	&__helpful-form {
 		margin-bottom: 2rem;
 
 		.gform_wrapper ul li.field_description_below div.ginput_container_radio {
