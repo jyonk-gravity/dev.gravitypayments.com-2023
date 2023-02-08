@@ -27,17 +27,18 @@
     
     input,
     textarea {
-      background: theme-color("lightest-gray");
-      border: 1px solid theme-color("light-gray");
+      background: $cloud;
+      border: 1px solid $silver;
       border-radius: $border-radius-base;
       font-family: proxima-nova, sans-serif;
-      font-size: 1rem !important;
-      padding: 0.25rem 0.75rem;
-      transition: background $transition-fast;
+      font-size: 0.9375rem !important;
+      padding: 0.5rem 0.75rem !important;
+      transition: all $transition-fast;
       width: 100%;
 
       &:focus {
-        // background: lighten(theme-color("lightest-gray"), 2);
+        background: $white;
+        border: 1px solid $blue;
         outline: none;
       }
     }
@@ -49,7 +50,7 @@
     }
 
     textarea {
-      height: 80px;
+      height: 70px;
     }
 
     select {
@@ -101,7 +102,7 @@
 
   .gfield_error .validation_message {
     border-radius: 4px;
-    color: $dsm-color-red-80;
+    color: $red;
     font-size: 0.8125rem;
     font-weight: $font-weight-semibold;
     margin-top: 2px;
@@ -112,14 +113,20 @@
 .gfield select {
   @extend .form-control;
 
-  background: theme-color("lightest-gray");
-  border: 1px solid theme-color("light-gray");
+  background: $cloud;
+  border: 1px solid $silver;
   border-radius: $border-radius-base;
   text-indent: 0.25rem;
   transition: background $transition-fast;
 
+  &:focus {
+    background: $white;
+    border: 1px solid $blue;
+    outline: none;
+  }
+
   option:first-child {
-    color: theme-color("secondary");
+    color: $green;
   }
 }
 
@@ -133,7 +140,7 @@
   // display: block;
   font-family: proxima-nova, sans-serif;
   font-size: 1rem;
-  font-weight: $font-weight-bold;
+  font-weight: $font-weight-semibold;
   margin-top: 0.5rem;
   padding: 0.375rem 1.5rem;
   transition: background-color $transition-speed-fast;

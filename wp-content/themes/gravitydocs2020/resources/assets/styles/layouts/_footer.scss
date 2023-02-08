@@ -54,6 +54,7 @@
 		#label_2_3_0 {
 			border: 1px solid $green;
 			color: $green;
+			cursor: pointer;
 
 			&:hover {
 				background-color: $mint;
@@ -75,6 +76,7 @@
 		#label_2_3_1 {
 			border: 1px solid $blue;
 			color: $blue;
+			cursor: pointer;
 
 			&:hover {
 				background: rgba($blue, 0.15);
@@ -115,6 +117,20 @@
 				border: 1px solid $blue;
 				color: $white;
 			}
+		}
+
+		.form-section-title {
+			border-bottom: none !important;
+    		padding-bottom: 0 !important;
+    		padding-top: 0 !important;
+
+			h3 {
+				font-size: 1.125rem;
+			}
+		}
+
+		.gform_required_legend {
+			display: none !important;
 		}
 	}
 }
