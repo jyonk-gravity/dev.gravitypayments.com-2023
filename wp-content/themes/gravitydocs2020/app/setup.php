@@ -14,7 +14,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_dequeue_style( 'searchwp-live-search' );
     wp_enqueue_style('sage/main.css', asset_path('styles/main.css'), false, null);
     wp_enqueue_script('prism', asset_path('../resources/assets/scripts/vendor/prism.js'), false, null, true);
-    wp_enqueue_script('fontawesome', 'https://kit.fontawesome.com/542ce5965e.js', false, null, true);
+    wp_enqueue_script('fontawesome', 'https://kit.fontawesome.com/1966c13026.js', false, null, true);
     wp_enqueue_script('sage/main.js', asset_path('scripts/main.js'), ['jquery'], null, true);
     
     if (is_single() && comments_open() && get_option('thread_comments')) {
