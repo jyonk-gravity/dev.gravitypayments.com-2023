@@ -43,7 +43,7 @@
       </form>
       @endif
 
-    @elseif ( is_page('downloads') || is_page('signup') || is_page('developer-support') )
+    @elseif ( is_page('downloads') || is_page('signup') || is_page('developer-support') || is_page('thanks') )
 
     @else 
     <nav class="nav--sidebar">
