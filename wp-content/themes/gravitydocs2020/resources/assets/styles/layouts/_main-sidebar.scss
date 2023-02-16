@@ -73,13 +73,23 @@
 		color: $green;
 		display: block;
 		padding-right: 20px;
+		font-weight: $font-weight-semibold;
 
 		@include media-breakpoint-up(lg) {
 			padding-left: 0;
 		}
 
 		&--static {
-			color: theme-color(light-gray);
+			color: rgba($pewter, 0.6);
+			font-weight: $font-weight-semibold;
+
+			i {
+				margin-right: 0.25rem;
+			}
+		}
+
+		i {
+			margin-right: 0.25rem;
 		}
 	}
 

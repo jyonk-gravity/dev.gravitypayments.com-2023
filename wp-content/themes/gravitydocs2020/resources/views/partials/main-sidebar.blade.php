@@ -11,9 +11,10 @@
 
   @if ( is_page() || is_search() )
     @if ( is_page('home') )
-    <div class="breadcrumb-link--static"><i class="fas fa-home-alt"></i></div>
+    <div class="breadcrumb-link--static"><i class="fas fa-home-alt"></i> Home</div>
     @else
-    <a href="/" class="breadcrumb-link"><i class="fas fa-chevron-circle-left text--secondary"></i> Home</a>
+    <a href="/" class="breadcrumb-link"><i class="fas fa-home-alt text--secondary"></i> Home</a>
+    {{-- <a href="/" class="breadcrumb-link"><i class="fas fa-chevron-circle-left text--secondary"></i> Home</a> --}}
     @endif
 
     @if ( is_page('release-notes') )
@@ -41,6 +42,8 @@
         @endforeach
       </form>
       @endif
+
+    @elseif ( is_page('downloads') || is_page('signup') || is_page('developer-support') )
 
     @else 
     <nav class="nav--sidebar">
@@ -72,7 +75,8 @@
     </nav>
     @endif --}}
   @elseif ( is_singular() && !$post->post_parent )
-    <a href="/" class="breadcrumb-link"><i class="fas fa-chevron-circle-left text--secondary"></i> Home</a>
+    <a href="/" class="breadcrumb-link"><i class="fas fa-home-alt text--secondary"></i> Home</a>
+    {{-- <a href="/" class="breadcrumb-link"><i class="fas fa-chevron-circle-left text--secondary"></i> Home</a> --}}
     @php
       $args = array(
         'posts_per_page' => -1,
@@ -138,27 +142,33 @@
     @endif
 
   @elseif ( is_singular() && $post->post_parent )
+    <div class="home-link mb-4">
+      <a href="/" class="breadcrumb-link"><i class="fas fa-home-alt text--secondary"></i> Home</a>
+    </div>
+
     <a href="{{ esc_url( get_the_permalink( $post->post_parent ) ) }}" class="breadcrumb-link"><i class="fas fa-chevron-circle-left text--secondary"></i> {!! get_the_title( $post->post_parent) !!}</a>
 
     @php
       $args = array(
         'posts_per_page' => -1,
-        'post_parent' => $post->ID,
+        // 'post_parent' => $post->ID,
+        'post_parent' => $post->post_parent,
         'post_type' => 'docs',
         'orderby' => 'menu_order',
         'order' => 'ASC',
         'post_status' => 'publish'
       );
       $children = get_children($args);
+      // var_dump($children);
     @endphp
 
     @if ( !get_field('hide_sidebar_nav') )
       @if ( $children )
-      <h4 class="main-sidebar__section-title">{!! get_the_title() !!}</h4>
+      {{-- <h4 class="main-sidebar__section-title">{!! get_the_title() !!}</h4> --}}
       <nav class="main-sidebar__child-pages">
         @foreach ( $children as $child_page )
           @if ( !get_field( 'hide_in_left_sidebar_nav', $child_page->ID ) )
-          <a href="{{ esc_url( get_the_permalink( $child_page->ID ) ) }}">{!! get_the_title( $child_page->ID ) !!}</a>
+          <a href="{{ esc_url( get_the_permalink( $child_page->ID ) ) }}" class="child-page-link">{!! get_the_title( $child_page->ID ) !!}</a>
           @endif
         @endforeach
       </nav>
