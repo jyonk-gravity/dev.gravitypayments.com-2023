@@ -11,12 +11,12 @@
   @endphp
 
   @if ( is_page() || is_search() )
-    @if ( is_page('home') )
+    {{-- @if ( is_page('home') )
     <div class="breadcrumb-link--static"><i class="fas fa-home-alt"></i> Home</div>
-    @else
+    @else --}}
     <a href="/" class="breadcrumb-link"><i class="fas fa-home-alt text--secondary"></i> Home</a>
     {{-- <a href="/" class="breadcrumb-link"><i class="fas fa-chevron-circle-left text--secondary"></i> Home</a> --}}
-    @endif
+    {{-- @endif --}}
 
     @if ( is_page('release-notes') )
       <h4 class="main-sidebar__section-title">Filter Release Notes</h4>
