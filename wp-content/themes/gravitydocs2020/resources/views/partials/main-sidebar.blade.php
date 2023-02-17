@@ -7,6 +7,7 @@
 
   @php
   global $post;
+  $current_page = $post->post_name;
   @endphp
 
   @if ( is_page() || is_search() )
@@ -168,7 +169,10 @@
       <nav class="main-sidebar__child-pages">
         @foreach ( $children as $child_page )
           @if ( !get_field( 'hide_in_left_sidebar_nav', $child_page->ID ) )
-          <a href="{{ esc_url( get_the_permalink( $child_page->ID ) ) }}" class="child-page-link">{!! get_the_title( $child_page->ID ) !!}</a>
+          @php
+          $page_slug = $child_page->post_name;
+          @endphp
+          <a href="{{ esc_url( get_the_permalink( $child_page->ID ) ) }}" class="child-page-link {{ $page_slug === $current_page ? 'child-page-link--current' : '' }}">{!! get_the_title( $child_page->ID ) !!}</a>
           @endif
         @endforeach
       </nav>
