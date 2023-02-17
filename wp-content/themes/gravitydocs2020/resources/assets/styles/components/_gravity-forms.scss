@@ -58,7 +58,9 @@
     }
 
     &_label {
+      font-size: 0.9375rem !important;
       font-weight: $font-weight-medium !important;
+      margin-bottom: 4px !important;
     }
 
     &.hidden_label label {
@@ -241,7 +243,23 @@ h2.gsection_title {
 }
 
 .gform_wrapper .gfield_required {
-  display: none !important;
+  position: relative;
+
+  .gfield_required_asterisk {
+    display: none !important;
+  }
+
+  &::after {
+    background: #DC2E50;
+    border-radius: 8px;
+    content: '';
+    display: inline-block;
+    height: 4px;
+    margin-left: 3px;
+    position: relative;
+    top: -6px;
+    width: 4px;
+  }
 }
 
 .gform_wrapper .gfield_radio li input[type='radio'] {
@@ -257,4 +275,24 @@ h2.gsection_title {
   border-radius: 4px;
   padding: 2px 20px;
   max-width: 100% !important;
+}
+
+body .gform_legacy_markup_wrapper ul li.gfield {
+  margin-top: 4px !important;
+}
+
+body .gform_legacy_markup_wrapper .top_label div.ginput_container {
+  margin-top: 4px !important;
+}
+
+.gform_wrapper.gravity-theme .gform_fields {
+  grid-row-gap: 4px !important;
+}
+
+.gform_required_legend {
+  display: none !important;
+}
+
+.gform_wrapper.gravity-theme .gfield textarea.small {
+  height: 72px !important;
 }
