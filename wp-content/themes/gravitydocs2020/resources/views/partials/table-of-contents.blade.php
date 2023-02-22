@@ -25,10 +25,6 @@
             <li><a href="#{{ $content_block_id }}" class="table-of-contents__link">{!! get_sub_field('heading') !!}</a></li>
           @endif
         @endif
-
-        {{-- @if ( get_sub_field('table_of_content_title') && get_sub_field('content_block_id') )
-        <li><a href="#{{ get_sub_field('content_block_id') }}">{!! get_sub_field('table_of_content_title') !!}</a></li>
-        @endif --}}
       @endif
     @endwhile
   </ul>
