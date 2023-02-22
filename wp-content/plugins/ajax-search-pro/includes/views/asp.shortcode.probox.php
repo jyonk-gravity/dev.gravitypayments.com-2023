@@ -75,10 +75,10 @@ $asp_loaders = array(
 
 	<button class='promagnifier' aria-label="<?php echo esc_attr(asp_icl_t('Search magnifier button aria-Label', $style['aria_magnifier_label'])); ?>">
 		<?php do_action('asp_layout_in_magnifier', $id); ?>
-		<div class='asp_text_button<?php echo w_isset_def($style['display_search_text'], 0) == 1 ? "" : " hiddend"; ?>'>
+		<span class='asp_text_button<?php echo w_isset_def($style['display_search_text'], 0) == 1 ? "" : " hiddend"; ?>'>
 			<?php echo asp_icl_t( "Search button text ($real_id)", $style['search_text']); ?>
-		</div>
-		<div class='innericon<?php echo w_isset_def($style['hide_magnifier'], 0) == 1 ? " hiddend" : ""; ?>'>
+		</span>
+		<span class='innericon<?php echo w_isset_def($style['hide_magnifier'], 0) == 1 ? " hiddend" : ""; ?>'>
 			<?php
 			if (w_isset_def($style['magnifierimage_custom'], "") == "" &&
 				pathinfo($style['magnifierimage'], PATHINFO_EXTENSION) == 'svg'
@@ -86,7 +86,7 @@ $asp_loaders = array(
 				echo file_get_contents(WP_PLUGIN_DIR . '/' . $style['magnifierimage']);
 			}
 			?>
-		</div>
+		</span>
 		<div class="asp_clear"></div>
 	</button>
 

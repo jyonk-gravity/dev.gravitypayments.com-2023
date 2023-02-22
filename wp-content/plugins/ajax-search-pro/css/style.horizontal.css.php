@@ -21,6 +21,15 @@ defined('ABSPATH') or die("You can't access this file directly.");
     visibility: hidden;
 }
 
+<?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?>.horizontal .results,
+    <?php echo $asp_res_ids2; ?>.horizontal .results,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?>.horizontal .results {
+    overflow-y: hidden;
+	overflow-x: auto;
+}
+
 
 <?php if ( $style['h_res_show_scrollbar'] == 0 ): ?>
 <?php if ($use_compatibility == true): ?>

@@ -1232,67 +1232,80 @@ class SearchPostTypes extends AbstractSearch {
 								switch ($order) {
 									case "average_rating DESC":
 										// ceil() is very important here!! as this expects 1, 0, -1 but no values inbetween
-										return ceil((float)$b->average_rating - (float)$a->average_rating);
+										$diff = ceil((float)$b->average_rating - (float)$a->average_rating);
+										break;
 									/** @noinspection PhpDuplicateSwitchCaseBodyInspection */
 									case "relevance DESC":
-										return $b->relevance - $a->relevance;
+										$diff = $b->relevance - $a->relevance;
+										break;
 									case "post_date DESC":
-										$date_diff = strtotime($b->date) - strtotime($a->date);
-										if ($date_diff == 0)
-											return $b->id - $a->id;
-
-										return $date_diff;
+										$diff = strtotime($b->post_date) - strtotime($a->post_date);
+										if ($diff == 0)
+											$diff = $b->id - $a->id;
+										break;
 									case "post_date ASC":
-										$date_diff = strtotime($a->date) - strtotime($b->date);
-										if ($date_diff == 0)
-											return $a->id - $b->id;
-
-										return $date_diff;
+										$diff = strtotime($a->post_date) - strtotime($b->post_date);
+										if ($diff == 0)
+											$diff = $a->id - $b->id;
+										break;
 									case "post_title DESC":
-										return MB::strcasecmp($b->title, $a->title);
+										$diff = MB::strcasecmp($b->title, $a->title);
+										break;
 									case "post_title ASC":
-										return MB::strcasecmp($a->title, $b->title);
+										$diff = MB::strcasecmp($a->title, $b->title);
+										break;
 									case "id DESC":
-										return $b->id - $a->id;
+										$diff = $b->id - $a->id;
+										break;
 									case "id ASC":
-										return $a->id - $b->id;
+										$diff = $a->id - $b->id;
+										break;
 									case "menu_order DESC":
-										return $b->menu_order - $a->menu_order;
+										$diff = $b->menu_order - $a->menu_order;
+										break;
 									case "menu_order ASC":
-										return $a->menu_order - $b->menu_order;
+										$diff = $a->menu_order - $b->menu_order;
+										break;
 									case "customfp DESC":
 										if ($order_metatype == 'numeric') {
 											$diff = floatval($b->customfp) - floatval($a->customfp);
-											return $diff < 0 ? floor($diff) : ceil($diff);
+											$diff = $diff < 0 ? floor($diff) : ceil($diff);
 										} else {
-											return MB::strcasecmp($b->customfp, $a->customfp);
+											$diff = MB::strcasecmp($b->customfp, $a->customfp);
 										}
+										break;
 									case "customfp ASC":
 										if ($order_metatype == 'numeric') {
 											$diff = floatval($a->customfp) - floatval($b->customfp);
-											return $diff < 0 ? floor($diff) : ceil($diff);
+											$diff = $diff < 0 ? floor($diff) : ceil($diff);
 										} else {
-											return MB::strcasecmp($a->customfp, $b->customfp);
+											$diff = MB::strcasecmp($a->customfp, $b->customfp);
 										}
+										break;
 									case "customfs DESC":
 										if ($order_metatype == 'numeric') {
 											$diff = floatval($b->customfs) - floatval($a->customfs);
-											return $diff < 0 ? floor($diff) : ceil($diff);
+											$diff = $diff < 0 ? floor($diff) : ceil($diff);
 										} else {
-											return MB::strcasecmp($b->customfs, $a->customfs);
+											$diff = MB::strcasecmp($b->customfs, $a->customfs);
 										}
+										break;
 									case "customfs ASC":
 										if ($order_metatype == 'numeric') {
 											$diff = floatval($a->customfs) - floatval($b->customfs);
-											return $diff < 0 ? floor($diff) : ceil($diff);
+											$diff = $diff < 0 ? floor($diff) : ceil($diff);
 										} else {
-											return MB::strcasecmp($a->customfs, $b->customfs);
+											$diff = MB::strcasecmp($a->customfs, $b->customfs);
 										}
+										break;
 									case "RAND()":
-										return rand(-1,1);
+										$diff = rand(-1,1);
+										break;
 									default:
-										return $b->relevance - $a->relevance;
+										$diff = $b->relevance - $a->relevance;
+										break;
 								}
+								return $diff;
 							}
 							/**
 							 * If the primary fields are not equal, then leave it as it is.
@@ -1392,7 +1405,6 @@ class SearchPostTypes extends AbstractSearch {
 	 * @return array of results
 	 */
 	protected function postProcess(): array {
-
 		$pageposts  = is_array( $this->results ) ? $this->results : array();
 		$s          = $this->s;
 		$_s         = $this->_s;
@@ -1427,7 +1439,7 @@ class SearchPostTypes extends AbstractSearch {
 		);
 		$image_settings = $sd['image_options'];
 
-		if ( $args['_ajax_search'] ) {
+		if ( $args['_ajax_search'] || strpos(get_called_class(), "SearchIndex") !== false ) {
 			$start = 0;
 			$end = count($pageposts);
 		} else {

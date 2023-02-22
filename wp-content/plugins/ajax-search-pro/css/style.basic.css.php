@@ -339,6 +339,8 @@ div.asp_m.ajaxsearchpro .probox .promagnifier,
 div.asp_m.ajaxsearchpro .probox .prosettings {
     width: 20px;
     height: 20px;
+	min-width: unset;
+	min-height: unset;
     background: none;
     background-size: 20px 20px;
     float: right;
@@ -439,7 +441,7 @@ div.asp_w.asp_s [disabled] .noUi-handle {
 
 div.asp_w.asp_r p.showmore {
     display: none;
-    margin: 5px 0;
+    margin: 0;
 }
 div.asp_w.asp_r.asp_more_res_loading p.showmore a,
 div.asp_w.asp_r.asp_more_res_loading p.showmore a span{
@@ -533,16 +535,15 @@ div.asp_w.asp_r .results {
     padding: 0;
 }
 
-div.asp_w.asp_r .results .asp_nores {
+div.asp_w.asp_r .asp_nores {
+	display: flex;
+	flex-wrap: wrap;
+    gap: 8px;
     overflow: hidden;
-    width: 100%;
+    width: auto;
     height: auto;
-    line-height: initial;
-    text-align: center;
-    margin: 0;
-    background: #FFF;
-    padding: 10px 3px;
-    color: #222;
+	position: relative;
+	z-index: 2;
 }
 
 div.asp_w.asp_r .results .item {
@@ -640,8 +641,12 @@ div.asp_w.asp_r .resdrg {
     height: auto;
 }
 
-div.asp_w.ajaxsearchpro .asp_group_header:first-of-type {
-    margin: 0px 0 -3px !important;
+div.asp_w.ajaxsearchpro .asp_results_group {
+    margin: 10px 0 0 0;
+}
+
+div.asp_w.ajaxsearchpro .asp_results_group:first-of-type {
+    margin: 0 !important;
 }
 
 

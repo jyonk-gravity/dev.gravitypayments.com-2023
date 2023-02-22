@@ -61,7 +61,7 @@ class Autocomplete extends AbstractAjax {
 			}
 
 			$t = new  KeywordSuggest($source, array(
-				'maxCount' => 10,
+				'maxCount' => 1,
 				'maxCharsPerWord' => $sd['autocomplete_length'],
 				'postTypes' => $types,
 				'lang' => $lang,

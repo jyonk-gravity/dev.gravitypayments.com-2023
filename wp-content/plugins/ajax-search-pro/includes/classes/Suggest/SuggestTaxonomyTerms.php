@@ -78,6 +78,7 @@ class SuggestTaxonomyTerms extends AbstractSuggest {
 			if ( !is_wp_error($tags) && count($tags) > 0 )
 				$res = Suggest::getSimilarText($tags, $q, $this->args['maxCount']);
 		}
-		return $res;
+
+		return apply_filters('asp/suggestions/taxonomy/results', $res, $q, $this->args['taxonomy'], $this->args);
 	}
 }

@@ -29,6 +29,7 @@ jQuery(function($){
 
     // Coditional rules via attributes
     WPD.Conditionals.init('div[tabid=1]');
+    WPD.Conditionals.init('div[tabid=5]');
     WPD.Conditionals.init('div[tabid=404]');
     WPD.Conditionals.init('div[tabid=405]');
 
@@ -982,15 +983,6 @@ jQuery(function($){
         }
     });
     $("ul.connectedSortable", $("input[name='keyword_suggestion_source']").parent()).trigger("sortupdate");
-
-    $('select[name=autocomplete], input[name=keywordsuggestions], input[name=frontend_show_suggestions]').on('change', function(){
-        if ( $(this).val() == 0 ) {
-            $(this).closest('fieldset').find('>.item').addClass('disabled');
-            $(this).closest('.item').removeClass('disabled');
-        } else {
-            $(this).closest('fieldset').find('>.item').removeClass('disabled');
-        }
-    }).trigger('change');
     // ----------------------------------------------------------------------------------
 
 
@@ -1198,14 +1190,6 @@ jQuery(function($){
                 ['more_results_action', 'ajax'],
                 ['resultstype', 'isotopic'],
                 ['i_ifnoimage', 'removeres']
-            ]
-        },
-        {
-            'args': JSON.parse(JSON.stringify(_tmp)), // Modal args
-            'items': [
-                ['showmoreresults', '1'],
-                ['more_results_action', 'ajax'],
-                ['group_by', 'none', true]
             ]
         },
         {

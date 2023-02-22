@@ -1,5 +1,8 @@
 <?php
 /* Prevent direct access */
+
+use WPDRMS\ASP\Utils\FileManager;
+
 defined('ABSPATH') or die("You can't access this file directly.");
 
 if (isset($_GET) && isset($_GET['asp_sid'])) {
@@ -11,8 +14,10 @@ if (isset($_GET) && isset($_GET['asp_sid'])) {
 <div id='wpdreams' style="display: flex; justify-content: start; align-items: flex-start; gap: 0;"
 	 class='asp-be wpdreams wrap<?php echo isset($_COOKIE['asp-accessibility']) ? ' wd-accessible' : ''; ?>'>
 	<div style="margin: 0;">
+		<?php do_action('asp_admin_notices'); ?>
+
 		<!-- This forces custom Admin Notices location -->
-		<h2 style="display: none;"></h2>
+		<div style="display:none;"><h2 style="display: none;"></h2></div>
 		<!-- This forces custom Admin Notices location -->
 
     <?php if (defined('ASL_PATH')): ?>
@@ -118,7 +123,7 @@ if (isset($_GET) && isset($_GET['asp_sid'])) {
         ) {
             $_POST['delete'] = $_POST['delete'] + 0;
             wd_asp()->instances->delete( $_POST['delete'] );
-			wpd_del_file( wd_asp()->cache_path . "search" . $_POST['delete'] . ".css");
+			FileManager::_o()->delFile( wd_asp()->cache_path . "search" . $_POST['delete'] . ".css");
             wd_asp()->css_manager->generator->generate();
         }
         if ( isset($_POST['asp_st_override']) ) {

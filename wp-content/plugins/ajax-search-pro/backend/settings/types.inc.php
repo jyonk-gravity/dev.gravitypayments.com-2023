@@ -85,6 +85,9 @@ if (!function_exists("admin_scriptsV05")) {
     function admin_scriptsV05() {
         $media_query = ASP_DEBUG == 1 ? asp_gen_rnd_str() : get_site_option("asp_media_query", "defn");
 
+		// Remove all nag notices from the back-end
+		remove_all_actions( 'admin_notices');
+
         // ------------ Dequeue some scripts causing issues on the back-end --------------
         wp_dequeue_script( 'otw-admin-colorpicker' );
         wp_dequeue_script( 'otw-admin-select2' );

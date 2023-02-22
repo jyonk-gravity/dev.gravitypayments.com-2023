@@ -2202,51 +2202,6 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
             }
         }
     , 
-        gaPageview: function(term) {
-            let $this = this;
-            let tracking_id = $this.gaGetTrackingID();
-            // noinspection JSUnresolvedVariable
-            if ( typeof ASP.analytics == 'undefined' || ASP.analytics.method != 'pageview' )
-                return false;
-            // noinspection JSUnresolvedVariable
-            if ( ASP.analytics.string != '' ) {
-                // YOAST uses __gaTracker, if not defined check for ga, if nothing go null, FUN EH??
-                // noinspection JSUnresolvedVariable
-                let _ga = typeof __gaTracker == "function" ? __gaTracker : (typeof ga == "function" ? ga : false);
-                let _gtag = typeof gtag == "function" ? gtag : false;
-
-                if (!window.location.origin) {
-                    window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-                }
-                // Multisite Subdirectory (if exists)
-                // noinspection JSUnresolvedVariable
-                let url = $this.o.homeurl.replace(window.location.origin, '');
-
-                // GTAG bypass pageview tracking method
-                if ( _gtag !== false ) {
-                    if ( tracking_id !== false ) {
-                        // noinspection JSUnresolvedVariable
-                        tracking_id.forEach(function(id) {
-                            _gtag('config', id, {'page_path': url + ASP.analytics.string.replace("{asp_term}", term)});
-                        });
-                    }
-                } else if ( _ga !== false ) {
-                    let params = {
-                        'page': url + ASP.analytics.string.replace("{asp_term}", term),
-                        'title': 'Ajax Search'
-                    };
-                    if ( tracking_id !== false ) {
-                        tracking_id.forEach(function(id) {
-                            _ga('create', id, 'auto');
-                            _ga('send', 'pageview', params);
-                        });
-                    } else {
-                        _ga('send', 'pageview', params);
-                    }
-                }
-            }
-        },
-
         gaEvent: function(which, data) {
             let $this = this;
             let tracking_id = $this.gaGetTrackingID();
@@ -2256,11 +2211,8 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
 
             // Get the scope
             let _gtag = typeof gtag == "function" ? gtag : false;
-            // noinspection JSUnresolvedVariable
-            let _ga = typeof window.__gaTracker == "function" ? window.__gaTracker :
-                (typeof window.ga == "function" ? window.ga : false);
 
-            if ( _gtag === false && _ga === false && typeof window.dataLayer == 'undefined' )
+            if ( _gtag === false && typeof window.dataLayer == 'undefined' )
                 return false;
 
             // noinspection JSUnresolvedVariable
@@ -2293,29 +2245,7 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                         event[kk] = event[kk].replace(regex, v);
                     });
                 });
-
-                if ( _ga !== false ) {
-                    if ( tracking_id !== false ) {
-                        tracking_id.forEach(function(id){
-                            _ga('create', id, 'auto');
-                            // noinspection JSUnresolvedVariable
-                            _ga('send', 'event',
-                                event.event_category,
-                                ASP.analytics.event[which].action,
-                                event.event_label,
-                                event.value
-                            );
-                        });
-                    } else {
-                        // noinspection JSUnresolvedVariable
-                        _ga('send', 'event',
-                            event.event_category,
-                            ASP.analytics.event[which].action,
-                            event.event_label,
-                            event.value
-                        );
-                    }
-                } else if ( _gtag !== false ) {
+                if ( _gtag !== false ) {
                     if ( tracking_id !== false ) {
                         tracking_id.forEach(function(id){
                             event.send_to = id;
@@ -2328,10 +2258,11 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                     }
                 } else if ( typeof window.dataLayer.push != 'undefined' ) {
                     window.dataLayer.push({
-                        'event': 'gaEvent',
-                        'eventCategory': event.event_category,
-                        'eventAction': ASP.analytics.event[which].action,
-                        'eventLabel': event.event_label
+                        'event': 'asp_event',
+                        'event_name': ASP.analytics.event[which].action,
+                        'event_category': event.event_category,
+                        'event_label': event.event_label,
+                        'event_value': event.value
                     });
                 }
             }
@@ -2433,7 +2364,6 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                 }
                 $this.n('s').trigger("asp_search_end", [$this.o.id, $this.o.iid, $this.n('text').val(), data], true, true);
                 $this.gaEvent?.('search_end', {'results_count': 'unknown'});
-                $this.gaPageview?.($this.n('text').val());
                 $this.hideLoader();
                 $el.css('opacity', 1);
                 $this.searching = false;
@@ -2662,7 +2592,7 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                     $this.showResultsBox();
                     $(".asp_res_loader", $this.n('resultsDiv')).removeClass("hiddend");
                     $this.n('results').css("display", "none");
-                    $this.n('showmore').css("display", "none");
+                    $this.n('showmoreContainer').css("display", "none");
                     if ( typeof $this.hidePagination !== 'undefined' ) {
                         $this.hidePagination();
                     }
@@ -3115,7 +3045,7 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                 $(html).find('.asp_nores').length > 0
             ) {
                 // Something went wrong, as the no-results container was returned
-                $this.n('showmore').css("display", "none");
+                $this.n('showmoreContainer').css("display", "none");
                 $('span', $this.n('showmore')).html("");
             } else {
                 // noinspection JSUnresolvedVariable
@@ -3161,6 +3091,7 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                 display: 'block',
                 height: 'auto'
             });
+
             $this.n('results').find('.item, .asp_group_header').addClass($this.animationOpacity);
 
             $this.n('resultsDiv').css($this.resAnim.showCSS);
@@ -3251,6 +3182,35 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
             });
         },
 
+        updateNoResultsHeader: function() {
+            let $this = this,
+                $new_nores = $this.n('resdrg').find('.asp_nores'), $old_nores;
+
+            if ( $new_nores.length > 0 ) {
+                $new_nores = $new_nores.detach();
+            }
+
+            $old_nores = $this.n('resultsDiv').find('.asp_nores')
+            if ( $old_nores.length > 0 ) {
+                $old_nores.remove();
+            }
+
+            if ( $new_nores.length > 0 ) {
+                $this.n('resultsDiv').prepend($new_nores);
+
+                $this.n('resultsDiv').find(".asp_keyword").on('click', function () {
+                    $this.n('text').val(helpers.decodeHTMLEntities($(this).text()));
+                    $this.n('textAutocomplete').val('');
+                    // Is any ajax trigger enabled?
+                    if ($this.o.redirectOnClick == 0 ||
+                        $this.o.redirectOnEnter == 0 ||
+                        $this.o.trigger.type == 1) {
+                        $this.search();
+                    }
+                });
+            }
+        },
+
         updateInfoHeader: function( totalCount ) {
             let $this = this,
                 content,
@@ -3258,7 +3218,7 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                 phrase = $this.n('text').val().trim();
 
             if ( $rt.length > 0 ) {
-                if ( $this.n('items').length <= 0 ) {
+                if ( $this.n('items').length <= 0 || $this.n('resultsDiv').find('.asp_nores').length > 0 ) {
                     $rt.css('display', 'none');
                 } else {
                     // Results information box original texts
@@ -3293,8 +3253,7 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
         showHorizontalResults: function () {
             let $this = this;
 
-            $this.n('resultsDiv').css('display', 'block');
-            $this.fixResultsPosition(true);
+            $this.showResultsBox();
 
             $this.n('items').css("opacity", $this.animationOpacity);
 
@@ -3310,7 +3269,6 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
             if ($this.n('items').length > 0 && $this.o.scrollBar.horizontal.enabled ) {
                 let el_m = parseInt($this.n('items').css("marginLeft")),
                     el_w = $this.n('items').outerWidth() + el_m * 2;
-                $this.n('results').css("overflowX", "auto");
                 $this.n('resdrg').css("width", $this.n('items').length * el_w + el_m * 2 + "px");
             } else {
                 $this.n('results').css("overflowX", "hidden");
@@ -3677,10 +3635,6 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
 
             $('.photostack>nav', $this.n('resultsDiv')).remove();
             let figures = $('figure', $this.n('resultsDiv'));
-            $this.n('resultsDiv').css({
-                display: 'block',
-                height: 'auto'
-            });
 
             $this.showResultsBox();
 
@@ -3867,9 +3821,6 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                     height: 'auto'
                 });
             }
-            $this.n('results').css({
-                'overflowY': 'auto'
-            });
 
             if ( $this.call_num < 1 ) {
                 // Scroll to top
@@ -3937,7 +3888,7 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
             caller = typeof caller == 'undefined' ? 'window' : caller;
 
             // Show more might not even visible
-            if ($this.n('showmore').length == 0 || $this.n('showmore').css('display') == 'none') {
+            if ($this.n('showmore').length == 0 || $this.n('showmoreContainer').css('display') == 'none') {
                 return false;
             }
 
@@ -4044,7 +3995,6 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                 data.autop = 1;
             }
 
-
             if ( !recall && !apiCall && (JSON.stringify(data) === JSON.stringify($this.lastSearchData)) ) {
                 if ( !$this.resultsOpened && !$this.usingLiveLoader() ) {
                     $this.showResults();
@@ -4125,8 +4075,6 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                     'method': 'POST',
                     'data': data,
                     'success': function (response) {
-                        $this.gaPageview?.($this.n('text').val());
-
                         $this.searching = false;
                         response = response.replace(/^\s*[\r\n]/gm, "");
                         let html_response = response.match(/___ASPSTART_HTML___(.*[\s\S]*)___ASPEND_HTML___/),
@@ -4149,8 +4097,23 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                             if ( typeof data.autop != 'undefined' ) {
                                 $this.autopData['not_in'] = {};
                                 $this.autopData['not_in_count'] = 0;
-                                if ( Array.isArray( data_response.results ) ) {
-                                    data_response.results.forEach(function (r) {
+                                if ( typeof data_response.results != 'undefined' ) {
+                                    let res = [];
+                                    if ( typeof data_response.results.groups != 'undefined') {
+                                        Object.keys(data_response.results.groups).forEach(function(k){
+                                            if ( typeof data_response.results.groups[k].items != 'undefined' ) {
+                                                let group = data_response.results.groups[k].items;
+                                                if (Array.isArray(group)) {
+                                                    group.forEach(function (result) {
+                                                        res.push(result);
+                                                    })
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        res = Array.isArray( data_response.results ) ? data_response.results : res;
+                                    }
+                                    res.forEach(function (r) {
                                         if (typeof $this.autopData['not_in'][r['content_type']] == 'undefined') {
                                             $this.autopData['not_in'][r['content_type']] = [];
                                         }
@@ -4175,6 +4138,8 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                             $this.updateResults(html_response);
                             $this.results_num += data_response.results_count;
                         }
+
+                        $this.updateNoResultsHeader();
 
                         $this.nodes.items = $('.item', $this.n('resultsDiv')).length > 0 ? $('.item', $this.n('resultsDiv')) : $('.photostack-flip', $this.n('resultsDiv'));
 
@@ -4205,17 +4170,6 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
 
                         $this.updateHref();
 
-                        $(".asp_keyword", $this.n('resdrg')).on('click', function () {
-                            $this.n('text').val(helpers.decodeHTMLEntities($(this).text()));
-                            $this.n('textAutocomplete').val('');
-                            // Is any ajax trigger enabled?
-                            if ($this.o.redirectOnClick == 0 ||
-                                $this.o.redirectOnEnter == 0 ||
-                                $this.o.trigger.type == 1) {
-                                $this.search();
-                            }
-                        });
-
                         if ($this.n('showmore').length > 0) {
                             if (
                                 $('span', $this.n('showmore')).length > 0 &&
@@ -4226,6 +4180,7 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                                     $this.n('showmore').data('text', $this.n('showmore').html());
                                 }
                                 $this.n('showmore').html($this.n('showmore').data('text').replaceAll('{phrase}', helpers.escapeHtml($this.n('text').val())));
+                                $this.n('showmoreContainer').css("display", "block");
                                 $this.n('showmore').css("display", "block");
                                 $('span', $this.n('showmore')).html("(" + (data_response.full_results_count - $this.results_num) + ")");
 
@@ -4290,7 +4245,7 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                                     }
                                 });
                             } else {
-                                $this.n('showmore').css("display", "none");
+                                $this.n('showmoreContainer').css("display", "none");
                                 $('span', $this.n('showmore')).html("");
                             }
                         }
@@ -6495,6 +6450,9 @@ window.WPD.intervalUntilExecute = function(f, criteria, interval, maxTries) {
                     case 'aspItemOverlay':
                         this.nodes[k] = $('.asp_item_overlay', this.n('hiddenContainer'));
                         break;
+                    case 'showmoreContainer':
+                        this.nodes[k] = $('.asp_showmore_container', this.n('resultsDiv'));
+                        break;
                     case 'showmore':
                         this.nodes[k] = $('.showmore', this.n('resultsDiv'));
                         break;
@@ -7273,14 +7231,17 @@ window.ASP.api = (function() {
                             $es.find('.e-load-more-anchor').next('.elementor-button-wrapper').offForced().on('click', handler);
                             $es.find('.asp_e_load_more_anchor').on('asp_e_load_more', handler);
                         } else {
-                            $es.find('.elementor-pagination a, .elementor-widget-container .woocommerce-pagination a').each(function(){
+                            $es.find('.elementor-pagination a, .elementor-widget-container .woocommerce-pagination a').each(function() {
                                 let a = $(this).attr('href');
-                                if ( a.indexOf('asp_ls=') < 0 && a.indexOf('asp_ls&') < 0 ) {
-                                    if ( a.indexOf('?') < 0 ) {
+                                if (a.indexOf('asp_ls=') < 0 && a.indexOf('asp_ls&') < 0) {
+                                    if (a.indexOf('?') < 0) {
                                         $(this).attr('href', a + '?' + queryString);
                                     } else {
                                         $(this).attr('href', a + '&' + queryString);
                                     }
+                                } else {
+                                    // Still, make sure that the force reset pagination is not accidentally printed
+                                    $(this).attr('href', $(this).attr('href').replace(/&asp_force_reset_pagination=1/gmi, ''));
                                 }
                             });
                             $es.find('.elementor-pagination a, .elementor-widget-container .woocommerce-pagination a').on('click', function(e){
@@ -7329,7 +7290,7 @@ window.ASP.api = (function() {
                         $loadMoreButton = $(originalNode).find('.e-load-more-anchor').next('.elementor-button-wrapper'),
                         $loadMoreMessage = $(originalNode).find('.e-load-more-message'),
                         $article = $(replacementNode).find('article');
-                    if ( $article.length > 0 && $article.parent().length > 0 ) {
+                    if ( $article.length > 0 && $article.parent().length > 0 && $(originalNode).find('article').parent().length > 0 ) {
                         let newData = $article.get(0).innerHTML,
                             previousData = $(originalNode).data('asp-previous-data');
                         if (previousData == '' || isNewSearch) {

@@ -50,7 +50,7 @@
                             global $APTO_UpdateData;
                             $data   =   FALSE;
                             
-                            if ( is_array ( $APTO_UpdateData ) &&    isset ( $APTO_UpdateData['wphide-pro-check_for_plugin_update_' . md5( $request_uri )] ))
+                            if ( is_array ( $APTO_UpdateData ) &&    isset ( $APTO_UpdateData['apto-check_for_plugin_update_' . md5( $request_uri )] ))
                                 $data   =   $APTO_UpdateData['apto-check_for_plugin_update_' . md5( $request_uri )];   
                         }
                      
@@ -67,7 +67,7 @@
                              set_site_transient( 'apto-check_for_plugin_update_' . md5( $request_uri ), $data, 60 * 60 * 48 );
                              
                              if ( isset ( $_GET['force-check'] ) && $_GET['force-check']    ==  '1' )
-                                $WPH_UpdateData['apto-check_for_plugin_update_' . md5( $request_uri )]    =   $data;                             
+                                $APTO_UpdateData['apto-check_for_plugin_update_' . md5( $request_uri )]    =   $data;                             
                          }
                             
                      $response_block = json_decode($data['body']);
@@ -125,6 +125,7 @@
                      $response  =   $this->postprocess_response( $response_block );
                      if ( $response ) 
                         return $response;
+                        
                  }
              
              private function prepare_request($action, $args = array())

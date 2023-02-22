@@ -3105,7 +3105,7 @@
     "vresulthbg": "0-60-rgb(244, 244, 244)-rgb(244, 244, 244)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -7228,7 +7228,7 @@
     "vresulthbg": "0-60-rgb(245, 245, 245)-rgb(245, 245, 245)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -7329,7 +7329,7 @@
     "vresulthbg": "0-60-rgb(245, 245, 245)-rgb(245, 245, 245)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -7430,7 +7430,7 @@
     "vresulthbg": "0-60-rgb(245, 245, 245)-rgb(245, 245, 245)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -7531,7 +7531,7 @@
     "vresulthbg": "0-60-rgb(245, 245, 245)-rgb(245, 245, 245)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -7632,7 +7632,7 @@
     "vresulthbg": "0-60-rgb(245, 245, 245)-rgb(245, 245, 245)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -7733,7 +7733,7 @@
     "vresulthbg": "0-60-rgb(244, 244, 244)-rgb(246, 246, 246)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -7826,7 +7826,7 @@
     "vresulthbg": "0-60-rgb(244, 244, 244)-rgb(246, 246, 246)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -7919,7 +7919,7 @@
     "vresulthbg": "0-60-rgb(244, 244, 244)-rgb(246, 246, 246)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8012,7 +8012,7 @@
     "vresulthbg": "0-60-rgb(244, 244, 244)-rgb(246, 246, 246)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8106,7 +8106,7 @@
     "vresulthbg": "0-60-rgb(235, 250, 255)-rgb(235, 250, 255)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8176,7 +8176,7 @@
     "vresulthbg": "0-60-rgb(255, 251, 241)-rgb(255, 251, 241)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8246,7 +8246,7 @@
     "vresulthbg": "0-60-rgb(245, 255, 243)-rgb(245, 255, 243)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:normal;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:18px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8316,7 +8316,7 @@
     "vresulthbg": "0-60-rgb(255, 243, 241)-rgb(255, 243, 241)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8386,7 +8386,7 @@
     "vresulthbg": "0-60-#fff9f3-#fff9f3",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8456,7 +8456,7 @@
     "vresulthbg": "0-60-#fff6f9-#fff6f9",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8526,7 +8526,7 @@
     "vresulthbg": "0-60-#faf1ff-#faf1ff",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8596,7 +8596,7 @@
     "vresulthbg": "0-60-#f8ffff-#f8ffff",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8666,7 +8666,7 @@
     "vresulthbg": "0-60-rgb(235, 250, 255)-rgb(235, 250, 255)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8736,7 +8736,7 @@
     "vresulthbg": "0-60-rgb(255, 251, 241)-rgb(255, 251, 241)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8806,7 +8806,7 @@
     "vresulthbg": "0-60-rgb(245, 255, 243)-rgb(245, 255, 243)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8876,7 +8876,7 @@
     "vresulthbg": "0-60-rgb(255, 243, 241)-rgb(255, 243, 241)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -8946,7 +8946,7 @@
     "vresulthbg": "0-60-#fff9f3-#fff9f3",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9016,7 +9016,7 @@
     "vresulthbg": "0-60-#fff6f9-#fff6f9",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9086,7 +9086,7 @@
     "vresulthbg": "0-60-#faf1ff-#faf1ff",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9156,7 +9156,7 @@
     "vresulthbg": "0-60-#f8ffff-#f8ffff",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9226,7 +9226,7 @@
     "vresulthbg": "0-60-rgb(235, 250, 255)-rgb(235, 250, 255)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9295,7 +9295,7 @@
     "vresulthbg": "0-60-rgb(235, 255, 242)-rgb(235, 255, 243)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9364,7 +9364,7 @@
     "vresulthbg": "0-60-rgb(253, 255, 235)-rgb(254, 255, 235)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9433,7 +9433,7 @@
     "vresulthbg": "0-60-rgb(255, 235, 235)-rgb(255, 235, 235)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9502,7 +9502,7 @@
     "vresulthbg": "0-60-rgb(244, 244, 244)-rgb(246, 246, 246)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9571,7 +9571,7 @@
     "vresulthbg": "0-60-rgb(244, 244, 244)-rgb(246, 246, 246)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9642,7 +9642,7 @@
     "vresulthbg": "0-60-rgb(235, 250, 255)-rgb(235, 250, 255)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9714,7 +9714,7 @@
     "vresulthbg": "0-60-rgb(240, 255, 247)-rgb(238, 253, 244)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9786,7 +9786,7 @@
     "vresulthbg": "0-60-rgb(253, 255, 240)-rgb(252, 253, 238)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9859,7 +9859,7 @@
     "vresulthbg": "0-60-rgb(240, 245, 247)-rgb(240, 245, 247)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -9931,7 +9931,7 @@
     "vresulthbg": "0-60-rgb(240, 245, 247)-rgb(240, 245, 247)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10003,7 +10003,7 @@
     "vresulthbg": "0-60-rgb(240, 245, 247)-rgb(240, 245, 247)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10075,7 +10075,7 @@
     "vresulthbg": "0-60-rgb(240, 245, 247)-rgb(240, 245, 247)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10147,7 +10147,7 @@
     "vresulthbg": "0-60-rgb(240, 245, 247)-rgb(240, 245, 247)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10219,7 +10219,7 @@
     "vresulthbg": "0-60-rgb(240, 245, 247)-rgb(240, 245, 247)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10291,7 +10291,7 @@
     "vresulthbg": "0-60-rgb(240, 245, 247)-rgb(240, 245, 247)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10363,7 +10363,7 @@
     "vresulthbg": "0-60-rgb(240, 245, 247)-rgb(240, 245, 247)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10545,7 +10545,7 @@
     "vresulthbg": "0-60-rgb(245, 245, 245)-rgb(245, 245, 245)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:PT Sans;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10650,7 +10650,7 @@
     "vresulthbg": "0-60-rgb(235, 250, 255)-rgb(235, 250, 255)",
     "spacercolor": "rgba(204, 204, 204, 1)",
     "titlefont": "font-weight:bold;font-family:PT Sans;color:rgba(20, 84, 169, 1);font-size:14px;line-height:1.4em;",
-    "titlehoverfont": "font-weight:bold;font-family:PT Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;",
+    
     "authorfont": "font-weight:bold;font-family:PT Sans;color:rgba(161, 161, 161, 1);font-size:12px;line-height:13px;",
     "datefont": "font-weight:normal;font-family:PT Sans;color:rgba(173, 173, 173, 1);font-size:12px;line-height:15px;",
     "descfont": "font-weight:normal;font-family:PT Sans;color:rgba(74, 74, 74, 1);font-size:13px;line-height:1.35em;",
@@ -10755,7 +10755,7 @@
     "vresulthbg": "0-60-rgb(255, 246, 246)-rgb(255, 246, 246)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10859,7 +10859,7 @@
     "vresulthbg": "0-60-rgb(255, 251, 241)-rgb(255, 251, 241)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(255, 255, 255);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -10965,7 +10965,7 @@
     "vresulthbg": "0-60-rgb(245, 245, 245)-rgb(245, 245, 245)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(70, 142, 190);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Lato;color:rgb(70, 142, 190);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -11072,7 +11072,7 @@
     "vresulthbg": "0-60-rgb(244, 244, 244)-rgb(246, 246, 246)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -11177,7 +11177,7 @@
     "vresulthbg": "0-60-rgb(240, 245, 247)-rgb(240, 245, 247)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -11282,7 +11282,7 @@
     "vresulthbg": "0-60-rgb(244, 244, 244)-rgb(246, 246, 246)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(20, 104, 169);font-size:14px;line-height:1.55em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:1.4em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
@@ -11387,7 +11387,7 @@
     "vresulthbg": "0-60-rgb(245, 245, 245)-rgb(245, 245, 245)",
     "spacercolor": "rgba(255, 255, 255, 0.55)",
     "titlefont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
-    "titlehoverfont": "font-weight:bold;font-family:Lato;color:rgb(255, 255, 255);font-size:15px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
+    
     "authorfont": "font-weight:bold;font-family:Open Sans;color:rgb(161, 161, 161);font-size:11px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "datefont": "font-weight:normal;font-family:Open Sans;color:rgb(173, 173, 173);font-size:11px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",
     "descfont": "font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:1.35em;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);",

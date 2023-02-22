@@ -1,4 +1,7 @@
 <?php
+
+use WPDRMS\ASP\Utils\FileManager;
+
 if (!defined('ABSPATH')) die('-1');
 /*
 This program is free software; you can redistribute it and/or modify
@@ -74,7 +77,7 @@ if (!class_exists("ASP_PDF2Text")) {
 
         function decodePDF() {
             // WordPress specific
-            $infile = file_exists($this->filename) ? wpd_get_file($this->filename) : '';
+            $infile = file_exists($this->filename) ? FileManager::_o()->read($this->filename) : '';
 
             // Read the data from pdf file
             if (empty($infile))

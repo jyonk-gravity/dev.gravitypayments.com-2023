@@ -10,10 +10,6 @@
 
             $('.photostack>nav', $this.n('resultsDiv')).remove();
             let figures = $('figure', $this.n('resultsDiv'));
-            $this.n('resultsDiv').css({
-                display: 'block',
-                height: 'auto'
-            });
 
             $this.showResultsBox();
 

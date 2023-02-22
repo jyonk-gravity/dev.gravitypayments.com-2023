@@ -121,15 +121,18 @@ class SearchOverride extends AbstractFilter {
 			echo Search::generateHTMLResults(array(), false, $_p_id, $phrase, 'elementor');
 		}
 
-		$wp_query->query_vars['post__in'] = array_unique(
-			array_merge(
-				$wp_query->query_vars['post__in'],
-				array_map(function($aspr){
-					return $aspr->id;
-				}, $asp_query->all_results)
-			)
-		);
-		$wp_query->query_vars['orderby'] = 'post__in';
+		$wp_query->query_vars['post__in'] = $wp_query->query_vars['post__in'] ?? array();
+		if ( is_array($wp_query->query_vars['post__in']) ) {
+			$wp_query->query_vars['post__in'] = array_unique(
+				array_merge(
+					$wp_query->query_vars['post__in'],
+					array_map(function($aspr){
+						return $aspr->id;
+					}, $asp_query->all_results)
+				)
+			);
+			$wp_query->query_vars['orderby'] = 'post__in';
+		}
 
 		// Elementor override fix
 		if ( defined('ELEMENTOR_VERSION') && isset($wp_query->posts) )
@@ -238,11 +241,80 @@ class SearchOverride extends AbstractFilter {
 			}
 		}
 
+		if ( isset($_GET['post_type']) && $_GET['post_type'] == 'product' ) {
+			$args['search_type'] = array("cpt");
+			$old_ptype = $args['post_type'];
+			$args['post_type'] = array();
+			if ( in_array("product", $old_ptype) ) {
+				$args['post_type'][] = "product";
+			}
+			if ( in_array("product_variation", $old_ptype) ) {
+				$args['post_type'][] = "product_variation";
+			}
+
+			// Exclude from search products
+			$visibility_term = get_term_by('slug', 'exclude-from-search', 'product_visibility');
+
+			if ( $visibility_term !== false ) {
+				$found = false;
+				if ( isset($args['post_tax_filter']) ) {
+					foreach ($args['post_tax_filter'] as &$filter) {
+						if ( $filter['taxonomy'] == 'product_visibility' ) {
+							$filter['exclude'] = $filter['exclude'] ?? array();
+							$filter['exclude'] = array_merge($filter['exclude'], array($visibility_term->term_id));
+							$found = true;
+							break;
+						}
+					}
+				}
+				if ( !$found ) {
+					$args['post_tax_filter'][] = array(
+						'taxonomy' => 'product_visibility',
+						'include' => array(),
+						'exclude' => array($visibility_term->term_id),
+						'allow_empty' => true
+					);
+				}
+			}
+		}
+
 		// Archive pages
 		if ( isset($_GET['asp_ls']) ) {
 			if ( WooCommerce::isShop() ) {
+				$args['search_type'] = array('cpt');
 				$args['post_type'] = array('product');
+				// Exclude from catalog products
+				$visibility_term = get_term_by('slug', 'exclude-from-search', 'product_visibility');
+				$catalog_term = get_term_by('slug', 'exclude-from-catalog', 'product_visibility');
+				if ( $visibility_term !== false && $catalog_term !== false ) {
+					$found = false;
+					if ( isset($args['post_tax_filter']) ) {
+						foreach ($args['post_tax_filter'] as &$filter) {
+							if ( $filter['taxonomy'] == 'product_visibility' ) {
+								$filter['exclude'] = $filter['exclude'] ?? array();
+								$filter['exclude'] = array_merge($filter['exclude'], array(
+									$visibility_term->term_id,
+									$catalog_term->term_id
+								));
+								$found = true;
+								break;
+							}
+						}
+					}
+					if ( !$found ) {
+						$args['post_tax_filter'][] = array(
+							'taxonomy' => 'product_visibility',
+							'include' => array(),
+							'exclude' => array(
+								$visibility_term->term_id,
+								$catalog_term->term_id
+							),
+							'allow_empty' => true
+						);
+					}
+				}
 			} else if ( Archive::isTaxonomyArchive() ) {
+				$args['search_type'] = array('cpt');
 				$found = false;
 				if ( isset($args['post_tax_filter']) ) {
 					foreach ($args['post_tax_filter'] as &$filter) {
@@ -258,15 +330,15 @@ class SearchOverride extends AbstractFilter {
 						'taxonomy'    => get_queried_object()->taxonomy,
 						'include'     => array(get_queried_object()->term_id),
 						'exclude'     => array(),
-						'allow_empty' => false
+						'allow_empty' => true
 					);
 				}
 			} else if ( Archive::isPostTypeArchive() ) {
+				$args['search_type'] = array('cpt');
 				$post_type = $wp_query->get( 'post_type' );
 				$args['post_type'] = $post_type == '' ? 'post' : $post_type;
 			}
 		}
-
 		return $args;
 	}
 
@@ -361,8 +433,12 @@ class SearchOverride extends AbstractFilter {
 		}
 
 		// Archive pages
-		if ( isset($_GET['asp_ls']) ) {
-			if ( WooCommerce::isShop() || Archive::isPostTypeArchive() || Archive::isTaxonomyArchive() ) {
+		if ( isset($_GET['asp_ls'], $_GET['p_asid']) ) {
+			if (
+				( wd_asp()->instances->getOption($_GET['p_asid'], 'woo_shop_live_search') && WooCommerce::isShop() ) ||
+				( wd_asp()->instances->getOption($_GET['p_asid'], 'cpt_archive_live_search') && Archive::isPostTypeArchive() ) ||
+				( wd_asp()->instances->getOption($_GET['p_asid'], 'taxonomy_archive_live_search') && Archive::isTaxonomyArchive() ) )
+			{
 				$is_search = true;
 			}
 		}

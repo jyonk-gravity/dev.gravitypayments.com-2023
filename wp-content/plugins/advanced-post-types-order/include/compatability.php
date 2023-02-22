@@ -67,7 +67,7 @@
                 
             if( (is_string($query->query_vars['post_type'])   &&  $query->query_vars['post_type']   !=  'product' )
                     ||
-                (is_array($query->query_vars['post_type'])   &&  ( count($query->query_vars['post_type']) > 1 ||  count($query->query_vars['post_type']) < 1 ||   $query->query_vars['post_type'][0]   !=  'product' ))
+                ( is_array($query->query_vars)   && is_array($query->query_vars['post_type'])   &&  ( count($query->query_vars['post_type']) > 1 ||  count($query->query_vars['post_type']) < 1 ||   $query->query_vars['post_type'][0]   !=  'product' ))
                 )
                 {
                     return $query;

@@ -2,6 +2,7 @@
 namespace WPDRMS\ASP\Synonyms;
 
 use WPDRMS\ASP\Patterns\SingletonTrait;
+use WPDRMS\ASP\Utils\FileManager;
 use WPDRMS\ASP\Utils\MB;
 
 defined('ABSPATH') or die("You can't access this file directly.");
@@ -235,7 +236,7 @@ if ( !class_exists(__NAMESPACE__ . '\Manager') ) {
 			$contents = json_encode($res);
 			$filename = 'asp_synonyms_export.json';
 
-			if ( wpd_put_file( wd_asp()->upload_path . $filename , $contents) !== false )
+			if ( FileManager::_o()->write( wd_asp()->upload_path . $filename , $contents) !== false )
 				return wd_asp()->upload_url . $filename;
 			else
 				return -1;
@@ -251,9 +252,9 @@ if ( !class_exists(__NAMESPACE__ . '\Manager') ) {
 			$att = attachment_url_to_postid($path);
 			if ( $att != 0 ) {
 				$att = get_attached_file($att);
-				$contents = wpd_get_file($att);
+				$contents = FileManager::_o()->read($att);
 			} else {
-				$contents = wpd_get_file($path);
+				$contents = FileManager::_o()->read($path);
 			}
 
 			if ( !empty($contents) ) {

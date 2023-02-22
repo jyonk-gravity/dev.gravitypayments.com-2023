@@ -91,11 +91,11 @@ if (!class_exists("wpdreamsFontComplete")) {
                             <div class="wd_fonts_dimensions">
                                 <label>
 									<?php _e('Size', 'ajax-search-pro'); ?>
-                                    <input type='text' class="wd_fonts_size twodigit" value="<?php echo $this->size; ?>">
+                                    <input type='text' class="wd_fonts_size fourdigit" value="<?php echo $this->size; ?>">
                                 </label>
                                 <label>
 									<?php _e('Line height', 'ajax-search-pro'); ?>
-                                    <input type='text' class="wd_fonts_line twodigit" value="<?php echo $this->lineheight; ?>">
+                                    <input type='text' class="wd_fonts_line fourdigit" value="<?php echo $this->lineheight; ?>">
                                 </label>
                                 <div class="descMsg"><?php _e('With dimensions, ex.:', 'ajax-search-pro'); ?> 10em, 10px or 110%</div>
                             </div>

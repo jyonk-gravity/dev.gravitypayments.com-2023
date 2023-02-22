@@ -17,8 +17,10 @@ if (ASP_DEMO) $_POST = null;
 </style>
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/sidebar.css?v='.ASP_CURR_VER; ?>" />
 <div id='wpdreams' class='asp-be wpdreams wrap<?php echo isset($_COOKIE['asp-accessibility']) ? ' wd-accessible' : ''; ?>'>
+	<?php do_action('asp_admin_notices'); ?>
+
 	<!-- This forces custom Admin Notices location -->
-	<h2 style="display: none;"></h2>
+	<div style="display:none;"><h2 style="display: none;"></h2></div>
 	<!-- This forces custom Admin Notices location -->
 
 	<?php if ( wd_asp()->updates->needsUpdate() ) { wd_asp()->updates->printUpdateMessage(); } ?>

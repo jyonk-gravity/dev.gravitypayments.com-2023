@@ -81,6 +81,22 @@ class Instances {
         return $this->search_instances;
     }
 
+	/**
+	 * Get an option value for a search instance ID
+	 *
+	 * @param $instance
+	 * @param $option_name
+	 * @return false|mixed
+	 */
+	public function getOption($instance, $option_name) {
+		if ( $this->exists($instance) ) {
+			$instance = $this->get($instance);
+			return $instance['data'][$option_name] ?? false;
+		}
+
+		return false;
+	}
+
     /**
      * Temporary changes the search instance data within the cache variable (not permanent)
      *

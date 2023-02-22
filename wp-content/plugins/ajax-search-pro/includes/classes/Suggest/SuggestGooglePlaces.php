@@ -28,6 +28,8 @@ class SuggestGooglePlaces extends AbstractSuggest {
 		} else {
 			$this->url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?types=geocode&language=' . $args['lang'] . '&key='.$args['api_key'] . "&input=";
 		}
+
+		$this->url = apply_filters('asp/suggestions/google_places/url', $this->url, $args);
 	}
 
 
@@ -67,12 +69,13 @@ class SuggestGooglePlaces extends AbstractSuggest {
 				}
 			}
 			$res = array_slice($res, 0, $this->args['maxCount']);
-			if (count($res) > 0)
-				return $res;
-			else
-				return array();
+			if (count($res) > 0) {
+				return apply_filters('asp/suggestions/google_places/results', $res, $q);
+			} else {
+				return apply_filters('asp/suggestions/google_places/results', array(), $q);
+			}
 		} catch( Exception $e) {
-			return array();
+			return apply_filters('asp/suggestions/google_places/results', array(), $q);
 		}
 	}
 }

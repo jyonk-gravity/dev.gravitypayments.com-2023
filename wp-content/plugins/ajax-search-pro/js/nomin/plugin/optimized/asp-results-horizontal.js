@@ -5,8 +5,7 @@
         showHorizontalResults: function () {
             let $this = this;
 
-            $this.n('resultsDiv').css('display', 'block');
-            $this.fixResultsPosition(true);
+            $this.showResultsBox();
 
             $this.n('items').css("opacity", $this.animationOpacity);
 
@@ -22,7 +21,6 @@
             if ($this.n('items').length > 0 && $this.o.scrollBar.horizontal.enabled ) {
                 let el_m = parseInt($this.n('items').css("marginLeft")),
                     el_w = $this.n('items').outerWidth() + el_m * 2;
-                $this.n('results').css("overflowX", "auto");
                 $this.n('resdrg').css("width", $this.n('items').length * el_w + el_m * 2 + "px");
             } else {
                 $this.n('results').css("overflowX", "hidden");

@@ -90,14 +90,17 @@
                             $es.find('.e-load-more-anchor').next('.elementor-button-wrapper').offForced().on('click', handler);
                             $es.find('.asp_e_load_more_anchor').on('asp_e_load_more', handler);
                         } else {
-                            $es.find('.elementor-pagination a, .elementor-widget-container .woocommerce-pagination a').each(function(){
+                            $es.find('.elementor-pagination a, .elementor-widget-container .woocommerce-pagination a').each(function() {
                                 let a = $(this).attr('href');
-                                if ( a.indexOf('asp_ls=') < 0 && a.indexOf('asp_ls&') < 0 ) {
-                                    if ( a.indexOf('?') < 0 ) {
+                                if (a.indexOf('asp_ls=') < 0 && a.indexOf('asp_ls&') < 0) {
+                                    if (a.indexOf('?') < 0) {
                                         $(this).attr('href', a + '?' + queryString);
                                     } else {
                                         $(this).attr('href', a + '&' + queryString);
                                     }
+                                } else {
+                                    // Still, make sure that the force reset pagination is not accidentally printed
+                                    $(this).attr('href', $(this).attr('href').replace(/&asp_force_reset_pagination=1/gmi, ''));
                                 }
                             });
                             $es.find('.elementor-pagination a, .elementor-widget-container .woocommerce-pagination a').on('click', function(e){
@@ -146,7 +149,7 @@
                         $loadMoreButton = $(originalNode).find('.e-load-more-anchor').next('.elementor-button-wrapper'),
                         $loadMoreMessage = $(originalNode).find('.e-load-more-message'),
                         $article = $(replacementNode).find('article');
-                    if ( $article.length > 0 && $article.parent().length > 0 ) {
+                    if ( $article.length > 0 && $article.parent().length > 0 && $(originalNode).find('article').parent().length > 0 ) {
                         let newData = $article.get(0).innerHTML,
                             previousData = $(originalNode).data('asp-previous-data');
                         if (previousData == '' || isNewSearch) {

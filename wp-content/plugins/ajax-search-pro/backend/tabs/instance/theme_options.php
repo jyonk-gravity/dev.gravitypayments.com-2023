@@ -5,6 +5,7 @@
     <li><a tabid="604" class='subtheme'><?php echo __('Magnifier & loading icon', 'ajax-search-pro'); ?></a></li>
 	<li><a tabid="612" class='subtheme'><?php echo __('Search text button', 'ajax-search-pro'); ?></a></li>
 	<li><a tabid="613" class='subtheme subtheme-rinfobox'><?php echo __('Result Info Box', 'ajax-search-pro'); ?></a></li>
+	<li><a tabid="614" class='subtheme subtheme-kwsuggestions'><?php echo __('Keyword Suggestions', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="605" class='subtheme subtheme-rlayout subtheme-isotopic'><?php echo __('Isotopic Results', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="606" class='subtheme subtheme-rlayout subtheme-isotopic'><?php echo __('Isotopic Navigation', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="607" class='subtheme subtheme-rlayout subtheme-vertical'><?php echo __('Vertical Results', 'ajax-search-pro'); ?></a></li>
@@ -32,6 +33,9 @@
 	</div>
 	<div tabid="613">
 		<?php include(ASP_PATH."backend/tabs/instance/theme/result_info_box.php"); ?>
+	</div>
+	<div tabid="614">
+		<?php include(ASP_PATH."backend/tabs/instance/theme/keyword_suggestions.php"); ?>
 	</div>
     <div tabid="605">
         <?php include(ASP_PATH."backend/tabs/instance/theme/isotopic_res.php"); ?>

@@ -4,7 +4,7 @@
 
 		var t = this;
 
-		t.version = '1.3.19';
+		t.version = '1.3.20';
 
 		t.param = {};
 
@@ -104,58 +104,69 @@
 
 		t.init = function() {
 
-			// classic editor
-			if ( $( '.acf-table-root' ).not( '.acf-table-rendered' ).length > 0 ) {
+			t.init_once();
+			t.update_tables();
 
-				t.init_workflow();
-			}
+			// DETECT NEW TABLES AFTER DOM CHANGES {
 
-			// try again multiple times if gutenberg editor or other delayed appearances
-			var loops = 0;
-			var table_exists = false;
-			var table_exists_interval = setInterval( function() {
+				var interval = false;
 
-				loops++;
+				let mutationObserver = new MutationObserver( function( mutations ) {
 
-				if ( $( '.acf-table-root' ).not( '.acf-table-rendered' ).length > 0 ) {
+					clearInterval( interval );
 
-					table_exists = true;
-					t.init_workflow();
-				}
+					interval = setInterval( function() {
 
-				if (
-					table_exists ||
-					loops >= 4
-				) {
+						if ( $( '.acf-table-root' ).not( '.acf-table-rendered' ).length > 0 ) {
 
-					clearInterval( table_exists_interval );
-				}
+							t.update_tables();
+						}
 
-			}, 500 );
+						clearInterval( interval );
+
+					}, 500 );
+
+				});
+
+				mutationObserver.observe( document.documentElement, {
+					childList: true,
+					subtree: true,
+				});
+
+			// }
+
 		};
 
-		t.init_workflow = function() {
+		t.update_tables = function() {
 
 			t.each_table();
-			t.table_add_col_event();
-			t.table_remove_col();
-			t.table_add_row_event();
+		};
+
+		t.init_once = function() {
+
 			t.table_remove_row();
+			t.table_remove_col();
+			t.table_add_col_event();
+			t.table_add_row_event();
+			t.sortable_event();
 			t.cell_editor();
 			t.cell_editor_tab_navigation();
 			t.prevent_cell_links();
+			//t.ui_event_ajax();
 			t.ui_event_use_header();
 			t.ui_event_caption();
 			t.ui_event_change_location_rule();
-			t.ui_event_ajax();
-			t.sortable_event();
 		};
 
 		t.ui_event_ajax = function() {
 
 			$( document ).ajaxComplete( function( event ) {
 
-				t.each_table();
+				setTimeout( function() {
+
+					t.each_table();
+
+				}, 1 );
 			});
 		}
 

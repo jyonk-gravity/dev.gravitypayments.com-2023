@@ -26,7 +26,12 @@ class SuggestStatistics extends AbstractSuggest {
 		$query = $wpdb->prepare(
 			"SELECT keyword FROM ".$wpdb->base_prefix."ajaxsearchpro_statistics WHERE keyword LIKE '%s' ORDER BY num desc LIMIT %d"
 			, $q . '%', $this->args['maxCount'] + 50);
+
+		$query = apply_filters('asp/suggestions/statistics/query', $query, $q);
+
 		$_keywords = $wpdb->get_results($query, ARRAY_A);
+
+		$_keywords = apply_filters('asp/suggestions/statistics/results', $_keywords, $q);
 
 		foreach($_keywords as $v) {
 			$keywords[] = $v['keyword'];

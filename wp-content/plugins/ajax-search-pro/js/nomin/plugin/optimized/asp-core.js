@@ -188,7 +188,7 @@
                     $this.showResultsBox();
                     $(".asp_res_loader", $this.n('resultsDiv')).removeClass("hiddend");
                     $this.n('results').css("display", "none");
-                    $this.n('showmore').css("display", "none");
+                    $this.n('showmoreContainer').css("display", "none");
                     if ( typeof $this.hidePagination !== 'undefined' ) {
                         $this.hidePagination();
                     }
@@ -657,7 +657,7 @@
                 $(html).find('.asp_nores').length > 0
             ) {
                 // Something went wrong, as the no-results container was returned
-                $this.n('showmore').css("display", "none");
+                $this.n('showmoreContainer').css("display", "none");
                 $('span', $this.n('showmore')).html("");
             } else {
                 // noinspection JSUnresolvedVariable
@@ -703,6 +703,7 @@
                 display: 'block',
                 height: 'auto'
             });
+
             $this.n('results').find('.item, .asp_group_header').addClass($this.animationOpacity);
 
             $this.n('resultsDiv').css($this.resAnim.showCSS);
@@ -793,6 +794,35 @@
             });
         },
 
+        updateNoResultsHeader: function() {
+            let $this = this,
+                $new_nores = $this.n('resdrg').find('.asp_nores'), $old_nores;
+
+            if ( $new_nores.length > 0 ) {
+                $new_nores = $new_nores.detach();
+            }
+
+            $old_nores = $this.n('resultsDiv').find('.asp_nores')
+            if ( $old_nores.length > 0 ) {
+                $old_nores.remove();
+            }
+
+            if ( $new_nores.length > 0 ) {
+                $this.n('resultsDiv').prepend($new_nores);
+
+                $this.n('resultsDiv').find(".asp_keyword").on('click', function () {
+                    $this.n('text').val(helpers.decodeHTMLEntities($(this).text()));
+                    $this.n('textAutocomplete').val('');
+                    // Is any ajax trigger enabled?
+                    if ($this.o.redirectOnClick == 0 ||
+                        $this.o.redirectOnEnter == 0 ||
+                        $this.o.trigger.type == 1) {
+                        $this.search();
+                    }
+                });
+            }
+        },
+
         updateInfoHeader: function( totalCount ) {
             let $this = this,
                 content,
@@ -800,7 +830,7 @@
                 phrase = $this.n('text').val().trim();
 
             if ( $rt.length > 0 ) {
-                if ( $this.n('items').length <= 0 ) {
+                if ( $this.n('items').length <= 0 || $this.n('resultsDiv').find('.asp_nores').length > 0 ) {
                     $rt.css('display', 'none');
                 } else {
                     // Results information box original texts
@@ -869,7 +899,7 @@
             caller = typeof caller == 'undefined' ? 'window' : caller;
 
             // Show more might not even visible
-            if ($this.n('showmore').length == 0 || $this.n('showmore').css('display') == 'none') {
+            if ($this.n('showmore').length == 0 || $this.n('showmoreContainer').css('display') == 'none') {
                 return false;
             }
 
@@ -983,7 +1013,6 @@
                 data.autop = 1;
             }
 
-
             if ( !recall && !apiCall && (JSON.stringify(data) === JSON.stringify($this.lastSearchData)) ) {
                 if ( !$this.resultsOpened && !$this.usingLiveLoader() ) {
                     $this.showResults();
@@ -1064,8 +1093,6 @@
                     'method': 'POST',
                     'data': data,
                     'success': function (response) {
-                        $this.gaPageview?.($this.n('text').val());
-
                         $this.searching = false;
                         response = response.replace(/^\s*[\r\n]/gm, "");
                         let html_response = response.match(/___ASPSTART_HTML___(.*[\s\S]*)___ASPEND_HTML___/),
@@ -1088,8 +1115,23 @@
                             if ( typeof data.autop != 'undefined' ) {
                                 $this.autopData['not_in'] = {};
                                 $this.autopData['not_in_count'] = 0;
-                                if ( Array.isArray( data_response.results ) ) {
-                                    data_response.results.forEach(function (r) {
+                                if ( typeof data_response.results != 'undefined' ) {
+                                    let res = [];
+                                    if ( typeof data_response.results.groups != 'undefined') {
+                                        Object.keys(data_response.results.groups).forEach(function(k){
+                                            if ( typeof data_response.results.groups[k].items != 'undefined' ) {
+                                                let group = data_response.results.groups[k].items;
+                                                if (Array.isArray(group)) {
+                                                    group.forEach(function (result) {
+                                                        res.push(result);
+                                                    })
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        res = Array.isArray( data_response.results ) ? data_response.results : res;
+                                    }
+                                    res.forEach(function (r) {
                                         if (typeof $this.autopData['not_in'][r['content_type']] == 'undefined') {
                                             $this.autopData['not_in'][r['content_type']] = [];
                                         }
@@ -1114,6 +1156,8 @@
                             $this.updateResults(html_response);
                             $this.results_num += data_response.results_count;
                         }
+
+                        $this.updateNoResultsHeader();
 
                         $this.nodes.items = $('.item', $this.n('resultsDiv')).length > 0 ? $('.item', $this.n('resultsDiv')) : $('.photostack-flip', $this.n('resultsDiv'));
 
@@ -1144,17 +1188,6 @@
 
                         $this.updateHref();
 
-                        $(".asp_keyword", $this.n('resdrg')).on('click', function () {
-                            $this.n('text').val(helpers.decodeHTMLEntities($(this).text()));
-                            $this.n('textAutocomplete').val('');
-                            // Is any ajax trigger enabled?
-                            if ($this.o.redirectOnClick == 0 ||
-                                $this.o.redirectOnEnter == 0 ||
-                                $this.o.trigger.type == 1) {
-                                $this.search();
-                            }
-                        });
-
                         if ($this.n('showmore').length > 0) {
                             if (
                                 $('span', $this.n('showmore')).length > 0 &&
@@ -1165,6 +1198,7 @@
                                     $this.n('showmore').data('text', $this.n('showmore').html());
                                 }
                                 $this.n('showmore').html($this.n('showmore').data('text').replaceAll('{phrase}', helpers.escapeHtml($this.n('text').val())));
+                                $this.n('showmoreContainer').css("display", "block");
                                 $this.n('showmore').css("display", "block");
                                 $('span', $this.n('showmore')).html("(" + (data_response.full_results_count - $this.results_num) + ")");
 
@@ -1229,7 +1263,7 @@
                                     }
                                 });
                             } else {
-                                $this.n('showmore').css("display", "none");
+                                $this.n('showmoreContainer').css("display", "none");
                                 $('span', $this.n('showmore')).html("");
                             }
                         }
@@ -2845,6 +2879,9 @@
                         break;
                     case 'aspItemOverlay':
                         this.nodes[k] = $('.asp_item_overlay', this.n('hiddenContainer'));
+                        break;
+                    case 'showmoreContainer':
+                        this.nodes[k] = $('.asp_showmore_container', this.n('resultsDiv'));
                         break;
                     case 'showmore':
                         this.nodes[k] = $('.showmore', this.n('resultsDiv'));

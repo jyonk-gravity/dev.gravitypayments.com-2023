@@ -1,51 +1,6 @@
 (function($){
     "use strict";
     let functions = {
-        gaPageview: function(term) {
-            let $this = this;
-            let tracking_id = $this.gaGetTrackingID();
-            // noinspection JSUnresolvedVariable
-            if ( typeof ASP.analytics == 'undefined' || ASP.analytics.method != 'pageview' )
-                return false;
-            // noinspection JSUnresolvedVariable
-            if ( ASP.analytics.string != '' ) {
-                // YOAST uses __gaTracker, if not defined check for ga, if nothing go null, FUN EH??
-                // noinspection JSUnresolvedVariable
-                let _ga = typeof __gaTracker == "function" ? __gaTracker : (typeof ga == "function" ? ga : false);
-                let _gtag = typeof gtag == "function" ? gtag : false;
-
-                if (!window.location.origin) {
-                    window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-                }
-                // Multisite Subdirectory (if exists)
-                // noinspection JSUnresolvedVariable
-                let url = $this.o.homeurl.replace(window.location.origin, '');
-
-                // GTAG bypass pageview tracking method
-                if ( _gtag !== false ) {
-                    if ( tracking_id !== false ) {
-                        // noinspection JSUnresolvedVariable
-                        tracking_id.forEach(function(id) {
-                            _gtag('config', id, {'page_path': url + ASP.analytics.string.replace("{asp_term}", term)});
-                        });
-                    }
-                } else if ( _ga !== false ) {
-                    let params = {
-                        'page': url + ASP.analytics.string.replace("{asp_term}", term),
-                        'title': 'Ajax Search'
-                    };
-                    if ( tracking_id !== false ) {
-                        tracking_id.forEach(function(id) {
-                            _ga('create', id, 'auto');
-                            _ga('send', 'pageview', params);
-                        });
-                    } else {
-                        _ga('send', 'pageview', params);
-                    }
-                }
-            }
-        },
-
         gaEvent: function(which, data) {
             let $this = this;
             let tracking_id = $this.gaGetTrackingID();
@@ -55,11 +10,8 @@
 
             // Get the scope
             let _gtag = typeof gtag == "function" ? gtag : false;
-            // noinspection JSUnresolvedVariable
-            let _ga = typeof window.__gaTracker == "function" ? window.__gaTracker :
-                (typeof window.ga == "function" ? window.ga : false);
 
-            if ( _gtag === false && _ga === false && typeof window.dataLayer == 'undefined' )
+            if ( _gtag === false && typeof window.dataLayer == 'undefined' )
                 return false;
 
             // noinspection JSUnresolvedVariable
@@ -92,29 +44,7 @@
                         event[kk] = event[kk].replace(regex, v);
                     });
                 });
-
-                if ( _ga !== false ) {
-                    if ( tracking_id !== false ) {
-                        tracking_id.forEach(function(id){
-                            _ga('create', id, 'auto');
-                            // noinspection JSUnresolvedVariable
-                            _ga('send', 'event',
-                                event.event_category,
-                                ASP.analytics.event[which].action,
-                                event.event_label,
-                                event.value
-                            );
-                        });
-                    } else {
-                        // noinspection JSUnresolvedVariable
-                        _ga('send', 'event',
-                            event.event_category,
-                            ASP.analytics.event[which].action,
-                            event.event_label,
-                            event.value
-                        );
-                    }
-                } else if ( _gtag !== false ) {
+                if ( _gtag !== false ) {
                     if ( tracking_id !== false ) {
                         tracking_id.forEach(function(id){
                             event.send_to = id;
@@ -127,10 +57,11 @@
                     }
                 } else if ( typeof window.dataLayer.push != 'undefined' ) {
                     window.dataLayer.push({
-                        'event': 'gaEvent',
-                        'eventCategory': event.event_category,
-                        'eventAction': ASP.analytics.event[which].action,
-                        'eventLabel': event.event_label
+                        'event': 'asp_event',
+                        'event_name': ASP.analytics.event[which].action,
+                        'event_category': event.event_category,
+                        'event_label': event.event_label,
+                        'event_value': event.value
                     });
                 }
             }

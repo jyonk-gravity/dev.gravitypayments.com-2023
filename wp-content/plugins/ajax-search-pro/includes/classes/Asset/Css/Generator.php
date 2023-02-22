@@ -3,6 +3,7 @@ namespace WPDRMS\ASP\Asset\Css;
 
 use WPDRMS\ASP\Asset\GeneratorInterface;
 use WPDRMS\ASP\Asset\Script\Requirements;
+use WPDRMS\ASP\Utils\FileManager;
 use WPDRMS\ASP\Utils\Str;
 
 defined('ABSPATH') or die("You can't access this file directly.");
@@ -134,7 +135,7 @@ if ( !class_exists(__NAMESPACE__ . '\Generator') ) {
 				if ( $this->minify ) {
 					$c = $this->minify($c);
 				}
-				wpd_put_file(wd_asp()->cache_path . "search" . $sid . ".css", $c);
+				FileManager::_o()->write(wd_asp()->cache_path . "search" . $sid . ".css", $c);
 			}
 
 			// Save the style instances file nevertheless, even if async enabled
@@ -143,11 +144,11 @@ if ( !class_exists(__NAMESPACE__ . '\Generator') ) {
 				$basic_css = $this->minify($basic_css);
 			}
 
-			wpd_put_file(wd_asp()->cache_path . "style.instances.css", $basic_css . $css);
-			wpd_put_file(wd_asp()->cache_path . "style.basic.css", $basic_css);
+			FileManager::_o()->write(wd_asp()->cache_path . "style.instances.css", $basic_css . $css);
+			FileManager::_o()->write(wd_asp()->cache_path . "style.basic.css", $basic_css);
 			if ( $this->basic_flags_string != '' ) {
-				wpd_put_file(wd_asp()->cache_path . "style.basic" . $this->basic_flags_string . ".css", $basic_css);
-				wpd_put_file(wd_asp()->cache_path . "style.instances" . $this->basic_flags_string . ".css", $basic_css . $css);
+				FileManager::_o()->write(wd_asp()->cache_path . "style.basic" . $this->basic_flags_string . ".css", $basic_css);
+				FileManager::_o()->write(wd_asp()->cache_path . "style.instances" . $this->basic_flags_string . ".css", $basic_css . $css);
 			}
 
 			update_site_option('asp_css_flags', array(

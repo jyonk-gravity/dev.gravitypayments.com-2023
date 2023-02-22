@@ -23,6 +23,6 @@ class KeywordSuggest extends AbstractSuggest {
 	}
 
 	function getKeywords(string $q):array {
-		return $this->suggest->getKeywords($q);
+		return apply_filters('asp/suggestions/keywords', $this->suggest->getKeywords($q), $q);
 	}
 }

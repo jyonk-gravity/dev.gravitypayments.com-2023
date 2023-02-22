@@ -22,4 +22,5 @@ defined('ABSPATH') or die("You can't access this file directly.");
  * @since: 4.0
  */
 ?>
-<div class="asp_group_header"><?php echo $group_name; ?></div>
+<div class="asp_results_group <?php echo $group_class; ?>">
+	<div class="asp_group_header"><?php echo $group_name; ?></div>

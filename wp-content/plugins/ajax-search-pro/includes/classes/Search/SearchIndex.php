@@ -489,7 +489,6 @@ class SearchIndex extends SearchPostTypes {
 				$results_arr[$k] = $wpdb->get_results($query);
 			}
 		}
-
 		// Merge results depending on the logic
 		$results_arr = $this->mergeRawResults($results_arr, $kw_logic);
 

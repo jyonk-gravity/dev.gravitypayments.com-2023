@@ -2,6 +2,9 @@
 namespace WPDRMS\ASP\Cache;
 
 /* Prevent direct access */
+
+use WPDRMS\ASP\Utils\FileManager;
+
 defined('ABSPATH') or die("You can't access this file directly.");
 
 class TextCache {
@@ -23,15 +26,15 @@ class TextCache {
 		$file = $this->filePath($file);
 		$this->last_file_path = $file;
 
-		if ( wpd_is_file($file) ) {
-			$filetime = wpd_mtime($file);
+		if ( FileManager::_o()->isFile($file) ) {
+			$filetime = FileManager::_o()->mtime($file);
 		} else {
 			return false;
 		}
 		if ( $filetime === false || (time() - $filetime) > $this->interval )
 			return false;
 		$this->last_file_mtime = $filetime;
-		return wpd_get_file($file);
+		return FileManager::_o()->read($file);
 	}
 
 	public function getDBCache($handle) {
@@ -59,14 +62,14 @@ class TextCache {
 		}
 
 
-		if ( wpd_is_file($file) ) {
-			$filetime = wpd_mtime($file);
+		if ( FileManager::_o()->isFile($file) ) {
+			$filetime = FileManager::_o()->mtime($file);
 		} else {
 			$filetime = 0;
 		}
 
 		if ( (time() - $filetime) > $this->interval ) {
-			wpd_put_file($file, $content);
+			FileManager::_o()->write($file, $content);
 		}
 	}
 
@@ -94,12 +97,12 @@ class TextCache {
 	}
 
 	public static function generateSCFiles() {
-		$content = wpd_get_file(ASP_PATH . "sc-config.php");
+		$content = FileManager::_o()->read(ASP_PATH . "sc-config.php");
 		if ( $content !== '' ) {
 			$content = preg_replace('/ASP_SC_CACHE_INTERVAL = (.*?);/', 'ASP_SC_CACHE_INTERVAL = ' . wd_asp()->o['asp_caching']['cachinginterval'] . ';', $content);
 			$content = preg_replace('/ASP_SC_CACHE_PATH = (.*?);/', "ASP_SC_CACHE_PATH = '" . wd_asp()->cache_path . "';", $content);
 			$content = preg_replace('/ASP_SC_ADMIN_AJAX_PATH = (.*?);/', "ASP_SC_ADMIN_AJAX_PATH = '" . ABSPATH . 'wp-admin/admin-ajax.php' . "';", $content);
-			wpd_put_file(ASP_PATH . "sc-config.php", $content);
+			FileManager::_o()->write(ASP_PATH . "sc-config.php", $content);
 		}
 	}
 

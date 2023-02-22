@@ -2,7 +2,7 @@
 namespace WPDRMS\ASP\Asset\Script;
 
 use WPDRMS\ASP\Asset\GeneratorInterface;
-use WPDRMS\ASP\Utils\File;
+use WPDRMS\ASP\Utils\FileManager;
 
 defined('ABSPATH') or die("You can't access this file directly.");
 
@@ -42,7 +42,7 @@ if ( !class_exists(__NAMESPACE__ . '\Generator') ) {
 						}
 					}
 				}
-				wpd_put_file(wd_asp()->cache_path . $this->fileName(), $final_content);
+				FileManager::_o()->write(wd_asp()->cache_path . $this->fileName(), $final_content);
 				return $this->verifyFiles();
 			}
 
@@ -62,7 +62,7 @@ if ( !class_exists(__NAMESPACE__ . '\Generator') ) {
 
 		public static function deleteFiles(): int {
 			if ( !empty(wd_asp()->cache_path) && wd_asp()->cache_path !== '' ) {
-				return File::delete(wd_asp()->cache_path, '*.js');
+				return FileManager::_o()->deleteByPattern(wd_asp()->cache_path, '*.js');
 			}
 			return 0;
 		}

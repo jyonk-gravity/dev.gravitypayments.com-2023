@@ -14,7 +14,7 @@ foreach($taxonomies_arr as $taxx) {
 ?>
 <ul id="subtabs"  class='tabs'>
     <li><a tabid="501" class='subtheme current'><?php echo __('Autocomplete', 'ajax-search-pro'); ?></a></li>
-    <li><a tabid="502" class='subtheme'><?php echo __('Keyword suggestions', 'ajax-search-pro'); ?></a></li>
+    <li><a tabid="502" class='subtheme'><?php echo __('Predictive Results & Keyword suggestions', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="503" class='subtheme'><?php echo __('Suggested search keywords', 'ajax-search-pro'); ?></a></li>
 </ul>
 <div class='tabscontent'>
@@ -37,16 +37,13 @@ foreach($taxonomies_arr as $taxx) {
     <div tabid="502">
         <fieldset>
             <legend>
-                <?php echo __('Keyword suggestions', 'ajax-search-pro'); ?>
+                <?php echo __('Predictive Results & Keyword suggestions', 'ajax-search-pro'); ?>
                 <span class="asp_legend_docs">
                     <a target="_blank" href="https://documentation.ajaxsearchpro.com/autocomplete-and-keyword-suggestions/keyword-suggestions"><span class="fa fa-book"></span>
                         <?php echo __('Documentation', 'ajax-search-pro'); ?>
                     </a>
                 </span>
             </legend>
-            <p class="infoMsg">
-                <?php echo __('Keyword suggestions appear when no results match the keyword.', 'ajax-search-pro'); ?>
-            </p>
             <?php include(ASP_PATH."backend/tabs/instance/suggest/keywords.php"); ?>
         </fieldset>
     </div>

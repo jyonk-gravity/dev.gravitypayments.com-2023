@@ -1252,7 +1252,7 @@
                     
                     $query_post_types   =   apply_filters('apto/query_get_post_types', $query_post_types, $query, $_if_empty_set_post_types );
                                             
-                    return  $query_post_types;    
+                    return  (array)$query_post_types;    
                 }
             
             

@@ -30,6 +30,8 @@ use WPDRMS\ASP\Utils\Css;defined('ABSPATH') or die("You can't access this file d
 <?php endif; ?>
 <?php echo $asp_res_ids; ?>.vertical .results {
     max-height: <?php echo $style['v_res_max_height']; ?>;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 <?php endif; ?>
 
@@ -83,14 +85,25 @@ use WPDRMS\ASP\Utils\Css;defined('ABSPATH') or die("You can't access this file d
 }
 
 <?php if ( intval($style['v_res_column_count']) > 1 ): ?>
-    <?php if ($use_compatibility == true): ?>
-        <?php echo $asp_res_ids1; ?>.vertical .resdrg,
-        <?php echo $asp_res_ids2; ?>.vertical .resdrg,
-    <?php endif; ?>
-    <?php echo $asp_res_ids; ?>.vertical .resdrg {
-        display: flex;
-        flex-wrap: wrap;
-    }
+	<?php if ( $style['group_by'] != "none" ): ?>
+		<?php if ($use_compatibility == true): ?>
+			<?php echo $asp_res_ids1; ?>.vertical .resdrg .asp_results_group,
+			<?php echo $asp_res_ids2; ?>.vertical .resdrg .asp_results_group,
+		<?php endif; ?>
+		<?php echo $asp_res_ids; ?>.vertical .resdrg .asp_results_group {
+			display: flex;
+			flex-wrap: wrap;
+		}
+	<?php else: ?>
+		<?php if ($use_compatibility == true): ?>
+			<?php echo $asp_res_ids1; ?>.vertical .resdrg,
+			<?php echo $asp_res_ids2; ?>.vertical .resdrg,
+		<?php endif; ?>
+		<?php echo $asp_res_ids; ?>.vertical .resdrg {
+			display: flex;
+			flex-wrap: wrap;
+		}
+	<?php endif; ?>
     <?php if ($use_compatibility == true): ?>
         <?php echo $asp_res_ids1; ?>.vertical .results .item,
         <?php echo $asp_res_ids2; ?>.vertical .results .item,
@@ -143,7 +156,7 @@ use WPDRMS\ASP\Utils\Css;defined('ABSPATH') or die("You can't access this file d
     border-top: 1px solid <?php echo $style['groupingbordercolor']; ?>;
     border-left: 1px solid <?php echo $style['groupingbordercolor']; ?>;
     border-right: 1px solid <?php echo $style['groupingbordercolor']; ?>;
-    margin: 10px 0 -3px;
+    margin: 0 0 -3px;
     padding: 7px 0 7px 10px;
     position: relative;
     z-index: 1000;

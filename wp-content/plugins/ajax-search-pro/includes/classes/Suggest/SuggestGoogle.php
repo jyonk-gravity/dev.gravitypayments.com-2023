@@ -26,6 +26,8 @@ class SuggestGoogle extends AbstractSuggest {
 		} else {
 			$this->url = 'https://suggestqueries.google.com/complete/search?output=toolbar&oe=utf-8&client=toolbar&hl=' . $args['lang'] . '&q=';
 		}
+
+		$this->url = apply_filters('asp/suggestions/google/url', $this->url, $args);
 	}
 
 	public function getKeywords(string $q): array {
@@ -35,7 +37,7 @@ class SuggestGoogle extends AbstractSuggest {
 			'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
 		) );
 		if ( is_wp_error( $response ) || !isset($response['body']) ) {
-			return array();
+			return apply_filters('asp/suggestions/google/results', array(), $q);
 		} else {
 			$data = $response['body'];
 		}
@@ -47,8 +49,9 @@ class SuggestGoogle extends AbstractSuggest {
 			if (
 				$suggestions === false ||
 				!isset($suggestions->{'CompleteSuggestion'})
-			)
-				return array();
+			) {
+				return apply_filters('asp/suggestions/google/results', array(), $q);
+			}
 
 			$suggestions = json_decode(
 				json_encode($suggestions->{'CompleteSuggestion'}),
@@ -75,12 +78,13 @@ class SuggestGoogle extends AbstractSuggest {
 				}
 			}
 			$res = array_slice($res, 0, $this->args['maxCount']);
-			if (count($res) > 0)
-				return $res;
-			else
-				return array();
+			if ( count($res) > 0 ) {
+				return apply_filters('asp/suggestions/google/results', $res, $q);
+			} else {
+				return apply_filters('asp/suggestions/google/results', array(), $q);
+			}
 		} catch(Exception $e) {
-			return array();
+			return apply_filters('asp/suggestions/google/results', array(), $q);
 		}
 	}
 }

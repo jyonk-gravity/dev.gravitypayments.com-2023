@@ -5,6 +5,7 @@ namespace WPDRMS\ASP\Media;
 
 use Exception;
 use WPDRMS\ASP\Media\RemoteService\License;
+use WPDRMS\ASP\Utils\FileManager;
 use WPDRMS\ASP\Utils\Str;
 
 defined( 'ABSPATH' ) or die( "You can't access this file directly." );
@@ -206,7 +207,7 @@ class Parser {
 	 * @return string
 	 */
 	function parseTXT() {
-		$contents = wpd_get_file($this->filepath);
+		$contents = FileManager::_o()->read($this->filepath);
 		// CSV files often store the values in quotes. We don't need those in this case.
 		if ( $this->post->post_mime_type == 'text/csv' ) {
 			$contents = str_replace(array('"', "'"), ' ', $contents);
@@ -221,7 +222,7 @@ class Parser {
 	 * @return string
 	 */
 	function parseRTF() {
-		$rtf = wpd_get_file($this->filepath);
+		$rtf = FileManager::_o()->read($this->filepath);
 		if ($rtf != '') {
 			include_once(ASP_EXTERNALS_PATH . 'class.rtf-html-php.php');
 			$reader = new \ASP_RtfReader();

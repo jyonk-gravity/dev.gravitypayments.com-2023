@@ -3,13 +3,6 @@
     $params[$o->getName()] = $o->getData();
     ?>
 </div>
-<!--
-<div class="item"><?php
-    $o = new wpdreamsFontComplete("titlehoverfont", __('Results title hover link font', 'ajax-search-pro'), $sd['titlehoverfont']);
-    $params[$o->getName()] = $o->getData();
-    ?>
-</div>
--->
 <div class="item"><?php
     $o = new wpdreamsFontComplete("authorfont", __('Author text font', 'ajax-search-pro'), $sd['authorfont']);
     $params[$o->getName()] = $o->getData();

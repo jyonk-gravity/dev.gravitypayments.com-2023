@@ -42,11 +42,16 @@ class Search {
 					include( ASP_INCLUDES_PATH . "views/results/".$subdir."no-results.php" );
 			}
 			$html .= ob_get_clean();
-		} else {
+			if ( isset($results['suggested']) ) {
+				$results = $results['suggested'];
+			}
+		}
+
+		if ( !empty($results) && !isset($results['nores']) ) {
 			if (isset($results['grouped'])) {
 				foreach($results['groups'] as $k=>$g) {
-					$group_name = $g['title'];
-
+					$group_name = esc_html($g['title']);
+					$group_class = "asp_results_group_" . esc_attr($k);
 					// Get the group headers
 					ob_start();
 					if ( file_exists( $theme_path . "group-header.php" ) )
@@ -127,6 +132,7 @@ class Search {
 				}
 			}
 		}
+
 
 		PolylangStringTranslations::save();
 

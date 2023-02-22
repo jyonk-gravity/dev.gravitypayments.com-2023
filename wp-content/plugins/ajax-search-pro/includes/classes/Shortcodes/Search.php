@@ -168,8 +168,7 @@ class Search extends AbstractShortcode {
 		// If images are removed the results count is unpredictable, thus disable ajax loader on more results
 		if (
 			($style['resultstype'] == "isotopic" && $style['i_ifnoimage'] == 'removeres') ||
-			($style['resultstype'] == 'polaroid' && $style['pifnoimage'] == 'removeres') ||
-			$style['group_by'] != "none"
+			($style['resultstype'] == 'polaroid' && $style['pifnoimage'] == 'removeres')
 		){
 			$style['more_results_action'] = "redirect";
 		}

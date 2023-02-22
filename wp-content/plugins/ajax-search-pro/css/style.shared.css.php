@@ -452,20 +452,22 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
 }
 
 <?php if ($use_compatibility == true): ?>
-	<?php echo $asp_div_ids1; ?> .probox .promagnifier div.innericon,
-	<?php echo $asp_div_ids2; ?> .probox .promagnifier div.innericon,
+	<?php echo $asp_div_ids1; ?> .probox .promagnifier .innericon,
+	<?php echo $asp_div_ids2; ?> .probox .promagnifier .innericon,
 <?php endif; ?>
-<?php echo $asp_div_ids; ?> .probox .promagnifier div.innericon {
+<?php echo $asp_div_ids; ?> .probox .promagnifier .innericon {
+	display: block;
 	width: <?php echo wpdreams_width_from_px($style['boxheight']); ?>px;
 	height: <?php echo wpdreams_width_from_px($style['boxheight']); ?>px;
 	float: right;
 }
 
 <?php if ($use_compatibility == true): ?>
-	<?php echo $asp_div_ids1; ?> .probox .promagnifier div.asp_text_button,
-	<?php echo $asp_div_ids2; ?> .probox .promagnifier div.asp_text_button,
+	<?php echo $asp_div_ids1; ?> .probox .promagnifier .asp_text_button,
+	<?php echo $asp_div_ids2; ?> .probox .promagnifier .asp_text_button,
 <?php endif; ?>
-<?php echo $asp_div_ids; ?> .probox .promagnifier div.asp_text_button {
+<?php echo $asp_div_ids; ?> .probox .promagnifier .asp_text_button {
+	display: block;
 	width: auto;
 	height: <?php echo wpdreams_width_from_px($style['boxheight']); ?>px;
 	float: <?php echo w_isset_def($style["search_text_position"], 'right'); ?>;
@@ -627,13 +629,36 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
 <?php endif; ?>
 
 <?php if ($use_compatibility == true): ?>
-    <?php echo $asp_res_ids1; ?> .results .asp_nores .asp_keyword,
-    <?php echo $asp_res_ids2; ?> .results .asp_nores .asp_keyword,
+    <?php echo $asp_res_ids1; ?> .asp_nores,
+    <?php echo $asp_res_ids2; ?> .asp_nores,
 <?php endif; ?>
-<?php echo $asp_res_ids; ?> .results .asp_nores .asp_keyword {
-    padding: 0 6px;
+<?php echo $asp_res_ids; ?> .asp_nores {
+	<?php echo $style['kw_suggest_border']; ?>
+	<?php echo $style['kw_suggest_box_shadow']; ?>
+    padding: <?php echo $style['kw_suggest_padding']; ?>;
+    margin: <?php echo $style['kw_suggest_margin']; ?>;
+    <?php echo Css::font($style['kw_suggest_font']); ?>
+    font-weight: normal;
+	background: <?php echo $style['kw_suggest_bg']; ?>;
+}
+
+<?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?> .asp_nores .asp_nores_kw_suggestions,
+    <?php echo $asp_res_ids2; ?> .asp_nores .asp_nores_kw_suggestions,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?> .asp_nores .asp_nores_kw_suggestions {
+	color: <?php echo $style['kw_suggest_didyoumean_font_color']; ?>;
+    font-weight: normal;
+}
+
+<?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?> .asp_nores .asp_keyword,
+    <?php echo $asp_res_ids2; ?> .asp_nores .asp_keyword,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?> .asp_nores .asp_keyword {
+    padding: 0 8px 0 0;
     cursor: pointer;
-    <?php echo Css::font($style['descfont']); ?>
+	color: <?php echo $style['kw_suggest_kw_font_color']; ?>;
     font-weight: bold;
 }
 
@@ -789,7 +814,6 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
 <?php endif; ?>
 <?php echo $asp_res_ids; ?> p.showmore {
   text-align: center;
-  margin: 5px 0 0;
   <?php echo Css::font($style['showmorefont']); ?>
 }
 

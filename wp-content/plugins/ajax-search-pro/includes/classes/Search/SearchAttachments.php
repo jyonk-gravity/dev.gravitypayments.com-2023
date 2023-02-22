@@ -615,6 +615,7 @@ class SearchAttachments extends SearchPostTypes {
 
 			if ( $r->content == '' ) {
 				$_content = get_post_meta($r->id, '_asp_attachment_text', true);
+				$_content = wd_strip_tags_ws( $_content, $sd['striptagsexclude'] );
 				// Get the words from around the search phrase, or just the description
 				if ( $_content != '' ) {
 					if ( $sd['description_context'] == 1 && count($_s) > 0 && $s != '' ) {

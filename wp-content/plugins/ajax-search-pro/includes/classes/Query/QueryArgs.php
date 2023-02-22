@@ -564,18 +564,8 @@ class QueryArgs {
 		$args['_show_more_results'] = $sd['showmoreresults'] == 1;
 		$args["woo_currency"] = $o['woo_currency'] ?? (function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '');
 		$args['_page_id'] = $o['current_page_id'] ?? $args['_page_id'];
-		// Reset search type and post types for WooCommerce search results page
-		if ( isset($_GET['post_type']) && $_GET['post_type'] == "product") {
-			$args['search_type'] = array("cpt");
-			$old_ptype = $args['post_type'];
-			$args['post_type'] = array();
-			if ( in_array("product", $old_ptype) ) {
-				$args['post_type'][] = "product";
-			}
-			if ( in_array("product_variation", $old_ptype) ) {
-				$args['post_type'][] = "product_variation";
-			}
-		}
+		$args['_is_autopopulate'] = isset($_POST['autop']);
+
 		if ( $sd['groupby_cpt_title'] == 1 && $args['cpt_query']['groupby'] == '' ) {
 			$args['cpt_query']['groupby'] = "title";
 		}

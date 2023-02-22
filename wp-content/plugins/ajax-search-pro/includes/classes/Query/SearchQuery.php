@@ -33,11 +33,18 @@ class SearchQuery {
 	public $all_results;
 
 	/**
-	 * The real results count
+	 * The real overall results count
 	 *
 	 * @var int
 	 */
 	public $found_posts = 0;
+
+	/**
+	 * The returned number of results for this stack
+	 *
+	 * @var int
+	 */
+	public $returned_posts = 0;
 
 	/**
 	 * The options passed from the search form, when requested from the front-end
@@ -375,6 +382,7 @@ class SearchQuery {
 
 		'global_found_posts' => 0, // Number of posts found overall at any point on mixed search queries
 		'_charcount'        => 0,
+		'_is_autopopulate'        => false,
 		'_keyword_count_limit' => 6, // Number of words in the search phrase allowed
 		'_exact_matches'   => false,
 		'_exact_match_location' => 'anywhere',  // anywhere, start, end
@@ -752,9 +760,9 @@ class SearchQuery {
 
 		$s = $this->applyExceptions( $args['s'] );
 
-		// Allow empty search phrases only if the char count is 0
+		// Allow empty search phrases only if the char count is 0 or autopopulate
 		if ( $s != "" ||
-			( isset($args['force_order']) || isset($args['force_count']) ) ||
+			( isset($args['_is_autopopulate']) || isset($args['force_order']) || isset($args['force_count']) ) ||
 			$args['_charcount'] == 0
 		)
 			$this->finalPhrases[] = $s;
@@ -1215,12 +1223,47 @@ class SearchQuery {
 			}
 		}
 
+		if ( isset($results['groups']) ) {
+			foreach ( $results['groups'] as $group ) {
+				if ( isset($group['items']) ) {
+					$this->returned_posts += count($group['items']);
+				}
+			}
+		} else {
+			$this->returned_posts = count($results);
+		}
+
 		$this->posts = $results;
 		return $results;
 	}
 
+	public function resultsSuggestions( $fallback_on_no_results = false ) {
+		$suggestions = $this->kwSuggestions();
+		$posts = array();
+		$return = array();
+		if ( isset($suggestions['keywords'], $suggestions['keywords'][0]) ) {
+			$this->args['s'] = $suggestions['keywords'][0];
+			$posts = $this->get_posts();
+		}
+
+		if ( count($posts) > 0 ) {
+			$return = array(
+				'suggested' => $posts,
+				'keywords' => array($suggestions['keywords'][0]),
+				'nores' => 1
+			);
+		} else if ( $fallback_on_no_results && isset($suggestions['keywords']) ) {
+			$return = array(
+				'keywords' => $suggestions['keywords'],
+				'nores' => 1
+			);
+		}
+
+		return $return;
+	}
+
 	/** @noinspection PhpUnused */
-	public function kwSuggestions() {
+	public function kwSuggestions( $single = false ) {
 		if ( !isset($this->args['_sd'], $this->args['_sid']) )
 			return array();
 
@@ -1229,6 +1272,7 @@ class SearchQuery {
 		$sd = &$this->args['_sd'];
 		$args = $this->args;
 		$results = array();
+		$count = $single === false ? $sd['keyword_suggestion_count'] : 1;
 
 		if (isset($sd['customtypes']) && count($sd['customtypes']) > 0)
 			$types = array_merge($types, $sd['customtypes']);
@@ -1248,7 +1292,7 @@ class SearchQuery {
 			foreach (w_isset_def($sd['selected-keyword_suggestion_source'], array('google')) as $source) {
 				if ( empty($source) )
 					continue;
-				$remaining_count = $sd['keyword_suggestion_count'] - count($keywords);
+				$remaining_count = $count - count($keywords);
 				if ($remaining_count <= 0) break;
 
 				$taxonomy = "";
@@ -1275,7 +1319,7 @@ class SearchQuery {
 			}
 		}
 
-		if ($keywords != false) {
+		if ( $keywords != false ) {
 			$results['keywords'] = $keywords;
 			$results['nores'] = 1;
 			$results = apply_filters('asp_only_keyword_results', $results);

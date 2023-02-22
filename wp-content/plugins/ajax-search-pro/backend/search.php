@@ -84,18 +84,9 @@ if ( empty($search) ) {
  */
 $sd = &$search['data'];
 ?>
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
+<link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/font-awesome/font-awesome.css?v='.ASP_CURR_VER; ?>" />
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/sidebar.css?v='.ASP_CURR_VER; ?>" />
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/search_instance.css?v='.ASP_CURR_VER; ?>" />
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=470596109688127&version=v2.0";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
 
 <div id="wpd_body_loader"><div id="wpd_loading_msg"><?php echo __('Loading...', 'ajax-search-pro'); ?></div></div>
 
@@ -145,8 +136,10 @@ $sd = &$search['data'];
     </div>
 </div>
 <div id='wpdreams' class='asp-be wpdreams wrap<?php echo isset($_COOKIE['asp-accessibility']) ? ' wd-accessible' : ''; ?>' style="min-width: 1280px;" data-searchid="<?php echo $_GET['asp_sid']; ?>">
+	<?php do_action('asp_admin_notices'); ?>
+
 	<!-- This forces custom Admin Notices location -->
-	<h2 style="display: none;"></h2> 
+	<div style="display:none;"><h2 style="display: none;"></h2></div>
 	<!-- This forces custom Admin Notices location -->
 
     <?php if (ASP_DEBUG == 1): ?>

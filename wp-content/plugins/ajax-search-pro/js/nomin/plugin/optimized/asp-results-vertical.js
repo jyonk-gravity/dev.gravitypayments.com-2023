@@ -92,9 +92,6 @@
                     height: 'auto'
                 });
             }
-            $this.n('results').css({
-                'overflowY': 'auto'
-            });
 
             if ( $this.call_num < 1 ) {
                 // Scroll to top

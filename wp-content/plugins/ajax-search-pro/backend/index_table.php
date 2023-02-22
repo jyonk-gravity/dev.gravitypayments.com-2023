@@ -49,14 +49,16 @@ $asp_cron_data = get_option("asp_it_cron", array(
     </div>
     <?php return; ?>
 <?php endif; ?>
-	<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
+	<link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/font-awesome/font-awesome.css?v='.ASP_CURR_VER; ?>" />
     <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/sidebar.css?v='.ASP_CURR_VER; ?>" />
     <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/jquery-tagging/tag-basic-style.css?v='.ASP_CURR_VER; ?>" />
     <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/index-table/index_table.css?v='.ASP_CURR_VER; ?>" />
     <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/index-table/synonyms.css?v='.ASP_CURR_VER; ?>" />
     <div id='wpdreams' class='asp-be wpdreams wrap<?php echo isset($_COOKIE['asp-accessibility']) ? ' wd-accessible' : ''; ?>'>
+		<?php do_action('asp_admin_notices'); ?>
+
 		<!-- This forces custom Admin Notices location -->
-		<h2 style="display: none;"></h2>
+		<div style="display:none;"><h2 style="display: none;"></h2></div>
 		<!-- This forces custom Admin Notices location -->
 
 		<?php if ( wd_asp()->updates->needsUpdate() ) { wd_asp()->updates->printUpdateMessage(); } ?>
@@ -539,6 +541,7 @@ $asp_cron_data = get_option("asp_it_cron", array(
                             </div>
                             <p id='index_db_other_data' style="display:none !important;"></p>
                         <?php endif; ?>
+						<div id="asp_i_dontclose" class="hiddend">Please do not close this browser tab until the indexing is finished!</div>
                     </fieldset>
 
                     <fieldset id='asp_indextable_options'>

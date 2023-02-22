@@ -77,6 +77,7 @@ if ( !class_exists(__NAMESPACE__ . '\Shortcode') ) {
 			// These shortcodes are completely ignored, and removed with content
 			$ignore_shortcodes = array(
 				'vc_asp_search',
+				'ts_products_in_category_tabs',
 				'wd_asp',
 				'wpdreams_ajaxsearchpro',
 				'wpdreams_ajaxsearchpro_results',

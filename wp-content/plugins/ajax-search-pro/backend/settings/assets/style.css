@@ -4,13 +4,17 @@
 Hiding unwanted notices on ASP admin pages
 \************************************************/
 
+.asp-backend div#wpbody-content>div[class*="vc_"],
+.asp-backend div#wpdreams>div[class*="vc_"],
 .asp-backend #wpbody-content>#message,
 .asp-backend #wpbody-content>.notice-warning,
+.asp-backend #wpdreams>.notice-warning,
 .asp-backend #wpbody-content>.woocommerce-message,
 .asp-backend #wpbody-content>.update-nag,
 .asp-backend #wpbody-content>#PO-ajax-notices,
 .asp-backend #wpbody-content>.settings-error,
 .asp-backend #wpbody-content>.notice:not(.asp-notice-nohide),
+.asp-backend #wpdreams>.notice:not(.asp-notice-nohide),
 .asp-backend #wpbody-content>.vc_license-activation-notice {
     display: none !important;
 }
@@ -436,6 +440,10 @@ div#wpdreams .wpd-text-right {
 #wpdreams .wpdreamsTextSmall input,
 #wpdreams input.threedigit {
     width: 45px;
+}
+
+#wpdreams input.fourdigit {
+    width: 55px;
 }
 
 #wpdreams input.ninedigit {
@@ -1603,7 +1611,8 @@ div.wd_cpt_search span.wp_cpt_search_selected:hover .fa {
 
 #wpdreams .wpdreamsFontComplete .wpd_font_shadow label,
 #wpdreams .wpdreamsBoxShadow .wpd_shadow_size label {
-    width: 140px;
+    width: 142px;
+    margin: 0 6px;
 }
 
 #wpdreams .wpdreamsFontComplete .wpd_font_shadow .wpdreamsColorPicker,

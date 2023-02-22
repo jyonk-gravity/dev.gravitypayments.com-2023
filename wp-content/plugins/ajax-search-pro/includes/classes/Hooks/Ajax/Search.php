@@ -65,8 +65,18 @@ class Search extends AbstractAjax {
 		), $id, $options);
 		$results = $asp_query->posts;
 
+		if ( count($results) > 0 ) {
+			$results = apply_filters('asp_only_non_keyword_results', $results, $id, $s, $asp_query->getArgs());
+		} else {
+			if ( $sd['result_suggestions'] ) {
+				$results = $asp_query->resultsSuggestions( $sd['keywordsuggestions'] );
+			} else if ( $sd['keywordsuggestions'] ) {
+				$results = $asp_query->kwSuggestions();
+			}
+		}
+
 		if (count($results) <= 0 && $sd['keywordsuggestions']) {
-			$results = $asp_query->kwSuggestions();
+			$results = $asp_query->resultsSuggestions();
 		} else if (count($results) > 0) {
 			$results = apply_filters('asp_only_non_keyword_results', $results, $id, $s, $asp_query->getArgs());
 		}
@@ -92,11 +102,19 @@ class Search extends AbstractAjax {
 		/* Clear output buffer, possible warnings */
 		$final_output .= "___ASPSTART_HTML___" . $html_results . "___ASPEND_HTML___";
 		$final_output .= "___ASPSTART_DATA___";
-		$final_output .= json_encode(array(
-			'results_count' => isset($results["keywords"]) ? 0 : count($results),
-			'full_results_count' => $asp_query->found_posts,
-			'results' => $results
-		));
+		if ( defined('JSON_INVALID_UTF8_IGNORE') ) {
+			$final_output .= json_encode(array(
+				'results_count' => isset($results["keywords"]) ? 0 : $asp_query->returned_posts,
+				'full_results_count' => $asp_query->found_posts,
+				'results' => $results
+			), JSON_INVALID_UTF8_IGNORE);
+		} else {
+			$final_output .= json_encode(array(
+				'results_count' => isset($results["keywords"]) ? 0 : $asp_query->returned_posts,
+				'full_results_count' => $asp_query->found_posts,
+				'results' => $results
+			));
+		}
 		$final_output .= "___ASPEND_DATA___";
 
 		$this->setCache($final_output);
@@ -107,7 +125,7 @@ class Search extends AbstractAjax {
 
 	private function printCache($options, $s, $id) {
 		$o = $options;
-		$this->cache = new TextCache(wd_asp()->upload_path, "xasp", wd_asp()->o['asp_caching']['cachinginterval'] * 60);
+		$this->cache = new TextCache(wd_asp()->cache_path, "z_asp", wd_asp()->o['asp_caching']['cachinginterval'] * 60);
 		$call_num = $_POST['asp_call_num'] ?? 0;
 
 		unset($o['filters_initial'], $o['filters_changed']);

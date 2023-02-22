@@ -7,6 +7,7 @@ use WPDRMS\ASP\Cache\TextCache;
 use WPDRMS\ASP\Database as Database;
 use WPDRMS\ASP\Hooks\Ajax\DeleteCache;
 use WPDRMS\ASP\Patterns\SingletonTrait;
+use WPDRMS\ASP\Utils\FileManager;
 use WPDRMS\ASP\Utils\Plugin;
 
 defined('ABSPATH') or die("You can't access this file directly.");
@@ -41,7 +42,7 @@ class Init {
 		Database\Manager::getInstance()->create();
 
 		$this->activation_only_backwards_compatibility_fixes();
-		$this->create_chmod(true);
+		FileManager::_o()->createRequiredDirectories();
 
 		DeleteCache::getInstance()->handle(false);
 
@@ -73,7 +74,7 @@ class Init {
 			// Was the plugin just activated, without version change?
 			if ( get_transient('asp_just_activated') !== false ) {
 				// Check the folders, they might have been deleted by accident
-				$this->create_chmod();
+				FileManager::_o()->createRequiredDirectories();
 				// Run a backwards compatibility check
 				$this->backwards_compatibility_fixes();
 				wd_asp()->css_manager->generator->generate();
@@ -129,8 +130,8 @@ class Init {
 
 		$ana = wd_asp()->o['asp_analytics'];
 		// Analytics Options fixes 4.18
-		if ( isset($ana['analytics']) && $ana['analytics'] == 1 ) {
-			wd_asp()->o['asp_analytics']['analytics'] = 'pageview';
+		if ( isset($ana['analytics']) && ( $ana['analytics'] == 1 || $ana['analytics'] == 'pageview' ) ) {
+			wd_asp()->o['asp_analytics']['analytics'] = 'event';
 			asp_save_option('asp_analytics');
 		}
 
@@ -406,87 +407,6 @@ class Init {
 		}
 	}
 
-	/**
-	 *  Create and chmod the upload directory
-	 */
-	public function create_chmod( $is_activation = false ) {
-		$this->createUploadDirectory($is_activation);
-		$this->createCacheDirectory($is_activation);
-	}
-
-	private function createUploadDirectory( $is_activation = false ): bool {
-		if ( $is_activation ) {
-			global $wp_filesystem;
-
-			if ( wpd_fs_init(true, 'is_dir') && !$wp_filesystem->is_dir( wd_asp()->upload_path ) ) {
-				if ( !$wp_filesystem->mkdir( wd_asp()->upload_path, 0755 ) ) {
-					return false;
-				} else {
-					if ( !@chmod(wd_asp()->upload_path, 0755) ) {
-						if ( !@chmod(wd_asp()->upload_path, 0664 ) ){
-							@chmod(wd_asp()->upload_path, 0644 );
-						}
-					}
-				}
-			}
-		} else {
-			/**
-			 * DO NOT initialize WP_Filesystem() nor $wp_filesystem here!
-			 * It causes conflicts later on. Instead just use the native PHP functions.
-			 */
-			if ( !is_dir( wd_asp()->upload_path ) ) {
-				if ( !mkdir( wd_asp()->upload_path, '0777', true ) ) {
-					return false;
-				} else {
-					if ( !@chmod(wd_asp()->upload_path, 0755) ) {
-						if ( !@chmod(wd_asp()->upload_path, 0664 ) ){
-							@chmod(wd_asp()->upload_path, 0644 );
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
-
-	private function createCacheDirectory( $is_activation = false ): bool {
-		if ( $is_activation ) {
-			global $wp_filesystem;
-
-			if ( wpd_fs_init(true, 'is_dir') && !$wp_filesystem->is_dir( wd_asp()->cache_path ) ) {
-				if ( !$wp_filesystem->is_dir( wd_asp()->global_cache_path ) ) {
-					$wp_filesystem->mkdir( wd_asp()->global_cache_path, 0755 );
-				}
-				if ( !$wp_filesystem->mkdir( wd_asp()->cache_path, 0755 ) ) {
-					return false;
-				} else {
-					if ( !@chmod(wd_asp()->cache_path, 0755) ) {
-						if ( !@chmod(wd_asp()->cache_path, 0664 ) ){
-							@chmod(wd_asp()->cache_path, 0644 );
-						}
-					}
-				}
-			}
-		} else {
-			/**
-			 * DO NOT initialize WP_Filesystem() nor $wp_filesystem here!
-			 * It causes conflicts later on. Instead just use the native PHP functions.
-			 */
-			if ( !is_dir( wd_asp()->cache_path ) ) {
-				if ( !mkdir( wd_asp()->cache_path, '0777', true ) ) {
-					return false;
-				} else {
-					if ( !@chmod(wd_asp()->cache_path, 0755) ) {
-						if ( !@chmod(wd_asp()->cache_path, 0664 ) ){
-							@chmod(wd_asp()->cache_path, 0644 );
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
-
 	public function pluginReset( $triggerActivate = true ) {
 		$options = array(
 			'asp_version',
@@ -555,51 +475,7 @@ class Init {
 		// Database
 		wd_asp()->db->delete();
 
-		// Files with safety check for alterations
-		if (
-			isset(wd_asp()->upload_path) &&
-			wd_asp()->upload_path != '' &&
-			wd_asp()->upload_path != '/' &&
-			wd_asp()->upload_path != './' &&
-			str_replace('/', '', get_home_path()) != str_replace('/', '', wd_asp()->upload_path) &&
-			strpos(wd_asp()->upload_path, 'wp-content') > 5 &&
-			strpos(wd_asp()->upload_path, 'plugins') === false &&
-			strpos(wd_asp()->upload_path, 'wp-includes') === false &&
-			strpos(wd_asp()->upload_path, 'wp-admin') === false &&
-			is_dir( wd_asp()->upload_path )
-		) {
-			wpd_rmdir( wd_asp()->upload_path  );
-			if ( is_dir( wd_asp()->upload_path ) ) {
-				wpd_rmdir( wd_asp()->upload_path, true);
-				if ( is_dir( wd_asp()->upload_path ) ) {
-					// Last attempt, with force
-					wpd_rmdir( wd_asp()->upload_path, true, true);
-				}
-			}
-		}
-
-		// Files with safety check for alterations
-		if (
-			isset(wd_asp()->cache_path) &&
-			wd_asp()->cache_path != '' &&
-			wd_asp()->cache_path != '/' &&
-			wd_asp()->cache_path != './' &&
-			str_replace('/', '', get_home_path()) != str_replace('/', '', wd_asp()->cache_path) &&
-			strpos(wd_asp()->cache_path, 'wp-content') > 5 &&
-			strpos(wd_asp()->cache_path, 'plugins') === false &&
-			strpos(wd_asp()->cache_path, 'wp-includes') === false &&
-			strpos(wd_asp()->cache_path, 'wp-admin') === false &&
-			is_dir( wd_asp()->cache_path )
-		) {
-			wpd_rmdir( wd_asp()->cache_path  );
-			if ( is_dir( wd_asp()->cache_path ) ) {
-				wpd_rmdir( wd_asp()->cache_path, true);
-				if ( is_dir( wd_asp()->cache_path ) ) {
-					// Last attempt, with force
-					wpd_rmdir( wd_asp()->cache_path, true, true);
-				}
-			}
-		}
+		FileManager::_o()->removeRequiredDirectories();
 
 		// Deactivate
 		deactivate_plugins(ASP_FILE);

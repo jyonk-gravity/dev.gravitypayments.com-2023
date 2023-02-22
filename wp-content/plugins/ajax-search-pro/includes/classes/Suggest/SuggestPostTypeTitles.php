@@ -168,6 +168,7 @@ class SuggestPostTypeTitles extends AbstractSuggest {
 		$limit = $count;
 
 
+
 		if ( $this->args['match_start'] ) {
 			$title_match = "( post_title LIKE '".$q."%'";
 			if ( $count > 1 ) {
@@ -181,8 +182,8 @@ class SuggestPostTypeTitles extends AbstractSuggest {
 
 		$the_query = "
 			SELECT
-				DISTINCT (post_title) as title,
-				ID as id
+				DISTINCT (post_title),
+				ID
 			FROM $wpdb->posts
 			WHERE
 			  $title_match
@@ -198,33 +199,41 @@ class SuggestPostTypeTitles extends AbstractSuggest {
 			LIMIT $limit
 		";
 
+		$the_query = apply_filters('asp/suggestions/post_type/query', $the_query, $q);
+
 		$results = $wpdb->get_results($the_query, OBJECT);
+
+		$results = apply_filters('asp/suggestions/post_type/results', $results, $q);
 
 		// The Loop
 		if ( is_array($results) ) {
+			$similar = array();
+
 			if ( !$this->args['match_start'] ) {
 				$titles = array();
+				$additional_shortwords = array();
 				foreach ( $results as $r ) {
-					$titles[$r->id] = MB::strtolower($r->title);
-				}
-				$similar = Suggest::getSimilarText($titles, $q, $count);
-				$results = array();
-				foreach ($similar as $key) {
-					$id = array_search($key, $titles);
-					if ( $id !== false ) {
-						$res = new stdClass();
-						$res->id = $id;
-						$res->title = $titles[$id];
-						$results[] = $res;
+					$titles[$r->ID] = MB::strtolower($r->post_title);
+					$title_words = explode(' ', $titles[$r->ID]);
+					if ( count($title_words) > 1 ) {
+						$title_words = array_filter($title_words, function ($w) {
+							return MB::strlen($w) > 2;
+						});
 					}
+					if ( count($title_words) > 1 ) {
+						$additional_shortwords = array_merge($additional_shortwords, $title_words);
+					}
+				}
+				$titles = array_merge(array_unique($additional_shortwords), $titles);
+				$similar = Suggest::getSimilarText($titles, $q, $count);
+			} else {
+				foreach ( $results as $r ) {
+					$similar[] = $r->post_title;
 				}
 			}
 
-			// This prevents the fancy quotes and stuff
-			remove_filter('the_title', 'wptexturize');
-			remove_filter('the_title', 'convert_chars');
-			foreach ($results as $res) {
-				$t = MB::strtolower(get_the_title($res->id));
+			foreach ($similar as $res) {
+				$t = MB::strtolower($res);
 				$q = MB::strtolower($q);
 				if (
 					$q != $t  &&

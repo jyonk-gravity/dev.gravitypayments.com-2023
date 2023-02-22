@@ -1,9 +1,9 @@
 === Search Exclude ===
-Contributors: pronskiy, williamdodson, stevelock
+Contributors: quadlayers, pronskiy, williamdodson, stevelock
 Tags: admin, plugin, search
 Requires at least: 4.7
 Tested up to: 6.1
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,9 @@ function filterForProducts($exclude, $query)
 2. screenshot-2.png
 
 == Changelog ==
+
+= 1.3.1 =
+* Author update.
 
 = 1.3.0 =
 * Fix and rework bulk edit: The `Bulk actions` dropdown now offers hide/show actions.

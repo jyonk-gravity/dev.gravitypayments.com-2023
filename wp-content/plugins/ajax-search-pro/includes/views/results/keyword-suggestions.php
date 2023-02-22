@@ -10,7 +10,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
  * file to your theme directory under the "asp" folder like so:
  *    wp-content/themes/your-theme-name/asp/keyword-suggestions.php
  *
- * The keyword should must always hold the 'asp_keyword' class and only
+ * The keyword must always hold the 'asp_keyword' class and only
  * contain the keyword text as the content.
  *
  * You can use any WordPress function here.
@@ -28,15 +28,15 @@ defined('ABSPATH') or die("You can't access this file directly.");
 ?>
 <div class="asp_nores">
 
-    <span class="asp_nores_header">
+    <div class="asp_nores_header">
         <?php
-        echo stripslashes( \WPDRMS\ASP\Utils\Str::resolveBracketSyntax( asp_icl_t("No results text" . " ($id)", $s_options['noresultstext']), array('phrase' => $phrase) ) .
-            " " . asp_icl_t("Did you mean? text" . " ($id)", $s_options['didyoumeantext']) );
+        echo stripslashes( \WPDRMS\ASP\Utils\Str::resolveBracketSyntax( asp_icl_t("No results text" . " ($id)", $s_options['noresultstext']), array('phrase' => $phrase) ));
         ?>
-    </span>
-
-    <?php foreach($s_keywords as $keyword): ?>
-        <span class='asp_keyword'><?php echo $keyword; ?></span>
-    <?php endforeach; ?>
-
+    </div>
+	<div class="asp_nores_kw_suggestions">
+		<?php echo stripslashes( asp_icl_t("Did you mean? text" . " ($id)", $s_options['didyoumeantext']) ); ?>
+		<?php foreach($s_keywords as $keyword): ?>
+			<span class='asp_keyword'><?php echo $keyword; ?></span>
+		<?php endforeach; ?>
+	</div>
 </div>

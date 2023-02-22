@@ -42,6 +42,7 @@ jQuery(function ($) {
     var $success = $("#asp_i_success");
     var $error = $("#asp_i_error");
     var $error_cont = $("#asp_i_error_cont");
+    var $dontclose = $("#asp_i_dontclose");
     var data = "";
     var keywords_found = 0;
     var remaining_blogs = [];
@@ -304,6 +305,7 @@ jQuery(function ($) {
         $buttons.removeAttr('disabled');
         $progress.addClass('hiddend');
         $overlay.addClass('hiddend');
+        $dontclose.addClass('hiddend');
     }
 
     function asp_on_post_failure(response, t) {
@@ -337,6 +339,7 @@ jQuery(function ($) {
             $buttons.removeAttr('disabled');
             $progress.addClass('hiddend');
             $overlay.addClass('hiddend');
+            $dontclose.addClass('hiddend');
         } else {
             console.log('Index Table Request failed, but continuing in 15 seconds. Consecutive failures count:', failCount);
             console.log(response);
@@ -344,7 +347,6 @@ jQuery(function ($) {
             index('extend', true);
         }
     }
-
 
     $('#asp_index_new, #asp_index_extend, #asp_index_delete').on('click', function (e) {
         if (!confirm($(this).attr('index_msg'))) {
@@ -382,6 +384,7 @@ jQuery(function ($) {
         $buttons.attr('disabled', 'disabled');
         $progress.removeClass('hiddend');
         $overlay.removeClass('hiddend');
+        $dontclose.removeClass('hiddend');
         $success.addClass('hiddend');
         $error.addClass('hiddend');
         $error_cont.addClass('hiddend');
@@ -408,6 +411,7 @@ jQuery(function ($) {
         $progress_bar.css('width', "0%");
         $progress_text.html(msg('msg_ini'));
         $overlay.removeClass('hiddend');
+        $dontclose.addClass('hiddend');
     });
 
     $("ul.connectedSortable", $('input[name=it_post_types]').parent()).on("sortupdate", function(){

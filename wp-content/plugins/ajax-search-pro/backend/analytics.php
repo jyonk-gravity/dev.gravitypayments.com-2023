@@ -23,7 +23,6 @@ if (isset($_POST, $_POST['asp_analytics'], $_POST['submit'], $_POST['asp_analyti
         $values = array(
             "analytics" => $_POST['analytics'],
             "analytics_tracking_id" => $_POST['analytics_tracking_id'],
-            "analytics_string" => $_POST['analytics_string'],
             // Gtag on input focus
             'gtag_focus' => $_POST['gtag_focus'],
             'gtag_focus_action' => $_POST['gtag_focus_action'],
@@ -88,8 +87,10 @@ $ana_options = wd_asp()->o['asp_analytics'];
 
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/sidebar.css?v='.ASP_CURR_VER; ?>" />
 <div id='wpdreams' class='asp-be asp-be-analytics wpdreams wrap<?php echo isset($_COOKIE['asp-accessibility']) ? ' wd-accessible' : ''; ?>'>
+	<?php do_action('asp_admin_notices'); ?>
+
 	<!-- This forces custom Admin Notices location -->
-	<h2 style="display: none;"></h2>
+	<div style="display:none;"><h2 style="display: none;"></h2></div>
 	<!-- This forces custom Admin Notices location -->
 
 	<?php if ( wd_asp()->updates->needsUpdate() ) { wd_asp()->updates->printUpdateMessage(); } ?>
@@ -102,8 +103,7 @@ $ana_options = wd_asp()->o['asp_analytics'];
                 array(
                     'selects' => array(
                         array("option" => esc_attr__('Disabled', 'ajax-search-pro'), "value" => "0"),
-                        array("option" => esc_attr__('Event Tracking', 'ajax-search-pro'), "value" => "event"),
-                        array("option" => esc_attr__('Tracking as pageview (legacy)', 'ajax-search-pro'), "value" => "pageview")
+                        array("option" => esc_attr__('Event Tracking (GTAG & GTM)', 'ajax-search-pro'), "value" => "event")
                     ),
                     'value' => $ana_options["analytics"]
                 )
@@ -116,30 +116,17 @@ $ana_options = wd_asp()->o['asp_analytics'];
         </div>
         <div class="asp_al_both hiddend">
             <div class="item">
-                <?php $o = new wpdreamsText("analytics_tracking_id", __('[optional] Google analytics Tracking ID (ex.: UA-XXXXXX-X)', 'ajax-search-pro'), $ana_options["analytics_tracking_id"]); ?>
-				<p class='descMsg'>
-					<?php echo __('You can leave this empty, the plugin should auto detect the tracking id. If you have multiple tracking IDs, you can specify one in this box.', 'ajax-search-pro'); ?>
-				</p>
+                <?php $o = new wpdreamsText("analytics_tracking_id", __('Google analytics Tracking ID (ex.: G-0123456789)', 'ajax-search-pro'), $ana_options["analytics_tracking_id"]); ?>
+				 <p class='descMsg'>
+					 <?php echo __('If you are using GTM (Google Tag Manager), then this is not required.', 'ajax-search-pro'); ?>
+				 </p>
 				<p class='infoMsg'>
                     <?php echo __(sprintf(
-                            'Please read this <a href="%s">google analytics documentation</a> to get your <a href="%s">tracking ID</a>.',
-                    'https://support.google.com/analytics/answer/7372977',
-                        'https://i.imgur.com/KiyBIPy.png'
+                            'Please read this <a href="%s">google analytics documentation</a> to get your tracking ID.',
+                    'https://support.google.com/analytics/answer/9539598'
                     ), 'ajax-search-pro'); ?>
                 </p>
             </div>
-        </div>
-        <div class="asp_al_pageview hiddend">
-            <div class="item">
-                <?php $o = new wpdreamsText("analytics_string", __('Google analytics pageview string', 'ajax-search-pro'), $ana_options["analytics_string"]); ?>
-                <p class='infoMsg'>
-                    <?php echo __('This is how the pageview will look like on the google analytics website. Use the {asp_term} variable to add the search term to the pageview.', 'ajax-search-pro'); ?>
-                </p>
-            </div>
-            <p class='infoMsg'>
-                <?php echo __('After some time you should be able to see the hits on your analytics board.', 'ajax-search-pro'); ?>
-            </p>
-            <img src="<?php echo ASP_URL . "img/analytics/pageview.png"; ?>">
         </div>
         <div class="asp_al_event hiddend">
             <fieldset>

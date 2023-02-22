@@ -22,3 +22,4 @@ defined('ABSPATH') or die("You can't access this file directly.");
  * @since: 4.0
  */
 ?>
+</div>

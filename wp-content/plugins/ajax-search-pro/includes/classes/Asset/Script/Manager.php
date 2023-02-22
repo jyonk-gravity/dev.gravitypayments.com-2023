@@ -433,7 +433,6 @@ class Manager implements ManagerInterface {
 			'analytics' => array(
 				'method' => $analytics['analytics'],
 				'tracking_id' => $analytics['analytics_tracking_id'],
-				'string' => $analytics['analytics_string'],
 				'event' => array(
 					'focus' => array(
 						'active' => $analytics['gtag_focus'],

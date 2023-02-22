@@ -146,8 +146,11 @@ if ( !function_exists('wd_strip_tags_ws') ) {
      */
     function wd_strip_tags_ws($string, $allowable_tags = '') {
         $string = str_replace('<', ' <', $string);
+		// Non breakable spaces to regular spaces
+		$string = preg_replace('/\xc2\xa0/', ' ', $string);
+		// Duplicated spaces
+        $string = preg_replace('/\s+/', " ", $string);
         $string = strip_tags($string, $allowable_tags);
-        $string = str_replace('  ', ' ', $string);
         $string = trim($string);
 
         return $string;
@@ -596,211 +599,6 @@ if (!function_exists("wpd_mem_convert")) {
 if ( !function_exists('asp_get_search_query') ) {
     function asp_get_search_query() {
         return isset($_GET['asp_ls']) ? $_GET['asp_ls'] : get_search_query( false );
-    }
-}
-
-
-//----------------------------------------------------------------------------------------------------------------------
-// 2. FILE SYSTEM SPECIFIC WRAPPERS
-//----------------------------------------------------------------------------------------------------------------------
-if ( !function_exists('wpd_fs_init') ) {
-    function wpd_fs_init($include = false, $check_method = '') {
-        global $wp_filesystem;
-        if ( $include && empty($wp_filesystem) ) {
-            require_once (ABSPATH . '/wp-admin/includes/file.php');
-        }
-        if ( function_exists('WP_Filesystem') && WP_Filesystem() === true && is_object($wp_filesystem) ) {
-            if ( $check_method != '' ) {
-                return method_exists($wp_filesystem, $check_method);
-            }
-            return true;
-        }
-        // Did not init
-        return false;
-    }
-}
-if ( !function_exists('wpd_fs_wrapper') ) {
-    function wpd_fs_wrapper($function) {
-        global $wp_filesystem;
-        $args = func_get_args();
-        array_shift($args);
-        return wpd_fs_init(false, $function) ?
-            call_user_func_array(array($wp_filesystem, $function), $args) :
-            call_user_func_array($function, $args);
-    }
-}
-if (!function_exists('wpd_mtime')) {
-    /**
-     * Checks the last modification time on file
-     * NOTE: Use this function in own plugin pages/actions/ajax only! Loading the WP_Filesystem(); can cause compatibility issues
-     *
-     * @param $file
-     * @return int|bool
-     */
-    function wpd_mtime($file) {
-        global $wp_filesystem;
-        // Did it fail?
-        if ( wpd_fs_init(false, 'mtime') ) {
-            return $wp_filesystem->mtime($file);
-        }
-        return filemtime( $file );
-    }
-}
-
-if (!function_exists('wpd_is_file')) {
-    /**
-     * Checks if the file exists and if it is a regular file
-     * NOTE: Use this function in own plugin pages/actions/ajax only! Loading the WP_Filesystem(); can cause compatibility issues
-     *
-     * @param $file
-     * @return bool
-     */
-    function wpd_is_file($file) {
-        return wpd_fs_wrapper('is_file', $file);
-    }
-}
-
-if (!function_exists('wpd_is_dir')) {
-    /**
-     * Checks if the directory exists and if it is indeed a directory
-     * NOTE: Use this function in own plugin pages/actions/ajax only! Loading the WP_Filesystem(); can cause compatibility issues
-     *
-     * @param $file
-     * @return bool
-     */
-    function wpd_is_dir($file) {
-        return wpd_fs_wrapper('is_dir', $file);
-    }
-}
-
-if ( !function_exists("wpd_get_file") ) {
-    /**
-     * Gets file contents with the use of WordPress file API with a fallback to file_get_contents()
-     * NOTE: Use this function in own plugin pages/actions/ajax only! Loading the WP_Filesystem(); can cause compatibility issues
-     *
-     * @param $filename
-     * @param $exist_check
-     * @return bool
-     */
-    function wpd_get_file($filename, $exist_check = false) {
-        global $wp_filesystem;
-        // Replace double
-        $filename = str_replace(array('\\\\', '//'), array('\\', '/'), $filename);
-
-        if ( $exist_check && !file_exists($filename) )
-            return '';
-
-        if ( wpd_fs_init(false, 'get_contents') ) {
-            // All went well, return
-            return $wp_filesystem->get_contents( $filename );
-        }
-
-        return @file_get_contents($filename);
-    }
-}
-
-if (!function_exists("wpd_put_file")) {
-    /**
-     * Writes to a file with the use of WordPress file API with a fallback to file_put_contents()
-     * NOTE: Use this function in own plugin pages/actions/ajax only! Loading the WP_Filesystem(); can cause compatibility issues
-     *
-     * @param $filename
-     * @param $contents
-     * @return bool
-     */
-    function wpd_put_file($filename, $contents) {
-        global $wp_filesystem;
-        // Replace double
-        $filename = str_replace(array('\\\\', '//'), array('\\', '/'), $filename);
-
-        // Did it fail?
-        if ( !wpd_fs_init(false, 'put_contents') ) {
-            /* any problems and we exit */
-            return @file_put_contents($filename, $contents) === false ? false : true;
-        }
-
-        // It worked, use it!
-        if ( defined('FS_CHMOD_FILE') ) {
-            if ( !$wp_filesystem->put_contents($filename, $contents, FS_CHMOD_FILE) ) {
-                return @file_put_contents($filename, $contents) === false ? false : true;
-            }
-        } else {
-            if ( !$wp_filesystem->put_contents($filename, $contents) ) {
-                return @file_put_contents($filename, $contents) === false ? false : true;
-            }
-        }
-
-        // All went well, return
-        return true;
-    }
-}
-
-if (!function_exists("wpd_rmdir")) {
-    /**
-     * Deletes a directory
-     * NOTE: Use this function in own plugin pages/actions only! Loading the WP_Filesystem(); can cause compatibility issues
-     *
-     * @param $dir
-     * @param $recursive
-     * @param $force
-     * @return bool
-     */
-    function wpd_rmdir($dir, $recursive = false, $force = false) {
-        global $wp_filesystem;
-
-        if ( $force ) {
-            wpd_rec_rmdir($dir);
-            return true;
-        }
-
-        // Did it fail?
-        if ( !wpd_fs_init(false, 'rmdir') ) {
-            // $recursive is not supported in the default php rmdir function
-            return rmdir( $dir );
-        }
-
-        $wp_filesystem->rmdir($dir, $recursive);
-    }
-}
-
-if ( !function_exists('wpd_rec_rmdir') ) {
-    function wpd_rec_rmdir($dirPath) {
-        if (!is_dir($dirPath)) {
-            throw new InvalidArgumentException("$dirPath must be a directory");
-        }
-        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-            $dirPath .= '/';
-        }
-        $files = glob($dirPath . '*', GLOB_MARK);
-        foreach ($files as $file) {
-            if (is_dir($file)) {
-                wpd_rec_rmdir($file);
-            } else {
-                unlink($file);
-            }
-        }
-        rmdir($dirPath);
-    }
-}
-
-if (!function_exists("wpd_del_file")) {
-    /**
-     * Deletes the file in the path
-     * NOTE: Use this function in own plugin pages/actions only! Loading the WP_Filesystem(); can cause compatibility issues
-     *
-     * @param $filename
-     * @return bool
-     */
-    function wpd_del_file($filename) {
-        global $wp_filesystem;
-
-        // Did it fail?
-        if ( !wpd_fs_init(false, 'delete') ) {
-            /* any problems and we exit */
-            return @unlink( $filename );
-        }
-
-        return $wp_filesystem->delete($filename);
     }
 }
 
@@ -1537,18 +1335,35 @@ if ( !function_exists('asp_parse_filters') ) {
         if ( !isset(wd_asp()->front_filters) || is_object(wd_asp()->front_filters) )
             wd_asp()->front_filters = FiltersManager::getInstance();
         wd_asp()->front_filters->setSearchId($id);
-        $o['_id'] = $id;
-        // Only call this once per intance
-        static $called = array();
 
-        if ( $clear ) {
-            wd_asp()->front_filters->clear($id);
-            if ( !in_array($id, $called) )
-                $called[] = $id;
-        } else {
-            if ( in_array($id, $called) ) return;
-            $called[] = $id;
-        }
+        $o['_id'] = $id;
+
+		/**
+		 * This is very important to cache. In some cases via search override this function gets called
+		 * many times, and caused memory issues. This cache resolves that.
+		 */
+        static $called = array();
+        static $called_with_display = array();
+
+		if ( $to_display ) {
+			if ( $clear ) {
+				wd_asp()->front_filters->clear($id);
+				if ( !in_array($id, $called_with_display) )
+					$called_with_display[] = $id;
+			} else {
+				if ( in_array($id, $called_with_display) ) return;
+				$called_with_display[] = $id;
+			}
+		} else {
+			if ( $clear ) {
+				wd_asp()->front_filters->clear($id);
+				if ( !in_array($id, $called) )
+					$called[] = $id;
+			} else {
+				if ( in_array($id, $called) ) return;
+				$called[] = $id;
+			}
+		}
 
         do_action('asp_pre_parse_filters', $id, $o);
 
@@ -2700,11 +2515,17 @@ if ( !function_exists('asp_parse_date_filters') ) {
         );
         $filter->is_api = false;
 
+
+		$post_types = $o['customtypes'];
+		if ( $o['return_attachments'] ) {
+			$post_types[] = 'attachment';
+		}
+		if ( isset($o['selected-showcustomtypes']) && count($o['selected-showcustomtypes']) > 0 ) {
+			$selected_post_types = array_map(function($n){ return $n[0]; }, $o['selected-showcustomtypes']);
+			$post_types = array_unique(array_merge($post_types, $selected_post_types));
+		}
+
         if ( $_dff['state'] != 'disabled' ) {
-			$post_types = $o['customtypes'];
-			if ( $o['return_attachments'] ) {
-				$post_types[] = 'attachment';
-			}
 			switch ($_dff['state']) {
 				case "rel_date":
 					$_def_dff_v = "-" . $_dff["rel_date"][0] . "y -" . $_dff["rel_date"][1] . "m -" . $_dff["rel_date"][2] . "d";
@@ -2737,10 +2558,6 @@ if ( !function_exists('asp_parse_date_filters') ) {
             ));
         }
         if ( $_dft['state'] != 'disabled' ) {
-			$post_types = $o['customtypes'];
-			if ( $o['return_attachments'] ) {
-				$post_types[] = 'attachment';
-			}
 			switch ($_dft['state']) {
 				case "rel_date":
 					$_def_dft_v = "-" . $_dft["rel_date"][0] . "y -" . $_dft["rel_date"][1] . "m -" . $_dft["rel_date"][2] . "d";

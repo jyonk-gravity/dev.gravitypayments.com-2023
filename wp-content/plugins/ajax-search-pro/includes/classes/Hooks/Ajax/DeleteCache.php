@@ -6,7 +6,7 @@ namespace WPDRMS\ASP\Hooks\Ajax;
 
 use WPDRMS\ASP\Cache\TextCache;
 use WPDRMS\ASP\Utils\Ajax;
-use WPDRMS\ASP\Utils\File;
+use WPDRMS\ASP\Utils\FileManager;
 
 if (!defined('ABSPATH')) die('-1');
 
@@ -18,11 +18,11 @@ class DeleteCache extends AbstractAjax {
 	public function handle( $exit = true ) {
 		$count = 0;
 		if ( !empty(wd_asp()->cache_path) && wd_asp()->cache_path !== '' )
-			$count = File::delete(wd_asp()->cache_path, '*.wpd');
+			$count = FileManager::_o()->deleteByPattern(wd_asp()->cache_path, '*.wpd');
 		if ( !empty(wd_asp()->bfi_path) && wd_asp()->bfi_path !== '' ) {
-			$count = $count +  File::delete(wd_asp()->bfi_path, '*.jpg');
-			$count = $count +  File::delete(wd_asp()->bfi_path, '*.jpeg');
-			$count = $count +  File::delete(wd_asp()->bfi_path, '*.png');
+			$count = $count +  FileManager::_o()->deleteByPattern(wd_asp()->bfi_path, '*.jpg');
+			$count = $count +  FileManager::_o()->deleteByPattern(wd_asp()->bfi_path, '*.jpeg');
+			$count = $count +  FileManager::_o()->deleteByPattern(wd_asp()->bfi_path, '*.png');
 		}
 
 		// Clear database cache

@@ -69,9 +69,8 @@ function asp_do_init_options() {
 
     /* Analytics options */
     $options['asp_analytics_def'] = array(
-        'analytics' => 0, // 0, ga, gtag
+        'analytics' => 0, // 0, event
         'analytics_tracking_id' => "",
-        'analytics_string' => "?ajax_search={asp_term}",
         // Gtag on input focus
         'gtag_focus' => 1,
         'gtag_focus_action' => 'focus',
@@ -658,7 +657,8 @@ function asp_do_init_options() {
 
         /* Autocomplete & Keyword suggestion options */
         'keywordsuggestions' => 1,
-        'keyword_suggestion_source' => 'google',
+        'result_suggestions' => 1,
+        'keyword_suggestion_source' => 'titles',
         'kws_google_places_api' => '',
         'keywordsuggestionslang' => "en",
         'keyword_suggestion_count' => 10,
@@ -862,7 +862,7 @@ function asp_do_init_options() {
 // Theme options - Results Information Box
         'ritb_font' => 'font-weight:normal;font-family:Open Sans;color:rgb(74, 74, 74);font-size:13px;line-height:16px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);',
         'ritb_padding' => '6px 12px 6px 12px',
-        'ritb_margin' => '0 0 4px 0',
+        'ritb_margin' => '0 0 0 0',
         'ritb_bg' => 'rgb(255, 255, 255)',
         'ritb_border' => 'border:1px none rgb(81, 81, 81);border-radius:0px 0px 0px 0px;',
 
@@ -875,14 +875,23 @@ function asp_do_init_options() {
         'resultscontentbackground' => '#ffffff',
         'titlefont' => 'font-weight:bold;font-family:Open Sans;color:rgba(20, 84, 169, 1);font-size:14px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);',
         'import-titlefont' => "@import url(https://fonts.googleapis.com/css?family=Open+Sans:300|Open+Sans:400|Open+Sans:700);",
-        'titlehoverfont' => 'font-weight:bold;font-family:Open Sans;color:rgb(46, 107, 188);font-size:14px;line-height:20px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);',
-        'authorfont' => 'font-weight:bold;font-family:Open Sans;color:rgba(161, 161, 161, 1);font-size:12px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);',
+		'authorfont' => 'font-weight:bold;font-family:Open Sans;color:rgba(161, 161, 161, 1);font-size:12px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);',
         'datefont' => 'font-weight:normal;font-family:Open Sans;color:rgba(173, 173, 173, 1);font-size:12px;line-height:15px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);',
         'descfont' => 'font-weight:normal;font-family:Open Sans;color:rgba(74, 74, 74, 1);font-size:13px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);',
         'import-descfont' => "@import url(https://fonts.googleapis.com/css?family=Lato:300|Lato:400|Lato:700);",
         'groupfont' => 'font-weight:normal;font-family:Open Sans;color:rgba(74, 74, 74, 1);font-size:13px;line-height:13px;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);',
         'groupingbordercolor' => 'rgb(248, 248, 248)',
         'spacercolor' => 'rgba(204, 204, 204, 1)',
+
+// Theme options - Results Information Box
+		'kw_suggest_font' => 'font-weight:normal;font-family:inherit;color:rgba(74, 74, 74, 1);font-size:1rem;line-height:1.2rem;text-shadow:0px 0px 0px rgba(255, 255, 255, 0);',
+		'kw_suggest_kw_font_color' => 'rgba(20, 84, 169, 1)',
+		'kw_suggest_didyoumean_font_color' => 'rgba(234, 67, 53, 1)',
+		'kw_suggest_bg' => 'rgb(255, 255, 255)',
+		'kw_suggest_border' => 'border:0px solid rgb(0, 0, 0);border-radius:0px 0px 0px 0px;',
+		'kw_suggest_box_shadow' => 'box-shadow:0px 5px 5px -5px #dfdfdf;',
+        'kw_suggest_padding' => '6px 12px 6px 12px',
+        'kw_suggest_margin' => '0 0 0 0',
 
 // Theme options - Vertical results
         'resultitemheight' => "auto",

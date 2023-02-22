@@ -73,7 +73,6 @@
                 }
                 $this.n('s').trigger("asp_search_end", [$this.o.id, $this.o.iid, $this.n('text').val(), data], true, true);
                 $this.gaEvent?.('search_end', {'results_count': 'unknown'});
-                $this.gaPageview?.($this.n('text').val());
                 $this.hideLoader();
                 $el.css('opacity', 1);
                 $this.searching = false;

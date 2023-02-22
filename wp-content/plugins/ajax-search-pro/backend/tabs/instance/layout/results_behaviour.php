@@ -29,21 +29,3 @@
         <?php echo __('Closes the results list when clicking outside the search elements.', 'ajax-search-pro'); ?>
     </p>
 </div>
-<div class="item">
-    <?php
-    $o = new wd_TextareaExpandable("noresultstext", __('No results text', 'ajax-search-pro'), $sd['noresultstext']);
-    $params[$o->getName()] = $o->getData();
-    ?>
-    <p class="descMsg">
-        <?php echo __('Supports HTML and variable {phrase}', 'ajax-search-pro'); ?>
-    </p>
-</div>
-<div class="item">
-    <?php
-    $o = new wd_TextareaExpandable("didyoumeantext", __('Did you mean text', 'ajax-search-pro'), $sd['didyoumeantext']);
-    $params[$o->getName()] = $o->getData();
-    ?>
-    <p class="descMsg">
-        <?php echo __('Supports HTML', 'ajax-search-pro'); ?>
-    </p>
-</div>

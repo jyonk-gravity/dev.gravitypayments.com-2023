@@ -2769,7 +2769,7 @@
                             if ( ($is_hierarhical === TRUE   ||  $is_woocommerce_archive ) &&  ( $sort_view_settings['_view_selection'] == 'archive' ||  $sort_view_settings['_view_selection'] == 'simple') )
                                 {
                                     $current_item_menu_order = '';
-                                    if($parent_id != 'null')
+                                    if ( $parent_id > 0 )
                                         {                                          
                                             if ( $is_woocommerce_archive    !== FALSE )
                                                 {
