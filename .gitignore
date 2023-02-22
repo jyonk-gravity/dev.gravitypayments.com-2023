@@ -8,6 +8,7 @@ Thumbs.db
 
 # theme specific
 wp-content/themes/gravityp2020/node_modules/*
+wp-content/themes/gravitydocs2020/node_modules/*
 wp-content/wflogs/*
 **/node_modules
 wp-content/et-cache/*
