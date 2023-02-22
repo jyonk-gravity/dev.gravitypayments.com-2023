@@ -11,12 +11,7 @@
   @endphp
 
   @if ( is_page() || is_search() )
-    {{-- @if ( is_page('home') )
-    <div class="breadcrumb-link--static"><i class="fas fa-home-alt"></i> Home</div>
-    @else --}}
     <a href="/" class="breadcrumb-link"><i class="fas fa-home-alt text--secondary"></i> Home</a>
-    {{-- <a href="/" class="breadcrumb-link"><i class="fas fa-chevron-circle-left text--secondary"></i> Home</a> --}}
-    {{-- @endif --}}
 
     @if ( is_page('release-notes') )
       <h4 class="main-sidebar__section-title">Filter Release Notes</h4>
@@ -54,30 +49,8 @@
     </nav>
     @endif
 
-
-    {{-- @php
-    $args = array(
-      'post_type' => 'docs',
-      'posts_per_page' => -1,
-      'post_parent' => 0
-    );
-
-    $query = new WP_Query( $args );
-    @endphp
-
-    @if ( $query->have_posts() )
-    <nav class="main-sidebar__child-pages">
-      @while( $query->have_posts() )
-        @php
-        $query->the_post();
-        @endphp
-        <a href="{{ esc_url( get_the_permalink( get_the_ID() ) ) }}">{!! get_the_title( get_the_ID() ) !!}</a>
-      @endwhile
-    </nav>
-    @endif --}}
   @elseif ( is_singular() && !$post->post_parent )
     <a href="/" class="breadcrumb-link"><i class="fas fa-home-alt text--secondary"></i> Home</a>
-    {{-- <a href="/" class="breadcrumb-link"><i class="fas fa-chevron-circle-left text--secondary"></i> Home</a> --}}
     @php
       $args = array(
         'posts_per_page' => -1,
@@ -160,12 +133,10 @@
         'post_status' => 'publish'
       );
       $children = get_children($args);
-      // var_dump($children);
     @endphp
 
     @if ( !get_field('hide_sidebar_nav') )
       @if ( $children )
-      {{-- <h4 class="main-sidebar__section-title">{!! get_the_title() !!}</h4> --}}
       <nav class="main-sidebar__child-pages">
         @foreach ( $children as $child_page )
           @if ( !get_field( 'hide_in_left_sidebar_nav', $child_page->ID ) )
@@ -216,10 +187,5 @@
       <a href="{{ esc_url($link_url) }}" target="{{ esc_attr($link_target) }}" class="api-link"><i class="fas fa-file-code"></i> {!! $link_title !!}</a>
     @endif
   @endif
-
- {{--  <div class="main-sidebar__footer">
-    <p class="mb-0"><small><a href="https://gravitypayments.com/privacy-policy/" target="_blank">Privacy Policy</a> &bull; <a href="https://gravitypayments.com/terms-of-use/" target="_blank">Terms of Use</a></small></p>
-    <p><small>&copy; {!! Date('Y') !!} Gravity Payments. All Rights Reserved.</small></p>
-  </div> --}}
 
 </aside>
