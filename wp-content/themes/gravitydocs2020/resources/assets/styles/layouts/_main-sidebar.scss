@@ -73,7 +73,7 @@
 		color: $green;
 		display: block;
 		padding-right: 20px;
-		font-weight: $font-weight-semibold;
+		font-weight: $font-weight-medium;
 
 		@include media-breakpoint-up(lg) {
 			padding-left: 0;
@@ -81,7 +81,7 @@
 
 		&--static {
 			color: rgba($pewter, 0.6);
-			font-weight: $font-weight-semibold;
+			font-weight: $font-weight-medium;
 
 			i {
 				margin-right: 0.25rem;

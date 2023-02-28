@@ -666,6 +666,26 @@ $page_path = substr($req_uri,0,strrpos($req_uri,'/'));
                 <div class="timeline__end"><i class="fas fa-check-circle"></i></div>
               </section>
 
+            @elseif ( get_row_layout() == 'api_reference' )
+              <section class="doc-block__api-reference">
+                <redoc spec-url="{{ esc_url( get_sub_field('api_reference_url') ) }}" required-props-first hide-download-button></redoc>
+                <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"></script>
+              </section>
+
+              <style>
+                .single-docs.reference .main-sidebar {
+                  display: none;
+                }
+
+                .single-docs.reference .docs-content {
+                  margin-left: 0;
+                  padding: 0;
+                }
+
+                .single-docs.reference .doc-block__header {
+                  display: none;
+                }
+              </style>
             @endif
 
             @php $section_id = $section_id + 1; @endphp

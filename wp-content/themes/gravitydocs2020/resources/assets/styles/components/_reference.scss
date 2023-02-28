@@ -1,0 +1,17 @@
+.reference {
+	&__breadcrumb-bar {
+		background: $white;
+		border-bottom: 1px solid rgba($silver, 0.6);
+		padding: 0.675rem 1.25rem;
+
+		.breadcrumb-link {
+			font-size: 0.9375rem;
+			font-weight: $font-weight-medium;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: none;
+			}
+		}
+	}
+}
