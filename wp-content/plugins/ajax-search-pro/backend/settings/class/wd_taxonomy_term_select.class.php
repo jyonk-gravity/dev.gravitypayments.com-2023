@@ -211,6 +211,7 @@ if (!class_exists("wd_TaxonomyTermSelect")) {
 
                     <input type='hidden' value="<?php echo base64_encode(json_encode($this->term_data)); ?>" class="wd_term_data">
                     <input type='hidden' value="<?php echo base64_encode(json_encode($this->args)); ?>" class="wd_args">
+                    <input type="hidden" class="wd_taxonomy_search_nonce" value="<?php echo wp_create_nonce( 'wd_taxonomy_search_nonce' ); ?>">
                     <input isparam=1 type='hidden' value="<?php echo (is_array($this->data) && isset($this->data['value'])) ? $this->data['value'] : $this->data; ?>" name='<?php echo $this->name; ?>'>
             </fieldset>
         </div>
@@ -295,80 +296,91 @@ if (!class_exists("wd_TaxonomyTermSelect")) {
         }
 
         public static function searchTerms() {
-            $taxonomy = $_POST['wd_taxonomy'];
-            //$data = json_decode(base64_decode($_POST['wd_args']), true);
-            $terms = get_terms($taxonomy, array(
-                'taxonomy' => $taxonomy,
-                'hide_empty' => false,
-                'fields' => 'id=>name',
-                'search' => trim($_POST['wd_s']),
-                'number' => 15
-            ));
-			Ajax::prepareHeaders();
-            if ( !is_wp_error($terms) && count($terms) > 0) {
-                foreach ($terms as $k => $term)
-                    print "<span term_id='".$k."'>".$term."</span><br>";
-            } else {
-                print "No results for <b>" .$_POST['wd_s'] . "</b>";
+            if ( 
+                isset($_POST['wd_taxonomy'], $_POST['wd_taxonomy_search_nonce']) &&
+                current_user_can('administrator') && 
+                wp_verify_nonce( $_POST["wd_taxonomy_search_nonce"], 'wd_taxonomy_search_nonce' ) 
+            ) {
+                $taxonomy = $_POST['wd_taxonomy'];
+                $terms = get_terms($taxonomy, array(
+                    'taxonomy' => $taxonomy,
+                    'hide_empty' => false,
+                    'fields' => 'id=>name',
+                    'search' => trim($_POST['wd_s']),
+                    'number' => 15
+                ));
+                Ajax::prepareHeaders();
+                if ( !is_wp_error($terms) && count($terms) > 0) {
+                    foreach ($terms as $k => $term)
+                        print "<span term_id='".$k."'>".$term."</span><br>";
+                } else {
+                    print "No results for <b>" .$_POST['wd_s'] . "</b>";
+                }
             }
             die();
         }
 
         public static function printTerms() {
-            $taxonomy = $_POST['wd_taxonomy'];
-            $data = json_decode(base64_decode($_POST['wd_args']), true);
+            if ( 
+                isset($_POST['wd_taxonomy'], $_POST['wd_taxonomy_search_nonce']) &&
+                current_user_can('administrator') && 
+                wp_verify_nonce( $_POST["wd_taxonomy_search_nonce"], 'wd_taxonomy_search_nonce' ) 
+            ) {
+                $taxonomy = $_POST['wd_taxonomy'];
+                $data = json_decode(base64_decode($_POST['wd_args']), true);
 
-            // WPMl?
-            $languages = apply_filters( 'wpml_active_languages', NULL, 'orderby=id&order=desc' );
-            $terms = array();
+                // WPMl?
+                $languages = apply_filters( 'wpml_active_languages', NULL, 'orderby=id&order=desc' );
+                $terms = array();
 
-            if (  defined('ICL_SITEPRESS_VERSION') && !empty( $languages ) ) {
-                foreach( $languages as $l ) {
-                    if ( isset($l['language_code']) ) {
-                      do_action( 'wpml_switch_language', $l['language_code'] );
-                      $gterms = get_terms($taxonomy, array(
-                          'taxonomy' => $taxonomy,
-                          'hide_empty' => false
-                      ));
-                      if ( !is_wp_error($gterms) && count($gterms) > 0 ) {
-                        $terms = array_merge( $terms, $gterms );
-                        foreach ( $gterms as &$term ) {
-                          $term->name = $term->name . ' [' . $l['language_code'] . ']';
+                if (  defined('ICL_SITEPRESS_VERSION') && !empty( $languages ) ) {
+                    foreach( $languages as $l ) {
+                        if ( isset($l['language_code']) ) {
+                        do_action( 'wpml_switch_language', $l['language_code'] );
+                        $gterms = get_terms($taxonomy, array(
+                            'taxonomy' => $taxonomy,
+                            'hide_empty' => false
+                        ));
+                        if ( !is_wp_error($gterms) && count($gterms) > 0 ) {
+                            $terms = array_merge( $terms, $gterms );
+                            foreach ( $gterms as &$term ) {
+                            $term->name = $term->name . ' [' . $l['language_code'] . ']';
+                            }
                         }
-                      }
+                        }
                     }
+                } else {
+                    $terms = get_terms($taxonomy, array(
+                        'taxonomy' => $taxonomy,
+                        'hide_empty' => false
+                    ));
                 }
-            } else {
-                $terms = get_terms($taxonomy, array(
-                    'taxonomy' => $taxonomy,
-                    'hide_empty' => false
-                ));
-            }
 
-            if ( $taxonomy == 'post_format' && !is_wp_error($terms) && !empty($terms) ) {
-                $std_term = new stdClass();
-                $std_term->term_id = -200;
-                $std_term->taxonomy = 'post_format';
-                $std_term->children = array();
-                $std_term->name = 'Standard';
-                $std_term->label = 'Standard';
-                $std_term->parent = 0;
-                $std_term = apply_filters('asp_post_format_standard', $std_term);
-                array_unshift($terms, $std_term);
-            }
-			Ajax::prepareHeaders();
-            $showmore = ( $data['show_more_options'] ) ? "<br><a class='wd_tts_showmore'>+ Show more options</a>" : "";
-            if ( $data['show_taxonomy_all'] )
-                echo '
-                    <li class="ui-state-default termlevel-0"  term_id="-1" taxonomy="' . $taxonomy . '">' . __('Use all from', 'ajax-search-pro')  . ' <b>'.$taxonomy.'</b><a class="deleteIcon"></a>'.$showmore.'</li>
-                    ..or select terms..
-                ';
-            if (!empty($terms) && is_array($terms)) {
-                $termsHierarchical = array();
-                wd_sort_terms_hierarchicaly($terms, $termsHierarchical);
-                self::printTermsRecursive($termsHierarchical, 0, $data);
-            } else {
-                print "No terms to display in this taxonomy.";
+                if ( $taxonomy == 'post_format' && !is_wp_error($terms) && !empty($terms) ) {
+                    $std_term = new stdClass();
+                    $std_term->term_id = -200;
+                    $std_term->taxonomy = 'post_format';
+                    $std_term->children = array();
+                    $std_term->name = 'Standard';
+                    $std_term->label = 'Standard';
+                    $std_term->parent = 0;
+                    $std_term = apply_filters('asp_post_format_standard', $std_term);
+                    array_unshift($terms, $std_term);
+                }
+                Ajax::prepareHeaders();
+                $showmore = ( $data['show_more_options'] ) ? "<br><a class='wd_tts_showmore'>+ Show more options</a>" : "";
+                if ( $data['show_taxonomy_all'] )
+                    echo '
+                        <li class="ui-state-default termlevel-0"  term_id="-1" taxonomy="' . esc_attr($taxonomy) . '">' . __('Use all from', 'ajax-search-pro')  . ' <b>'.esc_attr($taxonomy).'</b><a class="deleteIcon"></a>'.$showmore.'</li>
+                        ..or select terms..
+                    ';
+                if (!empty($terms) && is_array($terms)) {
+                    $termsHierarchical = array();
+                    wd_sort_terms_hierarchicaly($terms, $termsHierarchical);
+                    self::printTermsRecursive($termsHierarchical, 0, $data);
+                } else {
+                    print "No terms to display in this taxonomy.";
+                }
             }
             die();
         }

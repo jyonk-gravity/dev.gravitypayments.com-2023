@@ -1006,7 +1006,9 @@ if ( !function_exists("asp_results_to_wp_obj") ) {
                     $r->asp_guid = $res->asp_guid;
                     $res->asp_id = $r->id;  // Save the ID in case needed for some reason
                     $res->blogid = $r->blogid;
-					$res->guid = $r->link;
+                    if ( isset($r->link) ) {
+					    $res->guid = $r->link;
+                    }
 
                     /**
                      * On multisite the page and other post type links are filtered in such a way
@@ -1174,7 +1176,7 @@ if ( !function_exists("asp_acf_get_post_object_field_values") ) {
 		$return = array();
 		$_return = array();
 		foreach ( $field_object['post_type'] as $post_type ) {
-			$posts = get_posts( array('post_type' => $post_type, 'posts_per_page' => -1, 'post_status' => 'publish') );
+			$posts = get_posts( array('post_type' => $post_type, 'posts_per_page' => -1, 'post_status' => 'publish', 'suppress_filters' => false) );
 			if ( !is_wp_error($posts) && count($posts) > 0 ) {
 				$_return = array_merge($_return, $posts);
 			}
@@ -1234,7 +1236,7 @@ if ( !function_exists("asp_acf_get_field_choices") ) {
 
         // Method 3: Let us try going through the ACF registered post types
         if ( empty($results) ) {
-            $acf_posts = get_posts( array('post_type' => 'acf', 'posts_per_page' => -1, 'post_status' => 'all') );
+            $acf_posts = get_posts( array('post_type' => 'acf', 'posts_per_page' => -1, 'post_status' => 'all', 'suppress_filters' => false) );
             if ( !is_wp_error($acf_posts) ) {
                 foreach ($acf_posts as $acf) {
                     $meta = get_post_meta($acf->ID);
@@ -1291,7 +1293,7 @@ if ( !function_exists("asp_acf_get_field_type") ) {
 
         // Method 3: Let us try going through the ACF registered post types
         if ( $type === false ) {
-            $acf_posts = get_posts( array('post_type' => 'acf', 'posts_per_page' => -1, 'post_status' => 'all') );
+            $acf_posts = get_posts( array('post_type' => 'acf', 'posts_per_page' => -1, 'post_status' => 'all', 'suppress_filters' => false) );
             if ( !is_wp_error($acf_posts) ) {
                 foreach ($acf_posts as $acf) {
                     $meta = get_post_meta($acf->ID);

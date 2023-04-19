@@ -16,6 +16,7 @@ jQuery(function($){
         var data = {
             "action": "asp_license_ajax",
             "op": "activate",
+            "asp_license_request_nonce": $('#asp_license_request_nonce').val(),
             "asp_key": $("#asp_key").val()
         };
         var $this = $(this);
@@ -38,6 +39,7 @@ jQuery(function($){
         var data = {
             "action": "asp_license_ajax",
             "op": "deactivate",
+            "asp_license_request_nonce": $('#asp_license_request_nonce').val(),
             "asp_key": $("#asp_key").val()
         };
         var $this = $(this);
@@ -59,6 +61,7 @@ jQuery(function($){
         var data = {
             "action": "asp_license_ajax",
             "op": "deactivate_remote",
+            "asp_license_request_nonce": $('#asp_license_request_nonce').val(),
             "asp_key": $("#asp_keyd").val(),
             "site_url": $("#asp_site_url").val()
         };

@@ -17,6 +17,8 @@ jQuery(function($){
         "pre-tags-separator": ","
     };
 
+    var nonce = $('#asp_synonyms_request_nonce').val();
+
     $('#asp_syn_add').on('click', function(e){
         editorOpen();
     });
@@ -55,6 +57,7 @@ jQuery(function($){
             var data = {
                 action: 'asp_syn_admin_ajax',
                 op: 'update',
+                asp_synonyms_request_nonce: nonce,
                 keyword: $('#wpd-synonym-input').val(),
                 synonyms: synonyms,
                 lang: $('#wpd-synonym-lang').val(),
@@ -135,6 +138,7 @@ jQuery(function($){
         var data = {
             action: 'asp_syn_admin_ajax',
             op: 'delete',
+            asp_synonyms_request_nonce: nonce,
             id: $row.data('id')
         };
         $row.find('.wpd-syn-overlay').css('display', 'block');
@@ -168,7 +172,8 @@ jQuery(function($){
 
         var data = {
             action: 'asp_syn_admin_ajax',
-            op: 'wipe'
+            op: 'wipe',
+            asp_synonyms_request_nonce: nonce
         };
 
         $('#wpd-syn-results').find('.wpd-syn-overlay').css('display', 'block');
@@ -229,7 +234,8 @@ jQuery(function($){
 
         var data = {
             action: 'asp_syn_admin_ajax',
-            op: 'export'
+            op: 'export',
+            asp_synonyms_request_nonce: nonce
         };
         if (post != null && typeof post.abort != 'undefined')
             post.abort();
@@ -278,7 +284,8 @@ jQuery(function($){
         var data = {
             action: 'asp_syn_admin_ajax',
             path: $('input[name=syn-import-upload]').val(),
-            op: 'import'
+            op: 'import',
+            asp_synonyms_request_nonce: nonce
         };
         if (post != null && typeof post.abort != 'undefined')
             post.abort();
@@ -325,6 +332,7 @@ jQuery(function($){
         var data = {
             action: 'asp_syn_admin_ajax',
             op: 'findexact',
+            asp_synonyms_request_nonce: nonce,
             keyword: keyword,
             lang: lang
         };
@@ -368,6 +376,7 @@ jQuery(function($){
         var data = {
             action: 'asp_syn_admin_ajax',
             op: 'find',
+            asp_synonyms_request_nonce: nonce,
             keyword: phrase,
             lang: $('#wpd-syn-search-lang').val()
         };

@@ -34,7 +34,10 @@ $asp_performance = $pstats->get_data();
 
         <?php
         $updated = false;
-        if (isset($_POST) && isset($_POST['asp_performance']) && (wpdreamsType::getErrorNum()==0)) {
+        if (
+            isset($_POST['asp_performance'], $_POST['asp_performance_nonce']) && 
+            wp_verify_nonce( $_POST['asp_performance_nonce'], 'asp_performance_nonce' )
+        ) {
             $values = array(
                 "enabled" => $_POST['enabled']
             );
@@ -42,7 +45,10 @@ $asp_performance = $pstats->get_data();
             asp_parse_options();
             $updated = true;
         }
-        if (isset($_POST) && isset($_POST['asp_perf_clear'])) {
+        if (
+            isset($_POST['asp_perf_clear'], $_POST['asp_performance_clear_nonce']) && 
+            wp_verify_nonce( $_POST['asp_performance_clear_nonce'], 'asp_performance_clear_nonce' )
+        ) {
             $pstats = new Performance('asp_performance_stats');
             $pstats->reset();
         }
@@ -60,6 +66,9 @@ $asp_performance = $pstats->get_data();
                     <legend><?php echo __('Performance tracking options', 'ajax-search-pro'); ?></legend>
                     <?php print $_r; ?>
                     <input type='hidden' name='asp_performance' value='1' />
+                    <input type="hidden" name="asp_performance_nonce"
+                           value="<?php echo wp_create_nonce( 'asp_performance_nonce' ); ?>">
+
                 </fieldset>
             </form>
             <form name='asp_performance_settings_clear' class="asp_performance_settings_clear" method='post'>
@@ -75,6 +84,8 @@ $asp_performance = $pstats->get_data();
                         </ul>
                         <div class="item">
                             <label for="perf_asp_submit"><?php echo __('Clear performace statistics?', 'ajax-search-pro'); ?></label>
+                            <input type="hidden" name="asp_performance_clear_nonce"
+                                   value="<?php echo wp_create_nonce( 'asp_performance_clear_nonce' ); ?>">
                             <input type='submit' name="asp_perf_clear" id="asp_perf_clear" class='submit' value='<?php echo esc_attr__('Clear', 'ajax-search-pro'); ?>'/>
                         </div>
                     </fieldset>

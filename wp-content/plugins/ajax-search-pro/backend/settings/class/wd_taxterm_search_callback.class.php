@@ -15,6 +15,7 @@ if (!class_exists("wd_TaxTermSearchCallBack")) {
      * @copyright Copyright (c) 2018, Ernest Marcinko
      */
     class wd_TaxTermSearchCallBack extends wpdreamsType {
+        private static $delimiter = '!!!TTRES!!!';
         private $args = array(
             'callback' => '',       // javacsript function name in the windows scope | if empty, shows results
             'placeholder' => 'Search terms..',
@@ -36,6 +37,7 @@ if (!class_exists("wd_TaxTermSearchCallBack")) {
         public function getType() {
             parent::getType();
             $this->processData();
+            $this->args['delimiter'] = self::$delimiter;
             $this->types = $this->getAllTaxonomies();
             ?>
             <div class='wd_taxterm_search<?php echo $this->args['class'] != '' ? ' '.$this->args['class'] : "";?>'
@@ -58,6 +60,7 @@ if (!class_exists("wd_TaxTermSearchCallBack")) {
                     ?>
                 </select>
                 <?php if ($this->args['controls_position'] == 'left') $this->printControls(); ?>
+                <input type="hidden" class="wd_taxonomy_search_cb_nonce" value="<?php echo wp_create_nonce( 'wd_taxonomy_search_cb_nonce' ); ?>">
                 <input type="search" name="<?php echo $this->name; ?>"
                                                    class="wd_taxterm_search"
                                                    value="<?php echo (is_array($this->data) && isset($this->data['value'])) ? $this->data['value'] : $this->data; ?>"
@@ -97,20 +100,26 @@ if (!class_exists("wd_TaxTermSearchCallBack")) {
         }
 
         public static function searchTaxTerm() {
-            $taxonomy = $_POST['wd_taxonomy'];
-            $data = json_decode(base64_decode($_POST['wd_args']), true);
-            $terms = get_terms($taxonomy, array(
-                'taxonomy' => $taxonomy,
-                'hide_empty' => false,
-                'fields' => 'all',
-                'search' => trim($_POST['wd_phrase']),
-                'number' => $data['limit']
-            ));
-			Ajax::prepareHeaders();
-            if ( !is_wp_error($terms) ) {
-                print_r($data['delimiter'] . json_encode($terms) . $data['delimiter']);;
-            } else {
-                print 1;
+            if ( 
+                isset($_POST['wd_taxonomy'], $_POST['wd_taxonomy_search_cb_nonce']) &&
+                current_user_can('administrator') && 
+                wp_verify_nonce( $_POST["wd_taxonomy_search_cb_nonce"], 'wd_taxonomy_search_cb_nonce' ) 
+            ) {
+                $taxonomy = $_POST['wd_taxonomy'];
+                $data = json_decode(base64_decode($_POST['wd_args']), true);
+                $terms = get_terms($taxonomy, array(
+                    'taxonomy' => $taxonomy,
+                    'hide_empty' => false,
+                    'fields' => 'all',
+                    'search' => trim($_POST['wd_phrase']),
+                    'number' => $data['limit']
+                ));
+                Ajax::prepareHeaders();
+                if ( !is_wp_error($terms) ) {
+                    print_r(self::$delimiter . json_encode($terms) . self::$delimiter);;
+                } else {
+                    print 1;
+                }
             }
             die();
         }

@@ -315,7 +315,7 @@ class Manager {
 				<p>
 				<?php echo __('<b>Ajax Search Pro notice: </b> The Index Table options have been modified, please re-create the index table!', 'ajax-search-pro'); ?>
 				<a class="button button-primary" href="<?php  echo get_admin_url() . "admin.php?page=asp_index_table"; ?>"><?php echo __('Let\'s do it!', 'ajax-search-pro'); ?></a>
-				<a class="button button-secondary" href="<?php echo add_query_arg(array("asp_notice_clear_ri" => "1")); ?>"><?php echo __('Hide this message', 'ajax-search-pro'); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url(add_query_arg(array("asp_notice_clear_ri" => "1"))); ?>"><?php echo __('Hide this message', 'ajax-search-pro'); ?></a>
 				</p>
 			</div>
 			<?php

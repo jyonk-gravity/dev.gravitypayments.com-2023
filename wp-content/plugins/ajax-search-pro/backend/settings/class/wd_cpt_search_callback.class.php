@@ -16,6 +16,7 @@ if (!class_exists("wd_CPTSearchCallBack")) {
      * @copyright Copyright (c) 2016, Ernest Marcinko
      */
     class wd_CPTSearchCallBack extends wpdreamsType {
+        private static $delimiter = '!!!CPTRES!!!';
         private $post_title = '';
         private $args = array(
             'callback' => '',       // javacsript function name in the windows scope | if empty, shows results
@@ -30,6 +31,7 @@ if (!class_exists("wd_CPTSearchCallBack")) {
         public function getType() {
             parent::getType();
             $this->processData();
+            $this->args['delimiter'] = self::$delimiter;
             ?>
             <div class='wd_cpt_search<?php echo $this->args['class'] != '' ? ' '.$this->args['class'] : "";?>'
                  id='wd_cpt_search-<?php echo self::$_instancenumber; ?>'>
@@ -44,6 +46,7 @@ if (!class_exists("wd_CPTSearchCallBack")) {
                        name="<?php echo $this->name; ?>"
                        isparam="1"
                        value="<?php echo (is_array($this->data) && isset($this->data['value'])) ? $this->data['value'] : $this->data; ?>">
+                <input type="hidden" class="wd_cpt_search_nonce" value="<?php echo wp_create_nonce( 'wd_cpt_search_nonce' ); ?>">
                 <input type='hidden' value="<?php echo base64_encode(json_encode($this->args)); ?>" class="wd_args">
                 <?php if ($this->args['controls_position'] != 'left') $this->printControls(); ?>
                 <div class="wd_cpt_search_res"></div>
@@ -65,40 +68,46 @@ if (!class_exists("wd_CPTSearchCallBack")) {
 
         public static function searchCPT() {
             global $wpdb;
-            $phrase = trim($_POST['wd_phrase']);
-            $data = json_decode(base64_decode($_POST['wd_args']), true);
+            if ( 
+                isset($_POST['wd_phrase'], $_POST['wd_cpt_search_nonce']) &&
+                current_user_can('administrator') && 
+                wp_verify_nonce( $_POST["wd_cpt_search_nonce"], 'wd_cpt_search_nonce' ) 
+            ) {
+                $phrase = trim($_POST['wd_phrase']);
+                $data = json_decode(base64_decode($_POST['wd_args']), true);
 
-            $ptypes = get_post_types(array(
-                "public" => true,
-                "_builtin" => false
-            ), "names", "OR");
+                $ptypes = get_post_types(array(
+                    "public" => true,
+                    "_builtin" => false
+                ), "names", "OR");
 
-            $exclude = array("revision", "nav_menu_item", "attachment", 'peepso-post', 'peepso-comment', "acf",
-                "oembed_cache", "user_request", "wp_block", "shop_coupon", "avada_page_options",
-                "_pods_template", "_pods_pod", "_pods_field", "bp-email",
-                "lbmn_archive", "lbmn_footer", "mc4wp-form",
-                "elementor-front", "elementor-icon",
-                "fusion_template", "fusion_element", "wc_product_tab", "customize_changeset",
-                "wpcf7_contact_form", "dslc_templates", "acf-field", "acf-group", "acf-groups", "acf-field-group", "custom_css");
+                $exclude = array("revision", "nav_menu_item", "attachment", 'peepso-post', 'peepso-comment', "acf",
+                    "oembed_cache", "user_request", "wp_block", "shop_coupon", "avada_page_options",
+                    "_pods_template", "_pods_pod", "_pods_field", "bp-email",
+                    "lbmn_archive", "lbmn_footer", "mc4wp-form",
+                    "elementor-front", "elementor-icon",
+                    "fusion_template", "fusion_element", "wc_product_tab", "customize_changeset",
+                    "wpcf7_contact_form", "dslc_templates", "acf-field", "acf-group", "acf-groups", "acf-field-group", "custom_css");
 
-            $ptypes = array_diff($ptypes, $exclude);
+                $ptypes = array_diff($ptypes, $exclude);
 
-            $asp_query = new SearchQuery(array(
-                "s" => $phrase,
-                "_ajax_search" => false,
-                'keyword_logic' => 'AND',
-                'secondary_logic' => 'OR',
-                "posts_per_page" => 20,
-                'post_type' => $ptypes,
-                'post_status' => array(),
-                'post_fields' => array(
-                    'title', 'ids'
-                )
-            ));
+                $asp_query = new SearchQuery(array(
+                    "s" => $phrase,
+                    "_ajax_search" => false,
+                    'keyword_logic' => 'AND',
+                    'secondary_logic' => 'OR',
+                    "posts_per_page" => 20,
+                    'post_type' => $ptypes,
+                    'post_status' => array(),
+                    'post_fields' => array(
+                        'title', 'ids'
+                    )
+                ));
 
-            $results = $asp_query->posts;
-			Ajax::prepareHeaders();
-            print_r($data['delimiter'] . json_encode($results) . $data['delimiter']);
+                $results = $asp_query->posts;
+                Ajax::prepareHeaders();
+                print_r(self::$delimiter . json_encode($results) . self::$delimiter);
+            }
             die();
         }
 

@@ -497,7 +497,7 @@ jQuery(function($){
 
         var t = null;
         var post = null;
-        $(".wd_tagSelSearch input", $this).on("keyup", function(){
+        $(".wd_tagSelSearch input.wd_tagSelectSearch", $this).on("keyup", function(){
             var phrase = $(this).val();
             var $inp = $(this);
             var $loader = $(".loading-small", $inp.parent());
@@ -512,6 +512,7 @@ jQuery(function($){
                 $(".wd_tagSelSearch .wd_ts_close", $this).trigger('click');
                 return;
             }
+            let nonce = $(this).parent().find('.wd_tag_search_nonce').val();
 
             t = setTimeout(function(){
                 $loader.removeClass('hiddend');
@@ -519,6 +520,7 @@ jQuery(function($){
                 var data = {
                     'action': 'wd_search_tags',
                     'wd_tag_phrase': phrase,
+                    'wd_tag_search_nonce': nonce,
                     'wd_required': 1
                 };
                 post = $.post(ajaxurl, data, function(response) {
@@ -539,7 +541,7 @@ jQuery(function($){
         $(".wd_tagSelSearch .wd_ts_close", $this).on("click", function(){
             if (post != null)
                 post.abort();
-            $(".wd_tagSelSearch input", $this).val("");
+            $(".wd_tagSelSearch input.wd_tagSelectSearch", $this).val("");
             $(".wd_tagSearchResults:not(.hiddend)", $this).html("");
             $(".wd_ts_close", $this).addClass('hiddend');
             $(".loading-small", $this).addClass('hiddend');
@@ -655,7 +657,7 @@ jQuery(function($){
 
         var t = null;
         var post = null;
-        $(".wd_tagSelSearch input", $this).on("keyup", function(){
+        $(".wd_tagSelSearch input.wd_tagSelectSearch", $this).on("keyup", function(){
             var phrase = $(this).val();
             var $inp = $(this);
             var $loader = $(".loading-small", $inp.parent());
@@ -670,6 +672,7 @@ jQuery(function($){
                 $(".wd_tagSelSearch .wd_ts_close", $this).trigger('click');
                 return;
             }
+            let nonce = $(this).parent().find('.wd_tag_search_nonce').val();
 
             t = setTimeout(function(){
                 $loader.removeClass('hiddend');
@@ -677,6 +680,7 @@ jQuery(function($){
                 var data = {
                     'action': 'wd_search_tag',
                     'wd_tag_phrase': phrase,
+                    'wd_tag_search_nonce': nonce,
                     'wd_required': 1
                 };
                 post = $.post(ajaxurl, data, function(response) {
@@ -697,7 +701,7 @@ jQuery(function($){
         $(".wd_tagSelSearch .wd_ts_close", $this).on("click", function(){
             if (post != null)
                 post.abort();
-            $(".wd_tagSelSearch input", $this).val("");
+            $(".wd_tagSelSearch input.wd_tagSelectSearch", $this).val("");
             $(".wd_tagSearchResults:not(.hiddend)", $this).html("");
             $(".wd_ts_close", $this).addClass('hiddend');
             $(".loading-small", $this).addClass('hiddend');
@@ -1628,6 +1632,7 @@ jQuery(function($){
                 var data = {
                     'action': 'wd_print_taxonomy_terms',
                     'wd_required': 1,
+                    'wd_taxonomy_search_nonce': $('.wd_taxonomy_search_nonce', parent).val(),   
                     'wd_args': $("input.wd_args", parent).val(),
                     'wd_taxonomy': $(this).val()
                 };
@@ -1663,6 +1668,7 @@ jQuery(function($){
                     'action': 'wd_search_taxonomy_terms',
                     'wd_s': $this.val(),
                     'wd_required': 1,
+                    'wd_taxonomy_search_nonce': $('.wd_taxonomy_search_nonce', parent).val(),
                     'wd_args': $("input.wd_args", parent).val(),
                     'wd_taxonomy': active_tax
                 };
@@ -2017,6 +2023,7 @@ jQuery(function($){
 
         $("input.wd_cf_search", parent).on('keyup', function() {
             var $this = $(this);
+            let nonce = $(this).parent().find('.wd_cf_search_nonce').val();
             clearTimeout(timeout);
             if ( $this.val() == '' ) {
                 $('.wd_ts_close', parent).addClass("hiddend");
@@ -2029,6 +2036,7 @@ jQuery(function($){
                 var data = {
                     'action': 'wd_search_cf',
                     'wd_phrase': $this.val(),
+                    'wd_cf_search_nonce': nonce,
                     'wd_required': 1,
                     'wd_args': $("input.wd_args", parent).val()
                 };
@@ -2118,6 +2126,7 @@ jQuery(function($){
 
         $("input.wd_cpt_search", parent).on('keyup', function() {
             var $this = $(this);
+            let nonce = $this.parent().find('input.wd_cpt_search_nonce').val();
             clearTimeout(timeout);
             if ( $this.val() == '' ) {
                 $('.wd_ts_close', parent).addClass("hiddend");
@@ -2130,6 +2139,7 @@ jQuery(function($){
                 var data = {
                     'action': 'wd_search_cb_cpt',
                     'wd_phrase': $this.val(),
+                    'wd_cpt_search_nonce': nonce,
                     'wd_required': 1,
                     'wd_args': $("input.wd_args", parent).val()
                 };
@@ -2249,6 +2259,7 @@ jQuery(function($){
                     'action': 'wd_search_taxterm',
                     'wd_phrase': $this.val(),
                     'wd_taxonomy': $('.wd_taxterm_tax', parent).val(),
+                    'wd_taxonomy_search_cb_nonce': $('.wd_taxonomy_search_cb_nonce', parent).val(),
                     'wd_required': 1,
                     'wd_args': $("input.wd_args", parent).val()
                 };
@@ -2404,6 +2415,7 @@ jQuery(function($){
                 var data = {
                     'action': 'wd_search_users',
                     'wd_phrase': $this.val(),
+                    'wd_user_select_nonce': $('.wd_user_select_nonce', parent).val(),
                     'wd_required': 1,
                     'wd_args': $("input.wd_args", parent).val()
                 };
@@ -2514,12 +2526,14 @@ jQuery(function($){
         var timeout = null;
         $(".wd_cpt_search", parent).on('keyup', function(){
             var $this = $(this);
+            let nonce = $this.parent().find('.wd_cpt_select_search_nonce').val();
             clearTimeout(timeout);
             timeout = setTimeout(function(){
                 $('.dragLoader', parent).removeClass("hiddend");
                 var data = {
                     'action': 'wd_search_cpt',
                     'wd_phrase': $this.val(),
+                    'wd_cpt_select_search_nonce': nonce,
                     'wd_required': 1,
                     'wd_args': $("input.wd_args", parent).val()
                 };

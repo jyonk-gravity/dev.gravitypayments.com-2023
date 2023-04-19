@@ -30,6 +30,7 @@ if (!class_exists("wd_CPTSelect")) {
                     <div style='margin:15px 30px;text-align: left; line-height: 45px;'>
                         <label>
                             <?php echo __('Search posts/pages/cpt:', 'ajax-search-pro'); ?>
+                            <input type="hidden" class="wd_cpt_select_search_nonce" value="<?php echo wp_create_nonce( 'wd_cpt_select_search_nonce' ); ?>">
                             <input type="text" class="wd_cpt_search" placeholder="<?php echo __('Type title or ID here..', 'ajax-search-pro'); ?>"/>
                         </label>
                     </div>
@@ -46,7 +47,7 @@ if (!class_exists("wd_CPTSelect")) {
                             <?php $this->printSelectedPosts(); ?>
                         </ul>
                     </div>
-
+                    
                     <input type='hidden' value="<?php echo base64_encode(json_encode($this->args)); ?>" class="wd_args">
                     <input isparam=1 type='hidden' value="<?php echo (is_array($this->data) && isset($this->data['value'])) ? $this->data['value'] : $this->data; ?>" name='<?php echo $this->name; ?>'>
                 </fieldset>
@@ -89,54 +90,60 @@ if (!class_exists("wd_CPTSelect")) {
         }
 
         public static function searchPosts() {
-            $phrase = trim($_POST['wd_phrase']);
-            $data = json_decode(base64_decode($_POST['wd_args']), true);
+            if ( 
+                isset($_POST['wd_phrase'], $_POST['wd_cpt_select_search_nonce']) &&
+                current_user_can('administrator') && 
+                wp_verify_nonce( $_POST["wd_cpt_select_search_nonce"], 'wd_cpt_select_search_nonce' ) 
+            ) {
+                $phrase = trim($_POST['wd_phrase']);
+                $data = json_decode(base64_decode($_POST['wd_args']), true);
 
-            $ptypes = get_post_types(array(
-                "public" => true,
-                "_builtin" => false
-            ), "names", "OR");
+                $ptypes = get_post_types(array(
+                    "public" => true,
+                    "_builtin" => false
+                ), "names", "OR");
 
-            $exclude = array("revision", "nav_menu_item", 'peepso-post', 'peepso-comment', "acf",
-                "oembed_cache", "user_request", "wp_block", "shop_coupon", "avada_page_options",
-                "_pods_template", "_pods_pod", "_pods_field", "bp-email",
-                "lbmn_archive", "lbmn_footer", "mc4wp-form",
-                "elementor-front", "elementor-icon",
-                "fusion_template", "fusion_element", "wc_product_tab", "customize_changeset",
-                "wpcf7_contact_form", "dslc_templates", "acf-field", "acf-group", "acf-groups", "acf-field-group", "custom_css");
+                $exclude = array("revision", "nav_menu_item", 'peepso-post', 'peepso-comment', "acf",
+                    "oembed_cache", "user_request", "wp_block", "shop_coupon", "avada_page_options",
+                    "_pods_template", "_pods_pod", "_pods_field", "bp-email",
+                    "lbmn_archive", "lbmn_footer", "mc4wp-form",
+                    "elementor-front", "elementor-icon",
+                    "fusion_template", "fusion_element", "wc_product_tab", "customize_changeset",
+                    "wpcf7_contact_form", "dslc_templates", "acf-field", "acf-group", "acf-groups", "acf-field-group", "custom_css");
 
-            $ptypes = array_diff($ptypes, $exclude);
+                $ptypes = array_diff($ptypes, $exclude);
 
-            $asp_query = new SearchQuery(array(
-                "s" => $phrase,
-                "_ajax_search" => false,
-                'keyword_logic' => 'AND',
-                'secondary_logic' => 'OR',
-                "posts_per_page" => 20,
-                'post_type' => $ptypes,
-                'post_status' => array('publish', 'future', 'pending', 'private'),
-                'post_fields' => array(
-                    'title', 'ids'
-                )
-            ));
+                $asp_query = new SearchQuery(array(
+                    "s" => $phrase,
+                    "_ajax_search" => false,
+                    'keyword_logic' => 'AND',
+                    'secondary_logic' => 'OR',
+                    "posts_per_page" => 20,
+                    'post_type' => $ptypes,
+                    'post_status' => array('publish', 'future', 'pending', 'private'),
+                    'post_fields' => array(
+                        'title', 'ids'
+                    )
+                ));
 
-            $results = $asp_query->posts;
-			Ajax::prepareHeaders();
-            if ( ! empty( $results ) ) {
-                echo "Results (".count($results)."): ";
-                foreach ( $results as $p ) {
-                    $checkbox = "";
-                    if ($data['show_parent_checkbox'] == 1 && $p->post_type == 'page')
-                        $checkbox = '<div class="exclude_child">' . __('Exclude direct children too?', 'ajax-search-pro') . ' <input type="checkbox" value="' . $p->ID . '"/></div>';
-                    echo '
-                    <li class="ui-state-default" post_id="' . $p->ID . '">'. $p->post_title . '
-                        <span class="extra_info">[id: '.$p->ID.'] ['.$p->post_type.'] ['.$p->post_status.']</span>
-                        ' . $checkbox . '
-                    <a class="deleteIcon"></a></li>
-                    ';
+                $results = $asp_query->posts;
+                Ajax::prepareHeaders();
+                if ( ! empty( $results ) ) {
+                    echo "Results (".count($results)."): ";
+                    foreach ( $results as $p ) {
+                        $checkbox = "";
+                        if ($data['show_parent_checkbox'] == 1 && $p->post_type == 'page')
+                            $checkbox = '<div class="exclude_child">' . __('Exclude direct children too?', 'ajax-search-pro') . ' <input type="checkbox" value="' . $p->ID . '"/></div>';
+                        echo '
+                        <li class="ui-state-default" post_id="' . $p->ID . '">'. $p->post_title . '
+                            <span class="extra_info">[id: '.$p->ID.'] ['.$p->post_type.'] ['.$p->post_status.']</span>
+                            ' . $checkbox . '
+                        <a class="deleteIcon"></a></li>
+                        ';
+                    }
+                } else {
+                    echo __('No items found for term:', 'ajax-search-pro') . ' <b>' . esc_html($phrase) .'<b>';
                 }
-            } else {
-                echo __('No items found for term:', 'ajax-search-pro') . ' <b>' . $phrase .'<b>';
             }
             die();
         }

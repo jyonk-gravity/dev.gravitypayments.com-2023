@@ -10,21 +10,27 @@ if (!defined('ABSPATH')) die('-1');
 
 class Synonyms extends AbstractAjax {
 	function handle() {
-		if ( !isset($_POST['op']) ) {
-			print -1;
-			die();
-		} else if ($_POST['op'] == 'find' || $_POST['op'] == 'findexact') {
-			$this->find();
-		} else if ($_POST['op'] == 'update') {
-			$this->update();
-		} else if ($_POST['op'] == 'delete') {
-			$this->delete();
-		} else if ($_POST['op'] == 'wipe') {
-			$this->wipe();
-		} else if ($_POST['op'] == 'export') {
-			$this->export();
-		} else if ($_POST['op'] == 'import') {
-			$this->import();
+		if ( 
+			isset($_POST['asp_synonyms_request_nonce']) &&
+			wp_verify_nonce( $_POST['asp_synonyms_request_nonce'], 'asp_synonyms_request_nonce' ) &&
+			current_user_can( 'administrator' )
+		) {
+			if ( !isset($_POST['op']) ) {
+				print -1;
+				die();
+			} else if ($_POST['op'] == 'find' || $_POST['op'] == 'findexact') {
+				$this->find();
+			} else if ($_POST['op'] == 'update') {
+				$this->update();
+			} else if ($_POST['op'] == 'delete') {
+				$this->delete();
+			} else if ($_POST['op'] == 'wipe') {
+				$this->wipe();
+			} else if ($_POST['op'] == 'export') {
+				$this->export();
+			} else if ($_POST['op'] == 'import') {
+				$this->import();
+			}
 		}
 	}
 

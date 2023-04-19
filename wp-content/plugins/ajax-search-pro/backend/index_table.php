@@ -564,8 +564,8 @@ $asp_cron_data = get_option("asp_it_cron", array(
                         <div class='tabscontent'>
                             <?php print $_r; ?>
                         </div>
+                        <input type="hidden" id="asp_it_request_nonce" value="<?php echo wp_create_nonce( 'asp_it_request_nonce' ); ?>">
                         <input type='hidden' name='asp_index_table_page' value='1'/>
-
                         <div class="item">
                             <input name="submit_asp_index_options" type="submit" value="<?php echo esc_attr__('Save options', 'ajax-search-pro'); ?>"/>
                         </div>

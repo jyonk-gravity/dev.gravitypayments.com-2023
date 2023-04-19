@@ -4,8 +4,8 @@ Donate link: https://perfmatters.io
 Tags: perfmatters
 Requires at least: 5.5
 Requires PHP: 7.0
-Tested up to: 6.1.1
-Stable tag: 2.0.5
+Tested up to: 6.2
+Stable tag: 2.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,40 @@ Perfmatters is a lightweight performance plugin developed to speed up your WordP
 Check out our [documentation](https://perfmatters.io/docs/) for more information on how to use Perfmatters.
 
 == Changelog ==
+
+= 2.0.9 - 03.30.2023 =
+* Updated Request library functions used to download local font files to fix a compatibility issue with WordPress 6.2.
+* Added new perfmatters_preloads_ready filter.
+* Fixed a styling issue in Safari where the settings UI logo was getting clipped.
+
+= 2.0.8 - 03.29.2023 =
+* Updated plugin settings UI. Completely overhauled admin header and navigation. Made additional improvements to various elements (icons, buttons, toggles, etc.).
+* Added additional checks to allow PERFMATTERS_CACHE_DIR and PERFMATTERS_CACHE_URL to be manually set in wp-config.php.
+* Updated user agent for local font remote request.
+* Fixed an issue where multiple preload tags for the same resource could be printed if the resource was matched more than once in the DOM.
+* Fixed an issue where an individually delayed script would fail to load if it matched more than one delayed script entry.
+* Fixed an issue where FastClick script could still load even if Delay JS was turned off.
+* Translation updates.
+
+= 2.0.7 - 03.10.2023 =
+* Fixed an issue that was introduced in the last update that was causing certain images that had their HTML modified by another tool not to lazy load correctly.
+* Translation updates.
+
+= 2.0.6 - 03.02.2023 =
+* Added new Minimal v4 script type option in local analytics.
+* Added support for ::after pseudo element when lazy loading CSS background images.
+* Added support for AVIF images in a source tag to preload critical images feature.
+* Added new perfmatters_preload_critical_images filter.
+* Added new perfmatters_image_dimensions_exclusions filter.
+* Added notice to plugin update row if there is not an active license key.
+* Added async attribute to Instant Page script tag.
+* Added async attribute to all relevant local analytics script tags.
+* Reworked preload class to allow managing preloads entirely with perfmatters_preloads filter if needed.
+* Fixed an issue in MU Mode where plugins would not always disable correctly when helper plugins with similar directories were also active.
+* Fixed a couple of PHP warnings in MU plugin that would show up when certain variables were not declared.
+* Fixed an issue where our lazy loading script was attempting to load in images that had been prepped by another active lazy loader.
+* Fixed an issue where base64 encoded images were being picked up by missing image dimensions feature.
+* Removed BETA tag from preload critical images option.
 
 = 2.0.5 - 02.02.2023 =
 * Added new perfmatters_exclude_leading_images filter.

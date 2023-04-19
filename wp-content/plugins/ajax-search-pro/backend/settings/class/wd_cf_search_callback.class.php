@@ -15,11 +15,11 @@ if (!class_exists("wd_CFSearchCallBack")) {
      * @copyright Copyright (c) 2016, Ernest Marcinko
      */
     class wd_CFSearchCallBack extends wpdreamsType {
+        private static $delimiter = '!!!CFRES!!!';
         private $args = array(
             'callback' => '',       // javacsript function name in the windows scope | if empty, shows results
             'search_values' => 0,
             'limit' => 15,
-            'delimiter' => '!!!CFRES!!!',
             'controls_position' => 'right',
             'class' => '',
             'usermeta' => 0,
@@ -29,6 +29,7 @@ if (!class_exists("wd_CFSearchCallBack")) {
         public function getType() {
             parent::getType();
             $this->processData();
+            $this->args['delimiter'] = self::$delimiter;
             ?>
             <div class='wd_cf_search<?php echo $this->args['class'] != '' ? ' '.$this->args['class'] : "";?>'
                  id='wd_cf_search-<?php echo self::$_instancenumber; ?>'>
@@ -37,6 +38,7 @@ if (!class_exists("wd_CFSearchCallBack")) {
                                                    class="wd_cf_search"
                                                    value="<?php echo (is_array($this->data) && isset($this->data['value'])) ? $this->data['value'] : $this->data; ?>"
                                                    placeholder="<?php esc_attr_e('Search custom fields..', 'ajax-search-pro'); ?>"/>
+                <input type="hidden" class="wd_cf_search_nonce" value="<?php echo wp_create_nonce( 'wd_cf_search_nonce' ); ?>">                                   
                 <input type='hidden' value="<?php echo base64_encode(json_encode($this->args)); ?>" class="wd_args">
                 <?php if ($this->args['controls_position'] != 'left') $this->printControls(); ?>
                 <div class="wd_cf_search_res"></div>
@@ -58,56 +60,61 @@ if (!class_exists("wd_CFSearchCallBack")) {
         public static function searchCF()
         {
             global $wpdb;
-
-            // Exact matches
-            $phrase = trim($_POST['wd_phrase']) . '%';
-            $data = json_decode(base64_decode($_POST['wd_args']), true);
-            if ($data['usermeta'])
-                $table = $wpdb->usermeta;
-            else
-                $table = $wpdb->postmeta;
-            if ($data['search_values'] == 1) {
-                $cf_query = $wpdb->prepare(
-                    "SELECT DISTINCT(meta_key) FROM $table WHERE meta_key LIKE '%s' OR meta_value LIKE '%s' ORDER BY meta_key ASC LIMIT %d",
-                    $phrase, $phrase, $data['limit']);
-            } else {
-                $cf_query = $wpdb->prepare(
-                    "SELECT DISTINCT(meta_key) FROM $table WHERE meta_key LIKE '%s' ORDER BY meta_key ASC LIMIT %d",
-                    $phrase, $data['limit']);
-            }
-            $cf_results = $wpdb->get_results( $cf_query, OBJECT );
-
-            $remaining_limit = $data['limit'] - count($cf_results);
-            if ( $remaining_limit > 0 ) {
-                // Fuzzy matches
-                $not_in_query = '';
-                $not_in = array();
-                foreach ($cf_results as $r) {
-                    $not_in[] = $r->meta_key;
-                }
-                if (count($not_in) > 0) {
-                    $not_in_query = " AND meta_key NOT IN ('" . implode("','", $not_in) . "')";
-                }
-                $phrase = '%' . trim($_POST['wd_phrase']) . '%';
+            if ( 
+                isset($_POST['wd_phrase'], $_POST['wd_cf_search_nonce']) &&
+                current_user_can('administrator') && 
+                wp_verify_nonce( $_POST["wd_cf_search_nonce"], 'wd_cf_search_nonce' ) 
+            ) {
+                // Exact matches
+                $phrase = trim($_POST['wd_phrase']) . '%';
+                $data = json_decode(base64_decode($_POST['wd_args']), true);
+                if ($data['usermeta'])
+                    $table = $wpdb->usermeta;
+                else
+                    $table = $wpdb->postmeta;
                 if ($data['search_values'] == 1) {
                     $cf_query = $wpdb->prepare(
-                        "SELECT DISTINCT(meta_key) FROM $table WHERE (meta_key LIKE '%s' OR meta_value LIKE '%s') $not_in_query ORDER BY meta_key ASC LIMIT %d",
-                        $phrase, $phrase, $remaining_limit);
+                        "SELECT DISTINCT(meta_key) FROM $table WHERE meta_key LIKE '%s' OR meta_value LIKE '%s' ORDER BY meta_key ASC LIMIT %d",
+                        $phrase, $phrase, $data['limit']);
                 } else {
                     $cf_query = $wpdb->prepare(
-                        "SELECT DISTINCT(meta_key) FROM $table WHERE (meta_key LIKE '%s') $not_in_query ORDER BY meta_key ASC LIMIT %d",
-                        $phrase, $remaining_limit);
+                        "SELECT DISTINCT(meta_key) FROM $table WHERE meta_key LIKE '%s' ORDER BY meta_key ASC LIMIT %d",
+                        $phrase, $data['limit']);
                 }
-                $cf_results = array_merge($cf_results, $wpdb->get_results($cf_query, OBJECT));
+                $cf_results = $wpdb->get_results( $cf_query, OBJECT );
+
+                $remaining_limit = $data['limit'] - count($cf_results);
+                if ( $remaining_limit > 0 ) {
+                    // Fuzzy matches
+                    $not_in_query = '';
+                    $not_in = array();
+                    foreach ($cf_results as $r) {
+                        $not_in[] = $r->meta_key;
+                    }
+                    if (count($not_in) > 0) {
+                        $not_in_query = " AND meta_key NOT IN ('" . implode("','", $not_in) . "')";
+                    }
+                    $phrase = '%' . trim($_POST['wd_phrase']) . '%';
+                    if ($data['search_values'] == 1) {
+                        $cf_query = $wpdb->prepare(
+                            "SELECT DISTINCT(meta_key) FROM $table WHERE (meta_key LIKE '%s' OR meta_value LIKE '%s') $not_in_query ORDER BY meta_key ASC LIMIT %d",
+                            $phrase, $phrase, $remaining_limit);
+                    } else {
+                        $cf_query = $wpdb->prepare(
+                            "SELECT DISTINCT(meta_key) FROM $table WHERE (meta_key LIKE '%s') $not_in_query ORDER BY meta_key ASC LIMIT %d",
+                            $phrase, $remaining_limit);
+                    }
+                    $cf_results = array_merge($cf_results, $wpdb->get_results($cf_query, OBJECT));
+                }
+
+                if ( $data['show_pods'] )
+                    $pods_fields = self::searchPods($_POST['wd_phrase']);
+                else
+                    $pods_fields = array();
+
+                Ajax::prepareHeaders();
+                print_r(self::$delimiter . json_encode(array_merge($pods_fields, $cf_results)) . self::$delimiter);
             }
-
-            if ( $data['show_pods'] )
-                $pods_fields = self::searchPods($_POST['wd_phrase']);
-            else
-                $pods_fields = array();
-
-			Ajax::prepareHeaders();
-            print_r($data['delimiter'] . json_encode(array_merge($pods_fields, $cf_results)) . $data['delimiter']);
             die();
         }
 

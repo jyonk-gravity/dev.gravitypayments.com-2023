@@ -55,6 +55,7 @@ if (ASP_DEMO) $_POST = null;
                 $cache_options["cachinginterval"] ); ?>
 		</div>
 		<div class="item">
+		<input type="hidden" name="asp_caching_nonce" value="<?php echo wp_create_nonce( 'asp_caching_nonce' ); ?>">
 			<input type='submit' class='submit' value='<?php esc_attr_e('Save options', 'ajax-search-pro'); ?>'/>
 		</div>
 		<?php $_r = ob_get_clean(); ?>
@@ -62,7 +63,10 @@ if (ASP_DEMO) $_POST = null;
 
 		<?php
 		$updated = false;
-		if ( isset( $_POST ) && isset( $_POST['asp_caching'] ) && ( wpdreamsType::getErrorNum() == 0 ) ) {
+		if ( 
+			isset( $_POST['asp_caching'], $_POST['asp_caching_nonce'] ) && 
+			wp_verify_nonce( $_POST['asp_caching_nonce'], 'asp_caching_nonce' )
+		) {
 			$values = array(
 				"caching"         => $_POST['caching'],
 				"caching_method"  => $_POST['caching_method'],
@@ -103,6 +107,7 @@ if (ASP_DEMO) $_POST = null;
 				<legend><?php echo __('Clear Cache'); ?></legend>
 				<div class="item">
 					<p class='infoMsg'><?php echo __('Will clear all the images and precached search phrases.', 'ajax-search-pro'); ?></p>
+					<input type="hidden" id="asp_delete_cache_request_nonce" value="<?php echo wp_create_nonce( 'asp_delete_cache_request_nonce' ); ?>">
 					<input type='submit' class="red" name='Clear Cache' id='clearcache' value='<?php echo esc_attr__('Clear the cache!', 'ajax-search-pro'); ?>'>
 				</div>
 			</fieldset>
@@ -125,9 +130,11 @@ if (ASP_DEMO) $_POST = null;
 				$('#clearcache').on('click', function () {
 					var r = confirm('<?php echo esc_html__('Do you really want to clear the cache?', 'ajax-search-pro'); ?>');
 					if (r !== true) return;
-					var button = $(this);
+					var button = $(this),
+						nonce = $('#asp_delete_cache_request_nonce').val();
 					var data = {
-						action: 'ajaxsearchpro_deletecache'
+						action: 'ajaxsearchpro_deletecache',
+						'asp_delete_cache_request_nonce': nonce
 					};
 					button.attr("disabled", true);
 					var oldVal = button.attr("value");

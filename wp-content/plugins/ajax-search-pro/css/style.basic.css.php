@@ -203,6 +203,7 @@ div.asp_w.ajaxsearchpro input[type="search"] {
 
 /* This clear class is bulletproof */
 .asp_clear {
+    display: block !important;
     clear: both !important;
     margin: 0 !important;
     padding: 0 !important;

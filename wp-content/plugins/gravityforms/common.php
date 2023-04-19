@@ -2849,7 +2849,9 @@ Content-Type: text/html;
 	 * @return string Returns the support URL.
 	 */
 	public static function get_support_url() {
-		return self::get_environment_setting( 'support_url' );
+		$env_handler = GFForms::get_service_container()->get( Gravity_Forms\Gravity_Forms\Environment_Config\GF_Environment_Config_Service_Provider::GF_ENVIRONMENT_CONFIG_HANDLER );
+
+		return $env_handler->get_support_url();
 	}
 
 	/**
@@ -2859,7 +2861,7 @@ Content-Type: text/html;
 	 *
 	 * @param string $name The env variable name (without the "gf_env_" prefix. i.e. support_url).
 	 *
-	 * @return string Returns the environmentment variable.
+	 * @return string Returns the environment variable.
 	 */
 	public static function get_environment_setting( $name ) {
 		$env_handler = GFForms::get_service_container()->get( Gravity_Forms\Gravity_Forms\Environment_Config\GF_Environment_Config_Service_Provider::GF_ENVIRONMENT_CONFIG_HANDLER );
@@ -7567,30 +7569,53 @@ Content-Type: text/html;
 		$applied_settings = wp_parse_args( $block_settings, $default_settings );
 
 		return array(
-			'primary'   => array(
+			'primary'               => array(
 				'color'              => $applied_settings['buttonPrimaryBackgroundColor'],
 				'color-rgb'          => self::darken_color( $applied_settings['buttonPrimaryBackgroundColor'], 0, 'rgb' ),
 				'color-contrast'     => $applied_settings['buttonPrimaryColor'],
 				'color-contrast-rgb' => self::darken_color( $applied_settings['buttonPrimaryColor'], 0, 'rgb' ),
-				'color-shade'        => self::darken_color( $applied_settings['buttonPrimaryBackgroundColor'], 10 ),
+				'color-darker'       => self::darken_color( $applied_settings['buttonPrimaryBackgroundColor'], 10 ),
+				'color-lighter'      => self::lighten_color( $applied_settings['buttonPrimaryBackgroundColor'], 10 ),
 			),
-			'secondary' => array(
+			'secondary'             => array(
 				'color'              => $applied_settings['inputBackgroundColor'],
 				'color-rgb'          => self::darken_color( $applied_settings['inputBackgroundColor'], 0, 'rgb' ),
 				'color-contrast'     => $applied_settings['inputColor'],
 				'color-contrast-rgb' => self::darken_color( $applied_settings['inputColor'], 0, 'rgb' ),
-				'color-shade'        => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
+				'color-darker'       => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
+				'color-lighter'      => self::lighten_color( $applied_settings['inputBackgroundColor'], 2 ),
 			),
-			'light'     => array(
-				'color'       => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['labelColor'], 0, 'rgb' ) ) . ', 0.1)',
-				'color-shade' => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputBorderColor'], 0, 'rgb' ) ) . ', 0.35)',
-				'color-tint'  => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
+			'outside-control-light' => array(
+				'color'         => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['labelColor'], 0, 'rgb' ) ) . ', 0.1)',
+				'color-rgb'     => self::darken_color( $applied_settings['labelColor'], 0, 'rgb' ),
+				'color-darker'  => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputBorderColor'], 0, 'rgb' ) ) . ', 0.35)',
+				'color-lighter' => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
 			),
-			'dark'      => array(
-				'color'       => $applied_settings['descriptionColor'],
-				'color-rgb'   => self::darken_color( $applied_settings['descriptionColor'], 0, 'rgb' ),
-				'color-shade' => $applied_settings['inputColor'],
-				'color-tint'  => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputColor'], 0, 'rgb' ) ) . ', 0.65)',
+			'outside-control-dark'  => array(
+				'color'         => $applied_settings['descriptionColor'],
+				'color-rgb'     => self::darken_color( $applied_settings['descriptionColor'], 0, 'rgb' ),
+				'color-darker'  => $applied_settings['inputColor'],
+				'color-lighter' => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputColor'], 0, 'rgb' ) ) . ', 0.65)',
+			),
+			'inside-control'        => array(
+				'color'              => $applied_settings['inputBackgroundColor'],
+				'color-rgb'          => self::darken_color( $applied_settings['inputBackgroundColor'], 0, 'rgb' ),
+				'color-contrast'     => $applied_settings['inputColor'],
+				'color-contrast-rgb' => self::darken_color( $applied_settings['inputColor'], 0, 'rgb' ),
+				'color-darker'       => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
+				'color-lighter'      => self::lighten_color( $applied_settings['inputBackgroundColor'], 2 ),
+			),
+			'inside-control-light'  => array(
+				'color'         => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['labelColor'], 0, 'rgb' ) ) . ', 0.1)',
+				'color-rgb'     => self::darken_color( $applied_settings['labelColor'], 0, 'rgb' ),
+				'color-darker'  => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputBorderColor'], 0, 'rgb' ) ) . ', 0.35)',
+				'color-lighter' => self::darken_color( $applied_settings['inputBackgroundColor'], 2 ),
+			),
+			'inside-control-dark'   => array(
+				'color'         => $applied_settings['descriptionColor'],
+				'color-rgb'     => self::darken_color( $applied_settings['descriptionColor'], 0, 'rgb' ),
+				'color-darker'  => $applied_settings['inputColor'],
+				'color-lighter' => 'rgba(' . implode( ', ', self::darken_color( $applied_settings['inputColor'], 0, 'rgb' ) ) . ', 0.65)',
 			),
 		);
 	}

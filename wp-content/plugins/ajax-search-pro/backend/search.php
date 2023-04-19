@@ -62,9 +62,9 @@ $_themes = Themes::get('search');
 $_sb_themes = Themes::get('search_buttons');
 
 if ( is_multisite() ) {
-    $search = wd_asp()->instances->get($_GET['asp_sid'] + 0, false, true);
+    $search = wd_asp()->instances->get(intval($_GET['asp_sid']), false, true);
 } else {
-    $search = wd_asp()->instances->get($_GET['asp_sid'] + 0);
+    $search = wd_asp()->instances->get(intval($_GET['asp_sid']));
 }
 if ( empty($search) ) {
     $s_id = $_GET['asp_sid'] + 0;
@@ -72,7 +72,7 @@ if ( empty($search) ) {
     <div id='wpdreams' class='asp-be wpdreams wrap'>
         <div class="wpdreams-box">
             <h1><?php echo __('Woops', 'ajax-search-pro'); ?></h1>
-            <div class="errorMsg"><?php echo sprintf( __('This search instance (id=%s) does not exists.', 'ajax-search-pro'), $s_id ); ?></div>
+            <div class="errorMsg"><?php echo esc_html(sprintf( __('This search instance (id=%s) does not exists.', 'ajax-search-pro'), $s_id )); ?></div>
         </div>
     </div>
     <?php
@@ -94,6 +94,7 @@ $sd = &$search['data'];
     <span><?php echo __('Preview', 'ajax-search-pro'); ?></span>
     <a name='refresh' class='refresh' searchid='0' href='#'><?php echo __('Refresh', 'ajax-search-pro'); ?></a>
     <a name='hide' class='maximise'><?php echo __('Show', 'ajax-search-pro'); ?></a>
+    <input type="hidden" id="asp_backend_preview_nonce" value="<?php echo wp_create_nonce( 'asp_backend_preview_nonce' ); ?>">
     <label><?php echo __('Background:', 'ajax-search-pro'); ?> </label><input type="text" id="bgcolorpicker" value="#ffffff"/>
 
     <div style="text-align: center;
@@ -135,7 +136,7 @@ $sd = &$search['data'];
         <p style="margin-top: 10px;"><?php echo __('<b>Copy</b> the shorcode generated:', 'ajax-search-pro'); ?><br></p><textarea>[wd_asp='search' id=1]</textarea>
     </div>
 </div>
-<div id='wpdreams' class='asp-be wpdreams wrap<?php echo isset($_COOKIE['asp-accessibility']) ? ' wd-accessible' : ''; ?>' style="min-width: 1280px;" data-searchid="<?php echo $_GET['asp_sid']; ?>">
+<div id='wpdreams' class='asp-be wpdreams wrap<?php echo isset($_COOKIE['asp-accessibility']) ? ' wd-accessible' : ''; ?>' style="min-width: 1280px;" data-searchid="<?php echo $search['id']; ?>">
 	<?php do_action('asp_admin_notices'); ?>
 
 	<!-- This forces custom Admin Notices location -->

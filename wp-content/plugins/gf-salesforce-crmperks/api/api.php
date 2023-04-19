@@ -6,7 +6,7 @@ if(!class_exists('vxg_salesforce_api')){
     
 class vxg_salesforce_api extends vxg_salesforce{
   
-  public $info='' ; // info
+public $info=array();
   public $error= "";
   public $timeout=30;
   public $api_version='v37.0';
@@ -639,7 +639,6 @@ if(!empty($fields_info)){
 
 $fields=$this->clean_sf_fields($fields,$fields_info);
 
-
 if(!empty($meta['owner'])){
     $fields['disable_rules']=1;
 }  
@@ -1255,14 +1254,18 @@ foreach($fixed as $field_key=>$field_val){
    if(in_array($type, array("datetime",'date') ) ){
      
      $date_val=strtotime(str_replace(array("/"),"-",$field_val));
-
      if( $type == "date"  ){
-        /// if(strpos($field_val,'+') === false){$date_val=$date_val.'+00';}
-  $field_val=date('Y-m-d',$date_val); 
+        if(strpos($field_val,'+00:00') !== false){
+              $offset=get_option('gmt_offset');
+     $offset=$offset*3600; 
+$date_val+= $offset;  //convert utc datetime to local timezone for getting exatct date
+        } 
+        
+  $field_val=date('Y-m-d',$date_val);  
   }else{ 
     $offset=get_option('gmt_offset');
      $offset=$offset*3600; 
-     if(strpos($field_val,'+') === false){ // convert to utc if no timezone(+) does not exist with time string
+     if(strpos($field_val,'+') === false || strpos($field_val,'-') === false){ // convert to utc if no timezone(+) does not exist with time string
      $date_val-= $offset;   
      }  
   $field_val=date('c',$date_val); 

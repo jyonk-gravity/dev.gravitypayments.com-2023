@@ -67,7 +67,6 @@ include('class/wd_post_type_sortable.class.php');
 include('class/wd_taxterm_search_callback.class.php');
 include('class/wd_user_select.class.php');
 include('class/wd_usermeta.class.php');
-//include('class/class-wd-frontfilters.php');
 
 if ( wd_asp()->manager->getContext() === "backend" )
     add_filter('admin_body_class', 'asp_admin_bclass');

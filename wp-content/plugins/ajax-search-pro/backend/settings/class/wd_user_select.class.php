@@ -59,7 +59,7 @@ if (!class_exists("wd_UserSelect")) {
                             <?php $this->printSelectedUsers(); ?>
                         </ul>
                     </div>
-
+                    <input type="hidden" class="wd_user_select_nonce" value="<?php echo wp_create_nonce( 'wd_user_select_nonce' ); ?>">
                     <input type='hidden' value="<?php echo base64_encode(json_encode($this->args)); ?>" class="wd_args">
                     <input isparam=1 type='hidden' value="<?php echo (is_array($this->data) && isset($this->data['value'])) ? $this->data['value'] : $this->data; ?>" name='<?php echo $this->name; ?>'>
                 </fieldset>
@@ -97,32 +97,38 @@ if (!class_exists("wd_UserSelect")) {
         }
 
         public static function searchUsers() {
-            $phrase = trim($_POST['wd_phrase']);
-            $data = json_decode(base64_decode($_POST['wd_args']), true);
-            $user_query = new WP_User_Query( array( 'search' => "*" . $phrase . "*", "number" => 100 ) );
+            if ( 
+                isset($_POST['wd_phrase'], $_POST['wd_user_select_nonce']) &&
+                current_user_can('administrator') && 
+                wp_verify_nonce( $_POST["wd_user_select_nonce"], 'wd_user_select_nonce' ) 
+            ) {
+                $phrase = trim($_POST['wd_phrase']);
+                $data = json_decode(base64_decode($_POST['wd_args']), true);
+                $user_query = new WP_User_Query( array( 'search' => "*" . $phrase . "*", "number" => 100 ) );
 
-			Ajax::prepareHeaders();
-            if ( $data['show_all_users_option'] == 1 )
-                echo '<li class="ui-state-default termlevel-0"  user_id="-1">' . __('All users', 'ajax-search-pro') . '</b><a class="deleteIcon"></a></li>';
-            echo '<li class="ui-state-default"  user_id="0">' . __('Anonymous user (no user)', 'ajax-search-pro') . '</b><a class="deleteIcon"></a></li>
-                  <li class="ui-state-default"  user_id="-2">' . __('Current logged in user', 'ajax-search-pro') . '</b><a class="deleteIcon"></a></li>';
+                Ajax::prepareHeaders();
+                if ( $data['show_all_users_option'] == 1 )
+                    echo '<li class="ui-state-default termlevel-0"  user_id="-1">' . __('All users', 'ajax-search-pro') . '</b><a class="deleteIcon"></a></li>';
+                echo '<li class="ui-state-default"  user_id="0">' . __('Anonymous user (no user)', 'ajax-search-pro') . '</b><a class="deleteIcon"></a></li>
+                    <li class="ui-state-default"  user_id="-2">' . __('Current logged in user', 'ajax-search-pro') . '</b><a class="deleteIcon"></a></li>';
 
-            // User Loop
-            $user_results = $user_query->get_results();
-            if ( ! empty( $user_results ) ) {
-                echo "Or select users:";
-                foreach ( $user_results as $user ) {
-                    $checkbox = "";
-                    if ($data['show_checkboxes'] == 1)
-                        $checkbox = '<input style="float:left;" type="checkbox" value="' . $user->ID . '" checked="checked"/>';
-                    echo '
-                    <li class="ui-state-default" user_id="' . $user->ID . '">' . $user->user_login . ' ('.$user->display_name.')
-                        '.$checkbox.'
-                    <a class="deleteIcon"></a></li>
-                ';
+                // User Loop
+                $user_results = $user_query->get_results();
+                if ( ! empty( $user_results ) ) {
+                    echo "Or select users:";
+                    foreach ( $user_results as $user ) {
+                        $checkbox = "";
+                        if ($data['show_checkboxes'] == 1)
+                            $checkbox = '<input style="float:left;" type="checkbox" value="' . $user->ID . '" checked="checked"/>';
+                        echo '
+                        <li class="ui-state-default" user_id="' . $user->ID . '">' . $user->user_login . ' ('.$user->display_name.')
+                            '.$checkbox.'
+                        <a class="deleteIcon"></a></li>
+                    ';
+                    }
+                } else {
+                    echo __('No users found for term:', 'ajax-search-pro') . ' <b>' . esc_html($phrase) .'</b>';
                 }
-            } else {
-                echo __('No users found for term:', 'ajax-search-pro') . ' <b>' . $phrase .'</b>';
             }
             die();
         }

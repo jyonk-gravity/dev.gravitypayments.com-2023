@@ -73,6 +73,7 @@ if (ASP_DEMO) $_POST = null;
                 <span class="small-loading" style="display:none; vertical-align: middle;"></span>
                 <p class="descMsg" style="text-align: left;margin-top: 10px;"><?php echo __('<b>NOTICE:</b> After deactivation there is a <b>30 minute</b> wait time until you can re-activate the same purchase code to prevent malicious activity.', 'ajax-search-pro'); ?></p>
             </div>
+            <input type="hidden" id="asp_license_request_nonce" value="<?php echo wp_create_nonce( 'asp_license_request_nonce' ); ?>">
 			<?php endif; ?>
 		</div>
         <div class="clear"></div>

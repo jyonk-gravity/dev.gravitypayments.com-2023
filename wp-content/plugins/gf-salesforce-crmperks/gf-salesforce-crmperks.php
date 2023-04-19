@@ -2,9 +2,9 @@
 /**
 * Plugin Name: WP Gravity Forms Salesforce
 * Description: Integrates Gravity Forms with Salesforce allowing form submissions to be automatically sent to your Salesforce account 
-* Version: 1.3.7
+* Version: 1.3.8
 * Requires at least: 4.7
-* Tested up to: 6.1
+* Tested up to: 6.2
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/gravity-forms-plugins/gravity-forms-salesforce-plugin/
 * Author: CRM Perks.
@@ -25,7 +25,7 @@ class vxg_salesforce {
   public  $crm_name = 'salesforce';
   public  $id = 'vxg_salesforce';
   public  $domain = 'vxg-sales';
-  public  $version = "1.3.7";
+  public  $version = "1.3.8";
   public  $update_id = '30001';
   public  $min_gravityforms_version = '1.3.9';
   public $type = 'vxg_salesforce_pro';
@@ -110,7 +110,11 @@ require_once(self::$path . "includes/plugin-pages.php");
   add_action('gform_entry_created', array($this, 'gf_entry_created_before'), 99, 2); 
   //added via GF API
   add_action("gform_post_add_entry", array($this, 'gf_entry_created_before'), 40, 2);
-
+    //update entry
+  add_action('gform_after_update_entry', array($this, 'update_entry'),10,2); 
+  //trash , restore entry
+  add_action('gform_update_status', array($this, 'entry_status'),10,3);
+  
 if(self::$is_pr){
 //  add_action("gform_post_payment_status", array($this, 'gf_entry_paid'), 10, 2); //$feed,$entry
 add_action("gform_post_payment_completed", array($this, 'gf_entry_paid_normal'), 10, 2); //$entry,$pay_info
@@ -1287,6 +1291,45 @@ public function do_actions(){
     public function gf_entry_created_after($entry, $form){
       $this->gf_entry_created($entry, $form,'after_submit');  
     }
+    /**
+    * Send entry to crm on update
+    * 
+    * @param mixed $form
+    * @param mixed $lead_id
+    */
+public function update_entry($form,$lead_id){
+
+    $meta=get_option($this->type.'_settings',array());
+      if(!empty($meta['update']) || isset($_POST[$this->id.'_update']) ){
+  $entry=$this->get_gf_entry($lead_id);
+ 
+    $push=$this->push($entry,$form,'update');
+        if(!empty($push['msg']) && is_admin()){
+  $this->screen_msg($push['msg'],$push['class']);  
+  }
+}
+
+}
+   public function entry_status($id,$status,$old){
+             $meta=get_option($this->type.'_settings',array());
+         $option = '';
+             if($status == 'active'){
+              $option= 'restore';   
+             }else if($status == 'trash'){
+                 $option='delete';
+             }
+         
+      if( !empty($option) && !empty($meta[$option])){
+        //  $option= $option == 'restore' ? '' : $option;
+        $entry=$this->get_gf_entry($id);
+        $form=array();
+        if(!empty($entry['form_id'])){
+        $form = RGFormsModel::get_form_meta($entry['form_id']);    
+        }
+       $this->push($entry,$form,$option); 
+      } 
+  
+  }
   /**
   * gravity forms entry created
   * 
@@ -1312,9 +1355,11 @@ public function do_actions(){
      $this->gf_entry_paid($entry,$pay_info,'subscription_paid'); 
   }
    public function gf_entry_paid($entry,$pay_info,$event='paid'){
+       //vx_log(json_encode($entry));
     // if($entry['payment_status'] == 'Paid'){
         $entry_id=$this->post('id',$entry);
         $form=array('id'=>$entry['form_id'],'title'=>'form id '.$entry['form_id']);
+        if(class_exists('GFAPI')){ $form = GFAPI::get_form( $entry['form_id'] ); }
    
         if($this->do_actions()){
      do_action('vx_addons_save_entry',$entry_id,$entry,'gf',$form);   
@@ -1731,7 +1776,7 @@ $this->send_error_email($info_data,$entry,$form);
   }    
   } 
   //insert log
-  $arr=array("object"=>$feed["object"],"form_id"=>$form_id,"status"=>$status,"entry_id"=>$entry_id,"crm_id"=>$id,"meta"=>$error,"time"=>date('Y-m-d H:i:s'),"data"=>$temp,"response"=>$this->post('response',$res),"extra"=>$this->post('extra',$res),"feed_id"=>$this->post('id',$feed),"link"=>$this->post('link',$res),'parent_id'=>$parent_id,'event'=>$event);
+  $arr=array("object"=>$feed["object"],"form_id"=>$form_id,"status"=>$status,"entry_id"=>$entry_id,"crm_id"=>$id,"meta"=>$error,"time"=>date('Y-m-d H:i:s'),"data"=>$this->post('data',$res),"response"=>$this->post('response',$res),"extra"=>$this->post('extra',$res),"feed_id"=>$this->post('id',$feed),"link"=>$this->post('link',$res),'parent_id'=>$parent_id,'event'=>$event);
 
   $settings=get_option($this->type.'_settings',array());
   if($this->post('disable_log',$settings) !="yes"){ 

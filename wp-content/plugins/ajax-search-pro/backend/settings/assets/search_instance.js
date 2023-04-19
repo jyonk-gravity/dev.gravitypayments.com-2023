@@ -1289,6 +1289,7 @@ jQuery(function($){
         var $this = $(this).parent();
         var id = $('#wpdreams').data('searchid');
         var loading = $('.big-loading', $this);
+        var nonce = $('#asp_backend_preview_nonce').val();
 
         ASP.instances.destroy();
 
@@ -1297,6 +1298,7 @@ jQuery(function($){
         loading.removeClass('hidden');
         var data = {
             action: 'ajaxsearchpro_preview',
+            asp_backend_preview_nonce: nonce,
             asid: id,
             formdata: $('form[name="asp_data"]').serialize()
         };

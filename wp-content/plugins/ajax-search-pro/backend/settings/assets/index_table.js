@@ -89,6 +89,7 @@ jQuery(function ($) {
             'url': ajaxurl,
             'data': {
                 'action': 'asp_indextable_get_stats',
+                'asp_it_request_nonce': $('#asp_it_request_nonce').val(),
                 'blog_id': blog,
                 'data': $('#asp_indextable_settings').serialize(),
             },
@@ -150,6 +151,7 @@ jQuery(function ($) {
             asp_index_action: action,
             blog_id: blog,
             data: $('#asp_indextable_settings').serialize(),
+            asp_it_request_nonce: $('#asp_it_request_nonce').val(),
             last_request_duration: lastRequestDuration,
             longest_request_duration: longestRequestDuration
         };
@@ -172,7 +174,10 @@ jQuery(function ($) {
         defragmenting = true;
         $.ajax({
             'url': ajaxurl,
-            'data': {'action': 'asp_indextable_optimize'},
+            'data': {
+                'action': 'asp_indextable_optimize',
+                'asp_it_request_nonce': $('#asp_it_request_nonce').val(),
+            },
             'method': 'POST',
             'timeout': 60000
         }).done(function(r){

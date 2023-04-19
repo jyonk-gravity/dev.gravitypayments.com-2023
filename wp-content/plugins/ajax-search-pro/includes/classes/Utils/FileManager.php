@@ -180,7 +180,7 @@ class FileManager {
 			foreach ( $directories as $directory ) {
 				if ( !$wp_filesystem->is_dir( $directory ) ) {
 					if ( !$wp_filesystem->mkdir( $directory, 0755 ) ) {
-						mkdir( $directory, '0777', true );
+						@mkdir( $directory, '0777', true );
 					}
 					if ( $wp_filesystem->is_dir( $directory ) && !@chmod($directory, 0755) ) {
 						if ( !@chmod($directory, 0664 ) ){
@@ -192,7 +192,7 @@ class FileManager {
 		} else {
 			foreach ( $directories as $directory ) {
 				if ( !is_dir($directory) ) {
-					if ( !mkdir($directory, '0777', true) ) {
+					if ( !@mkdir($directory, '0777', true) ) {
 						return false;
 					} else {
 						if ( !@chmod($directory, 0755) ) {

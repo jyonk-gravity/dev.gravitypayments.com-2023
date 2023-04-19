@@ -91,6 +91,7 @@ if (!class_exists("wpdreamsSelectTags")) {
                             <polygon id="x-mark-icon" points="438.393,374.595 319.757,255.977 438.378,137.348 374.595,73.607 255.995,192.225 137.375,73.622 73.607,137.352 192.246,255.983 73.622,374.625 137.352,438.393 256.002,319.734 374.652,438.378 "></polygon>
                         </svg>
                     </div>
+                    <input type="hidden" class="wd_tag_search_nonce" value="<?php echo wp_create_nonce( 'wd_tag_search_nonce' ); ?>">
                     <input type="text" value="" placeholder="<?php esc_attr_e('Search for tags', 'ajax-search-pro'); ?>" class="wd_tagSelectSearch">
                     <div class="wd_tagSearchResults"></div>
                 </div>
@@ -223,17 +224,23 @@ if (!class_exists("wpdreamsSelectTags")) {
         }
 
         static function searchTag() {
-            $phrase = $_POST["wd_tag_phrase"];
-            $tags = get_terms(array("post_tag"), array('search' => $phrase, 'number' => 10));
-            $ret = "";
-            if ( count($tags) > 0 )
-                foreach ($tags as $tag) {
-                    $ret .= "<p>".$tag->name."<span termid='".$tag->term_id."'>>>" . __('USE', 'ajax-search-pro') . "</span></p>";
-                }
-            else
-                $ret = "No tags found for this phrase";
-			Ajax::prepareHeaders();
-            print "!!WDSTART!!" . $ret . "!!WDEND!!";
+            if ( 
+                isset($_POST['wd_tag_phrase'], $_POST['wd_tag_search_nonce']) &&
+                current_user_can('administrator') && 
+                wp_verify_nonce( $_POST["wd_tag_search_nonce"], 'wd_tag_search_nonce' ) 
+            ) {
+                $ret = "";
+                $phrase = $_POST["wd_tag_phrase"];
+                $tags = get_terms(array("post_tag"), array('search' => $phrase, 'number' => 10));
+                if ( count($tags) > 0 )
+                    foreach ($tags as $tag) {
+                        $ret .= "<p>".$tag->name."<span termid='".$tag->term_id."'>>>" . __('USE', 'ajax-search-pro') . "</span></p>";
+                    }
+                else
+                    $ret = "No tags found for this phrase";
+                Ajax::prepareHeaders();
+                print "!!WDSTART!!" . $ret . "!!WDEND!!";
+            }
             die();
         }
     }
