@@ -2,9 +2,9 @@
 /**
 * Plugin Name: WP Gravity Forms Salesforce
 * Description: Integrates Gravity Forms with Salesforce allowing form submissions to be automatically sent to your Salesforce account 
-* Version: 1.3.8
+* Version: 1.3.9
 * Requires at least: 4.7
-* Tested up to: 6.2
+* Tested up to: 6.3
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/gravity-forms-plugins/gravity-forms-salesforce-plugin/
 * Author: CRM Perks.
@@ -25,7 +25,7 @@ class vxg_salesforce {
   public  $crm_name = 'salesforce';
   public  $id = 'vxg_salesforce';
   public  $domain = 'vxg-sales';
-  public  $version = "1.3.8";
+  public  $version = "1.3.9";
   public  $update_id = '30001';
   public  $min_gravityforms_version = '1.3.9';
   public $type = 'vxg_salesforce_pro';
@@ -1257,7 +1257,7 @@ public function do_actions(){
   if(!class_exists("vxg_salesforce_api"))
   require_once($this->get_base_path()."api/api.php");
      
-  $this->api=$api= new vxg_salesforce_api($crm);
+  $api= new vxg_salesforce_api($crm);
   
   return $api;
   }
@@ -1673,18 +1673,19 @@ if(!empty($data['note_fields']) && is_array($data['note_fields'])){
           $data['note_val']='{'.implode("}\n{",$data['note_fields'])."}\n";
 }
 if(!empty($data['note_val'])){
-    $entry_note=$this->process_tags($entry,$form,$data['note_val']);
-    $entry_note=str_replace("'", "", $entry_note);
-    $entry_note=esc_html($entry_note);
-           if(empty($entry_note_title)){
+    $entry_note=$data['note_val'];
            $pos=strpos($entry_note,'?');
-               if($pos > 0){
-              $entry_note_title=substr($entry_note,0,$pos);     
+               if($pos > 0){ 
               $entry_note=substr($entry_note,$pos+1);     
                }else{    
-            $entry_note_title=substr($entry_note,0,20);   
-           } }
+            $pos=20;  
+           } 
+           $entry_note_title=substr($entry_note,0,$pos);
+           $entry_note_title=$this->process_tags($entry,$form,$entry_note_title);
+           $entry_note=$this->process_tags($entry,$form,$entry_note);
           if(!empty($entry_note)){
+    $entry_note=str_replace("'", "", $entry_note);
+    $entry_note=esc_html($entry_note);    
      $feed['__vx_entry_note']=array('Title'=>$entry_note_title,'Body'=>$entry_note);      
           }
 }

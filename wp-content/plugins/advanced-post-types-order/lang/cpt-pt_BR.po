@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Advanced Post Types Order\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-05 12:28+0200\n"
-"PO-Revision-Date: 2018-03-05 12:28+0200\n"
+"PO-Revision-Date: 2023-10-02 10:31+0300\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: http://nsp-code.com\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-SearchPath-0: ..\n"
 
 #: ../include/apto_admin_functions-class.php:90
@@ -25,6 +25,8 @@ msgid ""
 "All interfaces are set to hide, at least a visible is required. You can "
 "change tht from Settings"
 msgstr ""
+"Todas as interfaces estão definidas como ocultas, pelo menos uma visível é "
+"necessária. Você pode alterar isso em Configurações"
 
 #: ../include/apto_admin_functions-class.php:342
 #, fuzzy
@@ -34,17 +36,17 @@ msgstr "Advanced Post Types Order plugin é inativo, introduza o seu"
 #: ../include/apto_admin_functions-class.php:532
 #: ../include/apto_admin_functions-class.php:593
 msgid "Notice: There is"
-msgstr ""
+msgstr "Aviso: Há"
 
 #: ../include/apto_admin_functions-class.php:532
 #: ../include/apto_admin_functions-class.php:593
 msgid "another"
-msgstr ""
+msgstr "outro"
 
 #: ../include/apto_admin_functions-class.php:532
 #: ../include/apto_admin_functions-class.php:593
 msgid "similar sort"
-msgstr ""
+msgstr "tipo semelhante"
 
 #: ../include/apto_functions-class.php:1907
 msgid "Subscriber"
@@ -72,7 +74,7 @@ msgstr "Administrador"
 #: ../include/apto_functions-class.php:2336
 #, php-format
 msgid "Use commas instead of %s to separate excluded terms."
-msgstr ""
+msgstr "Use vírgulas em vez de %s para separar termos excluídos."
 
 #: ../include/apto_functions-class.php:2519
 msgid "Previous Post"
@@ -99,10 +101,12 @@ msgid ""
 "WPML: The Sort Rules couldn't be translated automatically. You need to set/"
 "translate this manually for"
 msgstr ""
+"WPML: Não foi possível traduzir automaticamente as regras de classificação. "
+"Você precisa definir/traduzir isso manualmente para"
 
 #: ../include/apto_interface-class.php:335
 msgid "Click to toggle"
-msgstr ""
+msgstr "Clique para alternar"
 
 #: ../include/apto_interface-class.php:336
 #: ../include/apto_interface-class.php:676
@@ -112,7 +116,7 @@ msgstr "Salvar configuração"
 
 #: ../include/apto_interface-class.php:347
 msgid "Query Rules"
-msgstr ""
+msgstr "Regras de consulta"
 
 #: ../include/apto_interface-class.php:348
 msgid ""
@@ -120,6 +124,9 @@ msgid ""
 "what to show on the following sort list and the order will apply on front "
 "side."
 msgstr ""
+"Crie um conjunto de regras de critérios que correspondam à sua consulta. "
+"Isso determinará o que mostrar na lista de classificação a seguir e a ordem "
+"que será aplicada na parte frontal."
 
 #: ../include/apto_interface-class.php:349
 msgid ""
@@ -1013,8 +1020,9 @@ msgstr ""
 #~ "\">Try again</a>"
 
 #~ msgid ""
-#~ "An Unexpected HTTP Error occurred during the API request.</p> <p><a href="
-#~ "\"?\" onclick=\"document.location.reload(); return false;\">Try again</a>"
+#~ "An Unexpected HTTP Error occurred during the API request.</p> <p><a "
+#~ "href=\"?\" onclick=\"document.location.reload(); return false;\">Try "
+#~ "again</a>"
 #~ msgstr ""
 #~ "Um erro HTTP inesperado ocorreu durante a solicitação da API. </p> <p><a "
 #~ "href=\"?\" onclick=\"document.location.reload(); return false;\">Tente "

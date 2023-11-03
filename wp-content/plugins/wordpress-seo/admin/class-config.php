@@ -5,8 +5,10 @@
  * @package WPSEO\Admin
  */
 
-use Yoast\WP\SEO\Config\Schema_Types;
+use Yoast\WP\SEO\Integrations\Academy_Integration;
 use Yoast\WP\SEO\Integrations\Settings_Integration;
+use Yoast\WP\SEO\Integrations\Support_Integration;
+use Yoast\WP\SEO\Conditionals\WooCommerce_Conditional;
 
 /**
  * Class WPSEO_Admin_Pages.
@@ -34,6 +36,7 @@ class WPSEO_Admin_Pages {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'init' ], 20 );
+
 		$this->asset_manager = new WPSEO_Admin_Asset_Manager();
 	}
 
@@ -43,8 +46,8 @@ class WPSEO_Admin_Pages {
 	public function init() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reason: We are not processing form information.
 		$page = isset( $_GET['page'] ) && is_string( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
-		if ( $page === Settings_Integration::PAGE ) {
-			// Bail, this is managed in the Settings_Integration.
+		if ( \in_array( $page, [ Settings_Integration::PAGE, Academy_Integration::PAGE, Support_Integration::PAGE ], true ) ) {
+			// Bail, this is managed in the applicable integration.
 			return;
 		}
 
@@ -78,16 +81,21 @@ class WPSEO_Admin_Pages {
 		wp_enqueue_script( 'dashboard' );
 		wp_enqueue_script( 'thickbox' );
 
-		$alert_dismissal_action = YoastSEO()->classes->get( \Yoast\WP\SEO\Actions\Alert_Dismissal_Action::class );
-		$dismissed_alerts       = $alert_dismissal_action->all_dismissed();
+		$alert_dismissal_action  = YoastSEO()->classes->get( \Yoast\WP\SEO\Actions\Alert_Dismissal_Action::class );
+		$dismissed_alerts        = $alert_dismissal_action->all_dismissed();
+		$woocommerce_conditional = new WooCommerce_Conditional();
 
 		$script_data = [
 			'userLanguageCode'               => WPSEO_Language_Utils::get_language( \get_user_locale() ),
 			'dismissedAlerts'                => $dismissed_alerts,
 			'isRtl'                          => is_rtl(),
 			'isPremium'                      => YoastSEO()->helpers->product->is_premium(),
+			'isWooCommerceActive'            => $woocommerce_conditional->is_met(),
+			'currentPromotions'              => YoastSEO()->classes->get( Yoast\WP\SEO\Promotions\Application\Promotion_Manager::class )->get_current_promotions(),
 			'webinarIntroSettingsUrl'        => WPSEO_Shortlinker::get( 'https://yoa.st/webinar-intro-settings' ),
 			'webinarIntroFirstTimeConfigUrl' => $this->get_webinar_shortlink(),
+			'linkParams'                     => WPSEO_Shortlinker::get_query_params(),
+			'pluginUrl'                      => \plugins_url( '', \WPSEO_FILE ),
 		];
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reason: We are not processing form information.

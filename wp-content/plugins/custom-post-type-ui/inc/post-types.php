@@ -87,7 +87,7 @@ function cptui_post_type_tabs( $tabs = [], $current_page = '' ) {
 		$tabs['tabs']       = [];
 		// Start out with our basic "Add new" tab.
 		$tabs['tabs']['add'] = [
-			'text'          => __( 'Add New Post Type', 'custom-post-type-ui' ),
+			'text'          => esc_html__( 'Add New Post Type', 'custom-post-type-ui' ),
 			'classes'       => $classes,
 			'url'           => cptui_admin_url( 'admin.php?page=cptui_manage_' . $current_page ),
 			'aria-selected' => 'false',
@@ -105,21 +105,21 @@ function cptui_post_type_tabs( $tabs = [], $current_page = '' ) {
 				$classes[] = 'nav-tab-active';
 			}
 			$tabs['tabs']['edit'] = [
-				'text'          => __( 'Edit Post Types', 'custom-post-type-ui' ),
+				'text'          => esc_html__( 'Edit Post Types', 'custom-post-type-ui' ),
 				'classes'       => $classes,
 				'url'           => esc_url( add_query_arg( [ 'action' => 'edit' ], cptui_admin_url( 'admin.php?page=cptui_manage_' . $current_page ) ) ),
 				'aria-selected' => ! empty( $action ) ? 'true' : 'false',
 			];
 
 			$tabs['tabs']['view'] = [
-				'text'          => __( 'View Post Types', 'custom-post-type-ui' ),
+				'text'          => esc_html__( 'View Post Types', 'custom-post-type-ui' ),
 				'classes'       => [ 'nav-tab' ], // Prevent notices.
 				'url'           => esc_url( cptui_admin_url( 'admin.php?page=cptui_listings#post-types' ) ),
 				'aria-selected' => 'false',
 			];
 
 			$tabs['tabs']['export'] = [
-				'text'          => __( 'Import/Export Post Types', 'custom-post-type-ui' ),
+				'text'          => esc_html__( 'Import/Export Post Types', 'custom-post-type-ui' ),
 				'classes'       => [ 'nav-tab' ], // Prevent notices.
 				'url'           => esc_url( cptui_admin_url( 'admin.php?page=cptui_tools' ) ),
 				'aria-selected' => 'false',
@@ -148,6 +148,13 @@ function cptui_manage_post_types() {
 	<div class="wrap <?php echo esc_attr( $tab_class ); ?>">
 
 	<?php
+	/**
+	 * Fires immediately after wrap div started on all of the cptui admin pages.
+	 *
+	 * @since 1.14.0
+	 */
+	do_action( 'cptui_inside_wrap' );
+
 	/**
 	 * Fires right inside the wrap div for the post type editor screen.
 	 *
@@ -204,7 +211,7 @@ function cptui_manage_post_types() {
 			 * @param string $value Text to use for the button.
 			 */
 			?>
-			<input type="submit" class="button-secondary" id="cptui_select_post_type_submit" name="cptui_select_post_type_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_select', __( 'Select', 'custom-post-type-ui' ) ) ); ?>" />
+			<input type="submit" class="button-secondary" id="cptui_select_post_type_submit" name="cptui_select_post_type_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_select', esc_attr__( 'Select', 'custom-post-type-ui' ) ) ); ?>" />
 		</form>
 		<?php
 
@@ -222,7 +229,7 @@ function cptui_manage_post_types() {
 	<form class="posttypesui" method="post" action="<?php echo esc_url( cptui_get_post_form_action( $ui ) ); ?>">
 		<div class="postbox-container">
 		<div id="poststuff">
-			<div class="cptui-section postbox">
+			<div id="cptui_panel_pt_basic_settings" class="cptui-section postbox">
 				<div class="postbox-header">
 					<h2 class="hndle ui-sortable-handle">
 						<span><?php esc_html_e( 'Basic settings', 'custom-post-type-ui' ); ?></span>
@@ -262,7 +269,7 @@ function cptui_manage_post_types() {
 							]
 						);
 						echo '<p class="cptui-slug-details">';
-							esc_html_e( 'Slugs should only contain alphanumeric, latin characters. Underscores should be used in place of spaces. Set "Custom Rewrite Slug" field to make slug use dashes for URLs.', 'custom-post-type-ui' );
+							esc_html_e( 'Slugs may only contain lowercase alphanumeric characters, dashes, and underscores.', 'custom-post-type-ui' );
 						echo '</p>';
 
 						if ( 'edit' === $tab ) {
@@ -341,7 +348,7 @@ function cptui_manage_post_types() {
 							 * @param string $value Text to use for the button.
 							 */
 							?>
-						<input type="submit" class="button-primary" name="cpt_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_edit', __( 'Save Post Type', 'custom-post-type-ui' ) ) ); ?>" />
+						<input type="submit" class="button-primary" name="cpt_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_edit', esc_attr__( 'Save Post Type', 'custom-post-type-ui' ) ) ); ?>" />
 							<?php
 
 							/**
@@ -352,7 +359,7 @@ function cptui_manage_post_types() {
 							 * @param string $value Text to use for the button.
 							 */
 							?>
-						<input type="submit" class="button-secondary cptui-delete-top" name="cpt_delete" id="cpt_submit_delete" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_delete', __( 'Delete Post Type', 'custom-post-type-ui' ) ) ); ?>" />
+						<input type="submit" class="button-secondary cptui-delete-top" name="cpt_delete" id="cpt_submit_delete" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_delete', esc_attr__( 'Delete Post Type', 'custom-post-type-ui' ) ) ); ?>" />
 						<?php } else { ?>
 							<?php
 
@@ -364,7 +371,7 @@ function cptui_manage_post_types() {
 							 * @param string $value Text to use for the button.
 							 */
 							?>
-						<input type="submit" class="button-primary" name="cpt_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_add', __( 'Add Post Type', 'custom-post-type-ui' ) ) ); ?>" />
+						<input type="submit" class="button-primary" name="cpt_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_add', esc_attr__( 'Add Post Type', 'custom-post-type-ui' ) ) ); ?>" />
 							<?php
 						}
 
@@ -381,7 +388,7 @@ function cptui_manage_post_types() {
 					</div>
 				</div>
 			</div>
-			<div class="cptui-section cptui-labels postbox">
+			<div id="cptui_panel_pt_additional_labels" class="cptui-section cptui-labels postbox">
 				<div class="postbox-header">
 					<h2 class="hndle ui-sortable-handle">
 						<span><?php esc_html_e( 'Additional labels', 'custom-post-type-ui' ); ?></span>
@@ -900,7 +907,7 @@ function cptui_manage_post_types() {
 					</div>
 				</div>
 			</div>
-			<div class="cptui-section cptui-settings postbox">
+			<div id="cptui_panel_pt_advanced_settings" class="cptui-section cptui-settings postbox">
 				<div class="postbox-header">
 					<h2 class="hndle ui-sortable-handle">
 						<span><?php esc_html_e( 'Settings', 'custom-post-type-ui' ); ?></span>
@@ -1703,7 +1710,7 @@ function cptui_manage_post_types() {
 							unset( $add_taxes['nav_menu'], $add_taxes['post_format'] );
 							foreach ( $add_taxes as $add_tax ) {
 
-								$core_label = in_array( $add_tax->name, [ 'category', 'post_tag' ], true ) ? __( '(WP Core)', 'custom-post-type-ui' ) : '';
+								$core_label = in_array( $add_tax->name, [ 'category', 'post_tag' ], true ) ? esc_html__( '(WP Core)', 'custom-post-type-ui' ) : '';
 								echo $ui->get_check_input( // phpcs:ignore.
 									[
 										'checkvalue' => esc_attr( $add_tax->name ),
@@ -1746,7 +1753,7 @@ function cptui_manage_post_types() {
 					 * @param string $value Text to use for the button.
 					 */
 				?>
-					<input type="submit" class="button-primary" name="cpt_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_edit', __( 'Save Post Type', 'custom-post-type-ui' ) ) ); ?>" />
+					<input type="submit" class="button-primary" name="cpt_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_edit', esc_attr__( 'Save Post Type', 'custom-post-type-ui' ) ) ); ?>" />
 					<?php
 
 					/**
@@ -1757,7 +1764,7 @@ function cptui_manage_post_types() {
 					 * @param string $value Text to use for the button.
 					 */
 				?>
-					<input type="submit" class="button-secondary cptui-delete-bottom" name="cpt_delete" id="cpt_submit_delete" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_delete', __( 'Delete Post Type', 'custom-post-type-ui' ) ) ); ?>" />
+					<input type="submit" class="button-secondary cptui-delete-bottom" name="cpt_delete" id="cpt_submit_delete" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_delete', esc_attr__( 'Delete Post Type', 'custom-post-type-ui' ) ) ); ?>" />
 				<?php
 			} else {
 
@@ -1769,8 +1776,12 @@ function cptui_manage_post_types() {
 					 * @param string $value Text to use for the button.
 					 */
 				?>
-					<input type="submit" class="button-primary" name="cpt_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_add', __( 'Add Post Type', 'custom-post-type-ui' ) ) ); ?>" />
-			<?php } ?>
+					<input type="submit" class="button-primary" name="cpt_submit" value="<?php echo esc_attr( apply_filters( 'cptui_post_type_submit_add', esc_attr__( 'Add Post Type', 'custom-post-type-ui' ) ) ); ?>" />
+				<?php
+			}
+				$ajax_nonce = wp_create_nonce( 'closedpostboxes' );
+			?>
+			<input type="hidden" id="closedpostboxesnonce" value="<?php echo esc_attr( $ajax_nonce ); ?>" />
 			</p>
 		</div>
 	</form>
@@ -1897,7 +1908,7 @@ function cptui_delete_post_type( $data = [] ) {
 	}
 
 	if ( empty( $data['name'] ) ) {
-		return cptui_admin_notices( 'error', '', false, __( 'Please provide a post type to delete', 'custom-post-type-ui' ) );
+		return cptui_admin_notices( 'error', '', false, esc_html__( 'Please provide a post type to delete', 'custom-post-type-ui' ) );
 	}
 
 	/**
@@ -1970,7 +1981,7 @@ function cptui_update_post_type( $data = [] ) {
 
 	// They need to provide a name.
 	if ( empty( $data['cpt_custom_post_type']['name'] ) ) {
-		return cptui_admin_notices( 'error', '', false, __( 'Please provide a post type name', 'custom-post-type-ui' ) );
+		return cptui_admin_notices( 'error', '', false, esc_html__( 'Please provide a post type name', 'custom-post-type-ui' ) );
 	}
 
 	if ( ! empty( $data['cpt_original'] ) && $data['cpt_original'] != $data['cpt_custom_post_type']['name'] ) { // phpcs:ignore.
@@ -2266,6 +2277,10 @@ function cptui_check_existing_post_type_slugs( $slug_exists = false, $post_type_
 		return $slug_exists;
 	}
 
+	if ( ! is_array( $post_types ) ) {
+		return $slug_exists;
+	}
+
 	// Check if CPTUI has already registered this slug.
 	if ( array_key_exists( strtolower( $post_type_slug ), $post_types ) ) {
 		return true;
@@ -2473,7 +2488,6 @@ function cptui_filtered_post_type_post_global() {
 	);
 
 	$items_string = array_merge( $default_strings, $third_party_items_strings );
-
 	foreach ( $items_string as $item ) {
 		$second_result = filter_input( INPUT_POST, $item, FILTER_SANITIZE_SPECIAL_CHARS );
 		if ( $second_result ) {

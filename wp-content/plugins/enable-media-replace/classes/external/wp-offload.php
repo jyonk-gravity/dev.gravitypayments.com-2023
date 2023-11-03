@@ -60,7 +60,19 @@ class WPOffload
 					return false;
 				}
 
-				add_filter('shortpixel/image/urltopath', array($this, 'checkIfOffloaded'), 10,2);
+        // @todo This all is begging for the creating of an enviroment model / controller.
+        if( !function_exists('is_plugin_active') ) {
+
+    			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+    		}
+        $spio_active = \is_plugin_active('shortpixel-image-optimiser/wp-shortpixel.php');
+
+        // Let spio handle this.
+        if (false === $spio_active)
+        {
+				      add_filter('shortpixel/image/urltopath', array($this, 'checkIfOffloaded'), 10,2);
+        }
 
 				add_action('emr_after_remove_current', array($this, 'removeRemote'), 10, 5);
 				add_filter('emr/file/virtual/translate', array($this, 'getLocalPath'), 10, 3);
@@ -187,6 +199,13 @@ class WPOffload
 		public function updateOriginalPath($source_url, $target_url, $post_id)
 		{
 				$item = $this->getItemById($post_id);
+
+				// If no item comes back, probably it's not offloaded
+				if (false === $item)
+				{
+					 return;
+				}
+
 
 				$original_path = $item->original_path(); // Original path (non-scaled-)
 				$original_source_path = $item->original_source_path();

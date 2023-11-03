@@ -1,306 +1,234 @@
-( function ( GF_Google_Analytics, $ ) {
-	/* global localStorage, */
-	jQuery( document ).ready( function() {
-		/**
-		 * Send events to Google Analytics
-		 *
-		 * Send events to Google Analytics. Use Ajax call so no duplicate entries are recorded.
-		 *
-		 * @since      1.0.0
-		 * @access     public
-		 * @class
-		 * @memberof jQuery
-		 * @global  jQuery
-		 * @fires   onload
-		 * @param {number} entryId       The form entry ID to submit conversions to.
-		 * @param {number} eventValue    Event value to send to Google Analytics.
-		 * @param {string} eventCategory Event category to send go Google Analytics.
-		 * @param {string} eventAction   Event action to send to Google Analytics.
-		 * @param {string} eventLabel    Event label to send to Google Analytics.
-		 */
-		$.gf_send_to_ga = function send_to_ga( entryId, eventValue, eventCategory, eventAction, eventLabel	) {
+( function () {
 
-			$.post( gforms_google_analytics_frontend_strings.ajaxurl, { action: 'get_entry_meta', entry_id: entryId, nonce: gforms_google_analytics_frontend_strings.nonce }, function( response ) {
-				if ( false === response.data.event_sent ) {
-					gfga_send_to_ga( eventValue, eventCategory, eventAction, eventLabel );
-
-					// Now send event to GF to make sure we don't submit duplicate events
-					$.post( gforms_google_analytics_frontend_strings.ajaxurl, { action: 'save_entry_meta', entry_id: entryId, nonce: gforms_google_analytics_frontend_strings.nonce } );
-				}
-			}, 'json' );
-		};
-		/**
-		 * Send pagination events to Google Analytics
-		 *
-		 * Send pagination events to Google Analytics.
-		 *
-		 * @since      1.0.0
-		 * @access     public
-		 * @class
-		 *
-		 * @memberof jQuery
-		 * @global  jQuery
-		 * @fires   onload
-		 *
-		 * @param {number} eventValue    Event value to send to Google Analytics.
-		 * @param {string} eventCategory Event category to send go Google Analytics.
-		 * @param {string} eventAction   Event action to send to Google Analytics.
-		 * @param {string} eventLabel    Event label to send to Google Analytics.
-		 */
-		$.gf_send_pagination_to_ga = function paginate_send_to_ga( eventValue, eventCategory, eventAction, eventLabel ) {
-			gfga_send_to_ga( eventValue, eventCategory, eventAction, eventLabel );
-			$.gf_remove_local_pagination_storage();
-		};
-		/**
-		 * Send pagination events to Google Tag Manager
-		 *
-		 * Send pagination events to Google Tag Manager.
-		 *
-		 * @since      1.0.0
-		 * @access     public
-		 * @class
-		 *
-		 * @memberof jQuery
-		 * @global  jQuery
-		 * @fires   onload
-		 *
-		 * @param {number} eventValue    Event value to send to Google Tag Manager.
-		 * @param {string} eventCategory Event category to send go Google Tag Manager.
-		 * @param {string} eventAction   Event action to send to Google Tag Manager.
-		 * @param {string} eventLabel    Event label to send to Google Tag Manager.
-		 */
-		$.gf_send_pagination_to_gtm = function paginate_send_to_gtm( eventValue, eventCategory, eventAction, eventLabel, utmSource, utmMedium, utmCampaign, utmTerm, utmContent ) {
-			gfga_send_to_gtm( eventValue, eventCategory, eventAction, eventLabel, utmSource, utmMedium, utmCampaign, utmTerm, utmContent );
-			$.gf_remove_local_pagination_storage();
-		};
-		/**
-		 * Send events to Google Tag Manager.
-		 *
-		 * @since      1.0.0
-		 * @access     public
-		 * @class
-		 * @memberof jQuery
-		 * @global  jQuery
-		 * @fires   onload
-		 *
-		 * @param {number} eventId       Entry ID to send to Tag Manager.
-		 * @param {number} eventValue    Event value to send to Google Tag Manager.
-		 * @param {string} eventCategory Event category to send go Google Tag Manager.
-		 * @param {string} eventAction   Event action to send to Google Tag Manager.
-		 * @param {string} eventLabel    Event label to send to Google Tag Manager.
-		 */
-		$.gf_send_to_gtm = function send_to_gtm( eventId, eventValue, eventCategory, eventAction, eventLabel, utmSource, utmMedium, utmCampaign, utmTerm, utmContent ) {
-			$.post( gforms_google_analytics_frontend_strings.ajaxurl, { action: 'get_entry_meta', entry_id: eventId, nonce: gforms_google_analytics_frontend_strings.nonce }, function( response ) {
-				if ( false === response.data.event_sent ) {
-					gfga_send_to_gtm( eventValue, eventCategory, eventAction, eventLabel, utmSource, utmMedium, utmCampaign, utmTerm, utmContent );
-					// Now send event to GF to make sure we don't submit duplicate events
-					$.post( gforms_google_analytics_frontend_strings.ajaxurl, { action: 'save_entry_meta', entry_id: eventId, nonce: gforms_google_analytics_frontend_strings.nonce } );
-				}
-			} );
+	/**
+	 * Send events to Google Analytics. Use Ajax call so no duplicate entries are recorded.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param {number} entryId    The entry ID associated with this submission.
+	 * @param {number} feedId     The feed ID associated with this event.
+	 * @param {array}  parameters Event parameters to send to Google Analytics.
+	 * @param {string} eventName  Event name to be sent to Google Analytics.
+	 */
+	this.send_unique_to_ga = async function ( entryId, feedId, parameters, eventName ) {
+		let has_sent = await this.has_sent_feed( entryId, feedId );
+		if ( ! has_sent ) {
+			this.send_to_ga( parameters, eventName );
+			this.mark_feed_as_sent( entryId, feedId );
 		}
-		/**
-		 * Send events to Google Tag Manager.
-		 *
-		 * @since      1.0.0
-		 * @access     public
-		 * @class
-		 *
-		 * @memberof jQuery
-		 * @global  jQuery
-		 * @fires   onload
-		 *
-		 * @param {number} eventValue    Event value to send to Google Tag Manager.
-		 * @param {string} eventCategory Event category to send go Google Tag Manager.
-		 * @param {string} eventAction   Event action to send to Google Tag Manager.
-		 * @param {string} eventLabel    Event label to send to Google Tag Manager.
-		 */
-		function gfga_send_to_gtm( eventValue, eventCategory, eventAction, eventLabel, utmSource, utmMedium, utmCampaign, utmTerm, utmContent ) {
-			if ( typeof ( window.parent.dataLayer ) != 'undefined' ) {
-				if ( typeof ( window.parent.gfgaTagManagerEventSent ) == 'undefined' ) {
-					window.parent.dataLayer.push( {
-						'event': 'GFTrackEvent',
-						'GFTrackCategory': eventCategory,
-						'GFTrackAction': eventAction,
-						'GFTrackLabel': eventLabel,
-						'GFTrackValue': eventValue,
-						'GFTrackSource': utmSource,
-						'GFTrackMedium': utmMedium,
-						'GFTrackCampaign': utmCampaign,
-						'GFTrackTerm': utmTerm,
-						'GFTrackContent': utmContent,
-					} );
+		this.maybe_trigger_feeds_sent();
+	};
+
+	/**
+	 * Send events to Google Analytics. Use ajax call so no duplicate entries are recorded.
+	 *
+	 * @since 1.0.0
+
+	 * @param {array}  parameters Event parameters to send to Google Analytics.
+	 * @param {string} eventName  Event name to be sent to Google Analytics.
+	 */
+	this.send_to_ga = function( parameters, eventName ) {
+
+		const eventTracker = gforms_google_analytics_frontend_strings.ua_tracker;
+
+		// Check for gtab implementation
+		if ( typeof window.parent.gtag != 'undefined' ) {
+			window.parent.gtag( 'event', eventName, parameters );
+		} else {
+			// Check for GA from Monster Insights Plugin
+			if ( typeof window.parent.ga == 'undefined' ) {
+				if ( typeof window.parent.__gaTracker != 'undefined' ) {
+					window.parent.ga = window.parent.__gaTracker;
 				}
-				window.parent.gfgaTagManagerEventSent = true;
+			}
+			if ( typeof window.parent.ga != 'undefined' ) {
+
+				let ga_send = 'send';
+				// Try to get original UA code from third-party plugins or tag manager
+				if ( eventTracker.length > 0 ) {
+					ga_send = eventTracker + '.' + ga_send;
+				}
+
+				// Use that tracker
+				window.parent.ga( ga_send, eventName, parameters );
+			} else {
+				console.error( 'Google Tag Manger script is not active. You may need to enable "Output the Google Analytics Script" setting on the Forms -> Settings -> Google Analytics page');
+				return;
 			}
 		}
 
-		/**
-		 * Send events to Google Analytics
-		 *
-		 * Send events to Google Analytics. Use Ajax call so no duplicate entries are recorded.
-		 *
-		 * @since      1.0.0
-		 * @access     public
-		 * @class
-		 *
-		 * @memberof jQuery
-		 * @global  jQuery
-		 * @fires   onload
-		 *
-		 * @param {number} eventValue    Event value to send to Google Analytics.
-		 * @param {string} eventCategory Event category to send go Google Analytics.
-		 * @param {string} eventAction   Event action to send to Google Analytics.
-		 * @param {string} eventLabel    Event label to send to Google Analytics.
-		 */
-		function gfga_send_to_ga( eventValue, eventCategory, eventAction, eventLabel ) {
-			var eventTracker = gforms_google_analytics_frontend_strings.ua_tracker;
+		// Logging if enabled.
+		const eventData = { 'type': 'ga', 'eventName' : eventName, 'parameters' : parameters };
+		this.consoleLog('Google Analytics event sent. Event data: ');
+		this.consoleLog( JSON.stringify( eventData, null, 2 ) );
 
-			if ( typeof ( window.parent.gfgaAnalyticsEventSent ) == 'undefined' ) {
-				// Check for gtab implementation
-				if ( typeof window.parent.gtag != 'undefined' ) {
-					window.parent.gtag( 'event', eventAction, {
-							'event_category': eventCategory,
-							'event_label': eventLabel,
-							'value': eventValue,
-						}
-					);
-				} else {
-					// Check for GA from Monster Insights Plugin
-					if ( typeof window.parent.ga == 'undefined' ) {
-						if ( typeof window.parent.__gaTracker != 'undefined' ) {
-							window.parent.ga = window.parent.__gaTracker;
-						}
-					}
-					if ( typeof window.parent.ga != 'undefined' ) {
-
-						var ga_send = 'send';
-						// Try to get original UA code from third-party plugins or tag manager
-						if ( eventTracker.length > 0 ) {
-							ga_send = eventTracker + '.' + ga_send;
-						}
-
-						// Use that tracker
-						window.parent.ga( ga_send, 'event', eventCategory, eventAction, eventLabel, eventValue );
-					}
-
-				}
+		// Triggering event_sent event.
+		this.trigger_event( 'googleanalytics/event_sent', eventData );
+		jQuery.post(
+			gforms_google_analytics_frontend_strings.ajaxurl,
+			{
+				action: 'gf_ga_log_event_sent',
+				parameters: parameters,
+				eventName: eventName,
+				connection: 'ga',
+				nonce: gforms_google_analytics_frontend_strings.logging_nonce,
 			}
-			window.parent.gfgaAnalyticsEventSent = true;
+		);
+	}
+
+	/**
+	 * Send events to Google Tag Manager.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param {number} entryId      The entry ID associated with this submission.
+	 * @param {number} feedId       The feed ID associated with this event.
+	 * @param {array}  parameters   Event parameters to send to Google Analytics.
+	 * @param {string} triggerName  Event type to be sent to Google Analytics.
+	 */
+	this.send_unique_to_gtm = async function( entryId, feedId, parameters, triggerName) {
+
+		let has_sent = await this.has_sent_feed( entryId, feedId );
+		if ( ! has_sent ) {
+			this.send_to_gtm( parameters, triggerName );
+			this.mark_feed_as_sent( entryId, feedId );
+		} else {
+			this.consoleLog( 'Event has already been sent. Aborting... Entry id: ' + entryId + '. Feed Id: ' + feedId );
+		}
+		this.maybe_trigger_feeds_sent();
+	}
+
+	/**
+	 * Send events to Google Tag Manager.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param {array}  parameters   Event parameters to send to Google Analytics.
+	 * @param {string} triggerName  Event name to be sent to Google Tag Manger.
+	 */
+	this.send_to_gtm = function( parameters, triggerName) {
+		if ( typeof ( window.parent.dataLayer ) == 'undefined' ) {
+			console.error( 'Google Tag Manger script is not active. You may need to enable "Output the Google Tag Manager Script" setting on the Forms -> Settings -> Google Analytics page' );
+			return;
 		}
 
-		/**
-		 * Clear pagination local storage
-		 *
-		 * Clear pagination storage when no longer used.
-		 *
-		 * @since      1.0.0
-		 * @access     public
-		 * @memberof jQuery
-		 * @global  jQuery
-		 */
-		$.gf_remove_local_pagination_storage = function remove_pagination_storage() {
-			localStorage.removeItem( 'gfpaginatetype' );
-			localStorage.removeItem( 'gfpaginateid' );
-			localStorage.removeItem( 'gfpaginatevalue' );
-			localStorage.removeItem( 'gfpaginatecategory' );
-			localStorage.removeItem( 'gfpaginateaction' );
-			localStorage.removeItem( 'gfpaginatelabel' );
-			localStorage.removeItem( 'gfpaginateutmsource' );
-			localStorage.removeItem( 'gfpaginateutmmedium' );
-			localStorage.removeItem( 'gfpaginateutmcampaign' );
-			localStorage.removeItem( 'gfentrytracker' );
-		};
-		// Test for local storage for JS events
-		var entryType = localStorage.getItem( 'googleAnalyticsFeeds' );
-		if ( null != entryType ) {
-			entryType = JSON.parse( entryType );
-			$.each( entryType, function( id, data ) {
-				if ( 'ga' === gforms_google_analytics_frontend_strings.gfgamode ) {
-					$.gf_send_to_ga( data.entryId, data.entryValue, data.entryCategory, data.entryAction, data.entryLabel );
-				}
-				var utmVariables = localStorage.getItem('googleAnalyticsUTM');
-				var utmSource = '',
-					utmMedium = '',
-					utmCampaign = '',
-					utmTerm = '',
-					utmContent = '';
-				if ( null != utmVariables ) {
-					utmVariables = JSON.parse( utmVariables );
-					utmSource = utmVariables.source;
-					utmMedium = utmVariables.medium;
-					utmCampaign = utmVariables.campaign;
-					utmTerm = utmVariables.term;
-					utmContent = utmVariables.content;
-				}
-				if ( 'gtm' === gforms_google_analytics_frontend_strings.gfgamode ) {
-					$.gf_send_to_gtm( data.entryId, data.entryValue, data.entryCategory, data.entryAction, data.entryLabel, utmSource, utmMedium, utmCampaign, utmTerm, utmContent );
-				}
-			});
-			localStorage.removeItem( 'googleAnalyticsFeeds' );
-		}
+		parameters['event'] = triggerName;
+		window.parent.dataLayer.push( parameters );
 
+		// Logging if enabled.
+		const eventData = { 'type': 'gtm', 'triggerName' : triggerName, 'parameters' : parameters };
+		this.consoleLog('Google Analytics event sent. Event data: ');
+		this.consoleLog( JSON.stringify( eventData, null, 2 ) );
 
-		// Test for paginated events
-		var paginationType = localStorage.getItem( 'gfpaginatetype' );
-		if ( null !== paginationType && 'pagination' === paginationType ) {
-			if ( 'ga' === gforms_google_analytics_frontend_strings.gfgamode ) {
-				$.gf_send_pagination_to_ga( localStorage.getItem( 'gfpaginatevalue' ), localStorage.getItem( 'gfpaginatecategory' ), localStorage.getItem('gfpaginateaction'), localStorage.getItem('gfpaginatelabel'));
+		// Triggering event_sent event.
+		this.trigger_event( 'googleanalytics/event_sent', eventData );
+		jQuery.post(
+			gforms_google_analytics_frontend_strings.ajaxurl,
+			{
+				action: 'gf_ga_log_event_sent',
+				parameters: parameters,
+				triggerName: triggerName,
+				connection: 'gtm',
+				nonce: gforms_google_analytics_frontend_strings.logging_nonce,
 			}
-			if ( 'gtm' === gforms_google_analytics_frontend_strings.gfgamode ) {
-				var utmVariables = localStorage.getItem( 'googleAnalyticsUTM' );
-				var utmSource = '',
-					utmMedium = '',
-					utmCampaign = '',
-					utmTerm = '',
-					utmContent = '';
-				if ( null != utmVariables ) {
-					utmVariables = JSON.parse( utmVariables );
-					utmSource = utmVariables.source;
-					utmMedium = utmVariables.medium;
-					utmCampaign = utmVariables.campaign;
-					utmTerm = utmVariables.term;
-					utmContent = utmVariables.content;
-				}
-				$.gf_send_pagination_to_gtm(
-					localStorage.getItem( 'gfpaginatevalue' ),
-					localStorage.getItem( 'gfpaginatecategory' ),
-					localStorage.getItem( 'gfpaginateaction' ),
-					localStorage.getItem( 'gfpaginatelabel' ),
-					utmSource,
-					utmMedium,
-					utmCampaign,
-					utmTerm,
-					utmContent
-				);
-			}
+		);
+	}
+
+	/**
+	 * Determines if event for this entry and feed has already been sent.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param {number} entryId Current entry id.
+	 * @param {number} feedId  Current feed id.
+	 *
+	 * @returns {bool} Returns true if the event for this entry and feed has already been sent. Returns false if not.
+	 */
+	this.has_sent_feed = async function( entryId, feedId ) {
+		let response = await jQuery.post( gforms_google_analytics_frontend_strings.ajaxurl, { action: 'get_entry_meta', entry_id: entryId, feed_id: feedId, nonce: gforms_google_analytics_frontend_strings.nonce }, 'json' );
+		return response.data.event_sent;
+	}
+
+	/**
+	 * Mark an event as sent via AJAX. Part of the system to prevent duplicate events from being sent.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param {number} entryId Current entry id.
+	 * @param {number} feedId  Current feed id.
+	 */
+	this.mark_feed_as_sent = function( entryId, feedId ) {
+		jQuery.post( gforms_google_analytics_frontend_strings.ajaxurl, { action: 'save_entry_meta', entry_id: entryId, feed_id: feedId, nonce: gforms_google_analytics_frontend_strings.nonce } );
+	}
+
+	/**
+	 * Holds the number of feeds that have been sent.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @type {number}
+	 */
+	this.feeds_sent = 0;
+
+	/**
+	 * Triggers 'googleanalytics/all_events_sent' after the last feed has been sent.
+	 *
+	 * @since 1.3.0
+	 */
+	this.maybe_trigger_feeds_sent = function() {
+
+		this.feeds_sent++;
+		this.consoleLog( 'Google Analytics event successfully sent: ' + this.feeds_sent + ' of ' + window['ga_feed_count'] );
+		if ( this.feeds_sent >= window['ga_feed_count'] ) {
+
+			this.consoleLog( 'All Google Analytics events have been sent.' );
+
+			// All feeds have been sent. Trigger feeds sent event.
+			this.trigger_event( 'googleanalytics/all_events_sent' );
+			window['all_ga_events_sent'] = true;
+
+			// Reset counters.
+			this.feeds_sent = 0;
+			window['ga_feed_count'] = 0;
 		}
-		// Test for URl appendage
-		var url = wpAjax.unserialize( window.location.href );
-		var actionExists = url.hasOwnProperty( 'gfaction' );
-		if ( actionExists ) {
-			var category = url.category;
-			var label = url.label;
-			var value = url.value;
-			var action = url.action;
+	}
 
-			// Format entry ID so that #gf-1 etc isn't appended to entry ID
-			var matches = url.entryid.match( /^[\d]+/ );
-			var entryId = matches[ 0 ];
+	/**
+	 * Triggers a Javascript event.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param {string} eventName Name of the event.
+	 * @param {*}      eventData Data associated with this event.
+	 */
+	this.trigger_event = function( eventName, eventData ) {
+		const event = new CustomEvent( eventName, { detail: eventData } );
+		window.dispatchEvent( event );
+	}
 
-			// Do an ajax check to make sure we're not sending an event twice
-			$.post( gforms_google_analytics_frontend_strings.ajaxurl, { action: 'get_entry_meta', entry_id: entryId, nonce: gforms_google_analytics_frontend_strings.nonce }, function( response ) {
-				if ( false === response.data.event_sent ) {
-					if ( 'ga' === gforms_google_analytics_frontend_strings.gfgamode ) {
-						gfga_send_to_ga( value, category, action, label );
-					}
-
-					if ( 'gtm' === gforms_google_analytics_frontend_strings.gfgamode ) {
-						gfga_send_to_gtm( value, category, action, label, '', '', '', '', '' );
-					}
-					// Now send event to GF to make sure we don't submit duplicate events
-					$.post( gforms_google_analytics_frontend_strings.ajaxurl, { action: 'save_entry_meta', entry_id: entryId, nonce: gforms_google_analytics_frontend_strings.nonce } );
-				}
-			}, 'json' );
+	/**
+	 * Logs to the console if logging is enabled in settings page.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param {*} message The message to be logged.
+	 */
+	this.consoleLog = function( message ) {
+		if ( gforms_google_analytics_frontend_strings.logging_enabled !== '1' ) {
+			return;
 		}
-	} );
-}( window.GF_Google_Analytics = window.GF_Google_Analytics || {}, jQuery ) );
+		console.log( message );
+	}
+
+	/**
+	 * Initializes this object.
+	 */
+	this.init = function() {
+		window.GF_Google_Analytics = this;
+
+		// Trigger script loaded event
+		this.trigger_event( 'googleanalytics/script_loaded' );
+	}
+
+	this.init();
+}() );

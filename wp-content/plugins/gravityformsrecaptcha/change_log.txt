@@ -1,3 +1,9 @@
+## 1.2.0 | 2023-08-31
+- Updated the reCAPTCHA settings link for the Captcha field "To use the reCAPTCHA field" message in the form editor.
+- Fixed an issue where reCAPTCHA fails validation when using the Stripe Payment Element.
+- Fixed an issue that causes the scripts for the frontend to not be available in production mode when compiled by Webpack.
+- Fixed an issue where scripts are sometimes missing dependencies, and sometimes getting loaded unnecessarily.
+
 ## 1.1 | 2021-07-21
 - Fixed an issue where an undefined variable notice appears on the add-on settings page.
 - Fixed an issue where forms can fail validation if they include dynamically added fields such as the honeypot.

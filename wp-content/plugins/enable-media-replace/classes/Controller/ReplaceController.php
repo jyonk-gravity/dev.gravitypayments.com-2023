@@ -31,6 +31,7 @@ class ReplaceController
 	const ERROR_DIRECTORY_NOTEXIST = 25;
 
 	protected $replaceType;
+	/** @var string */
 	protected $new_location;
 	protected $timeMode;
 	protected $newDate;
@@ -352,6 +353,7 @@ class ReplaceController
 					{
 						 $otherTarget = $this->fs()->getFile($targetLocation . $this->new_filename);
 						 // Halt if new target exists, but not if it's the same ( overwriting itself )
+
 						 if ($otherTarget->exists() && $otherTarget->getFullPath() !== $this->getSourceFile()->getFullPath() )
 						 {
 								$this->lastError = self::ERROR_TARGET_EXISTS;
@@ -435,7 +437,7 @@ class ReplaceController
 		 return $excerpt;
 		}
 
-		protected function getSourceUrl()
+		public function getSourceUrl()
 		{
 			if (function_exists('wp_get_original_image_url')) // WP 5.3+
 			{

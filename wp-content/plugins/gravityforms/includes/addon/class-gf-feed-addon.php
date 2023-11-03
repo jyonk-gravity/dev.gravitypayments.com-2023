@@ -65,6 +65,19 @@ abstract class GFFeedAddOn extends GFAddOn {
 	protected $_bypass_feed_delay = false;
 
 	/**
+	 * An array of properties relating to the delayed payment functionality.
+	 *
+	 * Set by passing the array to `$this->add_delayed_payment_support()` in `init()`.
+	 *
+	 * @since 2.7.14 Was a dynamic property in earlier versions.
+	 *
+	 * @var array {
+	 *     @type string $option_label The label to displayed for the add-ons delay checkbox, in the Post Payment Actions section of the payment add-ons feed configuration page.
+	 * }
+	 */
+	public $delayed_payment_integration = array();
+
+	/**
 	 * @var string Version number of the Add-On Framework
 	 */
 	private $_feed_version = '0.14';
@@ -347,7 +360,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 					// Add feed to processing queue.
 					gf_feed_processor()->push_to_queue(
 						array(
-							'addon' => $this,
+							'addon' => get_class( $this ),
 							'feed'  => $feed,
 							'entry_id' => $entry['id'],
 							'form_id'  => $form['id'],
@@ -1240,7 +1253,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 		if ( $this->is_feed_list_page() ) {
 			$title = $this->form_settings_title();
 			$url = add_query_arg( array( 'fid' => 0 ) );
-			return $title . " <a class='add-new-h2' href='" . esc_html( $url ) . "'>" . esc_html__( 'Add New', 'gravityforms' ) . '</a>';
+			return $title . " <a class='add-new-h2' href='" . esc_url( $url ) . "'>" . esc_html__( 'Add New', 'gravityforms' ) . '</a>';
 		}
 	}
 
@@ -1280,7 +1293,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 
 					// If feed IDs do not match, redirect.
 					if ( $feed_id !== $this->_current_feed_id && $this->_multiple_feeds ) {
-						wp_safe_redirect( add_query_arg( array( 'fid' => $this->_current_feed_id ) ) );
+						wp_safe_redirect( esc_url_raw( add_query_arg( array( 'fid' => $this->_current_feed_id ) ) ) );
 					}
 
 				},

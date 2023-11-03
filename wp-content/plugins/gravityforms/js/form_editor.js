@@ -3300,7 +3300,6 @@ function GetSelectedField() {
 		return false;
 	}
     var id = $field[0].id.substr( 6 );
-
     return GetFieldById( id );
 }
 
@@ -3538,10 +3537,25 @@ function SetFeaturedImage() {
 }
 
 function SetFieldProperty(name, value){
-    if(value == undefined)
-        value = "";
+	if (value == undefined)
+		value = "";
 
-    GetSelectedField()[name] = value;
+	var field = GetSelectedField();
+	var previousValue = rgar( field, name );
+
+	field[name] = value;
+
+	/**
+	 * Enables custom actions to be performed when a field property is set.
+	 *
+	 * @since 2.7.16
+	 *
+	 * @param {string}                        name          The name of the property that was set.
+	 * @param {object}                        field         The field object that was updated.
+	 * @param {(string|number|boolean|array)} value         The current value of the specified property.
+	 * @param {(string|number|boolean|array)} previousValue The previous value of the specified property.
+	 */
+	window.gform.doAction( 'gform_post_set_field_property', name, field, value, previousValue );
 }
 
 function SetInputName(value, inputId){
@@ -4571,9 +4585,7 @@ function resetAllFieldNotices() {
  */
 function ResetFieldAccessibilityWarning( fieldSetting ) {
 	if ( typeof fieldSetting !== 'undefined' ) {
-		jQuery( '.' + fieldSetting )
-			.nextAll( '.gform-alert--accessibility' ).remove()
-			.prevAll( '.gform-alert--accessibility' ).remove();
+		jQuery( '.gform-alert--accessibility[data-field-setting="' + fieldSetting + '"]' ).remove()
 	}
 }
 
@@ -4638,20 +4650,19 @@ function setFieldError( fieldSetting, position, message ) {
 		message = getFieldErrorMessage( fieldSetting );
 	}
 
-	var errorDiv = '<div class="gform-alert gform-alert--error gform-alert--inline">';
+	var errorDiv = '<div class="gform-alert gform-alert--error gform-alert--inline" data-field-setting="' + fieldSetting + '">';
 		errorDiv += '<span class="gform-alert__icon gform-icon gform-icon--circle-error-fine" aria-hidden="true"></span>';
 		errorDiv += '<div class="gform-alert__message-wrap">' + message + '</div>';
 		errorDiv += '</div>';
 
 	// Display the error message.
-	var fieldSetting = jQuery( '.' + fieldSetting );
-	fieldSetting.addClass( 'error' );
+	var fieldSettingContainer = jQuery( '.' + fieldSetting );
+	fieldSettingContainer.addClass( 'error' );
+	jQuery( '.gform-alert--error[data-field-setting="' + fieldSetting + '"]' ).remove();
 	if ( position === 'above' ) {
-		fieldSetting.prevAll( '.gform-alert--error' ).remove();
-		fieldSetting.before( errorDiv );
+		fieldSettingContainer.before( errorDiv );
 	} else {
-		fieldSetting.nextAll( '.gform-alert--error' ).remove();
-		fieldSetting.after( errorDiv );
+		fieldSettingContainer.after( errorDiv );
 	}
 }
 
@@ -4667,10 +4678,8 @@ function resetFieldError( fieldSetting ) {
 	var errorProperties = field.hasOwnProperty( 'errors' ) ? field.errors : [];
 
 	if ( typeof fieldSetting !== 'undefined' ) {
-		jQuery( '.' + fieldSetting )
-			.nextAll( '.gform-alert--error' ).remove()
-			.prevAll( '.gform-alert--error' ).remove();
 
+		jQuery( '.gform-alert--error[data-field-setting="' + fieldSetting + '"]' ).remove()
 		jQuery( '.' + fieldSetting ).removeClass( 'error' );
 
 		var index = errorProperties.indexOf( fieldSetting );

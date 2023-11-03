@@ -2,12 +2,12 @@
 ----------------------------------------------------------------
 
 admin-css-utilities.css
-Gravity Forms Administration Utility Styles
-http: //www.gravityforms.com
+Gravity Forms Admin Utility Styles
+https://www.gravityforms.com
 
 Gravity Forms is a Rocketgenius project
-copyright 2008-2021 Rocketgenius Inc.
-http: //www.rocketgenius.com
+copyright 2008-2023 Rocketgenius Inc.
+https://www.rocketgenius.com
 this may not be re-distributed without the
 express written permission of the author.
 
@@ -38,12 +38,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		background-color: #667085;
 	}
 
-.gform-admin .gform-util-gform-admin-background-color-titan-white {
-		background-color: #fdfdff;
+.gform-admin .gform-util-gform-admin-background-color-anti-flash-white {
+		background-color: #f2f3f5;
 	}
 
-.gform-admin .gform-util-gform-admin-background-color-zircon {
-		background-color: #fbfdff;
+.gform-admin .gform-util-gform-admin-background-color-titan-white {
+		background-color: #fdfdff;
 	}
 
 .gform-admin .gform-util-gform-admin-background-color-light-blue {
@@ -56,6 +56,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-admin .gform-util-gform-admin-background-color-blue-haze {
 		background-color: #c3c5db;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-metal-gray {
+		background-color: #d3d3e0;
 	}
 
 .gform-admin .gform-util-gform-admin-background-color-white-lilac {
@@ -106,20 +110,52 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		background-color: #e1f6ed;
 	}
 
+.gform-admin .gform-util-gform-admin-background-color-sugar-cane {
+		background-color: #fbfffb;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-feta {
+		background-color: #eefcf0;
+	}
+
 .gform-admin .gform-util-gform-admin-background-color-light-green {
 		background-color: #f5fcf6;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-enchanted-meadow {
+		background-color: #aed9b6;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-shamrock {
+		background-color: #31c48d;
 	}
 
 .gform-admin .gform-util-gform-admin-background-color-emerald {
 		background-color: #57c091;
 	}
 
+.gform-admin .gform-util-gform-admin-background-color-sea-green {
+		background-color: #2f833d;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-rose-white {
+		background-color: #fff9f9;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-once-bitten {
+		background-color: #c02b0a;
+	}
+
 .gform-admin .gform-util-gform-admin-background-color-red {
 		background-color: #dd301d;
 	}
 
+.gform-admin .gform-util-gform-admin-background-color-spanish-pink {
+		background-color: #ffc7bb;
+	}
+
 .gform-admin .gform-util-gform-admin-background-color-background-red {
-		background-color: #feefef;
+		background-color: #fee4e2;
 	}
 
 .gform-admin .gform-util-gform-admin-background-color-blue-ribbon {
@@ -162,6 +198,18 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		background-color: #e1f3e6;
 	}
 
+.gform-admin .gform-util-gform-admin-background-color-science-blue {
+		background-color: #044ad3;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-zircon {
+		background-color: #f4f8ff;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-broad-daylight {
+		background-color: #c3d9ff;
+	}
+
 .gform-admin .gform-util-gform-admin-background-color-hawkes-blue {
 		background-color: #dde9fc;
 	}
@@ -180,6 +228,18 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-admin .gform-util-gform-admin-background-color-border {
 		background-color: #9092b2;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-mischka {
+		background-color: #d2d5db;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-shuttle-gray {
+		background-color: #585e6a;
+	}
+
+.gform-admin .gform-util-gform-admin-background-color-secondary-border {
+		background-color: #e4e4ee;
 	}
 
 .gform-admin .gform-util-gform-admin-background-color-button-disabled {
@@ -318,12 +378,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		color: #667085;
 	}
 
-.gform-admin .gform-util-gform-admin-color-titan-white {
-		color: #fdfdff;
+.gform-admin .gform-util-gform-admin-color-anti-flash-white {
+		color: #f2f3f5;
 	}
 
-.gform-admin .gform-util-gform-admin-color-zircon {
-		color: #fbfdff;
+.gform-admin .gform-util-gform-admin-color-titan-white {
+		color: #fdfdff;
 	}
 
 .gform-admin .gform-util-gform-admin-color-light-blue {
@@ -336,6 +396,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-admin .gform-util-gform-admin-color-blue-haze {
 		color: #c3c5db;
+	}
+
+.gform-admin .gform-util-gform-admin-color-metal-gray {
+		color: #d3d3e0;
 	}
 
 .gform-admin .gform-util-gform-admin-color-white-lilac {
@@ -386,20 +450,52 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		color: #e1f6ed;
 	}
 
+.gform-admin .gform-util-gform-admin-color-sugar-cane {
+		color: #fbfffb;
+	}
+
+.gform-admin .gform-util-gform-admin-color-feta {
+		color: #eefcf0;
+	}
+
 .gform-admin .gform-util-gform-admin-color-light-green {
 		color: #f5fcf6;
+	}
+
+.gform-admin .gform-util-gform-admin-color-enchanted-meadow {
+		color: #aed9b6;
+	}
+
+.gform-admin .gform-util-gform-admin-color-shamrock {
+		color: #31c48d;
 	}
 
 .gform-admin .gform-util-gform-admin-color-emerald {
 		color: #57c091;
 	}
 
+.gform-admin .gform-util-gform-admin-color-sea-green {
+		color: #2f833d;
+	}
+
+.gform-admin .gform-util-gform-admin-color-rose-white {
+		color: #fff9f9;
+	}
+
+.gform-admin .gform-util-gform-admin-color-once-bitten {
+		color: #c02b0a;
+	}
+
 .gform-admin .gform-util-gform-admin-color-red {
 		color: #dd301d;
 	}
 
+.gform-admin .gform-util-gform-admin-color-spanish-pink {
+		color: #ffc7bb;
+	}
+
 .gform-admin .gform-util-gform-admin-color-background-red {
-		color: #feefef;
+		color: #fee4e2;
 	}
 
 .gform-admin .gform-util-gform-admin-color-blue-ribbon {
@@ -442,6 +538,18 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		color: #e1f3e6;
 	}
 
+.gform-admin .gform-util-gform-admin-color-science-blue {
+		color: #044ad3;
+	}
+
+.gform-admin .gform-util-gform-admin-color-zircon {
+		color: #f4f8ff;
+	}
+
+.gform-admin .gform-util-gform-admin-color-broad-daylight {
+		color: #c3d9ff;
+	}
+
 .gform-admin .gform-util-gform-admin-color-hawkes-blue {
 		color: #dde9fc;
 	}
@@ -460,6 +568,18 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gform-admin .gform-util-gform-admin-color-border {
 		color: #9092b2;
+	}
+
+.gform-admin .gform-util-gform-admin-color-mischka {
+		color: #d2d5db;
+	}
+
+.gform-admin .gform-util-gform-admin-color-shuttle-gray {
+		color: #585e6a;
+	}
+
+.gform-admin .gform-util-gform-admin-color-secondary-border {
+		color: #e4e4ee;
 	}
 
 .gform-admin .gform-util-gform-admin-color-button-disabled {

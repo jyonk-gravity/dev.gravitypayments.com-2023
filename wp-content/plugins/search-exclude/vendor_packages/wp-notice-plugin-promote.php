@@ -22,14 +22,14 @@ if ( class_exists( 'QuadLayers\\WP_Notice_Plugin_Promote\\Load' ) ) {
 	define( 'QLSE_PROMOTE_CROSS_INSTALL_1_SLUG', 'woocommerce-checkout-manager' );
 	define( 'QLSE_PROMOTE_CROSS_INSTALL_1_NAME', 'WooCommerce Checkout Manager' );
 	define( 'QLSE_PROMOTE_CROSS_INSTALL_1_DESCRIPTION', esc_html__( 'This plugin allows you to add custom fields to the checkout page, related to billing, shipping or additional fields sections.', 'search-exclude' ) );
-	define( 'QLSE_PROMOTE_CROSS_INSTALL_1_URL', 'https://quadlayers.com/portfolio/woocommerce-checkout-manager/?utm_source=qlse_admin' );
+	define( 'QLSE_PROMOTE_CROSS_INSTALL_1_URL', 'https://quadlayers.com/products/woocommerce-checkout-manager/?utm_source=qlse_admin' );
 	/**
 	 * Notice cross sell 2
 	 */
 	define( 'QLSE_PROMOTE_CROSS_INSTALL_2_SLUG', 'woocommerce-direct-checkout' );
 	define( 'QLSE_PROMOTE_CROSS_INSTALL_2_NAME', 'WooCommerce Direct Checkout' );
 	define( 'QLSE_PROMOTE_CROSS_INSTALL_2_DESCRIPTION', esc_html__( 'It allows you to reduce the steps in the checkout process by skipping the shopping cart page. This can encourage buyers to shop more and quickly. You will increase your sales reducing cart abandonment.', 'search-exclude' ) );
-	define( 'QLSE_PROMOTE_CROSS_INSTALL_2_URL', 'https://quadlayers.com/portfolio/woocommerce-direct-checkout/?utm_source=qlse_admin' );
+	define( 'QLSE_PROMOTE_CROSS_INSTALL_2_URL', 'https://quadlayers.com/products/woocommerce-direct-checkout/?utm_source=qlse_admin' );
 
 	new \QuadLayers\WP_Notice_Plugin_Promote\Load(
 		QLSE_PLUGIN_FILE,
@@ -45,7 +45,7 @@ if ( class_exists( 'QuadLayers\\WP_Notice_Plugin_Promote\\Load' ) ) {
 					),
 					QLSE_PLUGIN_NAME
 				),
-				'notice_description' => esc_html__( 'Could you please give it a 5-star rating on WordPress?. Your feedback will boost our motivation and help us promote and continue to improve this product.', 'search-exclude' ),
+				'notice_description' => esc_html__( 'Could you please give it a 5-star rating on WordPress? Your feedback boosts our motivation, helps us promote, and continues to improve this product. Your support matters!', 'search-exclude' ),
 				'notice_link'        => QLSE_PROMOTE_REVIEW_URL,
 				'notice_link_label'  => esc_html__(
 					'Yes, of course!',

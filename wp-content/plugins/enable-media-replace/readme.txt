@@ -3,9 +3,9 @@ Contributors: ShortPixel
 Donate link: https://www.paypal.me/resizeImage
 Tags: replace, attachment, media, files, replace image, remove background, replace jpg, change media, replace media, image, file
 Requires at least: 4.9.7
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 5.6
-Stable tag: 4.1.1
+Stable tag: 4.1.4
 
 Easily replace any attached image/file by simply uploading a new file in the Media Library edit view - a real time saver!
 
@@ -68,6 +68,24 @@ If you want more control over the format in which the time is shown, you can use
 * LinkedIn <a href="https://www.linkedin.com/company/shortpixel" target="_blank">https://www.linkedin.com/company/shortpixel</a>
 
 == Changelog ==
+
+= 4.1.4 =
+
+Release date: September 22, 2023
+* Fix: The latest security fix was breaking the replacements made with Beaver Builder (and possibly other builders);
+
+= 4.1.3 =
+
+Release date: September 14, 2023
+* Fix: A possible PHP Object Injection was patched, which could be exploited under certain conditions;
+* Fix: ShortPixel Image Optimizer handles offloading when both plugins are used with WP Offload Media.
+
+= 4.1.2 =
+
+Release date: April 24, 2023
+* Tweak: Reduced the wait time before redirecting to the media edit page to half (5s);
+* Fix: If an item is not offloaded, no attempt is made to update its data;
+* Fix: Removed some double spaces from the plugin strings (thanks to @Presskopp).
 
 = 4.1.1 =
 

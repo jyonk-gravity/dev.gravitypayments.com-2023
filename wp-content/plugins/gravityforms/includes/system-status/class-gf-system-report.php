@@ -777,7 +777,6 @@ class GF_System_Report {
 				}
 
 				if ( isset( $item['action'] ) && ! $is_export ) {
-					$url = add_query_arg( array( 'action' => $item['action']['code'] ) );
 					$value .= "&nbsp;<a href='#' onclick='gfDoAction(\"{$item['action']['code']}\", \"" . esc_attr( $item['action']['confirm'] ) . "\");'>{$item['action']['label']}</a>";
 				}
 
@@ -883,6 +882,10 @@ class GF_System_Report {
 				'label_export' => 'REST API v2',
 				'value'        => $is_v2_enabled ? __( 'Yes', 'gravityforms' ) : __( 'No', 'gravityforms' ),
 				'value_export' => $is_v2_enabled ? 'Yes' : 'No',
+			),
+			array(
+				'label'        => esc_html__( 'Orbital Style Filter', 'gravityforms' ),
+				'value'        => has_filter( 'gform_default_styles' ) ? 'Yes' : 'No',
 			),
 		);
 

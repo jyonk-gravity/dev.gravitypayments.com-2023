@@ -282,7 +282,7 @@ class Assets {
 				++$i;
 			}
 		}
-		$ret .= join( '/', $pp );
+		$ret .= implode( '/', $pp );
 
 		$ret .= isset( $parts['query'] ) ? '?' . $parts['query'] : '';
 		$ret .= isset( $parts['fragment'] ) ? '#' . $parts['fragment'] : '';
@@ -731,7 +731,6 @@ class Assets {
 	}
 
 	// endregion .
-
 }
 
 // Enable section folding in vim:

@@ -3,6 +3,8 @@
     class APTO_functions
         {
             var $conditional_rules  = '';
+            
+            var $is_woocommerce;
                
             function __construct()
                 {
@@ -218,6 +220,7 @@
                                             '_term_id'                      =>  '',
                                             '_view_language'                =>  '',
                                             '_auto_order_by'                =>  '_default_',
+                                            '_auto_taxonomy_name'           =>  '',
                                             '_auto_custom_field_name'       =>  '',
                                             '_auto_custom_field_type'       =>  '',
                                             '_auto_custom_function_name'    =>  '',
@@ -314,7 +317,7 @@
 
                     //identify the appropiate sort id and sort_view_id which match this query
                     $sort_view_id   =   $this->query_match_sort_id($query, $sorts_match_filter);
-                    $sort_view_id   =   apply_filters('apto/query_match_sort_id', $sort_view_id, $orderBy, $query, $sorts_match_filter);
+                    $sort_view_id   =   apply_filters('apto/query_match_sort_id', $sort_view_id, $orderBy, $query, $sorts_match_filter );
                     
                     //return default $orderBy if nothing found
                     if ($sort_view_id == '')
@@ -342,6 +345,7 @@
                             //Add falback for multiple 
                             $data_set = array(
                                                 'order_by'              =>  (array)$sort_view_settings['_auto_order_by'],
+                                                'taxonomy_name'         =>  (array)$sort_view_settings['_auto_taxonomy_name'],
                                                 'custom_field_name'     =>  (array)$sort_view_settings['_auto_custom_field_name'],
                                                 'custom_field_type'     =>  (array)$sort_view_settings['_auto_custom_field_type'],
                                                 'custom_function_name'  =>  (array)$sort_view_settings['_auto_custom_function_name'],
@@ -364,6 +368,12 @@
                                             
                                             case '_random_'         :
                                                                         $new_orderBy .= "RAND()";
+                                                                        
+                                                                        break;
+                                                                        
+                                            case '_taxonomy_'  :
+                                                                        
+                                                                        $new_orderBy .=  $this->query_get_orderby_taxonomy_name($key, $sort_view_id, $orderBy, $query);
                                                                         
                                                                         break;
                                             
@@ -691,7 +701,7 @@
                         return FALSE;
                     
                     if( /* $partial_match   === TRUE   &&  */  $this->is_woocommerce( $sortID ))
-                        $sort_rules['taxonomy']     =   woocommerce_query_filter_process ( $sort_rules['taxonomy'] );   
+                        $sort_rules['taxonomy']     =   APTO_compatibility::woocommerce_query_filter_process ( $sort_rules['taxonomy'] );   
                                         
                     //check for query rules match
                     
@@ -733,7 +743,8 @@
                                     
                                     foreach(APTO_query_utils::get_tax_queries($query->tax_query->queries) as $query_tax)
                                         {
-                                            $found_match = FALSE;
+                                            $found_match        =   FALSE;
+                                            $query_tax_terms    =   array();
                                             
                                             switch ( strtolower($query_tax['field']) )
                                                 {
@@ -956,7 +967,7 @@
             * @param mixed $sortID
             * @param mixed $query
             */
-            function sort_multiple_match_check_on_query($sortID, $query, $partial_match = FALSE)
+            function sort_multiple_match_check_on_query ( $sortID, $query, $partial_match = FALSE )
                 {
                     $sort_settings =   $this->get_sort_settings($sortID);
                     //check for query rules match
@@ -969,8 +980,11 @@
                     $query_post_type = $this->query_get_post_types($query, $partial_match);
                     
                     //v3.0 try a partial match, for general queries like category term without a post type specification (presuming the category is assigned to multiple post types)
-                    if(count($query_post_type) === 1 && strtolower($query_post_type[0]) == 'any')
-                        $query_post_type[0] =   'post';
+                    if( count ( $query_post_type ) === 1 &&  strtolower( $query_post_type[ array_keys( $query_post_type )[0] ] ) == 'any')
+                        {
+                            $query_post_type    =   array();
+                            $query_post_type[0] =   'post';
+                        }
                     
                     if($partial_match === FALSE)
                         {
@@ -988,7 +1002,7 @@
                     //check the taxonomy
                     $_view_selection    =   '';
                     //need a single taxonomy to match otherwise a simple sort need to be manually created
-                    //fallback on archive;  This maybe changed later and return FALSE !! 
+                    //fallback on archive;  This may change later and return FALSE !! 
                     if(APTO_query_utils::tax_queries_count($query->tax_query->queries) < 1 || APTO_query_utils::tax_queries_count($query->tax_query->queries) > 1)
                         $_view_selection    =   'archive';
                         else
@@ -1058,7 +1072,7 @@
                                     }
                                      
                                 //fallback on archive;  
-                                //This maybe changed later and return FALSE !!    
+                                //This may change later and return FALSE !!    
                                 if(count($query_tax_terms) < 1 || count($query_tax_terms) > 1)
                                     {
                                         //check agains the include_children paramether 
@@ -1075,7 +1089,7 @@
                                     else
                                     {
                                         //check the operator
-                                        //fallback on archive;  This maybe changed later and return FALSE !! 
+                                        //fallback on archive;  //This may change later and return FALSE !!     
                                         if(!in_array($query_tax['operator'], array('IN', 'AND', 'NOT IN')))
                                             $_view_selection    =   'archive';
                                             else
@@ -1377,6 +1391,8 @@
 
                     $new_orderBy    =   $this->query_get_new_orderBy($orderBy, $query, $sort_view_id, $order_list);
                     
+                    $new_orderBy    =   apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query, $order_list );
+                    
                     //update the orderby piece
                     $query_pieces['orderby']    =   $new_orderBy;
                        
@@ -1445,6 +1461,173 @@
                     return $updated_order_list;
                 }   
             
+            
+            
+            /**
+            * Return the orderby argv for query on a custom field sort
+            * 
+            * @param mixed $sort_view_id
+            * @param mixed $query
+            */
+            function query_get_orderby_taxonomy_name ( $data_set_key, $sort_view_id, $orderBy, $query )
+                {
+                    global $wpdb;
+                        
+                    $sort_view_settings =   $this->get_sort_view_settings( $sort_view_id );
+                    
+                    $sort_view_data     =   get_post($sort_view_id);
+                    $sortID             =   $sort_view_data->post_parent;
+                    
+                    $sort_settings      =   $this->get_sort_settings($sortID);
+                    
+                    $data_set = array(
+                                                'order_by'              =>  (array)$sort_view_settings['_auto_order_by'],
+                                                'taxonomy_name'         =>  (array)$sort_view_settings['_auto_taxonomy_name'],
+                                                'custom_field_name'     =>  (array)$sort_view_settings['_auto_custom_field_name'],
+                                                'custom_field_type'     =>  (array)$sort_view_settings['_auto_custom_field_type'],
+                                                'custom_function_name'  =>  (array)$sort_view_settings['_auto_custom_function_name'],
+                                                'order'                 =>  (array)$sort_view_settings['_auto_order']
+                                                );
+                    
+                    $taxonomy_name    = $data_set['taxonomy_name'][$data_set_key];
+                    //if empty no need to continue
+                    if( empty ( $taxonomy_name ) )
+                        return $orderBy;
+                        
+                    if ( ! taxonomy_exists( $taxonomy_name ) )
+                        return $orderBy;
+                        
+                    //check if is archive or a taxonomy view 
+                    if ( count ($query->tax_query->queries) > 1 )
+                        return $orderBy;
+                                  
+                                  
+                    //avoid endless loop in case using this function on multiple level terms
+                    global $_SCN_in_the_loop;
+
+                    if  ( $_SCN_in_the_loop )
+                        return $orderBy;
+                      
+                    $_is_archive    =   FALSE;
+                    $_is_term       =   FALSE;
+
+
+                    if  ( count ($query->tax_query->queries) > 0 )
+                        {
+                            //ensure there's a single term
+                            reset($query->tax_query->queries);
+                            $tax    =   current($query->tax_query->queries);
+
+                            if  ( is_array($tax['terms'])   &&  count ($tax['terms'])  > 1 )
+                                return $orderBy;
+
+                            $_is_term   =   TRUE;
+                        }
+                    else
+                        $_is_archive    =   TRUE;
+
+                    //retrive the terms
+                    $args   =   array(
+                               'taxonomy'   =>  $taxonomy_name,
+                               'orderby'    => 'term_order',
+                               'order'      =>  'ASC'
+                               );
+                               
+                    if  ( $_is_term ) 
+                        {
+                            //retrieve a list of existing terms
+                            reset($query->tax_query->queries);
+                            $tax    =   current($query->tax_query->queries);
+
+                            if  ( is_array( $tax['terms'] ))
+                                {
+                                    reset( $tax['terms'] );
+                                    $term_id    =   current( $tax['terms'] );
+                                }
+                                else
+                                $term_id    =   $tax['terms'];
+
+                            if ( $tax['field']  ==  'slug'  ||  $tax['field']  ==  'name' )
+                                {
+                                    $term_data      =   get_term_by( $tax['field'], $term_id, $taxonomy_name );
+                                    $term_id        =   $term_data->term_id;
+                                } 
+                            $args['child_of']   =   $term_id;
+                        }
+
+                    $terms  =   get_terms( $args );
+
+                    //retrieve a list of items for each of the terms
+                    if ( count ( $terms )   < 1 ) 
+                        return $orderBy;
+                        
+                    $_SCN_in_the_loop = TRUE; 
+                    
+                    global $APTO; 
+                    
+                    $sort_view_post     = get_post( $sort_view_id ); 
+                    $sort_list_settings = $APTO->functions->get_sort_settings( $sort_view_post->post_parent );
+
+                    do_action( 'apto/query_get_orderby_taxonomy_name/loop/before_terms_posts', $data_set_key, $sort_view_id, $orderBy, $query );
+                    
+                    $posts_list =   array();
+                    foreach ( $terms as  $term )
+                        {
+                            $args =   array(
+                                           'post_type'         =>  $sort_list_settings['_rules']['post_type'][0],
+                                           'posts_per_page'    =>  -1,
+                                           'fields'            =>  'ids',
+                                           'orderby'           =>  'menu_order',
+                                           'order'             =>  'ASC',
+                                           'tax_query'         => array(
+                                                                           array(
+                                                                               'taxonomy' =>   $taxonomy_name,
+                                                                               'field'    =>   'id',
+                                                                               'terms'    =>   array( $term->term_id ),
+                                                                           ),
+                                                                       ),
+                                   );
+                            $term_posts_query   =  new WP_Query( $args );
+                            $found_posts        =   $term_posts_query->posts;
+                            
+                            //ensure the ids are not already in the list
+                            foreach ( $found_posts   as  $key   =>  $found_post )
+                                {
+                                    if ( array_search ( $found_post, $posts_list )  === FALSE )
+                                        continue;
+                                        
+                                    unset ( $found_posts[$key] );
+                                }
+                            
+                            $posts_list =   array_merge ( $posts_list , array_values( $found_posts ));
+                        }
+
+                    $_SCN_in_the_loop = FALSE;
+                                       
+                    $orderBy    =   '';    
+                    if (count( $posts_list ) > 0 )
+                        {
+                                
+                            $counter = 1;
+                            $previous_meta_value    =   NULL;  
+                            
+                            $orderBy = "CASE ";
+                            foreach ( $posts_list as $post_id )
+                                {
+                                    $orderBy .= " WHEN ". $wpdb->posts .".ID = " . $post_id . "  THEN  ". $counter;
+                                    $counter++;
+                                }
+                            
+                            $orderBy .= " ELSE ". $counter ." END";
+                        }
+                    
+                    
+                    return $orderBy;
+                }
+            
+            
+            
+            
             /**
             * Return the orderby argv for query on a custom field sort
             * 
@@ -1464,6 +1647,7 @@
                     
                     $data_set = array(
                                                 'order_by'              =>  (array)$sort_view_settings['_auto_order_by'],
+                                                'taxonomy_name'         =>  (array)$sort_view_settings['_auto_taxonomy_name'],
                                                 'custom_field_name'     =>  (array)$sort_view_settings['_auto_custom_field_name'],
                                                 'custom_field_type'     =>  (array)$sort_view_settings['_auto_custom_field_type'],
                                                 'custom_function_name'  =>  (array)$sort_view_settings['_auto_custom_function_name'],
@@ -1808,6 +1992,7 @@
                     
                     $data_set = array(
                                                 'order_by'              =>  (array)$sort_view_settings['_auto_order_by'],
+                                                'taxonomy_name'         =>  (array)$sort_view_settings['_auto_taxonomy_name'],
                                                 'custom_field_name'     =>  (array)$sort_view_settings['_auto_custom_field_name'],
                                                 'custom_field_type'     =>  (array)$sort_view_settings['_auto_custom_field_type'],
                                                 'custom_function_name'  =>  (array)$sort_view_settings['_auto_custom_function_name'],
@@ -2490,7 +2675,7 @@
                                 }
 
                             if ( ! empty( $excluded_terms ) ) {
-                                $_where .= " AND p.ID NOT IN ( SELECT tr.object_id FROM $wpdb->term_relationships tr LEFT JOIN $wpdb->term_taxonomy tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id) WHERE tt.term_id IN (" . implode( $excluded_terms, ',' ) . ') )';
+                                $_where .= " AND p.ID NOT IN ( SELECT tr.object_id FROM $wpdb->term_relationships tr LEFT JOIN $wpdb->term_taxonomy tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id) WHERE tt.term_id IN (" . implode( ',', $excluded_terms ) . ') )';
                             }
                         }
                         

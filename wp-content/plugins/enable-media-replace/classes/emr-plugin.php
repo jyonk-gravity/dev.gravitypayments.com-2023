@@ -103,7 +103,7 @@ class EnableMediaReplacePlugin
         if (Log::debugIsActive()) {
             $uploaddir = wp_upload_dir(null, false, false);
             if (isset($uploaddir['basedir'])) {
-                $log->setLogPath($uploaddir['basedir'] . "/emr_log");
+                $log->setLogPath( trailingslashit($uploaddir['basedir']) . "emr_log");
             }
         }
         return self::$instance;
@@ -334,7 +334,7 @@ class EnableMediaReplacePlugin
 				wp_register_script('emr_success', plugins_url('js/emr_success.js', EMR_ROOT_FILE), array(), EMR_VERSION, true);
 
 				wp_localize_script('emr_success', 'emr_success_options', array(
-					'timeout' => apply_filters('emr/success/timeout', 10),
+					'timeout' => apply_filters('emr/success/timeout', 5),
 				));
     }
 

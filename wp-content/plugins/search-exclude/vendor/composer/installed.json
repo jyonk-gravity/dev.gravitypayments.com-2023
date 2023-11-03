@@ -2,32 +2,32 @@
     "packages": [
         {
             "name": "automattic/jetpack-assets",
-            "version": "v1.18.1",
-            "version_normalized": "1.18.1.0",
+            "version": "v1.18.11",
+            "version_normalized": "1.18.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Automattic/jetpack-assets.git",
-                "reference": "bccd132389f780abf779bb85bf12b91984b4b0ce"
+                "reference": "77517baf73271ba41dfda879c5e948ce90b883ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Automattic/jetpack-assets/zipball/bccd132389f780abf779bb85bf12b91984b4b0ce",
-                "reference": "bccd132389f780abf779bb85bf12b91984b4b0ce",
+                "url": "https://api.github.com/repos/Automattic/jetpack-assets/zipball/77517baf73271ba41dfda879c5e948ce90b883ae",
+                "reference": "77517baf73271ba41dfda879c5e948ce90b883ae",
                 "shasum": ""
             },
             "require": {
-                "automattic/jetpack-constants": "^1.6.22"
+                "automattic/jetpack-constants": "^1.6.23"
             },
             "require-dev": {
-                "automattic/jetpack-changelogger": "^3.3.2",
+                "automattic/jetpack-changelogger": "^3.3.9",
                 "brain/monkey": "2.6.1",
                 "wikimedia/testing-access-wrapper": "^1.0 || ^2.0",
-                "yoast/phpunit-polyfills": "1.0.4"
+                "yoast/phpunit-polyfills": "1.1.0"
             },
             "suggest": {
                 "automattic/jetpack-autoloader": "Allow for better interoperability with other plugins that use this package."
             },
-            "time": "2023-04-10T11:44:07+00:00",
+            "time": "2023-09-19T18:19:39+00:00",
             "type": "jetpack-library",
             "extra": {
                 "autotagger": true,
@@ -55,34 +55,34 @@
             ],
             "description": "Asset management utilities for Jetpack ecosystem packages",
             "support": {
-                "source": "https://github.com/Automattic/jetpack-assets/tree/v1.18.1"
+                "source": "https://github.com/Automattic/jetpack-assets/tree/v1.18.11"
             },
             "install-path": "../../jetpack_vendor/automattic/jetpack-assets"
         },
         {
             "name": "automattic/jetpack-composer-plugin",
-            "version": "v1.1.10",
-            "version_normalized": "1.1.10.0",
+            "version": "v1.1.14",
+            "version_normalized": "1.1.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Automattic/jetpack-composer-plugin.git",
-                "reference": "c6298f3efd8a1ca76182f685d0075080e2681aa3"
+                "reference": "4722a7fe4bd0080962308653a7f935a24acfc027"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Automattic/jetpack-composer-plugin/zipball/c6298f3efd8a1ca76182f685d0075080e2681aa3",
-                "reference": "c6298f3efd8a1ca76182f685d0075080e2681aa3",
+                "url": "https://api.github.com/repos/Automattic/jetpack-composer-plugin/zipball/4722a7fe4bd0080962308653a7f935a24acfc027",
+                "reference": "4722a7fe4bd0080962308653a7f935a24acfc027",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^2.1.0"
             },
             "require-dev": {
-                "automattic/jetpack-changelogger": "^3.3.2",
+                "automattic/jetpack-changelogger": "^3.3.9",
                 "composer/composer": "^2.2 || ^2.4",
-                "yoast/phpunit-polyfills": "1.0.4"
+                "yoast/phpunit-polyfills": "1.1.0"
             },
-            "time": "2023-02-20T19:47:32+00:00",
+            "time": "2023-09-19T18:18:32+00:00",
             "type": "composer-plugin",
             "extra": {
                 "plugin-modifies-install-path": true,
@@ -107,35 +107,41 @@
                 "GPL-2.0-or-later"
             ],
             "description": "A custom installer plugin for Composer to move Jetpack packages out of `vendor/` so WordPress's translation infrastructure will find their strings.",
+            "keywords": [
+                "composer",
+                "i18n",
+                "jetpack",
+                "plugin"
+            ],
             "support": {
-                "source": "https://github.com/Automattic/jetpack-composer-plugin/tree/v1.1.10"
+                "source": "https://github.com/Automattic/jetpack-composer-plugin/tree/v1.1.14"
             },
             "install-path": "../automattic/jetpack-composer-plugin"
         },
         {
             "name": "automattic/jetpack-constants",
-            "version": "v1.6.22",
-            "version_normalized": "1.6.22.0",
+            "version": "v1.6.23",
+            "version_normalized": "1.6.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Automattic/jetpack-constants.git",
-                "reference": "7b5c44d763c7b0dd7498be2b41a89bfefe84834c"
+                "reference": "0825fb1fa94956f26adebc01be0d716a0fd3ade0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Automattic/jetpack-constants/zipball/7b5c44d763c7b0dd7498be2b41a89bfefe84834c",
-                "reference": "7b5c44d763c7b0dd7498be2b41a89bfefe84834c",
+                "url": "https://api.github.com/repos/Automattic/jetpack-constants/zipball/0825fb1fa94956f26adebc01be0d716a0fd3ade0",
+                "reference": "0825fb1fa94956f26adebc01be0d716a0fd3ade0",
                 "shasum": ""
             },
             "require-dev": {
-                "automattic/jetpack-changelogger": "^3.3.2",
+                "automattic/jetpack-changelogger": "^3.3.8",
                 "brain/monkey": "2.6.1",
-                "yoast/phpunit-polyfills": "1.0.4"
+                "yoast/phpunit-polyfills": "1.1.0"
             },
             "suggest": {
                 "automattic/jetpack-autoloader": "Allow for better interoperability with other plugins that use this package."
             },
-            "time": "2023-04-10T11:43:45+00:00",
+            "time": "2023-08-23T17:56:35+00:00",
             "type": "jetpack-library",
             "extra": {
                 "autotagger": true,
@@ -159,7 +165,7 @@
             ],
             "description": "A wrapper for defining constants in a more testable way.",
             "support": {
-                "source": "https://github.com/Automattic/jetpack-constants/tree/v1.6.22"
+                "source": "https://github.com/Automattic/jetpack-constants/tree/v1.6.23"
             },
             "install-path": "../../jetpack_vendor/automattic/jetpack-constants"
         },
@@ -279,17 +285,17 @@
         },
         {
             "name": "quadlayers/wp-notice-plugin-required",
-            "version": "2.0.6",
-            "version_normalized": "2.0.6.0",
+            "version": "2.0.7",
+            "version_normalized": "2.0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/quadlayers/wp-notice-plugin-required.git",
-                "reference": "fca08afa7ec432f90068901307e692fe419374fb"
+                "reference": "fd3d10dbdb39be738c3ef320e43cb7cd4e59e071"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/quadlayers/wp-notice-plugin-required/zipball/fca08afa7ec432f90068901307e692fe419374fb",
-                "reference": "fca08afa7ec432f90068901307e692fe419374fb",
+                "url": "https://api.github.com/repos/quadlayers/wp-notice-plugin-required/zipball/fd3d10dbdb39be738c3ef320e43cb7cd4e59e071",
+                "reference": "fd3d10dbdb39be738c3ef320e43cb7cd4e59e071",
                 "shasum": ""
             },
             "require": {
@@ -298,7 +304,7 @@
             "require-dev": {
                 "woocommerce/woocommerce-sniffs": "^0.1.3"
             },
-            "time": "2023-03-20T18:48:01+00:00",
+            "time": "2023-06-23T12:20:55+00:00",
             "type": "jetpack-library",
             "extra": {
                 "textdomain": "wp-notice-plugin-required"
@@ -328,7 +334,7 @@
             ],
             "support": {
                 "issues": "https://github.com/quadlayers/wp-notice-plugin-required/issues",
-                "source": "https://github.com/quadlayers/wp-notice-plugin-required/tree/2.0.6"
+                "source": "https://github.com/quadlayers/wp-notice-plugin-required/tree/2.0.7"
             },
             "install-path": "../../jetpack_vendor/quadlayers/wp-notice-plugin-required"
         },

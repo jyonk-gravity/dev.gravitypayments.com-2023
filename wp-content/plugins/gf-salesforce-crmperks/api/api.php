@@ -9,7 +9,7 @@ class vxg_salesforce_api extends vxg_salesforce{
 public $info=array();
   public $error= "";
   public $timeout=30;
-  public $api_version='v37.0';
+  public $api_version='v57.0';
   public $api_res='';
   
 function __construct($info) { 
@@ -139,6 +139,9 @@ if(!isset($info['instance_url']) || empty($info['instance_url'])){
   $head['Sforce-Auto-Assign']='false'; 
   unset($body['disable_rules']);   
   }
+  if($method == 'post'){
+  $head['Sforce-Duplicate-Rule-Header'] = 'allowSave=true';    
+  }
   $body=json_encode($body);
 
   }
@@ -181,6 +184,7 @@ if(!empty($dev_key)){
   }else{
   $header=array("Authorization"=>' Bearer ' . $dev_key,'content-type'=>'application/json');     
   if(!empty($head) && is_array($head)){ $header=array_merge($header,$head);  }
+  
   }
   if(is_array($body)&& count($body)>0)
   { $body=http_build_query($body);
@@ -195,7 +199,7 @@ $header['content-length']= !empty($body) ? strlen($body) : 0;
   'body' => $body
   )
   );
-
+    
   return !is_wp_error($response) && isset($response['body']) ? $response['body'] : "";
   }
   /**
@@ -744,7 +748,7 @@ if(!empty($items['extra'])){
     $extra=array_merge($items['extra'],$extra);
 }        
 }
-//var_dump($fields); die();
+//var_dump($line_items,$items); die();
 $sales_response='';
   $post_data=json_encode($fields);
   //if($error ==""){
@@ -1051,11 +1055,11 @@ $disable=false;
        return array('res'=>$sales_response,'extra'=>$extra);
   }
 public function get_items($meta){
-    $items=$this->get_wc_items($meta);
+    $items=$this->get_wc_items($meta); 
     $order_items=array(); $extra=array();  
     $price_book=''; $k=0;
     if(!empty($items)){
-        foreach($items as $item_id=>$item){
+        foreach($items as $item_id=>$item){ 
             $sku=$item['sku'];
             $price_book_id="";
        $k++;
@@ -1120,8 +1124,16 @@ public function get_items($meta){
   //var_dump($sales_response,$q); die();  die('-------------');  
         if(!empty($price_book_id)){
          //add as order item
-       $order_item=array('quantity'=>$item['qty'],'PricebookEntryId'=>$price_book_id,'UnitPrice'=>$item['cost_woo']); //,'Product2Id'=>$product_id
+       $order_item=array('quantity'=>$item['qty'],'PricebookEntryId'=>$price_book_id,'UnitPrice'=>$item['cost']); //,'Product2Id'=>$product_id
        
+           if(!empty($meta['item_price']) ){
+          if($meta['item_price'] == 'cost'){
+       $order_item['UnitPrice']=floatval($item['cost_woo']); 
+      }else if($meta['item_price'] == 'cost_tax'){
+       $order_item['UnitPrice']=floatval($item['cost'])+floatval($item['tax']); 
+      }
+     }
+     
     if(!empty($item['fields']) && is_array($meta['fields'])){
         $item['fields']=$this->clean_sf_fields($item['fields'],$meta['fields']);
         foreach($item['fields'] as $k=>$v){
@@ -1163,13 +1175,15 @@ if(method_exists($item,'get_product')){
     }
    $qty = $item->get_quantity();
    $tax = $item->get_total_tax();
-
+  if(!empty($tax) && !empty($qty)){
+       $tax=floatval($tax)/$qty;
+   }
    $desc=$product->get_short_description();
    $title=$product->get_title();
    $sku=$product->get_sku();     
    $unit_price=$product->get_price(); 
    $p_id=$product->get_parent_id();
-   $var_id=$product->get_id();
+   $var_id=$product->get_id(); 
    if(empty($p_id)){
        $p_id=$var_id;
    }else{
@@ -1179,6 +1193,28 @@ if(method_exists($item,'get_product')){
          if($parent_sku == $sku){
             // $sku.='-'.$var_id;
          }
+              // append variation names ,  $item->get_name() does not support more than 3 variation names
+          $attrs=$product_simple->get_attributes(); //$item->get_formatted_meta_data( '' )
+            $var_info=array(); 
+             if(is_array($attrs) && count($attrs)>0){
+                 foreach($attrs as $attr_key=>$attr_val){
+                     if(!is_object($attr_val)){
+                    // $att_name=wc_attribute_label($attr_key,$product);
+                     $term = get_term_by( 'slug', $attr_val, $attr_key );
+                 if ( taxonomy_exists( $attr_key ) ) {
+                $term = get_term_by( 'slug', $attr_val, $attr_key );
+                if ( ! is_wp_error( $term ) && is_object( $term ) && $term->name ) {
+                    $attr_val = $term->name;
+                }    
+            }
+            if(!empty($attr_val)){
+            $var_info[]=$attr_val;
+            }    
+                 } }
+             }
+          if(!empty($var_info)){
+          $title.=' '.implode(', ',$var_info);    
+          } 
            }
    }
    $name=$item->get_name();
@@ -1278,9 +1314,9 @@ $date_val+= $offset;  //convert utc datetime to local timezone for getting exatc
       if(is_array($field_val)){
        $field_val=html_entity_decode(implode(';',$field_val));   
       }
-  }else if($type == 'string' && !empty($fields_info[$field_key]['maxlength'])){
+  }else if(in_array($type,array('string','url')) && !empty($fields_info[$field_key]['maxlength'])){
       $field_len=$fields_info[$field_key]['maxlength'];
-      if(strlen($field_val)> $field_len){
+      if(is_string($field_val) && strlen($field_val)> $field_len){
         $field_val=trim(substr($field_val,0,$field_len-1));  
       }
   } 

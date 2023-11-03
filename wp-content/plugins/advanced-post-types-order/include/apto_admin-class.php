@@ -81,10 +81,6 @@
                     if (empty($matched_sort_id))
                         return;
                     
-                    //no hierarhical yet
-                    if($this->interface_helper->get_is_hierarhical_by_settings($matched_sort_id) === TRUE)
-                        return;
-                    
                     //check the option of this sort if allow interface sorting
                     $sort_settings  =   $this->APTO->functions->get_sort_settings($matched_sort_id);
                     
@@ -170,6 +166,9 @@
                                     $term_id    =   $term_data->term_id;
                                 }
                         }
+                    
+                    $taxonomy   =   apply_filters( 'apto/default_interface_sort/taxonomy', $taxonomy );
+                    $term_id    =   apply_filters( 'apto/default_interface_sort/term_id', $term_id );
                     
                     $paged  =   get_query_var('paged', 1);
                     if($paged   <   1)
@@ -270,6 +269,7 @@
                     
                     global $userdata;
                     $objects_per_page   =   get_user_meta($userdata->ID ,'edit_' . $post_type . '_per_page', TRUE);
+                    $objects_per_page   =   apply_filters( "edit_{$post_type}_per_page", $objects_per_page );
                     if(empty($objects_per_page))
                         $objects_per_page   =   20;
                     

@@ -11,7 +11,7 @@ final class Plugin {
 		/**
 		* Load plugin textdomain.
 		*/
-		load_plugin_textdomain( 'plugin-init', false, QLSE_PLUGIN_DIR . '/languages/' );
+		load_plugin_textdomain( 'search-exclude', false, QLSE_PLUGIN_DIR . '/languages/' );
 		/**
 		 * On activation
 		 */
@@ -149,8 +149,8 @@ final class Plugin {
 
 	public function bulk_edit( $bulk_array ) {
 
-		$bulk_array['se_hide'] = 'Hide from Search';
-		$bulk_array['se_show'] = 'Show in Search';
+		$bulk_array['se_hide'] = esc_html__( 'Hide from Search', 'search-exclude' );
+		$bulk_array['se_show'] = esc_html__( 'Show in Search', 'search-exclude' );
 
 		return $bulk_array;
 	}
@@ -244,7 +244,7 @@ final class Plugin {
 	}
 
 	public function add_column( $columns ) {
-		$columns['search_exclude'] = 'Search Exclude';
+		$columns['search_exclude'] = esc_html__( 'Search Excluded', 'search-exclude' );
 		return $columns;
 	}
 

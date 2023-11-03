@@ -776,6 +776,9 @@ class Replace
         if ( $table_prefix . 'duplicator_packages' === $this->get_table()  && 'package' === $this->get_column() ) {
             return  true;
         }
+        if ( $table_prefix . 'aiowps_audit_log' === $this->get_table()  && 'stacktrace' === $this->get_column() ) {
+            return  true;
+        }
         return false;
     }
 
@@ -867,7 +870,7 @@ class Replace
     {
         $prefix         = in_array($this->intent, ['find_replace', 'import']) ? '_mig_' . $prefix : $prefix;
         $default_tables = [
-            "${prefix}posts",
+            "{$prefix}posts",
         ];
 
         // Account for multisite subsites.

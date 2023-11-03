@@ -12,6 +12,8 @@
              public     $plugin;
              
              private    $API_VERSION;
+             
+             var        $licence;
 
              public function __construct( $api_url, $slug, $plugin )
                  {
@@ -57,14 +59,14 @@
                      if  ( $data    === FALSE )
                          {
                              $data = wp_remote_get( $request_uri, array(
-                                                                                'timeout'     => 20,
+                                                                                'timeout'     => 10,
                                                                                 'user-agent'  => 'WordPress/' . $wp_version . '; APTO/' . APTO_VERSION .'; ' . get_bloginfo( 'url' ),
                                                                                 ) );
                              
                              if(is_wp_error( $data ) || $data['response']['code'] != 200)
                                 return $checked_data;
                                 
-                             set_site_transient( 'apto-check_for_plugin_update_' . md5( $request_uri ), $data, 60 * 60 * 48 );
+                             set_site_transient( 'apto-check_for_plugin_update_' . md5( $request_uri ), $data, ( 60 * 60 * 48 ) +  rand ( 100, 36000 ) );
                              
                              if ( isset ( $_GET['force-check'] ) && $_GET['force-check']    ==  '1' )
                                 $APTO_UpdateData['apto-check_for_plugin_update_' . md5( $request_uri )]    =   $data;                             
@@ -108,14 +110,14 @@
                      if  ( $data    === FALSE )
                          {
                              $data = wp_remote_get( $request_uri, array(
-                                                                                'timeout'     => 20,
+                                                                                'timeout'     => 10,
                                                                                 'user-agent'  => 'WordPress/' . $wp_version . '; APTO/' . APTO_VERSION .'; ' . get_bloginfo( 'url' ),
                                                                                 ) );
                              
                              if(is_wp_error( $data ) || $data['response']['code'] != 200)
                                 return new WP_Error('plugins_api_failed', __('An Unexpected HTTP Error occurred during the API request.' , 'woo-global-cart') . '&lt;/p> &lt;p>&lt;a href=&quot;?&quot; onclick=&quot;document.location.reload(); return false;&quot;>'. __( 'Try again', 'woo-global-cart' ) .'&lt;/a>', $data->get_error_message());
                                 
-                             set_site_transient( 'apto-check_for_plugin_update_' . md5( $request_uri ), $data, 60 * 60 * 48 );
+                             set_site_transient( 'apto-check_for_plugin_update_' . md5( $request_uri ), $data, ( 60 * 60 * 48 ) +  rand ( 100, 36000 ) );
                          }
         
                      $response_block = json_decode($data['body']);

@@ -1,7 +1,7 @@
 <?php
 
 /* --------------------------------------------------------- */
-/* !Duplicate the post - 2.28 */
+/* !Duplicate the post - 2.31 */
 /* --------------------------------------------------------- */
 
 function mtphr_duplicate_post( $original_id, $args=array(), $do_action=true ) {
@@ -57,14 +57,19 @@ function mtphr_duplicate_post( $original_id, $args=array(), $do_action=true ) {
 	unset( $duplicate['guid'] );
 	unset( $duplicate['comment_count'] );
 
-	$duplicate['post_content'] = str_replace( array( '\r\n', '\r', '\n' ), '<br />', wp_kses_post( $duplicate['post_content'] ) ); //Handles guttenburg escaping in returns for blocks
+	//$duplicate['post_content'] = wp_slash( str_replace( array( '\r\n', '\r', '\n' ), '<br />', wp_kses_post( $duplicate['post_content'] ) ) ); 
+	$duplicate['post_content'] = wp_slash( wp_kses_post( $duplicate['post_content'] ) ); 
 
 	// Insert the post into the database
 	$duplicate_id = wp_insert_post( $duplicate );
 	
 	// Duplicate all the taxonomies/terms
 	$taxonomies = get_object_taxonomies( $duplicate['post_type'] );
+	$disabled_taxonomies = ['post_translations'];
 	foreach( $taxonomies as $taxonomy ) {
+		if ( in_array( $taxonomy, $disabled_taxonomies ) ) {
+			continue;
+		}
 		$terms = wp_get_post_terms( $original_id, $taxonomy, array('fields' => 'names') );
 		wp_set_object_terms( $duplicate_id, $terms, $taxonomy );
 	}

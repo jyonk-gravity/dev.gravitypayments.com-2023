@@ -164,6 +164,7 @@
                     $terms_map  =   array();    
                     foreach($filtred_queries    as  $fq_key    =>  $meta_item)
                         {
+                            $query_tax_terms    =   array();
                                 
                             //identify the term
                             switch ( strtolower($meta_item['field']) )

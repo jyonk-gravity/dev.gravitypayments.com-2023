@@ -6,7 +6,7 @@ return array(
   'packages' => array(
     'jetpack-assets' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-assets',
-      'ver' => '1.18.1',
+      'ver' => '1.18.11',
     ),
     'wp-dashboard-widget-news' => array(
       'path' => 'jetpack_vendor/quadlayers/wp-dashboard-widget-news',
@@ -18,7 +18,7 @@ return array(
     ),
     'wp-notice-plugin-required' => array(
       'path' => 'jetpack_vendor/quadlayers/wp-notice-plugin-required',
-      'ver' => '2.0.6',
+      'ver' => '2.0.7',
     ),
     'wp-plugin-suggestions' => array(
       'path' => 'jetpack_vendor/quadlayers/wp-plugin-suggestions',

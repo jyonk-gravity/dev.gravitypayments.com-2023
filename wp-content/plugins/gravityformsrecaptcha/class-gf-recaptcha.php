@@ -275,6 +275,9 @@ class GF_RECAPTCHA extends GFAddOn {
 
 		add_filter( 'gform_entry_is_spam', array( $this, 'check_for_spam_entry' ), 10, 3 );
 		add_filter( 'gform_validation', array( $this, 'validate_submission' ) );
+
+		add_filter( 'gform_field_content', array( $this, 'update_captcha_field_settings_link' ), 10, 2 );
+		add_filter( 'gform_incomplete_submission_pre_save', array( $this, 'add_recaptcha_v3_input_to_draft' ), 10, 3 );
 	}
 
 	/**
@@ -322,14 +325,22 @@ class GF_RECAPTCHA extends GFAddOn {
 
 		// Prevent plugin settings from loading on the frontend. Remove this condition to see it in action.
 		if ( is_admin() ) {
+			if ( $this->requires_recaptcha_script() ) {
+				$admin_deps = array( 'jquery', "{$this->asset_prefix}recaptcha" );
+			} else {
+				$admin_deps = array( 'jquery' );
+			}
+
 			$scripts[] = array(
 				'handle'  => "{$this->asset_prefix}plugin_settings",
 				'src'     => $this->get_script_url( 'plugin_settings' ),
 				'version' => $this->_version,
-				'deps'    => array( 'jquery', "{$this->asset_prefix}recaptcha" ),
+				'deps'    => $admin_deps,
 				'enqueue' => array(
-					'admin_page' => array( 'plugin_settings' ),
-					'tab'        => $this->_slug,
+					array(
+						'admin_page' => array( 'plugin_settings' ),
+						'tab'        => $this->_slug,
+					),
 				),
 			);
 		}
@@ -483,6 +494,28 @@ class GF_RECAPTCHA extends GFAddOn {
 					),
 				),
 			),
+		);
+	}
+
+	/**
+	 * Updates the query string for the settings link displayed in the form editor preview of the Captcha field.
+	 *
+	 * @since 1.2
+	 *
+	 * @param string    $field_content The field markup.
+	 * @param \GF_Field $field         The field being processed.
+	 *
+	 * @return string
+	 */
+	public function update_captcha_field_settings_link( $field_content, $field ) {
+		if ( $field->type !== 'captcha' || ! $field->is_form_editor() ) {
+			return $field_content;
+		}
+
+		return str_replace(
+			array( '&subview=recaptcha', '?page=gf_settings' ),
+			array( '', '?page=gf_settings&subview=gravityformsrecaptcha' ),
+			$field_content
 		);
 	}
 
@@ -805,6 +838,7 @@ class GF_RECAPTCHA extends GFAddOn {
 			! $this->initialize_api()
 			|| $this->is_disabled_by_form_setting( rgar( $submission_data, 'form' ) )
 			|| $this->is_preview()
+			|| rgpost( 'action' ) === 'gfstripe_validate_form'
 		) {
 			$this->log_debug( __METHOD__ . '(): Validation skipped. reCAPTCHA v3 is misconfigured, disabled, or the form was submitted in preview mode.' );
 
@@ -814,6 +848,25 @@ class GF_RECAPTCHA extends GFAddOn {
 		$this->log_debug( __METHOD__ . '(): Validating reCAPTCHA v3.' );
 
 		return $this->field->validation_check( $submission_data );
+	}
+
+	/**
+	 * Add the recaptcha v3 input and value to the draft.
+	 *
+	 * @since 1.2
+	 *
+	 * @param array  $submission_json The json containing the submitted values and the partial entry created from the values.
+	 * @param string $resume_token    The resume token.
+	 * @param array  $form            The form data.
+	 *
+	 * @return string The json string for the submission with the recaptcha v3 input and value added.
+	 */
+	public function add_recaptcha_v3_input_to_draft( $submission_json, $resume_token, $form ) {
+		$submission = json_decode( $submission_json, true );
+		$input_name = $this->field->get_input_name( rgar( $form , 'id' ) );
+		$submission[ 'partial_entry' ][ $input_name ] = rgpost( $input_name );
+
+		return wp_json_encode( $submission );
 	}
 
 }

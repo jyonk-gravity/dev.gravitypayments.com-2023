@@ -86,11 +86,12 @@ class MultisiteToolsAddonCli extends MultisiteToolsAddon
         $destination_site   = 'push' === $profile['action'] ? $post_data['site_details']['remote'] : $post_data['site_details']['local'];
         $destination_prefix = $destination_site['prefix'];
         $site_id            = 0;
-        if ($profile['multisite_tools']['enabled']) {
+
+        if (isset($profile['multisite_tools']['enabled']) && $profile['multisite_tools']['enabled']) {
             $site_id = $profile['mst_subsite_to_subsite'] ? $profile['mst_destination_subsite'] : $profile['mst_selected_subsite'];
         }
 
-        if (1 < $site_id) {
+        if ($destination_site['is_multisite'] === 'true' && 1 < $site_id) {
             $profile['new_prefix'] = $destination_prefix . $site_id . '_';
         } else {
             $profile['new_prefix'] = $destination_prefix;
@@ -124,15 +125,17 @@ class MultisiteToolsAddonCli extends MultisiteToolsAddon
             return $profile;
         }
         $mst_select_subsite      = $mst['enabled'] ? '1' : '0';
-        $mst_destination_subsite = isset($mst['destination_subsite']) ? $mst['destination_subsite'] : '0';
-        $mst_subsite_to_subsite = isset($profile['mst_subsite_to_subsite']) ? $profile['mst_subsite_to_subsite'] : $profile['current_migration']['twoMultisites'];
+        $mst_subsite_to_subsite  = isset($profile['mst_subsite_to_subsite']) ? $profile['mst_subsite_to_subsite'] : $profile['current_migration']['twoMultisites'];
         $mst_args = [
             'mst_select_subsite'      => $mst_select_subsite,
             'mst_selected_subsite'    => (int)$mst['selected_subsite'],
-            'mst_destination_subsite' => (int)$mst_destination_subsite,
             'mst_subsite_to_subsite'  => $mst_subsite_to_subsite,
             'new_prefix'              => $mst['new_prefix'],
         ];
+
+        if ($mst_subsite_to_subsite === true) {
+            $mst_args['mst_destination_subsite'] = isset($mst['destination_subsite']) ? $mst['destination_subsite'] : '0';
+        }
 
         $profile = array_merge($profile, $mst_args);
 
@@ -278,10 +281,11 @@ class MultisiteToolsAddonCli extends MultisiteToolsAddon
             'mst_select_subsite',
             'mst_subsite_to_subsite',
             'mst_selected_subsite',
-            'mst_destination_subsite',
             'new_prefix'
         );
-
+        if ($mst_subsite_to_subsite === true) {
+            $filtered_profile['mst_destination_subsite'] = $mst_destination_subsite;
+        }
         return array_merge($profile, $filtered_profile);
     }
 

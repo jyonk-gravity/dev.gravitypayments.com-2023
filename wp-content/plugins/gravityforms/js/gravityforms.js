@@ -33,7 +33,7 @@ function announceAJAXValidationErrors() {
 }
 
 //Formatting free form currency fields to currency
-jQuery( document ).bind( 'gform_post_render', gformBindFormatPricingFields );
+jQuery( document ).on( 'gform_post_render', gformBindFormatPricingFields );
 
 function gformBindFormatPricingFields(){
 	// Namespace the event and remove before adding to prevent double binding.
@@ -1999,10 +1999,10 @@ function gformToggleCreditCard(){
 //------ CHOSEN DROP DOWN FIELD ----------
 //----------------------------------------
 
-function gformInitChosenFields(fieldList, noResultsText){
-    return jQuery(fieldList).each(function(){
-
-        var element = jQuery( this );
+function gformInitChosenFields( fieldList, noResultsText ) {
+    return jQuery( fieldList ).each( function(){
+		var element = jQuery( this );
+	    var isConvoForm = typeof gfcf_theme_config !== 'undefined' ? ( gfcf_theme_config !== null && typeof gfcf_theme_config.data !== 'undefined' ? gfcf_theme_config.data.is_conversational_form : undefined ) : false;
 
         // RTL support
         if( jQuery( 'html' ).attr( 'dir' ) == 'rtl' ) {
@@ -2010,11 +2010,14 @@ function gformInitChosenFields(fieldList, noResultsText){
         }
 
         // only initialize once
-        if( element.is(":visible") && element.siblings(".chosen-container").length == 0 ){
-            var options = gform.applyFilters( 'gform_chosen_options', { no_results_text: noResultsText }, element );
+        if( ( element.is( ':visible' ) || isConvoForm ) && element.siblings( '.chosen-container' ).length == 0 ) {
+			var chosenOptions = { no_results_text: noResultsText };
+			if ( isConvoForm ) {
+				chosenOptions.width = element.css( 'inline-size' );
+			}
+            var options = gform.applyFilters( 'gform_chosen_options', chosenOptions, element );
             element.chosen( options );
         }
-
     });
 }
 
@@ -2743,14 +2746,14 @@ function gformValidateFileSize( field, max_file_size ) {
     var imagesUrl = typeof gform_gravityforms != 'undefined' ? gform_gravityforms.vars.images_url : "";
 
 
-	$(document).bind('gform_post_render', function(e, formID){
+	$(document).on('gform_post_render', function(e, formID){
 
 		$("form#gform_" + formID + " .gform_fileupload_multifile").each(function(){
 			setup(this);
 		});
 		var $form = $("form#gform_" + formID);
 		if($form.length > 0){
-			$form.submit(function(){
+			$form.on( 'submit', function(){
 				var pendingUploads = false;
 				$.each(gfMultiFileUploader.uploaders, function(i, uploader){
 					if(uploader.total.queued>0){
@@ -2769,7 +2772,7 @@ function gformValidateFileSize( field, max_file_size ) {
 
 	});
 
-	$(document).bind("gform_post_conditional_logic", function(e,formID, fields, isInit){
+	$(document).on("gform_post_conditional_logic", function(e,formID, fields, isInit){
 		if(!isInit){
 			$.each(gfMultiFileUploader.uploaders, function(i, uploader){
 				uploader.refresh();
@@ -3132,7 +3135,7 @@ function gformInitSpinner(formId, spinnerUrl, isLegacy = true) {
 		isLegacy = true;
 	}
 
-	jQuery('#gform_' + formId).submit(function () {
+	jQuery('#gform_' + formId).on( 'submit', function () {
 		if ( isLegacy ) {
 			gformAddSpinner(formId, spinnerUrl);
 			return;
@@ -3481,16 +3484,18 @@ String.prototype.format = function() {
  * @since 2.5
  */
 jQuery( document ).ready( function() {
-	jQuery( '#gform-form-toolbar__menu > li' )
-		.hover( function() {
+	jQuery( '#gform-form-toolbar__menu' )
+		.on( 'mouseenter', '> li',function() {
 			jQuery( this ).find( '.gform-form-toolbar__submenu' ).toggleClass( 'open' );
 			jQuery( this ).find( '.has_submenu' ).toggleClass( 'submenu-open' );
-		}, function() {
+		} );
+	jQuery( '#gform-form-toolbar__menu' )
+		.on( 'mouseleave', '> li',function() {
 			jQuery( '.gform-form-toolbar__submenu.open' ).removeClass( 'open' );
 			jQuery( '.has_submenu.submenu-open' ).removeClass( 'submenu-open' );
 		} );
 	jQuery( '#gform-form-toolbar__menu .has_submenu' )
-		.click( function( e ) {
+		.on( 'click', function( e ) {
 			e.preventDefault();
 		} );
 } );

@@ -3,7 +3,7 @@
 Plugin Name: Perfmatters MU
 Plugin URI: https://perfmatters.io/
 Description: Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.
-Version: 2.0.9
+Version: 2.1.8
 Author: forgemedia
 Author URI: https://forgemedia.io/
 License: GPLv2 or later
@@ -22,12 +22,12 @@ function perfmatters_mu_disable_plugins($plugins) {
     }
 
     //only filter GET requests
-    if(!isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'GET') {
+    if((!isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'GET') && !isset($_GET['perfmatters'])) {
         return $plugins;
     }
 
     //dont filter if its a rest or ajax request
-    if((defined('REST_REQUEST') && REST_REQUEST) || (function_exists('wp_is_json_request') && wp_is_json_request()) || wp_doing_ajax() || wp_doing_cron()) {
+    if((defined('REST_REQUEST') && REST_REQUEST) || (defined('WP_CLI') && WP_CLI) || (function_exists('wp_is_json_request') && wp_is_json_request()) || wp_doing_ajax() || wp_doing_cron()) {
         return $plugins;
     }
 
@@ -81,6 +81,7 @@ function perfmatters_mu_disable_plugins($plugins) {
 
     //testing mode check
     if(!empty($pmsm_settings['testing_mode'])) {
+        wp_cookie_constants();
         require_once(wp_normalize_path(ABSPATH) . 'wp-includes/pluggable.php');
         if(!function_exists('wp_get_current_user') || !current_user_can('manage_options')) {
             return $plugins;
@@ -94,11 +95,10 @@ function perfmatters_mu_disable_plugins($plugins) {
 
     //make sure mu hasn't run already
     global $mu_run_flag;
+    global $mu_plugins;
     if($mu_run_flag) {
-        return $plugins;
+        return $mu_plugins;
     }
-
-    $mu_run_flag = true;
 
     //get script manager configuration
     $pmsm = get_option('perfmatters_script_manager');
@@ -175,6 +175,9 @@ function perfmatters_mu_disable_plugins($plugins) {
         }
     }
 
+    $mu_run_flag = true;
+    $mu_plugins = $plugins;
+
     return $plugins;
 }
 
@@ -188,9 +191,7 @@ add_action('plugins_loaded', 'perfmatters_mu_remove_filters', 1);
 function perfmatters_mu_get_current_ID() {
 
     //load necessary parts for url_to_postid
-    if(!defined('LOGGED_IN_COOKIE')) {
-        wp_cookie_constants();
-    }
+    wp_cookie_constants();
     require_once(wp_normalize_path(ABSPATH) . 'wp-includes/pluggable.php');
     global $wp_rewrite;
     global $wp;

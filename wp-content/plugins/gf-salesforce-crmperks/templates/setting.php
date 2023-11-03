@@ -92,7 +92,7 @@ echo '<option value="'.esc_attr($k).'" '.$sel.'>'.esc_html($v).'</option>';
  $link_href='https://login.salesforce.com/services/oauth2/authorize?response_type=code&state='.urlencode($link."&".$this->id."_tab_action=get_token&id=".$id."&vx_nonce=".$nonce.'&vx_env=').'&client_id='.esc_html($client['client_id']).'&redirect_uri='.urlencode(esc_url($client['call_back'])).'&scope='.urlencode('api refresh_token'); 
  if(!empty($info['env'])){ $link_href=$test_link; }    
   ?>
-  <a class="button button-default button-hero sf_login" id="vx_login_btn" data-id="<?php echo esc_html($client['client_id']) ?>" href="<?php echo $link_href ?>" data-login="<?php echo $link_href ?>" data-test="<?php echo $test_link ?>"> <i class="fa fa-lock"></i> <?php esc_html_e("Login with Salesforce",'gravity-forms-salesforce-crm'); ?></a>
+  <a class="button button-default button-hero sf_login" id="vx_login_btn" data-id="<?php echo esc_html($client['client_id']) ?>" href="<?php echo $link_href ?>" data-login="<?php echo $link_href ?>" target="_self" data-test="<?php echo $test_link ?>"> <i class="fa fa-lock"></i> <?php esc_html_e("Login with Salesforce",'gravity-forms-salesforce-crm'); ?></a>
   <?php
   }
   ?></div>

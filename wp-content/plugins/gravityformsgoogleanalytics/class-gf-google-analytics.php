@@ -9,6 +9,7 @@ use GFFeedAddOn;
 use GFCommon;
 use Gravity_Forms\Gravity_Forms_Google_Analytics\GF_Google_Analytics_Pagination;
 use GFAPI;
+use GFFormsModel;
 use GFCache;
 use Gravity_Forms\Gravity_Forms_Google_Analytics\Settings;
 use WP_Error;
@@ -25,6 +26,7 @@ GFForms::include_feed_addon_framework();
  * @copyright Copyright (c) 2019, Rocketgenius
  */
 class GF_Google_Analytics extends GFFeedAddOn {
+
 	/**
 	 * Contains an instance of this class, if available.
 	 *
@@ -72,6 +74,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @var    string $_full_path The full path.
 	 */
 	protected $_full_path = __FILE__;
+
 	/**
 	 * Wrapper class for plugin settings.
 	 *
@@ -79,6 +82,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @var Settings\Plugin_Settings
 	 */
 	private $plugin_settings;
+
 	/**
 	 * Wrapper class for form settings.
 	 *
@@ -86,13 +90,14 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @var Settings\Form_Settings
 	 */
 	private $form_settings;
+
 	/**
 	 * Defines the URL where this add-on can be found.
 	 *
 	 * @since  1.0
 	 * @var    string The URL of the Add-On.
 	 */
-	protected $_url = 'http://gravityforms.com';
+	protected $_url = 'https://gravityforms.com';
 
 	/**
 	 * Defines the title of this add-on.
@@ -164,15 +169,6 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	private static $options = false;
 
 	/**
-	 * Defines the entry id if the page is redirected.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @var    int Entry id for the feed.
-	 */
-	private $conversion_entryid = 0;
-
-	/**
 	 * Defines the category if the page is redirected.
 	 *
 	 * @since  1.0.0
@@ -218,6 +214,27 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	private $connect_error = false;
 
 	/**
+	 * Version of this add-on which requires reauthentication with the API.
+	 *
+	 * Anytime updates are made to this class that requires a site to reauthenticate Gravity Forms with Google Analytics, this
+	 * constant should be updated to the value of GFForms::$version.
+	 *
+	 * @since 2.0
+	 *
+	 * @see   GFForms::$version
+	 */
+	const LAST_REAUTHENTICATION_VERSION = '2.0';
+
+	/**
+	 * The handle used to register and enqueue the frontend scripts.
+	 *
+	 * @since 2.1
+	 *
+	 * @var string
+	 */
+	const FE_SCRIPT_HANDLE = 'gforms_google_analytics_frontend';
+
+	/**
 	 * Get an instance of this class.
 	 *
 	 * @since  1.0.0
@@ -255,20 +272,16 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 */
 	public function init() {
 		parent::init();
-		add_action( 'gform_confirmation', array( &$this, 'append_confirmation_url' ), 10, 4 );
+		add_action( 'gform_confirmation', array( $this, 'force_text_confirmation' ), 1000, 4 );
 		add_action( 'wp_head', array( $this, 'maybe_install_analytics' ) );
 		add_action( 'wp_head', array( $this, 'maybe_install_tag_manager_header' ) );
+		add_action( 'admin_notices', array( $this, 'maybe_display_authentication_notice' ) );
+		add_action( 'admin_notices', array( $this, 'maybe_display_upgrade_notice' ) );
 
 		add_action( 'wp_body_open', array( $this, 'maybe_install_tag_manager_body' ) );
 
 		// General pagination.
 		add_action( 'gform_post_paging', array( $this, 'pagination' ), 10, 3 );
-
-		// GTM UTM Variable Tracking Script.
-		add_action( 'wp_enqueue_scripts', array( $this, 'load_utm_gtm_script' ) );
-
-		// Load GA script on confirmation page if redirected.
-		add_action( 'wp_enqueue_scripts', array( $this, 'load_ga_scripts_on_confirmation' ) );
 	}
 
 	/**
@@ -276,6 +289,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 */
 	public function init_admin() {
 		$this->plugin_settings->maybe_update_auth_tokens();
+
 		parent::init_admin();
 	}
 
@@ -289,13 +303,15 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		add_action( 'wp_ajax_save_entry_meta', array( $this, 'ajax_save_entry_meta' ) );
 		add_action( 'wp_ajax_save_google_analytics_data', array( $this, 'ajax_save_google_analytics_data' ) );
 		add_action( 'wp_ajax_save_google_tag_manager_data', array( $this, 'ajax_save_google_tag_manager_data' ) );
-		add_action( 'wp_ajax_get_ga_views', array( $this, 'ajax_get_ga_views' ) );
-		add_action( 'wp_ajax_create_analytics_goal', array( $this, 'ajax_create_analytics_goal' ) );
-		add_action( 'wp_ajax_update_analytics_goal', array( $this, 'ajax_update_analytics_goal' ) );
+		add_action( 'wp_ajax_save_manual_configuration_data', array( $this, 'ajax_save_manual_configuration_data' ) );
+		add_action( 'wp_ajax_get_ga4_data_streams', array( $this, 'ajax_get_ga4_data_streams' ) );
 		add_action( 'wp_ajax_get_gtm_workspaces', array( $this, 'ajax_get_gtm_workspaces' ) );
 		add_action( 'wp_ajax_get_gtm_containers', array( $this, 'ajax_get_gtm_containers' ) );
 		add_action( 'wp_ajax_redirect_to_api', array( $this, 'ajax_redirect_to_api' ) );
 		add_action( 'wp_ajax_disconnect_account', array( $this, 'ajax_disconnect_account' ) );
+		add_action( 'wp_ajax_gf_ga_upgrade_feeds', array( $this, 'ajax_upgrade_feeds' ) );
+		add_action( 'wp_ajax_gf_ga_restore_feeds', array( $this, 'ajax_restore_feeds' ) );
+		add_action( 'wp_ajax_gf_ga_log_event_sent', array( $this, 'ajax_log_ga_event_sent' ) );
 
 		parent::init_ajax();
 	}
@@ -354,6 +370,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 				$this->log_debug( __METHOD__ . '(): API access token has been refreshed.' );
 			} else {
 				$this->log_debug( __METHOD__ . '(): API access token failed to be refreshed; ' . $auth_response->get_error_message() );
+
 				return false;
 			}
 		}
@@ -362,7 +379,231 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		$this->api = $google_analytics_api;
 
 		return true;
+	}
 
+	/**
+	 * Maybe display an admin notice if Google Analytics needs to be reauthenticated.
+	 *
+	 * @since 2.0
+	 */
+	public function maybe_display_authentication_notice() {
+
+		if ( ! $this->requires_api_reauthentication() ) {
+			return;
+		}
+
+		$message = sprintf(
+		/* translators: 1: reauthentication version number 2: open <a> tag, 3: close </a> tag */
+			esc_html__(
+				'Gravity Forms Google Analytics v%1$s requires re-authentication in order to correctly send data to Google Analytics 4. Please %2$sdisconnect and reconnect%3$s to ensure data can be sent to GA4.',
+				'gravityformsgoogleanalytics'
+			),
+			self::LAST_REAUTHENTICATION_VERSION,
+			'<a href="' . esc_attr( $this->get_plugin_settings_url() ) . '">',
+			'</a>'
+		)
+		?>
+
+		<div class="gf-notice notice notice-error">
+			<p><?php echo wp_kses( $message, array( 'a' => array( 'href' => true ) ) ); ?></p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Check whether this add-on needs to be reauthenticated with Google Analytics.
+	 *
+	 * @since 2.0
+	 *
+	 * @return bool
+	 */
+	public function requires_api_reauthentication() {
+		$settings = self::get_options();
+
+		// don't show the reauth notice if the add-on is not connected.
+		if ( ! rgar( $settings, 'mode' ) ) {
+			return false;
+		}
+
+		return ! empty( $settings ) && version_compare( rgar( $settings, 'reauth_version' ), self::LAST_REAUTHENTICATION_VERSION, '<' );
+	}
+
+	/**
+	 * Maybe display an admin notice if Google Analytics feeds need to be upgraded.
+	 *
+	 * @since 2.0
+	 */
+	public function maybe_display_upgrade_notice() {
+		if ( $this->requires_api_reauthentication() ) {
+			return false;
+		}
+
+		$settings = self::get_options();
+
+		if ( ! rgar( $settings, 'mode' ) ) {
+			return false;
+		}
+
+		if ( ! $this->requires_upgrade() ) {
+			return;
+		}
+
+		$message = sprintf(
+		/* translators: 1: open <a> tag, 2: close </a> tag */
+			esc_html__(
+				'One or more of your feeds or pagination settings needs to be upgraded to correctly send data to Google Analytics 4. Until they are upgraded, no information will be sent to Google Analytics. Please go to your %1sGoogle Analytics settings%2s to upgrade them.',
+				'gravityformsgoogleanalytics'
+			),
+			'<a href="' . esc_attr( $this->get_plugin_settings_url() ) . '">',
+			'</a>'
+		)
+		?>
+
+		<div class="gf-notice notice notice-error">
+			<p><?php echo wp_kses( $message, array( 'a' => array( 'href' => true ) ) ); ?></p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Check whether any feeds or pagination settings require upgrade.
+	 *
+	 * @since 2.0
+	 *
+	 * @return bool
+	 */
+	public function requires_upgrade() {
+		// No need to check if there are no unupgraded feeds if the cache is set to false.
+		if ( GFCache::get( 'all_ga4_feeds_upgraded' ) ) {
+			return false;
+		}
+
+		$form = GFAPI::get_form( rgget( 'id' ) );
+		if ( $this->has_unupgraded_feeds() || $this->has_unupgraded_pagination_settings( $form ) ) {
+			return true;
+		}
+
+		GFCache::set( 'all_ga4_feeds_upgraded', true, true );
+
+		return false;
+	}
+
+	/**
+	 * Check whether there are any unupgraded feeds.
+	 *
+	 * @since 2.0
+	 *
+	 * @return bool
+	 */
+	public function has_unupgraded_feeds() {
+		global $wpdb;
+
+		$needs_upgrade = false;
+
+		$sql = $wpdb->prepare(
+			"SELECT * FROM {$wpdb->prefix}gf_addon_feed
+                               WHERE addon_slug=%s AND is_active=1 ORDER BY `feed_order`, `id` ASC", $this->_slug
+		);
+
+		$results = $wpdb->get_results( $sql, ARRAY_A );
+		foreach ( $results as $result ) {
+			if ( ! rgar( json_decode( $result['meta'], true ), 'ga4_compatible' ) ) {
+				$this->log_debug( __METHOD__ . '(): Feed ' . $result['id'] . ' needs upgrading' );
+				$needs_upgrade = true;
+			};
+		}
+
+		if ( ! $needs_upgrade ) {
+			$this->log_debug( __METHOD__ . '(): no unupgraded feeds found' );
+		}
+
+		return $needs_upgrade;
+	}
+
+	/**
+	 * Check whether there are any unupgraded pagination settings.
+	 *
+	 * @since 2.0
+	 *
+	 * @param array $current_form The current form.
+	 *
+	 * @return bool
+	 */
+	private function has_unupgraded_pagination_settings( $current_form = null ) {
+		global $wpdb;
+
+		$sql = $wpdb->prepare(
+			"SELECT * FROM {$wpdb->prefix}gf_form_meta
+                               WHERE display_meta LIKE %s ORDER BY `form_id` ASC", '%' . $wpdb->esc_like( $this->_slug ) . '%'
+		);
+
+		$forms = $wpdb->get_results( $sql, ARRAY_A );
+
+		if ( ! $forms ) {
+			return false;
+		}
+
+		foreach ( $forms as $form ) {
+			$meta = json_decode( $form['display_meta'], true );
+
+			if ( rgempty( 'gravityformsgoogleanalytics', $meta ) || rgempty( 'google_analytics_pagination', $meta['gravityformsgoogleanalytics'] ) ) {
+				continue;
+			}
+
+			if ( ! rgar( $meta['gravityformsgoogleanalytics'], 'ga4_compatible' ) ) {
+
+				// If a form has just been saved to be made compatible, it doesn't need upgrading. This resolves a timing issue with displaying the notice and saving form settings.
+				if ( ( rgar( $current_form, 'id' ) === $form['form_id'] ) && rgpost( '_gform_setting_ga4_compatible' ) === '1' ) {
+					continue;
+				}
+
+				$this->log_debug( __METHOD__ . '(): Pagination settings for form ' . $form['form_id'] . ' need upgrading' );
+
+				return true;
+			}
+		}
+		$this->log_debug( __METHOD__ . '(): no unupgraded pagination settings found' );
+
+		return false;
+	}
+
+	/**
+	 * Determines if logging is enabled for Google Analytics.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return bool Returns true if logging is enabled. Returns false otherwise
+	 */
+	private function is_logging_enabled() {
+
+		// Query string override to enable console logging if needed.
+		if ( rgget( 'gfga_logging' ) == 1 ) {
+			return true;
+		}
+
+		// Main logging setting is turned off. Do not log.
+		if ( ! class_exists( 'GFLogging' ) || ! get_option( 'gform_enable_logging' ) ) {
+			return false;
+		}
+
+		// Get logging setting for plugin.
+		$plugin_setting = \GFLogging::get_instance()->get_plugin_setting( $this->_slug );
+
+		return rgar( $plugin_setting, 'enable' );
+	}
+
+	/**
+	 * Delete the all feeds upgraded cache before running the parent update feed method.
+	 *
+	 * @param $id        string The feed ID.
+	 * @param $is_active string Whether the feed is active.
+	 *
+	 * @return bool
+	 */
+	public function update_feed_active( $id, $is_active ) {
+		GFCache::delete( 'all_ga4_feeds_upgraded' );
+
+		return parent::update_feed_active( $id, $is_active );
 	}
 
 	/**
@@ -373,12 +614,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @return array
 	 */
 	public function scripts() {
-		$settings = $this->get_plugin_settings();
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || rgget( 'gform_debug' ) ? '' : '.min';
-
-		// Get the Tracker.
-		$settings['ajaxurl'] = admin_url( 'admin-ajax.php' );
-		$settings['nonce']   = wp_create_nonce( 'gforms_google_analytics_confirmation' );
 
 		$scripts = array(
 			array(
@@ -387,16 +623,20 @@ class GF_Google_Analytics extends GFFeedAddOn {
 				'version'   => $this->_version,
 				'deps'      => array( 'jquery', 'wp-ajax-response' ),
 				'strings'   => array(
-					'update_settings'    => wp_strip_all_tags( __( 'Update Settings', 'gravityformsgoogleanalytics' ) ),
-					'disconnect'         => wp_strip_all_tags( __( 'Disconnecting', 'gravityformsgoogleanalytics' ) ),
-					'redirect'           => wp_strip_all_tags( __( 'Redirecting...', 'gravityformsgoogleanalytics' ) ),
-					'connect'            => wp_strip_all_tags( __( 'Connect', 'gravityformsgoogleanalytics' ) ),
-					'connecting'         => wp_strip_all_tags( __( 'Connecting', 'gravityformsgoogleanalytics' ) ),
-					'workspace_required' => wp_strip_all_tags( __( 'You must select a Workspace', 'gravityformsgoogleanalytics' ) ),
-					'view_required'      => wp_strip_all_tags( __( 'You must select a View', 'gravityformsgoogleanalytics' ) ),
-					'ga_required'        => wp_strip_all_tags( __( 'You must select a Google Analytics account', 'gravityformsgoogleanalytics' ) ),
-					'gtm_required'       => wp_strip_all_tags( __( 'You must select a Tag Manager Account', 'gravityformsgoogleanalytics' ) ),
-					'spinner'            => GFCommon::get_base_url() . '/images/spinner.svg',
+					'update_settings'     => wp_strip_all_tags( __( 'Update Settings', 'gravityformsgoogleanalytics' ) ),
+					'disconnect'          => wp_strip_all_tags( __( 'Disconnecting', 'gravityformsgoogleanalytics' ) ),
+					'redirect'            => wp_strip_all_tags( __( 'Redirecting...', 'gravityformsgoogleanalytics' ) ),
+					'connect'             => wp_strip_all_tags( __( 'Connect', 'gravityformsgoogleanalytics' ) ),
+					'connecting'          => wp_strip_all_tags( __( 'Connecting', 'gravityformsgoogleanalytics' ) ),
+					'workspace_required'  => wp_strip_all_tags( __( 'You must select a Workspace', 'gravityformsgoogleanalytics' ) ),
+					'view_required'       => wp_strip_all_tags( __( 'You must select a View', 'gravityformsgoogleanalytics' ) ),
+					'ga_required'         => wp_strip_all_tags( __( 'You must select a Google Analytics account', 'gravityformsgoogleanalytics' ) ),
+					'gtm_required'        => wp_strip_all_tags( __( 'You must select a Tag Manager Account', 'gravityformsgoogleanalytics' ) ),
+					'spinner'             => GFCommon::get_base_url() . '/images/spinner.svg',
+					'upgrade_feeds_nonce' => wp_create_nonce( 'google_analytics_upgrade_feeds' ),
+					'restore_feeds_nonce' => wp_create_nonce( 'google_analytics_restore_feeds' ),
+					'upgrade_confirm'     => wp_strip_all_tags( __( 'This action will modify your feeds in order to be compatible with Google Analytics 4. Continue?', 'gravityformsgoogleanalytics' ) ),
+					'restore_confirm'     => wp_strip_all_tags( __( 'This action will permanently remove your existing Google Analytics feeds and restore your feeds from the previous version. These feeds will not work with Google Analytics 4. Continue?', 'gravityformsgoogleanalytics' ) ),
 				),
 				'in_footer' => true,
 				'enqueue'   => array(
@@ -406,122 +646,19 @@ class GF_Google_Analytics extends GFFeedAddOn {
 				),
 			),
 			array(
-				'handle'    => 'gforms_google_analytics_feed',
-				'src'       => $this->get_base_url() . "/js/google-analytics-feed{$min}.js",
-				'version'   => $this->_version,
-				'deps'      => array( 'jquery', 'thickbox' ),
-				'in_footer' => true,
-				'enqueue'   => array(
-					array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityformsgoogleanalytics' ),
-				),
-				'strings'   => array(
-					'edit'                    => wp_strip_all_tags( __( 'Select Goal', 'gravityformsgoogleanalytics' ) ),
-					'goalcreation'            => wp_strip_all_tags( __( 'Gravity Forms Google Analytics', 'gravityformsgoogleanalytics' ) ),
-					'usegoal'                 => wp_strip_all_tags( __( 'Use This Goal', 'gravityformsgoogleanalytics' ) ),
-					'creategoal'              => wp_strip_all_tags( __( 'Create Goal', 'gravityformsgoogleanalytics' ) ),
-					'creating'                => wp_strip_all_tags( __( 'Creating Goal...', 'gravityformsgoogleanalytics' ) ),
-					'saving'                  => wp_strip_all_tags( __( 'Saving Goal...', 'gravityformsgoogleanalytics' ) ),
-					'savinganduse'            => wp_strip_all_tags( __( 'Save and Use Goal', 'gravityformsgoogleanalytics' ) ),
-					'goalcreated'             => wp_strip_all_tags( __( 'Goal Created!', 'gravityformsgoogleanalytics' ) ),
-					'required'                => wp_strip_all_tags( __( 'This field is required.', 'gravityformsgoogleanalytics' ) ),
-					'spinner'                 => GFCommon::get_base_url() . '/images/spinner.gif',
-					'action'                  => 'submission',
-					'category'                => 'form',
-					'label'                   => '{form_title} ID: {form_id}',
-					'goal'                    => rgget( 'id' ) ? wp_strip_all_tags( __( 'Form Submission:', 'gravityformsgoogleanalytics' ) . ' ' . GFAPI::get_form( rgget( 'id' ) )['title'] ) : '',
-					'pagination_action'       => 'pagination',
-					'pagination_category'     => 'form',
-					'pagination_label'        => '{form_title}::{source_page_number}::{current_page_number}',
-					'pagination_goal'         => rgget( 'id' ) ? wp_strip_all_tags( __( 'Pagination:', 'gravityformsgoogleanalytics' ) . ' ' . GFAPI::get_form( rgget( 'id' ) )['title'] ) : '',
-					'pagination_savinganduse' => wp_strip_all_tags( __( 'Save and Use Goal', 'gravityformsgoogleanalytics' ) ),
-					'pagination_creategoal'   => wp_strip_all_tags( __( 'Create Goal', 'gravityformsgoogleanalytics' ) ),
-					'pagination_edit'         => wp_strip_all_tags( __( 'Select Goal', 'gravityformsgoogleanalytics' ) ),
-					'pagination_savegoal'     => wp_strip_all_tags( __( 'Save Goal', 'gravityformsgoogleanalytics' ) ),
-				),
-			),
-			array(
-				'handle'    => 'gforms_google_analytics_frontend',
+				'handle'    => self::FE_SCRIPT_HANDLE,
 				'src'       => $this->get_base_url() . "/js/google-analytics{$min}.js",
 				'version'   => $this->_version,
 				'deps'      => array( 'jquery', 'wp-ajax-response' ),
 				'in_footer' => true,
-				'strings'   => $settings,
 				'enqueue'   => array(
 					array( $this, 'frontend_script_callback' ),
 				),
+				'callback' => array( $this, 'frontend_script_strings_callback' ),
 			),
 		);
 
 		return array_merge( parent::scripts(), $scripts );
-	}
-
-	/**
-	 * Outputs admin styles to handle form submission in back-end.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @return array
-	 */
-	public function styles() {
-		$min    = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || rgget( 'gform_debug' ) ? '' : '.min';
-		$styles = array(
-			array(
-				'handle'  => 'thickbox',
-				'enqueue' => array(
-					array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityformsgoogleanalytics' ),
-				),
-			),
-			array(
-				'handle'  => 'gfga_thickbox_settings',
-				'src'     => $this->get_base_url() . "/css/gfga_thickbox{$min}.css",
-				'version' => $this->_version,
-				'deps'    => array( 'thickbox' ),
-				'enqueue' => array(
-					array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityformsgoogleanalytics' ),
-				),
-			),
-		);
-
-		return array_merge( parent::styles(), $styles );
-	}
-
-	/**
-	 * Load a UTM tracking script for Google Tag Manager.
-	 */
-	public function load_utm_gtm_script() {
-		$maybe_gtm_on = $this->get_plugin_setting( 'utm' );
-		if ( 'on' === $maybe_gtm_on ) {
-			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || rgget( 'gform_debug' ) ? '' : '.min';
-			wp_enqueue_script(
-				'gfga_utm_gtm',
-				$this->get_base_url() . "/js/google-analytics-utm-tag-manager{$min}.js",
-				array( 'jquery', 'wp-ajax-response' ),
-				$this->_version,
-				true
-			);
-		}
-	}
-
-	/**
-	 * Load GA scripts on the confirmation page if it is a redirect.
-	 *
-	 * @since 1.0
-	 */
-	public function load_ga_scripts_on_confirmation() {
-		if ( rgget( 'gfaction' ) ) {
-			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || rgget( 'gform_debug' ) ? '' : '.min';
-			wp_enqueue_script(
-				'gforms_google_analytics_frontend',
-				$this->get_base_url() . "/js/google-analytics{$min}.js",
-				array( 'jquery', 'wp-ajax-response' ),
-				$this->_version,
-				true
-			);
-			$settings = $this->get_plugin_settings();
-			$settings['ajaxurl'] = admin_url( 'admin-ajax.php' );
-			$settings['nonce']   = wp_create_nonce( 'gforms_google_analytics_confirmation' );
-			wp_localize_script( 'gforms_google_analytics_frontend', 'gforms_google_analytics_frontend_strings', $settings );
-		}
 	}
 
 	/**
@@ -544,9 +681,9 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param  string $context      Context to retrieve options for. This is used as an array key.
-	 * @param  string $key          Array key to retrieve.
-	 * @param  bool   $force_reload Whether to retrieve cached options or forcefully retrieve from the database.
+	 * @param string $context      Context to retrieve options for. This is used as an array key.
+	 * @param string $key          Array key to retrieve.
+	 * @param bool   $force_reload Whether to retrieve cached options or forcefully retrieve from the database.
 	 *
 	 * @return mixed All options if no context, or associative array if context is set. Empty array if no options. String if $key is set.
 	 */
@@ -617,6 +754,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * Save feed settings.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param int $feed_id The Feed ID.
 	 * @param int $form_id The Form ID.
 	 *
@@ -632,6 +770,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 
 		if ( ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
 			GFCommon::add_error_message( esc_html__( "You don't have sufficient permissions to update the form settings.", 'gravityformsgoogleanalytics' ) );
+
 			return $feed_id;
 		}
 
@@ -648,6 +787,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		if ( $is_valid ) {
 			$settings = $this->filter_settings( $sections, $settings );
 			$feed_id  = $this->save_feed_settings( $feed_id, $form_id, $settings );
+
 			if ( $feed_id ) {
 				GFCommon::add_message( $this->get_save_success_message( $sections ) );
 			} else {
@@ -683,7 +823,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since  1.0.0
 	 */
 	public function maybe_install_analytics() {
-		$settings = $this->get_plugin_settings();
+		$settings = self::get_options();
 		if ( ! isset( $settings['ga'] ) ) {
 			return;
 		}
@@ -694,31 +834,40 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		$this->log_debug( __METHOD__ . '(): Loading Google Analytics GTAG settings: ' . print_r( $settings, true ) );
 
 		// Attempt to get options.
-		$ga_code = sanitize_text_field( $this->get_options( 'account', 'property' ) );
+		$measurement_id = sanitize_text_field( self::get_options( 'ga4_account', 'measurement_id' ) );
 
 		// User has requested GA installation. Proceed.
 		echo "\r\n";
 		?>
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_html( $ga_code ); ?>"></script> <?php //phpcs:ignore ?>
-	<script>
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', '<?php echo esc_html( $ga_code ); ?>');
-		<?php
-		/**
-		 * Action: gform_googleanalytics_install_analytics
-		 *
-		 * Allow custom scripting for Google Analytics GTAG
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $ga_code Google Analytics Property ID
-		 */
-		do_action( 'gform_googleanalytics_install_analytics', $ga_code );
-		?>
-	</script>
+
+		<!-- Google tag (gtag.js) -->
+		<script async
+		        src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_html( $measurement_id ); ?>"></script> <?php //phpcs:ignore ?>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+
+			function gtag() {
+				dataLayer.push( arguments );
+			}
+
+			gtag( 'js', new Date() );
+
+			gtag( 'config', '<?php echo esc_html( $measurement_id ); ?>' );
+
+			<?php
+			/**
+			 * Action: gform_googleanalytics_install_analytics
+			 *
+			 * Allow custom scripting for Google Analytics GTAG
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param string $gmeasurement_id Google Analytics Property ID
+			 */
+			do_action( 'gform_googleanalytics_install_analytics', $measurement_id );
+			?>
+		</script>
+
 		<?php
 	}
 
@@ -728,7 +877,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since  1.0.0
 	 */
 	public function maybe_install_tag_manager_header() {
-		$settings = $this->get_plugin_settings();
+		$settings = self::get_options();
 		if ( ! isset( $settings['install_gtm'] ) ) {
 			return;
 		}
@@ -739,7 +888,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		$this->log_debug( __METHOD__ . '(): Loading Google Tag Manager Installation Setting: ' . print_r( $settings, true ) );
 
 		// Attempt to get options.
-		$gtm_code = sanitize_text_field( $this->get_options( 'account', 'container_id' ) );
+		$gtm_code = sanitize_text_field( self::get_options( 'ga4_account', 'gtm_container_id' ) );
 		if ( empty( $gtm_code ) ) {
 			return;
 		}
@@ -748,23 +897,31 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		echo "\r\n";
 		?>
 		<!-- Google Tag Manager -->
-		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-					new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-				j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-				'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-			})(window,document,'script','dataLayer','<?php echo esc_html( $gtm_code ); ?>');
-		<?php
-		/**
-		 * Action: gform_googleanalytics_install_tag_manager
-		 *
-		 * Allow custom scripting for Google Tag Manager
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $gtm_code Google Tag Manager ID
-		 */
-		do_action( 'gform_googleanalytics_install_tag_manager', $gtm_code );
-		?>
+		<script>( function( w, d, s, l, i ) {
+				w[ l ] = w[ l ] || [];
+				w[ l ].push( {
+					'gtm.start':
+						new Date().getTime(), event: 'gtm.js'
+				} );
+				var f = d.getElementsByTagName( s )[ 0 ],
+					j = d.createElement( s ), dl = l != 'dataLayer' ? '&l=' + l : '';
+				j.async = true;
+				j.src =
+					'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+				f.parentNode.insertBefore( j, f );
+			} )( window, document, 'script', 'dataLayer', '<?php echo esc_html( $gtm_code ); ?>' );
+			<?php
+			/**
+			 * Action: gform_googleanalytics_install_tag_manager
+			 *
+			 * Allow custom scripting for Google Tag Manager
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param string $gtm_code Google Tag Manager ID
+			 */
+			do_action( 'gform_googleanalytics_install_tag_manager', $gtm_code );
+			?>
 		</script>
 		<!-- End Google Tag Manager -->
 		<?php
@@ -776,7 +933,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since  1.0.0
 	 */
 	public function maybe_install_tag_manager_body() {
-		$settings = $this->get_plugin_settings();
+		$settings = self::get_options();
 		if ( ! isset( $settings['install_gtm'] ) ) {
 			return;
 		}
@@ -784,7 +941,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 			return;
 		}
 
-		$gtm_code = sanitize_text_field( $this->get_options( 'account', 'container_id' ) );
+		$gtm_code = sanitize_text_field( self::get_options( 'account', 'container_id' ) );
 		if ( empty( $gtm_code ) ) {
 			return;
 		}
@@ -793,7 +950,8 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		?>
 		<!-- Google Tag Manager (noscript) -->
 		<noscript>
-			<iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo esc_html( $gtm_code ); ?>" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+			<iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo esc_html( $gtm_code ); ?>" height="0"
+			        width="0" style="display:none;visibility:hidden"></iframe>
 		</noscript>
 		<!-- End Google Tag Manager (noscript) -->
 		<?php
@@ -807,338 +965,6 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		 * @param string $gtm_code Google Tag Manager ID
 		 */
 		do_action( 'gform_googleanalytics_install_tag_manager', $gtm_code );
-	}
-
-	/**
-	 * Check if goal attributes need to be manually configured for tag manager.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @return bool True if configuration is set to manual, otherwise false.
-	 */
-	public function manual_configuration() {
-		$options = $this->get_options();
-		return $options['account']['property'] === 'manual';
-	}
-
-	/**
-	 * Creates a Google Analytics goal if none exists.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @param string $event_category         The event category to create a goal for.
-	 * @param string $event_action           The event action to create a goal for.
-	 * @param string $event_label            The event label to create a goal for.
-	 * @param string $goal_name              The name for this goal.
-	 * @param bool   $create_goal            Whether to create the goal or not (useful for checking if the goal .exists).
-	 * @param bool   $skip_goal_exists_check If true, skips goal checking for existing goal.
-	 *
-	 * @return array|WP_Error The response from the API. An array if successful, otherwise a WP_Error object.
-	 */
-	private function create_analytics_goal( $event_category, $event_action, $event_label, $goal_name, $create_goal = true, $skip_goal_exists_check = false ) {
-		$options = $this->get_options();
-		$mode    = $options['mode'];
-
-		$custom_label = $event_label;
-
-		// Check event label for default values.
-		if ( '{form_title}::{source_page_number}::{current_page_number}' === $event_label ) {
-			$event_label = '';
-		}
-		if ( '{form_title} ID: {form_id}' === $event_label ) {
-			$event_label = '';
-		}
-
-		// Check event label for merge tags.
-		if ( ! empty( $event_label ) && strstr( $event_label, '{' ) ) {
-			$event_label = '';
-			$this->log_debug( __METHOD__ . '(): Label has merge tags. Defaulting to empty for goal creation. Users can segment by label in Google Analytics' );
-		}
-
-		// Make sure values aren't empty.
-		if ( empty( $event_category ) || empty( $event_action ) ) {
-			$this->log_debug( __METHOD__ . '(): Goal creation aborted. Event category or action is empty' );
-			return new WP_Error( 'missing_values', 'Event category and action cannot be empty' );
-		}
-
-		if ( $this->manual_configuration() ) {
-			return array(
-				'id'   => null,
-				'kind' => 'analytics#goal',
-			);
-		}
-
-		/**
-		 * Filter: gform_googleanalytics_goal_name.
-		 *
-		 * Filter the goal name so it can be changed.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $goal_name       Goal name for the analytics goal.
-		 * @param string $mode            The mode the plugins is in (ga, gmp, gtm).
-		 * @param string $event_category  Event category for this goal.
-		 * @param string $event_action    Event action for this goal.
-		 * @param string $event_label     Event label for this goal.
-		 *
-		 * @return string New goal name.
-		 */
-		$goal_name = apply_filters( 'gform_googleanalytics_goal_name', $goal_name, $mode, $event_category, $event_action, $event_label );
-
-		$this->log_debug( __METHOD__ . '(): Creating Google Analytics Goal: ' . $goal_name );
-
-		$body = array();
-
-		// Retrieve profile ID.
-		$profile_id = $this->get_profile_id(
-			$options['account']['account_id'],
-			$options['account']['property'],
-			$options['account']['view']
-		);
-		$this->log_debug( __METHOD__ . '(): Retrieving Profile ID with response: ' . $profile_id );
-
-		// Retrieve Goal information.
-		$goal_response = $this->api->get_goals(
-			$body,
-			$options['account']['account_id'],
-			$options['account']['property'],
-			$profile_id
-		);
-		if ( is_wp_error( $goal_response ) ) {
-			$this->log_debug( __METHOD__ . '(): Could not retrieve goal information' );
-			return $goal_response;
-		}
-
-		// See if goal has already been created.
-		$maybe_category_match = false;
-		$maybe_action_match   = false;
-		$maybe_label_match    = false;
-		$goal_count           = 0;
-		if ( isset( $goal_response['items'] ) ) {
-			$goal_count = count( $goal_response['items'] ) + 1;
-			foreach ( $goal_response['items'] as $item ) {
-				$event_data = $item['eventDetails']['eventConditions'];
-				foreach ( $event_data as $data ) {
-					if ( 'CATEGORY' === $data['type'] && $event_category === $data['expression'] ) {
-						$maybe_category_match = true;
-						continue;
-					}
-					if ( 'ACTION' === $data['type'] && $event_action === $data['expression'] ) {
-						$maybe_action_match = true;
-						continue;
-					}
-					if ( 'LABEL' === $data['type'] && $event_label === $data['expression'] ) {
-						$maybe_label_match = true;
-					}
-				}
-			}
-		} else {
-			$goal_count = 1;
-		}
-		if ( ! $skip_goal_exists_check ) {
-			// Goals match, return.
-			if ( $maybe_category_match && $maybe_action_match ) {
-				$this->log_debug( __METHOD__ . '(): Category and Action and Label already created. Aborting creating goal' );
-				return true;
-			}
-		}
-
-		// Goal doesn't exist and creating goals is false, so exit.
-		if ( ! $create_goal ) {
-			$this->log_debug( __METHOD__ . '(): Goal not created because automatic goal creation is turned off.' );
-			return new WP_Error( 'goal_creation_disabled', 'Automatic goal creation is disabled.' );
-		}
-
-		// Create a new goal.
-		$body_json = array(
-			'active'       => true,
-			'kind'         => 'analytics#goal',
-			'type'         => 'EVENT',
-			'eventDetails' => array(
-				'useEventValue'   => true,
-				'eventConditions' => array(
-					array(
-						'type'       => 'CATEGORY',
-						'matchType'  => 'BEGINS_WITH',
-						'expression' => $event_category,
-					),
-					array(
-						'type'       => 'ACTION',
-						'matchType'  => 'BEGINS_WITH',
-						'expression' => $event_action,
-					),
-				),
-			),
-			'id'           => $this->get_next_goal_id( $this->get_goals( true ) ),
-			'name'         => $goal_name,
-		);
-		if ( ! empty( $event_label ) ) {
-			$body_json['eventDetails']['eventConditions'][] = array(
-				'type'       => 'LABEL',
-				'matchType'  => 'BEGINS_WITH',
-				'expression' => $event_label,
-			);
-		}
-		$body = wp_json_encode( $body_json );
-
-		// Submit goal.
-		$goal_insert_response = $this->api->create_goal(
-			$body,
-			$options['account']['account_id'],
-			$options['account']['property'],
-			$profile_id
-		);
-		if ( is_wp_error( $goal_insert_response ) ) {
-			$this->log_debug( __METHOD__ . '(): Goal could not be created: ' . $goal_insert_response->get_error_code() . ': ' . $goal_insert_response->get_error_message() );
-			return $goal_insert_response;
-		}
-		$this->log_debug( __METHOD__ . '(): Goal created.' );
-
-		// Save Labels as option for goal.
-		$label_goal_options                                      = get_option( 'gforms_google_analytics_goal_labels', array() );
-		$label_goal_options[ $goal_insert_response['selfLink'] ] = sanitize_text_field( $custom_label );
-		update_option(
-			'gforms_google_analytics_goal_labels',
-			$label_goal_options
-		);
-
-		return $goal_insert_response;
-	}
-
-	/**
-	 * Get the next available goal ID for use in creating a new goal.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @param array $goals The user's existing goals.
-	 *
-	 * @return int The next available numeric ID for the new goal.
-	 */
-	private function get_next_goal_id( $goals ) {
-		$ids = array();
-		if ( $goals ) {
-			foreach ( $goals as $goal ) {
-				array_push( $ids, rgar( $goal, 'goal_id' ) );
-			}
-			$range         = range( 1, 20 );
-			$available_ids = array_diff( $range, $ids );
-			return current( $available_ids );
-		}
-		return 1;
-	}
-
-	/**
-	 * Updates an existing analytics goal.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @param string $event_category         The new or existing event category.
-	 * @param string $event_action           The new or existing event action.
-	 * @param string $event_label            The new or existing event label.
-	 * @param string $goal_name              The name for this goal.
-	 * @param int    $goal_id                The ID of the goal to be updated.
-	 *
-	 * @return array|WP_Error The response from the API. An array if successful, otherwise a WP_Error object.
-	 */
-	private function update_analytics_goal( $event_category, $event_action, $event_label, $goal_name, $goal_id ) {
-		$options      = $this->get_options();
-		$mode         = $options['mode'];
-		$custom_label = $event_label;
-
-		// Check event label for default values.
-		if ( '{form_title}::{source_page_number}::{current_page_number}' === $event_label ) {
-			$event_label = '';
-		}
-		if ( '{form_title} ID: {form_id}' === $event_label ) {
-			$event_label = '';
-		}
-
-		// Check event label for merge tags.
-		if ( ! empty( $event_label ) && strstr( $event_label, '{' ) ) {
-			$event_label = '';
-			$this->log_debug( __METHOD__ . '(): Label has merge tags. Defaulting to empty for goal creation. Users can segment by label in Google Analytics' );
-		}
-
-		// Make sure values aren't empty.
-		if ( empty( $event_category ) || empty( $event_action ) ) {
-			$this->log_debug( __METHOD__ . '(): Goal creation aborted. Event category or action is empty.' );
-			return new WP_Error( 'missing_values', 'Event Category or Action cannot be empty' );
-		}
-
-		/**
-		 * Filter: gform_googleanalytics_goal_name.
-		 *
-		 * Filter the goal name so it can be changed.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $goal_name       Goal name for the analytics goal.
-		 * @param string $mode            The mode the plugins is in (ga, gmp, gtm).
-		 * @param string $event_category  Event category for this goal.
-		 * @param string $event_action    Event action for this goal.
-		 * @param string $event_label     Event label for this goal.
-		 *
-		 * @return string New Goal name.
-		 */
-		$goal_name = apply_filters( 'gform_googleanalytics_goal_name', $goal_name, $mode, $event_category, $event_action, $event_label );
-		$this->log_debug( __METHOD__ . '(): Updating Google Analytics Goal: ' . $goal_name );
-
-		// Update a new goal.
-		$body_json = array(
-			'id'            => $goal_id,
-			'accountId'     => $options['account']['account_id'],
-			'webPropertyId' => $options['account']['property'],
-			'profileId'     => $options['account']['view'],
-			'goalId'        => $goal_id,
-			'name'          => $goal_name,
-			'type'          => 'event',
-			'active'        => true,
-			'eventDetails'  => array(
-				'useEventValue'   => true,
-				'eventConditions' => array(
-					array(
-						'type'       => 'CATEGORY',
-						'matchType'  => 'BEGINS_WITH',
-						'expression' => $event_category,
-					),
-					array(
-						'type'       => 'ACTION',
-						'matchType'  => 'BEGINS_WITH',
-						'expression' => $event_action,
-					),
-				),
-			),
-		);
-		if ( ! empty( $event_label ) ) {
-			$body_json['eventDetails']['eventConditions'][] = array(
-				'type'       => 'LABEL',
-				'matchType'  => 'BEGINS_WITH',
-				'expression' => $event_label,
-			);
-		}
-		$body = wp_json_encode( $body_json );
-
-		$goal_update_response = $this->api->update_goal(
-			$body,
-			$options['account']['account_id'],
-			$options['account']['property'],
-			$options['account']['view'],
-			$goal_id
-		);
-		if ( is_wp_error( $goal_update_response ) ) {
-			$this->log_debug( __METHOD__ . '(): Could not update goal: ' . $goal_id . ': ' . $goal_update_response->get_error_code() . ': ' . $goal_update_response->get_error_message() );
-			return $goal_update_response;
-		}
-
-		// Save Labels as option for goal.
-		$label_goal_options                                      = get_option( 'gforms_google_analytics_goal_labels', array() );
-		$label_goal_options[ $goal_update_response['selfLink'] ] = sanitize_text_field( $custom_label );
-		update_option(
-			'gforms_google_analytics_goal_labels',
-			$label_goal_options
-		);
-
-		return $goal_update_response;
 	}
 
 	/**
@@ -1219,9 +1045,9 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 *
 	 * @since  1.0.0
 	 *
-	 * @param int    $account_id  GA account number.
-	 * @param string $ga_code     GA property code.
-	 * @param string $view        GA View.
+	 * @param int    $account_id GA account number.
+	 * @param string $ga_code    GA property code.
+	 * @param string $view       GA View.
 	 *
 	 * @return string/WP_Error The GA profile ID.
 	 */
@@ -1241,11 +1067,44 @@ class GF_Google_Analytics extends GFFeedAddOn {
 					break;
 				}
 			}
+
 			return $profile_id;
 		}
+
 		return '';
 	}
 
+	/**
+	 * Returns an array with Google Analytics codes to be associated with the event. This only applies to Measurement Protocol.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $form  Current form object.
+	 * @param array $entry Current entry object.
+	 * @param array $feed  Current feed object.
+	 *
+	 * @return array Returns an array of Google Analytics codes.
+	 */
+	private function get_ga_codes( $form, $entry = null, $feed = null ) {
+
+		$ua_ids = array( $this->get_measurement_id() );
+
+		/**
+		 * Filter: gform_googleanalytics_ua_ids
+		 *
+		 * Filter all outgoing UA IDs to send events to using the measurement protocol.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $ua_ids UA codes.
+		 * @param array $form   Gravity Form form object.
+		 * @param array $entry  Gravity Form Entry Object.
+		 * @param array $feed   Current feed.
+		 *
+		 * @return array Google anaylics codes.
+		 */
+		return apply_filters( 'gform_googleanalytics_ua_ids', $ua_ids, $form, $entry, $feed );
+	}
 
 	/**
 	 * Initialize the pagination events.
@@ -1258,31 +1117,60 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 */
 	public function pagination( $form, $source_page_number, $current_page_number ) {
 
-		if ( ! rgar( $form, 'gravityformsgoogleanalytics' ) && ! rgar( $form, 'gravityformsgoogleanalytics/google_analytics_pagination' ) ) {
+		// Pagination tracking not enabled. Abort.
+		if ( ! rgars( $form, 'gravityformsgoogleanalytics/google_analytics_pagination' ) ) {
 			return;
 		}
 
-		if ( rgar( $form['gravityformsgoogleanalytics'], 'google_analytics_pagination' ) !== '1' ) {
-			return;
+		$mode       = self::get_options( '', 'mode' );
+		$parameters = $this->get_mapped_parameters( $form['gravityformsgoogleanalytics'], 'pagination_parameters', $form, \GFFormsModel::get_current_lead( $form ) );
+		$is_ajax    = isset( $_REQUEST['gform_ajax'] ) ? true : false;
+		$event_name = $this->get_pagination_event_name( $mode, $form );
+
+		switch ( $mode ) {
+			case 'gmp':
+				// Send events via server side (measurement protocol).
+				$ua_codes = $this->get_ga_codes( $form );
+				$this->send_measurement_protocol( $ua_codes, $parameters, $event_name, \GFFormsModel::get_current_page_url() );
+
+				break;
+
+			case 'ga':
+				$this->log_debug( __METHOD__ . '(): Attempting to send pagination event via Google Analytics. Event Name: ' . $event_name . '. Parameters: ' . print_r( $parameters, true ) );
+				$this->render_script_send_to_ga( $parameters, $event_name, $is_ajax );
+				break;
+
+			case 'gtm':
+				$trigger_name = rgar( $form['gravityformsgoogleanalytics'], 'pagination_trigger' ) == 'gf_custom' ? rgar( $form['gravityformsgoogleanalytics'], 'pagination_trigger_custom' ) : rgar( $form['gravityformsgoogleanalytics'], 'pagination_trigger' );
+				$this->log_debug( __METHOD__ . '(): Attempting to send pagination event via Google Tag Manager. Trigger Name: ' . $trigger_name . '. Parameters: ' . print_r( $parameters, true ) );
+				$this->render_script_send_to_gtm( $parameters, $trigger_name, $is_ajax );
+				break;
 		}
+	}
 
-		if ( ! class_exists( 'GF_Google_Analytics_Pagination' ) ) {
-			include_once 'includes/class-gf-google-analytics-pagination.php';
-		}
+	/**
+	 * Loads the parameter list with the actual values from the form submission and query string.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array  $settings               Settings array containing the mapped field configuration.
+	 * @param string $parameter_setting_name The name of the parameter setting field.
+	 * @param array  $form                   The current form object.
+	 * @param array  $entry                  The current entry object.
+	 *
+	 * @return array An array with the mapped parameters
+	 */
+	private function get_mapped_parameters( $settings, $parameter_setting_name, $form, $entry ) {
 
-		$settings = $this->get_options();
-		if ( rgar( $settings, 'mode' ) ) {
-			$mode = $settings['mode'];
-		} else {
-			$this->log_debug( __METHOD__ . '(): No tracking mode selected. Aborting pagination tracking.' );
-			return;
-		}
-		$ua_code = $this->get_ua_code();
+		// Adding UTM values to entry.
+		$entry['utm_source']   = rgget( 'utm_source' );
+		$entry['utm_medium']   = rgget( 'utm_medium' );
+		$entry['utm_campaign'] = rgget( 'utm_campaign' );
+		$entry['utm_term']     = rgget( 'utm_term' );
+		$entry['utm_content']  = rgget( 'utm_content' );
 
-		$this->log_debug( __METHOD__ . '(): Before pagination event sent: ' . sprintf( '%s:%s:%d:%d', $ua_code, $mode, $source_page_number, $current_page_number ) );
-
-		$pagination = GF_Google_Analytics_Pagination::get_instance();
-		$pagination->paginate( $ua_code, $mode, $form, $source_page_number, $current_page_number );
+		// Loading parameters.
+		return $this->get_generic_map_fields( $settings, $parameter_setting_name, $form, $entry );
 	}
 
 	/**
@@ -1307,124 +1195,43 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		}
 
 		set_transient( 'gravityapi_request_' . $this->get_slug(), $state, 10 * MINUTE_IN_SECONDS );
-		$mode         = sanitize_text_field( rgpost( 'mode' ) );
-		$action       = $mode == 'gtm' ? 'gtmselect' : 'gaselect';
-		$settings_url = urlencode( admin_url( 'admin.php?page=gf_settings&subview=' . $this->_slug ) . '&action=' . $action );
+		$mode    = sanitize_text_field( rgpost( 'mode' ) );
+		$options = self::get_options();
 
-		$auth_url = add_query_arg(
-			array(
-				'mode'        => sanitize_text_field( rgpost( 'mode' ) ),
-				'redirect_to' => $settings_url,
-				'state'       => $state,
-				'license'     => GFCommon::get_key(),
-			),
-			$this->get_gravity_api_url( '/auth/googleanalytics' )
-		);
+		if ( $mode == 'manual' ) {
+			$redirect_url         = admin_url( 'admin.php?page=gf_settings&subview=' . $this->_slug );
+			$options['is_manual'] = true;
 
-		$options             = self::get_options();
-		$options['tempmode'] = sanitize_text_field( rgpost( 'mode' ) ); // Temporary mode for storing what the user has selected for authorization.
+		} else {
+			$action = $mode == 'gtm' ? 'gtmselect' : 'gaselect';
+
+			$settings_url = urlencode( admin_url( 'admin.php?page=gf_settings&subview=' . $this->_slug ) . '&action=' . $action );
+
+			$redirect_url = add_query_arg(
+				array(
+					'mode'        => sanitize_text_field( rgpost( 'mode' ) ),
+					'redirect_to' => $settings_url,
+					'state'       => $state,
+					'license'     => GFCommon::get_key(),
+				),
+				$this->get_gravity_api_url( '/auth/googleanalytics' )
+			);
+
+			// Temporary mode for storing what the user has selected for authorization.
+			$options['tempmode'] = sanitize_text_field( rgpost( 'mode' ) );
+
+			$this->log_debug( "Redirecting to Gravity API: {$redirect_url}" );
+		}
+
+		// Updating options.
 		self::update_options( $options );
-
-		$this->log_debug( "Redirecting to Gravity API: {$auth_url}" );
 
 		wp_send_json_success(
 			array(
 				'errors'   => false,
-				'redirect' => esc_url_raw( $auth_url ),
+				'redirect' => esc_url_raw( $redirect_url ),
 			)
 		);
-	}
-
-	/**
-	 * Update an analytics goal based on passed values.
-	 *
-	 * @since 1.0.0
-	 */
-	public function ajax_update_analytics_goal() {
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'create_analytics_goal' ) || ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
-			$error = new WP_Error(
-				'google_analytics_ga_error',
-				wp_strip_all_tags( __( 'Permissions for form settings not met', 'gravityformsgoogleanalytics' ) )
-			);
-			wp_send_json_error( $error );
-		}
-		if ( ! $this->initialize_api() ) {
-			$this->log_debug( __METHOD__ . '(): Could not initialize API' );
-			$error = new WP_Error(
-				'google_analytics_ga_error',
-				wp_strip_all_tags( __( 'Could not initialize the Google Analytics API', 'gravityformsgoogleanalytics' ) )
-			);
-			wp_send_json_error( $error );
-		}
-		$event_category = rgpost( 'eventcategory' );
-		$event_action   = rgpost( 'eventaction' );
-		$event_label    = rgpost( 'eventlabel' );
-		$goal_name      = rgpost( 'goal' );
-		$goal_id        = rgpost( 'goalId' );
-
-		$request = $this->update_analytics_goal( $event_category, $event_action, $event_label, $goal_name, $goal_id );
-		if ( $request && ! is_wp_error( $request ) ) {
-			$return = array(
-				'errors'         => false,
-				'goal_updated'   => true,
-				'goal_name'      => $goal_name,
-				'event_category' => $event_category,
-				'event_action'   => $event_action,
-				'event_label'    => $event_label,
-				'goal_id'        => $goal_id,
-			);
-		} else {
-			wp_send_json_error( $request );
-		}
-		wp_send_json_success( $return );
-	}
-
-	/**
-	 * Creates an analytics goal based on passed values.
-	 *
-	 * @since 1.0.0
-	 */
-	public function ajax_create_analytics_goal() {
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'create_analytics_goal' ) || ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
-			$error = new WP_Error(
-				'google_analytics_ga_error',
-				wp_strip_all_tags( __( 'Permissions for form settings not met', 'gravityformsgoogleanalytics' ) )
-			);
-			wp_send_json_error( $error );
-		}
-		if ( ! $this->initialize_api() ) {
-			$this->log_debug( __METHOD__ . '(): Could not initialize API' );
-			$error = new WP_Error(
-				'google_analytics_ga_error',
-				wp_strip_all_tags( __( 'Could not initialize the Google Analytics API', 'gravityformsgoogleanalytics' ) )
-			);
-			wp_send_json_error( $error );
-		}
-		$event_category = rgpost( 'eventcategory' );
-		$event_action   = rgpost( 'eventaction' );
-		$event_label    = rgpost( 'eventlabel' );
-		$goal_name      = rgpost( 'goal' );
-		$request        = $this->create_analytics_goal( $event_category, $event_action, $event_label, $goal_name, true, true );
-		if ( $request && ! is_wp_error( $request ) ) {
-			$return = array(
-				'errors'       => false,
-				'goal_created' => true,
-				'option'       => sprintf(
-					'<option value="%s" data-action="%s" data-label="%s" data-category="%s" data-goal-id="%s" selected="selected">%s</option>',
-					esc_attr( $goal_name ),
-					esc_attr( $event_action ),
-					esc_attr( $event_label ),
-					esc_attr( $event_category ),
-					esc_attr( rgar( $request, 'id' ) ),
-					esc_html( $goal_name )
-				),
-			);
-		} else {
-			wp_send_json_error( $request );
-		}
-		wp_send_json_success( $return );
 	}
 
 	/**
@@ -1433,72 +1240,56 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since 1.0.0
 	 */
 	public function ajax_disconnect_account() {
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'gforms_google_analytics_disconnect' ) || ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
-			$error = new WP_Error(
-				'google_analytics_disconnect_error',
-				wp_strip_all_tags( __( 'Could not verify disconnect because permissions are not met', 'gravityformsgoogleanalytics' ) )
-			);
-			wp_send_json_error( $error );
-		}
-		if ( $this->initialize_api() ) {
-			// Deleting option. Token expires in an hour, so no need to revoke it.
-			delete_option( 'gravityformsaddon_gravityformsgoogleanalytics_settings' );
-			wp_send_json_success( array() );
-		}
-		$error = new WP_Error(
-			'google_analytics_disconnect_error',
-			wp_strip_all_tags( __( 'Could not disconnect from the account', 'gravityformsgoogleanalytics' ) )
-		);
-		wp_send_json_error( $error );
+
+		// Verify nonce and capability.
+		$this->verify_ajax_nonce( 'gforms_google_analytics_disconnect' );
+		$this->verify_capability();
+
+		// Deleting option. Token expires in an hour, so no need to revoke it.
+		delete_option( 'gravityformsaddon_gravityformsgoogleanalytics_settings' );
+		wp_send_json_success( array() );
 	}
 
 	/**
 	 * Gets views for the selected account and GA code
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
-	public function ajax_get_ga_views() {
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'connect_google_analytics' ) || ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
-			$error = new WP_Error(
-				'google_analytics_ga_error',
-				wp_strip_all_tags( __( 'Could not verify permissions for Google Analytics', 'gravityformsgoogleanalytics' ) )
+	public function ajax_get_ga4_data_streams() {
+
+		// Verify nonce, capability and API connection.
+		$this->verify_ajax_nonce();
+		$this->verify_capability();
+		$this->verify_api_connection();
+
+		// Retrieving data streams.
+		$property     = sanitize_text_field( rgpost( 'property' ) );
+		$data_streams = $this->api->get_data_streams( $property );
+		if ( is_wp_error( $data_streams ) ) {
+			$this->log_debug( __METHOD__ . '(): Error retrieving Google Analytics data streams associated with the selected property.' );
+			wp_send_json_error( new WP_Error( 'google_analytics_ga_error', wp_strip_all_tags( __( 'There was an error retrieving Google Analytics data streams.', 'gravityformsgoogleanalytics' ) ) ) );
+		}
+
+		// Create select field markup.
+		$html = '<br /><select name="ga_data_stream">';
+		$html .= '<option value="">' . esc_html__( 'Select a data stream', 'gravityformsgoogleanalytics' ) . '</option>';
+		foreach ( $data_streams['dataStreams'] as $data_stream ) {
+
+			// Ignore data streams that are not "webStreamData".
+			if ( ! isset( $data_stream['webStreamData'] ) ) {
+				continue;
+			}
+			$html .= sprintf(
+				'<option value="%s" data-data-stream-id="%s" data-data-stream-name="%s">%s</option>',
+				esc_attr( $data_stream['webStreamData']['measurementId'] ),
+				esc_attr( $data_stream['name'] ),
+				esc_attr( $data_stream['displayName'] ),
+				esc_html( $data_stream['displayName'] )
 			);
-			wp_send_json_error( $error );
 		}
-		if ( $this->initialize_api() ) {
-			$account_id = sanitize_text_field( rgpost( 'account_id' ) );
-			$ga_code    = sanitize_text_field( rgpost( 'ga_code' ) );
+		$html .= '</select>';
 
-			$body = array();
-
-			$views = $this->api->get_views( $body, $account_id, $ga_code );
-			if ( is_wp_error( $views ) ) {
-				$this->log_debug( __METHOD__ . '(): Could not retrieve Google Analytics Views.' );
-				die( '' );
-			}
-
-			// Output HTML.
-			$html  = '';
-			$html .= '<br /><select name="gaviews">';
-			$html .= '<option value="">' . esc_html__( 'Select a view', 'gravityformsgoogleanalytics' ) . '</option>';
-			foreach ( $views['items'] as $index => $item ) {
-				$html .= sprintf(
-					'<option value="%s" data-view-name="%s">%s</option>',
-					esc_attr( $item['id'] ),
-					esc_attr( $item['name'] ),
-					esc_html( $item['name'] )
-				);
-			}
-			$html .= '</select>';
-			die( $html );
-		}
-		$error = new WP_Error(
-			'google_analytics_ga_error',
-			wp_strip_all_tags( __( 'Could not retrieve Google Analytics views', 'gravityformsgoogleanalytics' ) )
-		);
-		wp_send_json_error( $error );
+		wp_send_json_success( $html );
 	}
 
 	/**
@@ -1507,57 +1298,46 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since 1.1
 	 */
 	public function ajax_get_gtm_containers() {
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'connect_google_analytics' ) || ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
+
+		// Verify nonce, capability and API connection.
+		$this->verify_ajax_nonce();
+		$this->verify_capability();
+		$this->verify_api_connection();
+
+		$account_id = rgpost( 'accountId' );
+		$token      = rgpost( 'token' );
+
+		// Get containers.
+		$container_response = $this->api->get_tag_manager_containers( array(), $account_id );
+		if ( is_wp_error( $container_response ) ) {
+			$this->log_debug( __METHOD__ . '(): Error retrieving property containers.' );
 			$error = new WP_Error(
 				'google_analytics_gtm_error',
-				wp_strip_all_tags( __( 'Permissions for retrieving Tag Manager data not met', 'gravityformsgoogleanalytics' ) )
+				$container_response->get_error_message()
 			);
 			wp_send_json_error( $error );
 		}
-		if ( $this->initialize_api() ) {
-			$account_id = rgpost( 'accountId' );
-			$token      = rgpost( 'token' );
 
-			// Test for variables already created.
-			$body = array();
-
-			// Get containers.
-			$container_response = $this->api->get_tag_manager_containers( $body, $account_id );
-			if ( is_wp_error( $container_response ) ) {
-				$this->log_debug( __METHOD__ . '(): Error retrieving property containers.' );
-				$error = new WP_Error(
-					'google_analytics_gtm_error',
-					$container_response->get_error_message()
-				);
-				wp_send_json_error( $error );
-			}
-
-			// Output HTML.
-			$success = array( 'success' => true );
-			$html    = '';
-			$html   .= '<br /><select name="gacontainer" id="gacontainer">';
-			$html   .= '<option value="">' . esc_html__( 'Select a Container', 'gravityformsgoogleanalytics' ) . '</option>';
-			foreach ( $container_response['container'] as $container ) {
-				$html .= sprintf(
-					'<option data-account-id="%s" data-path="%s" data-token="%s" value="%s">%s</option>',
-					esc_attr( $account_id ),
-					esc_attr( $container['path'] ),
-					esc_attr( $token ),
-					esc_attr( $container['publicId'] ),
-					esc_attr( $container['publicId'] )
-				);
-			}
-			$html   .= '</select>';
-
-			$success['body'] = $html;
-			wp_send_json( $success );
+		// Output HTML.
+		$success = array( 'success' => true );
+		$html    = '';
+		$html    .= '<br /><select name="gacontainer" id="gacontainer">';
+		$html    .= '<option value="">' . esc_html__( 'Select a Container', 'gravityformsgoogleanalytics' ) . '</option>';
+		foreach ( $container_response['container'] as $container ) {
+			$html .= sprintf(
+				'<option data-account-id="%s" data-path="%s" data-token="%s" value="%s">%s</option>',
+				esc_attr( $account_id ),
+				esc_attr( $container['path'] ),
+				esc_attr( $token ),
+				esc_attr( $container['publicId'] ),
+				esc_attr( $container['publicId'] )
+			);
 		}
-		$error = new WP_Error(
-			'google_analytics_gtm_error',
-			wp_strip_all_tags( __( 'Could not retrieve Tag Manager containers', 'gravityformsgoogleanalytics' ) )
-		);
-		wp_send_json_error( $error );
+		$html .= '</select>';
+
+		$success['body'] = $html;
+		wp_send_json( $success );
+
 	}
 
 	/**
@@ -1566,54 +1346,40 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since 1.0.0
 	 */
 	public function ajax_get_gtm_workspaces() {
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'connect_google_analytics' ) || ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
+
+		// Verify nonce, capability and API connection.
+		$this->verify_ajax_nonce();
+		$this->verify_capability();
+		$this->verify_api_connection();
+
+		// Get workspace ID.
+		$response = $this->api->get_tag_manager_workspaces( array(), rgpost( 'path' ) );
+		if ( is_wp_error( $response ) ) {
 			$error = new WP_Error(
 				'google_analytics_gtm_error',
-				wp_strip_all_tags( __( 'Permissions for retrieving Tag Manager data not met', 'gravityformsgoogleanalytics' ) )
+				wp_strip_all_tags( __( 'Could not retrieve Tag Manager workspaces', 'gravityformsgoogleanalytics' ) )
 			);
 			wp_send_json_error( $error );
 		}
-		if ( $this->initialize_api() ) {
-			$path = rgpost( 'path' );
 
-			// Test for variables already created.
-			$body = array();
-
-			// Get workspace ID.
-			$response = $this->api->get_tag_manager_workspaces( $body, $path );
-			if ( is_wp_error( $response ) ) {
-				$error = new WP_Error(
-					'google_analytics_gtm_error',
-					wp_strip_all_tags( __( 'Could not retrieve Tag Manager workspaces', 'gravityformsgoogleanalytics' ) )
+		// Output HTML.
+		$success = array( 'success' => true );
+		$html    = '';
+		$html    .= '<select name="gaworkspace">';
+		$html    .= '<option value="">' . esc_html__( 'Select a Workspace', 'gravityformsgoogleanalytics' ) . '</option>';
+		foreach ( $response as $index => $workspaces ) {
+			foreach ( $workspaces as $workspace ) {
+				$html .= sprintf(
+					'<option value="%s">%s</option>',
+					esc_attr( $workspace['workspaceId'] ),
+					esc_html( $workspace['name'] )
 				);
-				wp_send_json_error( $error );
 			}
-
-			// Output HTML.
-			$success = array( 'success' => true );
-			$html    = '';
-			$html   .= '<select name="gaworkspace">';
-			$html   .= '<option value="">' . esc_html__( 'Select a Workspace', 'gravityformsgoogleanalytics' ) . '</option>';
-			foreach ( $response as $index => $workspaces ) {
-				foreach ( $workspaces as $workspace ) {
-					$html .= sprintf(
-						'<option value="%s">%s</option>',
-						esc_attr( $workspace['workspaceId'] ),
-						esc_html( $workspace['name'] )
-					);
-				}
-			}
-			$html   .= '</select>';
-
-			$success['body'] = $html;
-			wp_send_json( $success );
 		}
-		$error = new WP_Error(
-			'google_analytics_gtm_error',
-			wp_strip_all_tags( __( 'Could not retrieve Tag Manager workspaces', 'gravityformsgoogleanalytics' ) )
-		);
-		wp_send_json_error( $error );
+		$html .= '</select>';
+
+		$success['body'] = $html;
+		wp_send_json( $success );
 	}
 
 	/**
@@ -1624,7 +1390,10 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @param array $settings Plugin settings to be saved.
 	 */
 	public function update_plugin_settings( $settings ) {
-		$current_settings = $this->get_plugin_settings();
+		$current_settings = self::get_options();
+
+		// Set the API authentication version.
+		$current_settings['reauth_version'] = self::LAST_REAUTHENTICATION_VERSION;
 		if ( is_array( $current_settings ) ) {
 			$settings = array_merge( $current_settings, $settings );
 		}
@@ -1637,66 +1406,85 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since  1.0.0
 	 */
 	public function ajax_save_google_analytics_data() {
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'connect_google_analytics' ) || ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
-			$error = new WP_Error(
-				'google_analytics_ga_error',
-				wp_strip_all_tags( __( 'Permissions for saving Google Analytics data not met', 'gravityformsgoogleanalytics' ) )
-			);
-			wp_send_json_error( $error );
-		}
-		if ( $this->initialize_api() ) {
-			$account_id   = rgpost( 'account_id' );
-			$account_name = rgpost( 'account_name' );
-			$ga_code      = rgpost( 'ga_code' );
-			$token        = rgpost( 'token' );
-			$refresh      = rgpost( 'refresh' );
-			$view         = rgpost( 'view' );
-			$view_name    = rgpost( 'view_name' );
 
-			// Get profile id.
-			$profile_id = $this->get_profile_id( $account_id, $ga_code, $view );
-			if ( is_wp_error( $profile_id ) ) {
-				$error = new WP_Error(
-					'google_analytics_ga_error',
-					wp_strip_all_tags( __( 'Could not retrieve the profile ID for Google Analytics', 'gravityformsgoogleanalytics' ) )
-				);
-				wp_send_json_error( $error );
+		// Verify nonce, capability and API connection.
+		$this->verify_ajax_nonce();
+		$this->verify_capability();
+		$this->verify_api_connection();
+
+		$options = $this->get_google_analytics_options( self::get_options() );
+
+		if ( rgar( $options, 'mode' ) === 'gmp' ) {
+			$api_secret = $this->get_api_secret();
+			if ( is_wp_error( $api_secret ) ) {
+				wp_send_json_error( $api_secret );
 			}
-
-			$options               = $this->get_options();
-			$options['auth_token'] = array(
-				'token'        => sanitize_text_field( $token ),
-				'refresh'      => sanitize_text_field( $refresh ),
-				'date_created' => time(),
-			);
-			$options['mode']       = $this->get_options( '', 'tempmode' );
-			$options['connected']  = true;
-			$options['account']    = array(
-				'account_id'   => sanitize_text_field( $account_id ),
-				'account_name' => sanitize_text_field( $account_name ),
-				'property_id'  => sanitize_text_field( $ga_code ),
-				'profile_id'   => sanitize_text_field( $profile_id ),
-				'property'     => sanitize_text_field( $ga_code ),
-				'view'         => sanitize_text_field( $view ),
-				'view_name'    => sanitize_text_field( $view_name ),
-			);
-			$this->log_debug( __METHOD__ . '(): Saving Analytics data' );
-
-			// Save Google Analytics data.
-			$options['gfgamode'] = $options['mode'];
-			$this->update_plugin_settings( $options );
-
-			// Build redirect url and return it.
-			$redirect_url = add_query_arg(
-				array(
-					'page'    => 'gf_settings',
-					'subview' => 'gravityformsgoogleanalytics',
-				),
-				admin_url( 'admin.php' )
-			);
-			die( esc_url_raw( $redirect_url ) );
+			$options['ga4_account']['gmp_api_secret'] = $api_secret['secretValue'];
 		}
+
+		$this->log_debug( __METHOD__ . '(): Saving Google Analytics settings.' );
+		$this->update_plugin_settings( $options );
+
+		// Build redirect url and return it.
+		$redirect_url = add_query_arg(
+			array(
+				'page'    => 'gf_settings',
+				'subview' => 'gravityformsgoogleanalytics',
+			),
+			admin_url( 'admin.php' )
+		);
+		wp_send_json_success( esc_url_raw( $redirect_url ) );
+	}
+
+	/**
+	 * Gets the API secret for Measurement Protocol.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return string Returns the API secret.
+	 */
+	private function get_api_secret() {
+		$secrets = $this->api->get_api_secrets( rgpost( 'data_stream_id' ) );
+		if ( rgar( $secrets, 'measurementProtocolSecrets' ) ) {
+			foreach ( $secrets['measurementProtocolSecrets'] as $secret ) {
+				if ( $secret['displayName'] === 'GravityFormsSecret' ) {
+					return $secret;
+				}
+			}
+		}
+
+		return $this->api->create_api_secret( rgpost( 'data_stream_id' ) );
+	}
+
+	/**
+	 * Creates an array with the Google Analytics settings to be saved.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $options Current options.
+	 *
+	 * @return array Returns an array with the settings set.
+	 */
+	public function get_google_analytics_options( $options ) {
+
+		$options['auth_token']  = array(
+			'token'        => sanitize_text_field( rgpost( 'token' ) ),
+			'refresh'      => sanitize_text_field( rgpost( 'refresh' ) ),
+			'date_created' => time(),
+		);
+		$options['connected']   = true;
+		$options['mode']        = $options['tempmode'];
+		$options['gfgamode']    = $options['tempmode'];
+		$options['ga4_account'] = array(
+			'account_id'       => sanitize_text_field( rgpost( 'account_id' ) ),
+			'account_name'     => sanitize_text_field( rgpost( 'account_name' ) ),
+			'property_id'      => sanitize_text_field( rgpost( 'property_id' ) ),
+			'property_name'    => sanitize_text_field( rgpost( 'property_name' ) ),
+			'data_stream_name' => sanitize_text_field( rgpost( 'data_stream_name' ) ),
+			'measurement_id'   => sanitize_text_field( rgpost( 'measurement_id' ) ),
+		);
+
+		return $options;
 	}
 
 	/**
@@ -1705,465 +1493,119 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since  1.0.0
 	 */
 	public function ajax_save_google_tag_manager_data() {
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'connect_google_analytics' ) || ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
-			$error = new WP_Error(
-				'google_analytics_gtm_error',
-				wp_strip_all_tags( __( 'Could not retrieve the correct permissions to set up Tag Manager', 'gravityformsgoogleanalytics' ) )
-			);
-			wp_send_json_error( $error );
-		}
-		if ( $this->initialize_api() ) {
-			$account_id         = rgpost( 'account_id' );
-			$account_name       = rgpost( 'account_name' );
-			$ga_code            = rgpost( 'ga_code' );
-			$token              = rgpost( 'token' );
-			$refresh            = rgpost( 'refresh' );
-			$gtm_account        = rgpost( 'gtm_account_id' );
-			$gtm_path           = rgpost( 'gtm_path' );
-			$gtm_container      = rgpost( 'gtm_container' );
-			$gtm_account_create = rgpost( 'gtm_auto_create' );
-			$view               = rgpost( 'view' );
-			$view_name          = rgpost( 'view_name' );
-			$workspace          = rgpost( 'gtm_workspace' );
 
-			// Get profile id.
-			$profile_id = $this->get_profile_id( $account_id, $ga_code, $view );
-			if ( is_wp_error( $profile_id ) ) {
-				$error = new WP_Error(
-					'google_analytics_gtm_error',
-					wp_strip_all_tags( __( 'Could not retrieve the profile ID for Google Analytics.', 'gravityformsgoogleanalytics' ) )
-				);
-				wp_send_json_error( $error );
-			}
+		// Verify nonce, capability and API connection.
+		$this->verify_ajax_nonce();
+		$this->verify_capability();
+		$this->verify_api_connection();
 
-			$options               = $this->get_options();
-			$options['auth_token'] = array(
-				'token'        => sanitize_text_field( $token ),
-				'refresh'      => sanitize_text_field( $refresh ),
-				'date_created' => time(),
-			);
-			$options['mode']       = 'gtm';
-			$options['connected']  = true;
-			$options['account']    = array(
-				'account_id'   => sanitize_text_field( $account_id ),
-				'account_name' => sanitize_text_field( $account_name ),
-				'property_id'  => sanitize_text_field( $ga_code ),
-				'container_id' => sanitize_text_field( $gtm_container ),
-				'profile_id'   => sanitize_text_field( $profile_id ),
-				'property'     => sanitize_text_field( $ga_code ),
-				'view'         => sanitize_text_field( $view ),
-				'view_name'    => sanitize_text_field( $view_name ),
-				'workspace'    => sanitize_text_field( $workspace ),
-			);
+		$options = $this->get_tag_manager_options( self::get_options() );
 
-			$this->log_debug( __METHOD__ . '(): Begin Google Tag Manager saving.' );
+		// Save Google Tag Manager data.
+		$this->log_debug( __METHOD__ . '(): Saving Google Tag Manager:' . print_r( $options, true ) );
+		$this->update_plugin_settings( $options );
 
-			// Do not create GTM variables if user has opted out.
-			$this->log_debug( __METHOD__ . '(): Google Tag Manager Opt Out Settings: ' . $gtm_account_create );
-			if ( 'on' !== $gtm_account_create ) {
-				$this->log_debug( __METHOD__ . '(): Google Tag Manager variables not created due to opt-out settings.' );
-				$redirect_url = add_query_arg(
-					array(
-						'page'    => 'gf_settings',
-						'subview' => 'gravityformsgoogleanalytics',
-					),
-					admin_url( 'admin.php' )
-				);
-				// Save Google Tag Manager data.
-				$options['gfgamode'] = $options['mode'];
-				$this->update_plugin_settings( $options );
+		$redirect_url = add_query_arg(
+			array(
+				'page'    => 'gf_settings',
+				'subview' => 'gravityformsgoogleanalytics',
+			),
+			admin_url( 'admin.php' )
+		);
+		wp_send_json_success( esc_url_raw( $redirect_url ) );
+	}
 
-				die( esc_url_raw( $redirect_url ) );
-			}
+	/**
+	 * Creates an array with Tag Manager settings to be saved.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $options Current options.
+	 *
+	 * @return array Returns an array with the settings set.
+	 */
+	public function get_tag_manager_options( $options ) {
 
-			// Test for variables already created.
-			$body = array();
+		$options['auth_token']  = array(
+			'token'        => sanitize_text_field( rgpost( 'token' ) ),
+			'refresh'      => sanitize_text_field( rgpost( 'refresh' ) ),
+			'date_created' => time(),
+		);
+		$options['mode']        = 'gtm';
+		$options['gfgamode']    = $options['mode'];
+		$options['connected']   = true;
+		$options['ga4_account'] = array(
+			'account_id'         => sanitize_text_field( rgpost( 'account_id' ) ),
+			'account_name'       => sanitize_text_field( rgpost( 'account_name' ) ),
+			'property_id'        => sanitize_text_field( rgpost( 'property_id' ) ),
+			'property_name'      => sanitize_text_field( rgpost( 'property_name' ) ),
+			'data_stream_name'   => sanitize_text_field( rgpost( 'data_stream_name' ) ),
+			'measurement_id'     => sanitize_text_field( rgpost( 'measurement_id' ) ),
+			'gtm_account_id'     => sanitize_text_field( rgpost( 'gtm_account_id' ) ),
+			'gtm_account_name'   => sanitize_text_field( rgpost( 'gtm_account_name' ) ),
+			'gtm_container_id'   => sanitize_text_field( rgpost( 'gtm_container' ) ),
+			'gtm_workspace_id'   => sanitize_text_field( rgpost( 'gtm_workspace_id' ) ),
+			'gtm_workspace_name' => sanitize_text_field( rgpost( 'gtm_workspace_name' ) ),
+			'gtm_api_path'       => sanitize_text_field( rgpost( 'gtm_api_path' ) ),
+		);
 
-			// Get workspace ID.
-			$work_id_response = $this->api->get_tag_manager_workspaces( $body, $gtm_path );
-			if ( is_wp_error( $work_id_response ) ) {
-				$this->log_debug( __METHOD__ . '(): Could not retrieve Google Tag Manager workspaces.' );
-				$error = new WP_Error(
-					'google_analytics_gtm_error',
-					wp_strip_all_tags( __( 'Could not retrieve the workspaces in Tag Manager.  Please check that your container, path, and workspace settings are correct.', 'gravityformsgoogleanalytics' ) )
-				);
-				wp_send_json_error( $error );
-			}
-			$work_id = $workspace;
+		return $options;
+	}
 
-			// Get variables.
-			$dl_variable_response = $this->api->get_tag_manager_variables( $body, $gtm_path, $work_id );
-			if ( is_wp_error( $dl_variable_response ) ) {
-				$this->log_debug( __METHOD__ . '(): Could not retrieve Google Tag Manager variables.' );
-				$error = new WP_Error(
-					'google_analytics_gtm_error',
-					wp_strip_all_tags( __( 'Could not retrieve the variables in Tag Manager', 'gravityformsgoogleanalytics' ) )
-				);
-				wp_send_json_error( $error );
-			}
-			$dl_variables_present = false;
-			if ( isset( $dl_variable_response['variable'] ) ) {
-				foreach ( $dl_variable_response['variable'] as $dl_variable ) {
-					if ( 'DL - GFTrackCategory' === $dl_variable['name'] ) {
-						$dl_variables_present = true;
-						break;
-					}
-					if ( 'DL - GFTrackAction' === $dl_variable['name'] ) {
-						$dl_variables_present = true;
-						break;
-					}
-					if ( 'DL - GFTrackLabel' === $dl_variable['name'] ) {
-						$dl_variables_present = true;
-						break;
-					}
-					if ( 'DL - GFTrackValue' === $dl_variable['name'] ) {
-						$dl_variables_present = true;
-						break;
-					}
-				}
-			}
+	/**
+	 * Saves manual configuration data to settings and provides redirect callback.
+	 *
+	 * @since  2.0.0
+	 */
+	public function ajax_save_manual_configuration_data() {
 
-			// Set new variables.
-			if ( false === $dl_variables_present ) {
+		// Verify nonce and capability.
+		$this->verify_ajax_nonce();
+		$this->verify_capability();
 
-				$this->log_debug( __METHOD__ . '(): GTM variables not installed. Installing.' );
+		$options = $this->get_manual_configuration_options( self::get_options() );
 
-				$dl_variables = array(
-					array(
-						'name'       => 'DL - GFTrackCategory',
-						'type'       => 'v',
-						'variableId' => 'GFTrackCategory',
-						'parameter'  => array(
-							array(
-								'type'  => 'template',
-								'key'   => 'name',
-								'value' => 'GFTrackCategory',
-							),
-						),
-					),
-					array(
-						'name'       => 'DL - GFTrackAction',
-						'type'       => 'v',
-						'variableId' => 'GFTrackAction',
-						'parameter'  => array(
-							array(
-								'type'  => 'template',
-								'key'   => 'name',
-								'value' => 'GFTrackAction',
-							),
-						),
-					),
-					array(
-						'name'       => 'DL - GFTrackLabel',
-						'type'       => 'v',
-						'variableId' => 'GFTrackLabel',
-						'parameter'  => array(
-							array(
-								'type'  => 'template',
-								'key'   => 'name',
-								'value' => 'GFTrackLabel',
-							),
-						),
-					),
-					array(
-						'name'       => 'DL - GFTrackValue',
-						'type'       => 'v',
-						'variableId' => 'GFTrackValue',
-						'parameter'  => array(
-							array(
-								'type'  => 'template',
-								'key'   => 'name',
-								'value' => 'GFTrackValue',
-							),
-						),
-					),
-					array(
-						'name'       => 'DL - GFTrackSource',
-						'type'       => 'v',
-						'variableId' => 'GFTrackSource',
-						'parameter'  => array(
-							array(
-								'type'  => 'template',
-								'key'   => 'name',
-								'value' => 'GFTrackSource',
-							),
-						),
-					),
-					array(
-						'name'       => 'DL - GFTrackMedium',
-						'type'       => 'v',
-						'variableId' => 'GFTrackMedium',
-						'parameter'  => array(
-							array(
-								'type'  => 'template',
-								'key'   => 'name',
-								'value' => 'GFTrackMedium',
-							),
-						),
-					),
-					array(
-						'name'       => 'DL - GFTrackCampaign',
-						'type'       => 'v',
-						'variableId' => 'GFTrackCampaign',
-						'parameter'  => array(
-							array(
-								'type'  => 'template',
-								'key'   => 'name',
-								'value' => 'GFTrackCampaign',
-							),
-						),
-					),
-					array(
-						'name'       => 'DL - GFTrackContent',
-						'type'       => 'v',
-						'variableId' => 'GFTrackContent',
-						'parameter'  => array(
-							array(
-								'type'  => 'template',
-								'key'   => 'name',
-								'value' => 'GFTrackContent',
-							),
-						),
-					),
-					array(
-						'name'       => 'DL - GFTrackTerm',
-						'type'       => 'v',
-						'variableId' => 'GFTrackTerm',
-						'parameter'  => array(
-							array(
-								'type'  => 'template',
-								'key'   => 'name',
-								'value' => 'GFTrackTerm',
-							),
-						),
-					),
-				);
-				foreach ( $dl_variables as $dl_variable ) {
-					$body                       = wp_json_encode( $dl_variable );
-					$variable_creation_response = $this->api->save_google_tag_manager_variable( $body, $gtm_path, $work_id );
-					if ( is_wp_error( $variable_creation_response ) ) {
-						$this->log_debug( __METHOD__ . '(): Could not create variable in Tag Manager: ' . $dl_variable['name'] );
-						$error = new WP_Error(
-							'google_analytics_gtm_error',
-							wp_strip_all_tags( __( 'Could not create the variables in Tag Manager', 'gravityformsgoogleanalytics' ) )
-						);
-						wp_send_json_error( $error );
-					}
-				}
+		$this->log_debug( __METHOD__ . '(): Saving manual configuration settings:' . print_r( $options, true ) );
+		$this->update_plugin_settings( $options );
 
-				// Event JSON.
-				$body             = '{
-					"name": "GFTrackEvent",
-					"type": "customEvent",
-					"customEventFilter": [
-					{
-						"type": "equals",
-						"parameter": [
-						{
-							"type": "template",
-							"key": "arg0",
-							"value": "{{_event}}"
-						},
-						{
-							"type": "template",
-							"key": "arg1",
-							"value": "GFTrackEvent"
-						}
-						]
-					}
-					]
-				}';
-				$trigger_response = $this->api->create_google_tag_manager_trigger( $body, $gtm_path, $work_id );
-				if ( is_wp_error( $trigger_response ) ) {
-					$this->log_debug( __METHOD__ . '(): Could not create trigger in Tag Manager.' );
-					$error = new WP_Error(
-						'google_analytics_gtm_error',
-						wp_strip_all_tags( __( 'Could not create the trigger in Tag Manager', 'gravityformsgoogleanalytics' ) )
-					);
-					wp_send_json_error( $error );
-				}
-				$trigger_id = isset( $trigger_response['triggerId'] ) ? $trigger_response['triggerId'] : 0;
+		$redirect_url = add_query_arg(
+			array(
+				'page'    => 'gf_settings',
+				'subview' => 'gravityformsgoogleanalytics',
+				'updated' => 'true',
+			),
+			admin_url( 'admin.php' )
+		);
+		wp_send_json_success( esc_url_raw( $redirect_url ) );
+	}
 
-				// Now let's create the tag JSON.
-				$body = '{
-					"name": "Gravity Forms Universal Analytics",
-					"type": "ua",
-					"parameter": [
-					{
-						"type": "template",
-						"key": "trackingId",
-						"value": "' . esc_js( $ga_code ) . '"
-					},
-					{
-						"type": "template",
-						"key": "trackType",
-						"value": "TRACK_EVENT"
-					},
-					{
-						"type": "template",
-						"key": "eventCategory",
-						"value": "{{DL - GFTrackCategory}}"
-					},
-					{
-						"type": "template",
-						"key": "eventAction",
-						"value": "{{DL - GFTrackAction}}"
-					},
-					{
-						"type": "template",
-						"key": "eventLabel",
-						"value": "{{DL - GFTrackLabel}}"
-					},
-					{
-						"type": "template",
-						"key": "eventValue",
-						"value": "{{DL - GFTrackValue}}"
-					},
-					{
-						"key": "fieldsToSet",
-						"list": [
-							{
-								"map": [
-									{
-										"type": "template",
-										"key": "fieldName",
-										"value": "campaignSource"
-									},
-									{
-										"type": "template",
-										"key": "value",
-										"value": "{{DL - GFTrackSource}}"
-									}
-								],
-								"type": "map"
-							},
-							{
-								"map": [
-									{
-										"type": "template",
-										"key": "fieldName",
-										"value": "campaignMedium"
-									},
-									{
-										"type": "template",
-										"key": "value",
-										"value": "{{DL - GFTrackMedium}}"
-									}
-								],
-								"type": "map"
-							},
-							{
-								"map": [
-									{
-										"type": "template",
-										"key": "fieldName",
-										"value": "campaignName"
-									},
-									{
-										"type": "template",
-										"key": "value",
-										"value": "{{DL - GFTrackCampaign}}"
-									}
-								],
-								"type": "map"
-							},
-							{
-								"map": [
-									{
-										"type": "template",
-										"key": "fieldName",
-										"value": "campaignContent"
-									},
-									{
-										"type": "template",
-										"key": "value",
-										"value": "{{DL - GFTrackContent}}"
-									}
-								],
-								"type": "map"
-							},
-							{
-								"map": [
-									{
-										"type": "template",
-										"key": "fieldName",
-										"value": "campaignTerm"
-									},
-									{
-										"type": "template",
-										"key": "value",
-										"value": "{{DL - GFTrackTerm}}"
-									}
-								],
-								"type": "map"
-							}
-						],
-						"type": "list"
-					}
-					],
-					"firingTriggerId": [
-					"' . esc_js( $trigger_id ) . '"
-					],
-				}';
+	/**
+	 * Creates an array with the manual configuration settings to be saved.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $options Current options.
+	 *
+	 * @return array Returns an array with the settings set.
+	 */
+	public function get_manual_configuration_options( $options ) {
 
-				// Trigger created, now to set up the tag.
-				$tag_response = $this->api->create_tag_manager_tag( $body, $gtm_path, $work_id );
-				if ( is_wp_error( $tag_response ) ) {
-					$this->log_debug( __METHOD__ . '(): Could not create tag in Tag Manager.' );
-					$error = new WP_Error(
-						'google_analytics_gtm_error',
-						wp_strip_all_tags( __( 'Could not create tag in Tag Manager', 'gravityformsgoogleanalytics' ) )
-					);
-					wp_send_json_error( $error );
-				}
+		$options['mode']        = sanitize_text_field( rgpost( 'mode' ) );
+		$options['connected']   = false;
+		$options['ga4_account'] = array(
+			'measurement_id'   => sanitize_text_field( rgpost( 'measurement_id' ) ),
+			'gmp_api_secret'   => sanitize_text_field( rgpost( 'gmp_api_secret' ) ),
+			'gtm_container_id' => sanitize_text_field( rgpost( 'gtm_container' ) ),
+			'gtm_workspace_id' => sanitize_text_field( rgpost( 'gtm_workspace_id' ) ),
+		);
 
-				$this->log_debug( __METHOD__ . '(): GTM Tags installed.' );
+		return $options;
+	}
 
-				// Create new workspace version.
-				$body                       = '{
-					"name": "Gravity Forms Version",
-					"notes": "Gravity Forms Update"
-				}';
-				$workspace_version_response = $this->api->save_update_tag_manager_version( $body, $gtm_path, $work_id );
-				if ( is_wp_error( $workspace_version_response ) ) {
-					$this->log_debug( __METHOD__ . '(): Could not create a new version for the container in Tag Manager.' );
-					die( '' );
-				}
-				$version_id = $workspace_version_response['containerVersion']['containerVersionId'];
-
-				// Make version live.
-				$body             = array();
-				$publish_response = $this->api->publish_google_tag_manager_container( $body, $gtm_path, $version_id );
-				if ( is_wp_error( $publish_response ) ) {
-					$this->log_debug( __METHOD__ . '(): Could not publish container for Tag Manager' );
-					die( '' );
-				}
-
-				$this->log_debug( __METHOD__ . '(): Tag Manager Container published.' );
-
-				// We are successful. Variables created, tags created, trigger created, and published.
-			} else {
-				$this->log_debug( __METHOD__ . '(): Tag Manager already installed.' );
-			}
-
-			// Save Google Analytics data.
-			$this->update_options( $options );
-			$this->update_plugin_settings(
-				array(
-					'gfgamode' => $options['mode'],
-				)
-			);
-
-			// Build redirect url and return it.
-			$redirect_url = add_query_arg(
-				array(
-					'page'    => 'gf_settings',
-					'subview' => 'gravityformsgoogleanalytics',
-				),
-				admin_url( 'admin.php' )
-			);
-			die( esc_url_raw( $redirect_url ) );
+	private function validate_ajax_nonce() {
+		if ( ! wp_verify_nonce( rgar( $_REQUEST, 'nonce' ), 'gforms_google_analytics_confirmation' ) ) {
+			$this->log_debug( __METHOD__ . '(): Nonce verification was not successful.' );
+			wp_send_json_error( new WP_Error( 'google_analytics_nonce_error', esc_html__( 'Nonce validation failed.', 'gravityformsgoogleanalytics' ) ) );
 		}
 	}
 
@@ -2173,23 +1615,18 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since  1.0.0
 	 */
 	public function ajax_get_entry_meta() {
-		if ( isset( $_REQUEST['nonce'] ) && wp_verify_nonce( $_REQUEST['nonce'], 'gforms_google_analytics_confirmation' ) ) {
-			wp_send_json_success( array( 'event_sent' => false ) );
-		} else {
-			$this->log_debug( __METHOD__ . '(): Nonce verification was not successful.' );
-			$error = new WP_Error(
-				'google_analytics_nonce_error',
-				wp_strip_all_tags( __( 'Nonce validation failed.', 'gravityformsgoogleanalytics' ) )
-			);
-			wp_send_json_error( $error );
-		}
-		$entry_id   = isset( $_REQUEST['entry_id'] ) ? absint( $_REQUEST['entry_id'] ) : null;
-		$event_sent = gform_get_meta( $entry_id, 'GFConversionStatus' );
-		if ( 'SENT' === $event_sent ) {
-			wp_send_json_success( array( 'event_sent' => true ) );
-		} else {
-			wp_send_json_success( array( 'event_sent' => false ) );
-		}
+		// Validate nonce.
+		$this->validate_ajax_nonce();
+
+		// Getting paramters.
+		$entry_id = absint( rgpost( 'entry_id' ) );
+		$feed_id  = absint( rgpost( 'feed_id' ) );
+
+		// Checking if event for entry id and feed id has been sent.
+		$feeds_sent = gform_get_meta( $entry_id, 'googleanalytics_feeds_sent' );
+		$has_sent   = is_array( $feeds_sent ) && in_array( $feed_id, $feeds_sent );
+
+		wp_send_json_success( array( 'event_sent' => $has_sent ) );
 	}
 
 	/**
@@ -2198,30 +1635,73 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since  1.0.0
 	 */
 	public function ajax_save_entry_meta() {
-		if ( isset( $_REQUEST['nonce'] ) && wp_verify_nonce( $_REQUEST['nonce'], 'gforms_google_analytics_confirmation' ) ) {
-			wp_send_json_success( array( 'meta_saved' => false ) );
-		} else {
-			$this->log_debug( __METHOD__ . '(): Nonce verification was not successful.' );
-			$error = new WP_Error(
-				'google_analytics_nonce_error',
-				wp_strip_all_tags( __( 'Nonce validation failed.', 'gravityformsgoogleanalytics' ) )
-			);
-			wp_send_json_error( $error );
+		// Validate nonce.
+		$this->validate_ajax_nonce();
+
+
+		// Getting paramters.
+		$entry_id = absint( rgpost( 'entry_id' ) );
+		$feed_id  = absint( rgpost( 'feed_id' ) );
+
+		// Adding current feed to meta and saving.
+		$feeds_sent = gform_get_meta( $entry_id, 'googleanalytics_feeds_sent' );
+		if ( ! is_array( $feeds_sent ) ) {
+			$feeds_sent = array();
 		}
-		$entry_id = isset( $_REQUEST['entry_id'] ) ? absint( $_REQUEST['entry_id'] ) : null;
-		gform_update_meta( $entry_id, 'GFConversionStatus', 'SENT' );
-		$event_sent = gform_get_meta( $entry_id, 'GFConversionStatus' );
-		if ( 'SENT' === $event_sent ) {
-			wp_send_json_success( array( 'meta_saved' => true ) );
-		} else {
-			wp_send_json_success( array( 'meta_saved' => false ) );
+		$feeds_sent[] = $feed_id;
+		gform_update_meta( $entry_id, 'googleanalytics_feeds_sent', $feeds_sent );
+
+		wp_send_json_success( array( 'meta_saved' => true ) );
+	}
+
+	/**
+	 * Verifies nonce and sends a JSON error if unsuccessful.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $nonce_action The nonce action to be verified.
+	 *
+	 * @return void
+	 */
+	private function verify_ajax_nonce( $nonce_action = 'connect_google_analytics' ) {
+		if ( ! wp_verify_nonce( rgpost( 'nonce' ), $nonce_action ) ) {
+			$this->log_debug( __METHOD__ . '(): Nonce validation failed.' );
+			wp_send_json_error( new WP_Error( 'google_analytics_ga_error', wp_strip_all_tags( __( 'Nonce validation has failed.', 'gravityformsgoogleanalytics' ) ) ) );
+		}
+	}
+
+	/**
+	 * Verifies Gravity Forms capabilities and sends a JSON error if user doesn't have required permission.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
+	private function verify_capability() {
+		if ( ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
+			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
+			wp_send_json_error( new WP_Error( 'google_analytics_ga_error', wp_strip_all_tags( __( 'User does not have required permissions to setup Google Analytics.', 'gravityformsgoogleanalytics' ) ) ) );
+		}
+	}
+
+	/**
+	 * Attempts to initialize Google Analytics API and sends a JSON error if unsuccessful.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
+	private function verify_api_connection() {
+		if ( ! $this->initialize_api() ) {
+			$this->log_debug( __METHOD__ . '(): Unable to initialize Google Anaylics API.' );
+			wp_send_json_error( new WP_Error( 'google_analytics_ga_error', wp_strip_all_tags( __( 'Unable to initialize Google Anaylics API.', 'gravityformsgoogleanalytics' ) ) ) );
 		}
 	}
 
 	/**
 	 * Append event data to the URL.
 	 *
-	 * @since  1.0.0
+	 * @since  2.0.0
 	 *
 	 * @param string|array $confirmation Confirmation for the form, can be a page redirect.
 	 * @param object       $form         Form object.
@@ -2230,27 +1710,33 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 *
 	 * @return string|array $confirmation
 	 */
-	public function append_confirmation_url( $confirmation, $form, $entry, $ajax ) {
-		if ( $ajax ) {
+	public function force_text_confirmation( $confirmation, $form, $entry, $ajax ) {
+
+		// Ignore blank or spam entries
+		if ( empty( $entry ) || rgar( $entry, 'status' ) === 'spam' ) {
 			return $confirmation;
 		}
-		if ( isset( $confirmation['redirect'] ) ) {
-			$url = add_query_arg(
-				array(
-					'gfaction' => 'event_send',
-					'category' => $this->conversion_category,
-					'action'   => $this->conversion_action,
-					'label'    => $this->conversion_label,
-					'value'    => $this->conversion_value,
-					'entryid'  => $this->conversion_entryid,
-					'nonce'    => wp_create_nonce( 'gforms_google_analytics_confirmation' ),
-				),
-				$confirmation['redirect']
-			);
 
-			$confirmation['redirect'] = esc_url_raw( $url );
+		// Ignore confirmations that are not of type redirect and submissions not associated with a GA feed.
+		if ( ! isset( $confirmation['redirect'] ) || ! $this->has_feed( $form['id'] ) ) {
+			return $confirmation;
 		}
-		return $confirmation;
+
+		// Ignore submissions associated with Measurement Protocol. Those will be handled server side and will go throught the standard flow.
+		if ( self::get_options( '', 'mode' ) === 'gmp' ) {
+			return $confirmation;
+		}
+
+		// Update confirmation to handle redirect.
+		$processing_message = esc_html__( 'Processing... Please wait.', 'gravityformsgoogleanalytics' );
+
+		return "<div id='gf_{$form['id']}' class='gform_anchor' tabindex='-1'></div><div id='gform_confirmation_wrapper_{$form['id']}' class='gform_confirmation_wrapper'><div id='gform_confirmation_message_{$form['id']}' class='gform_confirmation_message_{$form['id']} gform_confirmation_message'>{$processing_message}</div></div>" .
+		       '<script>
+					if ( window["all_ga_events_sent"] ) {
+						document.location.href="' . sanitize_url( $confirmation['redirect'] ) . '";
+					}
+					window.parent.addEventListener("googleanalytics/all_events_sent", function(){ document.location.href="' . sanitize_url( $confirmation['redirect'] ) . '" }); 
+				</script>';
 	}
 
 	/**
@@ -2261,9 +1747,15 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	public function uninstall() {
 		parent::uninstall();
 
+		// Delete backed up feeds as well.
+		global $wpdb;
+		$sql = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}gf_addon_feed WHERE addon_slug=%s", 'gravityformsgoogleanalytics_ua_ga4_upgrade' );
+		$wpdb->query( $sql );
+
 		delete_option( 'gravityformsaddon_gravityformsgoogleanalytics_settings' );
 		delete_option( 'gforms_google_analytics_goal_labels' );
 		GFCache::delete( 'google_analytics_plugin_settings' );
+		GFCache::delete( 'all_ga4_feeds_upgraded' );
 	}
 
 	/**
@@ -2273,12 +1765,14 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 *
 	 * @since  1.0.0
 	 */
-	public function settings_connected_label() {
-		$options = $this->get_options();
+	public function settings_connection_method() {
+		GFCache::delete( 'all_ga4_feeds_upgraded' );
+		$options = self::get_options();
+
 		if ( ! isset( $options['mode'] ) ) {
 			$options['mode'] = 'unset';
 		}
-		$disconnect_uri = esc_url_raw(
+		$disconnect_uri  = esc_url_raw(
 			add_query_arg(
 				array(
 					'page'    => 'gf_settings',
@@ -2290,7 +1784,9 @@ class GF_Google_Analytics extends GFFeedAddOn {
 			)
 		);
 		$disconnect_link = sprintf( '<a href="%s" class="gfga-disconnect">%s</a> ', esc_url_raw( $disconnect_uri ), esc_html__( 'Disconnect', 'gravityformsgoogleanalytics' ) );
-		if ( 'ga' === $options['mode'] ) {
+		if ( rgar( $options, 'is_manual' ) ) {
+			echo esc_html__( 'Manual Configuration', 'gravityformsgoogleanalytics' ) . ' | ' . wp_kses_post( $disconnect_link );
+		} elseif ( 'ga' === $options['mode'] ) {
 			echo esc_html__( 'Google Analytics', 'gravityformsgoogleanalytics' ) . ' | ' . wp_kses_post( $disconnect_link );
 		} elseif ( 'gtm' === $options['mode'] ) {
 			echo esc_html__( 'Google Tag Manager', 'gravityformsgoogleanalytics' ) . ' | ' . wp_kses_post( $disconnect_link );
@@ -2302,50 +1798,81 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	}
 
 	/**
-	 * Outputs the UA code if set.
+	 * Outputs the configured analitics account and data stream.
 	 *
-	 * @since  1.0.0
+	 * @since  2.0.0
 	 */
-	public function settings_uatext() {
-		$options      = $this->get_options( 'account' );
-		$account_name = isset( $options['account_name'] ) ? $options['account_name'] : '';
-		if ( isset( $options['property'] ) && ! empty( $options['property'] ) ) {
-			if ( $this->manual_configuration() ) {
-				esc_html_e( 'Must be manually configured in tag manager', 'gravityformsgoogleanalytics' );
-			} else {
-				echo esc_html( $account_name ) . ' | ' . esc_html( $options['property'] );
-			}
-		} else {
-			esc_html_e( 'Please authenticate against the Measurement Protocol, Google Analytics, or Tag Manager to get your GA code', 'gravityformsgoogleanalytics' );
+	public function settings_analytics_account() {
+		$options = self::get_options( 'ga4_account' );
+		if ( ! empty( $options['account_name'] ) ) {
+			echo esc_html( $options['account_name'] ) . ' / ' . esc_html( $options['property_name'] ) . ' / ' . esc_html( $options['data_stream_name'] );
 		}
 	}
 
 	/**
-	 * Outputs the mode in a hidden field.
+	 * Outputs the configured tag manager account information.
 	 *
-	 * @since  1.0.0
+	 * @since  2.0.0
 	 */
-	public function settings_uamode() {
-		$mode = $this->get_options( '', 'mode' );
-		printf( '<input type="hidden" value="%s" id="uamode" />', esc_attr( $mode ) );
+	public function settings_tag_manager_account() {
+		$options = self::get_options( 'ga4_account' );
+		if ( ! empty( $options['gtm_account_name'] ) ) {
+			echo esc_html( $options['gtm_account_name'] ) . ' / ' . esc_html( $options['gtm_container_id'] ) . ' / ' . esc_html( $options['gtm_workspace_name'] );
+		}
 	}
 
 	/**
-	 * Outputs the UA view if set.
+	 * Outputs the configured tag manager create assets setting.
 	 *
-	 * @since  1.0.0
+	 * @since  2.0.0
 	 */
-	public function settings_uaview() {
-		$options = $this->get_options( 'account' );
-		if ( isset( $options['view'] ) && isset( $options['view_name'] ) ) {
-			if ( $this->manual_configuration() ) {
-				esc_html_e( 'Must be manually configured in tag manager', 'gravityformsgoogleanalytics' );
-			} else {
-				echo esc_html( $options['view_name'] ) . ' | ' . esc_html( $options['view'] );
-			}
+	public function settings_tag_manager_create_assets() {
+		$options = self::get_options( 'ga4_account' );
+		echo rgar( $options, 'gtm_create_assets' ) ? 'Yes' : 'No';
+	}
+
+	/**
+	 * Outputs the configured measurement id
+	 *
+	 * @since  2.0.0
+	 */
+	public function settings_measurement_id() {
+		$options = self::get_options( 'ga4_account' );
+		if ( isset( $options['measurement_id'] ) ) {
+			echo esc_html( $options['measurement_id'] );
 		} else {
-			esc_html_e( 'Please authenticate to retrieve the view.', 'gravityformsgoogleanalytics' );
+			esc_html_e( 'Measurement ID not specified.', 'gravityformsgoogleanalytics' );
 		}
+	}
+
+	/**
+	 * Adds the inline script containing the gforms_google_analytics_frontend_strings variable.
+	 *
+	 * @since 2.1
+	 *
+	 * @return void
+	 */
+	public function frontend_script_strings_callback() {
+		static $done;
+		if ( $done ) {
+			return;
+		}
+
+		$strings = array(
+			'ajaxurl'         => admin_url( 'admin-ajax.php' ),
+			'nonce'           => wp_create_nonce( 'gforms_google_analytics_confirmation' ),
+			'logging_enabled' => $this->is_logging_enabled(),
+			'logging_nonce'   => wp_create_nonce( 'log_google_analytics_event_sent' ),
+			'ua_tracker'      => self::get_options( '', 'ua_tracker' ),
+		);
+
+		if ( function_exists( 'wp_add_inline_script' ) ) {
+			wp_add_inline_script( self::FE_SCRIPT_HANDLE, sprintf( 'var %s_strings = %s;', self::FE_SCRIPT_HANDLE, json_encode( $strings ) ), 'before' );
+		} else {
+			wp_localize_script( self::FE_SCRIPT_HANDLE, self::FE_SCRIPT_HANDLE . '_strings', $strings );
+		}
+
+		$done = true;
 	}
 
 	/**
@@ -2363,7 +1890,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 			return false;
 		}
 
-		$settings = $this->get_plugin_settings();
+		$settings = self::get_options();
 
 		// Check for mode setting.
 		if ( ! $this->is_frontend_scripts_mode_valid( $settings ) ) {
@@ -2376,7 +1903,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 			return true;
 		}
 
-		if ( ! $this->has_feed( $form['id'] ) && ! rgars( $form, 'gravityformsgoogleanalytics/pagination_gaeventcategory' ) ) {
+		if ( ! $this->has_feed( $form['id'] ) && ! rgars( $form, 'gravityformsgoogleanalytics/google_analytics_pagination' ) ) {
 			return false;
 		}
 
@@ -2393,7 +1920,8 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @return bool false if there is no gfgamode or it is gmp, true otherwise.
 	 */
 	public function is_frontend_scripts_mode_valid( $settings ) {
-		if ( ! isset( $settings['gfgamode'] ) || empty( $settings['gfgamode'] ) || 'gmp' === rgar( $settings, 'gfgamode' ) ) {
+		$mode = rgar( $settings, 'mode' );
+		if ( empty( $mode ) || $mode === 'gmp' ) {
 			return false;
 		}
 
@@ -2418,7 +1946,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		$auth_tokens = array();
 
 		if ( $auth_payload ) {
-			$auth_tokens['token'] = rgar( $auth_payload, 'access_token' );
+			$auth_tokens['token']   = rgar( $auth_payload, 'access_token' );
 			$auth_tokens['refresh'] = rgar( $auth_payload, 'refresh_token' );
 		} else {
 			$auth_tokens['token']   = rgar( $settings['auth_token'], 'token' );
@@ -2433,95 +1961,86 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 *
 	 * @since  1.0.0
 	 */
-	public function settings_ga_select() {
+	public function settings_ga_select_account() {
+
+		if ( ! $this->initialize_api() ) {
+			$this->log_debug( __METHOD__ . '(): Unable to initialize Google Analytics API.' );
+
+			return false;
+		}
+
+		if ( ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
+			$this->log_debug( __METHOD__ . '(): User does not have Form Settings capability.' );
+
+			return false;
+		}
+
 		$auth_payload = $this->plugin_settings->get_auth_payload();
+		$auth_tokens  = $this->maybe_get_tokens_from_auth_payload( $auth_payload, self::get_options() );
 
-		if ( $this->initialize_api() ) {
-			if ( ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
-				return;
-			}
+		if ( ! $auth_tokens ) {
+			$this->log_debug( __METHOD__ . '(): Unable to retrieve API Token.' );
 
-			$auth_tokens = $this->maybe_get_tokens_from_auth_payload( $auth_payload, $this->get_plugin_settings() );
+			return false;
+		}
 
-			if ( ! $auth_tokens ) {
-				return false;
-			}
+		$response = $this->api->get_ga4_accounts();
 
-			$token   = rgar( $auth_tokens, 'token' );
-			$refresh = rgar( $auth_tokens, 'refresh' );
+		if ( is_wp_error( $response ) ) {
+			$this->log_debug( __METHOD__ . '(): Could not retrieve Google Analytics accounts' );
 
-			$body = array();
+			return esc_html_e( 'It appears that you do not have a Google Analytics account for the account you selected.', 'gravityformsgoogleanalytics' );
+		}
 
-			$response = $this->api->get_analytics_accounts( $body );
-
-			if ( is_wp_error( $response ) ) {
-				$this->log_debug( __METHOD__ . '(): Could not retrieve Google Analytics accounts' );
-				return esc_html_e( 'It appears that you do not have a Google Analytics account for the account you selected.', 'gravityformsgoogleanalytics' );
-			}
-
-			if ( ! isset( $response['items'] ) ) {
-				$this->connect_error = true;
-				$gravity_url         = admin_url( 'admin.php?page=gf_settings&subview=gravityformsgoogleanalytics' );
+		if ( ! isset( $response['accountSummaries'] ) || empty( $response['accountSummaries'] ) ) {
+			$this->connect_error = true;
+			$gravity_url         = admin_url( 'admin.php?page=gf_settings&subview=gravityformsgoogleanalytics' );
+			?>
+			<style>
+                #gform-settings-save {
+                    display: none;
+                }
+			</style>
+			<p><?php esc_html_e( 'It appears that you do not have a Google Analytics account for the account you selected.', 'gravityformsgoogleanalytics' ); ?></p>
+			<p><a class="button primary"
+			      href="<?php echo esc_url_raw( $gravity_url ); ?>"><?php esc_html_e( 'Return to Settings', 'gravityformsgoogleanalytics' ); ?></a>
+			</p>
+			<?php
+		} else {
+			echo sprintf( '<input type="hidden" name="gfga_token" value="%s" />', esc_attr( rgar( $auth_tokens, 'token' ) ) );
+			echo sprintf( '<input type="hidden" name="gfga_refresh" value="%s" />', esc_attr( rgar( $auth_tokens, 'refresh' ) ) );
+			echo '<select name="gaproperty" id="gaproperty">';
+			echo '<option value="">' . esc_html__( 'Select an account', 'gravityformsgoogleanalytics' ) . '</option>';
+			foreach ( $response['accountSummaries'] as $account ) {
 				?>
-				<style>
-					#gform-settings-save {
-						display: none;
+				<optgroup label="<?php echo esc_attr( $account['displayName'] ); ?>">
+					<?php
+					if ( ! isset( $account['propertySummaries'] ) || empty( $account['propertySummaries'] ) ) {
+						printf( '<option disabled="disabled">%s</option>', esc_html__( 'This account does not have any properties...', 'gravityformsgoogleanalytics' ) );
+						continue;
 					}
-				</style>
-				<p><?php esc_html_e( 'It appears that you do not have a Google Analytics account for the account you selected.', 'gravityformsgoogleanalytics' ); ?></p>
-				<p><a class="button primary" href="<?php echo esc_url_raw( $gravity_url ); ?>"><?php esc_html_e( 'Return to Settings', 'gravityformsgoogleanalytics' ); ?></a></p>
-				<?php
-			} else {
-				echo sprintf( '<input type="hidden" name="gfga_token" value="%s" />', esc_attr( $token ) );
-				echo sprintf( '<input type="hidden" name="gfga_refresh" value="%s" />', esc_attr( $refresh ) );
-				echo '<select name="gaproperty" id="gaproperty">';
-				echo '<option value="">' . esc_html__( 'Select an account', 'gravityformsgoogleanalytics' ) . '</option>';
-				foreach ( $response['items'] as $item ) {
+					foreach ( $account['propertySummaries'] as $property ) {
+						printf(
+							'<option value="%s" data-account-id="%s" data-account-name="%s" data-property-name="%s">%s</option>',
+							esc_attr( $property['property'] ),
+							esc_attr( $account['account'] ),
+							esc_html( $account['displayName'] ),
+							esc_html( $property['displayName'] ),
+							esc_html( $property['displayName'] )
+						);
+					}
 					?>
-					<optgroup label="<?php printf( '%s', esc_html( $item['name'] ) ); ?>">
-						<?php
-						$ga_child_url   = $item['childLink']['href'];
-						$child_response = $this->api->get_child_account( $ga_child_url, $body );
-						if ( is_wp_error( $child_response ) ) {
-							return $child_response->get_error_message();
-						}
-						foreach ( $child_response['items'] as $child_item ) {
-							printf(
-								'<option value="%s" data-account-id="%s" data-ua-code="%s" data-token="%s" data-account-name="%s">%s %s</option>',
-								esc_attr( $child_item['id'] ),
-								esc_attr( $item['id'] ),
-								esc_attr( $child_item['id'] ),
-								esc_attr( rgar( $auth_payload, 'access_token' ) ),
-								esc_html( $child_item['websiteUrl'] ),
-								esc_html( $child_item['websiteUrl'] ),
-								esc_html( $child_item['id'] )
-							);
-						}
-						?>
-					</optgroup>
-					<?php
-				}
-				if ( rgget( 'action' ) === 'gtmselect' ) {
-					?>
-					<optgroup label="<?php esc_html_e( 'Don\'t see your account?', 'gravityformsgoogleanalytics' ); ?>">
-					<option value="manual"><?php esc_html_e( 'I\'ll configure manually (required to use GA4)', 'gravityformsgoogleanalytics' ); ?></option>
-					</optgroup>
-					<?php
-				}
-				if ( rgget( 'action' ) === 'gaselect' ) {
-					?>
-					<optgroup label="<?php esc_html_e( 'Don\'t see your account?', 'gravityformsgoogleanalytics' ); ?>">
-						<option value="self_config"><?php esc_html_e( 'I\'ll enter the details myself', 'gravityformsgoogleanalytics' ); ?></option>
-					</optgroup>
-					<?php
-				}
-				echo '</select>';
-				?>
-				<br /><div id="ga-views"></div>
+				</optgroup>
 				<?php
 			}
+			echo '</select>';
+			?>
+			<br/>
+			<div id="ga-data-streams"></div>
+			<?php
 		}
 	}
+
 
 	/**
 	 * Displays a Google Tag Manager box.
@@ -2535,7 +2054,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 				return;
 			}
 
-			$auth_tokens = $this->maybe_get_tokens_from_auth_payload( $auth_payload, $this->get_plugin_settings() );
+			$auth_tokens = $this->maybe_get_tokens_from_auth_payload( $auth_payload, self::get_options() );
 
 			if ( ! $auth_tokens ) {
 				return false;
@@ -2563,14 +2082,19 @@ class GF_Google_Analytics extends GFFeedAddOn {
 				foreach ( $response['account'] as $account ) {
 					$google_tag_manager_array[ $account['name'] ] = array();
 					?>
-					<option data-account-name="<?php echo esc_attr( $account['name'] ); ?>" data-account-id="<?php echo esc_attr( $account['accountId'] ); ?>" data-token="<?php echo esc_attr( rgar( $auth_payload, 'access_token' ) ); ?>" value="<?php echo esc_attr( $account['name'] ); ?>"><?php echo esc_attr( $account['name'] ); ?></option>
+					<option data-account-name="<?php echo esc_attr( $account['name'] ); ?>"
+					        data-account-id="<?php echo esc_attr( $account['accountId'] ); ?>"
+					        data-token="<?php echo esc_attr( rgar( $auth_payload, 'access_token' ) ); ?>"
+					        value="<?php echo esc_attr( $account['name'] ); ?>"><?php echo esc_attr( $account['name'] ); ?></option>
 					<?php
 				}
 
 				echo '</select>';
 				?>
-				<br /><div id="gtm-containers"></div>
-				<br /><div id="gtm-workspaces"></div>
+				<br/>
+				<div id="gtm-containers"></div>
+				<br/>
+				<div id="gtm-workspaces"></div>
 				<?php
 
 				return;
@@ -2581,565 +2105,58 @@ class GF_Google_Analytics extends GFFeedAddOn {
 			$gravity_url         = admin_url( 'admin.php?page=gf_settings&subview=gravityformsgoogleanalytics' );
 			?>
 			<style>
-				#gform-settings-save {
-					display: none;
-				}
+                #gform-settings-save {
+                    display: none;
+                }
 			</style>
 			<p><?php esc_html_e( 'It appears that you do not have a Google Tag Manager account for the account you selected.', 'gravityformsgoogleanalytics' ); ?></p>
-			<p><a class="button primary" href="<?php echo esc_url_raw( $gravity_url ); ?>"><?php esc_html_e( 'Return to Settings', 'gravityformsgoogleanalytics' ); ?></a></p>
+			<p><a class="button primary"
+			      href="<?php echo esc_url_raw( $gravity_url ); ?>"><?php esc_html_e( 'Return to Settings', 'gravityformsgoogleanalytics' ); ?></a>
+			</p>
 			<?php
 		}
 	}
 
 	/**
-	 * Get Analytics Goals for the user based on the view selected.
+	 * Get Tag Manager Triggers.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0
 	 *
-	 * @return mixed Array of Existing event-based goals, or false if no goals exist or on error.
+	 * @param array  $body      The add-on's options.
+	 * @param string $path      The path for the api request.
+	 * @param string $workspace The workspace ID.
+	 *
+	 * @return array Array of triggers
 	 */
-	public function get_goals( $all_goals = false ) {
-		if ( ! $this->initialize_api() ) {
-			return false;
+	public function get_tag_manager_triggers( $body, $path, $workspace ) {
+		if ( $this->initialize_api() ) {
+			$triggers = $this->api->get_tag_manager_triggers( array(), $path, $workspace );
+
+			return $triggers;
 		}
 
-		$account = $this->get_options( 'account' );
+		return array();
+	}
 
-		$body = array();
+	/**
+	 * Get Tag Manager Variables.
+	 *
+	 * @since 2.0
+	 *
+	 * @param array  $body      The add-on's options.
+	 * @param string $path      The path for the api request.
+	 * @param string $workspace The workspace ID.
+	 *
+	 * @return array Array of variables.
+	 */
+	public function get_tag_manager_variables( $body, $path, $workspace ) {
+		if ( $this->initialize_api() ) {
+			$variables = $this->api->get_tag_manager_variables( array(), $path, $workspace );
 
-		// Retrieve Goals.
-		$response = $this->api->get_goals(
-			$body,
-			$account['account_id'],
-			$account['property_id'],
-			$account['view']
-		);
-		if ( is_wp_error( $response ) ) {
-			$this->log_debug( __METHOD__ . '(): Could not retrieve Google Analytics Goals.' );
-			return false;
+			return $variables;
 		}
 
-		// Retrieve Goal Labels.
-		$goal_labels = get_option( 'gforms_google_analytics_goal_labels', array() );
-
-		$goal_information = array();
-		if ( isset( $response['items'] ) ) {
-			foreach ( $response['items'] as $goal_info ) {
-				if ( 'EVENT' === $goal_info['type'] || $all_goals ) {
-					$event_label    = isset( $goal_labels[ $goal_info['selfLink'] ] ) ? $goal_labels[ $goal_info['selfLink'] ] : '';
-					$event_action   = '';
-					$event_category = '';
-					foreach ( $goal_info['eventDetails']['eventConditions'] as $condition ) {
-						if ( 'CATEGORY' === $condition['type'] ) {
-							$event_category = $condition['expression'];
-						}
-						if ( 'ACTION' === $condition['type'] ) {
-							$event_action = $condition['expression'];
-						}
-						if ( 'LABEL' === $condition['type'] ) {
-							$event_label = $condition['expression'];
-						}
-					}
-					$goal_information[ $goal_info['id'] ] = array(
-						'name'     => $goal_info['name'],
-						'category' => $event_category,
-						'action'   => $event_action,
-						'label'    => $event_label,
-						'goal_id'  => $goal_info['id'],
-					);
-				}
-			}
-		}
-
-		if ( ! empty( $goal_information ) ) {
-			return $goal_information;
-		}
-		return false;
-
-	}
-
-	/**
-	 * Creates a placeholder for the Event Category.
-	 *
-	 * @since  1.0.0
-	 */
-	public function settings_event_category() {
-		$this->get_event_setting( 'gaeventcategory' );
-	}
-
-	/**
-	 * Creates a placeholder for the Event Action.
-	 *
-	 * @since  1.0.0
-	 */
-	public function settings_event_action() {
-		$this->get_event_setting( 'gaeventaction' );
-	}
-
-	/**
-	 * Creates a placeholder for the Event Label.
-	 *
-	 * @since  1.0.0
-	 */
-	public function settings_event_label() {
-		$this->get_event_setting( 'gaeventlabel' );
-	}
-
-	/**
-	 * Get the event setting or a placeholder if the setting is empty
-	 *
-	 * @param string $setting_name The name of the setting to retrieve.
-	 *
-	 * @since  1.0.0
-	 */
-	public function get_event_setting( $setting_name ) {
-		$view = rgget( 'settingstype' );
-		if ( $view === 'form' ) {
-			$form = $this->get_current_form();
-			if ( rgars( $form, 'gravityformsgoogleanalytics/pagination_' . $setting_name ) ) {
-				$setting = 'pagination_' . $setting_name;
-				echo '<p>' . esc_html( $form['gravityformsgoogleanalytics'][ $setting ] ) . '</p>';
-			} else {
-				echo '<p>' . esc_html__( 'empty', 'gravityformsgoogleanalytics' ) . '</p>';
-			}
-		} else {
-			$feed = $this->get_current_feed();
-			if ( isset( $feed['meta'][ $setting_name ] ) ) {
-				echo '<p>' . esc_html( $feed['meta'][ $setting_name ] ) . '</p>';
-			} else {
-				echo '<p>' . esc_html__( 'empty', 'gravityformsgoogleanalytics' ) . '</p>';
-			}
-		}
-	}
-
-	/**
-	 * Creates the select goal field type for the feed settings page.
-	 *
-	 * @since  1.0.0
-	 */
-	public function settings_select_goal() {
-		$view = rgget( 'settingstype' );
-		$feed = $this->get_current_feed();
-		$form = $this->get_current_form();
-		if ( $view === 'form' ) {
-			if ( $this->manual_configuration() ) {
-				if ( rgar( $form, 'gravityformsgoogleanalytics' ) && rgar( $form['gravityformsgoogleanalytics'], 'pagination_gaeventgoal' ) ) {
-					printf(
-						'<span id="selected_goal">%s</span> | <a href="#" id="set_values_popup">%s</a>',
-						esc_html( $form['gravityformsgoogleanalytics']['pagination_gaeventgoal'] ),
-						esc_html__( 'Set Values', 'gravityformsgoogleanalytics' )
-					);
-				} else {
-					printf(
-						'<span id="selected_goal">%s</span> | <a href="#" id="set_values_popup">%s</a>',
-						esc_html__( 'No values saved', 'gravityformsgoogleanalytics' ),
-						esc_html__( 'Set Values', 'gravityformsgoogleanalytics' )
-					);
-				}
-			} else {
-				if ( rgar( $form, 'gravityformsgoogleanalytics' ) && rgar( $form['gravityformsgoogleanalytics'], 'pagination_gaeventgoal' ) ) {
-					printf(
-						'<span id="selected_goal">%s</span> | <a href="#" id="select_goal_popup">%s</a>',
-						esc_html( $form['gravityformsgoogleanalytics']['pagination_gaeventgoal'] ),
-						esc_html__( 'Select Goal', 'gravityformsgoogleanalytics' )
-					);
-				} else {
-					printf(
-						'<span id="selected_goal">%s</span> | <a href="#" id="select_goal_popup">%s</a>',
-						esc_html__( 'No goal selected', 'gravityformsgoogleanalytics' ),
-						esc_html__( 'Select or create a new goal', 'gravityformsgoogleanalytics' )
-					);
-				}
-			}
-		} else {
-			if ( $this->manual_configuration() ) {
-				if ( rgar( $feed, 'meta' ) && rgar( $feed['meta'], 'gaeventgoal' ) ) {
-					printf(
-						'<span id="selected_goal">%s</span> | <a href="#" id="set_values_popup">%s</a>',
-						esc_html( $feed['meta']['gaeventgoal'] ),
-						esc_html__( 'Set Values', 'gravityformsgoogleanalytics' )
-					);
-				} else {
-					printf(
-						'<span id="selected_goal">%s</span> | <a href="#" id="set_values_popup">%s</a>',
-						esc_html__( 'No values saved', 'gravityformsgoogleanalytics' ),
-						esc_html__( 'Set Values', 'gravityformsgoogleanalytics' )
-					);
-				}
-			} else {
-				if ( rgar( $feed, 'meta' ) && rgar( $feed['meta'], 'gaeventgoal' ) ) {
-					printf(
-						'<span id="selected_goal">%s</span> | <a href="#" id="select_goal_popup">%s</a>',
-						esc_html( $feed['meta']['gaeventgoal'] ),
-						esc_html__( 'Select Goal', 'gravityformsgoogleanalytics' )
-					);
-				} else {
-					printf(
-						'<span id="selected_goal">%s</span> | <a href="#" id="select_goal_popup">%s</a>',
-						esc_html__( 'No goal selected', 'gravityformsgoogleanalytics' ),
-						esc_html__( 'Select or create a new goal', 'gravityformsgoogleanalytics' )
-					);
-				}
-			}
-		}
-
-		if ( $this->manual_configuration() ) {
-			$this->manual_config_modal();
-		} else {
-			$this->goal_selection_modal();
-		}
-	}
-
-	/**
-	 * A modal for manual configuration of event attributes.
-	 *
-	 * @since 1.0.0
-	 */
-	public function manual_config_modal() {
-		$form = rgget( 'id' ) ? GFAPI::get_form( rgget( 'id' ) ) : null;
-		?>
-		<div id="thickbox_set_values">
-			<div class="gform-addon-conversion-tracking-modal gform-addon-gtm-manual-config">
-				<?php wp_nonce_field( 'create_analytics_goal', 'create_ga_goal' ); ?>
-				<?php echo $this->manual_config_modal_fields( $form ); ?>
-				<div class="gform-addon-conversion-tracking-modal__actions gform-settings-panel__content">
-					<?php echo $this->save_buttons(); ?>
-					<button id="close_manual_config" class="gform-button gform-button--white gform-button--size-xs">
-						<?php echo esc_html__( 'Cancel', 'gravityformsgoogleanalytics' ); ?>
-					</button>
-				</div>
-			</div>
-		</div><!-- #thickbox_goal_select -->
-		<?php
-	}
-
-	/**
-	 * Creates the modal where the user can select, create, and edit feeds.
-	 *
-	 * @since  1.0.0
-	 */
-	public function goal_selection_modal() {
-		$form    = rgget( 'id' ) ? GFAPI::get_form( rgget( 'id' ) ) : null;
-		$goals   = $this->get_goals();
-		$choices = array();
-		if ( $goals ) {
-			foreach ( $goals as $goal ) {
-				$choices[] = array(
-					'label'         => $goal['name'],
-					'value'         => $goal['goal_id'],
-					'data-action'   => $goal['action'],
-					'data-label'    => $goal['label'],
-					'data-category' => $goal['category'],
-					'data-goal-id'  => $goal['goal_id'],
-				);
-			}
-		}
-		?>
-		<div id="thickbox_goal_select">
-			<div class="gform-addon-conversion-tracking-modal">
-				<fieldset id="goal_select_edit" class="gform-settings-panel gform-settings-panel--with-title">
-					<legend class="goal-creation gform-settings-panel__title gform-settings-panel__title--header">
-						<span class="gform-settings-panel__title-wrapper"><?php echo esc_html__( 'Google Analytics Goal', 'gravityformsgoogleanalytics' ); ?></span>
-						<button class="gform-settings-panel__title-action gform-button gform-button--primary gform-button--size-xs">
-							<?php echo esc_html__( 'New Goal', 'gravityformsgoogleanalytics' ); ?>
-						</button>
-					</legend>
-					<?php wp_nonce_field( 'create_analytics_goal', 'create_ga_goal' ); ?>
-					<div class="gforms-goal-selection gform-settings-panel__content">
-						<div class="gform-settings-field gform-settings-field__select">
-							<div class="gform-settings-field__header">
-								<label class="gform-settings-label" for="goal_select">
-									<?php echo esc_html__( 'Select a Goal', 'gravityformsgoogleanalytics' ); ?>
-								</label>
-							</div>
-							<span class="gform-settings-input__container">
-								<select id="goal_select" name="_gaddon_setting_gagoalselect">
-									<optgroup label="<?php echo esc_html__( 'Select a Goal', 'gravityformsgoogleanalytics' ); ?>" id="ga_goals">
-										<?php
-										foreach ( $choices as $choice ) {
-											printf(
-												'<option value="%s" data-action="%s" data-label="%s" data-category="%s" data-goal-id="%s" %s>%s</option>',
-												esc_attr( $choice['data-goal-id'] ),
-												esc_attr( $choice['data-action'] ),
-												esc_attr( $choice['data-label'] ),
-												esc_attr( $choice['data-category'] ),
-												esc_attr( $choice['data-goal-id'] ),
-												selected( isset( $feed['meta']['gagoalselect'] ) ? $feed['meta']['gagoalselect'] : false, $choice['data-goal-id'], false ),
-												esc_html( $choice['label'] )
-											);
-										}
-										?>
-									</optgroup>
-								</select>
-							</span>
-						</div>
-				</fieldset>
-				<?php echo $this->modal_fields( $form ); ?>
-				<div class="gform-addon-conversion-tracking-modal__actions gform-settings-panel__content">
-					<?php echo $this->save_buttons(); ?>
-					<button id="cancel_goal" class="gform-button gform-button--white gform-button--size-xs">
-						<?php echo esc_html__( 'Cancel', 'gravityformsgoogleanalytics' ); ?>
-					</button>
-				</div>
-			</div>
-		</div><!-- #thickbox_goal_select -->
-		<?php
-	}
-
-	/**
-	 * Create modal fields for manual configuration.
-	 *
-	 * @since  1.0.0
-	 */
-	public function manual_config_modal_fields( $form ) {
-		?>
-		<fieldset id="goal_labels" class="gform-settings-panel gform-settings-panel--with-title">
-			<legend class="gform-settings-panel__title gform-settings-panel__title--header">
-				<span class="gforms_goal_create_heading">
-					<?php echo esc_html__( 'Set Event Values', 'gravityformsgoogleanalytics' ); ?>
-				</span>
-			</legend>
-			<div class="gform-settings-panel__content">
-				<div class="gform-settings-field gform-settings-field__text">
-					<div class="gform-settings-field__header">
-						<label class="gform-settings-label" for="ga_event_goal_thickbox">
-							<?php echo esc_html__( 'Goal Name', 'gravityformsgoogleanalytics' ); ?>
-						</label>
-					</div>
-					<?php
-					$this->settings_hidden(
-						array(
-							'name'          => 'gaeventgoalid_thickbox',
-							'default_value' => '',
-						)
-					);
-					$this->settings_text(
-						array(
-							'name'          => 'gaeventgoal_thickbox',
-							'class'         => 'ga_event_goal_thickbox disabled',
-							'default_value' => __( 'Submission:', 'gravityformsgoogleanalytics' ) . ' ' . $form['title'],
-							'id'            => 'ga_event_goal_thickbox',
-							'placeholder'   => __( 'Goal Name', 'gravityformsgoogleanalytics' ),
-						)
-					);
-					?>
-				</div>
-				<div class="gform-settings-field gform-settings-field__text">
-					<div class="gform-settings-field__header">
-						<label class="gform-settings-label" for="ga_event_category_thickbox">
-							<?php echo esc_html__( 'Event Category', 'gravityformsgoogleanalytics' ); ?>
-							<span class="required"><?php echo esc_html__( '(Required)', 'gravityformsgoogleanalytics' ); ?></span>
-						</label>
-					</div>
-					<?php
-					$this->settings_text(
-						array(
-							'name'          => 'gaeventcategory_thickbox',
-							'class'         => 'ga_event_category_thickbox disabled',
-							'default_value' => '',
-							'id'            => 'ga_event_category_thickbox',
-							'placeholder'   => __( 'Event Category', 'gravityformsgoogleanalytics' ),
-							'required'      => true,
-						)
-					);
-					?>
-				</div>
-				<div class="gform-settings-field gform-settings-field__text">
-					<div class="gform-settings-field__header">
-						<label class="gform-settings-label" for="ga_event_action_thickbox">
-							<?php echo esc_html__( 'Event Action', 'gravityformsgoogleanalytics' ); ?>
-							<span class="required"><?php echo esc_html__( '(Required)', 'gravityformsgoogleanalytics' ); ?></span>
-						</label>
-					</div>
-					<?php
-					$this->settings_text(
-						array(
-							'name'          => 'gaeventaction_thickbox',
-							'class'         => 'ga_event_action_thickbox disabled',
-							'default_value' => '',
-							'id'            => 'ga_event_action_thickbox',
-							'placeholder'   => __( 'Event Action', 'gravityformsgoogleanalytics' ),
-							'required'      => true,
-						)
-					);
-					?>
-				</div>
-				<div class="gform-settings-field gform-settings-field__text">
-					<div class="gform-settings-field__header">
-						<label class="gform-settings-label" for="ga_event_label_thickbox">
-							<?php echo esc_html__( 'Event Label', 'gravityformsgoogleanalytics' ); ?>
-						</label>
-					</div>
-					<?php
-					$this->settings_text(
-						array(
-							'name'          => 'gaeventlabel_thickbox',
-							'class'         => 'ga_event_label_thickbox disabled merge-tag-support mt-position-right',
-							'default_value' => '{form_title} ID: {form_id}',
-							'id'            => 'ga_event_label_thickbox',
-							'placeholder'   => __( 'Event Label', 'gravityformsgoogleanalytics' ),
-						)
-					);
-					?>
-				</div>
-			</div>
-		</fieldset>
-		<?php
-	}
-
-	/**
-	 * Create the goal fields for the modal.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @param object $form The current form.
-	 */
-	public function modal_fields( $form ) {
-		?>
-		<fieldset id="goal_labels" class="gform-settings-panel gform-settings-panel--with-title">
-			<legend class="gform-settings-panel__title gform-settings-panel__title--header">
-				<span class="gforms_goal_edit_heading">
-					<?php echo esc_html__( 'Edit Google Analytics Goal', 'gravityformsgoogleanalytics' ); ?>
-				</span>
-				<span class="gforms_goal_create_heading">
-					<?php echo esc_html__( 'Create a Google Analytics Goal', 'gravityformsgoogleanalytics' ); ?>
-				</span>
-			</legend>
-			<div class="gform-settings-panel__content">
-				<div class="gform-settings-field gform-settings-field__text">
-					<div class="gform-settings-field__header">
-						<label class="gform-settings-label" for="ga_event_goal_thickbox">
-							<?php echo esc_html__( 'Goal Name', 'gravityformsgoogleanalytics' ); ?>
-						</label>
-					</div>
-					<?php
-					$this->settings_hidden(
-						array(
-							'name'          => 'gaeventgoalid_thickbox',
-							'default_value' => '',
-						)
-					);
-					$this->settings_text(
-						array(
-							'name'          => 'gaeventgoal_thickbox',
-							'class'         => 'ga_event_goal_thickbox disabled',
-							'default_value' => __( 'Submission:', 'gravityformsgoogleanalytics' ) . ' ' . $form['title'],
-							'id'            => 'ga_event_goal_thickbox',
-							'placeholder'   => __( 'Goal Name', 'gravityformsgoogleanalytics' ),
-						)
-					);
-					?>
-				</div>
-				<div class="gform-settings-field gform-settings-field__text">
-					<div class="gform-settings-field__header">
-						<label class="gform-settings-label" for="ga_event_category_thickbox">
-							<?php echo esc_html__( 'Event Category', 'gravityformsgoogleanalytics' ); ?>
-							<span class="required"><?php echo esc_html__( '(Required)', 'gravityformsgoogleanalytics' ); ?></span>
-						</label>
-					</div>
-					<?php
-					$this->settings_text(
-						array(
-							'name'          => 'gaeventcategory_thickbox',
-							'class'         => 'ga_event_category_thickbox disabled',
-							'default_value' => '',
-							'id'            => 'ga_event_category_thickbox',
-							'placeholder'   => __( 'Event Category', 'gravityformsgoogleanalytics' ),
-							'required'      => true,
-						)
-					);
-					?>
-				</div>
-				<div class="gform-settings-field gform-settings-field__text">
-					<div class="gform-settings-field__header">
-						<label class="gform-settings-label" for="ga_event_action_thickbox">
-							<?php echo esc_html__( 'Event Action', 'gravityformsgoogleanalytics' ); ?>
-							<span class="required"><?php echo esc_html__( '(Required)', 'gravityformsgoogleanalytics' ); ?></span>
-						</label>
-					</div>
-					<?php
-					$this->settings_text(
-						array(
-							'name'          => 'gaeventaction_thickbox',
-							'class'         => 'ga_event_action_thickbox disabled',
-							'default_value' => '',
-							'id'            => 'ga_event_action_thickbox',
-							'placeholder'   => __( 'Event Action', 'gravityformsgoogleanalytics' ),
-							'required'      => true,
-						)
-					);
-					?>
-				</div>
-				<div class="gform-settings-field gform-settings-field__text">
-					<div class="gform-settings-field__header">
-						<label class="gform-settings-label" for="ga_event_label_thickbox">
-							<?php echo esc_html__( 'Event Label', 'gravityformsgoogleanalytics' ); ?>
-						</label>
-					</div>
-					<?php
-					$this->settings_text(
-						array(
-							'name'          => 'gaeventlabel_thickbox',
-							'class'         => 'ga_event_label_thickbox disabled merge-tag-support mt-position-right',
-							'default_value' => '{form_title} ID: {form_id}',
-							'id'            => 'ga_event_label_thickbox',
-							'placeholder'   => __( 'Event Label', 'gravityformsgoogleanalytics' ),
-						)
-					);
-					?>
-				</div>
-			</div>
-		</fieldset>
-		<?php
-	}
-
-	/**
-	 * Create the save buttons for the modal.
-	 *
-	 * @since  1.0.0
-	 */
-	public function save_buttons() {
-		if ( ! $this->manual_configuration() ) {
-			?>
-		<input
-			type="submit"
-			name="gform-settings-save"
-			value="<?php echo esc_html__( 'Select', 'gravityformsgoogleanalytics' ); ?>"
-			class="gform-button gform-button--primary gform-button--size-xs gaddon-setting gaddon-submit"
-			id="use_goal"
-		>
-		<button
-			id="edit_goal"
-			class="gform-button gform-button--white gform-button--size-xs"
-		>
-			<?php echo esc_html__( 'Edit', 'gravityformsgoogleanalytics' ); ?>
-		</button>
-		<input
-			type="submit"
-			name="gform-settings-save"
-			value="<?php echo esc_html__( 'Save Goal', 'gravityformsgoogleanalytics' ); ?>"
-			class="gform-button gform-button--primary gform-button--size-xs gaddon-setting gaddon-submit"
-			id="update_goal"
-		>
-		<input
-			type="submit"
-			name="gform-settings-save"
-			value="<?php echo esc_html__( 'Create New Goal', 'gravityformsgoogleanalytics' ); ?>"
-			class="gform-button gform-button--primary gform-button--size-xs gaddon-setting gaddon-submit"
-			id="create_goal"
-		>
-			<?php
-		} else {
-			?>
-			<input
-					type="submit"
-					name="gform-settings-save"
-					value="<?php echo esc_html__( 'Save Values', 'gravityformsgoogleanalytics' ); ?>"
-					class="gform-button gform-button--primary gform-button--size-xs gaddon-setting gaddon-submit"
-					id="set_event_values"
-			>
-			<?php
-		}
+		return array();
 	}
 
 	/**
@@ -3170,6 +2187,15 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	}
 
 	/**
+	 * Sets an action variable for manual configuration.
+	 *
+	 * @since  1.0.0
+	 */
+	public function settings_manual_action() {
+		echo '<input type="hidden" name="gfgaaction" value="manual" />';
+	}
+
+	/**
 	 * Update auth tokens.
 	 *
 	 * @since  1.0.0
@@ -3177,6 +2203,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	public function plugin_settings_page() {
 
 		$this->plugin_settings->maybe_update_auth_tokens();
+		$this->plugin_settings->maybe_display_settings_updated();
 
 		parent::plugin_settings_page();
 
@@ -3198,78 +2225,8 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 *
 	 * @return string/bool Returns string UA code, false otherwise
 	 */
-	private function get_ua_code() {
-		$ua_code = $this->get_options( 'account', 'property' );
-
-		$ua_regex = '/^UA-[0-9]{5,}-[0-9]{1,}$/';
-
-		if ( is_string( $ua_code ) && preg_match( $ua_regex, $ua_code ) ) {
-			return $ua_code;
-		}
-		return false;
-	}
-
-	/**
-	 * Load UA Settings
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool Returns true if UA ID is loaded, false otherwise
-	 */
-	private function load_ua_settings() {
-
-		$this->ua_id = $this->get_ua_code();
-
-		if ( false !== $this->ua_id ) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Get GA ID.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string Returns found UA ID or empty string if not found.
-	 */
-	public function get_ga_id() {
-		$this->load_ua_settings();
-		if ( false === $this->ua_id ) {
-			return '';
-		} else {
-			return $this->ua_id;
-		}
-	}
-
-	/**
-	 * Return Google Analytics GA Codes
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $feed_ua     The UA code from the feed meta.
-	 * @param string $settings_ua The UA code from the settings.
-	 *
-	 * @return array Array of GA codes
-	 */
-	private function get_ua_codes( $feed_ua, $settings_ua ) {
-		$google_analytics_codes   = array();
-		$google_analytics_codes[] = $this->get_options( 'account', 'property' );
-
-		if ( ! empty( $feed_ua ) ) {
-			$ga_ua = explode( ',', $feed_ua );
-			if ( is_array( $ga_ua ) ) {
-				foreach ( $ga_ua as &$value ) {
-					$value = trim( $value );
-				}
-			}
-			$google_analytics_codes = $ga_ua;
-		}
-		if ( $settings_ua ) {
-			$google_analytics_codes[] = $settings_ua;
-		}
-		$google_analytics_codes = array_unique( $google_analytics_codes );
-		return $google_analytics_codes;
+	private function get_measurement_id() {
+		return self::get_options( 'ga4_account', 'measurement_id' );
 	}
 
 	/**
@@ -3277,7 +2234,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 *
 	 * @since  1.0.0
 	 *
-	 * @param array $form  The current form.
+	 * @param array $form The current form.
 	 */
 	public function form_settings( $form ) {
 		return $this->form_settings->form_settings_page( $form );
@@ -3288,7 +2245,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 *
 	 * @since  1.0.0
 	 *
-	 * @param array $form  The current form.
+	 * @param array $form The current form.
 	 */
 	public function form_settings_fields( $form ) {
 		return $this->form_settings->pagination_form_settings( $form );
@@ -3320,6 +2277,11 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @return bool
 	 */
 	public function can_create_feed() {
+		$options = self::get_options();
+
+		if ( rgar( $options, 'is_manual' ) === true ) {
+			return true;
+		}
 
 		if ( $this->initialize_api() ) {
 			return true;
@@ -3338,208 +2300,300 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @param array $form  The form the feed is coming from.
 	 */
 	public function process_feed( $feed, $entry, $form ) {
+		$mode       = self::get_options( '', 'mode' );
+		$parameters = $this->get_mapped_parameters( $feed, 'submission_parameters', $form, $entry );
+		$is_ajax    = isset( $_REQUEST['gform_ajax'] ) ? true : false;
+		$event_name = $this->get_submission_event_name( $mode, $feed, $entry, $form );
 
-		// Replace merge tags.
-		$event_vars = array( 'gaeventua', 'gaeventcategory', 'gaeventaction', 'gaeventlabel', 'gaeventvalue' );
-		foreach ( $event_vars as $var ) {
-			if ( ! empty( $feed['meta'][ $var ] ) ) {
-				$value                = $feed['meta'][ $var ];
-				$feed['meta'][ $var ] = GFCommon::replace_variables( $value, $form, $entry, false, false, true, 'text' );
-			}
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && $mode !== 'gmp' ) {
+			$this->add_event_to_rest_response( $entry, $feed, $form, $mode, $parameters, $is_ajax, $event_name );
+
+			return $entry;
 		}
 
-		// Set entry ID.
-		$this->conversion_entryid = $entry['id'];
+		switch ( $mode ) {
+			case 'gmp':
+				// Send events via server side (measurement protocol)
+				$ua_codes = $this->get_ga_codes( $form, $entry, $feed );
+				$this->send_measurement_protocol( $ua_codes, $parameters, $event_name, $entry['source_url'] );
+				break;
 
-		// Get all analytics codes to send.
-		$google_analytics_codes = $this->get_ua_codes( isset( $feed['meta']['gaeventua'] ) ? $feed['meta']['gaeventua'] : '', $this->get_ga_id() );
+			case 'ga':
+				$this->log_debug( __METHOD__ . '(): Attempting to send event via Google Analytics. Event Name: ' . $event_name . '. Page URL: ' . $entry['source_url'] . '. Parameters: ' . print_r( $parameters, true ) );
+				$this->render_script_feed_counter();
+				$this->render_script_send_unique_to_ga( $entry['id'], $feed['id'], $parameters, $event_name, $is_ajax );
+				break;
 
-		/**
-		 * Filter: gform_googleanalytics_ua_ids
+			case 'gtm':
+				$trigger_name = rgar( $feed['meta'], 'submission_trigger' ) !== 'gf_custom' ? rgar( $feed['meta'], 'submission_trigger' ) : rgar( $feed['meta'], 'submission_trigger_custom' );
+				$this->log_debug( __METHOD__ . '(): Attempting to send event via Google Tag Manager. Trigger Name: ' . $trigger_name . '. Page URL: ' . $entry['source_url'] . '. Parameters: ' . print_r( $parameters, true ) );
+				$this->render_script_feed_counter();
+				$this->render_script_send_unique_to_gtm( $entry['id'], $feed['id'], $parameters, $trigger_name, $is_ajax );
+				break;
+		}
+
+		return $entry;
+	}
+
+	/**
+	 * Adds the event data to a REST response object in lieu of echoing it in the response.
+	 *
+	 * @since 2.1.0
+	 *
+	 * @param $entry
+	 * @param $feed
+	 * @param $form
+	 * @param $mode
+	 * @param $parameters
+	 * @param $is_ajax
+	 * @param $event_name
+	 *
+	 * @return void
+	 */
+	protected function add_event_to_rest_response( $entry, $feed, $form, $mode, $parameters, $is_ajax, $event_name ) {
+		$details = array();
+
+		switch ( $mode ) {
+			case 'ga':
+				$details = array(
+					'entry_id'   => $entry['id'],
+					'feed_id'    => $feed['id'],
+					'parameters' => $parameters,
+					'event_name' => $event_name,
+				);
+				break;
+
+			case 'gtm':
+				$trigger_name = rgar( $feed['meta'], 'submission_trigger' ) !== 'gf_custom' ? rgar( $feed['meta'], 'submission_trigger' ) : rgar( $feed['meta'], 'submission_trigger_custom' );
+				$details      = array(
+					'entry_id'     => $entry['id'],
+					'feed_id'      => $feed['id'],
+					'parameters'   => $parameters,
+					'trigger_name' => $trigger_name,
+				);
+				break;
+		}
+
+		add_filter( 'rest_request_after_callbacks', function ( $response ) use ( $details ) {
+			$response->data['ga_event'] = $details;
+
+			return $response;
+		} );
+	}
+
+	/***
+	 * Determines the name of the event to be sent to Google Analytics or Measurement Protocol.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $mode  Google analytics connection mode. "ga" for Analytics, "gtm" for Tag Manager, "gmp" for Management Protocol.
+	 * @param array  $feed  Current feed object.
+	 * @param array  $entry Current entry object.
+	 * @param array  $form  Current form object.
+	 *
+	 * @return string Returns the event name that will be sent to track the event.
+	 */
+	private function get_submission_event_name( $mode, $feed, $entry, $form ) {
+
+		/***
+		 * Filters the name of the submission event to be sent to Google Analytics. This filter only applies to Google Analytics or Measurement Protocol (not Tag Manger)
 		 *
-		 * Filter all outgoing UA IDs to send events to using the measurement protocol.
+		 * @since 2.0.0
 		 *
-		 * @since 1.0.0
-		 *
-		 * @param array  $google_analytics_codes UA codes
-		 * @param object $form Gravity Form form object
-		 * @param object $entry Gravity Form Entry Object
-		 * @return array google anaylics codes
+		 * @param string $event_name Event name being filtered.
+		 * @param string $mode       Google analytics connection mode. "ga" for Analytics, "gtm" for Tag Manager, "gmp" for Management Protocol.
+		 * @param array  $feed       Current feed object.
+		 * @param array  $entry      Current entry object.
+		 * @param array  $form       Current form object.
 		 */
-		$google_analytics_codes = apply_filters( 'gform_googleanalytics_ua_ids', $google_analytics_codes, $form, $entry );
+		return apply_filters( 'gform_googleanalytics_submission_event_name', 'gforms_submission', $mode, $feed, $entry, $form );
+	}
+
+	/***
+	 * Determines the name of the pagination event to be sent to Google Analytics or Measurement Protocol.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $mode Google analytics connection mode. "ga" for Analytics and "gmp" for Measurement Protocol.
+	 * @param array  $form Current form object.
+	 *
+	 * @return string Returns the event name.
+	 */
+	private function get_pagination_event_name( $mode, $form ) {
+
+		/***
+		 * Filters the name of the pagination event to be sent to Google Analytics. This filter only applies to Google Analytics or Measurement Protocol (not Tag Manger)
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $event_name Event name being filtered.
+		 * @param string $mode       Google analytics connection mode. "ga" for Analytics, "gtm" for Tag Manager, "gmp" for Management Protocol.
+		 * @param array  $form       Current form object.
+		 */
+		return apply_filters( 'gform_googleanalytics_pagination_event_name', 'gforms_pagination', $mode, $form );
+	}
+
+	/**
+	 * Renders the script to send an event to Google Analytics, making sure the event is not sent if it has been sent before.
+	 *
+	 * @since 2.0
+	 *
+	 * @param int    $entry_id   The current entry id.
+	 * @param int    $feed_id    The current feed id.
+	 * @param array  $parameters An array of event parameters to be sent.
+	 * @param string $event_name The event name to be recorded in Google Analytics.
+	 * @param bool   $is_ajax    Wether or not the form submission was done with AJAX enabled.
+	 *
+	 */
+	private function render_script_send_unique_to_ga( $entry_id, $feed_id, $parameters, $event_name, $is_ajax ) {
+
+		$body = "window.parent.GF_Google_Analytics.send_unique_to_ga( '" . esc_js( $entry_id ) . "', '" . esc_js( $feed_id ) . "',  " . wp_json_encode( $parameters ) . ", '" . esc_js( $event_name ) . "' );";
+		$this->render_script_wrapper( $body, $is_ajax );
+	}
+
+	/**
+	 * Renders the script to send an event to Google Tag Manager, making sure the event is not sent if it has been sent before.
+	 *
+	 * @since 2.0
+	 *
+	 * @param int    $entry_id     The current entry id.
+	 * @param int    $feed_id      The current feed id.
+	 * @param array  $parameters   An array of event parameters to be sent.
+	 * @param string $trigger_name The trigger name to be associated with this event in Tag Manager.
+	 * @param bool   $is_ajax      Wether or not the form submission was done with AJAX enabled.
+	 *
+	 */
+	private function render_script_send_unique_to_gtm( $entry_id, $feed_id, $parameters, $trigger_name, $is_ajax ) {
+
+		$body = "window.parent.GF_Google_Analytics.send_unique_to_gtm( '" . esc_js( $entry_id ) . "', '" . esc_js( $feed_id ) . "',  " . wp_json_encode( $parameters ) . ", '" . esc_js( $trigger_name ) . "' );";
+		$this->render_script_wrapper( $body, $is_ajax );
+	}
+
+	/**
+	 * Renders the script to send an event to Google Analytics.
+	 *
+	 * @since 2.0
+	 *
+	 * @param array  $parameters An array of event parameters to be sent.
+	 * @param string $event_name The event name to be recorded in Google Analytics.
+	 * @param bool   $is_ajax    Wether or not the form submission was done with AJAX enabled.
+	 *
+	 */
+	private function render_script_send_to_ga( $parameters, $event_name, $is_ajax ) {
+
+		$body = 'window.parent.GF_Google_Analytics.send_to_ga( ' . wp_json_encode( $parameters ) . ', "' . esc_js( $event_name ) . '" );';
+		$this->render_script_wrapper( $body, $is_ajax );
+	}
+
+	/**
+	 * Renders the script to send an event to Google Tag Manager.
+	 *
+	 * @since 2.0
+	 *
+	 * @param array  $parameters   An array of event parameters to be sent.
+	 * @param string $trigger_name The trigger name to be associated with this event in Tag Manager.
+	 * @param bool   $is_ajax      Wether or not the form submission was done with AJAX enabled.
+	 *
+	 */
+	private function render_script_send_to_gtm( $parameters, $trigger_name, $is_ajax ) {
+
+		$body = 'window.parent.GF_Google_Analytics.send_to_gtm( ' . wp_json_encode( $parameters ) . ', "' . esc_js( $trigger_name ) . '" );';
+		$this->render_script_wrapper( $body, $is_ajax );
+	}
+
+	/**
+	 * Renders the wrapper script for the specified $script_body script, taking AJAX into account.
+	 *
+	 * @since 2.0
+	 *
+	 * @param string $script_body The script body to be wrapped.
+	 * @param bool   $is_ajax     Wether or not the form submission was done with AJAX enabled.
+	 */
+	private function render_script_wrapper( $script_body, $is_ajax ) {
+		?>
+		<script>
+			<?php
+			if ( $is_ajax ) {
+				echo $script_body;
+			} else {
+			// For non-AJAX forms, script body must be wrapped inside the googleanalytics/script_loaded so that it is
+			// executed after the google analytics script is loaded.
+			?>
+			window.addEventListener( "googleanalytics/script_loaded", function() {
+				<?php
+				echo $script_body;
+				?>
+			} );
+			<?php
+			}
+			?>
+		</script>
+		<?php
+	}
+
+	/**
+	 * Renders the script that will count how many feeds were executed. This is needed so that an event can be fired after all the feeds are sent.
+	 *
+	 * @since 2.0
+	 */
+	private function render_script_feed_counter() {
+		?>
+		<script>
+			window.parent[ 'ga_feed_count' ] = window.parent[ 'ga_feed_count' ] ? window.parent[ 'ga_feed_count' ] + 1 : 1;
+		</script>
+		<?php
+	}
+
+	/**
+	 * Sends an event via the Measurement Protocol.
+	 *
+	 * @since 2.0
+	 *
+	 * @param array  $ga_codes   An array of GA Codes to receive the event. Each GA code here will receive the event.
+	 * @param array  $parameters An array of event parameters to be sent.
+	 * @param string $event_name The event name to be recorded in Google Analytics.
+	 * @param string $page_url   The current page URL.
+	 */
+	private function send_measurement_protocol( $ga_codes, $parameters, $event_name, $page_url ) {
 
 		// Initialize the measurement protocol.
 		if ( ! class_exists( 'GF_Google_Analytics_Measurement_Protocol' ) ) {
 			include_once 'includes/class-gf-google-analytics-measurement-protocol.php';
 		}
-		$event = new GF_Google_Analytics_Measurement_Protocol();
-		$event->init();
+		$event      = new GF_Google_Analytics_Measurement_Protocol();
+		$api_secret = self::get_options( 'ga4_account', 'gmp_api_secret' );
+		$event->init( $api_secret, $event_name );
 
-		// Set up some event defaults.
-		$event->set_document_path( str_replace( home_url(), '', $entry['source_url'] ) );
+		// Set document variables.
+		$event->set_document_path( str_replace( home_url(), '', $page_url ) );
+		$event->set_document_location( esc_url( $page_url ) );
 		$event_url_parsed = wp_parse_url( home_url() );
 		$event->set_document_host( $event_url_parsed['host'] );
-		$event->set_document_location( esc_url( $entry['source_url'] ) );
-		$ip_address = '127.0.0.1';
-		if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-			$ip_address = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
-		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-			$ip_address = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
-		}
-		$event->set_user_ip_address( $ip_address );
 
-		// Try to get the document title.
+
+		// Set IP address
+		$event->set_user_ip_address( \GFFormsModel::get_ip() );
+
+		// Set document title.
 		global $post;
 		$document_title = isset( $post ) && isset( $post->post_title ) ? sanitize_text_field( $post->post_title ) : esc_html__( 'No title found', 'gravityformsgoogleanalytics' );
 		$event->set_document_title( $document_title );
 
-		/**
-		 * Filter: gform_googleanalytics_event_category
-		 *
-		 * Filter the event category dynamically
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $category Event Category
-		 * @param object $form     Gravity Form form object
-		 * @param object $entry    Gravity Form Entry Object
-		 */
-		$event_category = apply_filters( 'gform_googleanalytics_event_category', $feed['meta']['gaeventcategory'], $form, $entry );
-		$event->set_event_category( $event_category );
-		$this->conversion_category = $event_category;
+		// Set submission parameters.
+		$event->set_params( $parameters );
 
-		/**
-		 * Filter: gform_googleanalytics_event_action
-		 *
-		 * Filter the event action dynamically
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $action Event Action
-		 * @param object $form   Gravity Form form object
-		 * @param object $entry  Gravity Form Entry Object
-		 */
-		$event_action = apply_filters( 'gform_googleanalytics_event_action', $feed['meta']['gaeventaction'], $form, $entry );
-		$event->set_event_action( $event_action );
-		$this->conversion_action = $event_action;
+		// Begin sending events using the measurement protocol.
+		foreach ( $ga_codes as $code ) {
 
-		/**
-		 * Filter: gform_googleanalytics_event_label
-		 *
-		 * Filter the event label dynamically
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $label Event Label
-		 * @param object $form  Gravity Form form object
-		 * @param object $entry Gravity Form Entry Object
-		 */
-		$event_label = apply_filters( 'gform_googleanalytics_event_label', $feed['meta']['gaeventlabel'], $form, $entry );
-		$event->set_event_label( $event_label );
-		$this->conversion_label = $event_label;
+			$this->log_debug( __METHOD__ . '(): Attempting to send event via Measurement Protocol. Secret (last 4): XXXXXX' . substr( $api_secret, - 4 ) . '. GA code: ' . $code . '. Event Name: ' . $event_name . '. Page URL: ' . $page_url . '. Parameters: ' . print_r( $parameters, true ) );
 
-		/**
-		 * Filter: gform_googleanalytics_event_value
-		 *
-		 * Filter the event value dynamically
-		 *
-		 * @since 1.0.0
-		 * @param int    $value Event Label
-		 * @param object $form  Gravity Form form object
-		 * @param object $entry Gravity Form Entry Object
-		 */
-		$event_value = apply_filters( 'gform_googleanalytics_event_value', $feed['meta']['gaeventvalue'], $form, $entry );
-		if ( $event_value ) {
-			// Event value must be a valid integer!
-			$event_value = absint( round( GFCommon::to_number( $event_value ) ) );
-			$event->set_event_value( $event_value );
-			$this->conversion_value = $event_value;
-		} else {
-			$event_value = 0;
-			$event->set_event_value( 0 );
-			$this->conversion_value = 0;
-		}
+			$response = $event->send( $code );
 
-		$is_ajax_only = isset( $_REQUEST['gform_ajax'] ) ? true : false;
-		?>
-<script type="text/javascript">
-	if (typeof(Storage) !== "undefined" && false == <?php echo wp_json_encode( $is_ajax_only ); ?> ) {
-		var gfEntryStorage = localStorage.getItem('googleAnalyticsFeeds');
-		var eventObject = {};
-		if ( null == gfEntryStorage ) {
-			eventObject['<?php echo esc_js( $feed['id'] ); ?>'] = {
-				entryId: '<?php echo esc_js( $entry['id'] ); ?>',
-				entryCategory: '<?php echo esc_js( $event_category ); ?>',
-				entryAction: '<?php echo esc_js( $event_action ); ?>',
-				entryLabel: '<?php echo esc_js( $event_label ); ?>',
-				entryValue: '<?php echo esc_js( $event_value ); ?>',
-				utm_source: '<?php echo rgget( 'utm_source' ) ? esc_js( rgget( 'utm_source' ) ) : ''; ?>',
-				utm_medium: '<?php echo rgget( 'utm_medium' ) ? esc_js( rgget( 'utm_medium' ) ) : ''; ?>',
-				utm_campaign: '<?php echo rgget( 'utm_campaign' ) ? esc_js( rgget( 'utm_campaign' ) ) : ''; ?>',
-				};
-		} else {
-			eventObject = JSON.parse(gfEntryStorage);
-			eventObject['<?php echo esc_js( $feed['id'] ); ?>'] = {
-				entryId: '<?php echo esc_js( $entry['id'] ); ?>',
-				entryCategory: '<?php echo esc_js( $event_category ); ?>',
-				entryAction: '<?php echo esc_js( $event_action ); ?>',
-				entryLabel: '<?php echo esc_js( $event_label ); ?>',
-				entryValue: '<?php echo esc_js( $event_value ); ?>',
-				utm_source: '<?php echo rgget( 'utm_source' ) ? esc_js( rgget( 'utm_source' ) ) : ''; ?>',
-				utm_medium: '<?php echo rgget( 'utm_medium' ) ? esc_js( rgget( 'utm_medium' ) ) : ''; ?>',
-				utm_campaign: '<?php echo rgget( 'utm_campaign' ) ? esc_js( rgget( 'utm_campaign' ) ) : ''; ?>',
-			};
-		}
-		localStorage.setItem( 'googleAnalyticsFeeds', JSON.stringify( eventObject ) );
-	}
-</script>
-		<?php
-
-		// Get mode and return if measurement protocol is not selected.
-		$mode = $this->get_plugin_setting( 'gfgamode' );
-		if ( 'gmp' === $mode ) {
-
-			// Begin sending events using the measurement protocol.
-			foreach ( $google_analytics_codes as $ua_code ) {
-				$event->send( $ua_code );
+			if ( is_wp_error( $response ) ) {
+				$this->log_debug( __METHOD__ . '(): Failed to send event to Google Analytics via Measurement Protocol. Secret (last 4): XXXXXX' . substr( $api_secret, - 4 ) . '. GA code: ' . $code . '. Event Name: ' . $event_name . '. Page URL: ' . $page_url . '. Parameters: ' . print_r( $parameters, true ) );
+			} else {
+				$this->log_debug( __METHOD__ . '(): Successfully sent event to Google Analytics via Measurement Protocol. Secret (last 4): XXXXXX' . substr( $api_secret, - 4 ) . '. GA code: ' . $code . '. Event Name: ' . $event_name . '. Page URL: ' . $page_url . '. Parameters: ' . print_r( $parameters, true ) );
 			}
-		} elseif ( 'ga' === $mode && $is_ajax_only ) {
-			?>
-			<script>
-				window.parent.jQuery.gf_send_to_ga('<?php echo esc_js( $entry['id'] ); ?>', <?php echo esc_js( $event_value ); ?>,'<?php echo esc_js( $event_category ); ?>','<?php echo esc_js( $event_action ); ?>','<?php echo esc_js( $event_label ); ?>');
-			</script>
-			<?php
-		} elseif ( 'gtm' === $mode && $is_ajax_only ) {
-			?>
-			<script>
-				var utmVariables = localStorage.getItem('googleAnalyticsUTM');
-				var utmSource = '',
-					utmMedium = '',
-					utmCampaign = '',
-					utmTerm = '',
-					utmContent = '';
-				if ( null != utmVariables ) {
-					utmVariables = JSON.parse( utmVariables );
-					utmSource = utmVariables.source;
-					utmMedium = utmVariables.medium;
-					utmCampaign = utmVariables.campaign;
-					utmTerm = utmVariables.term;
-					utmContent = utmVariables.content;
-				}
-				window.parent.jQuery.gf_send_to_gtm(
-					'<?php echo esc_js( $entry['id'] ); ?>',
-					<?php echo esc_js( $event_value ); ?>,
-					'<?php echo esc_js( $event_category ); ?>',
-					'<?php echo esc_js( $event_action ); ?>',
-					'<?php echo esc_js( $event_label ); ?>',
-					utmSource,
-					utmMedium,
-					utmCampaign,
-					utmTerm,
-					utmContent
-				);
-			</script>
-			<?php
 		}
 	}
 
@@ -3564,35 +2618,6 @@ class GF_Google_Analytics extends GFFeedAddOn {
 				$value = $feed['meta'][ $column ];
 			}
 		}
-		return $value;
-	}
-
-
-	/**
-	 * Get the default feed values
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $property The property to retrieve the default value for.
-	 *
-	 * @return string Default values
-	 */
-	public function get_default_feed_value( $property ) {
-		$value = '';
-		switch ( $property ) {
-			case 'gaeventcategory':
-				$value = __( 'form', 'gravityformsgoogleanalytics' );
-				break;
-			case 'gaeventaction':
-				$value = __( 'submission', 'gravityformsgoogleanalytics' );
-				break;
-			case 'gaeventlabel':
-				$value = __( '{form_title} ID: {form_id}', 'gravityformsgoogleanalytics' );
-				break;
-			case 'gaeventvalue':
-				$value = 0;
-				break;
-		}
 
 		return $value;
 	}
@@ -3607,4 +2632,711 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	public function get_menu_icon() {
 		return $this->is_gravityforms_supported( '2.5-beta-4' ) ? 'gform-icon--analytics' : 'dashicons-admin-generic';
 	}
+
+	/**
+	 * Creates a tag manager trigger and associated tag.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $gtm_api_root_path Google Tag Manager API path.
+	 * @param string $gtm_workspace_id  Google Tag Manager workspace id.
+	 * @param string $ga_measurement_id Google Analytics measurement id to be used when creating the tag.
+	 *
+	 * @return true|WP_Error Returns true if successfull. Otherwise, returns a WP_Error
+	 */
+	private function create_tag_manager_assets( $gtm_api_root_path, $gtm_workspace_id, $ga_measurement_id ) {
+		$requires_publish = false;
+
+		// Tries to find an existing GFTrackerEvent trigger in Tag Manager.
+		$trigger_id = $this->get_tag_manager_gf_trigger( $gtm_api_root_path, $gtm_workspace_id );
+		if ( is_wp_error( $trigger_id ) ) {
+			return $trigger_id;
+		}
+
+		// If trigger was not found, create one.
+		if ( ! $trigger_id ) {
+			$trigger_id = $this->create_tag_manager_trigger( $gtm_api_root_path, $gtm_workspace_id );
+			if ( is_wp_error( $trigger_id ) ) {
+				return $trigger_id;
+			}
+			$requires_publish = true;
+			$this->log_debug( __METHOD__ . '(): Created GFTrackEvent trigger.' );
+		} else {
+			$this->log_debug( __METHOD__ . '(): GFTrackEvent trigger already exists.' );
+		}
+
+		// Tries to find an existing 'Gravity Forms GA4' tag in Tag Manager.
+		$tag_id = $this->get_tag_manager_gf_tag( $gtm_api_root_path, $gtm_workspace_id );
+		if ( is_wp_error( $tag_id ) ) {
+			return $tag_id;
+		}
+
+		// If tag was not found, create one.
+		if ( ! $tag_id ) {
+			$tag_response = $this->create_tag_manager_tag( $gtm_api_root_path, $gtm_workspace_id, $trigger_id, $ga_measurement_id );
+			if ( is_wp_error( $tag_response ) ) {
+				return $tag_response;
+			}
+			$requires_publish = true;
+			$this->log_debug( __METHOD__ . '(): Created Gravity Forms GA4 tag.' );
+		} else {
+			$this->log_debug( __METHOD__ . '(): Gravity Forms GA4 tag already exists.' );
+		}
+
+		// If any update was made to Tag Manager, publish changes.
+		if ( $requires_publish ) {
+			$response = $this->publish_tag_manager_version( $gtm_api_root_path, $gtm_workspace_id, 'Gravity Forms initial setup. Default trigger and tag created.' );
+			if ( is_wp_error( $response ) ) {
+				return $response;
+			}
+			$this->log_debug( __METHOD__ . '(): Tag Manager container successfully published.' );
+		}
+	}
+
+	/**
+	 * Tries to find the GFTrackEvent trigger in Tag Manager.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $gtm_api_root_path Google Tag Manager API path.
+	 * @param string $workspace_id      Google Tag Manager workspace id.
+	 *
+	 * @return false|int|WP_Error Returns the trigger id or false if not found. Returns a WP_Error if there was an error while retrieving the list of triggers.
+	 */
+	private function get_tag_manager_gf_trigger( $gtm_api_root_path, $workspace_id ) {
+
+		$response = $this->api->get_tag_manager_triggers( array(), $gtm_api_root_path, $workspace_id );
+
+		if ( is_wp_error( $response ) ) {
+			$this->log_error( __METHOD__ . '(): Error retrieving tag manager triggers. ' . $response->get_error_message() );
+
+			return new WP_Error( 'google_analytics_gtm_error', esc_html__( 'Could not retrieve the list of triggers in Tag Manager', 'gravityformsgoogleanalytics' ) );
+		}
+
+		foreach ( $response['trigger'] as $trigger ) {
+			if ( $trigger['name'] == 'GFTrackEvent' ) {
+				return $trigger['triggerId'];
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Tries to find the Gravity Forms GA4 tag in Tag Manager.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $gtm_api_root_path Google Tag Manager API path.
+	 * @param string $workspace_id      Google Tag Manager workspace id.
+	 *
+	 * @return false|int|WP_Error Returns the tag id or false if not found. Returns a WP_Error if there was an error while retrieving the list of tags.
+	 */
+	private function get_tag_manager_gf_tag( $gtm_api_root_path, $workspace_id ) {
+
+		$response = $this->api->get_tag_manager_tags( array(), $gtm_api_root_path, $workspace_id );
+
+		if ( is_wp_error( $response ) ) {
+			$this->log_error( __METHOD__ . '(): Error retrieving tag manager tags. ' . $response->get_error_message() );
+
+			return new WP_Error( 'google_analytics_gtm_error', esc_html__( 'Could not retrieve the list of tags in Tag Manager', 'gravityformsgoogleanalytics' ) );
+		}
+
+		foreach ( $response['tag'] as $tag ) {
+			if ( $tag['name'] == 'Gravity Forms GA4' ) {
+				return $tag['tagId'];
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Creates the GFTrackEvent trigger in Tag Manager.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $gtm_api_root_path Google Tag Manager API path.
+	 * @param string $gtm_workspace_id  Google Tag Manager workspace id.
+	 *
+	 * @return int|WP_Error Returns the newly created trigger id. Returns a WP_Error if there was an error while creating the trigger.
+	 */
+	private function create_tag_manager_trigger( $gtm_api_root_path, $gtm_workspace_id ) {
+
+		$trigger_json = '{
+				"name": "GFTrackEvent",
+				"type": "customEvent",
+				"customEventFilter": [
+				{
+					"type": "equals",
+					"parameter": [
+					{
+						"type": "template",
+						"key": "arg0",
+						"value": "{{_event}}"
+					},
+					{
+						"type": "template",
+						"key": "arg1",
+						"value": "GFTrackEvent"
+					}
+					]
+				}
+				]
+			}';
+
+		$trigger_response = $this->api->create_google_tag_manager_trigger( $trigger_json, $gtm_api_root_path, $gtm_workspace_id );
+		if ( is_wp_error( $trigger_response ) ) {
+			$this->log_debug( __METHOD__ . '(): Could not create trigger in Tag Manager.' . $trigger_response->get_error_message() );
+
+			return new WP_Error( 'google_analytics_gtm_error', esc_html__( 'Could not create the trigger in Tag Manager', 'gravityformsgoogleanalytics' ) );
+		}
+
+		return $trigger_response['triggerId'];
+	}
+
+	/**
+	 * Creates the Gravity Form GA4 tag in Tag Manager.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $gtm_api_root_path Google Tag Manager API path.
+	 * @param string $gtm_workspace_id  Google Tag Manager workspace id.
+	 * @param string $trigger_id        Google Tag Manager trigger to be associated with this tag.
+	 * @param string $ga_measurement_id Google Analytics measurement id.
+	 *
+	 * @return int|WP_Error Returns the newly created tag id. Returns a WP_Error if there was an error while creating the tag.
+	 */
+	private function create_tag_manager_tag( $gtm_api_root_path, $gtm_workspace_id, $trigger_id, $ga_measurement_id ) {
+
+		// Tag JSON.
+		$tag_json = '{
+			"name": "Gravity Forms GA4",
+			"type": "gaawe",
+			"parameter": [
+			{
+				"type": "TEMPLATE",
+				"key": "eventName",
+				"value": "Gravity Forms GA4 Event"
+			},
+			{
+				"type": "TEMPLATE",
+				"key": "measurementId",
+				"value": "none"
+			},
+			{
+				"type": "TEMPLATE",
+				"key": "measurementIdOverride",
+				"value": "' . esc_js( $ga_measurement_id ) . '"
+			},
+			{
+				"type": "TEMPLATE",
+				"key": "trackType",
+				"value": "TRACK_EVENT"
+			}
+			],
+			"firingTriggerId": [
+			"' . esc_js( $trigger_id ) . '"
+			]
+		}';
+
+		// Trigger created, now to set up the tag.
+		$tag_response = $this->api->create_tag_manager_tag( $tag_json, $gtm_api_root_path, $gtm_workspace_id );
+		if ( is_wp_error( $tag_response ) ) {
+			$this->log_debug( __METHOD__ . '(): Could not create tag in Tag Manager. ' . $tag_response->get_error_message() );
+
+			return new WP_Error( 'google_analytics_gtm_error', esc_html__( 'Could not create the tag in Tag Manager', 'gravityformsgoogleanalytics' ) );
+		}
+
+		return $tag_response;
+	}
+
+	/**
+	 * Creates a new version of the Tag Manager container and plublishes it.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $gtm_api_root_path Google Tag Manager API path.
+	 * @param string $gtm_workspace_id  Google Tag Manager workspace id.
+	 * @param string $notes             Notes to describe the new version of the Tag Manager container.
+	 *
+	 * @return int|WP_Error Returns the newly created trigger id. Returns a WP_Error if there was an error while creating the trigger.
+	 */
+	private function publish_tag_manager_version( $gtm_api_root_path, $gtm_workspace_id, $notes ) {
+
+		// Create new workspace version.
+		$body                       = '{
+			"name": "Gravity Forms Version",
+			"notes": "' . esc_js( $notes ) . '"
+		}';
+		$workspace_version_response = $this->api->save_update_tag_manager_version( $body, $gtm_api_root_path, $gtm_workspace_id );
+		if ( is_wp_error( $workspace_version_response ) ) {
+			$this->log_debug( __METHOD__ . '(): Could not create a new version for the container in Tag Manager. ' . $workspace_version_response->get_error_message() );
+
+			return new WP_Error( 'google_analytics_gtm_error', esc_html__( 'Could not create new container version in Tag Manager', 'gravityformsgoogleanalytics' ) );
+		}
+
+		// Make version live.
+		$publish_response = $this->api->publish_google_tag_manager_container( array(), $gtm_api_root_path, $workspace_version_response['containerVersion']['containerVersionId'] );
+		if ( is_wp_error( $publish_response ) ) {
+			$this->log_debug( __METHOD__ . '(): Could not publish Tag Manager container. ' . $publish_response->get_error_message() );
+
+			return new WP_Error( 'google_analytics_gtm_error', esc_html__( 'Could not publish Tag Manager container', 'gravityformsgoogleanalytics' ) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Show the upgrade and restore feeds section.
+	 */
+	public function upgrade_feeds_section() {
+		if ( rgget( 'gfga_allow_restore' ) === '1' ) {
+			$fields = array(
+				array(
+					'type'  => 'upgrade_feeds',
+					'name'  => 'upgrade_feeds',
+					'label' => esc_html__( 'Upgrade Feeds', 'gravityformsgoogleanalytics' ),
+				),
+				array(
+					'type'  => 'restore_feeds',
+					'name'  => 'restore_feeds',
+					'label' => esc_html__( 'Restore Feeds', 'gravityformsgoogleanalytics' ),
+				),
+			);
+		} else {
+			$fields = array(
+				array(
+					'type'  => 'upgrade_feeds',
+					'name'  => 'upgrade_feeds',
+					'label' => esc_html__( 'Upgrade Feeds', 'gravityformsgoogleanalytics' ),
+				),
+			);
+		}
+
+		return array(
+			'title'       => esc_html__( 'Upgrade Feeds', 'gravityformsgoogleanalytics' ),
+			'fields'      => $fields,
+			'description' => esc_html__( 'Upgrading your existing feeds will make them compatible with Google Analytics 4. Note: feeds that haven’t been upgraded will stop working after July 1, 2023.', 'gravityformsgoogleanalytics' ),
+		);
+	}
+
+	/**
+	 * Upgrade feeds and pagination settings for GA4 compatibility.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
+	public function ajax_upgrade_feeds() {
+		check_ajax_referer( 'google_analytics_upgrade_feeds', 'nonce' );
+
+		$this->upgrade_feeds();
+		$this->upgrade_pagination_feeds();
+
+		// Set the cache since we know that all feeds are now upgraded.
+		GFCache::set( 'all_ga4_feeds_upgraded', true, true );
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Restore feeds and pagination settings to their universal analytics versions.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
+	public function ajax_restore_feeds() {
+		check_ajax_referer( 'google_analytics_restore_feeds', 'nonce' );
+
+		$this->restore_feeds();
+		$this->restore_pagination_feeds();
+		GFCache::delete( 'all_ga4_feeds_upgraded' );
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Upgrade feeds settings field.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $field The field object.
+	 * @param array $echo  Whether to echo the html output.
+	 *
+	 * @return string $html The field html.
+	 */
+	public function settings_upgrade_feeds( $field, $echo = true ) {
+		$html = '<div class="success-alert-container-upgrade alert-container hidden" >
+					<div class="gform-alert gform-alert--success" data-js="gform-alert">
+						<span class="gform-alert__icon gform-icon gform-icon--circle-check" aria-hidden="true"></span>
+						<div class="gform-alert__message-wrap">
+							<p class="gform-alert__message">' . esc_html__( 'Feeds upgraded.', 'gravityformsgoogleanalytics' ) . '</p>
+						</div>
+					</div>
+				</div>
+				<div class="error-alert-container-upgrade alert-container hidden" >
+					<div class="gform-alert gform-alert--error" data-js="gform-alert">
+						<span class="gform-alert__icon gform-icon gform-icon--circle-close" aria-hidden="true"></span>
+						<div class="gform-alert__message-wrap">
+							<p class="gform-alert__message">' . esc_html__( 'Feeds could not be upgraded at the moment.', 'gravityformsgoogleanalytics' ) . '</p>
+						</div>
+					</div>
+				</div>';
+		$html .= '<p><a id="upgrade_ga_feeds" data-js="upgrade_ga_feeds" class="primary button">' . esc_html__( 'Upgrade Feeds', 'gravityformsgoogleanalytics' ) . '</a></p>';
+
+		if ( $echo ) {
+			echo html_entity_decode( $html );
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Restore feeds settings field.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $field The field object.
+	 * @param array $echo  Whether to echo the html output.
+	 *
+	 * @return string $html The field html.
+	 */
+	public function settings_restore_feeds( $field, $echo = true ) {
+		if ( ! $this->has_backed_up_pagination_feeds() && empty( $this->get_feeds_by_slug( 'gravityformsgoogleanalytics_ua_ga4_upgrade' ) ) ) {
+			$html = '<p><a disabled id="restore_ga_feeds" class="secondary button">' . esc_html__( 'Restore Feeds', 'gravityformsgoogleanalytics' ) . '</a></p>
+					<p>' . esc_html__( 'There are no feeds to restore at this time. You will only be able to restore feeds that have been previously upgraded.', 'gravityformsgoogleanalytics' ) . '</p>';
+		} else {
+			$html = '<div class="success-alert-container-restore alert-container hidden" >
+					<div class="gform-alert gform-alert--success" data-js="gform-alert">
+						<span class="gform-alert__icon gform-icon gform-icon--circle-check" aria-hidden="true"></span>
+						<div class="gform-alert__message-wrap">
+							<p class="gform-alert__message">' . esc_html__( 'Feeds restored.', 'gravityformsgoogleanalytics' ) . '</p>
+						</div>
+					</div>
+				</div>
+				<div class="error-alert-container-restore alert-container hidden" >
+					<div class="gform-alert gform-alert--error" data-js="gform-alert">
+						<span class="gform-alert__icon gform-icon gform-icon--circle-close" aria-hidden="true"></span>
+						<div class="gform-alert__message-wrap">
+							<p class="gform-alert__message">' . esc_html__( 'Feeds could not be restored at the moment.', 'gravityformsgoogleanalytics' ) . '</p>
+						</div>
+					</div>
+				</div>';
+			$html .= '<p><a id="restore_ga_feeds" data-js="restore_ga_feeds" class="secondary button">' . esc_html__( 'Restore Feeds', 'gravityformsgoogleanalytics' ) . '</a></p>';
+		}
+
+		if ( $echo ) {
+			echo html_entity_decode( $html );
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Upgrade feeds for GA4 compatibility.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
+	public function upgrade_feeds() {
+		$mode = self::get_options( '', 'mode' );
+
+		$feeds = $this->get_feeds_by_slug( 'gravityformsgoogleanalytics' );
+		$this->backup_feeds();
+		foreach ( $feeds as $feed ) {
+			if ( empty( rgar( $feed, 'meta' ) ) ) {
+				continue;
+			}
+
+			if ( $mode === 'gtm' ) {
+				if ( rgempty( 'submission_trigger', $feed['meta'] ) ) {
+					$feed['meta']['submission_trigger'] = 'GFTrackEvent';
+				}
+
+				if ( rgempty( 'submission_parameters', $feed['meta'] ) ) {
+					$feed['meta']['submission_parameters'] = array(
+						array(
+							'key'          => 'GFTrackCategory',
+							'custom_key'   => '',
+							'value'        => 'gf_custom',
+							'custom_value' => rgar( $feed['meta'], 'gaeventcategory' ),
+						),
+						array(
+							'key'          => 'GFTrackAction',
+							'custom_key'   => '',
+							'value'        => 'gf_custom',
+							'custom_value' => rgar( $feed['meta'], 'gaeventaction' ),
+						),
+						array(
+							'key'          => 'GFTrackLabel',
+							'custom_key'   => '',
+							'value'        => 'gf_custom',
+							'custom_value' => rgar( $feed['meta'], 'gaeventlabel' ),
+						),
+						array(
+							'key'          => 'GFTrackValue',
+							'custom_key'   => '',
+							'value'        => 'gf_custom',
+							'custom_value' => rgar( $feed['meta'], 'gaeventvalue' ),
+						),
+					);
+				}
+			} else {
+				if ( rgempty( 'submission_parameters', $feed['meta'] ) ) {
+					$feed['meta']['submission_parameters'] = array(
+						array(
+							'key'          => 'gf_custom',
+							'custom_key'   => 'event_category',
+							'value'        => 'gf_custom',
+							'custom_value' => rgar( $feed['meta'], 'gaeventcategory' ),
+						),
+						array(
+							'key'          => 'gf_custom',
+							'custom_key'   => 'event_action',
+							'value'        => 'gf_custom',
+							'custom_value' => rgar( $feed['meta'], 'gaeventaction' ),
+						),
+						array(
+							'key'          => 'gf_custom',
+							'custom_key'   => 'event_label',
+							'value'        => 'gf_custom',
+							'custom_value' => rgar( $feed['meta'], 'gaeventlabel' ),
+						),
+						array(
+							'key'          => 'gf_custom',
+							'custom_key'   => 'event_value',
+							'value'        => 'gf_custom',
+							'custom_value' => rgar( $feed['meta'], 'gaeventvalue' ),
+						),
+					);
+				}
+			}
+
+			$feed['meta']['ga4_compatible'] = '1';
+
+			$this->update_feed_meta( $feed['id'], $feed['meta'] );
+		}
+
+	}
+
+	/**
+	 * Restore feeds.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
+	public function restore_feeds() {
+		$backed_up_feeds = $this->get_feeds_by_slug( 'gravityformsgoogleanalytics_ua_ga4_upgrade' );
+
+		// If we don't have backed up feeds, we don't need to restore anything.
+		if ( empty( $backed_up_feeds ) ) {
+			return;
+		}
+
+		$ga_feeds = $this->get_feeds_by_slug( 'gravityformsgoogleanalytics' );
+
+		// delete GA4 feeds.
+		foreach ( $ga_feeds as $feed ) {
+			$this->delete_feed( $feed['id'] );
+		}
+
+		global $wpdb;
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$wpdb->prefix}gf_addon_feed SET addon_slug = %s WHERE addon_slug='gravityformsgoogleanalytics_ua_ga4_upgrade'", 'gravityformsgoogleanalytics'
+			)
+		);
+	}
+
+	/**
+	 * Backup feeds.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
+	public function backup_feeds() {
+
+		global $wpdb;
+
+		$delete_query = "DELETE FROM wp_gf_addon_feed WHERE addon_slug='gravityformsgoogleanalytics_ua_ga4_upgrade'";
+
+		$wpdb->query( $delete_query );
+
+		$query = "INSERT INTO wp_gf_addon_feed ( form_id, is_active, addon_slug, meta )
+SELECT form_id, is_active, 'gravityformsgoogleanalytics_ua_ga4_upgrade' AS addon_slug, meta 
+FROM wp_gf_addon_feed WHERE addon_slug='gravityformsgoogleanalytics'";
+
+		$wpdb->query( $query );
+	}
+
+	/**
+	 * Upgrade pagination feeds.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
+	public function upgrade_pagination_feeds() {
+		$forms = GFAPI::get_forms();
+		if ( ! $forms ) {
+			return;
+		}
+
+		$mode = self::get_options( '', 'mode' );
+
+		foreach ( $forms as &$form ) {
+			if ( ! rgempty( 'gravityformsgoogleanalytics', $form ) && ! rgempty( 'google_analytics_pagination', $form['gravityformsgoogleanalytics'] ) ) {
+				$form = $this->backup_pagination_feeds( $form );
+				if ( $mode === 'gtm' ) {
+					if ( rgempty( 'pagination_trigger', $form['gravityformsgoogleanalytics'] ) ) {
+						$form['gravityformsgoogleanalytics']['pagination_trigger'] = 'GFTrackEvent';
+					}
+
+					if ( rgempty( 'pagination_parameters', $form['gravityformsgoogleanalytics'] ) ) {
+						$form['gravityformsgoogleanalytics']['pagination_parameters'] = array(
+							array(
+								'key'          => 'GFTrackCategory',
+								'custom_key'   => '',
+								'value'        => 'gf_custom',
+								'custom_value' => $form['gravityformsgoogleanalytics']['pagination_gaeventcategory'],
+							),
+							array(
+								'key'          => 'GFTrackAction',
+								'custom_key'   => '',
+								'value'        => 'gf_custom',
+								'custom_value' => $form['gravityformsgoogleanalytics']['pagination_gaeventaction'],
+							),
+							array(
+								'key'          => 'GFTrackLabel',
+								'custom_key'   => '',
+								'value'        => 'gf_custom',
+								'custom_value' => $form['gravityformsgoogleanalytics']['pagination_gaeventlabel'],
+							),
+							array(
+								'key'          => 'GFTrackValue',
+								'custom_key'   => '',
+								'value'        => 'gf_custom',
+								'custom_value' => $form['gravityformsgoogleanalytics']['pagination_value'],
+							),
+						);
+					}
+				} else {
+					if ( rgempty( 'pagination_parameters', $form['gravityformsgoogleanalytics'] ) ) {
+						$form['gravityformsgoogleanalytics']['pagination_parameters'] = array(
+							array(
+								'key'          => 'gf_custom',
+								'custom_key'   => 'event_category',
+								'value'        => 'gf_custom',
+								'custom_value' => $form['gravityformsgoogleanalytics']['pagination_gaeventcategory'],
+							),
+							array(
+								'key'          => 'gf_custom',
+								'custom_key'   => 'event_action',
+								'value'        => 'gf_custom',
+								'custom_value' => $form['gravityformsgoogleanalytics']['pagination_gaeventaction'],
+							),
+							array(
+								'key'          => 'gf_custom',
+								'custom_key'   => 'event_label',
+								'value'        => 'gf_custom',
+								'custom_value' => $form['gravityformsgoogleanalytics']['pagination_gaeventlabel'],
+							),
+							array(
+								'key'          => 'gf_custom',
+								'custom_key'   => 'event_value',
+								'value'        => 'gf_custom',
+								'custom_value' => $form['gravityformsgoogleanalytics']['pagination_value'],
+							),
+						);
+					}
+				}
+
+				$form['gravityformsgoogleanalytics']['ga4_compatible'] = '1';
+				GFFormsModel::update_form_meta( $form['id'], $form );
+			}
+		}
+	}
+
+	/**
+	 * Restore pagination feeds.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
+	public function restore_pagination_feeds() {
+		$forms = GFAPI::get_forms();
+		if ( ! $forms ) {
+			return;
+		}
+
+		foreach ( $forms as $form ) {
+			if ( ! rgempty( 'gravityformsgoogleanalytics_ua_ga4_backup', $form ) ) {
+				$form['gravityformsgoogleanalytics'] = $form['gravityformsgoogleanalytics_ua_ga4_backup'];
+				unset( $form['gravityformsgoogleanalytics_ua_ga4_backup'] );
+				GFFormsModel::update_form_meta( $form['id'], $form );
+			}
+		}
+	}
+
+	/**
+	 * Backup pagination feeds.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $form The form to backup the pagination settings for.
+	 */
+	public function backup_pagination_feeds( $form ) {
+
+		$form['gravityformsgoogleanalytics_ua_ga4_backup'] = $form['gravityformsgoogleanalytics'];
+
+		return $form;
+	}
+
+	/**
+	 * Check if pagination feeds exist.
+	 *
+	 * @since 2.0.0
+	 */
+	public function has_backed_up_pagination_feeds() {
+
+		global $wpdb;
+
+		$sql = $wpdb->prepare(
+			"SELECT * FROM {$wpdb->prefix}gf_form_meta
+                               WHERE display_meta LIKE %s ORDER BY `form_id` ASC", '%' . $wpdb->esc_like( 'gravityformsgoogleanalytics_ua_ga4_backup' ) . '%'
+		);
+
+		$results = $wpdb->get_results( $sql, ARRAY_A );
+
+		if ( $results ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Log if an event is successfully sent.
+	 *
+	 * @since 2.1.0
+	 */
+	public function ajax_log_ga_event_sent() {
+		$this->verify_ajax_nonce( 'log_google_analytics_event_sent' );
+		$connection = rgpost( 'connection' );
+		$parameters = rgpost( 'parameters' );
+		if ( $connection === 'ga' ) {
+			$event_name = rgpost( 'eventName' );
+			$this->log_debug( __METHOD__ . '(): Completed sending event via Google Analytics. Event Name: ' . $event_name . '. Parameters: ' . print_r( $parameters, true ) );
+		} elseif ( $connection = 'gtm' ) {
+			$trigger_name = rgpost( 'triggerName' );
+			$this->log_debug( __METHOD__ . '(): Completed sending event via Google Tag Manager. Trigger Name: ' . $trigger_name . '. Parameters: ' . print_r( $parameters, true ) );
+		}
+	}
+
 }

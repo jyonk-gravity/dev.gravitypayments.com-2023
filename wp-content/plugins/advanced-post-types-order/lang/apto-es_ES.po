@@ -3,24 +3,23 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-03 14:47+0200\n"
-"PO-Revision-Date: 2018-12-03 14:49+0200\n"
+"PO-Revision-Date: 2023-03-28 23:16+0300\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: \n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;_e\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 2.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
 #: ../include/apto_interface-class.php:141
-#, fuzzy
 msgid "Re-order"
-msgstr " -  Re-ordenar"
+msgstr "Re-pedido"
 
 #: ../include/apto_interface-class.php:145
 msgid ""
@@ -34,20 +33,21 @@ msgid ""
 "WPML: The Sort Rules couldn't be translated automatically. You need to set/"
 "translate this manually for"
 msgstr ""
+"WPML: Las Reglas de Ordenación no se pueden traducir automáticamente. Es "
+"necesario configurar/traducir esto manualmente para"
 
 #: ../include/apto_interface-class.php:335
 msgid "Click to toggle"
-msgstr ""
+msgstr "Haga clic para activar"
 
 #: ../include/apto_interface-class.php:336
 #: ../include/apto_interface-class.php:678
-#, fuzzy
 msgid "Sort List Settings"
-msgstr "Guardar Ajustes"
+msgstr "Configuración de la lista de clasificación"
 
 #: ../include/apto_interface-class.php:347
 msgid "Query Rules"
-msgstr ""
+msgstr "Reglas de consulta"
 
 #: ../include/apto_interface-class.php:348
 msgid ""
@@ -55,50 +55,52 @@ msgid ""
 "what to show on the following sort list and the order will apply on front "
 "side."
 msgstr ""
+"Cree un conjunto de reglas de criterios que coincidan con su consulta. Esto "
+"determinará lo que se mostrará en la siguiente lista de clasificación y el "
+"orden que se aplicará en la parte frontal."
 
 #: ../include/apto_interface-class.php:349
 msgid ""
 "All rules are compared to a query using AND operator. For more details check"
 msgstr ""
+"Todas las reglas se comparan con una consulta mediante el operador AND. Para "
+"más información"
 
 #: ../include/apto_interface-class.php:349
 msgid "Query Rules examples"
-msgstr ""
+msgstr "Ejemplos de reglas de consulta"
 
 #: ../include/apto_interface-class.php:370
 msgid "Show Advanced"
-msgstr ""
+msgstr "Mostrar avanzado"
 
 #: ../include/apto_interface-class.php:429
 msgid "Add Post Type"
-msgstr ""
+msgstr "Añadir Tipo de entrada"
 
 #: ../include/apto_interface-class.php:436
-#, fuzzy
 msgid "Taxonomy"
-msgstr "Título de Taxonomia"
+msgstr "Taxonomía"
 
 #: ../include/apto_interface-class.php:485
-#, fuzzy
 msgid "Add Taxonomy"
-msgstr "Título de Taxonomia"
+msgstr "Agregar Taxonomía"
 
 #: ../include/apto_interface-class.php:493
-#, fuzzy
 msgid "Taxonomy Relation"
-msgstr "Título de Taxonomia"
+msgstr "Relación taxonómica"
 
 #: ../include/apto_interface-class.php:519
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: ../include/apto_interface-class.php:553
 msgid "Add Meta"
-msgstr ""
+msgstr "Añadir metadato"
 
 #: ../include/apto_interface-class.php:561
 msgid "Meta Relation"
-msgstr ""
+msgstr "Meta relación"
 
 #: ../include/apto_interface-class.php:586
 #: ../include/apto_interface_helper-class.php:1633
@@ -106,9 +108,8 @@ msgid "Author"
 msgstr "Autor"
 
 #: ../include/apto_interface-class.php:610
-#, fuzzy
 msgid "Add Author"
-msgstr "Autor"
+msgstr "Añadir Autor"
 
 #: ../include/apto_interface-class.php:624
 msgid ""
@@ -116,47 +117,51 @@ msgid ""
 "displayed anymore. You should review the settings Query Rules area and click "
 "Update button."
 msgstr ""
+"Se han realizado ciertos cambios en su sitio y algunas de las reglas de "
+"consulta ya no se pueden mostrar. Debe revisar la configuración del área de "
+"Reglas de consulta y hacer clic en el botón Actualizar."
 
 #: ../include/apto_interface-class.php:639
 msgid "Conditionals"
-msgstr ""
+msgstr "Condicionales"
 
 #: ../include/apto_interface-class.php:640
 msgid "Apply the order only if conditions are true. For more details check"
 msgstr ""
+"Aplica la orden sólo si las condiciones son verdaderas. Para más detalles"
 
 #: ../include/apto_interface-class.php:640
 msgid "Conditionals Usage"
-msgstr ""
+msgstr "Uso de condicionales"
 
 #: ../include/apto_interface-class.php:643
 msgid "Apply if"
-msgstr ""
+msgstr "Aplicar"
 
 #: ../include/apto_interface-class.php:668
 msgid "Add Group"
-msgstr ""
+msgstr "Añadir grupo"
 
 #: ../include/apto_interface-class.php:677
 msgid "Interface"
-msgstr ""
+msgstr "Interfaz"
 
 #: ../include/apto_interface-class.php:678
 msgid "This sort interface settings. For more details check"
-msgstr ""
+msgstr "Este tipo de configuración de la interfaz. Para más información"
 
 #: ../include/apto_interface-class.php:685
 #: ../include/apto_interface_helper-class.php:1636
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: ../include/apto_interface-class.php:686
 msgid "Sort list tab title"
-msgstr ""
+msgstr "Título de la pestaña Ordenar lista"
 
 #: ../include/apto_interface-class.php:690
 msgid "Description"
-msgstr ""
+msgstr "Descripción "
 
 #: ../include/apto_interface-class.php:691
 msgid ""
@@ -164,23 +169,26 @@ msgid ""
 "doing re-sort, it should include a description for what area this sort will "
 "apply."
 msgstr ""
+"Descripción de la lista. Esto aparecerá para los demás (usuarios no "
+"administradores) al hacer la reordenación, debe incluir una descripción de "
+"qué área se aplicará esta ordenación."
 
 #: ../include/apto_interface-class.php:695
 msgid "Menu Location"
-msgstr ""
+msgstr "Ubicación del menú"
 
 #: ../include/apto_interface-class.php:696
 msgid "Relocate this Sort Interface to another menu"
-msgstr ""
+msgstr "Reubicar esta interfaz de clasificación en otro menú"
 
 #: ../include/apto_interface-class.php:718
-#, fuzzy
 msgid "Auto Apply Sort"
-msgstr "Orden automático"
+msgstr "Aplicar ordenación automática"
 
 #: ../include/apto_interface-class.php:719
 msgid "Automatically apply the sort to theme queries if match."
 msgstr ""
+"Aplicar automáticamente la ordenación a las consultas temáticas si coinciden."
 
 #: ../include/apto_interface-class.php:721
 #: ../include/apto_interface-class.php:729
@@ -191,7 +199,7 @@ msgstr ""
 #: ../include/apto_interface-class.php:878
 #: ../include/apto_interface-class.php:1460
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: ../include/apto_interface-class.php:722
 #: ../include/apto_interface-class.php:730
@@ -202,7 +210,7 @@ msgstr ""
 #: ../include/apto_interface-class.php:879
 #: ../include/apto_interface-class.php:1457
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: ../include/apto_interface-class.php:726
 msgid "Admin Sort"
@@ -211,37 +219,44 @@ msgstr "Orden de Administrador"
 #: ../include/apto_interface-class.php:727
 msgid "Automatically apply the sort to admin queries if match."
 msgstr ""
+"Aplicar automáticamente la ordenación a las consultas administrativas si "
+"coinciden."
 
 #: ../include/apto_interface-class.php:735
 msgid "Allow sorting within default post type interface"
 msgstr ""
+"Permitir la clasificación dentro de la interfaz de tipo de entrada por "
+"defecto"
 
 #: ../include/apto_interface-class.php:736
 msgid ""
 "A Drag & Drop functionality is available to be used within default WordPress "
 "post type interface."
 msgstr ""
+"Una funcionalidad de arrastrar y soltar está disponible para ser utilizada "
+"dentro de la interfaz por defecto del tipo de entrada de WordPress."
 
 #: ../include/apto_interface-class.php:792
 msgid "Need to Create Sort first"
-msgstr ""
+msgstr "Es necesario crear primero la clasificación"
 
 #: ../include/apto_interface-class.php:809
 msgid "Not a primary sort, this feature can apply only to"
 msgstr ""
+"Al no ser una clasificación primaria, esta característica sólo puede "
+"aplicarse a"
 
 #: ../include/apto_interface-class.php:814
 msgid "This feature can't apply when conditionals set"
-msgstr ""
+msgstr "Esta función no puede aplicarse cuando se establecen condicionales"
 
 #: ../include/apto_interface-class.php:819
 msgid "Admin Sort need to be Yes"
-msgstr ""
+msgstr "Admin Sort tiene que ser Sí"
 
 #: ../include/apto_interface-class.php:832
-#, fuzzy
 msgid "Send new items to bottom of list"
-msgstr "Envíe nuevos elementos a abajo"
+msgstr "Enviar los nuevos elementos al final de la lista"
 
 #: ../include/apto_interface-class.php:833
 msgid ""
@@ -252,41 +267,40 @@ msgstr ""
 "vez de arriba. Esto se aplicará al realizar el pedido manual."
 
 #: ../include/apto_interface-class.php:840
-#, fuzzy
 msgid "Thumbnails"
-msgstr "Alternar Miniaturas"
+msgstr "Miniaturas"
 
 #: ../include/apto_interface-class.php:841
 msgid "Show thumbnails on sort list"
-msgstr ""
+msgstr "Mostrar miniaturas en la lista de clasificación"
 
 #: ../include/apto_interface-class.php:850
 msgid "Pagination"
-msgstr ""
+msgstr "Paginación"
 
 #: ../include/apto_interface-class.php:851
 msgid "Set pagination for sort list"
-msgstr ""
+msgstr "Paginación de la lista de clasificación"
 
 #: ../include/apto_interface-class.php:859
 msgid "Posts Per Page"
-msgstr ""
+msgstr "Entradas por página"
 
 #: ../include/apto_interface-class.php:860
 msgid "The number of posts to show on page"
-msgstr ""
+msgstr "Número de entradas que se mostrarán en la página"
 
 #: ../include/apto_interface-class.php:866
 msgid "Offset Posts"
-msgstr ""
+msgstr "Postes de desplazamiento"
 
 #: ../include/apto_interface-class.php:867
 msgid "The offset number of posts"
-msgstr ""
+msgstr "El número compensado de puestos"
 
 #: ../include/apto_interface-class.php:875
 msgid "WPML Synchronize"
-msgstr ""
+msgstr "Sincronización WPML"
 
 #: ../include/apto_interface-class.php:876
 msgid ""
@@ -294,10 +308,13 @@ msgid ""
 "languages sorting. For this to work, all other languages must contain the "
 "same translated objects."
 msgstr ""
+"Sincronizar el orden en todos los demás idiomas. Esto sobrescribirá la "
+"ordenación de otros idiomas. Para que esto funcione, todos los demás idiomas "
+"deben contener los mismos objetos traducidos."
 
 #: ../include/apto_interface-class.php:885
 msgid "Capability / Role"
-msgstr ""
+msgstr "Capacidad / Función"
 
 #: ../include/apto_interface-class.php:886
 #, fuzzy
@@ -306,11 +323,11 @@ msgstr "Mínimo nivel para usar este plugin"
 
 #: ../include/apto_interface-class.php:910
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: ../include/apto_interface-class.php:911
 msgid "Show objects status"
-msgstr ""
+msgstr "Mostrar el estado de los objetos"
 
 #: ../include/apto_interface-class.php:949
 #, fuzzy
@@ -320,6 +337,8 @@ msgstr "Order de Feed"
 #: ../include/apto_interface-class.php:1052
 msgid "Select area and customise your order list <br />or switch to automatic"
 msgstr ""
+"Seleccione el área y personalice su lista de pedidos <br />o cambie a "
+"automático"
 
 #: ../include/apto_interface-class.php:1077
 #: ../include/apto_interface-class.php:1103
@@ -328,7 +347,7 @@ msgstr "Archivo"
 
 #: ../include/apto_interface-class.php:1077
 msgid "Total Archive Objects"
-msgstr ""
+msgstr "Total de objetos de archivo"
 
 #: ../include/apto_interface-class.php:1133
 msgid "Taxonomy Title"
@@ -350,11 +369,11 @@ msgstr "Título de Taxonomia"
 
 #: ../include/apto_interface-class.php:1250
 msgid "Total Topics"
-msgstr ""
+msgstr "Temas totales"
 
 #: ../include/apto_interface-class.php:1423
 msgid "Add Fallback"
-msgstr ""
+msgstr "Añadir retroceso"
 
 #: ../include/apto_interface-class.php:1447
 msgid "Batch Terms Automatic Update"
@@ -411,31 +430,31 @@ msgstr "Actualizar"
 
 #: ../include/apto_interface-class.php:1615
 msgid "Reverse"
-msgstr ""
+msgstr "Retroceder"
 
 #: ../include/apto_interface-class.php:1616
 msgid "Title Asc"
-msgstr ""
+msgstr "Título Asc"
 
 #: ../include/apto_interface-class.php:1617
 msgid "Title Desc"
-msgstr ""
+msgstr "Título Desc"
 
 #: ../include/apto_interface-class.php:1618
 msgid "Id order Asc"
-msgstr ""
+msgstr "Id orden Asc"
 
 #: ../include/apto_interface-class.php:1619
 msgid "Id order Desc"
-msgstr ""
+msgstr "Id pedido Desc"
 
 #: ../include/apto_interface-class.php:1624
 msgid "List view"
-msgstr ""
+msgstr "Vista de lista"
 
 #: ../include/apto_interface-class.php:1625
 msgid "Grid view"
-msgstr ""
+msgstr "Vista en Cuadrícula"
 
 #: ../include/apto_interface-class.php:1722
 msgid "Reset Order"
@@ -450,6 +469,8 @@ msgid ""
 "**WARNING!! This will load all post types objects. Recommended to be used "
 "with Advanced Query Rules"
 msgstr ""
+"**ADVERTENCIA Esto cargará todos los objetos post types. Recomendado para "
+"ser usado con Reglas de Consulta Avanzadas"
 
 #: ../include/apto_interface_helper-class.php:1621
 msgid "Order By"
@@ -457,100 +478,100 @@ msgstr "Ordenar por"
 
 #: ../include/apto_interface_helper-class.php:1622
 msgid "More details about Order By paramether can be found at"
-msgstr ""
+msgstr "Encontrará más información sobre Order By paramether en"
 
 #: ../include/apto_interface_helper-class.php:1622
 #: ../include/apto_interface_helper-class.php:1717
 msgid "Order & Orderby Parameters"
-msgstr ""
+msgstr "Parámetros Order & Orderby"
 
 #: ../include/apto_interface_helper-class.php:1623
 msgid ""
 "Additional details and example of usage for Custom Function can be found at"
 msgstr ""
+"Encontrará más información y ejemplos de uso de la función personalizada en"
 
 #: ../include/apto_interface_helper-class.php:1623
 #: ../include/apto_interface_helper-class.php:1699
 msgid "Custom Function"
-msgstr ""
+msgstr "Función personalizada"
 
 #: ../include/apto_interface_helper-class.php:1627
 msgid "Default / None"
-msgstr ""
+msgstr "Por defecto / Ninguno"
 
 #: ../include/apto_interface_helper-class.php:1630
-#, fuzzy
 msgid "Post ID"
-msgstr "Entradas"
+msgstr "ID de la publicación"
 
 #: ../include/apto_interface_helper-class.php:1639
 msgid "Slug"
-msgstr ""
+msgstr "Slug"
 
 #: ../include/apto_interface_helper-class.php:1642
 #: ../include/apto_interface_helper-class.php:1684
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #: ../include/apto_interface_helper-class.php:1645
 msgid "Modified"
-msgstr ""
+msgstr "Modificado"
 
 #: ../include/apto_interface_helper-class.php:1648
 msgid "Comments Count"
-msgstr ""
+msgstr "Contador de comentarios"
 
 #: ../include/apto_interface_helper-class.php:1651
 msgid "Random"
-msgstr ""
+msgstr "Aleatorio"
 
 #: ../include/apto_interface_helper-class.php:1654
 msgid "Custom Field"
-msgstr ""
+msgstr "Campo personalizado"
 
 #: ../include/apto_interface_helper-class.php:1662
 msgid "Field Name"
-msgstr ""
+msgstr "Nombre del campo"
 
 #: ../include/apto_interface_helper-class.php:1663
 msgid "The name of custom field"
-msgstr ""
+msgstr "Nombre del campo personalizado"
 
 #: ../include/apto_interface_helper-class.php:1668
 msgid "Field Type"
-msgstr ""
+msgstr "Tipo de campo"
 
 #: ../include/apto_interface_helper-class.php:1669
 msgid "MySql Type of field, more details at"
-msgstr ""
+msgstr "MySql Tipo de campo, más detalles en"
 
 #: ../include/apto_interface_helper-class.php:1669
 msgid "Cast Functions and Operators"
-msgstr ""
+msgstr "Funciones y operadores de fundición"
 
 #: ../include/apto_interface_helper-class.php:1672
 msgid "None / Default"
-msgstr ""
+msgstr "Ninguno / Por defecto"
 
 #: ../include/apto_interface_helper-class.php:1675
 msgid "Signed (Integer)"
-msgstr ""
+msgstr "Con signo (entero)"
 
 #: ../include/apto_interface_helper-class.php:1678
 msgid "Unsigned (Integer)"
-msgstr ""
+msgstr "Sin signo (entero)"
 
 #: ../include/apto_interface_helper-class.php:1681
 msgid "Float (Decimal)"
-msgstr ""
+msgstr "Float (Decimal)"
 
 #: ../include/apto_interface_helper-class.php:1687
 msgid "Datetime"
-msgstr ""
+msgstr "Fecha y hora"
 
 #: ../include/apto_interface_helper-class.php:1690
 msgid "Time"
-msgstr ""
+msgstr "Tiempo"
 
 #: ../include/apto_interface_helper-class.php:1716
 #, fuzzy
@@ -559,15 +580,15 @@ msgstr "Restablecer Orden"
 
 #: ../include/apto_interface_helper-class.php:1717
 msgid "More details about Order paramether can be found at"
-msgstr ""
+msgstr "Encontrará más información sobre Order paramether en"
 
 #: ../include/apto_interface_helper-class.php:1721
 msgid "Descending"
-msgstr ""
+msgstr "Descendente"
 
 #: ../include/apto_interface_helper-class.php:1724
 msgid "Ascending"
-msgstr ""
+msgstr "Ascendente"
 
 #: ../include/apto_interface_helper-class.php:2338
 #: ../include/apto_interface_helper-class.php:2363
@@ -580,17 +601,16 @@ msgid "General Settings"
 msgstr "Ajustes Generales"
 
 #: ../include/apto_options_class.php:106
-#, fuzzy
 msgid "Show / Hide re-order interface"
-msgstr "Siempre muestra las Miniaturas dentro de la interfaz reordenar"
+msgstr "Mostrar / Ocultar interfaz de reordenación"
 
 #: ../include/apto_options_class.php:119
 msgid "Show"
-msgstr ""
+msgstr "Mostrar"
 
 #: ../include/apto_options_class.php:120
 msgid "Hide"
-msgstr ""
+msgstr "Ocultar"
 
 #: ../include/apto_options_class.php:134
 msgid "General"
@@ -601,15 +621,14 @@ msgid "Ignore Suppress Filters"
 msgstr "pasar por alto  Suppress Filters"
 
 #: ../include/apto_options_class.php:144
-#, fuzzy
 msgid ""
 "Set FALSE the <b>suppress_filters</b> arguments for get_posts() default "
 "WordPress function. Use this feature if Autosort does not work with your "
 "theme, otherwise you should leave un-checked."
 msgstr ""
-"Establecer FALSO <b> suppress_filters </ b> para get_posts () función "
-"predeterminada. Utilice esta función si Autosort no funcionará con usted, si "
-"usted debe dejar desmarcado."
+"Establecer FALSE los argumentos <b>suppress_filters</b> para get_posts() "
+"función por defecto de WordPress. Utilice esta función si Autosort no "
+"funciona con su tema, de lo contrario debe dejar sin marcar."
 
 #: ../include/apto_options_class.php:149
 msgid "Ignore Sticky Posts"
@@ -620,18 +639,22 @@ msgid ""
 "Ignore any Sticky posts, those will not appear on top of the list but per "
 "customised order."
 msgstr ""
+"Ignore los mensajes pegajosos, ya que no aparecerán en la parte superior de "
+"la lista, sino en el orden personalizado."
 
 #: ../include/apto_options_class.php:158
 msgid "Next / Previous Apply"
-msgstr ""
+msgstr "Siguiente / Anterior Aplicar"
 
 #: ../include/apto_options_class.php:162
 msgid "Apply the sort to default Next / Previous site-wide navigation."
 msgstr ""
+"Aplicar la ordenación a la navegación por defecto Siguiente / Anterior en "
+"todo el sitio."
 
 #: ../include/apto_options_class.php:162
 msgid "For advanced Next / Previous navigation check"
-msgstr ""
+msgstr "Para navegación avanzada Siguiente/Anterior marque"
 
 #: ../include/apto_options_class.php:162 ../include/apto_options_class.php:183
 msgid "read more"

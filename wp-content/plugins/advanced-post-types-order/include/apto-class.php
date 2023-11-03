@@ -46,11 +46,7 @@
                 
             function pre_get_posts($query)
                 {
-                    //check for the force_no_custom_order param, usefull when Autosort is ON
-                    //deprecated force_no_custom_order   rely on ignore_custom_sort instead
-                    if (isset($query->query_vars['force_no_custom_order']) && $query->query_vars['force_no_custom_order'] === TRUE)
-                        return $query;
-                        
+                    //Check for the ignore_custom_sort argument. Usefull when Autosort is ON                        
                     if (isset($query->query_vars['ignore_custom_sort']) && $query->query_vars['ignore_custom_sort'] === TRUE)
                         return $query;
                         

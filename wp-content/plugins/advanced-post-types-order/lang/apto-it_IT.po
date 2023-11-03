@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-03 14:47+0200\n"
-"PO-Revision-Date: 2018-12-03 14:47+0200\n"
+"PO-Revision-Date: 2023-04-12 18:41+0300\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: \n"
 "Language: it_IT\n"
@@ -12,14 +12,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;_e\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ..\n"
 
 #: ../include/apto_interface-class.php:141
-#, fuzzy
 msgid "Re-order"
-msgstr " -  Riordina"
+msgstr "Ordini"
 
 #: ../include/apto_interface-class.php:145
 msgid ""
@@ -34,10 +33,12 @@ msgid ""
 "WPML: The Sort Rules couldn't be translated automatically. You need to set/"
 "translate this manually for"
 msgstr ""
+"WPML: Le regole di ordinamento non potevano essere tradotte automaticamente. "
+"È necessario impostarle/tradurle manualmente per"
 
 #: ../include/apto_interface-class.php:335
 msgid "Click to toggle"
-msgstr ""
+msgstr "Clicca per attivare"
 
 #: ../include/apto_interface-class.php:336
 #: ../include/apto_interface-class.php:678
@@ -47,7 +48,7 @@ msgstr "Salva impostazioni"
 
 #: ../include/apto_interface-class.php:347
 msgid "Query Rules"
-msgstr ""
+msgstr "Regole di interrogazione"
 
 #: ../include/apto_interface-class.php:348
 msgid ""
@@ -55,28 +56,32 @@ msgid ""
 "what to show on the following sort list and the order will apply on front "
 "side."
 msgstr ""
+"Creare una serie di regole di criterio che corrispondano alla query. Questo "
+"determinerà cosa mostrare nell'elenco seguente e l'ordine da applicare sul "
+"lato frontale."
 
 #: ../include/apto_interface-class.php:349
 msgid ""
 "All rules are compared to a query using AND operator. For more details check"
 msgstr ""
+"Tutte le regole vengono confrontate con una query utilizzando l'operatore "
+"AND. Per maggiori dettagli, controllare"
 
 #: ../include/apto_interface-class.php:349
 msgid "Query Rules examples"
-msgstr ""
+msgstr "Esempi di regole di query"
 
 #: ../include/apto_interface-class.php:370
 msgid "Show Advanced"
-msgstr ""
+msgstr "Mostra Avanzate"
 
 #: ../include/apto_interface-class.php:429
 msgid "Add Post Type"
-msgstr ""
+msgstr "Aggiungi un tipo di Post"
 
 #: ../include/apto_interface-class.php:436
-#, fuzzy
 msgid "Taxonomy"
-msgstr "Titolo tassonomia"
+msgstr "Tassonomia"
 
 #: ../include/apto_interface-class.php:485
 #, fuzzy
@@ -90,15 +95,15 @@ msgstr "Titolo tassonomia"
 
 #: ../include/apto_interface-class.php:519
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: ../include/apto_interface-class.php:553
 msgid "Add Meta"
-msgstr ""
+msgstr "Aggiungi campo"
 
 #: ../include/apto_interface-class.php:561
 msgid "Meta Relation"
-msgstr ""
+msgstr "Meta-relazione"
 
 #: ../include/apto_interface-class.php:586
 #: ../include/apto_interface_helper-class.php:1633
@@ -116,22 +121,27 @@ msgid ""
 "displayed anymore. You should review the settings Query Rules area and click "
 "Update button."
 msgstr ""
+"Sono state apportate alcune modifiche al sito e alcune regole di query non "
+"possono più essere visualizzate. È necessario rivedere le impostazioni "
+"dell'area Regole di query e fare clic sul pulsante Aggiorna."
 
 #: ../include/apto_interface-class.php:639
 msgid "Conditionals"
-msgstr ""
+msgstr "Condizionali"
 
 #: ../include/apto_interface-class.php:640
 msgid "Apply the order only if conditions are true. For more details check"
 msgstr ""
+"Applica l'ordine solo se le condizioni sono vere. Per maggiori dettagli, "
+"controllare"
 
 #: ../include/apto_interface-class.php:640
 msgid "Conditionals Usage"
-msgstr ""
+msgstr "Uso dei condizionali"
 
 #: ../include/apto_interface-class.php:643
 msgid "Apply if"
-msgstr ""
+msgstr "Applica a"
 
 #: ../include/apto_interface-class.php:668
 msgid "Add Group"

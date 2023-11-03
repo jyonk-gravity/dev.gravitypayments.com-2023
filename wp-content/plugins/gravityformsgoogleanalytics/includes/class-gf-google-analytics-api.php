@@ -28,6 +28,14 @@ class GF_Google_Analytics_API {
 	protected $ga_api_url = 'https://www.googleapis.com/analytics/v3/';
 
 	/**
+	 * Google Analytics Admin API URL.
+	 *
+	 * @since  2.0
+	 * @var    string $ga_admin_api_url Google Analytics Admin API URL.
+	 */
+	protected $ga_admin_api_url = 'https://analyticsadmin.googleapis.com/v1beta/';
+
+	/**
 	 * Google Tag Manager API URL.
 	 *
 	 * @since  1.0
@@ -87,6 +95,9 @@ class GF_Google_Analytics_API {
 		// Get mode.
 		$api_url = '';
 		switch ( $mode ) {
+			case 'ga4':
+				$api_url = $this->ga_admin_api_url;
+				break;
 			case 'ga':
 				$api_url = $this->ga_api_url;
 				break;
@@ -124,6 +135,10 @@ class GF_Google_Analytics_API {
 				'Accept'        => 'application/json;ver=1.0',
 				'Content-Type'  => 'application/json; charset=UTF-8',
 			);
+		}
+
+		if ( 'POST' === $method ) {
+			$args['body'] = wp_json_encode( $body );
 		}
 
 		// Execute request.
@@ -349,6 +364,76 @@ class GF_Google_Analytics_API {
 	}
 
 	/**
+	 * Get a list of Google Analytics accounts.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return array|WP_Error
+	 */
+	public function get_ga4_accounts() {
+		return $this->make_request(
+			'accountSummaries',
+			'ga4',
+			array()
+		);
+	}
+
+	/**
+	 * Get a list of GA4 data streams.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $property GA4 property associated with the data streams. In the format "property/XXXX".
+	 *
+	 * @return array|WP_Error Returns an array of data streams.
+	 */
+	public function get_data_streams( $property ) {
+		return $this->make_request(
+			"{$property}/dataStreams",
+			'ga4',
+			array()
+		);
+	}
+
+	/**
+	 * Creates a new Measurement Protocol API Secret.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $path The path to the data stream for which we're creating a secret.
+	 *
+	 * @return array|WP_Error Returns an array of measurement protocol secrets.
+	 */
+	public function create_api_secret( $path ) {
+		return $this->make_request(
+			$path . '/measurementProtocolSecrets',
+			'ga4',
+			array(
+				'displayName' => 'GravityFormsSecret',
+			),
+			'POST'
+		);
+	}
+
+	/**
+	 * List Measurement Protocol API Secrets.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $path The path to the data stream for which we're retrieving secrets.
+	 *
+	 * @return array|WP_Error Returns an array of measurement protocol secrets.
+	 */
+	public function get_api_secrets( $path ) {
+		return $this->make_request(
+			$path . '/measurementProtocolSecrets',
+			'ga4',
+			array(),
+			'GET'
+		);
+	}
+
+	/**
 	 * Get a list of tag manager accounts.
 	 *
 	 * @since 1.0.0
@@ -402,6 +487,44 @@ class GF_Google_Analytics_API {
 	}
 
 	/**
+	 * Get a list of tag manager triggers.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array  $body      Body information.
+	 * @param string $path      Account path to request.
+	 * @param string $workspace The workspace to retrieve variables for.
+	 *
+	 * @return array|WP_Error
+	 */
+	public function get_tag_manager_triggers( $body, $path, $workspace ) {
+		return $this->make_request(
+			sprintf( '%s/workspaces/%s/triggers', $path, $workspace ),
+			'gtm',
+			$body
+		);
+	}
+
+	/**
+	 * Get a list of tag manager tags.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array  $body      Body information.
+	 * @param string $path      Account path to request.
+	 * @param string $workspace The workspace to retrieve variables for.
+	 *
+	 * @return array|WP_Error
+	 */
+	public function get_tag_manager_tags( $body, $path, $workspace ) {
+		return $this->make_request(
+			sprintf( '%s/workspaces/%s/tags', $path, $workspace ),
+			'gtm',
+			$body
+		);
+	}
+
+	/**
 	 * Get a list of tag manager variables.
 	 *
 	 * @since 1.0.0
@@ -449,7 +572,7 @@ class GF_Google_Analytics_API {
 	 * @param string $path      Account path to request.
 	 * @param string $workspace The workspace to retrieve variables for.
 	 *
-	 * @return array|WP_Error
+	 * @return string|WP_Error
 	 */
 	public function create_google_tag_manager_trigger( $body, $path, $workspace ) {
 		return $this->make_request(
