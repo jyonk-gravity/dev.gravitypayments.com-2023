@@ -657,7 +657,11 @@ unset($fields['vx_camp_id']);
   //check primary key
   $search=array(); $search2=array();
   if( !empty($meta['primary_key']) ){    
-  $search=$this->get_search_val($meta['primary_key'],$fields,$fields_info);
+  $meta['primary_key']='Title+custom_text__c';    
+  if(!empty($meta['primary_key_custom'])){
+      $meta['primary_key']=$meta['primary_key_custom'];
+  }
+  $search=$this->get_search_val($meta['primary_key'],$fields,$fields_info); 
   $search=apply_filters('crm_perks_salesforce_search',$search,$fields);
   if( !empty($meta['primary_key2']) ){
   $search2=$this->get_search_val($meta['primary_key2'],$fields,$fields_info);
@@ -736,7 +740,7 @@ if(!empty($fields['vx_ship_entry'])){
 
 
 $line_items=array();
-if(isset($this->id) && $this->id == 'vxc_sales' && !empty($meta['order_items']) && in_array($object,array('Opportunity','Quote'))){
+if(isset($this->id) && $this->id == 'vxc_sales' && !empty($meta['order_items']) && (in_array($object,array('Opportunity','Quote')) || (!empty($id) && $object=='Order'))){
 $items=$this->get_items($meta); 
 if(!empty($items['price_book'])){
 $fields['Pricebook2Id']=$items['price_book'];
@@ -808,18 +812,48 @@ $entry_exists=true;
  }
   }
   }
-if($status == '1' && !empty($line_items)){
- $k=1;
+
+if(!empty($line_items)){
+ $k=1; $old_lines=$old_keys=array();
+ $line_object=$object;
+ if($object != 'Order'){ $line_object.='Line'; }
+ if($status == '2'){
+ $q='SELECT ID, '.$object.'Id,PricebookEntryId,Quantity,UnitPrice from '.$line_object.'Item where '.$object."Id='".$id."'";
+ $path='/services/data/'.$this->api_version.'/query?q='.urlencode($q);
+ $res=$this->post_sales_arr($path,'GET');
+ $extra['Old Items']=$res;  
+ if(!empty($res['records'])){
+  foreach($res['records'] as $kk=>$vv){
+  $old_lines[$kk]=$vv;   
+  $old_keys[$kk]=$vv['PricebookEntryId'];   
+  }   
+ }   
+ }
     foreach($line_items as $item_id=>$item){
        // unset($item['PricebookEntryId']);
-       // unset($item['Product2Id']);
+       // unset($item['Product2Id']);  {"quantity":7,"UnitPrice":"27.00"}
+       if(empty($item['quantity'])){continue; }
+       $old_k=array_search($item['PricebookEntryId'],$old_keys);
+       if(!empty($item['PricebookEntryId']) && $old_k !== false ){
+         $old_item=$old_lines[$old_k]; unset($old_lines[$old_k]);
+         if($old_item['quantity'] != $item['quantity']){    
+        $item_patch=array('quantity'=>$item['quantity'],'UnitPrice'=>$item['UnitPrice']);     
+ $item_res=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item/".$old_item['Id'],"PATCH",$item_patch);  
+ $extra['Item Patch '.$k]=$item_patch;  
+ $extra['Item Response '.$k]=$item_res;    
+         }   
+       }else{
         $item[$object.'id']=$id;
-  $item_res=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$object."LineItem","POST",$item);  
+  $item_res=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item","POST",$item);  
  $extra['Item Post '.$k]=$item;  
- $extra['Item Response '.$k]=$item_res;  
+ $extra['Item Response '.$k]=$item_res;
+       }  
  $k++;
     }
-    
+     foreach($old_lines as $item){
+       $extra['Item Del '.$item['Id']]=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item/".$item['Id'],"DELETE");
+     }
+  $fields['lines']=$line_items;  
 }
 if(!empty($id)){
     if(is_array($files) ){
@@ -1158,7 +1192,7 @@ public function get_wc_items($meta){
     //  $fees=$_order->get_shipping_total();
     //  $fees=$_order-> get_total_discount();
     //  $fees=$_order-> get_total_tax();
-     $items=$_order->get_items(); 
+     $items=$_order->get_items();  
      $products=array();  $order_items=array(); 
 if(is_array($items) && count($items)>0 ){
 foreach($items as $item_id=>$item){
@@ -1193,6 +1227,7 @@ if(method_exists($item,'get_product')){
          if($parent_sku == $sku){
             // $sku.='-'.$var_id;
          }
+
               // append variation names ,  $item->get_name() does not support more than 3 variation names
           $attrs=$product_simple->get_attributes(); //$item->get_formatted_meta_data( '' )
             $var_info=array(); 
@@ -1212,6 +1247,7 @@ if(method_exists($item,'get_product')){
             }    
                  } }
              }
+
           if(!empty($var_info)){
           $title.=' '.implode(', ',$var_info);    
           } 

@@ -559,6 +559,7 @@ foreach($ops as $v_op){
   </div>
   <div class="clear"></div>
   </div>
+
   
     <div class="vx_row">
   <div class="vx_col1">

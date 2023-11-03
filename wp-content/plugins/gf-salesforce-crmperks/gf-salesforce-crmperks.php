@@ -2,7 +2,7 @@
 /**
 * Plugin Name: WP Gravity Forms Salesforce
 * Description: Integrates Gravity Forms with Salesforce allowing form submissions to be automatically sent to your Salesforce account 
-* Version: 1.3.9
+* Version: 1.4.0
 * Requires at least: 4.7
 * Tested up to: 6.3
 * Author URI: https://www.crmperks.com
@@ -25,7 +25,7 @@ class vxg_salesforce {
   public  $crm_name = 'salesforce';
   public  $id = 'vxg_salesforce';
   public  $domain = 'vxg-sales';
-  public  $version = "1.3.9";
+  public  $version = "1.4.0";
   public  $update_id = '30001';
   public  $min_gravityforms_version = '1.3.9';
   public $type = 'vxg_salesforce_pro';
