@@ -93,30 +93,13 @@
                     //check for orderby GET paramether in which case return default data
                     if ( ! defined('DOING_AJAX') && isset($_GET['orderby']) && $_GET['orderby'] !=  'menu_order' && apply_filters('apto/ignore_get_orderby', TRUE, $orderBy, $query ) )
                         return $orderBy;
-                    
-                    //check for the force_no_custom_order param
-                    //deprecated force_no_custom_order   relay on ignore_custom_sort instead
-                    if (isset($query->query_vars['force_no_custom_order']) && $query->query_vars['force_no_custom_order'] === TRUE)
-                        return $orderBy;
-                        
+                                            
                     if (isset($query->query_vars['ignore_custom_sort']) && $query->query_vars['ignore_custom_sort'] === TRUE)
                         return $orderBy;
                           
                     if (apto_is_plugin_active('bbpress/bbpress.php') && isset($query->query_vars['post_type']) && ((is_array($query->query_vars['post_type']) && in_array("reply", $query->query_vars['post_type'])) || ($query->query_vars['post_type'] == "reply")))
                         return $orderBy;
-                    
-                    //WP E-Commerce check if drag-and-drop for archive 
-                    if (apto_is_plugin_active('wp-e-commerce/wp-shopping-cart.php') && $query->is_archive('wpsc-product') && !$query->is_tax('wpsc_product_category'))
-                        {
-                            if($this->functions->wp_ecommerce_is_draganddrop() === FALSE)
-                                return $orderBy;
-                        }  
-                   
-                    //allowing a way to suppress sorting apply and return original orderby
-                    //Deprecated, use apto/ignore_custom_order instead
-                    if( apply_filters('apto/posts_orderby', $orderBy, $query) === FALSE )
-                        return $orderBy;
-                        
+                                           
                     if( apply_filters('apto/ignore_custom_order', FALSE, $orderBy, $query) )
                         return $orderBy;
                     

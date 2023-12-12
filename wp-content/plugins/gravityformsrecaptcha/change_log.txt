@@ -1,3 +1,7 @@
+## 1.3.0 | 2023-11-09
+- Fixed an issue where a JavaScript error can occur on the front-end if the page also includes custom or third-party forms.
+- Fixed an issue where the v3 settings aren't populated by the GF_RECAPTCHA_V3_SITE_KEY and GF_RECAPTCHA_V3_SECRET_KEY constants.
+
 ## 1.2.0 | 2023-08-31
 - Updated the reCAPTCHA settings link for the Captcha field "To use the reCAPTCHA field" message in the form editor.
 - Fixed an issue where reCAPTCHA fails validation when using the Stripe Payment Element.

@@ -555,6 +555,8 @@
                     //hide send to manual order list buttton
                     jQuery('#send_to_manual').slideUp();
                     
+                    jQuery ( '#automatic_insert_mark' ).css( 'display', 'none' );
+                    
 
                 },
             RemoveAutomaticOrderFallback: function (element)
@@ -565,18 +567,36 @@
                     jQuery('#apto_form_order .automatic_order_by[data-id="' + group_id  +'"]').remove();
                     jQuery('#apto_form_order .automatic_order[data-id="' + group_id  +'"]').remove();
                     
+                    jQuery ( '#automatic_insert_mark' ).css( 'display', 'table-row' );
+                    
                 },
                 
             apto_autosort_orderby_field_change: function (element)
                 {
+                    group_id = jQuery('#apto_form_order').find(element).closest('tr').attr('data-id');
+                    if ( group_id > 1 )
+                        return;
+                    
                     var element_value = jQuery(element).val();
                     var group_id = jQuery(element).closest('tr').attr('data-id'); 
                     
                     //close all toggle_area
                     jQuery(element).closest('td').find(' > .toggle_area').hide('fast');
                     
+                    jQuery('#apto_settings #automatic_insert_mark').hide('fast');
+                    
                     if(element_value == '_taxonomy_')
-                        jQuery(element).closest('tr').find('#apto_taxonomy_area_' + group_id).stop().show('fast');
+                        {
+                            jQuery(element).closest('tr').find('#apto_taxonomy_area_' + group_id).stop().show('fast');
+                            jQuery('#apto_settings #automatic_insert_mark').show('fast');
+                        }
+                        else
+                        {
+                            inner_group_id = 2;
+                    
+                            jQuery('#apto_form_order .automatic_order_by[data-id="' + inner_group_id  +'"]').remove();
+                            jQuery('#apto_form_order .automatic_order[data-id="' + inner_group_id  +'"]').remove();
+                        }
                     
                     if(element_value == '_custom_field_')
                         jQuery(element).closest('tr').find('#apto_custom_field_area_' + group_id).stop().show('fast');

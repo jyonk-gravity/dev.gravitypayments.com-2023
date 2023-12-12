@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Advanced Post Types Order\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-05 12:28+0200\n"
-"PO-Revision-Date: 2023-10-02 10:31+0300\n"
+"PO-Revision-Date: 2023-11-06 15:22+0200\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: http://nsp-code.com\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4\n"
 "X-Poedit-SearchPath-0: ..\n"
 
 #: ../include/apto_admin_functions-class.php:90
@@ -132,14 +132,16 @@ msgstr ""
 msgid ""
 "All rules are compared to a query using AND operator. For more details check"
 msgstr ""
+"Todas as regras são comparadas a uma consulta usando o operador AND. Para "
+"obter mais detalhes, consulte"
 
 #: ../include/apto_interface-class.php:349
 msgid "Query Rules examples"
-msgstr ""
+msgstr "Exemplos de regras de consulta"
 
 #: ../include/apto_interface-class.php:370
 msgid "Show Advanced"
-msgstr ""
+msgstr "Mostrar avançado"
 
 #: ../include/apto_interface-class.php:429
 #, fuzzy
@@ -160,7 +162,7 @@ msgstr "Type de post inválido"
 
 #: ../include/apto_interface-class.php:457
 msgid "Term"
-msgstr ""
+msgstr "Termo"
 
 #: ../include/apto_interface-class.php:483
 #, fuzzy
@@ -174,15 +176,15 @@ msgstr "Título taxonomia"
 
 #: ../include/apto_interface-class.php:517
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: ../include/apto_interface-class.php:551
 msgid "Add Meta"
-msgstr ""
+msgstr "Adicionar meta"
 
 #: ../include/apto_interface-class.php:559
 msgid "Meta Relation"
-msgstr ""
+msgstr "Meta-relação"
 
 #: ../include/apto_interface-class.php:608
 #, fuzzy
@@ -195,47 +197,53 @@ msgid ""
 "displayed anymore. You should review the settings Query Rules area and click "
 "Update button."
 msgstr ""
+"Algumas alterações foram feitas em seu site e algumas das regras de consulta "
+"não podem mais ser exibidas. Você deve revisar as configurações da área "
+"Query Rules e clicar no botão Update (Atualizar)."
 
 #: ../include/apto_interface-class.php:637
 msgid "Conditionals"
-msgstr ""
+msgstr "Condicionais"
 
 #: ../include/apto_interface-class.php:638
 msgid "Apply the order only if conditions are true. For more details check"
 msgstr ""
+"Aplicar a ordem somente se as condições forem verdadeiras. Para obter mais "
+"detalhes, consulte"
 
 #: ../include/apto_interface-class.php:638
 msgid "Conditionals Usage"
-msgstr ""
+msgstr "Uso de condicionais"
 
 #: ../include/apto_interface-class.php:641
 msgid "Apply if"
-msgstr ""
+msgstr "Aplicar"
 
 #: ../include/apto_interface-class.php:666
 msgid "Add Group"
-msgstr ""
+msgstr "Adicionar Grupo"
 
 #: ../include/apto_interface-class.php:675
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 #: ../include/apto_interface-class.php:676
 msgid "This sort interface settings. For more details check"
 msgstr ""
+"Esse tipo de configuração de interface. Para obter mais detalhes, verifique"
 
 #: ../include/apto_interface-class.php:683
 #: ../include/apto_interface_helper-class.php:1621
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: ../include/apto_interface-class.php:684
 msgid "Sort list tab title"
-msgstr ""
+msgstr "Título da guia da lista de classificação"
 
 #: ../include/apto_interface-class.php:688
 msgid "Description"
-msgstr ""
+msgstr "Descrição"
 
 #: ../include/apto_interface-class.php:689
 msgid ""

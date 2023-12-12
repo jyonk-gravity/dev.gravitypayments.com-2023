@@ -308,9 +308,83 @@
                     return $this->is_woocommerce;   
                     
                 }
+            
+            
+            
+                
+            /**
+            * Identify the appropiate sort id and sort_view_id which match this query    
+            * 
+            * @param mixed $query
+            * @param mixed $sorts_match_filter  Contain set of filters (cutsto fileld with values) to allos sorts filtering
+            */
+            function query_match_sort_id($query, $sorts_match_filter)
+                {
+                    //check if there is already a query paramether as sort_view_id
+                    if(isset($query->query['sort_view_id']))
+                        return $query->query['sort_view_id'];
+                    
+                    $sort_items =   array();
+                        
+                    //check if there is already a query paramether as sort_id
+                    if(isset($query->query['sort_id']) && $query->query['sort_id'] > 0)
+                        {
+                            $object         = new stdClass();
+                            $object->ID     =   $query->query['sort_id'];
+                            $sort_items[]   =   $object;
+                            unset($object);     
+                        }
+                        
+                    if(count($sort_items) < 1)
+                        {
+                            $sort_items =   $this->get_sorts_by_filters($sorts_match_filter);
+                        }
+                    
+                    //v3.0 try a partial match, for general queries like category term without a post type specification (presuming the category is assigned to multiple post types)
+                    $partial_match_options  =   array(
+                                                FALSE, 
+                                                TRUE
+                                                );
+                    foreach($partial_match_options      as  $partial_match)
+                    foreach($sort_items as $sort_item)
+                        {
+                            
+                            /*
+                            if($this->sort_id_exists($sort_item->ID) === FALSE)
+                                continue;
+                            */
+                            
+                            $sort_view_settings =   $this->get_sort_view_settings($sort_item->ID);
+                            
+                            switch($sort_view_settings['_view_type'])
+                                {
+                                    case 'simple'   :
+                                                        /*
+                                                        //no need to check again
+                                                        if($partial_match   !==  FALSE)
+                                                            continue;
+                                                        */
+                                                        
+                                                        $match  =   $this->sort_simple_match_check_on_query($sort_item->ID, $query, $partial_match);
+                                                        if($match   !== FALSE)
+                                                            return $match;
+                                                            
+                                                        break;      
+                                    
+                                    case 'multiple'   :
+                                                        $match  =   $this->sort_multiple_match_check_on_query($sort_item->ID, $query, $partial_match);
+                                                        if($match   !== FALSE)
+                                                            return $match;
+                                                            
+                                                        break;
+                                }
+                        }
+                    
+                    return '';
+                }
                 
             
-            function query_get_orderby($orderBy, $query, $sorts_match_filter = array())
+            function query_get_orderby( $orderBy, $query, $sorts_match_filter = array() )
                 {
                     //filter the query for unnecesarelly data;  i.e. empty taxonomy rules
                     $query          =   $this->query_filter_valid_data($query);
@@ -329,7 +403,7 @@
                     
                     global $wpdb;
                     
-                    $new_orderBy = $orderBy;
+                    $new_orderBy = '';
                         
                     $sort_view_settings =   $this->get_sort_view_settings($sort_view_id);
                     
@@ -342,76 +416,15 @@
                     
                     if($sort_view_settings['_order_type'] == 'auto')
                         {
-                            //Add falback for multiple 
-                            $data_set = array(
-                                                'order_by'              =>  (array)$sort_view_settings['_auto_order_by'],
-                                                'taxonomy_name'         =>  (array)$sort_view_settings['_auto_taxonomy_name'],
-                                                'custom_field_name'     =>  (array)$sort_view_settings['_auto_custom_field_name'],
-                                                'custom_field_type'     =>  (array)$sort_view_settings['_auto_custom_field_type'],
-                                                'custom_function_name'  =>  (array)$sort_view_settings['_auto_custom_function_name'],
-                                                'order'                 =>  (array)$sort_view_settings['_auto_order']
-                                                );
+                            $new_orderBy    =   $this->query_get_auto_orderby( $sortID, $sort_view_id, $orderBy, $query );
                             
-                            $new_orderBy = '';
-                            
-                            $counter = 0;
-                            foreach($data_set['order_by']   as $key =>  $data)
-                                {
-                                    if($new_orderBy != '')
-                                        $new_orderBy .= ', ';
-                                    
-                                    switch ($data_set['order_by'][$key])
-                                        {
-                                            case '_default_'        :
-                                                                        $new_orderBy    =   $orderBy;   
-                                                                        break;
-                                            
-                                            case '_random_'         :
-                                                                        $new_orderBy .= "RAND()";
-                                                                        
-                                                                        break;
-                                                                        
-                                            case '_taxonomy_'  :
-                                                                        
-                                                                        $new_orderBy .=  $this->query_get_orderby_taxonomy_name($key, $sort_view_id, $orderBy, $query);
-                                                                        
-                                                                        break;
-                                            
-                                            case '_custom_field_'   :
-                                                                        
-                                                                        $new_orderBy .=  $this->query_get_orderby_custom_field($key, $sort_view_id, $orderBy, $query);
-                                   
-                                                                        break;
-                                            
-                                            case '_custom_function_'   :
-                                                                        
-                                                                        $new_orderBy .=  $this->query_get_orderby_custom_function($key, $sort_view_id, $orderBy, $query);
-                                   
-                                                                        break;
-                                                                    
-                                            default: 
-                                                                        $new_orderBy .= $wpdb->posts .".". $data_set['order_by'][$key] . " " . $data_set['order'][$key];
-                                                                        
-                                                                        break;
-                                            
-                                        }
-                                        
-                                   $counter++; 
-                                }
-                                
-                            if($counter <   2)
-                                {
-                                    if(!empty($new_orderBy))
-                                        $new_orderBy    .=  ", ";
-                                    $new_orderBy .= $wpdb->posts .".post_date ". $data_set['order'][0];
-                                }
-                              
-                            //Deprecated
+                             //Deprecated
                             $new_orderBy    =   apply_filters('apto_get_orderby', $new_orderBy, $orderBy, $query);
                             
                             $new_orderBy    =   apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query, FALSE);
                             
                             return $new_orderBy;
+
                         }
                     
                     
@@ -546,932 +559,93 @@
                     return $new_orderBy;   
                 }
             
-                
-            /**
-            * Identify the appropiate sort id and sort_view_id which match this query    
-            * 
-            * @param mixed $query
-            * @param mixed $sorts_match_filter  Contain set of filters (cutsto fileld with values) to allos sorts filtering
-            */
-            function query_match_sort_id($query, $sorts_match_filter)
-                {
-                    //check if there is already a query paramether as sort_view_id
-                    if(isset($query->query['sort_view_id']))
-                        return $query->query['sort_view_id'];
-                    
-                    $sort_items =   array();
-                        
-                    //check if there is already a query paramether as sort_id
-                    if(isset($query->query['sort_id']) && $query->query['sort_id'] > 0)
-                        {
-                            $object         = new stdClass();
-                            $object->ID     =   $query->query['sort_id'];
-                            $sort_items[]   =   $object;
-                            unset($object);     
-                        }
-                        
-                    if(count($sort_items) < 1)
-                        {
-                            $sort_items =   $this->get_sorts_by_filters($sorts_match_filter);
-                        }
-                    
-                    //v3.0 try a partial match, for general queries like category term without a post type specification (presuming the category is assigned to multiple post types)
-                    $partial_match_options  =   array(
-                                                FALSE, 
-                                                TRUE
-                                                );
-                    foreach($partial_match_options      as  $partial_match)
-                    foreach($sort_items as $sort_item)
-                        {
-                            
-                            /*
-                            if($this->sort_id_exists($sort_item->ID) === FALSE)
-                                continue;
-                            */
-                            
-                            $sort_view_settings =   $this->get_sort_view_settings($sort_item->ID);
-                            
-                            switch($sort_view_settings['_view_type'])
-                                {
-                                    case 'simple'   :
-                                                        /*
-                                                        //no need to check again
-                                                        if($partial_match   !==  FALSE)
-                                                            continue;
-                                                        */
-                                                        
-                                                        $match  =   $this->sort_simple_match_check_on_query($sort_item->ID, $query, $partial_match);
-                                                        if($match   !== FALSE)
-                                                            return $match;
-                                                            
-                                                        break;      
-                                    
-                                    case 'multiple'   :
-                                                        $match  =   $this->sort_multiple_match_check_on_query($sort_item->ID, $query, $partial_match);
-                                                        if($match   !== FALSE)
-                                                            return $match;
-                                                            
-                                                        break;
-                                }
-                        }
-                    
-                    return '';
-                }
-                
-                
-            static function get_sorts_by_filters($sort_filters = array(), $post_column_filters = array())
-                {
-                    $defaults   = array (
-                                            'post_parent'               =>  '0',
-                                            'post_type'                 =>  'apto_sort',
-                                            'post_status'               =>  'publish'
-                                        );
-                    $post_column_filters          = wp_parse_args( $post_column_filters, $defaults );
-                            
-                    
-                    global $APTO;
-                    
-                    //try the cache
-                    $arguments_hash =   md5( serialize($sort_filters) . serialize($post_column_filters) );
-                    if ( $APTO->cache_key_exists( 'sorts_by_filters/' .  $arguments_hash ) )
-                        return $APTO->cache_get_key( 'sorts_by_filters/' .  $arguments_hash );
-                    
-                    //try to identify other sorts which match this
-                            
-                    //get all sort items
-                    //First try the specific / simple sorts then use the multiple / general
-                    global $wpdb;
-                    $mysql_query = "SELECT ". $wpdb->posts .".ID FROM ". $wpdb->posts ;
-                    
-                    if(count($sort_filters) > 0)
-                        {
-                            $q_inner_count  = 1;
-                            foreach($sort_filters as $cf_name =>  $cf_values)
-                                {
-                                    $mysql_query .= " INNER JOIN ". $wpdb->postmeta ." AS PMF". $q_inner_count ." ON (". $wpdb->posts .".ID = PMF" . $q_inner_count ." .post_id) ";
-                                    $q_inner_count++;
-                                }
-                        }
-                        
-                    $mysql_query .= " INNER JOIN ". $wpdb->postmeta ." AS PM2 ON (". $wpdb->posts .".ID = PM2.post_id) 
-                                        
-                                        WHERE 1 = 1 ";
-                    
-                    foreach($post_column_filters as $post_column    =>  $volumn_value)
-                        {
-                            $mysql_query .= " AND " . $wpdb->posts . "." . $post_column ." = '". $volumn_value  ."'" ;
-                        }
-                     
-                    if(count($sort_filters) > 0)
-                        {
-                            $q_inner_count  = 1;
-                            foreach($sort_filters as $cf_name =>  $cf_values)
-                                {
-                                    $mysql_query .= " AND (PMF" . $q_inner_count ." .meta_key = '" . $cf_name . "' AND CAST(PMF". $q_inner_count ." .meta_value AS CHAR) IN ('". implode("', '", $cf_values)  ."'))";
-                                    $q_inner_count++;
-                                }
-                        }
-                                                
-                    $mysql_query .= " AND PM2.meta_key = '_view_type'
-                                                
-                                        GROUP BY ". $wpdb->posts .".ID 
-                                        
-                                        ORDER BY FIELD(PM2.meta_value, 'simple', 'multiple'),  ". $wpdb->posts .".ID ASC  ";
-                    $sort_items =   $wpdb->get_results($mysql_query);   
-                    
-                    //set a cahce for later usage
-                    $APTO->cache_add_key('sorts_by_filters/' . $arguments_hash, $sort_items );
-                    
-                    return $sort_items;
-                    
-                }
-            
             
             /**
-            * Simple view match check
-            *     
-            * @param mixed $sortID
-            * @param mixed $query
-            */
-            function sort_simple_match_check_on_query($sortID, $query, $partial_match)
-                {
-                    $sort_settings  =   $this->get_sort_settings($sortID);
-                    $sort_rules     =   $this->get_sort_current_language_rules($sort_settings, FALSE);
-                    if($sort_rules  === FALSE)
-                        return FALSE;
-                    
-                    if( /* $partial_match   === TRUE   &&  */  $this->is_woocommerce( $sortID ))
-                        $sort_rules['taxonomy']     =   APTO_compatibility::woocommerce_query_filter_process ( $sort_rules['taxonomy'] );   
-                                        
-                    //check for query rules match
-                    
-                    /**
-                    * 
-                    * Check for post type
-                    * 
-                    */
-                    $query_post_type = $this->query_get_post_types($query, $partial_match);
-                    
-                    //check for 'any' sort post types
-                    if(array_search('any', $query_post_type) === FALSE  && array_search('any', $sort_rules['post_type']) !== FALSE)
-                        {
-                            $sort_rules['post_type']    =   $this->get_post_types();    
-                        }
-                    $differences = array_diff($query_post_type, $sort_rules['post_type']);
-                    if(count($query_post_type) != count($sort_rules['post_type']) || count($differences) > 0)
-                        return FALSE;
-                        
-                    
-                    
-                                 
-                    /**
-                    * 
-                    * Check for taxonomies match
-                    * 
-                    */
-                    //check for exact taxonomy match
-                    if(count($sort_rules['taxonomy']) > 0)
-                        {
-                            if(APTO_query_utils::tax_queries_count($query->tax_query->queries) > 0)
-                                {
-                                    if(APTO_query_utils::tax_queries_count($query->tax_query->queries) != count($sort_rules['taxonomy']))
-                                        return FALSE;
-                                    
-                                    //check for relation
-                                    if($query->tax_query->relation != $sort_rules['taxonomy_relation'])
-                                        return FALSE;
-                                    
-                                    foreach(APTO_query_utils::get_tax_queries($query->tax_query->queries) as $query_tax)
-                                        {
-                                            $found_match        =   FALSE;
-                                            $query_tax_terms    =   array();
-                                            
-                                            switch ( strtolower($query_tax['field']) )
-                                                {
-                                                    case 'term_id':
-                                                    case 'cat_id':
-                                                    case 'id':
-                                                                $query_tax_terms    = $query_tax['terms'];
-                                                                if(!is_array($query_tax_terms))
-                                                                    $query_tax_terms    =   array($query_tax_terms);
-                                                                break;
-                                                                
-                                                    case 'slug':
-                                                                
-                                                                $query_tax_terms    = $query_tax['terms'];
-                                                                if(!is_array($query_tax_terms))
-                                                                    $query_tax_terms    =   array($query_tax_terms);
-                                                                
-                                                                //switch terms to id 
-                                                                foreach($query_tax_terms as $key => $query_tax_term_slug)
-                                                                    {
-                                                                          $term_data                =   get_term_by('slug', $query_tax_term_slug, $query_tax['taxonomy']);
-                                                                          if  ( is_object( $term_data ) )
-                                                                            $query_tax_terms[$key]    =   $term_data->term_id;
-                                                                    }
-
-                                                                break;
-                                                    case 'name':
-                                                            
-                                                            $query_tax_terms    = $query_tax['terms'];
-                                                            if(!is_array($query_tax_terms))
-                                                                $query_tax_terms    =   array($query_tax_terms);
-                                                            
-                                                            //switch terms to id 
-                                                            foreach($query_tax_terms as $key => $query_tax_term_slug)
-                                                                {
-                                                                      $term_data                =   get_term_by('name', $query_tax_term_slug, $query_tax['taxonomy']);
-                                                                      $query_tax_terms[$key]    =   $term_data->term_id;
-                                                                }
-
-                                                            break;
-                                                            
-                                                    case 'term_taxonomy_id':
-                                                        
-                                                            $query_tax_terms    = $query_tax['terms'];
-                                                            if(!is_array($query_tax_terms))
-                                                                $query_tax_terms    =   array($query_tax_terms);
-                                                            
-                                                            //switch terms to id 
-                                                            foreach($query_tax_terms as $key => $query_tax_term_slug)
-                                                                {
-                                                                      $term_data                =   get_term_by('term_taxonomy_id', $query_tax_term_slug, $query_tax['taxonomy']);
-                                                                      $query_tax_terms[$key]    =   $term_data->term_id;
-                                                                }
-
-                                                        break;
-                                                }
-                                            
-                                            foreach($sort_rules['taxonomy'] as $tax_rule)
-                                                {
-                                                    //check for taxonomy name match
-                                                    if($tax_rule['taxonomy'] != $query_tax['taxonomy'])
-                                                        continue;
-                                                    
-                                                    //check for operator match
-                                                    if($tax_rule['operator'] != $query_tax['operator'])
-                                                        continue;
-                                                        
-                                                    //check for operator match
-                                                    if(isset($query_tax['include_children']) &&  ! empty ( $query_tax['include_children'] )  &&   $this->str_to_bool($tax_rule['include_children']) !== $this->str_to_bool( $query_tax['include_children']) )
-                                                        continue;
-                                                    
-                                                    //check for terms
-                                                    $differences = array_diff($query_tax_terms, $tax_rule['terms']);
-                                                    if(count($query_tax_terms) != count($tax_rule['terms']) || count($differences) > 0)
-                                                        continue;
-                                                        
-                                                    $found_match    =   TRUE;
-                                                }
-                                            
-                                            if($found_match === FALSE)
-                                                return FALSE;
-                                        }
-                                    
-                                }
-                                else
-                                {
-                                    //if sort settings contain taxonomy rules, return false
-                                    if(count($sort_rules['taxonomy'])   >   0)
-                                        return FALSE;                            
-                                }
-                        
-                        }    
-  
-                    
-                            
-                    /**
-                    * 
-                    * Check for meta match
-                    * 
-                    */
-                    //check for exact meta match
-                    
-                    if( isset($sort_rules['meta'])  &&  $partial_match   === FALSE   &&  APTO_query_utils::meta_queries_count($query->meta_query->queries)   !=  count($sort_rules['meta']))
-                        return FALSE;
-                    
-                    if(
-                        ($partial_match   === FALSE   &&  APTO_query_utils::meta_queries_count($query->meta_query->queries) > 0)
-                        ||
-                        //try to ignore meta within queries if sort meta is empty; This trigger only on partial match
-                        (   isset($sort_rules['meta'])  &&  $partial_match   === TRUE   &&  APTO_query_utils::meta_queries_count($query->meta_query->queries) > 0  &&  count($sort_rules['meta'])  >   0)
-                        )
-                        {
-                            if(APTO_query_utils::meta_queries_count($query->meta_query->queries) != count($sort_rules['meta']))
-                                return FALSE;
-                            
-                            //check for relation
-                            if($query->meta_query->relation != $sort_rules['meta_relation'])
-                                return FALSE;
-                            
-                            foreach(APTO_query_utils::get_meta_queries($query->meta_query->queries) as $query_meta)
-                                {
-                                    $found_match = FALSE;
-                                                                   
-                                    foreach($sort_rules['meta'] as $meta_rule)
-                                        {
-                                            $meta_rule  =   $this->meta_data_prepare_value($meta_rule);
-                                            
-                                            //check for taxonomy name match
-                                            if($meta_rule['key'] != $query_meta['key'])
-                                                continue;
-                                            
-                                            //check if value is a string or array
-                                            if((is_array($meta_rule['value'])    &&  !is_array($query_meta['value']))
-                                                ||  (!is_array($meta_rule['value'])    &&  is_array($query_meta['value']))
-                                                )
-                                                continue;
-                                            
-                                            //check for value
-                                            if(is_array($meta_rule['value']))
-                                                {
-                                                    $differences = array_diff($meta_rule['value'], $query_meta['value']);
-                                                    if(count($meta_rule['value']) != count($query_meta['value']) || count($differences) > 0)
-                                                        continue;       
-                                                }
-                                                else
-                                                {
-                                                       
-                                                    if((string)$meta_rule['value'] !== (string)$query_meta['value'])
-                                                        continue;
-                                                }
-                                                
-                                            //check compare if exists
-                                            if(isset($query_meta['compare'])    &&  strtolower($query_meta['compare'])  !=  strtolower($meta_rule['compare']))
-                                                continue;
-                                                
-                                            //check type if exists
-                                            if(isset($query_meta['type'])    &&  strtolower($query_meta['type'])  !=  strtolower($meta_rule['type']))
-                                                continue;
-                                                
-                                            $found_match    =   TRUE;
-                                        }
-                                    
-                                    if($found_match === FALSE)
-                                        return FALSE;
-                                }
-                            
-                        }                    
-     
-                    
-                    
-                    
-                    /**
-                    * 
-                    * Check for conditionals match
-                    * 
-                    */
-                    if(count($sort_settings['_conditionals']) > 0)
-                        {
-                            foreach($sort_settings['_conditionals'] as $conditional_group)
-                                {
-                                    $group_match    =   TRUE;
-                                    foreach($conditional_group as $conditional)
-                                        {
-                                            $value      =   isset($conditional['conditional_value']) ?  $conditional['conditional_value'] :   '';
-                                            $comparison =   isset($conditional['conditional_comparison']) ?  $conditional['conditional_comparison'] :   '';
-                                            $match  =   call_user_func_array($this->conditional_rules->rules[$conditional['conditional_id']]['query_check_callback'], array($comparison, $value, $query));
-                                            if($match   ===  FALSE)
-                                                {
-                                                    $group_match    =   FALSE;
-                                                    break;
-                                                }
-                                        }
-                                        
-                                    if($group_match === TRUE)
-                                        break;
-                                }
-                                
-                            if($group_match === FALSE)
-                                return FALSE;
-
-                        }
-                    
-                    //identify the sort view
-                    $attr = array(
-                                    '_view_selection'   =>  'simple',
-                                    '_view_language'    =>  $this->get_blog_language()
-                                    );
-                    $sort_view_id   =   $this->get_sort_view_id_by_attributes($sortID, $attr);
-                    
-                    if($sort_view_id > 0)
-                        return $sort_view_id;     
-                        else
-                        return FALSE;   
-                }
-                
-            
-            /**
-            * Multiple view match check
+            * Return the automatic order by sort settings
             * 
             * @param mixed $sortID
+            * @param mixed $sort_view_id
+            * @param mixed $orderBy
             * @param mixed $query
             */
-            function sort_multiple_match_check_on_query ( $sortID, $query, $partial_match = FALSE )
+            function query_get_auto_orderby( $sortID, $sort_view_id, $orderBy, $query )
                 {
-                    $sort_settings =   $this->get_sort_settings($sortID);
-                    //check for query rules match
-                    
-                    /**
-                    * 
-                    * Check for post type
-                    * 
-                    */
-                    $query_post_type = $this->query_get_post_types($query, $partial_match);
-                    
-                    //v3.0 try a partial match, for general queries like category term without a post type specification (presuming the category is assigned to multiple post types)
-                    if( count ( $query_post_type ) === 1 &&  strtolower( $query_post_type[ array_keys( $query_post_type )[0] ] ) == 'any')
-                        {
-                            $query_post_type    =   array();
-                            $query_post_type[0] =   'post';
-                        }
-                    
-                    if($partial_match === FALSE)
-                        {
-                            $differences = array_diff($query_post_type, $sort_settings['_rules']['post_type']);
-                            if(count($query_post_type) != count($sort_settings['_rules']['post_type']) || count($differences) > 0)
-                                return FALSE;
-                        }
-                    else
-                        {
-                            if(count(array_intersect($query_post_type, $sort_settings['_rules']['post_type'])) < 1)
-                                return FALSE;        
-                        }
-                    
-                             
-                    //check the taxonomy
-                    $_view_selection    =   '';
-                    //need a single taxonomy to match otherwise a simple sort need to be manually created
-                    //fallback on archive;  This may change later and return FALSE !! 
-                    if(APTO_query_utils::tax_queries_count($query->tax_query->queries) < 1 || APTO_query_utils::tax_queries_count($query->tax_query->queries) > 1)
-                        $_view_selection    =   'archive';
-                        else
-                            {
-                                $tax_queries    =   APTO_query_utils::get_tax_queries($query->tax_query->queries);
-                                reset($tax_queries);
-                                $query_tax      =   current($tax_queries);
-                                $taxonomy       =   $query_tax['taxonomy'];
-                                
-                                $query_tax_terms    =   array();
-                                
-                                //identify the term
-                                switch ( strtolower($query_tax['field']) )
-                                    {
-                                        case 'term_id':
-                                        case 'cat_id':
-                                        case 'id':
-                                                    $query_tax_terms    = $query_tax['terms'];
-                                                    if(!is_array($query_tax_terms))
-                                                        $query_tax_terms    =   array($query_tax_terms);
-                                                    break;
-                                                    
-                                        case 'slug':
-                                                    
-                                                    $query_tax_terms    = $query_tax['terms'];
-                                                    if(!is_array($query_tax_terms))
-                                                        $query_tax_terms    =   array($query_tax_terms);
-                                                    
-                                                    //switch terms to id 
-                                                    foreach($query_tax_terms as $key => $query_tax_term_slug)
-                                                        {
-                                                              $term_data                =   get_term_by('slug', $query_tax_term_slug, $query_tax['taxonomy']);
-                                                              if(isset($term_data->term_id))
-                                                                $query_tax_terms[$key]    =   $term_data->term_id;
-                                                        }
-
-                                                    break;
-                                        case 'name':
-                                                    
-                                                    $query_tax_terms    = $query_tax['terms'];
-                                                    if(!is_array($query_tax_terms))
-                                                        $query_tax_terms    =   array($query_tax_terms);
-                                                    
-                                                    //switch terms to id 
-                                                    foreach($query_tax_terms as $key => $query_tax_term_slug)
-                                                        {
-                                                              $term_data                =   get_term_by('name', $query_tax_term_slug, $query_tax['taxonomy']);
-                                                              $query_tax_terms[$key]    =   $term_data->term_id;
-                                                        }
-
-                                                    break;
-                                                    
-                                        case 'term_taxonomy_id':
-                                                
-                                                $query_tax_terms    = $query_tax['terms'];
-                                                    if(!is_array($query_tax_terms))
-                                                        $query_tax_terms    =   array($query_tax_terms);
-                                                    
-                                                    //switch terms to id 
-                                                    foreach($query_tax_terms as $key => $query_tax_term_slug)
-                                                        {
-                                                              $term_data                =   get_term_by('term_taxonomy_id', $query_tax_term_slug, $query_tax['taxonomy']);
-                                                              $query_tax_terms[$key]    =   $term_data->term_id;
-                                                        }
-
-                                                break;
-                                    }
-                                     
-                                //fallback on archive;  
-                                //This may change later and return FALSE !!    
-                                if(count($query_tax_terms) < 1 || count($query_tax_terms) > 1)
-                                    {
-                                        //check agains the include_children paramether 
-                                        if(count($query_tax_terms) > 1 && $query_tax['include_children'] == FALSE)
-                                            {
-                                                $_view_selection    =   'taxonomy'; 
-                                                 
-                                                reset($query_tax_terms);
-                                                $term_id    =      current($query_tax_terms);
-                                            }
-                                            else
-                                            $_view_selection    =   'archive';
-                                    }
-                                    else
-                                    {
-                                        //check the operator
-                                        //fallback on archive;  //This may change later and return FALSE !!     
-                                        if(!in_array($query_tax['operator'], array('IN', 'AND', 'NOT IN')))
-                                            $_view_selection    =   'archive';
-                                            else
-                                            {
-                                                $_view_selection    =   'taxonomy';
-                                                
-                                                reset($query_tax_terms);
-                                                $term_id    =      current($query_tax_terms);
-                                            }
-                                    }
-                                    
-                                
-                                //Fix the empty taxonomy for some rare queries
-                                If  ( empty ( $taxonomy ) &&     is_object( $term_data ) && isset ( $term_data->taxonomy ) )
-                                    $taxonomy   =   $term_data->taxonomy;
-                                    
-                            }
-                    
-                    /**
-                    * 
-                    * Check for conditionals match
-                    * 
-                    */
-                    if(count($sort_settings['_conditionals']) > 0)
-                        {
-                            foreach($sort_settings['_conditionals'] as $conditional_group)
-                                {
-                                    $group_match    =   TRUE;
-                                    foreach($conditional_group as $conditional)
-                                        {
-                                            $value      =   isset($conditional['conditional_value']) ?  $conditional['conditional_value'] :   '';
-                                            $comparison =   isset($conditional['conditional_comparison']) ?  $conditional['conditional_comparison'] :   '';
-                                            $match  =   call_user_func_array($this->conditional_rules->rules[$conditional['conditional_id']]['query_check_callback'], array($comparison, $value, $query));
-                                            if($match   ===  FALSE)
-                                                {
-                                                    $group_match    =   FALSE;
-                                                    break;
-                                                }
-                                        }
-                                        
-                                    if($group_match === TRUE)
-                                        break;
-                                }
-                                
-                            if($group_match === FALSE)
-                                return FALSE;
-
-                        }
-                    
-                            
-                    //identify the sort view
-                    $attr = array(
-                                    '_view_selection'    =>  $_view_selection
-                                    );
-                    if($_view_selection == 'taxonomy')
-                        {
-                            $attr['_taxonomy']      =   $taxonomy;
-                            $attr['_term_id']       =   $term_id;
-                            $attr['_view_language'] =   $this->get_blog_language();
-                        }
-                    if($_view_selection  ==  'archive')
-                                $attr['_view_language']   =   $this->get_blog_language();                    
-                    $sort_view_id   =   $this->get_sort_view_id_by_attributes($sortID, $attr);
-                    
-                    if($sort_view_id > 0)
-                        return $sort_view_id;     
-                        else
-                        return FALSE;
-                }
-                
-            
-            function meta_data_prepare_value($meta_data)
-                {
-                    if($meta_data['value_type']    ==  'array')
-                        {
-                            $value  =   explode(",", $meta_data['value']);
-                            $value  =   array_map('trim',   $value);
-                            $value  =   array_filter($value);
-                            $meta_data['value']   =   $value;
-                        }
-                        
-                    if( strpos( (string)$meta_data['value'] , '!{' )    ===  0   )
-                        {
-                            $meta_rule_value    =   (string)$meta_data['value'];
-                            preg_match('/!{(.*)}/i', $meta_rule_value, $mathes);
-                            
-                            $meta_rule_value    =   '';
-                            
-                            if ( isset($mathes[1])  &&  ! empty($mathes[1]) )
-                                {
-                                    $code   =   $mathes[1];
-                                    $code   =   trim( $code );
-                                    
-                                    //ensure it ends in a ;
-                                    $code   =   rtrim($code, ';');
-                                    $code   .=  ';';
-                                    
-                                    $meta_rule_value    =   eval( 'return ' . $code );
-                                    if ( $meta_rule_value   === FALSE)
-                                        $meta_rule_value    =   '';
-                                }
-                                
-                            $meta_data['value'] =   $meta_rule_value;
-                            
-                        }
-                        
-                    unset($meta_data['value_type']);
-                    
-                    return $meta_data;                    
-                }
-                
-            function query_get_post_types($query, $_if_empty_set_post_types = FALSE)
-                {
-                    $query_post_types = isset($query->query_vars['post_type']) ? $query->query_vars['post_type'] :   array();
-                    if(!empty($query_post_types) && !is_array($query_post_types))
-                        $query_post_types    =   (array)$query_post_types;
-                    if(empty($query_post_types) && !is_array($query_post_types))
-                        $query_post_types    =   array();
-                        
-                    /**
-                    * 
-                    *   If empty post type query field AND use default category taxonomy, use post
-                    *   To check further
-                    * 
-                    */
-                    if ( empty($query_post_types) && $_if_empty_set_post_types  === FALSE) 
-                        {
-                            $taxonomies =   array();
-                            if(isset($query->tax_query) && isset($query->tax_query->queries))
-                                {
-                                    $taxonomies =   APTO_query_utils::get_query_taxonomies($query->tax_query->queries);
-                                }
-                            
-                            if(count($taxonomies) > 0   && count($taxonomies)   < 2)
-                                {
-                                    reset($taxonomies);
-                                    $query_taxonomy =  current($taxonomies);
-                                    
-                                    if($query_taxonomy  ==  'category')
-                                        $query_post_types[]  =   'post';   
-                                }
-                        }
-                   
-                        
-                    if ( empty($query_post_types) && $_if_empty_set_post_types  === TRUE) 
-                        {
-                            $taxonomies =   array();
-                            if(isset($query->tax_query) && isset($query->tax_query->queries))
-                                {
-                                    $taxonomies =   APTO_query_utils::get_query_taxonomies($query->tax_query->queries);
-                                }
-                            
-                            $ignore = array (
-                                                'revision',
-                                                'nav_menu_item'
-                                                );
-                            foreach ( $this->get_post_types($ignore) as $pt ) 
-                                {
-                                    $object_taxonomies = $pt === 'attachment' ? get_taxonomies_for_attachments() : get_object_taxonomies( $pt );
-                                    if ( array_intersect( $taxonomies, $object_taxonomies ) )
-                                        $query_post_types[] = $pt;
-                                }
-                               
-                            //v3.0  ??????chose the first
-                            /*
-                            if(count($query_post_types) > 1)
-                                $query_post_types  =   array_slice($query_post_types, 0, 1);
-                            */
-                            
-                            if(count($query_post_types) < 1)
-                                $query_post_types[]  =   'post';
-                        }
-                        
-                    
-                    $query_post_types   =   apply_filters('apto/query_get_post_types', $query_post_types, $query, $_if_empty_set_post_types );
-                                            
-                    return  (array)$query_post_types;    
-                }
-            
-            
-            function sticky_posts_clauses_request($query_pieces, $query)
-                {
-                    global $sorts_match_filter__posts_clauses_request;
-                    
-                    //make sure this is applied to correct query; possible a new query has called durring the execution
-                    if ($sorts_match_filter__posts_clauses_request['query_vars_hash'] != $query->query_vars_hash)
-                        return $query_pieces;
-                    
-                    //remove this filter for being triggered again
-                    remove_filter('posts_clauses_request', array($this, 'sticky_posts_clauses_request'), 999);
-                    
-                    //filter the query for unnecesarelly data;  i.e. empty taxonomy rules
-                    $query          =   $this->query_filter_valid_data($query);
-
-                    
-                    //identify the appropiate sort id and sort_view_id which match this query
-                    $sort_view_id   =   $this->query_match_sort_id($query, $sorts_match_filter__posts_clauses_request['filters']);
-                    
                     global $wpdb;
                     
                     $sort_view_settings =   $this->get_sort_view_settings($sort_view_id);
                     
-                    $sort_view_data     =   get_post($sort_view_id);
-                    if($sort_view_data->post_parent > 0)
-                        $sortID             =   $sort_view_data->post_parent;
-                        else
-                        $sortID             =   $sort_view_id;
-                    $sort_settings      =   $this->get_sort_settings($sortID);
+                    //Add falback for multiple 
+                    $data_set = array(
+                                        'order_by'              =>  (array)$sort_view_settings['_auto_order_by'],
+                                        'taxonomy_name'         =>  (array)$sort_view_settings['_auto_taxonomy_name'],
+                                        'custom_field_name'     =>  (array)$sort_view_settings['_auto_custom_field_name'],
+                                        'custom_field_type'     =>  (array)$sort_view_settings['_auto_custom_field_type'],
+                                        'custom_function_name'  =>  (array)$sort_view_settings['_auto_custom_function_name'],
+                                        'order'                 =>  (array)$sort_view_settings['_auto_order']
+                                        );
                     
+                    $new_orderBy    =   '';
+                    $posts_list     =   '';
                     
-                    $new_orderBy    =   $orderBy    =   $query_pieces['orderby'];
-                    
-                    $order_list     =   $this->get_order_list($sort_view_id);
-                    
-                    if (count($order_list) > 0 )
+                    $data_set_key   =   0;
+                    //foreach($data_set['order_by']   as $key =>  $data)
                         {
-                            $query_order = isset($query->query['order']) ? strtoupper($query->query['order']) : 'ASC';
+                            if($new_orderBy != '')
+                                $new_orderBy .= ', ';
                             
-                            //check if the orderby is not menu_order and autosort is turned on to make the order as ASC;  This will fix when use the get_posts() as it send DESC by default
-                            if((!isset($query->query['orderby']) || (isset($query->query['orderby']) && $query->query['orderby'] != 'menu_order'))
-                                && $sort_settings['_autosort'] == "yes")
+                            switch ( $data_set['order_by'][ $data_set_key ] )
                                 {
-                                    $query_order   =   'ASC';   
-                                }
-
-                            //check for bottom append new posts
-                            $new_items_to_bottom    =   $sort_settings['_new_items_to_bottom'];
-                            $new_items_to_bottom    =   apply_filters('apto/new_items_to_bottom', $new_items_to_bottom, $sort_view_id, $query);
-
-                            if($new_items_to_bottom == "yes")
-                                {
-                                    $_order_list = array_reverse($order_list);
-                                    if($query_order == 'DESC')   
-                                        $_order_list = array_reverse($_order_list);
+                                    case '_default_'        :
+                                                                $new_orderBy    =   $orderBy;   
+                                                                break;
                                     
-                                    $new_orderBy = "FIELD(".$wpdb->posts.".ID, ". implode(",", $_order_list) .") DESC, ".$wpdb->posts.".post_date DESC";
-                                }
-                                else
-                                {
-                                    $_order_list = $order_list;
-                                    if($query_order == 'DESC')   
-                                        $_order_list = array_reverse($_order_list);
-                                        
-                                    $new_orderBy = "FIELD(".$wpdb->posts.".ID, ". implode(",", $_order_list) ."), ".$wpdb->posts.".post_date DESC";
-                                }
-                        }
-                        else if($new_orderBy != '')
-                            {
-                                //if use just menu_order, append post_date in case a menu_order haven't been set
-                                $temp_orderBy = $new_orderBy;
-                                $temp_orderBy = str_ireplace("asc", "", $temp_orderBy);
-                                $temp_orderBy = str_ireplace("desc", "", $temp_orderBy);
-                                $temp_orderBy = trim($temp_orderBy);
-                                if($temp_orderBy != $wpdb->posts . '.menu_order')
-                                    {
-                                        unset($temp_orderBy);
-                                    }
-                                    else
-                                    {
-                                        //apply order only when in _archive_
-                                        if ($sort_settings['_view_type'] == 'multiple' && $sort_view_settings['_view_selection'] == 'archive')
-                                            {
-                                                $new_orderBy = $wpdb->posts.".menu_order, " . $wpdb->posts.".post_date ";
-                                                //$new_orderBy .= $query->query_vars['order'];
-                                                $new_orderBy .= "DESC";
-                                            }
-                                            else
-                                            {
-                                                $new_orderBy = $wpdb->posts. ".post_date DESC";   
-                                            }
-                                    }
-                                                        
-                            }
-                        else
-                        {
-                            $new_orderBy = $wpdb->posts.".menu_order, " . $wpdb->posts.".post_date " . $query->query_vars['order'];
-                        }
-                    
-                    
-                    $query_groupby    =   "";
-                    if($query_pieces['groupby'] !=  '')
-                        $query_groupby    =   'GROUP BY ' . $query_pieces['groupby'];
-                        
-                    $query_orderby    =   "";
-                    if($new_orderBy !=  '')
-                        $query_orderby    =   'ORDER BY ' . $new_orderBy;
-                    
-                    //create the sort list
-                    $query_request  = "SELECT ". $query_pieces['distinct'] ." " . $wpdb->posts .".ID FROM " . $wpdb->posts ." " . $query_pieces['join'] ." WHERE 1=1 " . $query_pieces['where'] ." " . $query_groupby . "  " . $query_orderby;
-                    $results = $wpdb->get_results($query_request);
-                    
-                    $order_list =   array();
-                    foreach ($results as $result)
-                        $order_list[] = $result->ID;
-                    
-                    //apply sicky
-                    if(isset($sort_view_settings['_sticky_data']) && is_array($sort_view_settings['_sticky_data']) && count($sort_view_settings['_sticky_data']) > 0)
-                        $order_list     =   $this->order_list_apply_sticky_data( $order_list, $sort_view_settings['_sticky_data'], $sort_view_id );
+                                    case '_random_'         :
+                                                                $new_orderBy .= "RAND()";
+                                                                
+                                                                break;
+                                                                
+                                    case '_taxonomy_'  :
+                                                                $new_orderBy =  $this->query_get_orderby_taxonomy_name( $sort_view_id, $orderBy, $query );
+                                                                                 
+                                                                break;
+                                    
+                                    case '_custom_field_'   :
+                                                                
+                                                                $new_orderBy .=  $this->query_get_orderby_custom_field( $data_set_key, $sort_view_id, $orderBy, $query );
+                           
+                                                                break;
+                                    
+                                    case '_custom_function_'   :
+                                                                
+                                                                $new_orderBy .=  $this->query_get_orderby_custom_function( $data_set_key, $sort_view_id, $orderBy, $query );
+                           
+                                                                break;
+                                                            
+                                    default: 
 
-                    $new_orderBy    =   $this->query_get_new_orderBy($orderBy, $query, $sort_view_id, $order_list);
-                    
-                    $new_orderBy    =   apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query, $order_list );
-                    
-                    //update the orderby piece
-                    $query_pieces['orderby']    =   $new_orderBy;
-                       
-                    return  $query_pieces;   
-                }
-                
-            function get_order_list($sort_view_id)
-                {
-                    global $wpdb;
-                    
-                    $order_list = array();
-                    
-                    $query = "SELECT object_id FROM `". $wpdb->prefix ."apto_sort_list`
-                                    WHERE `sort_view_id`    =   ". $sort_view_id;
-                    $query .= " ORDER BY id ASC";
-                    
-                    $results = $wpdb->get_results($query);
-                    
-                    foreach ($results as $result)
-                        $order_list[] = $result->object_id;
-                        
-                    //$sort_view_settings =   $this->get_sort_view_settings($sort_view_id);
-                    
-                    $order_list = apply_filters('apto/get_order_list', $order_list, $sort_view_id);
-                    
-                    return $order_list;    
-                }
-            
-            
-            
-            /**
-            * Relocate the item if sticky
-            *     
-            * @param mixed $order_list
-            * @param mixed $sticky_data
-            */
-            function order_list_apply_sticky_data( $order_list, $sticky_data, $sort_view_id )
-                {
-                    $updated_order_list     =   array();
-                    
-                    foreach($sticky_data as $key =>  $object_id)
-                        {
-                             if(array_search($object_id, $order_list)   !== FALSE)
-                                $updated_order_list[$key - 1]  =   $object_id;   
-                        }
-                    
-                    
-                    $current_index = 0;
-                    foreach($order_list as $key =>  $object_id)
-                        {
-                            if(array_search($object_id, $updated_order_list)   !== FALSE)
-                                continue;
-                            
-                            while(isset($updated_order_list[$current_index]))
-                                {
-                                    $current_index++;
+                                                                $new_orderBy .= $wpdb->posts .".". $data_set['order_by'][ $data_set_key ] . " " . $data_set['order'][ $data_set_key ];
+                                                                
+                                                                break;
+                                    
                                 }
-                                
-                             $updated_order_list[$current_index]  =   $object_id;   
                         }
+                                        
+                    return $new_orderBy;   
+                    
+                }
+            
                         
-                    ksort($updated_order_list);
-                    
-                    $updated_order_list =   apply_filters( 'apto/order_list/apply_sticky_data', $updated_order_list, $order_list, $sticky_data, $sort_view_id );
-                    
-                    return $updated_order_list;
-                }   
-            
-            
-            
             /**
             * Return the orderby argv for query on a custom field sort
             * 
             * @param mixed $sort_view_id
             * @param mixed $query
             */
-            function query_get_orderby_taxonomy_name ( $data_set_key, $sort_view_id, $orderBy, $query )
+            function query_get_orderby_taxonomy_name ( $sort_view_id, $orderBy, $query )
                 {
                     global $wpdb;
+                    
+                    $data_set_key   =   0;
                         
                     $sort_view_settings =   $this->get_sort_view_settings( $sort_view_id );
                     
@@ -1526,11 +700,13 @@
                     else
                         $_is_archive    =   TRUE;
 
+                    $tax_order  =   $data_set['order'][$data_set_key];
+                        
                     //retrive the terms
                     $args   =   array(
                                'taxonomy'   =>  $taxonomy_name,
                                'orderby'    => 'term_order',
-                               'order'      =>  'ASC'
+                               'order'      =>  $tax_order
                                );
                                
                     if  ( $_is_term ) 
@@ -1568,7 +744,7 @@
                     $sort_view_post     = get_post( $sort_view_id ); 
                     $sort_list_settings = $APTO->functions->get_sort_settings( $sort_view_post->post_parent );
 
-                    do_action( 'apto/query_get_orderby_taxonomy_name/loop/before_terms_posts', $data_set_key, $sort_view_id, $orderBy, $query );
+                    do_action( 'apto/query_get_orderby_taxonomy_name/loop/before_terms_posts', $sort_view_id, $orderBy, $query );
                     
                     $posts_list =   array();
                     foreach ( $terms as  $term )
@@ -1578,7 +754,7 @@
                                            'posts_per_page'    =>  -1,
                                            'fields'            =>  'ids',
                                            'orderby'           =>  'menu_order',
-                                           'order'             =>  'ASC',
+                                           'order'             =>  $tax_order,
                                            'tax_query'         => array(
                                                                            array(
                                                                                'taxonomy' =>   $taxonomy_name,
@@ -1599,33 +775,77 @@
                                     unset ( $found_posts[$key] );
                                 }
                             
-                            $posts_list =   array_merge ( $posts_list , array_values( $found_posts ));
+                            if ( isset ( $data_set['order_by'][ $data_set_key + 1 ] ) )
+                                {
+                                    $sort_by    =   $data_set['order_by'][ $data_set_key + 1 ];
+                                    $order      =   $data_set['order'][ $data_set_key + 1 ];
+                                    
+                                    switch ( $sort_by )
+                                        {
+                                            case '_default_':
+                                                        
+                                                        break;
+                                                        
+                                            case '_random_':
+                                                        
+                                                        shuffle( $found_posts );
+                                                        
+                                                        break;
+                                                        
+                                            default :
+                                                        
+                                                        $mysql_query    =   "SELECT * FROM " . $wpdb->posts . " WHERE ID IN (" . implode( ',', $found_posts )  . ")";
+                                                        $posts_data    =   $wpdb->get_results( $mysql_query );
+                           
+                                                        usort( $posts_data, function ( $a, $b ) use ( $sort_by, $order ) {
+                                                                return $this->sort_objects_list_by( $a, $b, $sort_by, $order );
+                                                            });
+                                                            
+                                                        $found_posts =   array();
+                                                        foreach ( $posts_data  as $post_data )
+                                                            $found_posts[]   =   $post_data->ID;
+                                                            
+                                                        break;
+                                        }
+                                }
+                                                        
+                            $posts_list =   array_merge ( $posts_list , array_values( $found_posts ) );
                         }
 
                     $_SCN_in_the_loop = FALSE;
-                                       
-                    $orderBy    =   '';    
+                    
+                    $new_orderBy    =   '';
                     if (count( $posts_list ) > 0 )
                         {
                                 
                             $counter = 1;
                             $previous_meta_value    =   NULL;  
                             
-                            $orderBy = "CASE ";
+                            $new_orderBy = "CASE ";
                             foreach ( $posts_list as $post_id )
                                 {
-                                    $orderBy .= " WHEN ". $wpdb->posts .".ID = " . $post_id . "  THEN  ". $counter;
+                                    $new_orderBy .= " WHEN ". $wpdb->posts .".ID = " . $post_id . "  THEN  ". $counter;
                                     $counter++;
                                 }
                             
-                            $orderBy .= " ELSE ". $counter ." END";
+                            $new_orderBy .= " ELSE ". $counter ." END";
                         }
                     
+                    return $new_orderBy;
                     
-                    return $orderBy;
                 }
             
-            
+
+            function sort_objects_list_by( $a, $b, $property_name, $order )
+                {
+                    if ($a->$property_name == $b->$property_name)
+                        return 0;
+                    
+                    if ( $order == 'ASC' )        
+                        return ($a->$property_name < $b->$property_name) ? -1 : 1;
+                        else
+                        return ($a->$property_name > $b->$property_name) ? -1 : 1;
+                }
             
             
             /**
@@ -2049,6 +1269,852 @@
                     
                     return $orderBy;
                 }
+                    
+                
+            static function get_sorts_by_filters($sort_filters = array(), $post_column_filters = array())
+                {
+                    $defaults   = array (
+                                            'post_parent'               =>  '0',
+                                            'post_type'                 =>  'apto_sort',
+                                            'post_status'               =>  'publish'
+                                        );
+                    $post_column_filters          = wp_parse_args( $post_column_filters, $defaults );
+                            
+                    
+                    global $APTO;
+                    
+                    //try the cache
+                    $arguments_hash =   md5( serialize($sort_filters) . serialize($post_column_filters) );
+                    if ( $APTO->cache_key_exists( 'sorts_by_filters/' .  $arguments_hash ) )
+                        return $APTO->cache_get_key( 'sorts_by_filters/' .  $arguments_hash );
+                    
+                    //try to identify other sorts which match this
+                            
+                    //get all sort items
+                    //First try the specific / simple sorts then use the multiple / general
+                    global $wpdb;
+                    $mysql_query = "SELECT ". $wpdb->posts .".ID FROM ". $wpdb->posts ;
+                    
+                    if(count($sort_filters) > 0)
+                        {
+                            $q_inner_count  = 1;
+                            foreach($sort_filters as $cf_name =>  $cf_values)
+                                {
+                                    $mysql_query .= " INNER JOIN ". $wpdb->postmeta ." AS PMF". $q_inner_count ." ON (". $wpdb->posts .".ID = PMF" . $q_inner_count ." .post_id) ";
+                                    $q_inner_count++;
+                                }
+                        }
+                        
+                    $mysql_query .= " INNER JOIN ". $wpdb->postmeta ." AS PM2 ON (". $wpdb->posts .".ID = PM2.post_id) 
+                                        
+                                        WHERE 1 = 1 ";
+                    
+                    foreach($post_column_filters as $post_column    =>  $volumn_value)
+                        {
+                            $mysql_query .= " AND " . $wpdb->posts . "." . $post_column ." = '". $volumn_value  ."'" ;
+                        }
+                     
+                    if(count($sort_filters) > 0)
+                        {
+                            $q_inner_count  = 1;
+                            foreach($sort_filters as $cf_name =>  $cf_values)
+                                {
+                                    $mysql_query .= " AND (PMF" . $q_inner_count ." .meta_key = '" . $cf_name . "' AND CAST(PMF". $q_inner_count ." .meta_value AS CHAR) IN ('". implode("', '", $cf_values)  ."'))";
+                                    $q_inner_count++;
+                                }
+                        }
+                                                
+                    $mysql_query .= " AND PM2.meta_key = '_view_type'
+                                                
+                                        GROUP BY ". $wpdb->posts .".ID 
+                                        
+                                        ORDER BY FIELD(PM2.meta_value, 'simple', 'multiple'),  ". $wpdb->posts .".ID ASC  ";
+                    $sort_items =   $wpdb->get_results($mysql_query);   
+                    
+                    //set a cahce for later usage
+                    $APTO->cache_add_key('sorts_by_filters/' . $arguments_hash, $sort_items );
+                    
+                    return $sort_items;
+                    
+                }
+            
+            
+            /**
+            * Simple view match check
+            *     
+            * @param mixed $sortID
+            * @param mixed $query
+            */
+            function sort_simple_match_check_on_query($sortID, $query, $partial_match)
+                {
+                    $sort_settings  =   $this->get_sort_settings($sortID);
+                    $sort_rules     =   $this->get_sort_current_language_rules($sort_settings, FALSE);
+                    if($sort_rules  === FALSE)
+                        return FALSE;
+                    
+                    if( /* $partial_match   === TRUE   &&  */  $this->is_woocommerce( $sortID ))
+                        $sort_rules['taxonomy']     =   APTO_compatibility::woocommerce_query_filter_process ( $sort_rules['taxonomy'] );   
+                                        
+                    //check for query rules match
+                    
+                    /**
+                    * 
+                    * Check for post type
+                    * 
+                    */
+                    $query_post_type = $this->query_get_post_types($query, $partial_match);
+                    
+                    //check for 'any' sort post types
+                    if(array_search('any', $query_post_type) === FALSE  && array_search('any', $sort_rules['post_type']) !== FALSE)
+                        {
+                            $sort_rules['post_type']    =   $this->get_post_types();    
+                        }
+                    $differences = array_diff($query_post_type, $sort_rules['post_type']);
+                    if(count($query_post_type) != count($sort_rules['post_type']) || count($differences) > 0)
+                        return FALSE;
+                        
+                    
+                    
+                                 
+                    /**
+                    * 
+                    * Check for taxonomies match
+                    * 
+                    */
+                    //check for exact taxonomy match
+                    if(count($sort_rules['taxonomy']) > 0)
+                        {
+                            if(APTO_query_utils::tax_queries_count($query->tax_query->queries) > 0)
+                                {
+                                    if(APTO_query_utils::tax_queries_count($query->tax_query->queries) != count($sort_rules['taxonomy']))
+                                        return FALSE;
+                                    
+                                    //check for relation
+                                    if($query->tax_query->relation != $sort_rules['taxonomy_relation'])
+                                        return FALSE;
+                                    
+                                    foreach(APTO_query_utils::get_tax_queries($query->tax_query->queries) as $query_tax)
+                                        {
+                                            $found_match        =   FALSE;
+                                            $query_tax_terms    =   array();
+                                            
+                                            switch ( strtolower($query_tax['field']) )
+                                                {
+                                                    case 'term_id':
+                                                    case 'cat_id':
+                                                    case 'id':
+                                                                $query_tax_terms    = $query_tax['terms'];
+                                                                if(!is_array($query_tax_terms))
+                                                                    $query_tax_terms    =   array($query_tax_terms);
+                                                                break;
+                                                                
+                                                    case 'slug':
+                                                                
+                                                                $query_tax_terms    = $query_tax['terms'];
+                                                                if(!is_array($query_tax_terms))
+                                                                    $query_tax_terms    =   array($query_tax_terms);
+                                                                
+                                                                //switch terms to id 
+                                                                foreach($query_tax_terms as $key => $query_tax_term_slug)
+                                                                    {
+                                                                          $term_data                =   get_term_by('slug', $query_tax_term_slug, $query_tax['taxonomy']);
+                                                                          if  ( is_object( $term_data ) )
+                                                                            $query_tax_terms[$key]    =   $term_data->term_id;
+                                                                    }
+
+                                                                break;
+                                                    case 'name':
+                                                            
+                                                            $query_tax_terms    = $query_tax['terms'];
+                                                            if(!is_array($query_tax_terms))
+                                                                $query_tax_terms    =   array($query_tax_terms);
+                                                            
+                                                            //switch terms to id 
+                                                            foreach($query_tax_terms as $key => $query_tax_term_slug)
+                                                                {
+                                                                      $term_data                =   get_term_by('name', $query_tax_term_slug, $query_tax['taxonomy']);
+                                                                      $query_tax_terms[$key]    =   $term_data->term_id;
+                                                                }
+
+                                                            break;
+                                                            
+                                                    case 'term_taxonomy_id':
+                                                        
+                                                            $query_tax_terms    = $query_tax['terms'];
+                                                            if(!is_array($query_tax_terms))
+                                                                $query_tax_terms    =   array($query_tax_terms);
+                                                            
+                                                            //switch terms to id 
+                                                            foreach($query_tax_terms as $key => $query_tax_term_slug)
+                                                                {
+                                                                      $term_data                =   get_term_by('term_taxonomy_id', $query_tax_term_slug, $query_tax['taxonomy']);
+                                                                      $query_tax_terms[$key]    =   $term_data->term_id;
+                                                                }
+
+                                                        break;
+                                                }
+                                            
+                                            foreach($sort_rules['taxonomy'] as $tax_rule)
+                                                {
+                                                    //check for taxonomy name match
+                                                    if($tax_rule['taxonomy'] != $query_tax['taxonomy'])
+                                                        continue;
+                                                    
+                                                    //check for operator match
+                                                    if($tax_rule['operator'] != $query_tax['operator'])
+                                                        continue;
+                                                        
+                                                    //check for operator match
+                                                    if(isset($query_tax['include_children']) &&  ! empty ( $query_tax['include_children'] )  &&   $this->str_to_bool($tax_rule['include_children']) !== $this->str_to_bool( $query_tax['include_children']) )
+                                                        continue;
+                                                    
+                                                    //check for terms
+                                                    $differences = array_diff($query_tax_terms, $tax_rule['terms']);
+                                                    if(count($query_tax_terms) != count($tax_rule['terms']) || count($differences) > 0)
+                                                        continue;
+                                                        
+                                                    $found_match    =   TRUE;
+                                                }
+                                            
+                                            if($found_match === FALSE)
+                                                return FALSE;
+                                        }
+                                    
+                                }
+                                else
+                                {
+                                    //if sort settings contain taxonomy rules, return false
+                                    if(count($sort_rules['taxonomy'])   >   0)
+                                        return FALSE;                            
+                                }
+                        
+                        }    
+  
+                    
+                            
+                    /**
+                    * 
+                    * Check for meta match
+                    * 
+                    */
+                    //check for exact meta match
+                    
+                    if( isset($sort_rules['meta'])  &&  $partial_match   === FALSE   &&  APTO_query_utils::meta_queries_count($query->meta_query->queries)   !=  count($sort_rules['meta']))
+                        return FALSE;
+                    
+                    if(
+                        ($partial_match   === FALSE   &&  APTO_query_utils::meta_queries_count($query->meta_query->queries) > 0)
+                        ||
+                        //try to ignore meta within queries if sort meta is empty; This trigger only on partial match
+                        (   isset($sort_rules['meta'])  &&  $partial_match   === TRUE   &&  APTO_query_utils::meta_queries_count($query->meta_query->queries) > 0  &&  count($sort_rules['meta'])  >   0)
+                        )
+                        {
+                            if(APTO_query_utils::meta_queries_count($query->meta_query->queries) != count($sort_rules['meta']))
+                                return FALSE;
+                            
+                            //check for relation
+                            if($query->meta_query->relation != $sort_rules['meta_relation'])
+                                return FALSE;
+                            
+                            foreach(APTO_query_utils::get_meta_queries($query->meta_query->queries) as $query_meta)
+                                {
+                                    $found_match = FALSE;
+                                                                   
+                                    foreach($sort_rules['meta'] as $meta_rule)
+                                        {
+                                            $meta_rule  =   $this->meta_data_prepare_value($meta_rule);
+                                            
+                                            //check for taxonomy name match
+                                            if($meta_rule['key'] != $query_meta['key'])
+                                                continue;
+                                            
+                                            //check if value is a string or array
+                                            if((is_array($meta_rule['value'])    &&  !is_array($query_meta['value']))
+                                                ||  (!is_array($meta_rule['value'])    &&  is_array($query_meta['value']))
+                                                )
+                                                continue;
+                                            
+                                            //check for value
+                                            if(is_array($meta_rule['value']))
+                                                {
+                                                    $differences = array_diff($meta_rule['value'], $query_meta['value']);
+                                                    if(count($meta_rule['value']) != count($query_meta['value']) || count($differences) > 0)
+                                                        continue;       
+                                                }
+                                                else
+                                                {
+                                                       
+                                                    if((string)$meta_rule['value'] !== (string)$query_meta['value'])
+                                                        continue;
+                                                }
+                                                
+                                            //check compare if exists
+                                            if(isset($query_meta['compare'])    &&  strtolower($query_meta['compare'])  !=  strtolower($meta_rule['compare']))
+                                                continue;
+                                                
+                                            //check type if exists
+                                            if(isset($query_meta['type'])    &&  strtolower($query_meta['type'])  !=  strtolower($meta_rule['type']))
+                                                continue;
+                                                
+                                            $found_match    =   TRUE;
+                                        }
+                                    
+                                    if($found_match === FALSE)
+                                        return FALSE;
+                                }
+                            
+                        }                    
+     
+                    
+                    
+                    
+                    /**
+                    * 
+                    * Check for conditionals match
+                    * 
+                    */
+                    if(count($sort_settings['_conditionals']) > 0)
+                        {
+                            foreach($sort_settings['_conditionals'] as $conditional_group)
+                                {
+                                    $group_match    =   TRUE;
+                                    foreach($conditional_group as $conditional)
+                                        {
+                                            $value      =   isset($conditional['conditional_value']) ?  $conditional['conditional_value'] :   '';
+                                            $comparison =   isset($conditional['conditional_comparison']) ?  $conditional['conditional_comparison'] :   '';
+                                            $match  =   call_user_func_array($this->conditional_rules->rules[$conditional['conditional_id']]['query_check_callback'], array($comparison, $value, $query));
+                                            if($match   ===  FALSE)
+                                                {
+                                                    $group_match    =   FALSE;
+                                                    break;
+                                                }
+                                        }
+                                        
+                                    if($group_match === TRUE)
+                                        break;
+                                }
+                                
+                            if($group_match === FALSE)
+                                return FALSE;
+
+                        }
+                    
+                    //identify the sort view
+                    $attr = array(
+                                    '_view_selection'   =>  'simple',
+                                    '_view_language'    =>  $this->get_blog_language()
+                                    );
+                    $sort_view_id   =   $this->get_sort_view_id_by_attributes($sortID, $attr);
+                    
+                    if($sort_view_id > 0)
+                        return $sort_view_id;     
+                        else
+                        return FALSE;   
+                }
+                
+            
+            /**
+            * Multiple view match check
+            * 
+            * @param mixed $sortID
+            * @param mixed $query
+            */
+            function sort_multiple_match_check_on_query ( $sortID, $query, $partial_match = FALSE )
+                {
+                    $sort_settings =   $this->get_sort_settings($sortID);
+                    //check for query rules match
+                    
+                    /**
+                    * 
+                    * Check for post type
+                    * 
+                    */
+                    $query_post_type = $this->query_get_post_types($query, $partial_match);
+                    
+                    //v3.0 try a partial match, for general queries like category term without a post type specification (presuming the category is assigned to multiple post types)
+                    if( count ( $query_post_type ) === 1 &&  strtolower( $query_post_type[ array_keys( $query_post_type )[0] ] ) == 'any')
+                        {
+                            $query_post_type    =   array();
+                            $query_post_type[0] =   'post';
+                        }
+                    
+                    if($partial_match === FALSE)
+                        {
+                            $differences = array_diff($query_post_type, $sort_settings['_rules']['post_type']);
+                            if(count($query_post_type) != count($sort_settings['_rules']['post_type']) || count($differences) > 0)
+                                return FALSE;
+                        }
+                    else
+                        {
+                            if(count(array_intersect($query_post_type, $sort_settings['_rules']['post_type'])) < 1)
+                                return FALSE;        
+                        }
+                    
+                             
+                    //check the taxonomy
+                    $_view_selection    =   '';
+                    //need a single taxonomy to match otherwise a simple sort need to be manually created
+                    //fallback on archive;  This may change later and return FALSE !! 
+                    if( APTO_query_utils::tax_queries_count($query->tax_query->queries) < 1 || APTO_query_utils::tax_queries_count($query->tax_query->queries) > 1)
+                        $_view_selection    =   'archive';
+                    
+                    if ( empty ( $_view_selection ) )
+                        {
+                            $tax_queries    =   APTO_query_utils::get_tax_queries($query->tax_query->queries);
+                            reset($tax_queries);
+                            $query_tax      =   current($tax_queries);
+                            $taxonomy       =   $query_tax['taxonomy'];
+                            
+                            $query_tax_terms    =   array();
+                            
+                            //identify the term
+                            switch ( strtolower($query_tax['field']) )
+                                {
+                                    case 'term_id':
+                                    case 'cat_id':
+                                    case 'id':
+                                                $query_tax_terms    = $query_tax['terms'];
+                                                if(!is_array($query_tax_terms))
+                                                    $query_tax_terms    =   array($query_tax_terms);
+                                                break;
+                                                
+                                    case 'slug':
+                                                
+                                                $query_tax_terms    = $query_tax['terms'];
+                                                if(!is_array($query_tax_terms))
+                                                    $query_tax_terms    =   array($query_tax_terms);
+                                                
+                                                //switch terms to id 
+                                                foreach($query_tax_terms as $key => $query_tax_term_slug)
+                                                    {
+                                                          $term_data                =   get_term_by('slug', $query_tax_term_slug, $query_tax['taxonomy']);
+                                                          if(isset($term_data->term_id))
+                                                            $query_tax_terms[$key]    =   $term_data->term_id;
+                                                    }
+
+                                                break;
+                                    case 'name':
+                                                
+                                                $query_tax_terms    = $query_tax['terms'];
+                                                if(!is_array($query_tax_terms))
+                                                    $query_tax_terms    =   array($query_tax_terms);
+                                                
+                                                //switch terms to id 
+                                                foreach($query_tax_terms as $key => $query_tax_term_slug)
+                                                    {
+                                                          $term_data                =   get_term_by('name', $query_tax_term_slug, $query_tax['taxonomy']);
+                                                          $query_tax_terms[$key]    =   $term_data->term_id;
+                                                    }
+
+                                                break;
+                                                
+                                    case 'term_taxonomy_id':
+                                            
+                                            $query_tax_terms    = $query_tax['terms'];
+                                                if(!is_array($query_tax_terms))
+                                                    $query_tax_terms    =   array($query_tax_terms);
+                                                
+                                                //switch terms to id 
+                                                foreach($query_tax_terms as $key => $query_tax_term_slug)
+                                                    {
+                                                          $term_data                =   get_term_by('term_taxonomy_id', $query_tax_term_slug, $query_tax['taxonomy']);
+                                                          $query_tax_terms[$key]    =   $term_data->term_id;
+                                                    }
+
+                                            break;
+                                }
+                                 
+                            //fallback on archive;  
+                            //This may change later and return FALSE !!    
+                            if(count($query_tax_terms) < 1 || count($query_tax_terms) > 1)
+                                {
+                                    //check agains the include_children paramether 
+                                    if(count($query_tax_terms) > 1 && $query_tax['include_children'] == FALSE)
+                                        {
+                                            $_view_selection    =   'taxonomy'; 
+                                             
+                                            reset($query_tax_terms);
+                                            $term_id    =      current($query_tax_terms);
+                                        }
+                                        else
+                                        $_view_selection    =   'archive';
+                                }
+                                else
+                                {
+                                    //check the operator
+                                    //fallback on archive;  //This may change later and return FALSE !!     
+                                    if(!in_array($query_tax['operator'], array('IN', 'AND', 'NOT IN')))
+                                        $_view_selection    =   'archive';
+                                        else
+                                        {
+                                            $_view_selection    =   'taxonomy';
+                                            
+                                            reset($query_tax_terms);
+                                            $term_id    =      current($query_tax_terms);
+                                        }
+                                }
+                                
+                            
+                            //Fix the empty taxonomy for some rare queries
+                            If  ( empty ( $taxonomy ) &&     is_object( $term_data ) && isset ( $term_data->taxonomy ) )
+                                $taxonomy   =   $term_data->taxonomy;
+                                
+                        }
+                    
+                    /**
+                    * 
+                    * Check for conditionals match
+                    * 
+                    */
+                    if(count($sort_settings['_conditionals']) > 0)
+                        {
+                            foreach($sort_settings['_conditionals'] as $conditional_group)
+                                {
+                                    $group_match    =   TRUE;
+                                    foreach($conditional_group as $conditional)
+                                        {
+                                            $value      =   isset($conditional['conditional_value']) ?  $conditional['conditional_value'] :   '';
+                                            $comparison =   isset($conditional['conditional_comparison']) ?  $conditional['conditional_comparison'] :   '';
+                                            $match  =   call_user_func_array($this->conditional_rules->rules[$conditional['conditional_id']]['query_check_callback'], array($comparison, $value, $query));
+                                            if($match   ===  FALSE)
+                                                {
+                                                    $group_match    =   FALSE;
+                                                    break;
+                                                }
+                                        }
+                                        
+                                    if($group_match === TRUE)
+                                        break;
+                                }
+                                
+                            if($group_match === FALSE)
+                                return FALSE;
+
+                        }
+                    
+                            
+                    //identify the sort view
+                    $attr = array(
+                                    '_view_selection'    =>  $_view_selection
+                                    );
+                    if($_view_selection == 'taxonomy')
+                        {
+                            $attr['_taxonomy']      =   $taxonomy;
+                            $attr['_term_id']       =   $term_id;
+                            $attr['_view_language'] =   $this->get_blog_language();
+                        }
+                    if($_view_selection  ==  'archive')
+                                $attr['_view_language']   =   $this->get_blog_language();                    
+                    $sort_view_id   =   $this->get_sort_view_id_by_attributes($sortID, $attr);
+                    
+                    if($sort_view_id > 0)
+                        return $sort_view_id;     
+                        else
+                        return FALSE;
+                }
+                
+            
+            function meta_data_prepare_value($meta_data)
+                {
+                    if($meta_data['value_type']    ==  'array')
+                        {
+                            $value  =   explode(",", $meta_data['value']);
+                            $value  =   array_map('trim',   $value);
+                            $value  =   array_filter($value);
+                            $meta_data['value']   =   $value;
+                        }
+                        
+                    if( strpos( (string)$meta_data['value'] , '!{' )    ===  0   )
+                        {
+                            $meta_rule_value    =   (string)$meta_data['value'];
+                            preg_match('/!{(.*)}/i', $meta_rule_value, $mathes);
+                            
+                            $meta_rule_value    =   '';
+                            
+                            if ( isset($mathes[1])  &&  ! empty($mathes[1]) )
+                                {
+                                    $code   =   $mathes[1];
+                                    $code   =   trim( $code );
+                                    
+                                    //ensure it ends in a ;
+                                    $code   =   rtrim($code, ';');
+                                    $code   .=  ';';
+                                    
+                                    $meta_rule_value    =   eval( 'return ' . $code );
+                                    if ( $meta_rule_value   === FALSE)
+                                        $meta_rule_value    =   '';
+                                }
+                                
+                            $meta_data['value'] =   $meta_rule_value;
+                            
+                        }
+                        
+                    unset($meta_data['value_type']);
+                    
+                    return $meta_data;                    
+                }
+                
+            function query_get_post_types($query, $_if_empty_set_post_types = FALSE)
+                {
+                    $query_post_types = isset($query->query_vars['post_type']) ? $query->query_vars['post_type'] :   array();
+                    if(!empty($query_post_types) && !is_array($query_post_types))
+                        $query_post_types    =   (array)$query_post_types;
+                    if(empty($query_post_types) && !is_array($query_post_types))
+                        $query_post_types    =   array();
+                        
+                    /**
+                    * 
+                    *   If empty post type query field AND use default category taxonomy, use post
+                    *   To check further
+                    * 
+                    */
+                    if ( empty($query_post_types) && $_if_empty_set_post_types  === FALSE) 
+                        {
+                            $taxonomies =   array();
+                            if(isset($query->tax_query) && isset($query->tax_query->queries))
+                                {
+                                    $taxonomies =   APTO_query_utils::get_query_taxonomies($query->tax_query->queries);
+                                }
+                            
+                            if(count($taxonomies) > 0   && count($taxonomies)   < 2)
+                                {
+                                    reset($taxonomies);
+                                    $query_taxonomy =  current($taxonomies);
+                                    
+                                    if($query_taxonomy  ==  'category')
+                                        $query_post_types[]  =   'post';   
+                                }
+                        }
+                   
+                        
+                    if ( empty($query_post_types) && $_if_empty_set_post_types  === TRUE) 
+                        {
+                            $taxonomies =   array();
+                            if(isset($query->tax_query) && isset($query->tax_query->queries))
+                                {
+                                    $taxonomies =   APTO_query_utils::get_query_taxonomies($query->tax_query->queries);
+                                }
+                            
+                            $ignore = array (
+                                                'revision',
+                                                'nav_menu_item'
+                                                );
+                            foreach ( $this->get_post_types($ignore) as $pt ) 
+                                {
+                                    $object_taxonomies = $pt === 'attachment' ? get_taxonomies_for_attachments() : get_object_taxonomies( $pt );
+                                    if ( array_intersect( $taxonomies, $object_taxonomies ) )
+                                        $query_post_types[] = $pt;
+                                }
+                               
+                            //v3.0  ??????chose the first
+                            /*
+                            if(count($query_post_types) > 1)
+                                $query_post_types  =   array_slice($query_post_types, 0, 1);
+                            */
+                            
+                            if(count($query_post_types) < 1)
+                                $query_post_types[]  =   'post';
+                        }
+                        
+                    
+                    $query_post_types   =   apply_filters('apto/query_get_post_types', $query_post_types, $query, $_if_empty_set_post_types );
+                                            
+                    return  (array)$query_post_types;    
+                }
+            
+            
+            function sticky_posts_clauses_request($query_pieces, $query)
+                {
+                    global $sorts_match_filter__posts_clauses_request;
+                    
+                    //make sure this is applied to correct query; possible a new query has called durring the execution
+                    if ($sorts_match_filter__posts_clauses_request['query_vars_hash'] != $query->query_vars_hash)
+                        return $query_pieces;
+                    
+                    //remove this filter for being triggered again
+                    remove_filter('posts_clauses_request', array($this, 'sticky_posts_clauses_request'), 999);
+                    
+                    //filter the query for unnecesarelly data;  i.e. empty taxonomy rules
+                    $query          =   $this->query_filter_valid_data($query);
+
+                    
+                    //identify the appropiate sort id and sort_view_id which match this query
+                    $sort_view_id   =   $this->query_match_sort_id($query, $sorts_match_filter__posts_clauses_request['filters']);
+                    
+                    global $wpdb;
+                    
+                    $sort_view_settings =   $this->get_sort_view_settings($sort_view_id);
+                    
+                    $sort_view_data     =   get_post($sort_view_id);
+                    if($sort_view_data->post_parent > 0)
+                        $sortID             =   $sort_view_data->post_parent;
+                        else
+                        $sortID             =   $sort_view_id;
+                    $sort_settings      =   $this->get_sort_settings($sortID);
+                    
+                    
+                    $new_orderBy    =   $orderBy    =   $query_pieces['orderby'];
+                    
+                    $order_list     =   $this->get_order_list($sort_view_id);
+                    
+                    if (count($order_list) > 0 )
+                        {
+                            $query_order = isset($query->query['order']) ? strtoupper($query->query['order']) : 'ASC';
+                            
+                            //check if the orderby is not menu_order and autosort is turned on to make the order as ASC;  This will fix when use the get_posts() as it send DESC by default
+                            if((!isset($query->query['orderby']) || (isset($query->query['orderby']) && $query->query['orderby'] != 'menu_order'))
+                                && $sort_settings['_autosort'] == "yes")
+                                {
+                                    $query_order   =   'ASC';   
+                                }
+
+                            //check for bottom append new posts
+                            $new_items_to_bottom    =   $sort_settings['_new_items_to_bottom'];
+                            $new_items_to_bottom    =   apply_filters('apto/new_items_to_bottom', $new_items_to_bottom, $sort_view_id, $query);
+
+                            if($new_items_to_bottom == "yes")
+                                {
+                                    $_order_list = array_reverse($order_list);
+                                    if($query_order == 'DESC')   
+                                        $_order_list = array_reverse($_order_list);
+                                    
+                                    $new_orderBy = "FIELD(".$wpdb->posts.".ID, ". implode(",", $_order_list) .") DESC, ".$wpdb->posts.".post_date DESC";
+                                }
+                                else
+                                {
+                                    $_order_list = $order_list;
+                                    if($query_order == 'DESC')   
+                                        $_order_list = array_reverse($_order_list);
+                                        
+                                    $new_orderBy = "FIELD(".$wpdb->posts.".ID, ". implode(",", $_order_list) ."), ".$wpdb->posts.".post_date DESC";
+                                }
+                        }
+                        else if($new_orderBy != '')
+                            {
+                                //if use just menu_order, append post_date in case a menu_order haven't been set
+                                $temp_orderBy = $new_orderBy;
+                                $temp_orderBy = str_ireplace("asc", "", $temp_orderBy);
+                                $temp_orderBy = str_ireplace("desc", "", $temp_orderBy);
+                                $temp_orderBy = trim($temp_orderBy);
+                                if($temp_orderBy != $wpdb->posts . '.menu_order')
+                                    {
+                                        unset($temp_orderBy);
+                                    }
+                                    else
+                                    {
+                                        //apply order only when in _archive_
+                                        if ($sort_settings['_view_type'] == 'multiple' && $sort_view_settings['_view_selection'] == 'archive')
+                                            {
+                                                $new_orderBy = $wpdb->posts.".menu_order, " . $wpdb->posts.".post_date ";
+                                                //$new_orderBy .= $query->query_vars['order'];
+                                                $new_orderBy .= "DESC";
+                                            }
+                                            else
+                                            {
+                                                $new_orderBy = $wpdb->posts. ".post_date DESC";   
+                                            }
+                                    }
+                                                        
+                            }
+                        else
+                        {
+                            $new_orderBy = $wpdb->posts.".menu_order, " . $wpdb->posts.".post_date " . $query->query_vars['order'];
+                        }
+                    
+                    
+                    $query_groupby    =   "";
+                    if($query_pieces['groupby'] !=  '')
+                        $query_groupby    =   'GROUP BY ' . $query_pieces['groupby'];
+                        
+                    $query_orderby    =   "";
+                    if($new_orderBy !=  '')
+                        $query_orderby    =   'ORDER BY ' . $new_orderBy;
+                    
+                    //create the sort list
+                    $query_request  = "SELECT ". $query_pieces['distinct'] ." " . $wpdb->posts .".ID FROM " . $wpdb->posts ." " . $query_pieces['join'] ." WHERE 1=1 " . $query_pieces['where'] ." " . $query_groupby . "  " . $query_orderby;
+                    $results = $wpdb->get_results($query_request);
+                    
+                    $order_list =   array();
+                    foreach ($results as $result)
+                        $order_list[] = $result->ID;
+                    
+                    //apply sicky
+                    if(isset($sort_view_settings['_sticky_data']) && is_array($sort_view_settings['_sticky_data']) && count($sort_view_settings['_sticky_data']) > 0)
+                        $order_list     =   $this->order_list_apply_sticky_data( $order_list, $sort_view_settings['_sticky_data'], $sort_view_id );
+
+                    $new_orderBy    =   $this->query_get_new_orderBy($orderBy, $query, $sort_view_id, $order_list);
+                    
+                    $new_orderBy    =   apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query, $order_list );
+                    
+                    //update the orderby piece
+                    $query_pieces['orderby']    =   $new_orderBy;
+                       
+                    return  $query_pieces;   
+                }
+                
+            function get_order_list($sort_view_id)
+                {
+                    global $wpdb;
+                    
+                    $order_list = array();
+                    
+                    $query = "SELECT object_id FROM `". $wpdb->prefix ."apto_sort_list`
+                                    WHERE `sort_view_id`    =   ". $sort_view_id;
+                    $query .= " ORDER BY id ASC";
+                    
+                    $results = $wpdb->get_results($query);
+                    
+                    foreach ($results as $result)
+                        $order_list[] = $result->object_id;
+                        
+                    //$sort_view_settings =   $this->get_sort_view_settings($sort_view_id);
+                    
+                    $order_list = apply_filters('apto/get_order_list', $order_list, $sort_view_id);
+                    
+                    return $order_list;    
+                }
+            
+            
+            
+            /**
+            * Relocate the item if sticky
+            *     
+            * @param mixed $order_list
+            * @param mixed $sticky_data
+            */
+            function order_list_apply_sticky_data( $order_list, $sticky_data, $sort_view_id )
+                {
+                    $updated_order_list     =   array();
+                    
+                    foreach($sticky_data as $key =>  $object_id)
+                        {
+                             if(array_search($object_id, $order_list)   !== FALSE)
+                                $updated_order_list[$key - 1]  =   $object_id;   
+                        }
+                    
+                    
+                    $current_index = 0;
+                    foreach($order_list as $key =>  $object_id)
+                        {
+                            if(array_search($object_id, $updated_order_list)   !== FALSE)
+                                continue;
+                            
+                            while(isset($updated_order_list[$current_index]))
+                                {
+                                    $current_index++;
+                                }
+                                
+                             $updated_order_list[$current_index]  =   $object_id;   
+                        }
+                        
+                    ksort($updated_order_list);
+                    
+                    $updated_order_list =   apply_filters( 'apto/order_list/apply_sticky_data', $updated_order_list, $order_list, $sticky_data, $sort_view_id );
+                    
+                    return $updated_order_list;
+                }   
+            
+            
             
             
             /**
@@ -3078,48 +3144,7 @@
             
                     return $args;
                 }
-                
-                
-           /**
-            * 
-            * 
-            */
-           function wp_ecommerce_is_draganddrop()
-                {
-                    $wpec_orderby = get_option( 'wpsc_sort_by' );
-                    if ($wpec_orderby != "dragndrop")
-                        return FALSE;
-                        
-                    return TRUE;
-                }
-                
-                
-           /**
-            * WP E-Commerce Order Update 
-            * 
-            * @param mixed $orderBy
-            * @param mixed $query
-            */
-           function wp_ecommerce_orderby($orderBy, $query)
-                {
-                    //only for non-admin
-                    if (is_admin())
-                        return $orderBy;
-                    
-                    if (!apto_is_plugin_active('wp-e-commerce/wp-shopping-cart.php') || ($query->is_archive('wpsc-product') === FALSE && $query->is_tax('wpsc_product_category') === FALSE))
-                        return $orderBy;
-                      
-                    if($this->wp_ecommerce_is_draganddrop() === FALSE)
-                        return $orderBy;
-
-                    //always use ascending
-                    $query->query['order']  =   'ASC';
-                    $orderBy = $this->query_get_orderby('menu_order', $query);
-
-                    return $orderBy;
-                }
-                
-                
+               
                 
            function is_BBPress_topic_simple($sortID)
                 {

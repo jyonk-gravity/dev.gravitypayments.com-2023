@@ -2,7 +2,9 @@
 
     if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-    //v2.1.1
+    /**
+    * v2.1.6
+    */
     class APTO_CodeAutoUpdate
          {
 
@@ -41,6 +43,11 @@
                      
                      global $wp_version;
                      
+                     //check if server was busy
+                     $busy  =   get_site_transient ( 'apto-check_for_plugin_update__server_busy' );
+                     if ( ! empty ( $busy ) )
+                        return $checked_data;
+                     
                      // Start checking for an update
                      $request_uri = $this->api_url . '?' . http_build_query( $request_string , '', '&');
                      
@@ -56,15 +63,23 @@
                                 $data   =   $APTO_UpdateData['apto-check_for_plugin_update_' . md5( $request_uri )];   
                         }
                      
+                     $refresh   =   FALSE;
                      if  ( $data    === FALSE )
                          {
+                             $refresh   =   TRUE;
+                             
                              $data = wp_remote_get( $request_uri, array(
                                                                                 'timeout'     => 10,
                                                                                 'user-agent'  => 'WordPress/' . $wp_version . '; APTO/' . APTO_VERSION .'; ' . get_bloginfo( 'url' ),
                                                                                 ) );
                              
                              if(is_wp_error( $data ) || $data['response']['code'] != 200)
-                                return $checked_data;
+                                {
+                                    //try again in few hours
+                                    set_site_transient( 'apto-check_for_plugin_update__server_busy' , '1', ( 60 * 60 * 4 ) +  rand ( 100, 36000 ) );
+                                    
+                                    return $checked_data;
+                                }
                                 
                              set_site_transient( 'apto-check_for_plugin_update_' . md5( $request_uri ), $data, ( 60 * 60 * 48 ) +  rand ( 100, 36000 ) );
                              
@@ -72,7 +87,7 @@
                                 $APTO_UpdateData['apto-check_for_plugin_update_' . md5( $request_uri )]    =   $data;                             
                          }
                             
-                     $response_block = json_decode($data['body']);
+                     $response_block = json_decode( wp_remote_retrieve_body( $data ) );
                       
                      if(!is_array($response_block) || count($response_block) < 1)
                         return $checked_data;
@@ -82,7 +97,17 @@
                      
                      $response  =   $this->postprocess_response( $response_block );
                      if ( $response ) 
-                        $checked_data->response[$this->plugin] = $response;
+                        {
+                            $checked_data->response[$this->plugin] = $response;
+                            
+                            //update any licensing data
+                            if ( $refresh   &&  isset ( $response->licence_status ) )
+                                {
+                                    $this->licence['licence_status']    =   $response->licence_status;
+                                    $this->licence['licence_expire']    =   $response->licence_expire;
+                                    $this->wph->licence->update_licence_data( $this->licence );
+                                }   
+                        }
                         
                      return $checked_data;
                  }

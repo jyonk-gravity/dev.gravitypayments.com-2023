@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'quadlayers/search-exclude',
-        'pretty_version' => 'v2.0.5',
-        'version' => '2.0.5.0',
-        'reference' => '7c5efb4b33ad314ad462ea3c448b4816cc551125',
+        'pretty_version' => 'v2.0.6',
+        'version' => '2.0.6.0',
+        'reference' => '89d62461ca213a21fd6ed3ebba540fb0b52b9db6',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'automattic/jetpack-assets' => array(
-            'pretty_version' => 'v1.18.11',
-            'version' => '1.18.11.0',
-            'reference' => '77517baf73271ba41dfda879c5e948ce90b883ae',
+            'pretty_version' => 'v1.18.14',
+            'version' => '1.18.14.0',
+            'reference' => 'fd16259b627c9f8d658123bda7699131e3cd31c3',
             'type' => 'jetpack-library',
             'install_path' => __DIR__ . '/../../jetpack_vendor/automattic/jetpack-assets',
             'aliases' => array(),
@@ -38,9 +38,9 @@
             'dev_requirement' => false,
         ),
         'quadlayers/search-exclude' => array(
-            'pretty_version' => 'v2.0.5',
-            'version' => '2.0.5.0',
-            'reference' => '7c5efb4b33ad314ad462ea3c448b4816cc551125',
+            'pretty_version' => 'v2.0.6',
+            'version' => '2.0.6.0',
+            'reference' => '89d62461ca213a21fd6ed3ebba540fb0b52b9db6',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

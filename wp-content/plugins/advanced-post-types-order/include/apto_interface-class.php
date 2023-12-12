@@ -1509,21 +1509,25 @@ class APTO_interface
                                                             {
                                                                 $options['data_set']    =   array(
                                                                                                             'order_by'              =>  $data_set['order_by'][$key],
-                                                                                                            'taxonomy_name'         =>  $data_set['taxonomy_name'][$key],
-                                                                                                            'custom_field_name'     =>  $data_set['custom_field_name'][$key],
-                                                                                                            'custom_field_type'     =>  $data_set['custom_field_type'][$key],
-                                                                                                            'custom_function_name'  =>  $data_set['custom_function_name'][$key],
+                                                                                                            'taxonomy_name'         =>  ( isset ( $data_set['taxonomy_name'][$key] )          ?   $data_set['taxonomy_name'][$key]        :   '' ),
+                                                                                                            'custom_field_name'     =>  ( isset ( $data_set['custom_field_name'][$key] )      ?   $data_set['custom_field_name'][$key]    :   '' ),
+                                                                                                            'custom_field_type'     =>  ( isset ( $data_set['custom_field_type'][$key] )      ?   $data_set['custom_field_type'][$key]    :   '' ),
+                                                                                                            'custom_function_name'  =>  ( isset ( $data_set['custom_function_name'][$key] )   ?   $data_set['custom_function_name'][$key] :   '' ),
                                                                                                             'order'                 =>  $data_set['order'][$key],
                                                                                                             );
                                                             }
 
-                                                    echo $this->interface_helper->html_automatic_add_falback_order ( $options, $this->current_sort_view_ID );
+                                                    $partial_output =   FALSE;
+                                                    if ( $options['group_id']   >   1 )
+                                                        $partial_output =   TRUE;        
+                                                        
+                                                    echo $this->interface_helper->html_automatic_add_falback_order ( $options, $this->current_sort_view_ID, $partial_output );
                                                 }
                                         ?>
                                     
                                       
                                         
-                                        <tr id="automatic_insert_mark">
+                                        <tr id="automatic_insert_mark"<?php  if ( $options['data_set']['order_by'] != '_taxonomy_' ) { echo ' style="display: none"'; }   ?>>
                                             <td class="label">&nbsp;</td>
                                             <td>
                                                 <a onclick="APTO.AddFallBackAutomaticOrder()" href="javascript: void(0)" class="button-secondary"><?php _e( "Add Fallback", 'apto' ) ?></a> &nbsp;&nbsp;<img class="ajax_loading" src="<?php echo APTO_URL ?>/images/ajax-loader.gif" alt="Loading" />
@@ -1551,12 +1555,15 @@ class APTO_interface
                                         <tr>
                                             <td class="label">
                                                 <label for=""><?php _e( "Batch Terms Automatic Update", 'apto' ) ?></label>
-                                                <p class="description"><?php _e( "<b>WARNING!</b></i> using this option all existing", 'apto' ) ?> <?php 
+                                                <p class="description"><?php _e( "<b>WARNING!</b></i> using this option all existing childs terms of the current", 'apto' ) ?> <?php 
                                                     
-                                                    $current_taxonomy_info = get_taxonomy($this->current_sort_view_settings['_taxonomy']);
-                                                    echo $current_taxonomy_info->label;
+                                                    $term_data  =   get_term ( $this->current_sort_view_settings['_term_id'], $this->current_sort_view_settings['_taxonomy'] );
+                                                    echo '<b>' . ucfirst ( $term_data->name ) . '</b> ';
                                                     
-                                                    ?> <?php _e( "terms order type will update to Automatic Order and change for current settings.", 'apto' ) ?> <?php _e( "Existing manual/custom sort lists will be kept, but the order type will be switched to Automatic Order.", 'apto' ) ?></p>
+                                                    $current_taxonomy_info = get_taxonomy( $this->current_sort_view_settings['_taxonomy'] );
+                                                    echo $current_taxonomy_info->labels->singular_name;
+
+                                                    ?> <?php _e( "will update to Automatic Order and change for current settings.", 'apto' ) ?> <?php _e( "Existing manual/custom sort lists will be kept, but the order type will be switched to Automatic Order.", 'apto' ) ?></p>
                                             </td>
                                             <td>
                                                 <input type="radio" checked="checked" value="no" name="batch_order_update" />

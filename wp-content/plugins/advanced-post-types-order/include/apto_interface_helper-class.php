@@ -754,7 +754,7 @@
                     $sort_view_id   =   $_POST['sort_view_ID'];
                     
                     $order_by               =   array_values($_POST['auto_order_by']);
-                    $taxonomy_name          =   array_values($_POST['auto_taxonomy_name']);
+                    $taxonomy_name          =   isset ( $_POST['auto_taxonomy_name'] )  ?   array_values($_POST['auto_taxonomy_name'])  :   array();
                     $custom_field_name      =   array_values($_POST['auto_custom_field_name']);
                     $custom_field_type      =   array_values($_POST['auto_custom_field_type']);
                     $custom_function_name   =   array_values($_POST['auto_custom_function_name']);
@@ -1711,7 +1711,7 @@
                     // Parse incoming $args into an array and merge it with $defaults
                     $options = wp_parse_args( $options, $defaults );   
                     
-                    $html_data  =    $this->html_automatic_add_falback_order ( $options, $this->current_sort_view_ID );
+                    $html_data  =    $this->html_automatic_add_falback_order ( $options, $this->current_sort_view_ID, TRUE );
                     
                     $this->response['html']             =   $html_data;
                     $this->response['group_id']         =   $options['group_id'];
@@ -1721,7 +1721,7 @@
                 }
                 
                 
-            function html_automatic_add_falback_order( $options, $sort_view_ID )
+            function html_automatic_add_falback_order( $options, $sort_view_ID, $partial = FALSE )
                 {
                     $defaults = array (
                                              'default'              =>  FALSE,
@@ -1786,77 +1786,80 @@
                                 
                                 <?php
                                 
-                                $view_selection   =   get_post_meta( $sort_view_ID,  '_view_selection', TRUE);
-                                if ( $view_selection    ==   'archive' )
+                                if ( ! $partial )
                                     {
-                                    ?>
-                                        <input type="radio" id="auto_order_by_taxonomy_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_taxonomy_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_taxonomy_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
-                                        <label for="auto_order_by_taxonomy_<?php echo $options['group_id'] ?>"><?php _e( "Taxonomy", 'apto' ) ?></label><br><br>
-                                        <div id="apto_taxonomy_area_<?php echo $options['group_id'] ?>" <?php
-                                            if ($options['data_set']['order_by'] != '_taxonomy_')
+                                
+                                        $view_selection   =   get_post_meta( $sort_view_ID,  '_view_selection', TRUE);
+                                        if ( $view_selection    ==   'archive' )
+                                            {
+                                            ?>
+                                                <input type="radio" id="auto_order_by_taxonomy_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_taxonomy_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_taxonomy_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
+                                                <label for="auto_order_by_taxonomy_<?php echo $options['group_id'] ?>"><?php _e( "Taxonomy", 'apto' ) ?></label><br><br>
+                                                <div id="apto_taxonomy_area_<?php echo $options['group_id'] ?>" <?php
+                                                    if ($options['data_set']['order_by'] != '_taxonomy_')
+                                                        echo 'style="display: none"';
+                                                ?> class="toggle_area">
+                                                    <input id="auto_taxonomy_name_<?php echo $options['group_id'] ?>" type="text" placeholder="Taxonomy Slug" class="regular-text custom-field-text" value="<?php echo $options['data_set']['taxonomy_name'] ?>" name="auto_taxonomy_name[<?php echo $options['group_id'] ?>]"><br /><br />
+                                                </div> 
+                                            <?php
+                                            }
+                                        
+                                        ?>
+                                        
+                                        <input type="radio" id="auto_order_by_custom_field_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_custom_field_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_custom_field_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
+                                        <label for="auto_order_by_custom_field_<?php echo $options['group_id'] ?>"><?php _e( "Custom Field", 'apto' ) ?></label><br>
+                                        <div id="apto_custom_field_area_<?php echo $options['group_id'] ?>" <?php
+                                            if ($options['data_set']['order_by'] != '_custom_field_')
                                                 echo 'style="display: none"';
                                         ?> class="toggle_area">
-                                            <input id="auto_taxonomy_name_<?php echo $options['group_id'] ?>" type="text" placeholder="Taxonomy Slug" class="regular-text custom-field-text" value="<?php echo $options['data_set']['taxonomy_name'] ?>" name="auto_taxonomy_name[<?php echo $options['group_id'] ?>]"><br /><br />
-                                        </div> 
-                                    <?php
-                                    }
-                                
-                                ?>
-                                
-                                <input type="radio" id="auto_order_by_custom_field_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_custom_field_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_custom_field_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
-                                <label for="auto_order_by_custom_field_<?php echo $options['group_id'] ?>"><?php _e( "Custom Field", 'apto' ) ?></label><br>
-                                <div id="apto_custom_field_area_<?php echo $options['group_id'] ?>" <?php
-                                    if ($options['data_set']['order_by'] != '_custom_field_')
-                                        echo 'style="display: none"';
-                                ?> class="toggle_area">
-                                    <table class="apto_input inner_table widefat">
-                                        <tbody>
-                                            <tr class="alt"><td>
-                                                <h4><?php _e( "Field Name", 'apto' ) ?></h4>
-                                                <p class="description"><?php _e( "The name of custom field", 'apto' ) ?></p>
-                                                <input id="auto_custom_field_name_<?php echo $options['group_id'] ?>" type="text" class="regular-text custom-field-text" value="<?php echo $options['data_set']['custom_field_name'] ?>" name="auto_custom_field_name[<?php echo $options['group_id'] ?>]">
-                                            </td></tr>
+                                            <table class="apto_input inner_table widefat">
+                                                <tbody>
+                                                    <tr class="alt"><td>
+                                                        <h4><?php _e( "Field Name", 'apto' ) ?></h4>
+                                                        <p class="description"><?php _e( "The name of custom field", 'apto' ) ?></p>
+                                                        <input id="auto_custom_field_name_<?php echo $options['group_id'] ?>" type="text" class="regular-text custom-field-text" value="<?php echo $options['data_set']['custom_field_name'] ?>" name="auto_custom_field_name[<?php echo $options['group_id'] ?>]">
+                                                    </td></tr>
+                                                    
+                                                    <tr class="alt"><td>
+                                                        <h4><?php _e( "Field Type", 'apto' ) ?></h4>
+                                                        <p class="description"><?php _e( "MySql Type of field, more details at", 'apto' ) ?> <a href="http://dev.mysql.com/doc/refman/5.0/en/cast-functions.html" target="_blank"><?php _e( "Cast Functions and Operators", 'apto' ) ?></a></p>
+                                                        
+                                                        <input type="radio" id="custom_field_type_none_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'none' || $options['data_set']['custom_field_type'] == '') {echo 'checked="checked"'; } ?> value="none" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_none_<?php echo $options['group_id'] ?>"><?php _e( "None / Default", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'SIGNED') {echo 'checked="checked"'; } ?> value="SIGNED" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Signed (Integer)", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'UNSIGNED') {echo 'checked="checked"'; } ?> value="UNSIGNED" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Unsigned (Integer)", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'float') {echo 'checked="checked"'; } ?> value="float" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Float (Decimal)", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_date_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'DATE') {echo 'checked="checked"'; } ?> value="DATE" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_date_<?php echo $options['group_id'] ?>"><?php _e( "Date", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_datetime_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'DATETIME') {echo 'checked="checked"'; } ?> value="DATETIME" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_datetime_<?php echo $options['group_id'] ?>"><?php _e( "Datetime", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_time_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'TIME') {echo 'checked="checked"'; } ?> value="TIME" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_time_<?php echo $options['group_id'] ?>"><?php _e( "Time", 'apto' ) ?></label><br>
+                                                        
+                                                    </td></tr>
                                             
-                                            <tr class="alt"><td>
-                                                <h4><?php _e( "Field Type", 'apto' ) ?></h4>
-                                                <p class="description"><?php _e( "MySql Type of field, more details at", 'apto' ) ?> <a href="http://dev.mysql.com/doc/refman/5.0/en/cast-functions.html" target="_blank"><?php _e( "Cast Functions and Operators", 'apto' ) ?></a></p>
-                                                
-                                                <input type="radio" id="custom_field_type_none_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'none' || $options['data_set']['custom_field_type'] == '') {echo 'checked="checked"'; } ?> value="none" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_none_<?php echo $options['group_id'] ?>"><?php _e( "None / Default", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'SIGNED') {echo 'checked="checked"'; } ?> value="SIGNED" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Signed (Integer)", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'UNSIGNED') {echo 'checked="checked"'; } ?> value="UNSIGNED" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Unsigned (Integer)", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'float') {echo 'checked="checked"'; } ?> value="float" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Float (Decimal)", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_date_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'DATE') {echo 'checked="checked"'; } ?> value="DATE" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_date_<?php echo $options['group_id'] ?>"><?php _e( "Date", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_datetime_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'DATETIME') {echo 'checked="checked"'; } ?> value="DATETIME" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_datetime_<?php echo $options['group_id'] ?>"><?php _e( "Datetime", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_time_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'TIME') {echo 'checked="checked"'; } ?> value="TIME" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_time_<?php echo $options['group_id'] ?>"><?php _e( "Time", 'apto' ) ?></label><br>
-                                                
-                                            </td></tr>
-                                    
-                                        </tbody>
-                                    </table>
-                                </div>
-                                
-                                <input type="radio" id="auto_order_by_custom_function_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_custom_function_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_custom_function_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
-                                <label for="auto_order_by_custom_function_<?php echo $options['group_id'] ?>"><?php _e( "Custom Function", 'apto' ) ?></label><br><br>
-                                <div id="apto_custom_function_area_<?php echo $options['group_id'] ?>" <?php
-                                    if ($options['data_set']['order_by'] != '_custom_function_')
-                                        echo 'style="display: none"';
-                                ?> class="toggle_area">
-                                    <input id="auto_custom_function_name_<?php echo $options['group_id'] ?>" type="text" class="regular-text custom-field-text" value="<?php echo $options['data_set']['custom_function_name'] ?>" name="auto_custom_function_name[<?php echo $options['group_id'] ?>]">
-                                </div>    
-
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                        <input type="radio" id="auto_order_by_custom_function_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_custom_function_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_custom_function_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
+                                        <label for="auto_order_by_custom_function_<?php echo $options['group_id'] ?>"><?php _e( "Custom Function", 'apto' ) ?></label><br><br>
+                                        <div id="apto_custom_function_area_<?php echo $options['group_id'] ?>" <?php
+                                            if ($options['data_set']['order_by'] != '_custom_function_')
+                                                echo 'style="display: none"';
+                                        ?> class="toggle_area">
+                                            <input id="auto_custom_function_name_<?php echo $options['group_id'] ?>" type="text" class="regular-text custom-field-text" value="<?php echo $options['data_set']['custom_function_name'] ?>" name="auto_custom_function_name[<?php echo $options['group_id'] ?>]">
+                                        </div>    
+                                <?php } ?>
                             </td>
                             
                             <td class="buttons">

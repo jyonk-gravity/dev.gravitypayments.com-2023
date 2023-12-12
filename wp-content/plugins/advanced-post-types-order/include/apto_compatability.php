@@ -79,7 +79,16 @@
                     include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
                     
                     if ( is_plugin_active( 'wp-grid-builder/wp-grid-builder.php' ) )
-                        add_filter ( 'apto/query_match_sort_id',                    array ( $this, 'wp_grid_builder_query_match_sort_id'), 99, 4 );
+                        {
+                            add_filter ( 'apto/query_match_sort_id',                    array ( $this, 'wp_grid_builder_query_match_sort_id'), 99, 4 );
+                        }
+                        
+                        
+                    if ( is_plugin_active( 'essential-grid/essential-grid.php' ) )
+                        {
+                            //clean the terms as essential-grid bulk serialize all...
+                            add_action ( 'pre_get_posts',                               array ( $this, 'essential_grid_pre_get_posts' ), 999 );
+                        }
                     
                 }
     
@@ -708,6 +717,81 @@
                         return $query_match_sort_id;
                         
                     return $sort_view_id;
+                }
+                
+                
+            function essential_grid_pre_get_posts( $object )
+                {
+                    if ( ! isset ( $object->query['tax_query'] ) || count ( $object->tax_query->queries )   <   1 )
+                        return $object;
+                    
+                    foreach ( $object->query['tax_query']   as  $key    =>  $data )
+                        {
+                            $taxonomy   =   isset ( $data['taxonomy'] ) ?   $data['taxonomy']   :   FALSE;
+                            $terms      =   isset ( $data['terms'] ) ?   $data['terms']   :   FALSE;
+                            $field_type =   isset ( $data['field'] ) ?   $data['field']   :   'id';
+                            
+                            if ( $taxonomy  === FALSE   ||  $terms  === FALSE   ||  ! is_array( $terms ) )
+                                continue;
+                                
+                            foreach ( $terms    as  $term_key   =>  $term_item )
+                                {
+                                    $term_data  =   get_term_by( $field_type, $term_item, $taxonomy );
+                                    if ( $term_data === FALSE )
+                                        unset ( $terms[ $term_key ] );
+                                }
+                                
+                            $terms  =   array_values ( $terms );
+                            
+                            $object->query['tax_query'][ $key ]['terms']    =   $terms;
+                        }
+                        
+                    foreach ( $object->query_vars['tax_query']   as  $key    =>  $data )
+                        {
+                            $taxonomy   =   isset ( $data['taxonomy'] ) ?   $data['taxonomy']   :   FALSE;
+                            $terms      =   isset ( $data['terms'] ) ?   $data['terms']   :   FALSE;
+                            $field_type =   isset ( $data['field'] ) ?   $data['field']   :   'id';
+                            
+                            if ( $taxonomy  === FALSE   ||  $terms  === FALSE   ||  ! is_array( $terms ) )
+                                continue;
+                                
+                            foreach ( $terms    as  $term_key   =>  $term_item )
+                                {
+                                    $term_data  =   get_term_by( $field_type, $term_item, $taxonomy );
+                                    if ( $term_data === FALSE )
+                                        unset ( $terms[ $term_key ] );
+                                }
+                                
+                            $terms  =   array_values ( $terms );
+                            
+                            $object->query_vars['tax_query'][ $key ]['terms']    =   $terms;
+                        }
+                        
+                    foreach ( $object->tax_query->queries   as  $key    =>  $data )
+                        {
+                            if ( ! is_array ( $data ) )
+                                continue;
+                            
+                            $taxonomy   =   isset ( $data['taxonomy'] ) ?   $data['taxonomy']   :   FALSE;
+                            $terms      =   isset ( $data['terms'] ) ?   $data['terms']   :   FALSE;
+                            $field_type =   isset ( $data['field'] ) ?   $data['field']   :   'id';
+                            
+                            if ( $taxonomy  === FALSE   ||  $terms  === FALSE   ||  ! is_array( $terms ) )
+                                continue;
+                                
+                            foreach ( $terms    as  $term_key   =>  $term_item )
+                                {
+                                    $term_data  =   get_term_by( $field_type, $term_item, $taxonomy );
+                                    if ( $term_data === FALSE )
+                                        unset ( $terms[ $term_key ] );
+                                }
+                                
+                            $terms  =   array_values ( $terms );
+                            
+                            $object->tax_query->queries[ $key ]['terms']    =   $terms;
+                        }
+                    
+                    return $object;
                 }
                 
         }

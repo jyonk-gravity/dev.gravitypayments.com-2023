@@ -98,8 +98,13 @@ var _this = this;
 
     self.getFormIds = function () {
       var ids = [];
-      $('form').each(function (index) {
-        ids.push($('form').get(index).id.split('gform_')[1]);
+      var forms = document.querySelectorAll('.gform_wrapper form');
+      forms.forEach(function (form) {
+        if ('formid' in form.dataset) {
+          ids.push(form.dataset.formid);
+        } else {
+          ids.push(form.getAttribute('id').split('gform_')[1]);
+        }
       });
       return ids;
     };
