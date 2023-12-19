@@ -23,15 +23,25 @@ class Table extends \WP_Plugin_Install_List_Table {
 	 *
 	 * @var array Plugin data.
 	 */
-	private $plugins_data = array();
+	private $plugin_data = array(
+		'author'           => 'quadlayers',
+		'per_page'         => 36,
+		'exclude'          => array(),
+	);
 
 	/**
 	 * Table constructor.
 	 *
-	 * @param array $plugins_data Plugins data.
+	 * @param array $plugin_data Plugins data.
 	 */
-	public function __construct( array $plugins_data = array() ) {
-		$this->plugins_data = $plugins_data;
+	public function __construct( array $plugin_data = array() ) {
+		/**
+		 * Merge plugin data with default data
+		 */
+		$this->plugin_data = wp_parse_args(
+			$plugin_data,
+			$this->plugin_data
+		);
 		parent::__construct();
 	}
 
@@ -76,7 +86,7 @@ class Table extends \WP_Plugin_Install_List_Table {
 	 */
 	private function get_transient_key() {
 
-		$key = md5( serialize( $this->plugins_data ) );
+		$key = md5( serialize( $this->plugin_data ) );
 
 		return 'quadlayers_plugin_suggestions_' . $key;
 	}
@@ -90,12 +100,12 @@ class Table extends \WP_Plugin_Install_List_Table {
 	 */
 	private function remove_excluded_plugins( $plugins ) {
 
-		if ( empty( $this->plugins_data['exclude'] ) ) {
+		if ( empty( $this->plugin_data['exclude'] ) ) {
 			return $plugins;
 		}
 
 		foreach ( $plugins as $key => $plugin ) {
-			if ( in_array( $plugin['slug'], $this->plugins_data['exclude'] ) ) {
+			if ( in_array( $plugin['slug'], $this->plugin_data['exclude'] ) ) {
 				unset( $plugins[ $key ] );
 			}
 		}
@@ -117,8 +127,8 @@ class Table extends \WP_Plugin_Install_List_Table {
 		if ( $plugins === false ) {
 
 			$args = array(
-				'per_page' => $this->plugins_data['per_page'],
-				'author'   => $this->plugins_data['author'],
+				'per_page' => $this->plugin_data['per_page'],
+				'author'   => $this->plugin_data['author'],
 				'locale'   => get_user_locale(),
 			);
 

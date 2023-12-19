@@ -23,6 +23,7 @@ return array(
     'QuadLayers\\WP_Notice_Plugin_Promote\\Traits\\PluginDataByFile' => $baseDir . '/jetpack_vendor/quadlayers/wp-notice-plugin-promote/src/Traits/PluginDataByFile.php',
     'QuadLayers\\WP_Notice_Plugin_Required\\Load' => $baseDir . '/jetpack_vendor/quadlayers/wp-notice-plugin-required/src/Load.php',
     'QuadLayers\\WP_Notice_Plugin_Required\\Plugin' => $baseDir . '/jetpack_vendor/quadlayers/wp-notice-plugin-required/src/Plugin.php',
+    'QuadLayers\\WP_Plugin_Install_Tab\\Load' => $baseDir . '/jetpack_vendor/quadlayers/wp-plugin-install-tab/src/Load.php',
     'QuadLayers\\WP_Plugin_Suggestions\\Load' => $baseDir . '/jetpack_vendor/quadlayers/wp-plugin-suggestions/src/Load.php',
     'QuadLayers\\WP_Plugin_Suggestions\\Page' => $baseDir . '/jetpack_vendor/quadlayers/wp-plugin-suggestions/src/Page.php',
     'QuadLayers\\WP_Plugin_Suggestions\\Table' => $baseDir . '/jetpack_vendor/quadlayers/wp-plugin-suggestions/src/Table.php',
