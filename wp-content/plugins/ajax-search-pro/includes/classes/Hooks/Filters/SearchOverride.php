@@ -14,6 +14,8 @@ if (!defined('ABSPATH')) die('-1');
 
 
 class SearchOverride extends AbstractFilter {
+	public static $overrideCount = 0;
+
 	public function handle() {}
 
 	/**
@@ -143,6 +145,8 @@ class SearchOverride extends AbstractFilter {
 			$wp_query->max_num_pages = ceil($wp_query->found_posts / $posts_per_page);
 		else
 			$wp_query->max_num_pages = 0;
+
+		self::$overrideCount++;
 
 		return $res;
 	}
@@ -282,7 +286,8 @@ class SearchOverride extends AbstractFilter {
 		if ( isset($_GET['asp_ls']) ) {
 			if ( WooCommerce::isShop() ) {
 				$args['search_type'] = array('cpt');
-				$args['post_type'] = array('product');
+				// Only allow product or product variations if selected
+				$args['post_type'] = in_array('product_variation', $args['post_type']) ? array('product', 'product_variation') : array('product');
 				// Exclude from catalog products
 				$visibility_term = get_term_by('slug', 'exclude-from-search', 'product_visibility');
 				$catalog_term = get_term_by('slug', 'exclude-from-catalog', 'product_visibility');
@@ -428,12 +433,14 @@ class SearchOverride extends AbstractFilter {
 		}
 
 		// Elementor or other forced override
-		if ( isset($wp_query->query_vars) && $wp_query->query_vars['post_type'] === 'asp_override' ) {
+		// Only allow override once in this case, otherwise duplicates will appear
+		// @ticket: https://wp-dreams.com/forums/topic/filtered-results-show-duplicate-posts/
+		if ( isset($wp_query->query_vars) && $wp_query->query_vars['post_type'] === 'asp_override' && self::$overrideCount == 0 ) {
 			$is_search = true;
 		}
 
 		// Archive pages
-		if ( isset($_GET['asp_ls'], $_GET['p_asid']) ) {
+		if ( isset($_GET['asp_ls'], $_GET['p_asid']) && $wp_query->is_main_query() ) {
 			if (
 				( wd_asp()->instances->getOption($_GET['p_asid'], 'woo_shop_live_search') && WooCommerce::isShop() ) ||
 				( wd_asp()->instances->getOption($_GET['p_asid'], 'cpt_archive_live_search') && Archive::isPostTypeArchive() ) ||

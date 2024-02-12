@@ -24,8 +24,8 @@ if ( isset($_POST['priority_groups']) ) {
 <p id="pg_information">
     <?php echo sprintf( __('If you don\'t know what priority groups are, check the <a href="%s" target="_blank">Priority</a> and the
     <a href="%s" target="_blank">Priority groups</a> documentations first.', 'ajax-search-pro'),
-        'https://wp-dreams.com/go/?to=asp-doc-result-priority',
-    'https://wp-dreams.com/go/?to=asp-doc-result-priority-group'
+        'https://documentation.ajaxsearchpro.com/result-priority-settings',
+    'https://documentation.ajaxsearchpro.com/result-priority-settings/priorities-by-rules-priority-groups'
     ); ?>
 </p>
 <p class="noticeMsg">

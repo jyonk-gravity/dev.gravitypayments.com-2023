@@ -1,7 +1,9 @@
 <?php
 namespace WPDRMS\ASP\Search;
 
+use WPDRMS\ASP\Utils\Html;
 use WPDRMS\ASP\Utils\MB;
+use WPDRMS\ASP\Utils\Post;
 use WPDRMS\ASP\Utils\Str;
 
 defined('ABSPATH') or die("You can't access this file directly.");
@@ -260,6 +262,7 @@ class SearchPeepsoActivities extends SearchPostTypes {
 			foreach ($r as $k => $v) {
 
 				if ( $v->post_type == 'peepso-post' ) {
+					/* @noinspection All */
 					$v->link = \PeepSo::get_page('activity_status') . $v->title . '/';
 				} else {
 					$PeepSoActivity = \PeepSoActivity::get_instance();
@@ -269,55 +272,25 @@ class SearchPeepsoActivities extends SearchPostTypes {
 					$v->link = \PeepSo::get_page('activity_status') . $parent_post->post_title . '/#comment.' . $parent_activity->act_id . '.' . $v->parent_activity_id . '.' . $v->activity_id . '.' . $v->id;
 				}
 
-				// Remove any shortcodes..
-				/* @noinspection All */
-				$v->content = preg_replace("~(?:\[/?)[^\]]+/?\]~su", '', $v->content);
-
+				$_content = Post::dealWithShortcodes($v->content, $sd['shortcode_op'] == "remove");	
 				// Remove any mentions
 				/* @noinspection All */
 				$v->content = preg_replace('/@peepso_user_[0-9]{1,5}\((.*?)\).*?/i', '$1', $v->content);
-
-				// Remove styles and scripts
-				$_content = preg_replace(array(
-					'#<script(.*?)>(.*?)</script>#is',
-					'#<style(.*?)>(.*?)</style>#is'
-				), '', $v->content);
-
-				$_content = wd_strip_tags_ws($_content, $sd['striptagsexclude']);
-
+				$_content = Html::stripTags($_content, $sd['striptagsexclude']);
 				// Get the words from around the search phrase, or just the description
-				if ( $sd['description_context'] == 1 && count($_s) > 0 && $s != '' ) {
-					// Try for an exact match
-					$_ex_content = $this->contextFind(
-						$_content, $s,
-						floor($sd['descriptionlength'] / 6),
-						$sd['descriptionlength'],
-						$sd['description_context_depth'],
-						true
-					);
-					if ( $_ex_content === false ) {
-						// No exact match, go with the first keyword
-						$_content = $this->contextFind(
-							$_content, $_s[0],
-							floor($sd['descriptionlength'] / 6),
-							$sd['descriptionlength'],
-							$sd['description_context_depth']
-						);
-					} else {
-						$_content = $_ex_content;
-					}
-				} else if ( $_content != '' && (MB::strlen($_content) > $sd['descriptionlength']) ) {
+				if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '') {
+					$_content = Str::getContext($_content, $sd['descriptionlength'], $sd['description_context_depth'], $s, $_s);
+				} else if ( $_content != '' && (  MB::strlen( $_content ) > $sd['descriptionlength'] ) ) {
 					$_content = wd_substr_at_word($_content, $sd['descriptionlength']);
 				}
-
-				$v->content = Str::fixSSLURLs(wd_closetags($_content));
+				$v->content = wd_closetags($_content);
 
 				$v->title = wd_substr_at_word($v->content, 120);
 				if ( MB::strlen($v->content) > MB::strlen($v->title) )
 					$v->title .= '..';
 
 				/* Remove the results in polaroid mode */
-				if ( $args['_ajax_search'] && empty($r->image) && isset($sd['resultstype']) &&
+				if ( $args['_ajax_search'] && empty($v->image) && isset($sd['resultstype']) &&
 					$sd['resultstype'] == 'polaroid' && $sd['pifnoimage'] == 'removeres' ) {
 					unset($this->results[$k]);
 					continue;

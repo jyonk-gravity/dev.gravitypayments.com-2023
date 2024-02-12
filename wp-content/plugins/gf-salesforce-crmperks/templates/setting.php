@@ -60,8 +60,8 @@ echo '<option value="'.esc_attr($k).'" '.$sel.'>'.esc_html($v).'</option>';
      <div class="crm_field">
   <div class="crm_field_cell1"><label for="org_url"><?php esc_html_e('Salesforce URL (optional)','gravity-forms-salesforce-crm'); ?></label></div>
   <div class="crm_field_cell2">
-  <input type="url" id="org_url" name="crm[org_url]" class="crm_text" placeholder="<?php esc_html_e('https://my-instance.salesforce.com','gravity-forms-salesforce-crm'); ?>" value="<?php echo esc_html($this->post('org_url',$info)); ?>">
-  <span class="howto"><?php esc_html_e('Copy your salesforce domain name with https from browser(e.g: https://my-instance.salesforce.com)','gravity-forms-salesforce-crm'); ?></span>
+  <input type="url" id="org_url" name="crm[org_url]" class="crm_text" placeholder="<?php esc_html_e('Keep it empty ','gravity-forms-salesforce-crm'); ?>" value="<?php echo esc_html($this->post('org_url',$info)); ?>">
+  <span class="howto"><?php esc_html_e('Only set this url , if you do not receive data in salesforce, Copy your salesforce domain name with https from browser(e.g: https://my-instance.salesforce.com)','gravity-forms-salesforce-crm'); ?></span>
   </div>
   <div class="clear"></div>
   </div> 

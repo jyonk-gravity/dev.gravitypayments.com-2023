@@ -33,10 +33,10 @@ class Manager {
 	 * @param string $plugin_slug
 	 * @param object $updates_o
 	 */
-	function __construct( $plugin_name, $plugin_slug, $udpates_o ) {
+	function __construct( $plugin_name, $plugin_slug, $updates_o ) {
 		// Set the class public variables
 		$this->plugin_slug = $plugin_slug;
-		$this->udpates_o   = $udpates_o;
+		$this->updates_o   = $updates_o;
 		$t                 = explode( '/', $plugin_slug );
 		$this->slug        = str_replace( '.php', '', $t[1] );
 
@@ -64,7 +64,7 @@ class Manager {
 		}
 
 		// If a newer version is available, add the update
-		if ( $this->udpates_o->needsUpdate( true ) ) {
+		if ( $this->updates_o->needsUpdate( true ) ) {
 			$download_url = '';
 			// No need to check the remote, as the ->getDownLoadURL will do it later
 			$license_key = EnvatoLicense::isActivated();
@@ -88,11 +88,11 @@ class Manager {
 			$obj                                       = new stdClass();
 			$obj->slug                                 = $this->slug;
 			$obj->name                                 = $this->slug;
-			$obj->new_version                          = $this->udpates_o->getVersionString();
+			$obj->new_version                          = $this->updates_o->getVersionString();
 			$obj->url                                  = "";
 			$obj->package                              = $download_url;
 			$obj->plugin                               = $this->plugin_slug;
-			$obj->tested                               = $this->udpates_o->getTestedVersion();
+			$obj->tested                               = $this->updates_o->getTestedVersion();
 			$transient->response[ $this->plugin_slug ] = $obj;
 		}
 
@@ -141,14 +141,14 @@ class Manager {
 			$information->name          = "Ajax Search Pro";
 			$information->slug          = $this->slug;
 			$information->author = '<a href="https://ajaxsearchpro.com/">AjaxSearchPro.com</a>';
-			$information->new_version   = $this->udpates_o->getVersionString();
-			$information->version   = $this->udpates_o->getVersionString();
-			$information->requires      = $this->udpates_o->getRequiresVersion();
-			$information->tested        = $this->udpates_o->getTestedVersion();
-			$information->downloaded    = $this->udpates_o->getDownloadedCount();
-			$information->last_updated  = $this->udpates_o->getLastUpdated();
+			$information->new_version   = $this->updates_o->getVersionString();
+			$information->version   = $this->updates_o->getVersionString();
+			$information->requires      = $this->updates_o->getRequiresVersion();
+			$information->tested        = $this->updates_o->getTestedVersion();
+			$information->downloaded    = $this->updates_o->getDownloadedCount();
+			$information->last_updated  = $this->updates_o->getLastUpdated();
 			$information->sections      = array(
-				'changelog' => "<h4>Version ".$this->udpates_o->getVersionString()."</h4><p>
+				'changelog' => "<h4>Version ".$this->updates_o->getVersionString()."</h4><p>
 					For the changelog please visit <a target='_blank' href='https://changelog.ajaxsearchpro.com/'>the knowledge base.</a>
 				</p>"
 			);

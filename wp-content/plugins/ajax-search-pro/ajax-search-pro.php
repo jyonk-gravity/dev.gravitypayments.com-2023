@@ -3,8 +3,8 @@
 Plugin Name: Ajax Search Pro
 Plugin URI: https://ajaxsearchpro.com
 Description: The most powerful live search engine for WordPress.
-Version: 4.26.2
-Requires PHP: 7.0
+Version: 4.26.3
+Requires PHP: 7.4
 Requires at least: 4.9
 Author: Ernest Marcinko
 Author URI: https://codecanyon.net/user/wpdreams
@@ -33,8 +33,8 @@ define(
     str_replace('http://', 'https://', plugin_dir_url(__FILE__)) : plugin_dir_url(__FILE__)
 );
 define('ASP_URL_NP',  str_replace(array("http://", "https://"), "//", plugin_dir_url(__FILE__)));
-define('ASP_CURR_VER', 5060);
-define('ASP_CURR_VER_STRING', "4.26.2");
+define('ASP_CURR_VER', 5061);
+define('ASP_CURR_VER_STRING', "4.26.3");
 define('ASP_PLUGIN_SLUG', plugin_basename(__FILE__) );
 define('ASP_DEBUG', 0);
 define('ASP_DEMO', get_option('wd_asp_demo', 0) );

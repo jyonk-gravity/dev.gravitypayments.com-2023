@@ -483,6 +483,7 @@ jQuery(function ($) {
             'text/tab-separated-values',
             'text/calendar',
             'text/css',
+            'text/vtt',
             'text/html'
         ],
         'richtext' : [

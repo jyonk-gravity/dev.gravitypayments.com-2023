@@ -70,7 +70,7 @@ if (!class_exists("wd_CPTSearchCallBack")) {
             global $wpdb;
             if ( 
                 isset($_POST['wd_phrase'], $_POST['wd_cpt_search_nonce']) &&
-                current_user_can('administrator') && 
+                ( current_user_can('administrator') || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
                 wp_verify_nonce( $_POST["wd_cpt_search_nonce"], 'wd_cpt_search_nonce' ) 
             ) {
                 $phrase = trim($_POST['wd_phrase']);

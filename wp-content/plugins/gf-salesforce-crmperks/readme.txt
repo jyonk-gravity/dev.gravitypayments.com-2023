@@ -2,9 +2,9 @@
 Contributors: crmperks, sbazzi, asif876
 Tags: salesforce, gravity forms salesforce, gravity forms salesforce add on, gravity forms salesforce crm, gravity forms salesforce integration, salesforce wordpress gravity forms
 Requires at least: 4.7
-Tested up to: 6.3
-Stable tag: 1.4.0
-Version: 1.4.0
+Tested up to: 6.4
+Stable tag: 1.4.1
+Version: 1.4.1
 Requires PHP: 5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -179,6 +179,9 @@ Yes, as you connect your normal salesforce account similarly, you can connect yo
 
 == Changelog ==
 
+
+= 1.4.1 =
+* added "custom primary key" feature.
 
 = 1.4.0 =
 * fixed "line item update" issue.

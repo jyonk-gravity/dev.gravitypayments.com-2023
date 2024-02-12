@@ -1,7 +1,10 @@
 <?php
 namespace WPDRMS\ASP\Search;
 
+use WPDRMS\ASP\Utils\Html;
+use WPDRMS\ASP\Utils\MB;
 use WPDRMS\ASP\Utils\Str;
+use WPDRMS\ASP\Utils\Post;
 
 defined('ABSPATH') or die("You can't access this file directly.");
 
@@ -256,8 +259,16 @@ class SearchBuddyPress extends AbstractSearch {
 							unset($groupresults[$k]);
 							continue;
 						}
-						if ($v->content != '')
-							$v->content = wd_substr_at_word(strip_tags($v->content), $sd['descriptionlength']);
+
+						$_content = Post::dealWithShortcodes($v->content, $sd['shortcode_op'] == "remove");	
+						$_content = Html::stripTags($_content, $sd['striptagsexclude']);
+						// Get the words from around the search phrase, or just the description
+						if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '') {
+							$_content = Str::getContext($_content, $sd['descriptionlength'], $sd['description_context_depth'], $s, $_s);
+						} else if ( $_content != '' && (  MB::strlen( $_content ) > $sd['descriptionlength'] ) ) {
+							$_content = wd_substr_at_word($_content, $sd['descriptionlength']);
+						}
+						$v->content = $_content;
 
 						// --------------------------------- DATE -----------------------------------
 						if ($sd["showdate"] == 1) {
@@ -389,14 +400,16 @@ class SearchBuddyPress extends AbstractSearch {
 					$v->link = bp_activity_get_permalink($v->id);
 					$v->image = Str::fixSSLURLs( bp_core_fetch_avatar(array('item_id' => $v->author_id, 'html' => false)) );
 
-					$v->content = do_shortcode($v->content);
-					/* @noinspection All */
-					$v->content = preg_replace("~(?:\[/?)[^\]]+/?\]~su", '', strip_tags($v->content));
-					$v->content = stripslashes($v->content);
-					$new_content = wd_substr_at_word( $v->content, $sd['descriptionlength'] );
-					if ( strlen($new_content) < strlen($v->content) )
-						$v->content = $new_content;
-
+					$_content = Post::dealWithShortcodes($v->content, $sd['shortcode_op'] == "remove");	
+					$_content = Html::stripTags($_content, $sd['striptagsexclude']);
+					// Get the words from around the search phrase, or just the description
+					if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '') {
+						$_content = Str::getContext($_content, $sd['descriptionlength'], $sd['description_context_depth'], $s, $_s);
+					} else if ( $_content != '' && (  MB::strlen( $_content ) > $sd['descriptionlength'] ) ) {
+						$_content = wd_substr_at_word($_content, $sd['descriptionlength']);
+					}
+					$v->content = $_content;
+			
 					// --------------------------------- DATE -----------------------------------
 					if (isset($sd["showdate"]) && $sd["showdate"] == 1) {
 						$post_time = strtotime($v->date);

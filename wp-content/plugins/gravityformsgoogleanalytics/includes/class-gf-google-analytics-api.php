@@ -76,11 +76,11 @@ class GF_Google_Analytics_API {
 	 *
 	 * @since  1.0
 	 *
-	 * @param string $path       Request path.
-	 * @param string $mode       ga or gtm for Google Analytics or Tag Manager.
-	 * @param array  $body       Body arguments.
-	 * @param string $method     Request method. Defaults to GET.
-	 * @param string $return_key Array key from response to return. Defaults to null (return full response).
+	 * @param string $path         Request path.
+	 * @param string $mode         ga or gtm for Google Analytics or Tag Manager.
+	 * @param array  $body         Body arguments.
+	 * @param string $method       Request method. Defaults to GET.
+	 * @param string $return_key   Array key from response to return. Defaults to null (return full response).
 	 *
 	 * @return array|WP_Error
 	 */
@@ -108,27 +108,31 @@ class GF_Google_Analytics_API {
 				return new WP_Error( 'google_analytics_invalid_mode', esc_html__( 'The API mode supplied is not supported by the Google Analytics API.', 'gravityformsgoogleanalytics' ), array() );
 		}
 
+		// Build request URL.
+		$request_url     = $api_url . $path;
+
 		$args = array(
 			'method'    => $method,
 			/**
 			 * Filters if SSL verification should occur.
 			 *
-			 * @param bool false If the SSL certificate should be verified. Defaults to false.
+			 * @param bool false          If the SSL certificate should be verified. Defaults to false.
+			 * @param string $request_url The request URL.
 			 *
 			 * @return bool
 			 */
-			'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
+			'sslverify' => apply_filters( 'https_local_ssl_verify', false, $request_url ),
 			/**
 			 * Sets the HTTP timeout, in seconds, for the request.
 			 *
-			 * @param int 30 The timeout limit, in seconds. Defaults to 30.
+			 * @param int 30              The timeout limit, in seconds. Defaults to 30.
+			 * @param string $request_url The request URL.
 			 *
 			 * @return int
 			 */
-			'timeout'   => apply_filters( 'http_request_timeout', 30 ),
+			'timeout'   => apply_filters( 'http_request_timeout', 30, $request_url ),
 		);
 		if ( 'GET' === $method || 'POST' === $method || 'PUT' === $method ) {
-			$request_url     = $api_url . $path;
 			$args['body']    = empty( $body ) ? '' : $body;
 			$args['headers'] = array(
 				'Authorization' => 'Bearer ' . $token,
@@ -200,167 +204,6 @@ class GF_Google_Analytics_API {
 			return new WP_Error( 'google_analytics_api_error', $error_message, $retrieved_response_code );
 		}
 		return $response_body;
-	}
-
-	/**
-	 * Retrieve Google Analytics goals based on the view.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body        Body information.
-	 * @param string $account_id  Account ID for analytics.
-	 * @param string $property_id The property ID to retrieve goals for.
-	 * @param string $view        The Google Anaytics view.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function get_goals( $body, $account_id, $property_id, $view ) {
-		return $this->make_request(
-			sprintf(
-				'management/accounts/%s/webproperties/%s/profiles/%s/goals',
-				$account_id,
-				$property_id,
-				$view
-			),
-			'ga',
-			$body
-		);
-	}
-
-	/**
-	 * Update an existing Google Analytics goal.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body        Body information.
-	 * @param string $account_id  Account ID for analytics.
-	 * @param string $property_id The property ID to retrieve goals for.
-	 * @param string $view        The Google Anaytics view.
-	 * @param sring  $goal_id     The Goal ID to update.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function update_goal( $body, $account_id, $property_id, $view, $goal_id ) {
-		return $this->make_request(
-			sprintf(
-				'management/accounts/%s/webproperties/%s/profiles/%s/goals/%s',
-				$account_id,
-				$property_id,
-				$view,
-				$goal_id
-			),
-			'ga',
-			$body,
-			'PUT'
-		);
-	}
-
-	/**
-	 * Create a Google Analytics Goal.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body        Body information.
-	 * @param string $account_id  Account ID for analytics.
-	 * @param string $property_id The property ID to retrieve goals for.
-	 * @param string $profile_id  The property ID for the Analytics account.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function create_goal( $body, $account_id, $property_id, $profile_id ) {
-		return $this->make_request(
-			sprintf(
-				'management/accounts/%s/webproperties/%s/profiles/%s/goals',
-				$account_id,
-				$property_id,
-				$profile_id
-			),
-			'ga',
-			$body,
-			'POST'
-		);
-	}
-
-	/**
-	 * Retrieve a profile ID for Google Analytics
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body       Body information.
-	 * @param string $account_id Account ID for analytics.
-	 * @param string $ua_code    The Google Analytics UA ID.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function get_profile_id( $body, $account_id, $ua_code ) {
-		return $this->make_request(
-			sprintf(
-				'management/accounts/%s/webproperties/%s/profiles',
-				$account_id,
-				$ua_code
-			),
-			'ga',
-			$body
-		);
-	}
-
-	/**
-	 * Retrieve views for Google Analytics
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body       Body information.
-	 * @param string $account_id Account ID for analytics.
-	 * @param string $ua_code    The Google Analytics UA ID.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function get_views( $body, $account_id, $ua_code ) {
-		return $this->make_request(
-			sprintf(
-				'management/accounts/%s/webproperties/%s/profiles',
-				$account_id,
-				$ua_code
-			),
-			'ga',
-			$body
-		);
-	}
-
-	/**
-	 * Retrieve a child account for Google Analytics
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $path Full path to Child account.
-	 * @param array  $body Body information.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function get_child_account( $path, $body ) {
-		$path = str_replace( $this->ga_api_url, '', $path );
-		return $this->make_request(
-			$path,
-			'ga',
-			$body
-		);
-	}
-
-	/**
-	 * Get a list of Google Analytics accounts.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $body Body information.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function get_analytics_accounts( $body ) {
-		return $this->make_request(
-			'management/accounts',
-			'ga',
-			$body
-		);
 	}
 
 	/**
@@ -506,25 +349,6 @@ class GF_Google_Analytics_API {
 	}
 
 	/**
-	 * Get a list of tag manager tags.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @param array  $body      Body information.
-	 * @param string $path      Account path to request.
-	 * @param string $workspace The workspace to retrieve variables for.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function get_tag_manager_tags( $body, $path, $workspace ) {
-		return $this->make_request(
-			sprintf( '%s/workspaces/%s/tags', $path, $workspace ),
-			'gtm',
-			$body
-		);
-	}
-
-	/**
 	 * Get a list of tag manager variables.
 	 *
 	 * @since 1.0.0
@@ -540,106 +364,6 @@ class GF_Google_Analytics_API {
 			sprintf( '%s/workspaces/%s/variables', $path, $workspace ),
 			'gtm',
 			$body
-		);
-	}
-
-	/**
-	 * Create a variable within Tag Manager.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body      Body information.
-	 * @param string $path      Account path to request.
-	 * @param string $workspace The workspace to retrieve variables for.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function save_google_tag_manager_variable( $body, $path, $workspace ) {
-		return $this->make_request(
-			sprintf( '%s/workspaces/%s/variables', $path, $workspace ),
-			'gtm',
-			$body,
-			'POST'
-		);
-	}
-
-	/**
-	 * Create a trigger within Tag Manager.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body      Body information.
-	 * @param string $path      Account path to request.
-	 * @param string $workspace The workspace to retrieve variables for.
-	 *
-	 * @return string|WP_Error
-	 */
-	public function create_google_tag_manager_trigger( $body, $path, $workspace ) {
-		return $this->make_request(
-			sprintf( '%s/workspaces/%s/triggers', $path, $workspace ),
-			'gtm',
-			$body,
-			'POST'
-		);
-	}
-
-	/**
-	 * Create a tag within Tag Manager.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body      Body information.
-	 * @param string $path      Account path to request.
-	 * @param string $workspace The workspace to retrieve variables for.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function create_tag_manager_tag( $body, $path, $workspace ) {
-		return $this->make_request(
-			sprintf( '%s/workspaces/%s/tags', $path, $workspace ),
-			'gtm',
-			$body,
-			'POST'
-		);
-	}
-
-	/**
-	 * Create a new container version within Tag Manager.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body      Body information.
-	 * @param string $path      Account path to request.
-	 * @param string $workspace The workspace to retrieve variables for.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function save_update_tag_manager_version( $body, $path, $workspace ) {
-		return $this->make_request(
-			sprintf( '%s/workspaces/%s:create_version', $path, $workspace ),
-			'gtm',
-			$body,
-			'POST'
-		);
-	}
-
-	/**
-	 * Publish container within Tag Manager.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array  $body      Body information.
-	 * @param string $path      Account path to request.
-	 * @param string $version   The version to publish.
-	 *
-	 * @return array|WP_Error
-	 */
-	public function publish_google_tag_manager_container( $body, $path, $version ) {
-		return $this->make_request(
-			sprintf( '%s/versions/%s:publish', $path, $version ),
-			'gtm',
-			$body,
-			'POST'
 		);
 	}
 }

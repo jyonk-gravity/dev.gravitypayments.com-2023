@@ -388,6 +388,7 @@ class SearchQuery {
 		'_exact_match_location' => 'anywhere',  // anywhere, start, end
 		'_qtranslate_lang' => "en",         // qtranslatex language data
 		'_wpml_lang'       => "",           // WPML language
+		'_wpml_allow_missing_translations'       => true,           // WPML missing translations
 		'_polylang_lang'       => "",       // Polylang language
 		'_exclude_page_parent_child' => "", // parent page exclusion data (comma separated list)
 		'_taxonomy_group_logic' => 'AND',
@@ -1491,7 +1492,7 @@ class SearchQuery {
 			$groups = $new_groups;
 		}
 
-		$groups = apply_filters('asp_result_groups', $groups, $this->args['_id'], $this->args);
+		$groups = apply_filters('_wpml_lang', $groups, $this->args['_id'], $this->args);
 
 		if ( count($groups) > 0)
 			return array("grouped" => 1, "groups" => $groups);

@@ -26,6 +26,7 @@ class Parser {
 			'text/tab-separated-values',
 			'text/calendar',
 			'text/css',
+			'text/vtt',
 			'text/html'
 		),
 		'richtext'       => array(
@@ -90,6 +91,9 @@ class Parser {
 		$this->post = $post;
 		$this->args = wp_parse_args($args, $defaults);
 		$this->args = apply_filters('asp_media_parser_args', $this->args, $defaults);
+
+        // To allow adding mimes programmatically
+		self::$mimes = apply_filters('asp/media/parser/mimes', self::$mimes);
 	}
 
 	/**

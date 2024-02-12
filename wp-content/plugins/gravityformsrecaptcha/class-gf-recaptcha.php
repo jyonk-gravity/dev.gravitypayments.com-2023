@@ -278,6 +278,7 @@ class GF_RECAPTCHA extends GFAddOn {
 
 		add_filter( 'gform_field_content', array( $this, 'update_captcha_field_settings_link' ), 10, 2 );
 		add_filter( 'gform_incomplete_submission_pre_save', array( $this, 'add_recaptcha_v3_input_to_draft' ), 10, 3 );
+
 	}
 
 	/**
@@ -761,6 +762,7 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return bool
 	 */
 	public function check_for_spam_entry( $is_spam, $form, $entry ) {
+
 		if ( $is_spam || $this->is_disabled_by_form_setting( $form ) || ! $this->initialize_api() || $this->is_preview() ) {
 			return $is_spam;
 		}
@@ -771,6 +773,16 @@ class GF_RECAPTCHA extends GFAddOn {
 		return $is_spam;
 	}
 
+	public function is_spam_submission( $form ) {
+		if ( $this->is_disabled_by_form_setting( $form ) || $this->is_preview() || ! $this->initialize_api() ) {
+			return false;
+		}
+
+		$score      = $this->token_verifier->get_score();
+		$threashold = $this->get_spam_score_threshold();
+
+		return (float) $score <= (float) $threashold;
+	}
 	/**
 	 * Get the Recaptcha score from the entry details.
 	 *
@@ -834,12 +846,7 @@ class GF_RECAPTCHA extends GFAddOn {
 	public function validate_submission( $submission_data ) {
 		$this->log_debug( __METHOD__ . '(): Validating form (#' . rgars( $submission_data, 'form/id' ) . ') submission.' );
 
-		if (
-			! $this->initialize_api()
-			|| $this->is_disabled_by_form_setting( rgar( $submission_data, 'form' ) )
-			|| $this->is_preview()
-			|| rgpost( 'action' ) === 'gfstripe_validate_form'
-		) {
+		if ( $this->should_skip_validation( $submission_data ) ) {
 			$this->log_debug( __METHOD__ . '(): Validation skipped. reCAPTCHA v3 is misconfigured, disabled, or the form was submitted in preview mode.' );
 
 			return $submission_data;
@@ -848,6 +855,57 @@ class GF_RECAPTCHA extends GFAddOn {
 		$this->log_debug( __METHOD__ . '(): Validating reCAPTCHA v3.' );
 
 		return $this->field->validation_check( $submission_data );
+	}
+
+	/**
+	 * Check If reCaptcha validation should be skipped.
+	 *
+	 * In some situations where the form validation could be triggered twice, for example while making a stripe payment element transaction
+	 * we want to skip the reCaptcha validation so it isn't triggered twice, as this will make it always fail.
+	 *
+	 * @since 1.4
+	 *
+	 * @param array $submission_data The submitted form data.
+	 *
+	 * @return bool
+	 */
+	public function should_skip_validation( $submission_data ) {
+
+		$is_recaptcha_configured = $this->initialize_api() && ! $this->is_disabled_by_form_setting( rgar( $submission_data, 'form' ) );
+		// Skip validation if reCaptcha is not configured or if the form is in preview mode.
+		if ( ! $is_recaptcha_configured || $this->is_preview() ) {
+			return true;
+		}
+
+		// For older versions of Stripe, skip the first validation attempt and only validate on the second attempt. Newer versions of Stripe will validate twice without a problem.
+		if ( $this->is_stripe_validation() && version_compare( gf_stripe()->get_version(), '5.4.3', '<' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if this is a stripe validation request.
+	 *
+	 * @since 1.4
+	 *
+	 * @return bool Returns true if this is a stripe validation request. Returns false otherwise.
+	 */
+	public function is_stripe_validation() {
+		return function_exists( 'gf_stripe' ) && rgpost( 'action' ) === 'gfstripe_validate_form';
+	}
+
+	/**
+	 * Check if this is a preview request, taking into account Stripe's validation request.
+	 *
+	 * @since 1.4
+	 *
+	 * @return bool Returns true if this is a preview request. Returns false otherwise.
+	 */
+	public function is_preview() {
+
+		return parent::is_preview() || ( $this->is_stripe_validation() && rgget( 'preview' ) === '1' );
 	}
 
 	/**
@@ -862,8 +920,8 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return string The json string for the submission with the recaptcha v3 input and value added.
 	 */
 	public function add_recaptcha_v3_input_to_draft( $submission_json, $resume_token, $form ) {
-		$submission = json_decode( $submission_json, true );
-		$input_name = $this->field->get_input_name( rgar( $form , 'id' ) );
+		$submission                                   = json_decode( $submission_json, true );
+		$input_name                                   = $this->field->get_input_name( rgar( $form , 'id' ) );
 		$submission[ 'partial_entry' ][ $input_name ] = rgpost( $input_name );
 
 		return wp_json_encode( $submission );

@@ -237,7 +237,12 @@ class Tokenizer {
 
 		// Get additional words if available
 		$additional_words = array();
+		$started = microtime(true);
 		foreach ($words as $ww) {
+			// This operation can be costly, so limit to 3 seconds just to be sure
+			if ( (microtime(true) - $started) > 3 ) {
+				break;
+			}
 
 			// ex.: 123-45-678 to 123, 45, 678
 			$ww1 = str_replace(self::$additional_keywords_pattern, ' ', $ww);
@@ -302,7 +307,7 @@ class Tokenizer {
 		$stopWords = $this->getStopWords($post);
 		$keywords = array();
 
-		while (($c_word = array_shift($words)) !== null) {
+		foreach( $words as $c_word ) {
 			$c_word = trim($c_word);
 
 			if ( $c_word == '' || $fn_strlen($c_word) < $args['min_word_length'] ) {
@@ -350,7 +355,7 @@ class Tokenizer {
 		$stopWords = array_unique( $stopWords );
 		foreach ( $stopWords as $sk => &$sv ) {
 			$sv = trim($sv);
-			if ( $sv == '' ) {
+			if ( $sv == '' || MB::strlen($sv) < $this->args['min_word_length'] ) {
 				unset($stopWords[$sk]);
 			}
 		}

@@ -5,6 +5,26 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
 if ( !class_exists(__NAMESPACE__ . '\Post') ) {
 	class Post {
+		public static function dealWithShortcodes( string $content, bool $remove = true ):string {
+			// Remove unneccessary gutemberg blocks
+			$_content = Str::removeGutenbergBlocks($content, array('core-embed/*'));
+	
+			// Deal with the shortcodes here, for more accuracy
+			if ( $remove ) {
+				if ( $_content != "" ) {
+					// Remove shortcodes, keep the content, really fast and effective method
+					/* @noinspection All */
+					$_content = preg_replace("~(?:\[/?)[^\]]+/?\]~su", '', $_content);
+				}
+			} else {
+				if ( $_content != "" ) {
+					$_content = apply_filters( 'the_content', $_content );
+				}
+			}
+	
+			return $_content;
+		}
+
 		/**
 		 * Fetches an image from the image sources
 		 *
@@ -12,7 +32,7 @@ if ( !class_exists(__NAMESPACE__ . '\Post') ) {
 		 * @param $args array
 		 * @return string image URL
 		 */
-		public static function parseImage($post, array $args ): string {
+		public static function parseImage( $post, array $args ): string {
 			$args = wp_parse_args($args, array(
 				'get_content' => true,
 				'get_excerpt' => true,

@@ -19,11 +19,11 @@ $_pagination_arrow = file_get_contents(WP_PLUGIN_DIR . '/' . $style['i_paginatio
         ($style['i_pagination_position'] == 'top' || $style['i_pagination_position'] == 'both')): ?>
         <nav class="asp_navigation">
 
-            <a class="asp_prev">
+            <a class="asp_prev" role="button">
                 <?php echo $_pagination_arrow; ?>
             </a>
 
-            <a class="asp_next">
+            <a class="asp_next" role="button">
                 <?php echo $_pagination_arrow; ?>
             </a>
 
@@ -66,13 +66,13 @@ $_pagination_arrow = file_get_contents(WP_PLUGIN_DIR . '/' . $style['i_paginatio
         ($style['i_pagination_position'] == 'bottom' || $style['i_pagination_position'] == 'both')): ?>
         <nav class="asp_navigation">
 
-            <a class="asp_prev">
+            <a class="asp_prev" role="button">
                 <?php echo $_pagination_arrow; ?>
             </a>
 
             <ul></ul>
 
-            <a class="asp_next">
+            <a class="asp_next" role="button">
                 <?php echo $_pagination_arrow; ?>
             </a>
 

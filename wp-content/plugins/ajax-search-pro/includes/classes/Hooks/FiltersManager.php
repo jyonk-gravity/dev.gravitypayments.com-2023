@@ -209,7 +209,18 @@ class FiltersManager {
 			"handler" => array("EtcFixes", "diviBuilderReady"),
 			"priority" => 9999,
 			"args" => 0
-		)
+		),
+		/**
+		 * Optimizes the HTML output by removing line breaks.
+		 * This prevents some wpautop applied paragraphs and line breaks from appearing
+		 * when the shortcode is used in a shortcode block.
+		 */
+		array(
+			"filter" => "asp_shortcode_output",
+			"handler" => array("EtcFixes", "optimizeHTML"),
+			"priority" => 9999,
+			"args" => 1
+		),
 	);
 
 	/**

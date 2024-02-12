@@ -157,7 +157,7 @@ class SearchAttachments extends SearchPostTypes {
 			 * For missing translations...
 			 * If the site language is used, the translation can be non-existent
 			 */
-			if ($site_lang_selected) {
+			if ($args['_wpml_allow_missing_translations'] && $site_lang_selected) {
 				$wpml_query = "
 				NOT EXISTS (
 					SELECT DISTINCT(wpml.element_id)
@@ -500,33 +500,6 @@ class SearchAttachments extends SearchPostTypes {
 			$this->results_count = $this->remaining_limit;
 		}
 
-		/**
-		 * Order them again:
-		 *  - The custom field ordering always uses alphanumerical comparision, which is not ok
-		 */
-		if (
-			count($attachments) > 0 &&
-			(
-				strpos($args['post_primary_order'], 'customfp') !== false ||
-				strpos($args['post_secondary_order'], 'customfs') !== false
-			)
-		) {
-			usort( $attachments, array( $this, 'compare_by_primary' ) );
-			/**
-			 * Let us save some time. There is going to be a user selecting the same sorting
-			 * for both primary and secondary. Only do secondary if it is different from the primary.
-			 */
-			if ( $this->ordering['primary'] != $this->ordering['secondary'] ) {
-				$i = 0;
-				foreach ($attachments as $pp) {
-					$pp->primary_order = $i;
-					$i++;
-				}
-
-				usort( $attachments, array( $this, 'compare_by_secondary' ) );
-			}
-		}
-
 		$attachments = array_slice($attachments, $args['_call_num'] * $this->remaining_limit, $this->remaining_limit);
 
 		$this->results = $attachments;
@@ -619,30 +592,12 @@ class SearchAttachments extends SearchPostTypes {
 				// Get the words from around the search phrase, or just the description
 				if ( $_content != '' ) {
 					if ( $sd['description_context'] == 1 && count($_s) > 0 && $s != '' ) {
-						// Try for an exact match
-						$_ex_content = $this->contextFind(
-							$_content, $s,
-							floor($sd['descriptionlength'] / 6),
-							$sd['descriptionlength'],
-							$sd['description_context_depth'],
-							true
-						);
-						if ( $_ex_content === false ) {
-							// No exact match, go with the first keyword
-							$_content = $this->contextFind(
-								$_content, $_s[0],
-								floor($sd['descriptionlength'] / 6),
-								$sd['descriptionlength'],
-								$sd['description_context_depth']
-							);
-						} else {
-							$_content = $_ex_content;
-						}
+						$_content = Str::getContext($_content, $sd['descriptionlength'], $sd['description_context_depth'], $s, $_s);
 					} else if ( MB::strlen($_content) > $sd['descriptionlength'] ) {
 						$_content = wd_substr_at_word($_content, $sd['descriptionlength']);
 					}
 					if ( $_content != '' ) {
-						$r->content = $_content;
+						$r->content = wd_closetags($_content);
 					}
 				}
 			}

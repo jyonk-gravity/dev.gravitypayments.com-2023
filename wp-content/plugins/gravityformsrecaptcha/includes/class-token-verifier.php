@@ -80,6 +80,15 @@ class Token_Verifier {
 	private $recaptcha_result;
 
 	/**
+	 * The reCAPTCHA action.
+	 *
+	 * @since 1.4 Previously a dynamic property.
+	 *
+	 * @var string
+	 */
+	private $action;
+
+	/**
 	 * Token_Verifier constructor.
 	 *
 	 * @since 1.0
@@ -168,6 +177,15 @@ class Token_Verifier {
 	 * @return bool
 	 */
 	public function verify_submission( $token ) {
+
+		$data = \GFCache::get( 'recaptcha_' . $token, $found );
+		if ( $found ) {
+			$this->addon->log_debug( __METHOD__ . '() using cached reCAPTCHA result: ' . print_r( $data, true ) );
+			$this->recaptcha_result = $data;
+
+			return true;
+		}
+
 		$this->addon->log_debug( __METHOD__ . '(): verifying reCAPTCHA submission.' );
 
 		if ( empty( $token ) ) {
@@ -201,6 +219,9 @@ class Token_Verifier {
 		// @codingStandardsIgnoreLine
 		$this->addon->log_debug( __METHOD__ . '() validated reCAPTCHA: ' . print_r( $data, true ) );
 		$this->recaptcha_result = $data;
+
+		// Caching result for 1 hour.
+		\GFCache::set( 'recaptcha_' . $token, $data, true, 60 * 60 );
 
 		return true;
 	}

@@ -13,6 +13,7 @@ if (!class_exists("wpdreamsCustomPostTypes")) {
      */
     class wpdreamsCustomPostTypes extends wpdreamsType {
 		private $types = array();
+		private $selected = array();
         private $args = array(
             'exclude' => array("revision", "nav_menu_item", "attachment", 'peepso-post', 'peepso-comment', "acf",
                 "oembed_cache", "user_request", "wp_block", "shop_coupon", "avada_page_options",

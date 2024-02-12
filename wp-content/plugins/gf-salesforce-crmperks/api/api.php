@@ -579,7 +579,7 @@ public function verify_files($files,$old=array()){
   */
 public function push_object($object,$temp_fields,$meta){  
 
-    
+    //$pdf  = GPDFAPI::get_pdf( 1, '5fba18c9c0304' ); $pdf  = GPDFAPI::get_entry_pdfs( 789 ); var_dump($pdf); die(); 
 //$res=$this->get_entry('Lead','00Q0H00001sbljWUAQ');
 //$res=$this->post_sales_arr('/services/data/v39.0/sobjects/RecordType/describe','get','');
 //var_dump($temp_fields,$meta); die();
@@ -600,7 +600,7 @@ public function push_object($object,$temp_fields,$meta){
   if(isset($this->info['api']) && $this->info['api'] == "web"){ 
  
   if($this->post('debug_email',$this->info) !=""){
-   $fields['debug']="1";   
+   $fields['debug']="0";   //1 send notice for all including success , 0 sends only failure notices
    $fields['debugEmail']=$this->post('debug_email',$this->info);   
   } 
     //associate lead and campaign
@@ -657,7 +657,7 @@ unset($fields['vx_camp_id']);
   //check primary key
   $search=array(); $search2=array();
   if( !empty($meta['primary_key']) ){    
-  $meta['primary_key']='Title+custom_text__c';    
+
   if(!empty($meta['primary_key_custom'])){
       $meta['primary_key']=$meta['primary_key_custom'];
   }
@@ -665,7 +665,7 @@ unset($fields['vx_camp_id']);
   $search=apply_filters('crm_perks_salesforce_search',$search,$fields);
   if( !empty($meta['primary_key2']) ){
   $search2=$this->get_search_val($meta['primary_key2'],$fields,$fields_info);
-  }
+  } 
   if(!empty($search) || !empty($search2)){
     //  $search=array('FirstName'=>esc_sql("+~'john@"));
     // $search=array('Phone'=>esc_sql("(810) 476-3056"));
@@ -718,7 +718,6 @@ unset($fields['vx_camp_id']);
   if(!empty($meta['crm_id'])){
    $id=$meta['crm_id'];   
   } 
-
      if(in_array($event,array('delete_note','add_note'))){    
   if(isset($meta['related_object'])){
     $extra['Note Object']= $meta['related_object'];
@@ -858,9 +857,13 @@ if(!empty($line_items)){
 if(!empty($id)){
     if(is_array($files) ){
         foreach($files as $k=>$file){ $k++;
-         $file_name=substr($file,strrpos($file,'/')+1);   
+        $filer=rtrim($file,'/'); 
+         $file_name=substr($filer,strrpos($filer,'/')+1);  
+            if(strpos($file,'/pdf/') !== false){
+    $file_name.='.pdf';    
+    }     
     $post=array('Title'=>$file_name); 
-     if( filter_var($file, FILTER_VALIDATE_URL)) { //!ini_get('allow_url_fopen')
+         if( filter_var($file, FILTER_VALIDATE_URL) && strpos($file,'/gravity_forms/') !== false) { //!ini_get('allow_url_fopen')
       $upload_dir=wp_upload_dir();
        $file=str_replace($upload_dir['baseurl'],$upload_dir['basedir'],$file); 
     }
@@ -962,7 +965,7 @@ $extra['camp_res']=$camp_res;
   }
 
 public function get_search_val($field,$fields,$fields_info){
-   $search=array();
+   $search=array(); 
    if(strpos($field,'Product2Id+') !== false ){
       if(!empty($fields['Product2Id'])){
           $search['Product2Id']=  $fields['Product2Id'];
@@ -979,7 +982,7 @@ public function get_search_val($field,$fields,$fields_info){
        }   
       } 
   }else if(isset($fields[$field]) && $fields[$field] !=''){
-      $val=$fields[$field];
+      $val=$fields[$field]; 
       if(isset($fields_info[$field]['type'])){
           $type=$fields_info[$field]['type'];
           if( $type == 'phone'){

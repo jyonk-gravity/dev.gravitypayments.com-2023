@@ -1,7 +1,9 @@
 <?php
 namespace WPDRMS\ASP\Search;
 
+use WPDRMS\ASP\Utils\Html;
 use WPDRMS\ASP\Utils\MB;
+use WPDRMS\ASP\Utils\Post;
 use WPDRMS\ASP\Utils\Str;
 
 defined('ABSPATH') or die("You can't access this file directly.");
@@ -321,43 +323,18 @@ class SearchPeepsoGroups extends SearchPostTypes {
 					}
 				}
 
-				// Remove styles and scripts
-				$_content = preg_replace( array(
-					'#<script(.*?)>(.*?)</script>#is',
-					'#<style(.*?)>(.*?)</style>#is'
-				), '', $v->content );
-
-				$_content = wd_strip_tags_ws( $_content, $sd['striptagsexclude'] );
-
+				$_content = Post::dealWithShortcodes($v->content, $sd['shortcode_op'] == "remove");	
+				$_content = Html::stripTags($_content, $sd['striptagsexclude']);
 				// Get the words from around the search phrase, or just the description
 				if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '') {
-					// Try for an exact match
-					$_ex_content = $this->contextFind(
-						$_content, $s,
-						floor($sd['descriptionlength'] / 6),
-						$sd['descriptionlength'],
-						$sd['description_context_depth'],
-						true
-					);
-					if ( $_ex_content === false ) {
-						// No exact match, go with the first keyword
-						$_content = $this->contextFind(
-							$_content, $_s[0],
-							floor($sd['descriptionlength'] / 6),
-							$sd['descriptionlength'],
-							$sd['description_context_depth']
-						);
-					} else {
-						$_content = $_ex_content;
-					}
+					$_content = Str::getContext($_content, $sd['descriptionlength'], $sd['description_context_depth'], $s, $_s);
 				} else if ( $_content != '' && (  MB::strlen( $_content ) > $sd['descriptionlength'] ) ) {
 					$_content = wd_substr_at_word($_content, $sd['descriptionlength']);
 				}
-
-				$v->content = Str::fixSSLURLs( wd_closetags( $_content ) );
+				$v->content = Str::fixSSLURLs( wd_closetags($_content) );
 
 				/* Remove the results in polaroid mode */
-				if ($args['_ajax_search'] && empty($r->image) && isset($sd['resultstype']) &&
+				if ($args['_ajax_search'] && empty($v->image) && isset($sd['resultstype']) &&
 					$sd['resultstype'] == 'polaroid' && $sd['pifnoimage'] == 'removeres') {
 					unset($this->results[$k]);
 					continue;

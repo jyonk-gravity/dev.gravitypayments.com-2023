@@ -126,7 +126,7 @@ class SuggestPostTypeTitles extends AbstractSuggest {
 				 * For missing translations...
 				 * If the site language is used, the translation can be non-existent
 				 */
-				if ($site_lang_selected) {
+				if ($search_args['_wpml_allow_missing_translations'] && $site_lang_selected) {
 					$wpml_query = "
 				NOT EXISTS (
 					SELECT DISTINCT(wpml.element_id)

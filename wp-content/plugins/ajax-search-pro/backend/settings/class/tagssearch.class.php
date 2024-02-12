@@ -79,7 +79,7 @@ if (!class_exists("wpdreamsSearchTags")) {
         static function searchTag() {
             if ( 
                 isset($_POST['wd_tag_phrase'], $_POST['wd_tag_search_nonce']) &&
-                current_user_can('administrator') && 
+                ( current_user_can('administrator') || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
                 wp_verify_nonce( $_POST["wd_tag_search_nonce"], 'wd_tag_search_nonce' ) 
             ) {
                 $phrase = $_POST["wd_tag_phrase"];

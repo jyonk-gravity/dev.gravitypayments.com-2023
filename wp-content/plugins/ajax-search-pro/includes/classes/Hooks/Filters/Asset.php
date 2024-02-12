@@ -51,6 +51,7 @@ class Asset extends AbstractFilter {
 	function onShutdown() {
 		if (
 			wd_asp()->manager->getContext() == 'frontend' && !wp_is_json_request()
+			&& !isset($_POST['ags_wc_filters_ajax_shop']) // divi shop live pagination 
 		) {
 			Manager::_o()->printBackup();
 		}

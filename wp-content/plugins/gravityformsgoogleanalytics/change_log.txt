@@ -1,3 +1,9 @@
+### 2.2.0 | 2024-02-07
+- Added support for the {source_page_number} and {current_page_number} merge tags in pagination settings.
+- Fixed a link on the plugin settings page.
+- Fixed a timeout error that occurs when using the http_request_timeout filter.
+- Removed unused Universal Analytics code that is no longer relevant to GA4.
+
 ### 2.1.0 | 2023-09-06
 - Added improved logging for pagination and submission events.
 - Fixed an issue where confirmation redirect URLs with query string variables are getting improperly escaped, preventing the query string variables from being accessible on the confirmation page.

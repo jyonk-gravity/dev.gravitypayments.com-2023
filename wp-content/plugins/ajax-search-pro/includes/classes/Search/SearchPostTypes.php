@@ -4,6 +4,7 @@
 namespace WPDRMS\ASP\Search;
 
 use WPDRMS\ASP\Misc\Priorities;
+use WPDRMS\ASP\Utils\Html;
 use WPDRMS\ASP\Utils\MB;
 use WPDRMS\ASP\Utils\Post;
 use WPDRMS\ASP\Utils\Str;
@@ -81,9 +82,6 @@ class SearchPostTypes extends AbstractSearch {
 		$args = &$this->args;
 
 		$sd = $args["_sd"] ?? array();
-
-		// General variables
-		$postmeta_join   = "";
 
 		// Prefixes and suffixes
 		$pre_field = $this->pre_field;
@@ -277,7 +275,7 @@ class SearchPostTypes extends AbstractSearch {
 			 * For missing translations...
 			 * If the site language is used, the translation can be non-existent
 			 */
-			if ($site_lang_selected) {
+			if ($args['_wpml_allow_missing_translations'] && $site_lang_selected) {
 				$wpml_query = "
 				NOT EXISTS (
 					SELECT DISTINCT(wpml.element_id)
@@ -476,7 +474,6 @@ class SearchPostTypes extends AbstractSearch {
 			$custom_field_selectp as customfp,
 			$custom_field_selects as customfs
 		FROM $wpdb->posts
-			{postmeta_join}
 			$term_join
 			$add_join
 			{args_join}
@@ -662,32 +659,22 @@ class SearchPostTypes extends AbstractSearch {
 				$args['post_custom_fields'] = array("all");
 
 			if ( count($args['post_custom_fields']) > 0 ) {
-				$postmeta_join   = "LEFT JOIN $wpdb->postmeta ON $wpdb->postmeta.post_id = $wpdb->posts.ID";
+				$cf_parts = array();
 				foreach ( $args['post_custom_fields'] as $cfield ) {
 					$key_part = $args['post_custom_fields_all'] == 1 ? "" : "$wpdb->postmeta.meta_key='$cfield' AND ";
 
 					if ( $kw_logic == 'or' || $kw_logic == 'and' || $is_exact ) {
-						$parts[] = "( $key_part " . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
+						$cf_parts[] = "( $key_part " . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 					} else {
-						$parts[] = "( $key_part 
-					   (" . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
-					OR  " . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " LIKE $pre_like'" . $word . " %'$suf_like
-					OR  " . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " LIKE $pre_like'% " . $word . "'$suf_like
-					OR  " . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " = '" . $word . "') )";
+						$cf_parts[] = "( $key_part 
+						(" . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
+						OR  " . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " LIKE $pre_like'" . $word . " %'$suf_like
+						OR  " . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " LIKE $pre_like'% " . $word . "'$suf_like
+						OR  " . $pre_field . $wpdb->postmeta . ".meta_value" . $suf_field . " = '" . $word . "') )";
 					}
-					if ( !$relevance_added ) {
-						if ($cfield == 'author_field_name')
-							$relevance_parts[] = "(case when
-						(EXISTS (SELECT 1 FROM $wpdb->postmeta as cfre WHERE cfre.post_id = $wpdb->posts.ID AND cfre.meta_key = '$cfield' AND 
-						(cfre.meta_value" . $suf_field . " LIKE '%" . $s . "%')))
-						 then 100 else 0 end)";
-						if ($cfield == 'fulltext_field_name')
-							$relevance_parts[] = "(case when
-						(EXISTS (SELECT 1 FROM $wpdb->postmeta as cfre WHERE cfre.post_id = $wpdb->posts.ID AND cfre.meta_key = '$cfield' AND 
-						(cfre.meta_value" . $suf_field . " LIKE '%" . $s . "%')))
-						 then 10 else 0 end)";
-					}
+
 				}
+				$parts[] = "( EXISTS (SELECT 1 FROM $wpdb->postmeta WHERE (".implode(' OR ', $cf_parts).") AND $wpdb->posts.ID = $wpdb->postmeta.post_id) )";
 			}
 			/*---------------------------------------------------------------*/
 
@@ -699,9 +686,6 @@ class SearchPostTypes extends AbstractSearch {
 			$this->parts[] = array( $parts, $relevance_parts );
 			$relevance_added = true;
 		}
-
-		// Add the meta join if needed...
-		$this->query = str_replace( '{postmeta_join}', $postmeta_join, $this->query );
 
 		$querystr = $this->buildQuery( $this->parts );
 		$querystr = apply_filters('asp_query_cpt', $querystr, $args, $args['_id'], $args['_ajax_search']);
@@ -1299,7 +1283,7 @@ class SearchPostTypes extends AbstractSearch {
 										}
 										break;
 									case "RAND()":
-										$diff = rand(-1,1);
+										$diff = 0;
 										break;
 									default:
 										$diff = $b->relevance - $a->relevance;
@@ -1648,62 +1632,35 @@ class SearchPostTypes extends AbstractSearch {
 						break;
 				}
 
-				// Remove unneccessary gutemberg blocks
-				$_content = Str::removeGutenbergBlocks($_content, array('core-embed/*'));
-
-				// Deal with the shortcodes here, for more accuracy
-				if ( $sd['shortcode_op'] == "remove" ) {
-					if ( $_content != "" ) {
-						// Remove shortcodes, keep the content, really fast and effective method
-						/* @noinspection All */
-						$_content = preg_replace("~(?:\[/?)[^\]]+/?\]~su", '', $_content);
-					}
-				} else {
-					if ( $_content != "" ) {
-						$_content = apply_filters( 'the_content', $_content, $searchId );
-					}
-				}
+				$_content = Post::dealWithShortcodes($_content, $sd['shortcode_op'] == "remove");
 
 				if ( $_content != '') break;
 			}
 
-			// Remove inline styles and scripts
-			$_content = preg_replace( array(
-				'#<script(.*?)>(.*?)</script>#is',
-				'#<style(.*?)>(.*?)</style>#is'
-			), '', $_content );
-
-			$_content = wd_strip_tags_ws( $_content, $sd['striptagsexclude'] );
+			
+			$_content = Html::stripTags($_content, $sd['striptagsexclude']);
+			$description_length = $sd['descriptionlength'];
 
 			// Get the words from around the search phrase, or just the description
 			if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '') {
-				// Try for an exact match
-				$_ex_content = $this->contextFind(
-					$_content, $s,
-					floor($sd['descriptionlength'] / 6),
-					$sd['descriptionlength'],
-					$sd['description_context_depth'],
-					true
-				);
-				if ( $_ex_content === false ) {
-					// No exact match, go with the first keyword
-					$_content = $this->contextFind(
-						$_content, $_s[0],
-						floor($sd['descriptionlength'] / 6),
-						$sd['descriptionlength'],
-						$sd['description_context_depth']
-					);
-				} else {
-					$_content = $_ex_content;
-				}
-			} else if ( $_content != '' && (  MB::strlen( $_content ) > $sd['descriptionlength'] ) ) {
-				$_content = wd_substr_at_word($_content, $sd['descriptionlength']);
+				$_content = Str::getContext($_content, $description_length, $sd['description_context_depth'], $s, $_s);
+			} else if ( $_content != '' && (  MB::strlen( $_content ) > $description_length ) ) {
+				$_content = wd_substr_at_word($_content, $description_length);
 			}
 
-			$_content   = wd_closetags( $_content );
+			add_filter('asp_cpt_advanced_field_value', function($value, $field) use($description_length, $sd, $s, $_s) {
+				$value = Post::dealWithShortcodes($value, $sd['shortcode_op'] == "remove");
+				$value = Html::stripTags($value, $sd['striptagsexclude']);
+				if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '' ) {
+					$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
+				} else if ( $value != '' && (  MB::strlen( $value ) > $description_length ) ) {
+					$value = wd_substr_at_word($value, $description_length);
+				}
+				return $value;
+			}, 10, 2);
 
-			if ( !empty($sd['advdescriptionfield']) )
-				$r->content = $this->advField(
+			if ( !empty($sd['advdescriptionfield']) ) {
+				$_content = $this->advField(
 					array(
 						'main_field_slug' => 'descriptionfield',
 						'main_field_value'=> $_content,
@@ -1712,6 +1669,9 @@ class SearchPostTypes extends AbstractSearch {
 					),
 					$com_options['use_acf_getfield']
 				);
+			}
+
+			$r->content = wd_closetags( $_content );
 
 			// --------------------------------- DATE -----------------------------------
 			if ($sd["showdate"] == 1) {
@@ -1892,6 +1852,7 @@ class SearchPostTypes extends AbstractSearch {
 						$val = number_format(floatval($val), $decimals, $decimal_separator, $thousand_separator);
 					}
 				}
+				
 				$val = apply_filters('asp_cpt_advanced_field_value', $val, $field, $f_args['r'], $f_args);
 				$field_pattern = str_replace( '{'.$complete_field.'}', $val, $field_pattern );
 			}

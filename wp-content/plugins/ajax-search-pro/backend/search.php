@@ -113,7 +113,7 @@ $sd = &$search['data'];
     <h3 style="flex-wrap: wrap; flex-basis: 100%; min-width: 100%;text-align: left; margin-top: 0;margin-left: 40px;"><?php echo __('Shortcode generator', 'ajax-search-pro'); ?></h3>
     <div class="wpd-modal-close"></div>
     <div class="sortablecontainer wpd_md_col">
-        <p class="descMsg"><?php echo sprintf( __('This tool is to help you generate a Column/Row based layout for the plugin. For more info on shortcodes, <a href="%s" target="_blank">check this video</a> tutorial.', 'ajax-search-pro'), 'http://wp-dreams.com/go/?to=yt-shortcodes' ); ?></p>
+        <p class="descMsg"><?php echo sprintf( __('This tool is to help you generate a Column/Row based layout for the plugin. For more info on shortcodes, <a href="%s" target="_blank">check this video</a> tutorial.', 'ajax-search-pro'), 'https://documentation.ajaxsearchpro.com/getting-started/search-shortcodes' ); ?></p>
         <ul class="ui-sortable">
             <li item="search"><b><?php echo __('Search box', 'ajax-search-pro'); ?></b><br><label><?php echo __('Ratio:', 'ajax-search-pro'); ?> <input type="number" value="100" min="5" max="100"/>%</label><a class="deleteIcon"></a></li>
             <li item="settings" class="hiddend"><b><?php echo __('Settings box', 'ajax-search-pro'); ?></b><br><label><?php echo __('Ratio:', 'ajax-search-pro'); ?> <input type="number" value="100" min="5" max="100"/>%</label><a class="deleteIcon"></a></li>

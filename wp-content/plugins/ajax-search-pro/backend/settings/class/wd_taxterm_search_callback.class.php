@@ -102,7 +102,7 @@ if (!class_exists("wd_TaxTermSearchCallBack")) {
         public static function searchTaxTerm() {
             if ( 
                 isset($_POST['wd_taxonomy'], $_POST['wd_taxonomy_search_cb_nonce']) &&
-                current_user_can('administrator') && 
+                ( current_user_can('administrator') || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
                 wp_verify_nonce( $_POST["wd_taxonomy_search_cb_nonce"], 'wd_taxonomy_search_cb_nonce' ) 
             ) {
                 $taxonomy = $_POST['wd_taxonomy'];

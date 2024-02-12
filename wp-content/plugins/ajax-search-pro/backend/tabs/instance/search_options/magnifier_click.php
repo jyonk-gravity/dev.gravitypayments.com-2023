@@ -75,7 +75,7 @@
 		$params[$o->getName()] = $o->getData();
 		?>
 		<p class="descMsg">
-			<?php echo sprintf( __('You can use the <string>asp_redirect_url</string> filter to add more variables. See <a href="%s" target="_blank">this tutorial</a>.', 'ajax-search-pro'), 'http://wp-dreams.com/go/?to=kb-redirecturl' ); ?>
+			<?php echo sprintf( __('You can use the <string>asp_redirect_url</string> filter to add more variables. See <a href="%s" target="_blank">this tutorial</a>.', 'ajax-search-pro'), 'https://knowledgebase.ajaxsearchpro.com/miscellaneous/tutorials/how-to-add-variables-to-the-redirect-to-url-or-the-show-more-url' ); ?>
 		</p>
 	</div>
 	<div class="item item-flex-nogrow item-flex-wrap">

@@ -1,7 +1,9 @@
 <?php
 namespace WPDRMS\ASP\Search;
 
+use WPDRMS\ASP\Utils\Html;
 use WPDRMS\ASP\Utils\MB;
+use WPDRMS\ASP\Utils\Post;
 use WPDRMS\ASP\Utils\Str;
 use WPDRMS\ASP\Utils\User;
 
@@ -190,40 +192,52 @@ class SearchUsers extends AbstractSearch {
 			}
 			/*---------------------------------------------------------------*/
 
-			/*-------------------- Other selected meta ----------------------*/
+			/*-------------------- Other selected meta ----------------------*/		
 			$args['user_search_meta_fields'] = !is_array($args['user_search_meta_fields']) ? array($args['user_search_meta_fields']) : $args['user_search_meta_fields'];
-			foreach ($args['user_search_meta_fields'] as $meta_field) {
-				$meta_field = trim($meta_field);
-				if ( empty($meta_field) )
-					continue;
-				if ( $args['user_search_meta_fields_separate_subquery'] ) {
+			if ( count( $args['user_search_meta_fields']) > 0 ) {
+				$cf_parts = array();
+				foreach ( $args['user_search_meta_fields'] as $cfield ) {
+					$key_part = "$wpdb->usermeta.meta_key='$cfield' AND ";
+
 					if ( $kw_logic == 'or' || $kw_logic == 'and' || $is_exact ) {
-						$parts[] = "EXISTS( SELECT 1 FROM $wpdb->usermeta sums WHERE 
-							sums.user_id = $wpdb->users.ID AND sums.meta_key = '" . $meta_field . "' AND 
-							( " . $pre_field . "sums.meta_value" . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like ) )";
+						$cf_parts[] = "( $key_part " . $pre_field . $wpdb->usermeta . ".meta_value" . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 					} else {
-						$parts[] = "EXISTS( SELECT 1 FROM $wpdb->usermeta sums WHERE 
-							sums.user_id = $wpdb->users.ID AND
-							sums.meta_key = '" . $meta_field . "' AND
-							   (" . $pre_field . "sums.meta_value" . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
-							OR  " . $pre_field . "sums.meta_value" . $suf_field . " LIKE $pre_like'" . $word . " %'$suf_like
-							OR  " . $pre_field . "sums.meta_value" . $suf_field . " LIKE $pre_like'% " . $word . "'$suf_like
-							OR  " . $pre_field . "sums.meta_value" . $suf_field . " = '" . $word . "') )";
-					}
-				} else {
-					if ( $kw_logic == 'or' || $kw_logic == 'and' || $is_exact ) {
-						$parts[] = "( $wpdb->usermeta.meta_key = '" . $meta_field . "' AND ( " . $pre_field . $wpdb->usermeta . ".meta_value" . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like ) )";
-					} else {
-						$parts[] = "( $wpdb->usermeta.meta_key = '" . $meta_field . "' AND
-						   (" . $pre_field . $wpdb->usermeta . ".meta_value" . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
+						$cf_parts[] = "( $key_part 
+						(" . $pre_field . $wpdb->usermeta . ".meta_value" . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
 						OR  " . $pre_field . $wpdb->usermeta . ".meta_value" . $suf_field . " LIKE $pre_like'" . $word . " %'$suf_like
 						OR  " . $pre_field . $wpdb->usermeta . ".meta_value" . $suf_field . " LIKE $pre_like'% " . $word . "'$suf_like
 						OR  " . $pre_field . $wpdb->usermeta . ".meta_value" . $suf_field . " = '" . $word . "') )";
 					}
-				}
 
+				}
+				$parts[] = "( EXISTS (SELECT 1 FROM $wpdb->usermeta WHERE (".implode(' OR ', $cf_parts).") AND $wpdb->users.ID = $wpdb->usermeta.user_id) )";
 			}
 			/*---------------------------------------------------------------*/
+			
+			
+			/*------------------ BP Xprofile field meta ---------------------*/
+			$args['user_search_bp_fields'] = !is_array($args['user_search_bp_fields']) ? array($args['user_search_bp_fields']) : $args['user_search_bp_fields'];
+			$bp_meta_table = $wpdb->base_prefix . "bp_xprofile_data";
+			$bp_cf_parts = array();
+
+			if (count($args['user_search_bp_fields']) > 0 && $wpdb->get_var("SHOW TABLES LIKE '$bp_meta_table'") == $bp_meta_table) {
+				$bp_cf_parts = array();
+				foreach ($args['user_search_bp_fields'] as $field_id) {
+					$key_part = "$bp_meta_table.field_id = '" . $field_id . "' AND ";
+					if ( $kw_logic == 'or' || $kw_logic == 'and' || $is_exact ) {
+						$bp_cf_parts[] = "( $key_part " . $pre_field . $bp_meta_table . ".value" . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
+					} else {
+						$bp_cf_parts[] = "( $key_part 
+						(" . $pre_field . $bp_meta_table . ".value" . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
+						OR  " . $pre_field . $bp_meta_table . ".value" . $suf_field . " LIKE $pre_like'" . $word . " %'$suf_like
+						OR  " . $pre_field . $bp_meta_table . ".value" . $suf_field . " LIKE $pre_like'% " . $word . "'$suf_like
+						OR  " . $pre_field . $bp_meta_table . ".value" . $suf_field . " = '" . $word . "') )";
+					}
+
+				}
+				$parts[] = "( EXISTS (SELECT 1 FROM $bp_meta_table WHERE (".implode(' OR ', $bp_cf_parts).") AND $bp_meta_table.user_id = $wpdb->users.ID ) )";
+			}
+
 
 			$this->parts[] = array( $parts, $relevance_parts );
 			$relevance_added = true;
@@ -242,7 +256,7 @@ class SearchUsers extends AbstractSearch {
 						$_like = implode("%'$suf_like " . $op . " " . $pre_field . $bp_meta_table . ".value" . $suf_field . " LIKE $pre_like'%", $words);
 					else
 						$_like = $s;
-					$bp_cf_parts[] = "( $bp_meta_table.field_id = '" . $field_id . "' AND ( " . $pre_field . $bp_meta_table . ".value" . $suf_field . " LIKE $pre_like'$wcl" . $_like . "$wcr'$suf_like ) )";
+					$bp_cf_parts[] = "( $bp_meta_table.field_id = " . $field_id . " AND ( " . $pre_field . $bp_meta_table . ".value" . $suf_field . " LIKE $pre_like'$wcl" . $_like . "$wcr'$suf_like ) )";
 				} else {
 					$_like = array();
 					$op = $kw_logic == 'andex' ? 'AND' : 'OR';
@@ -253,20 +267,12 @@ class SearchUsers extends AbstractSearch {
 					OR  " . $pre_field . $bp_meta_table . ".value" . $suf_field . " LIKE $pre_like'% " . $word . "'$suf_like
 					OR  " . $pre_field . $bp_meta_table . ".value" . $suf_field . " = '" . $word . "')";
 					}
-					$bp_cf_parts[] = "( $bp_meta_table.field_id = '" . $field_id . "' AND (" . implode(' ' . $op . ' ', $_like) . ") )";
+					$bp_cf_parts[] = "( $bp_meta_table.field_id = " . $field_id . " AND (" . implode(' ' . $op . ' ', $_like) . ") )";
 				}
 			}
 
-			if (count($bp_cf_parts) > 0) {
-				$bp_cf_query = implode(" OR ", $bp_cf_parts);
-				$bp_cf_select = "
-			OR ( (
-				SELECT COUNT(*) FROM $bp_meta_table WHERE
-					$bp_meta_table.user_id = $wpdb->users.ID
-				AND
-					($bp_cf_query)
-			) > 0 )";
-			}
+			$parts[] = "( EXISTS (SELECT 1 FROM $bp_meta_table WHERE (".implode(' OR ', $bp_cf_parts).") AND $bp_meta_table.user_id = $wpdb->users.ID ) )";
+			$this->parts[] = array( $parts, array() );
 		}
 		/*---------------------------------------------------------------*/
 
@@ -740,41 +746,28 @@ class SearchUsers extends AbstractSearch {
 						$r->content = $content;
 			}
 
-			// Remove inline styles and scripts
-			$_content = preg_replace( array(
-				'#<script(.*?)>(.*?)</script>#is',
-				'#<style(.*?)>(.*?)</style>#is'
-			), '', $r->content );
-
-			$_content = wd_strip_tags_ws( $_content, $sd['striptagsexclude'] );
+			$_content = Html::stripTags($r->content, $sd['striptagsexclude']);
+			$description_length = $sd['user_res_descriptionlength'];
 
 			// Get the words from around the search phrase, or just the description
 			if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '') {
-				// Try for an exact match
-				$_ex_content = $this->contextFind(
-					$_content, $s,
-					floor($sd['user_res_descriptionlength'] / 6),
-					$sd['user_res_descriptionlength'],
-					$sd['description_context_depth'],
-					true
-				);
-				if ( $_ex_content === false ) {
-					// No exact match, go with the first keyword
-					$_content = $this->contextFind(
-						$_content, $_s[0],
-						floor($sd['user_res_descriptionlength'] / 6),
-						$sd['user_res_descriptionlength'],
-						$sd['description_context_depth']
-					);
-				} else {
-					$_content = $_ex_content;
-				}
-			} else if ( $_content != '' && (  MB::strlen( $_content ) > $sd['user_res_descriptionlength'] ) ) {
-				$_content = wd_substr_at_word($_content, $sd['user_res_descriptionlength']);
+				$_content = Str::getContext($_content, $description_length, $sd['description_context_depth'], $s, $_s);
+			} else if ( $_content != '' && (  MB::strlen( $_content ) > $description_length ) ) {
+				$_content = wd_substr_at_word($_content, $description_length);
 			}
-			$r->content   = wd_closetags( $_content );
 
-			if ( !empty($sd['user_search_advanced_description_field']) )
+			add_filter('asp_user_advanced_field_value', function($value, $field) use($description_length, $sd, $s, $_s) {
+				$value = Post::dealWithShortcodes($value, $sd['shortcode_op'] == "remove");
+				$value = Html::stripTags($value, $sd['striptagsexclude']);
+				if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '') {
+					$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
+				} else if ( $value != '' && (  MB::strlen( $value ) > $description_length ) ) {
+					$value = wd_substr_at_word($value, $description_length);
+				}
+				return $value;
+			}, 10, 2);
+
+			if ( !empty($sd['user_search_advanced_description_field']) ) {
 				$r->content = $this->advField(
 					array(
 						'main_field_slug' => 'descriptionfield',
@@ -784,6 +777,9 @@ class SearchUsers extends AbstractSearch {
 					),
 					$com_options['use_acf_getfield']
 				);
+			}
+
+			$r->content = wd_closetags( $_content );	
 			/*---------------------------------------------------------------*/
 
 			// --------------------------------- DATE -----------------------------------

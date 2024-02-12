@@ -109,6 +109,23 @@ class EtcFixes extends AbstractFilter {
 	}
 
 	/**
+	 * Remove extra line breaks from within HTML tags
+	 */
+	function optimizeHTML( $output ) {
+		$search = [
+			'/>\s+</s',         // whitespaces between tags
+			'/\r|\n|\r\n/s',    // Any remaining line breaks
+			'/\s+/s',           // Any double spaces
+		];
+		$replace = array(
+			'><',
+			'',
+			' '
+		);
+		return preg_replace($search, $replace, $output);
+	}
+
+	/**
 	 * Fix images on multisite installation results pages with search override
 	 *
 	 * @param $image

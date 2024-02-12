@@ -106,14 +106,12 @@ class SearchIndex extends SearchPostTypes {
 		}
 		/*---------------------------------------------------------------*/
 		$post_fields_query = '';
-		if ( !in_array('attachment', $args['post_type']) ) {
-			$exc_fields = array_diff(array('title', 'content', 'excerpt'), $args['post_fields']);
-			if ( count($exc_fields) > 0 ) {
-				$post_fields_arr = array_map(function ($field) {
-					return "asp_index.$field = 0";
-				}, $exc_fields);
-				$post_fields_query = 'AND (' . implode(' AND ', $post_fields_arr) . ') ';
-			}
+		$allowed_fields = array_intersect(array('title', 'content', 'excerpt'), $args['post_fields']);
+		if ( count($allowed_fields) > 0 ) {
+			$post_fields_arr = array_map(function ($field) {
+				return "asp_index.$field > 0";
+			}, $allowed_fields);
+			$post_fields_query = 'AND (' . implode(' OR ', $post_fields_arr) . ') ';
 		}
 
 		// ------------------------ Categories/tags/taxonomies ----------------------
@@ -167,8 +165,9 @@ class SearchIndex extends SearchPostTypes {
 			 * Imported or some custom post types might have missing translations for the site default language.
 			 * If the user currently searches on the default language, empty translation string is allowed.
 			 */
-			if ( $site_lang_selected )
+			if ($args['_wpml_allow_missing_translations'] && $site_lang_selected) {
 				$wpml_query .= " OR asp_index.lang = ''";
+			}
 			$wpml_query = " AND (" . $wpml_query . ")";
 		}
 		/*---------------------------------------------------------------*/
@@ -198,14 +197,14 @@ class SearchIndex extends SearchPostTypes {
 		}
 		/*---------------------------------------------------------------*/
 
-		/*---------------------- Relevance Values -----------------------*/
-		$rel_val_title = w_isset_def($sd["it_title_weight"], 10);
-		$rel_val_content = w_isset_def($sd["it_content_weight"], 8);
-		$rel_val_excerpt = w_isset_def($sd["it_excerpt_weight"], 5);
-		$rel_val_permalinks = w_isset_def($sd["it_terms_weight"], 3);
-		$rel_val_terms = w_isset_def($sd["it_terms_weight"], 3);
-		$rel_val_cf = w_isset_def($sd["it_cf_weight"], 3);
-		$rel_val_author = w_isset_def($sd["it_author_weight"], 2);
+		/*---------------------- Relevance Stored -----------------------*/
+		$rel_val_title = $sd["it_title_weight"] ?? 10;
+		$rel_val_content = $sd["it_content_weight"] ?? 8;
+		$rel_val_excerpt = $sd["it_excerpt_weight"] ?? 5;
+		$rel_val_permalinks = $sd["it_terms_weight"] ?? 3;
+		$rel_val_terms = $sd["it_terms_weight"] ?? 3;
+		$rel_val_cf = $sd["it_cf_weight"] ?? 3;
+		$rel_val_author = $sd["it_author_weight"] ?? 2;
 		/*---------------------------------------------------------------*/
 
 		/*------------------- Post type based ordering ------------------*/
@@ -764,12 +763,12 @@ class SearchIndex extends SearchPostTypes {
 		foreach ($the_posts as $r) {
 			$new_result = new stdClass();
 
-			$new_result->id = w_isset_def($r->ID, null);
+			$new_result->id = $r->ID ?? null;
 			$new_result->blogid = $r->blogid;
-			$new_result->title = w_isset_def($r->post_title, null);
+			$new_result->title = $r->post_title ?? null;
 			$new_result->post_title = $new_result->title;
-			$new_result->content = w_isset_def($r->post_content, null);
-			$new_result->excerpt = w_isset_def($r->post_excerpt, null);
+			$new_result->content = $r->post_content ?? null;
+			$new_result->excerpt = $r->post_excerpt ?? null;
 			$new_result->image = null;
 
 			if ( isset($sd) && $sd['showauthor'] == 1 ) {
@@ -786,23 +785,22 @@ class SearchIndex extends SearchPostTypes {
 			}
 
 
-			$new_result->date = w_isset_def($r->post_date, null);
+			$new_result->date = $r->post_date ?? null;
 			$new_result->post_date = $new_result->date;
 
-			$new_result->menu_order = w_isset_def($r->menu_order, 0);
+			$new_result->menu_order = $r->menu_order ?? 0;
+
+			$key = $new_result->blogid . "x" . $new_result->id;
 
 			// Get the relevance and priority values
-			$new_result->relevance = (int)$this->raw_results[$new_result->blogid . "x" . $new_result->id]->relevance;
-			$new_result->priority = (int)$this->raw_results[$new_result->blogid . "x" . $new_result->id]->priority;
-			$new_result->group_priority = (int)$this->raw_results[$new_result->blogid . "x" . $new_result->id]->group_priority;
-			$new_result->p_type_priority = (int)$this->raw_results[$new_result->blogid . "x" . $new_result->id]->p_type_priority;
-			$new_result->post_type = $this->raw_results[$new_result->blogid . "x" . $new_result->id]->post_type;
-			if ( isset($this->raw_results[$new_result->blogid . "x" . $new_result->id]->average_rating) )
-				$new_result->average_rating = (float)$this->raw_results[$new_result->blogid . "x" . $new_result->id]->average_rating;
-			if ( isset($this->raw_results[$new_result->blogid . "x" . $new_result->id]->customfp) )
-				$new_result->customfp = $this->raw_results[$new_result->blogid . "x" . $new_result->id]->customfp;
-			if ( isset($this->raw_results[$new_result->blogid . "x" . $new_result->id]->customfs) )
-				$new_result->customfs = $this->raw_results[$new_result->blogid . "x" . $new_result->id]->customfs;
+			$new_result->relevance = (int)$this->raw_results[$key]->relevance;
+			$new_result->priority = (int)$this->raw_results[$key]->priority;
+			$new_result->group_priority = (int)$this->raw_results[$key]->group_priority;
+			$new_result->p_type_priority = (int)$this->raw_results[$key]->p_type_priority;
+			$new_result->post_type = $this->raw_results[$key]->post_type;
+			$new_result->average_rating = floatval($this->raw_results[$key]->average_rating ?? 0);
+			$new_result->customfp = $this->raw_results[$key]->customfp ?? 1;
+			$new_result->customfs = $this->raw_results[$key]->customfs ?? 1;
 			$new_result->content_type = "pagepost";
 			$new_result->g_content_type = "post_page_cpt";
 

@@ -13,6 +13,7 @@ class Manager implements ManagerInterface {
 
 	private
 		$method,	// file, optimized, inline
+		$force_inline = false,	// When "file" is the $method, but the files can't be created
 		$media_query,
 		$minify;
 	public
@@ -32,7 +33,7 @@ class Manager implements ManagerInterface {
 				$this->generator->generate();
 				if ( !$this->generator->verifyFiles() ) {
 					// Swap to inline if the files were not generated
-					$this->method = 'inline';
+					$this->force_inline = true;
 				}
 			}
 		}
@@ -53,11 +54,18 @@ class Manager implements ManagerInterface {
 			if ( !$this->generator->verifyFiles() ) {
 				$this->generator->generate();
 				if ( !$this->generator->verifyFiles() ) {
-					$this->method = 'inline';
-					return;
+					$this->force_inline = true;
 				}
 			}
-			wp_enqueue_style('asp-instances', $this->url('instances'), array(), $this->media_query);
+			// Still enqueue to the head, but the file was not possible to create.
+			if ( $this->force_inline ) {
+				add_action('wp_head', function(){
+					echo $this->getBasic();
+					echo $this->getInstances();
+				}, 999);
+			} else {
+				wp_enqueue_style('asp-instances', $this->url('instances'), array(), $this->media_query);	
+			}
 		}
 	}
 
@@ -84,13 +92,14 @@ class Manager implements ManagerInterface {
 	private function getBasic(): string {
 		$output = '';
 
-		if ( $this->method == 'optimized' ) {
-			$output = '<link rel="stylesheet" id="asp-basic" href="' . $this->url('basic') . '?mq='.$this->media_query.'" media="all" />';
-		} else if ( $this->method == 'inline' ) {
+
+		if ( $this->method == 'inline' || $this->force_inline ) {
 			$css = get_site_option('asp_css', array('basic' => '', 'instances' => array()));
 			if ( $css['basic'] != '' ) {
 				$output .= "<style id='asp-basic'>" . $css['basic'] . "</style>";
 			}
+		} else 	if ( $this->method == 'optimized' ) {
+			$output = '<link rel="stylesheet" id="asp-basic" href="' . $this->url('basic') . '?mq='.$this->media_query.'" media="all" />';
 		}
 		return $output;
 	}
@@ -102,21 +111,25 @@ class Manager implements ManagerInterface {
 				$this->method = 'inline';
 			}
 		}
-		// Widgets screen
+		
 		if (
-			wp_is_json_request() ||
-			isset($_GET, $_GET['et_fb']) || // Divi frontend editor
-			isset($_GET, $_GET['vcv-ajax']) || // Visual Composer Frontend editor
-			isset($_GET, $_GET['fl_builder']) || // Beaver Builder Frontend editor
-			isset($_GET, $_GET['elementor-preview']) // Elementor Frontend
+			current_user_can('administrator') && (
+				wp_is_json_request() || // Widgets screen
+				isset($_GET, $_GET['et_fb']) || // Divi frontend editor
+				isset($_GET, $_GET['vcv-ajax']) || // Visual Composer Frontend editor
+				isset($_GET, $_GET['fl_builder']) || // Beaver Builder Frontend editor
+				isset($_GET, $_GET['elementor-preview']) ||  // Elementor Frontend
+				(isset($_GET, $_GET['action']) && $_GET['action'] == 'elementor') // Elementor Parts editor
+			)
 		) {
 			$this->method = 'file';
 		}
 	}
 
-	private function getInstances( $instances ): string {
+	private function getInstances( $instances = false ): string {
 		$css = get_site_option('asp_css', array('basic' => '', 'instances' => array()));
 		$output = '';
+		$instances = $instances === false ? array_keys($css['instances']) : $instances;
 		foreach ($instances as $search_id) {
 			if ( isset($css['instances'][$search_id]) && $css['instances'][$search_id] != '' ) {
 				$output .= "<style id='asp-instance-$search_id'>" . $css['instances'][$search_id] . "</style>";

@@ -1,7 +1,9 @@
 <?php
 namespace WPDRMS\ASP\Search;
 
+use WPDRMS\ASP\Utils\Html;
 use WPDRMS\ASP\Utils\MB;
+use WPDRMS\ASP\Utils\Post;
 use WPDRMS\ASP\Utils\Str;
 
 defined('ABSPATH') or die("You can't access this file directly.");
@@ -433,36 +435,15 @@ class SearchTaxonomyTerms extends AbstractSearch {
 
 			// ------------------------ CONTENT & CONTEXT --------------------------
 			// Get the words from around the search phrase, or just the description
-			$_content = $v->content;
-			$_description_context = $sd['description_context'] ?? 0;
-			$_description_context_depth = $sd['description_context_depth'] ?? 10000;
-			$_descriptionlength = $sd['tax_res_descriptionlength'] ?? 220;
-			$_content = strip_tags( $_content, $sd['striptagsexclude'] );
-			if ( $_description_context == 1 && count( $_s ) > 0 ) {
-				// Try for an exact match
-				$_ex_content = $this->contextFind(
-					$_content, $s,
-					floor($_descriptionlength / 6),
-					$_descriptionlength,
-					$_description_context_depth,
-					true
-				);
-				if ( $_ex_content === false ) {
-					// No exact match, go with the first keyword
-					$_content = $this->contextFind(
-						$_content, $_s[0],
-						floor($_descriptionlength / 6),
-						$_descriptionlength,
-						$_description_context_depth
-					);
-				} else {
-					$_content = $_ex_content;
-				}
-			} else if ( $_content != '' && (  MB::strlen( $_content ) > $_descriptionlength ) ) {
-				$_content = wd_substr_at_word($_content, $_descriptionlength);
+			$_content = Post::dealWithShortcodes($v->content, $sd['shortcode_op'] == "remove");	
+			$_content = Html::stripTags($_content, $sd['striptagsexclude']);
+			// Get the words from around the search phrase, or just the description
+			if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '') {
+				$_content = Str::getContext($_content, $sd['descriptionlength'], $sd['description_context_depth'], $s, $_s);
+			} else if ( $_content != '' && (  MB::strlen( $_content ) > $sd['descriptionlength'] ) ) {
+				$_content = wd_substr_at_word($_content, $sd['descriptionlength']);
 			}
-			$_content   = wd_closetags( $_content );
-			$v->content = $_content;
+			$v->content = Str::fixSSLURLs( wd_closetags($_content) );
 			// ---------------------------------------------------------------------
 
 			$term_url = get_term_link( (int)$v->id, $v->taxonomy);

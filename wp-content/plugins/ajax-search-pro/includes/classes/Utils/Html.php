@@ -5,6 +5,24 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
 if ( !class_exists(__NAMESPACE__ . '\Html') ) {
 	class Html {
+		public static function stripTags($string, $allowable_tags = '', $white_space = ' ') {
+			// Remove inline styles and scripts
+			$string = preg_replace( array(
+				'#<script(.*?)>(.*?)</script>#is',
+				'#<style(.*?)>(.*?)</style>#is'
+			), '', $string );
+
+			$string = str_replace('<', $white_space . '<', $string);
+			// Non breakable spaces to regular spaces
+			$string = preg_replace('/\xc2\xa0/', ' ', $string);
+			// Duplicated spaces
+			$string = preg_replace('/\s+/', " ", $string);
+			$string = strip_tags($string, $allowable_tags);
+			$string = trim($string);
+	
+			return $string;
+		}
+
 		public static function toTxt( string $document ) {
 			$search = array(
 				'@<script[^>]*?>.*?</script>@si', // Strip out javascript

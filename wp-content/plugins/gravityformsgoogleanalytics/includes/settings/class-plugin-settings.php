@@ -57,13 +57,6 @@ class Plugin_Settings {
 	public function get_fields() {
 
 		if ( $this->is_connected() ) {
-			if ( ! $this->addon->requires_api_reauthentication() && ( $this->addon->requires_upgrade() || rgget( 'gfga_allow_restore' ) === '1' ) ) {
-				return array(
-					$this->get_connection_display(),
-					$this->addon->upgrade_feeds_section(),
-					$this->get_advanced_fields(),
-				);
-			}
 			return array(
 				$this->get_connection_display(),
 				$this->get_advanced_fields(),
@@ -71,13 +64,6 @@ class Plugin_Settings {
 		}
 
 		if ( $this->is_manual_configuration() ) {
-			if ( ! $this->addon->requires_api_reauthentication() && ( $this->addon->requires_upgrade() || rgget( 'gfga_allow_restore' ) === '1' ) ) {
-				return array(
-					$this->manual_connection_settings(),
-					$this->addon->upgrade_feeds_section(),
-				);
-			}
-
 			return array( $this->manual_connection_settings() );
 		}
 
@@ -88,6 +74,11 @@ class Plugin_Settings {
 		return $this->get_connection_mode_fields();
 	}
 
+	/**
+	 * Display the settings updated notice
+	 *
+	 * @since 2.0.0
+	 */
 	public function maybe_display_settings_updated() {
 		if ( rgget( 'updated' ) ) {
 			printf(
@@ -335,132 +326,132 @@ class Plugin_Settings {
 		$options = $this->addon->get_options();
 
 		return array(
-				'id'     => 'google-analytics-settings',
-				'fields' => array(
-					array(
-						'name'  => 'connection_mode',
-						'type'  => 'connection_method',
-						'label' => esc_html__( 'Connection Mode', 'gravityformsgoogleanalytics' ),
-					),
-					array(
-						'name'    => 'ga_connection_type',
-						'type'    => 'select',
-						'label'   => esc_html__( 'Connection Type', 'gravityformsgoogleanalytics' ),
-						'value'   => rgar( $options, 'mode' ),
-						'choices' => array(
-							array(
-								'label' => esc_html__( 'Select a connection type', 'gravityformsgoogleanalytics' ),
-								'value' => '',
-							),
-							array(
-								'label' => 'Google Analytics',
-								'value' => 'ga',
-							),
-							array(
-								'label' => 'Measurement Protocol',
-								'value' => 'gmp',
-							),
-							array(
-								'label' => 'Tag Manager',
-								'value' => 'gtm',
-							),
+			'id'     => 'google-analytics-settings',
+			'fields' => array(
+				array(
+					'name'  => 'connection_mode',
+					'type'  => 'connection_method',
+					'label' => esc_html__( 'Connection Mode', 'gravityformsgoogleanalytics' ),
+				),
+				array(
+					'name'    => 'ga_connection_type',
+					'type'    => 'select',
+					'label'   => esc_html__( 'Connection Type', 'gravityformsgoogleanalytics' ),
+					'value'   => rgar( $options, 'mode' ),
+					'choices' => array(
+						array(
+							'label' => esc_html__( 'Select a connection type', 'gravityformsgoogleanalytics' ),
+							'value' => '',
 						),
-					),
-					array(
-						'name'        => 'ga_measurement_id',
-						'type'        => 'text',
-						'label'       => esc_html__( 'Analytics Measurement ID', 'gravityformsgoogleanalytics' ),
-						'value'       => rgars( $options, 'ga4_account/measurement_id' ),
-						'dependency'  => array(
-							'live'   => true,
-							'fields' => array(
-								array(
-									'field'  => 'ga_connection_type',
-									'values' => array( 'ga', 'gmp' ),
-								),
-							),
+						array(
+							'label' => esc_html__( 'Google Analytics', 'gravityformsgoogleanalytics' ),
+							'value' => 'ga',
 						),
-						'description' => sprintf(
-						// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
-							__( 'Please enter the measurement ID (format: G-XXXXXX). %sLearn more about finding your measurement ID%s.', 'gravityformsgoogleanalytics' ),
-							'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#google-analytics" target="_blank">',
-							'</a>'
+						array(
+							'label' => esc_html__( 'Measurement Protocol', 'gravityformsgoogleanalytics' ),
+							'value' => 'gmp',
 						),
-					),
-					array(
-						'name'        => 'gmp_api_secret',
-						'type'        => 'text',
-						'input_type'  => 'password',
-						'label'       => esc_html__( 'Measurement Protocol API Secret', 'gravityformsgoogleanalytics' ),
-						'value'       => rgars( $options, 'ga4_account/gmp_api_secret' ),
-						'dependency'  => array(
-							'live'   => true,
-							'fields' => array(
-								array(
-									'field'  => 'ga_connection_type',
-									'values' => array( 'gmp' ),
-								),
-							),
+						array(
+							'label' => esc_html__( 'Tag Manager', 'gravityformsgoogleanalytics' ),
+							'value' => 'gtm',
 						),
-						'description' => sprintf(
-						// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
-							__( 'Please enter your API secret. %sLearn more about finding your API secret%s.', 'gravityformsgoogleanalytics' ),
-							'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-measurement-protocol" target="_blank">',
-							'</a>'
-						),
-					),
-					array(
-						'name'        => 'gtm_container_id',
-						'type'        => 'text',
-						'label'       => esc_html__( 'Tag Manager Container ID', 'gravityformsgoogleanalytics' ),
-						'value'       => rgars( $options, 'ga4_account/gtm_container_id' ),
-						'description' => sprintf(
-						// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
-							__( 'Please enter the container ID (format: GTM-XXXXXX). %sLearn more about finding your container ID%s.', 'gravityformsgoogleanalytics' ),
-							'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-tag-manager" target="_blank">',
-							'</a>'
-						),
-						'dependency'  => array(
-							'live'   => true,
-							'fields' => array(
-								array(
-									'field'  => 'ga_connection_type',
-									'values' => array( 'gtm' ),
-								),
-							),
-						),
-					),
-					array(
-						'name'        => 'gtm_workspace_id',
-						'type'        => 'text',
-						'label'       => esc_html__( 'Tag Manager Workspace ID', 'gravityformsgoogleanalytics' ),
-						'value'       => rgars( $options, 'ga4_account/gtm_workspace_id' ),
-						'description' => sprintf(
-						// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
-							__( 'Please enter the workspace name Id. %sLearn more about finding your Workspaces%s.', 'gravityformsgoogleanalytics' ),
-							'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-tag-manager" target="_blank">',
-							'</a>'
-						),
-						'dependency'  => array(
-							'live'   => true,
-							'fields' => array(
-								array(
-									'field'  => 'ga_connection_type',
-									'values' => array( 'gtm' ),
-								),
-							),
-						),
-					),
-					array(
-						'name' => 'manual_action',
-						'type' => 'manual_action',
-					),
-					array(
-						'name' => 'nonce',
-						'type' => 'nonce_connect',
 					),
 				),
-			);
+				array(
+					'name'        => 'ga_measurement_id',
+					'type'        => 'text',
+					'label'       => esc_html__( 'Analytics Measurement ID', 'gravityformsgoogleanalytics' ),
+					'value'       => rgars( $options, 'ga4_account/measurement_id' ),
+					'dependency'  => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => 'ga_connection_type',
+								'values' => array( 'ga', 'gmp' ),
+							),
+						),
+					),
+					'description' => sprintf(
+					// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
+						__( 'Please enter the measurement ID (format: G-XXXXXX). %sLearn more about finding your measurement ID%s.', 'gravityformsgoogleanalytics' ),
+						'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-measurement-protocol" target="_blank">',
+						'</a>'
+					),
+				),
+				array(
+					'name'        => 'gmp_api_secret',
+					'type'        => 'text',
+					'input_type'  => 'password',
+					'label'       => esc_html__( 'Measurement Protocol API Secret', 'gravityformsgoogleanalytics' ),
+					'value'       => rgars( $options, 'ga4_account/gmp_api_secret' ),
+					'dependency'  => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => 'ga_connection_type',
+								'values' => array( 'gmp' ),
+							),
+						),
+					),
+					'description' => sprintf(
+					// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
+						__( 'Please enter your API secret. %1$sLearn more about finding your API secret%2$s.', 'gravityformsgoogleanalytics' ),
+						'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-measurement-protocol" target="_blank">',
+						'</a>'
+					),
+				),
+				array(
+					'name'        => 'gtm_container_id',
+					'type'        => 'text',
+					'label'       => esc_html__( 'Tag Manager Container ID', 'gravityformsgoogleanalytics' ),
+					'value'       => rgars( $options, 'ga4_account/gtm_container_id' ),
+					'description' => sprintf(
+					// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
+						__( 'Please enter the container ID (format: GTM-XXXXXX). %1$sLearn more about finding your container ID%2$s.', 'gravityformsgoogleanalytics' ),
+						'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-tag-manager" target="_blank">',
+						'</a>'
+					),
+					'dependency'  => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => 'ga_connection_type',
+								'values' => array( 'gtm' ),
+							),
+						),
+					),
+				),
+				array(
+					'name'        => 'gtm_workspace_id',
+					'type'        => 'text',
+					'label'       => esc_html__( 'Tag Manager Workspace ID', 'gravityformsgoogleanalytics' ),
+					'value'       => rgars( $options, 'ga4_account/gtm_workspace_id' ),
+					'description' => sprintf(
+					// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
+						__( 'Please enter the workspace name Id. %1$sLearn more about finding your Workspaces%2$s.', 'gravityformsgoogleanalytics' ),
+						'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-tag-manager" target="_blank">',
+						'</a>'
+					),
+					'dependency'  => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => 'ga_connection_type',
+								'values' => array( 'gtm' ),
+							),
+						),
+					),
+				),
+				array(
+					'name' => 'manual_action',
+					'type' => 'manual_action',
+				),
+				array(
+					'name' => 'nonce',
+					'type' => 'nonce_connect',
+				),
+			),
+		);
 	}
 
 	/**
@@ -642,7 +633,7 @@ class Plugin_Settings {
 	 *
 	 * @since 1.0
 	 *
-	 * @param array $payload
+	 * @param array $payload The payload received from Gravity API.
 	 *
 	 * @return array
 	 */

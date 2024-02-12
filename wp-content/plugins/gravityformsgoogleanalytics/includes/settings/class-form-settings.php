@@ -114,6 +114,27 @@ class Form_Settings {
 					'save_callback'  => function( $values ) use ( $form ) {
 						$this->save_form_settings( $form, $values );
 					},
+					'before_fields'  => function() use ( $form ) {
+						?>
+
+						<script type="text/javascript">
+
+							gform.addFilter( 'gform_merge_tags', 'addPaginationMergeTags' );
+
+							function addPaginationMergeTags( mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option ) {
+								mergeTags[ 'other' ].tags.push( {
+									tag: '{source_page_number}',
+									label: <?php echo json_encode( __( 'Source Page Number', 'gravityforms' ) ) ?> } );
+								mergeTags[ 'other' ].tags.push( {
+									tag: '{current_page_number}',
+									label: <?php echo json_encode( __( 'Current Page Number', 'gravityforms' ) ) ?> } );
+
+								return mergeTags;
+							}
+						</script>
+						<?php
+
+					},
 					'after_fields'   => function() use ( $form ) {
 
 						printf(
@@ -149,7 +170,6 @@ class Form_Settings {
 	 */
 	public function save_form_settings( $form, $settings ) {
 		$form[ $this->addon->get_slug() ] = $settings;
-		$form[ $this->addon->get_slug() ]['ga4_compatible'] = '1';
 		$result                           = GFFormsModel::update_form_meta( $form['id'], $form );
 
 		return ! ( false === $result );
@@ -177,11 +197,6 @@ class Form_Settings {
 						'class'    => 'medium',
 						'required' => true,
 						'tooltip'  => '<strong>' . esc_html__( 'Feed Name', 'gravityformsgoogleanalytics' ) . '</strong>' . esc_html__( 'Enter a feed name to uniquely identify this feed.', 'gravityformsgoogleanalytics' ),
-					),
-					array(
-						'name' 			=> 'ga4_compatible',
-						'type' 			=> 'hidden',
-						'default_value' => '1',
 					),
 				),
 			),
@@ -522,11 +537,6 @@ class Form_Settings {
 									'name'  => 'google_analytics_pagination',
 								),
 							),
-						),
-						array(
-							'name' 			=> 'ga4_compatible',
-							'type' 			=> 'hidden',
-							'default_value' => '1',
 						),
 					),
 				),

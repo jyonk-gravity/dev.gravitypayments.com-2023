@@ -783,6 +783,8 @@ class Manager {
 					}
 				}
 			}
+			
+			$field_type = function_exists('get_field') ? asp_acf_get_field_type($field) : 'text';
 
 			if ( empty($values) )
 				$values = get_post_meta( $the_post->ID, $field, false );
@@ -805,20 +807,37 @@ class Manager {
 				$value = !is_array($value) ? array($value) : $value;
 
 				foreach ( $value as $v ) {
-					$v = Str::anyToString( $v );
-					if ( $v != '' ) {
-						if ( isset($acf_labels[$v]) && $v != $acf_labels[$v] ) {
-							$v .= ' ' . $acf_labels[$v];
-						}
-						$cf_content .= " " . $v;
-						// Without spaces for short values (for example product SKUs)
-						if ( $fn_strlen($v) <= 50 ) {
-							$spaceless_value = str_replace(' ', '', $v);
-							if ( $spaceless_value != $v ) {
-								$cf_content .= " " . $spaceless_value;
+				    if ( $field_type == 'user' ) {
+				        if ( is_numeric($v) ) {
+				            $user = get_userdata( $v );
+				            if ( !is_wp_error($user) && isset($user->display_name) ) {
+				                $cf_content .= " " . $user->display_name;
+				            }
+				        }
+				    } else if ( $field_type == 'post_object' ) {
+				        if ( is_numeric($v) ) {
+							$reference_post_title = get_the_title($v);
+							if ( !is_wp_error($reference_post_title) && $reference_post_title != '' ) {
+								$cf_content .= " " . $reference_post_title;
 							}
-						}
-					}
+				        }
+				    } else {
+    					$v = Str::anyToString( $v );
+    					if ( $v != '' ) {
+    						if ( isset($acf_labels[$v]) && $v != $acf_labels[$v] ) {
+    							$v .= ' ' . $acf_labels[$v];
+    						}
+    						$cf_content .= " " . $v;
+    						// Without spaces for short values (for example product SKUs)
+    						if ( $fn_strlen($v) <= 50 ) {
+    							$spaceless_value = str_replace(' ', '', $v);
+    							if ( $spaceless_value != $v ) {
+    								$cf_content .= " " . $spaceless_value;
+    							}
+    						}
+    					}
+				    }
+
 				}
 			}
 

@@ -13,6 +13,7 @@ if (!class_exists("wpdreamsBP_XProfileFields")) {
 	 */
 	class wpdreamsBP_XProfileFields extends wpdreamsType {
 		private $selected;
+		private $types;
 
 		function getType() {
 

@@ -79,19 +79,27 @@ class Elementor extends AbstractFilter {
 			if (
 				wd_asp()->instances->exists( $id )
 			) {
+				$instance = wd_asp()->instances->get($id);
+				$sd = $instance['data'];
+
+				if ( isset($sd['customtypes']) ) {
+					$post_type = in_array('product_variation', $sd['customtypes']) ? array('product', 'product_variation') : array('product');
+				} else {
+					$post_type = array('product');
+				}
 				$ids = array();
 				$phrase = $_GET['asp_ls'] ?? $_GET['s'];
 				$search_args = array(
 					"s" => $phrase,
 					"_ajax_search" => false,
-					"post_type" => array('product'),
+					"post_type" => $post_type,
 					"search_type" => array('cpt'),
 					// Do not recommend going over that, as the post__in argument will generate a
 					// too long query to complete, as well as Elementor processes all of these
 					// results, yielding a terrible loading time.
 					'posts_per_page' =>500
 				);
-				$search_args = SearchOverride::getAdditionalArgs($search_args);
+				add_filter('asp_query_args', array(SearchOverride::getInstance(), 'getAdditionalArgs'));
 
 				if ( isset($_GET['asp_force_reset_pagination']) ) {
 					// For the correct pagination highlight

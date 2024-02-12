@@ -20,7 +20,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
  *
  * You can leave empty lines for better visibility, they are cleared before output.
  *
- * MORE INFO: https://wp-dreams.com/knowledge-base/result-templating/
+ * MORE INFO: https://knowledgebase.ajaxsearchpro.com/hooks/templating/result-templating
  *
  * @since: 4.0
  */

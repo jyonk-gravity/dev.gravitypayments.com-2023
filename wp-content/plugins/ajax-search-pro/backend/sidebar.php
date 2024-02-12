@@ -10,6 +10,11 @@ defined( 'ABSPATH' ) or die( "You can't access this file directly." ); ?>
 	<input type="text" value="" id="asp-os-input" placeholder="<?php echo esc_attr__('Search in options', 'ajax-search-pro'); ?>">
 	<div id="asp-os-results"></div>
 	<?php endif; ?>
+	<div class="asp-beta-testing">
+		<h2>Want to test the latest features?</h2>
+		<p><a href="https://ajaxsearchpro.com/development-roadmap-beta-testing/" target="_blank">Join the beta testers!</a></p>
+		<p>Beta testers gain access to the latest updates before the final release.</p>
+	</div>
 	<div class="newsletter">
 		<h2>Subscribe to our newsletter</h2>
 		<p>Get the latest news and updates</p>

@@ -61,7 +61,11 @@ class WooCommerce {
 						$price = $p->get_regular_price();
 						break;
 					case '_sale_price':
-						$price = $p->get_sale_price();
+						if ( $p->is_on_sale() ) {
+							$price = $p->get_sale_price();
+						} else {
+							$price = '';
+						}
 						break;
 					case '_tax_price':
 						$price = wc_get_price_including_tax($p);

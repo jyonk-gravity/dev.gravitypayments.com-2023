@@ -170,7 +170,7 @@ if ( !class_exists(__NAMESPACE__ . '\Manager') ) {
 		public function exists($table_slug = '', $force_check = false): bool {
 			global $wpdb;
 			// Store the data in the options cache as SHOW TABLES .. query is expensive
-			$table_opt = get_option('_asp_tables', array());
+			$table_opt = get_option('_asp_db_tables', array());
 
 			if ( !$force_check ) {
 				if ( isset($table_opt[$table_slug]) && $table_opt[$table_slug] == 1 )
@@ -189,11 +189,11 @@ if ( !class_exists(__NAMESPACE__ . '\Manager') ) {
 				strtolower($db_table_name) != strtolower($table_name)   // Some databases return lowercase, ignore that
 			) {
 				$table_opt[$table_slug] = 0;
-				update_option('_asp_tables', $table_opt);
+				update_option('_asp_db_tables', $table_opt);
 				return false;
 			} else {
 				$table_opt[$table_slug] = 1;
-				update_option('_asp_tables', $table_opt);
+				update_option('_asp_db_tables', $table_opt);
 				return true;
 			}
 		}
