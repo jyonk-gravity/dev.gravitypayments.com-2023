@@ -82,6 +82,7 @@ use WPDRMS\ASP\Utils\Css;defined('ABSPATH') or die("You can't access this file d
 <?php endif; ?>
 <?php echo $asp_res_ids; ?> .photostack nav span {
   <?php wpdreams_gradient_css($style['pdotssmallcolor']); ?>
+  margin: 0 5px;
 }
 
 <?php if ($use_compatibility == true): ?>

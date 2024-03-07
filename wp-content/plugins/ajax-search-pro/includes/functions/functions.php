@@ -1725,9 +1725,11 @@ if ( !function_exists("asp_parse_custom_field_filters") ) {
 				$default = array($bfield->asp_f_number_range_default1, $bfield->asp_f_number_range_default2);
 
 				if ( isset($o['_fo']) && isset($o['_fo']['aspf'][$unique_field_name]['lower']) ) {
+                    $lower = $o['_fo']['aspf'][$unique_field_name]['lower'];
+                    $upper = $o['_fo']['aspf'][$unique_field_name]['upper'];
 					$value = array(
-						Str::forceNumeric($o['_fo']['aspf'][$unique_field_name]['lower']),
-						Str::forceNumeric($o['_fo']['aspf'][$unique_field_name]['upper'])
+						$lower === '' ? $lower : Str::forceNumeric($lower),
+						$upper === '' ? $upper : Str::forceNumeric($upper)
 					);
 				} else {
 					$value = $default;

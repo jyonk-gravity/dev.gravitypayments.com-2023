@@ -119,6 +119,7 @@ class Manager implements ManagerInterface {
 				isset($_GET, $_GET['vcv-ajax']) || // Visual Composer Frontend editor
 				isset($_GET, $_GET['fl_builder']) || // Beaver Builder Frontend editor
 				isset($_GET, $_GET['elementor-preview']) ||  // Elementor Frontend
+				isset($_GET, $_GET['wc-ajax']) ||  // WooCommerce Ajax Request
 				(isset($_GET, $_GET['action']) && $_GET['action'] == 'elementor') // Elementor Parts editor
 			)
 		) {

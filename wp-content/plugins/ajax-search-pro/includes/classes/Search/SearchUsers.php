@@ -880,7 +880,7 @@ class SearchUsers extends AbstractSearch {
 					$val = apply_filters('asp_user_advanced_field_value', $val, $field, $f_args['r'], $f_args);
 					$field_pattern = str_replace( '{'.$complete_field.'}', $val, $field_pattern );
 				} else {
-					$val        = User::getCFValue($field, $f_args['r'], $use_acf);
+					$val        = User::getCFValue($field, $f_args['r'], $use_acf, $field_args);
 					// For the recursive call to break, if any of the fields is empty
 					if ( $empty_on_missing && $val == '')
 						return '';

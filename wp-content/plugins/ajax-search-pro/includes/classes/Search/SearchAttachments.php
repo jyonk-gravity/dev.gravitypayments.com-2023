@@ -524,35 +524,38 @@ class SearchAttachments extends SearchPostTypes {
 
 			$r->content = Str::fixSSLURLs($r->content);
 
-			if ($args['attachment_use_image'] == 1 && $r->guid != "") {
-				$image_settings = $sd['image_options'];
-				$image_args = array(
-					'get_content' => false,
-					'get_excerpt' => false,
-					'image_sources' => array(
-						$image_settings['image_source1'],
-						$image_settings['image_source2'],
-						$image_settings['image_source3'],
-						$image_settings['image_source4'],
-						$image_settings['image_source5']
-					),
-					'image_source_size' => $image_settings['image_source_featured'] == "original" ? 'full' : $image_settings['image_source_featured'],
-					'image_default' => $image_settings['image_default'],
-					'image_number' => $sd['image_parser_image_number'],
-					'image_custom_field' => $image_settings['image_custom_field'],
-					'exclude_filenames' => $sd['image_parser_exclude_filenames'],
-					'image_width' => $image_settings['image_width'],
-					'image_height' => $image_settings['image_height'],
-					'apply_the_content' => $image_settings['apply_content_filter'],
-					'image_cropping' => $image_settings['image_cropping'],
-					'image_transparency' => $image_settings['image_transparency'],
-					'image_bg_color' => $image_settings['image_bg_color']
-				);
-				$r->image = Post::parseImage($r, $image_args);
+			$image_settings = $sd['image_options'];
+			$image_args = array(
+				'get_content' => false,
+				'get_excerpt' => false,
+				'image_sources' => array(
+					$image_settings['image_source1'],
+					$image_settings['image_source2'],
+					$image_settings['image_source3'],
+					$image_settings['image_source4'],
+					$image_settings['image_source5']
+				),
+				'image_source_size' => $image_settings['image_source_featured'] == "original" ? 'full' : $image_settings['image_source_featured'],
+				'image_default' => $image_settings['image_default'],
+				'image_number' => $sd['image_parser_image_number'],
+				'image_custom_field' => $image_settings['image_custom_field'],
+				'exclude_filenames' => $sd['image_parser_exclude_filenames'],
+				'image_width' => $image_settings['image_width'],
+				'image_height' => $image_settings['image_height'],
+				'apply_the_content' => $image_settings['apply_content_filter'],
+				'image_cropping' => $image_settings['image_cropping'],
+				'image_transparency' => $image_settings['image_transparency'],
+				'image_bg_color' => $image_settings['image_bg_color']
+			);
+			if (
+				$r->post_mime_type == 'application/pdf' &&
+				$args['attachment_pdf_image'] == 1
+			) {
+				$r->image = Pdf::getThumbnail($r->id, false, $image_args['image_source_size']);
 			}
 
-			if ( $r->post_mime_type == 'application/pdf' && $args['attachment_pdf_image'] == 1 && empty($r->image) ) {
-				$r->image = Pdf::getThumbnail($r->id);
+			if ( empty($r->image) && $args['attachment_use_image'] == 1 && $r->guid != "" ) {
+				$r->image = Post::parseImage($r, $image_args);
 			}
 
 			/* Remove the results in polaroid mode */

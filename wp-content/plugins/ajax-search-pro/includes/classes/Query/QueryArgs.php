@@ -791,8 +791,10 @@ class QueryArgs {
 				}
 
 				// Manage inclusions from the back-end
-				if ( isset($sd_include[$taxonomy]) && count($sd_include[$taxonomy]) > 0 )
+				if ( isset($sd_include[$taxonomy]) && count($sd_include[$taxonomy]) > 0 ) {
 					$include_terms = array_unique( array_merge($include_terms, $sd_include[$taxonomy]) );
+				}
+
 
 				if ( !empty($include_terms) || !empty($exclude_terms) ) {
 					$add = array(
@@ -805,6 +807,22 @@ class QueryArgs {
 					);
 					if ( $override_allow_empty !== '' ) {
 						$add['allow_empty'] = $override_allow_empty;
+					}
+					// Include child terms of selected included terms
+					if ( $sd['frontend_terms_parent_child_assignment'] ) {
+						foreach ( $add['exclude'] as $term ) {
+							$children = get_term_children($term, $taxonomy);
+							if ( !is_wp_error($children) ) {
+								$add['exclude'] = array_merge($add['exclude'], $children);
+							}
+						}
+						foreach ( $add['include'] as $term ) {
+							$children = get_term_children($term, $taxonomy);
+							if ( !is_wp_error($children) ) {
+								$add['include'] = array_merge($add['include'], $children);
+							}
+						}
+						$add['include'] = array_diff(array_unique($add['include']), $add['exclude']);
 					}
 					$ret[] = $add;
 				}

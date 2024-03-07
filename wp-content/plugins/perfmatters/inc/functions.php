@@ -152,7 +152,8 @@ function perfmatters_rest_authentication_errors($result) {
 			'wordfence',
 			'elementor',
 			'ws-form',
-			'litespeed'
+			'litespeed',
+			'wp-recipe-maker'
 		));
 		foreach($exceptions as $exception) {
 			if(strpos($rest_route, $exception) !== false) {
@@ -1384,7 +1385,9 @@ function perfmatters_is_page_builder() {
 		'bricks', //bricks
 		'vc_editable', //wp bakery
 		'op3editor', //optimizepress
-		'cs_preview_state' //cornerstone
+		'cs_preview_state', //cornerstone
+		'breakdance', //breakdance
+    	'breakdance_iframe'
 	));
 
 	if(!empty($page_builders)) {

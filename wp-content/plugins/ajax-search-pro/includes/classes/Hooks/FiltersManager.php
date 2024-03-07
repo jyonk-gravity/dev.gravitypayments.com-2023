@@ -205,6 +205,12 @@ class FiltersManager {
 			"args" => 1
 		),
 		array(
+			"filter" => "asp_post_custom_field_before_tokenize",
+			"handler" => array("ACF", "indexRepeaterAndFlexFields"),
+			"priority" => 10,
+			"args" => 3
+		),
+		array(
 			"filter" => "et_builder_ready",
 			"handler" => array("EtcFixes", "diviBuilderReady"),
 			"priority" => 9999,

@@ -321,10 +321,12 @@ class SearchOverride extends AbstractFilter {
 			} else if ( Archive::isTaxonomyArchive() ) {
 				$args['search_type'] = array('cpt');
 				$found = false;
+				$children = get_term_children(get_queried_object()->term_id, get_queried_object()->taxonomy);
+				$include = !is_wp_error($children) ? array_merge(array(get_queried_object()->term_id), $children) : array(get_queried_object()->term_id);
 				if ( isset($args['post_tax_filter']) ) {
 					foreach ($args['post_tax_filter'] as &$filter) {
 						if ( $filter['taxonomy'] == get_queried_object()->taxonomy ) {
-							$filter['include'] = array(get_queried_object()->term_id);
+							$filter['include'] = array_diff($include, $filter['exclude']);
 							$found = true;
 							break;
 						}
@@ -333,7 +335,7 @@ class SearchOverride extends AbstractFilter {
 				if ( !$found ) {
 					$args['post_tax_filter'][] = array(
 						'taxonomy'    => get_queried_object()->taxonomy,
-						'include'     => array(get_queried_object()->term_id),
+						'include'     => $include,
 						'exclude'     => array(),
 						'allow_empty' => true
 					);

@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Ajax Search Pro plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Pro 4.26.3\n"
+"Project-Id-Version: Ajax Search Pro 4.26.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ajax-search-pro\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-08T16:17:52+00:00\n"
+"POT-Creation-Date: 2024-03-04T11:41:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: ajax-search-pro\n"
@@ -87,7 +87,7 @@ msgstr ""
 #: backend/tabs/instance/suggest/autocomplete.php:5
 #: backend/tabs/instance/suggest/autocomplete.php:36
 #: build/ajax-search-pro/backend/analytics.php:105
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:93
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:105
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:30
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:28
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:31
@@ -101,7 +101,7 @@ msgstr ""
 #: build/ajax-search-pro/backend/tabs/instance/suggest/autocomplete.php:5
 #: build/ajax-search-pro/backend/tabs/instance/suggest/autocomplete.php:36
 #: build/full/ajax-search-pro/backend/analytics.php:105
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:93
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:105
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:30
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:28
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:31
@@ -665,27 +665,27 @@ msgstr ""
 
 #: backend/Classes/Options/CustomField.php:50
 #: backend/settings/class/customfields.class.php:44
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/CustomField.php:49
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/CustomField.php:53
 #: build/ajax-search-pro/backend/settings/class/customfields.class.php:44
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/CustomField.php:49
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/CustomField.php:53
 #: build/full/ajax-search-pro/backend/settings/class/customfields.class.php:44
 msgid "Use the search bar above to look for custom fields"
 msgstr ""
 
 #: backend/Classes/Options/CustomField.php:54
 #: backend/settings/class/customfields.class.php:46
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/CustomField.php:53
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/CustomField.php:57
 #: build/ajax-search-pro/backend/settings/class/customfields.class.php:46
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/CustomField.php:53
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/CustomField.php:57
 #: build/full/ajax-search-pro/backend/settings/class/customfields.class.php:46
 msgid "Drag here the custom fields you want to use!"
 msgstr ""
 
 #: backend/Classes/Options/CustomFieldSearch.php:33
 #: backend/settings/class/wd_cf_search_callback.class.php:40
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/CustomFieldSearch.php:78
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/CustomFieldSearch.php:80
 #: build/ajax-search-pro/backend/settings/class/wd_cf_search_callback.class.php:39
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/CustomFieldSearch.php:78
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/CustomFieldSearch.php:80
 #: build/full/ajax-search-pro/backend/settings/class/wd_cf_search_callback.class.php:39
 msgid "Search custom fields.."
 msgstr ""
@@ -951,11 +951,11 @@ msgstr ""
 #: backend/Classes/Options/UserSelect.php:52
 #: backend/settings/class/dateinterval.class.php:26
 #: backend/settings/class/wd_user_select.class.php:39
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:22
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:60
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/UserSelect.php:36
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:26
 #: build/ajax-search-pro/backend/settings/class/wd_user_select.class.php:39
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:22
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:60
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/UserSelect.php:36
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:26
 #: build/full/ajax-search-pro/backend/settings/class/wd_user_select.class.php:39
@@ -965,11 +965,11 @@ msgstr ""
 #: backend/Classes/Options/UserSelect.php:53
 #: backend/settings/class/dateinterval.class.php:25
 #: backend/settings/class/wd_user_select.class.php:40
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:21
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:59
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/UserSelect.php:37
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:25
 #: build/ajax-search-pro/backend/settings/class/wd_user_select.class.php:40
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:21
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:59
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/UserSelect.php:37
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:25
 #: build/full/ajax-search-pro/backend/settings/class/wd_user_select.class.php:40
@@ -1525,9 +1525,9 @@ msgstr ""
 #: backend/index_table.php:237
 #: backend/tabs/instance/general/sources.php:96
 #: build/ajax-search-pro/backend/index_table.php:237
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:560
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:569
 #: build/full/ajax-search-pro/backend/index_table.php:237
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:560
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:569
 msgid "Comma separated list. WP Defaults: publish, future, draft, pending, private, trash, auto-draft"
 msgstr ""
 
@@ -2901,320 +2901,320 @@ msgstr ""
 
 #: backend/search.php:91
 #: backend/search.php:346
-#: build/ajax-search-pro/backend/search.php:100
-#: build/ajax-search-pro/backend/search.php:354
-#: build/full/ajax-search-pro/backend/search.php:100
-#: build/full/ajax-search-pro/backend/search.php:354
+#: build/ajax-search-pro/backend/search.php:93
+#: build/ajax-search-pro/backend/search.php:347
+#: build/full/ajax-search-pro/backend/search.php:93
+#: build/full/ajax-search-pro/backend/search.php:347
 msgid "Loading..."
 msgstr ""
 
 #: backend/search.php:94
-#: build/ajax-search-pro/backend/search.php:103
-#: build/full/ajax-search-pro/backend/search.php:103
+#: build/ajax-search-pro/backend/search.php:96
+#: build/full/ajax-search-pro/backend/search.php:96
 msgid "Preview"
 msgstr ""
 
 #: backend/search.php:95
-#: build/ajax-search-pro/backend/search.php:104
-#: build/full/ajax-search-pro/backend/search.php:104
+#: build/ajax-search-pro/backend/search.php:97
+#: build/full/ajax-search-pro/backend/search.php:97
 msgid "Refresh"
 msgstr ""
 
 #: backend/search.php:96
-#: build/ajax-search-pro/backend/search.php:105
-#: build/full/ajax-search-pro/backend/search.php:105
+#: build/ajax-search-pro/backend/search.php:98
+#: build/full/ajax-search-pro/backend/search.php:98
 msgid "Show"
 msgstr ""
 
 #: backend/search.php:98
-#: build/ajax-search-pro/backend/search.php:106
-#: build/full/ajax-search-pro/backend/search.php:106
+#: build/ajax-search-pro/backend/search.php:99
+#: build/full/ajax-search-pro/backend/search.php:99
 msgid "Background:"
 msgstr ""
 
 #: backend/search.php:103
-#: build/ajax-search-pro/backend/search.php:111
-#: build/full/ajax-search-pro/backend/search.php:111
+#: build/ajax-search-pro/backend/search.php:104
+#: build/full/ajax-search-pro/backend/search.php:104
 msgid "Please note, that some functions may not work in preview mode.<br>The first loading can take up to 15 seconds!"
 msgstr ""
 
 #: backend/search.php:113
 #: backend/search.php:179
-#: build/ajax-search-pro/backend/search.php:121
-#: build/ajax-search-pro/backend/search.php:187
-#: build/full/ajax-search-pro/backend/search.php:121
-#: build/full/ajax-search-pro/backend/search.php:187
+#: build/ajax-search-pro/backend/search.php:114
+#: build/ajax-search-pro/backend/search.php:180
+#: build/full/ajax-search-pro/backend/search.php:114
+#: build/full/ajax-search-pro/backend/search.php:180
 msgid "Shortcode generator"
 msgstr ""
 
 #: backend/search.php:116
-#: build/ajax-search-pro/backend/search.php:124
-#: build/full/ajax-search-pro/backend/search.php:124
+#: build/ajax-search-pro/backend/search.php:117
+#: build/full/ajax-search-pro/backend/search.php:117
 msgid "This tool is to help you generate a Column/Row based layout for the plugin. For more info on shortcodes, <a href=\"%s\" target=\"_blank\">check this video</a> tutorial."
 msgstr ""
 
 #: backend/search.php:118
-#: build/ajax-search-pro/backend/search.php:126
-#: build/full/ajax-search-pro/backend/search.php:126
+#: build/ajax-search-pro/backend/search.php:119
+#: build/full/ajax-search-pro/backend/search.php:119
 msgid "Search box"
 msgstr ""
 
 #: backend/search.php:118
 #: backend/search.php:119
 #: backend/search.php:120
-#: build/ajax-search-pro/backend/search.php:126
-#: build/ajax-search-pro/backend/search.php:127
-#: build/ajax-search-pro/backend/search.php:128
-#: build/full/ajax-search-pro/backend/search.php:126
-#: build/full/ajax-search-pro/backend/search.php:127
-#: build/full/ajax-search-pro/backend/search.php:128
+#: build/ajax-search-pro/backend/search.php:119
+#: build/ajax-search-pro/backend/search.php:120
+#: build/ajax-search-pro/backend/search.php:121
+#: build/full/ajax-search-pro/backend/search.php:119
+#: build/full/ajax-search-pro/backend/search.php:120
+#: build/full/ajax-search-pro/backend/search.php:121
 msgid "Ratio:"
 msgstr ""
 
 #: backend/search.php:119
-#: build/ajax-search-pro/backend/search.php:127
-#: build/full/ajax-search-pro/backend/search.php:127
+#: build/ajax-search-pro/backend/search.php:120
+#: build/full/ajax-search-pro/backend/search.php:120
 msgid "Settings box"
 msgstr ""
 
 #: backend/search.php:120
-#: build/ajax-search-pro/backend/search.php:128
-#: build/full/ajax-search-pro/backend/search.php:128
+#: build/ajax-search-pro/backend/search.php:121
+#: build/full/ajax-search-pro/backend/search.php:121
 msgid "Results box"
 msgstr ""
 
 #: backend/search.php:126
-#: build/ajax-search-pro/backend/search.php:134
-#: build/full/ajax-search-pro/backend/search.php:134
+#: build/ajax-search-pro/backend/search.php:127
+#: build/full/ajax-search-pro/backend/search.php:127
 msgid "Pre-defined variations"
 msgstr ""
 
 #: backend/search.php:127
-#: build/ajax-search-pro/backend/search.php:135
-#: build/full/ajax-search-pro/backend/search.php:135
+#: build/ajax-search-pro/backend/search.php:128
+#: build/full/ajax-search-pro/backend/search.php:128
 msgid "Search/Results 50/50"
 msgstr ""
 
 #: backend/search.php:128
-#: build/ajax-search-pro/backend/search.php:136
-#: build/full/ajax-search-pro/backend/search.php:136
+#: build/ajax-search-pro/backend/search.php:129
+#: build/full/ajax-search-pro/backend/search.php:129
 msgid "Search/Settings 50/50"
 msgstr ""
 
 #: backend/search.php:129
-#: build/ajax-search-pro/backend/search.php:137
-#: build/full/ajax-search-pro/backend/search.php:137
+#: build/ajax-search-pro/backend/search.php:130
+#: build/full/ajax-search-pro/backend/search.php:130
 msgid "Search/Settings/Results in columns"
 msgstr ""
 
 #: backend/search.php:130
-#: build/ajax-search-pro/backend/search.php:138
-#: build/full/ajax-search-pro/backend/search.php:138
+#: build/ajax-search-pro/backend/search.php:131
+#: build/full/ajax-search-pro/backend/search.php:131
 msgid "Search/Settings/Results in 100/50/50"
 msgstr ""
 
 #: backend/search.php:131
-#: build/ajax-search-pro/backend/search.php:139
-#: build/full/ajax-search-pro/backend/search.php:139
+#: build/ajax-search-pro/backend/search.php:132
+#: build/full/ajax-search-pro/backend/search.php:132
 msgid "Search/Settings/Results in 50/50/100"
 msgstr ""
 
 #: backend/search.php:133
-#: build/ajax-search-pro/backend/search.php:141
-#: build/full/ajax-search-pro/backend/search.php:141
+#: build/ajax-search-pro/backend/search.php:134
+#: build/full/ajax-search-pro/backend/search.php:134
 msgid "Add the search box"
 msgstr ""
 
 #: backend/search.php:134
-#: build/ajax-search-pro/backend/search.php:142
-#: build/full/ajax-search-pro/backend/search.php:142
+#: build/ajax-search-pro/backend/search.php:135
+#: build/full/ajax-search-pro/backend/search.php:135
 msgid "Add the settings box"
 msgstr ""
 
 #: backend/search.php:135
-#: build/ajax-search-pro/backend/search.php:143
-#: build/full/ajax-search-pro/backend/search.php:143
+#: build/ajax-search-pro/backend/search.php:136
+#: build/full/ajax-search-pro/backend/search.php:136
 msgid "Add the results box"
 msgstr ""
 
 #: backend/search.php:136
-#: build/ajax-search-pro/backend/search.php:144
-#: build/full/ajax-search-pro/backend/search.php:144
+#: build/ajax-search-pro/backend/search.php:137
+#: build/full/ajax-search-pro/backend/search.php:137
 msgid "<b>Copy</b> the shorcode generated:"
 msgstr ""
 
 #: backend/search.php:147
-#: build/ajax-search-pro/backend/search.php:155
-#: build/full/ajax-search-pro/backend/search.php:155
+#: build/ajax-search-pro/backend/search.php:148
+#: build/full/ajax-search-pro/backend/search.php:148
 msgid "Debug mode is on!"
 msgstr ""
 
 #: backend/search.php:152
-#: build/ajax-search-pro/backend/search.php:160
-#: build/full/ajax-search-pro/backend/search.php:160
+#: build/ajax-search-pro/backend/search.php:153
+#: build/full/ajax-search-pro/backend/search.php:153
 msgid "NOTICE: The custom ajax handler is enabled. In case you experience issues, please <a href=\"%s\">turn it off.</a>"
 msgstr ""
 
 #: backend/search.php:159
-#: build/ajax-search-pro/backend/search.php:167
-#: build/full/ajax-search-pro/backend/search.php:167
+#: build/ajax-search-pro/backend/search.php:160
+#: build/full/ajax-search-pro/backend/search.php:160
 msgid "Back to the search list"
 msgstr ""
 
 #: backend/search.php:161
-#: build/ajax-search-pro/backend/search.php:169
+#: build/ajax-search-pro/backend/search.php:162
 #: build/ajax-search-pro/includes/classes/Core/Menu.php:52
-#: build/full/ajax-search-pro/backend/search.php:169
+#: build/full/ajax-search-pro/backend/search.php:162
 #: build/full/ajax-search-pro/includes/classes/Core/Menu.php:52
 #: includes/classes/Core/Menu.php:52
 msgid "Search Statistics"
 msgstr ""
 
 #: backend/search.php:163
-#: build/ajax-search-pro/backend/search.php:171
-#: build/full/ajax-search-pro/backend/search.php:171
+#: build/ajax-search-pro/backend/search.php:164
+#: build/full/ajax-search-pro/backend/search.php:164
 msgid "Compatibility checking"
 msgstr ""
 
 #: backend/search.php:165
-#: build/ajax-search-pro/backend/search.php:173
-#: build/full/ajax-search-pro/backend/search.php:173
+#: build/ajax-search-pro/backend/search.php:166
+#: build/full/ajax-search-pro/backend/search.php:166
 msgid "Caching options"
 msgstr ""
 
 #: backend/search.php:170
-#: build/ajax-search-pro/backend/search.php:178
-#: build/full/ajax-search-pro/backend/search.php:178
+#: build/ajax-search-pro/backend/search.php:171
+#: build/full/ajax-search-pro/backend/search.php:171
 msgid "Warning:  <strong>Ajax Search Lite</strong> is still activated, please deactivate it to assure every PRO feature works properly."
 msgstr ""
 
 #: backend/search.php:178
-#: build/ajax-search-pro/backend/search.php:186
-#: build/full/ajax-search-pro/backend/search.php:186
+#: build/ajax-search-pro/backend/search.php:179
+#: build/full/ajax-search-pro/backend/search.php:179
 msgid "Toggle shortcodes for"
 msgstr ""
 
 #: backend/search.php:182
-#: build/ajax-search-pro/backend/search.php:190
-#: build/full/ajax-search-pro/backend/search.php:190
+#: build/ajax-search-pro/backend/search.php:183
+#: build/full/ajax-search-pro/backend/search.php:183
 msgid "Simple shortcodes"
 msgstr ""
 
 #: backend/search.php:183
-#: build/ajax-search-pro/backend/search.php:191
-#: build/full/ajax-search-pro/backend/search.php:191
+#: build/ajax-search-pro/backend/search.php:184
+#: build/full/ajax-search-pro/backend/search.php:184
 msgid "Search shortcode:"
 msgstr ""
 
 #: backend/search.php:186
-#: build/ajax-search-pro/backend/search.php:194
-#: build/full/ajax-search-pro/backend/search.php:194
+#: build/ajax-search-pro/backend/search.php:187
+#: build/full/ajax-search-pro/backend/search.php:187
 msgid "Search shortcode for templates:"
 msgstr ""
 
 #: backend/search.php:192
-#: build/ajax-search-pro/backend/search.php:200
-#: build/full/ajax-search-pro/backend/search.php:200
+#: build/ajax-search-pro/backend/search.php:193
+#: build/full/ajax-search-pro/backend/search.php:193
 msgid "Result shortcodes"
 msgstr ""
 
 #: backend/search.php:194
-#: build/ajax-search-pro/backend/search.php:202
-#: build/full/ajax-search-pro/backend/search.php:202
+#: build/ajax-search-pro/backend/search.php:195
+#: build/full/ajax-search-pro/backend/search.php:195
 msgid "Shortcodes for placing the result box elsewhere. (only works if the result layout position is <b>block</b> - see in layout options tab)"
 msgstr ""
 
 #: backend/search.php:196
-#: build/ajax-search-pro/backend/search.php:204
-#: build/full/ajax-search-pro/backend/search.php:204
+#: build/ajax-search-pro/backend/search.php:197
+#: build/full/ajax-search-pro/backend/search.php:197
 msgid "Result box shortcode:"
 msgstr ""
 
 #: backend/search.php:200
-#: build/ajax-search-pro/backend/search.php:208
-#: build/full/ajax-search-pro/backend/search.php:208
+#: build/ajax-search-pro/backend/search.php:201
+#: build/full/ajax-search-pro/backend/search.php:201
 msgid "Result shortcode for templates:"
 msgstr ""
 
 #: backend/search.php:206
-#: build/ajax-search-pro/backend/search.php:214
-#: build/full/ajax-search-pro/backend/search.php:214
+#: build/ajax-search-pro/backend/search.php:207
+#: build/full/ajax-search-pro/backend/search.php:207
 msgid "Settings shortcodes"
 msgstr ""
 
 #: backend/search.php:208
-#: build/ajax-search-pro/backend/search.php:216
-#: build/full/ajax-search-pro/backend/search.php:216
+#: build/ajax-search-pro/backend/search.php:209
+#: build/full/ajax-search-pro/backend/search.php:209
 msgid "Shortcodes for placing the settings box elsewhere."
 msgstr ""
 
 #: backend/search.php:210
-#: build/ajax-search-pro/backend/search.php:218
-#: build/full/ajax-search-pro/backend/search.php:218
+#: build/ajax-search-pro/backend/search.php:211
+#: build/full/ajax-search-pro/backend/search.php:211
 msgid "Settings box shortcode:"
 msgstr ""
 
 #: backend/search.php:214
-#: build/ajax-search-pro/backend/search.php:222
-#: build/full/ajax-search-pro/backend/search.php:222
+#: build/ajax-search-pro/backend/search.php:215
+#: build/full/ajax-search-pro/backend/search.php:215
 msgid "Shortcode for templates:"
 msgstr ""
 
 #: backend/search.php:220
-#: build/ajax-search-pro/backend/search.php:228
-#: build/full/ajax-search-pro/backend/search.php:228
+#: build/ajax-search-pro/backend/search.php:221
+#: build/full/ajax-search-pro/backend/search.php:221
 msgid "Two Column Shortcode"
 msgstr ""
 
 #: backend/search.php:222
-#: build/ajax-search-pro/backend/search.php:230
-#: build/full/ajax-search-pro/backend/search.php:230
+#: build/ajax-search-pro/backend/search.php:223
+#: build/full/ajax-search-pro/backend/search.php:223
 msgid "Will place a search box (left) and a result box (right) next to each other, like the one on the demo front page."
 msgstr ""
 
 #: backend/search.php:224
-#: build/ajax-search-pro/backend/search.php:232
-#: build/full/ajax-search-pro/backend/search.php:232
+#: build/ajax-search-pro/backend/search.php:225
+#: build/full/ajax-search-pro/backend/search.php:225
 msgid "TC shortcode:"
 msgstr ""
 
 #: backend/search.php:228
-#: build/ajax-search-pro/backend/search.php:236
-#: build/full/ajax-search-pro/backend/search.php:236
+#: build/ajax-search-pro/backend/search.php:229
+#: build/full/ajax-search-pro/backend/search.php:229
 msgid "TC shortcode for templates:"
 msgstr ""
 
 #: backend/search.php:232
-#: build/ajax-search-pro/backend/search.php:240
-#: build/full/ajax-search-pro/backend/search.php:240
+#: build/ajax-search-pro/backend/search.php:233
+#: build/full/ajax-search-pro/backend/search.php:233
 msgid "Extra Parameters"
 msgstr ""
 
 #: backend/search.php:234
-#: build/ajax-search-pro/backend/search.php:242
-#: build/full/ajax-search-pro/backend/search.php:242
+#: build/ajax-search-pro/backend/search.php:235
+#: build/full/ajax-search-pro/backend/search.php:235
 msgid "search_width - {integer} the search bar width (in %, not px)"
 msgstr ""
 
 #: backend/search.php:235
-#: build/ajax-search-pro/backend/search.php:243
-#: build/full/ajax-search-pro/backend/search.php:243
+#: build/ajax-search-pro/backend/search.php:236
+#: build/full/ajax-search-pro/backend/search.php:236
 msgid "results_width - {integer} the results box width (in %, not px)"
 msgstr ""
 
 #: backend/search.php:236
-#: build/ajax-search-pro/backend/search.php:244
-#: build/full/ajax-search-pro/backend/search.php:244
+#: build/ajax-search-pro/backend/search.php:237
+#: build/full/ajax-search-pro/backend/search.php:237
 msgid "invert - {0 or 1} inverts the search and results box position from left to right"
 msgstr ""
 
 #: backend/search.php:240
 #: backend/tabs/instance/search_options/archive_pages.php:88
 #: backend/tabs/instance/search_options/magnifier_click.php:117
-#: build/ajax-search-pro/backend/search.php:248
+#: build/ajax-search-pro/backend/search.php:241
 #: build/ajax-search-pro/backend/tabs/instance/search_options/archive_pages.php:88
 #: build/ajax-search-pro/backend/tabs/instance/search_options/magnifier_click.php:117
-#: build/full/ajax-search-pro/backend/search.php:248
+#: build/full/ajax-search-pro/backend/search.php:241
 #: build/full/ajax-search-pro/backend/tabs/instance/search_options/archive_pages.php:88
 #: build/full/ajax-search-pro/backend/tabs/instance/search_options/magnifier_click.php:117
 msgid "Elementor Posts Widget Live Filter"
@@ -3223,10 +3223,10 @@ msgstr ""
 #: backend/search.php:243
 #: backend/tabs/instance/search_options/archive_pages.php:97
 #: backend/tabs/instance/search_options/magnifier_click.php:126
-#: build/ajax-search-pro/backend/search.php:251
+#: build/ajax-search-pro/backend/search.php:244
 #: build/ajax-search-pro/backend/tabs/instance/search_options/archive_pages.php:97
 #: build/ajax-search-pro/backend/tabs/instance/search_options/magnifier_click.php:126
-#: build/full/ajax-search-pro/backend/search.php:251
+#: build/full/ajax-search-pro/backend/search.php:244
 #: build/full/ajax-search-pro/backend/tabs/instance/search_options/archive_pages.php:97
 #: build/full/ajax-search-pro/backend/tabs/instance/search_options/magnifier_click.php:126
 msgid "Add to Elementor Posts Widget class name to enable live filtering on that widget"
@@ -3235,10 +3235,10 @@ msgstr ""
 #: backend/search.php:248
 #: backend/tabs/instance/search_options/archive_pages.php:102
 #: backend/tabs/instance/search_options/magnifier_click.php:131
-#: build/ajax-search-pro/backend/search.php:256
+#: build/ajax-search-pro/backend/search.php:249
 #: build/ajax-search-pro/backend/tabs/instance/search_options/archive_pages.php:102
 #: build/ajax-search-pro/backend/tabs/instance/search_options/magnifier_click.php:131
-#: build/full/ajax-search-pro/backend/search.php:256
+#: build/full/ajax-search-pro/backend/search.php:249
 #: build/full/ajax-search-pro/backend/tabs/instance/search_options/archive_pages.php:102
 #: build/full/ajax-search-pro/backend/tabs/instance/search_options/magnifier_click.php:131
 msgid "Please check the <a href=\"%s\">Elementor Posts Live Loader documentation</a> for more details"
@@ -3246,119 +3246,127 @@ msgstr ""
 
 #: backend/search.php:271
 #: backend/search.php:283
-#: build/ajax-search-pro/backend/search.php:279
-#: build/ajax-search-pro/backend/search.php:291
-#: build/full/ajax-search-pro/backend/search.php:279
-#: build/full/ajax-search-pro/backend/search.php:291
+#: build/ajax-search-pro/backend/search.php:272
+#: build/ajax-search-pro/backend/search.php:284
+#: build/full/ajax-search-pro/backend/search.php:272
+#: build/full/ajax-search-pro/backend/search.php:284
 msgid "Search Sources"
 msgstr ""
 
 #: backend/search.php:272
-#: build/ajax-search-pro/backend/search.php:280
-#: build/full/ajax-search-pro/backend/search.php:280
+#: build/ajax-search-pro/backend/search.php:273
+#: build/full/ajax-search-pro/backend/search.php:273
 msgid "Search Behavior"
 msgstr ""
 
 #: backend/search.php:273
-#: build/ajax-search-pro/backend/search.php:281
-#: build/full/ajax-search-pro/backend/search.php:281
+#: build/ajax-search-pro/backend/search.php:274
+#: build/full/ajax-search-pro/backend/search.php:274
 msgid "Frontend Search Settings"
 msgstr ""
 
 #: backend/search.php:274
-#: build/ajax-search-pro/backend/search.php:282
-#: build/full/ajax-search-pro/backend/search.php:282
+#: build/ajax-search-pro/backend/search.php:275
+#: build/full/ajax-search-pro/backend/search.php:275
 msgid "Layout options"
 msgstr ""
 
 #: backend/search.php:275
 #: backend/search.php:315
-#: build/ajax-search-pro/backend/search.php:283
-#: build/ajax-search-pro/backend/search.php:323
-#: build/full/ajax-search-pro/backend/search.php:283
-#: build/full/ajax-search-pro/backend/search.php:323
+#: build/ajax-search-pro/backend/search.php:276
+#: build/ajax-search-pro/backend/search.php:316
+#: build/full/ajax-search-pro/backend/search.php:276
+#: build/full/ajax-search-pro/backend/search.php:316
 msgid "Autocomplete & Suggestions"
 msgstr ""
 
 #: backend/search.php:276
-#: build/ajax-search-pro/backend/search.php:284
-#: build/full/ajax-search-pro/backend/search.php:284
+#: build/ajax-search-pro/backend/search.php:277
+#: build/full/ajax-search-pro/backend/search.php:277
 msgid "Theme & Styling"
 msgstr ""
 
 #: backend/search.php:277
 #: backend/search.php:331
-#: build/ajax-search-pro/backend/search.php:285
-#: build/ajax-search-pro/backend/search.php:339
-#: build/full/ajax-search-pro/backend/search.php:285
-#: build/full/ajax-search-pro/backend/search.php:339
+#: build/ajax-search-pro/backend/search.php:278
+#: build/ajax-search-pro/backend/search.php:332
+#: build/full/ajax-search-pro/backend/search.php:278
+#: build/full/ajax-search-pro/backend/search.php:332
 msgid "Multisite Options"
 msgstr ""
 
 #: backend/search.php:278
-#: build/ajax-search-pro/backend/search.php:286
-#: build/full/ajax-search-pro/backend/search.php:286
+#: build/ajax-search-pro/backend/search.php:279
+#: build/full/ajax-search-pro/backend/search.php:279
 msgid "Advanced options"
 msgstr ""
 
 #: backend/search.php:291
-#: build/ajax-search-pro/backend/search.php:299
-#: build/full/ajax-search-pro/backend/search.php:299
+#: build/ajax-search-pro/backend/search.php:292
+#: build/full/ajax-search-pro/backend/search.php:292
 msgid "Search Behavior Options"
 msgstr ""
 
 #: backend/search.php:299
-#: build/ajax-search-pro/backend/search.php:307
-#: build/full/ajax-search-pro/backend/search.php:307
+#: build/ajax-search-pro/backend/search.php:300
+#: build/full/ajax-search-pro/backend/search.php:300
 msgid "Frontend Search Settings options"
 msgstr ""
 
 #: backend/search.php:307
-#: build/ajax-search-pro/backend/search.php:315
-#: build/full/ajax-search-pro/backend/search.php:315
+#: build/ajax-search-pro/backend/search.php:308
+#: build/full/ajax-search-pro/backend/search.php:308
 msgid "Layout Options"
 msgstr ""
 
 #: backend/search.php:323
-#: build/ajax-search-pro/backend/search.php:331
-#: build/full/ajax-search-pro/backend/search.php:331
+#: build/ajax-search-pro/backend/search.php:324
+#: build/full/ajax-search-pro/backend/search.php:324
 msgid "Theme & Styling Options"
 msgstr ""
 
 #: backend/search.php:339
-#: build/ajax-search-pro/backend/search.php:347
-#: build/full/ajax-search-pro/backend/search.php:347
+#: build/ajax-search-pro/backend/search.php:340
+#: build/full/ajax-search-pro/backend/search.php:340
 msgid "Advanced Options"
 msgstr ""
 
 #: backend/settings/class/animations.class.php:38
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/AnimationSelect.php:135
+#: build/ajax-search-pro/backend/Options/src/Views/AnimationSelectView.php:46
 #: build/ajax-search-pro/backend/settings/class/animations.class.php:38
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/AnimationSelect.php:135
+#: build/full/ajax-search-pro/backend/Options/src/Views/AnimationSelectView.php:46
 #: build/full/ajax-search-pro/backend/settings/class/animations.class.php:38
 msgid "Hi there!"
 msgstr ""
 
 #: backend/settings/class/blogselect.class.php:30
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/BlogSelect.php:69
+#: build/ajax-search-pro/backend/Options/src/Views/BlogSelectView.php:30
 #: build/ajax-search-pro/backend/settings/class/blogselect.class.php:30
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/BlogSelect.php:69
+#: build/full/ajax-search-pro/backend/Options/src/Views/BlogSelectView.php:30
 #: build/full/ajax-search-pro/backend/settings/class/blogselect.class.php:30
 msgid "Use all blogs?"
 msgstr ""
 
 #: backend/settings/class/blogselect.class.php:36
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/BlogSelect.php:79
+#: build/ajax-search-pro/backend/Options/src/Views/BlogSelectView.php:40
 #: build/ajax-search-pro/backend/settings/class/blogselect.class.php:36
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/BlogSelect.php:79
+#: build/full/ajax-search-pro/backend/Options/src/Views/BlogSelectView.php:40
 #: build/full/ajax-search-pro/backend/settings/class/blogselect.class.php:36
 msgid "Available blogs"
 msgstr ""
 
 #: backend/settings/class/blogselect.class.php:45
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/BlogSelect.php:90
+#: build/ajax-search-pro/backend/Options/src/Views/BlogSelectView.php:51
 #: build/ajax-search-pro/backend/settings/class/blogselect.class.php:45
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/BlogSelect.php:90
+#: build/full/ajax-search-pro/backend/Options/src/Views/BlogSelectView.php:51
 #: build/full/ajax-search-pro/backend/settings/class/blogselect.class.php:45
 msgid "Drag here the blogs you want to use!"
 msgstr ""
@@ -3435,11 +3443,11 @@ msgstr ""
 #: backend/settings/class/boxshadow.class.php:45
 #: backend/settings/class/font-complete.class.php:106
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:89
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:163
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:192
 #: build/ajax-search-pro/backend/settings/class/boxshadow.class.php:45
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:106
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:89
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:163
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:192
 #: build/full/ajax-search-pro/backend/settings/class/boxshadow.class.php:45
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:106
 msgid "Horizontal offset"
@@ -3448,11 +3456,11 @@ msgstr ""
 #: backend/settings/class/boxshadow.class.php:46
 #: backend/settings/class/font-complete.class.php:105
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:96
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:156
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:185
 #: build/ajax-search-pro/backend/settings/class/boxshadow.class.php:46
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:105
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:96
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:156
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:185
 #: build/full/ajax-search-pro/backend/settings/class/boxshadow.class.php:46
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:105
 msgid "Vertical offset"
@@ -3461,11 +3469,11 @@ msgstr ""
 #: backend/settings/class/boxshadow.class.php:47
 #: backend/settings/class/font-complete.class.php:107
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:103
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:170
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:199
 #: build/ajax-search-pro/backend/settings/class/boxshadow.class.php:47
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:107
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:103
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:170
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:199
 #: build/full/ajax-search-pro/backend/settings/class/boxshadow.class.php:47
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:107
 msgid "Blur radius"
@@ -3481,10 +3489,10 @@ msgstr ""
 
 #: backend/settings/class/datefilter-post.class.php:25
 #: backend/settings/class/datefilter.class.php:25
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:69
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:81
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:25
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:25
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:69
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:81
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:25
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:25
 msgid "Date type"
@@ -3498,7 +3506,7 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/date_from.php:28
 #: backend/settings/class/wd_frontfilters/views/date_to.php:14
 #: backend/settings/class/wd_frontfilters/views/date_to.php:28
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:73
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:85
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:26
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:26
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:29
@@ -3507,7 +3515,7 @@ msgstr ""
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:28
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:14
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:28
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:73
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:85
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:26
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:26
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:29
@@ -3525,14 +3533,14 @@ msgstr ""
 #: backend/settings/class/dateinterval.class.php:47
 #: backend/settings/class/wd_frontfilters/views/date_from.php:13
 #: backend/settings/class/wd_frontfilters/views/date_to.php:13
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:78
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:90
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:27
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:27
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:30
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:47
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:13
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:13
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:78
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:90
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:27
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:27
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:30
@@ -3543,17 +3551,17 @@ msgid "Relative Date"
 msgstr ""
 
 #: backend/settings/class/datefilter-post.class.php:28
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:83
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:95
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:28
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:83
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:95
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:28
 msgid "Earliest Post Date"
 msgstr ""
 
 #: backend/settings/class/datefilter-post.class.php:29
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:88
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:100
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:29
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:88
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:100
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:29
 msgid "Latest Post Date"
 msgstr ""
@@ -3562,12 +3570,12 @@ msgstr ""
 #: backend/settings/class/datefilter.class.php:33
 #: backend/settings/class/wd_frontfilters/views/date_from.php:32
 #: backend/settings/class/wd_frontfilters/views/date_to.php:32
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:103
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:115
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:35
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:33
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:32
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:32
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:103
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:115
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:35
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:33
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:32
@@ -3579,12 +3587,12 @@ msgstr ""
 #: backend/settings/class/datefilter.class.php:37
 #: backend/settings/class/dateinterval.class.php:35
 #: backend/settings/class/dateinterval.class.php:52
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:108
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:120
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:39
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:37
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:35
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:52
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:108
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:120
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:39
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:37
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:35
@@ -3598,14 +3606,14 @@ msgstr ""
 #: backend/settings/class/dateinterval.class.php:53
 #: backend/settings/class/wd_frontfilters/views/date_from.php:19
 #: backend/settings/class/wd_frontfilters/views/date_to.php:19
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:112
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:124
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:40
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:38
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:36
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:53
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:19
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:19
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:112
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:124
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:40
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:38
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:36
@@ -3619,12 +3627,12 @@ msgstr ""
 #: backend/settings/class/datefilter.class.php:39
 #: backend/settings/class/dateinterval.class.php:37
 #: backend/settings/class/dateinterval.class.php:54
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:113
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:125
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:41
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:39
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:37
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:54
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:113
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:125
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:41
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:39
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:37
@@ -3638,14 +3646,14 @@ msgstr ""
 #: backend/settings/class/dateinterval.class.php:55
 #: backend/settings/class/wd_frontfilters/views/date_from.php:20
 #: backend/settings/class/wd_frontfilters/views/date_to.php:20
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:117
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:129
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:42
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:40
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:38
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:55
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:20
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:20
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:117
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:129
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:42
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:40
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:38
@@ -3676,14 +3684,14 @@ msgstr ""
 #: backend/settings/class/dateinterval.class.php:57
 #: backend/settings/class/wd_frontfilters/views/date_from.php:21
 #: backend/settings/class/wd_frontfilters/views/date_to.php:21
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:122
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:134
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:44
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:42
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:40
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:57
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:21
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:21
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:122
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:134
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:44
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:42
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:40
@@ -3697,12 +3705,12 @@ msgstr ""
 #: backend/settings/class/datefilter.class.php:44
 #: backend/settings/class/wd_frontfilters/views/date_from.php:23
 #: backend/settings/class/wd_frontfilters/views/date_to.php:23
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:125
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:137
 #: build/ajax-search-pro/backend/settings/class/datefilter-post.class.php:46
 #: build/ajax-search-pro/backend/settings/class/datefilter.class.php:44
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:23
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:23
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:125
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:137
 #: build/full/ajax-search-pro/backend/settings/class/datefilter-post.class.php:46
 #: build/full/ajax-search-pro/backend/settings/class/datefilter.class.php:44
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:23
@@ -3714,12 +3722,12 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/date_from.php:11
 #: backend/settings/class/wd_frontfilters/views/date_to.php:11
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:30
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:20
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:58
 #: build/ajax-search-pro/backend/settings/class/dateinterval.class.php:24
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:11
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:11
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:30
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:20
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateInterval.php:58
 #: build/full/ajax-search-pro/backend/settings/class/dateinterval.class.php:24
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_from.php:11
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/date_to.php:11
@@ -3749,81 +3757,81 @@ msgid "to:"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:63
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:113
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:142
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:63
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:113
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:142
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:63
 msgid "inherit"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:64
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:114
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:143
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:64
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:114
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:143
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:64
 msgid "Custom Font"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:65
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:115
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:144
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:65
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:115
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:144
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:65
 msgid "Classic Fonts"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:73
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:123
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:152
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:73
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:123
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:152
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:73
 msgid "Google Fonts"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:88
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:138
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:167
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:88
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:138
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:167
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:88
 msgid "Custom font name:"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:93
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:143
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:172
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:93
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:143
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:172
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:93
 msgid "Size"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:97
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:147
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:176
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:97
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:147
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:176
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:97
 msgid "Line height"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:100
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:150
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:179
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:100
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:150
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:179
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:100
 msgid "With dimensions, ex.:"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:104
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:154
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:183
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:104
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:154
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:183
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:104
 msgid "Font shadow"
 msgstr ""
 
 #: backend/settings/class/font-complete.class.php:108
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:180
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:208
 #: build/ajax-search-pro/backend/settings/class/font-complete.class.php:108
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:180
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:208
 #: build/full/ajax-search-pro/backend/settings/class/font-complete.class.php:108
 msgid "Shadow color"
 msgstr ""
@@ -4630,12 +4638,12 @@ msgstr ""
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/custom_field.php:16
 #: build/ajax-search-pro/backend/tabs/instance/frontend/custom_fields.php:398
 #: build/ajax-search-pro/backend/tabs/instance/frontend/custom_fields.php:627
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:446
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:455
 #: build/ajax-search-pro/backend/tabs/priorities/priority_groups.php:198
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/custom_field.php:16
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/custom_fields.php:398
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/custom_fields.php:627
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:446
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:455
 #: build/full/ajax-search-pro/backend/tabs/priorities/priority_groups.php:198
 msgid "Text"
 msgstr ""
@@ -4933,7 +4941,7 @@ msgid "Layout & Functionality Options"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:59
-#: backend/tabs/instance/frontend/taxonomy_terms.php:30
+#: backend/tabs/instance/frontend/taxonomy_terms.php:39
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:59
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:30
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:59
@@ -4942,7 +4950,7 @@ msgid "Hide empty terms?"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:63
-#: backend/tabs/instance/frontend/taxonomy_terms.php:34
+#: backend/tabs/instance/frontend/taxonomy_terms.php:43
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:63
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:34
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:63
@@ -4984,7 +4992,7 @@ msgid "Hide (collapse) child terms, where the parent checkbox is unchecked?"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:89
-#: backend/tabs/instance/frontend/taxonomy_terms.php:43
+#: backend/tabs/instance/frontend/taxonomy_terms.php:52
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:89
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:43
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:89
@@ -5035,7 +5043,7 @@ msgid "Maintain term hierarchy"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:114
-#: backend/tabs/instance/frontend/taxonomy_terms.php:52
+#: backend/tabs/instance/frontend/taxonomy_terms.php:61
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:114
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:52
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:114
@@ -5044,7 +5052,7 @@ msgid "Shows child terms hierarchically under their parents with padding. Suppor
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:117
-#: backend/tabs/instance/frontend/taxonomy_terms.php:59
+#: backend/tabs/instance/frontend/taxonomy_terms.php:68
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:117
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:59
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:117
@@ -5053,7 +5061,7 @@ msgid "Default term order"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:119
-#: backend/tabs/instance/frontend/taxonomy_terms.php:65
+#: backend/tabs/instance/frontend/taxonomy_terms.php:74
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:119
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:65
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:119
@@ -5062,7 +5070,7 @@ msgid "Name"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:120
-#: backend/tabs/instance/frontend/taxonomy_terms.php:66
+#: backend/tabs/instance/frontend/taxonomy_terms.php:75
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:120
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:66
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:120
@@ -5071,7 +5079,7 @@ msgid "Item count"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:121
-#: backend/tabs/instance/frontend/taxonomy_terms.php:67
+#: backend/tabs/instance/frontend/taxonomy_terms.php:76
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:121
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:67
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:121
@@ -5080,7 +5088,7 @@ msgid "ID"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:124
-#: backend/tabs/instance/frontend/taxonomy_terms.php:70
+#: backend/tabs/instance/frontend/taxonomy_terms.php:79
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:124
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:70
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:124
@@ -5089,7 +5097,7 @@ msgid "Ascending"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:125
-#: backend/tabs/instance/frontend/taxonomy_terms.php:71
+#: backend/tabs/instance/frontend/taxonomy_terms.php:80
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:125
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:71
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:125
@@ -8267,12 +8275,12 @@ msgstr ""
 #: backend/tabs/instance/search_options/magnifier_click.php:60
 #: backend/tabs/instance/search_options/mobile_behavior.php:68
 #: build/ajax-search-pro/backend/tabs/instance/frontend/search_button.php:37
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:176
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:185
 #: build/ajax-search-pro/backend/tabs/instance/layout/highlight_loadmore.php:32
 #: build/ajax-search-pro/backend/tabs/instance/search_options/magnifier_click.php:60
 #: build/ajax-search-pro/backend/tabs/instance/search_options/mobile_behavior.php:68
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/search_button.php:37
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:176
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:185
 #: build/full/ajax-search-pro/backend/tabs/instance/layout/highlight_loadmore.php:32
 #: build/full/ajax-search-pro/backend/tabs/instance/search_options/magnifier_click.php:60
 #: build/full/ajax-search-pro/backend/tabs/instance/search_options/mobile_behavior.php:68
@@ -8324,13 +8332,21 @@ msgstr ""
 msgid "nav_menu"
 msgstr ""
 
-#: backend/tabs/instance/frontend/taxonomy_terms.php:39
+#: backend/tabs/instance/frontend/taxonomy_terms.php:30
+msgid "Filtering by parent terms should also include the results from children?"
+msgstr ""
+
+#: backend/tabs/instance/frontend/taxonomy_terms.php:34
+msgid "If a post from child category is not directly assigned to the parent category as well, this will force the filter to still apply if the parent category is selected."
+msgstr ""
+
+#: backend/tabs/instance/frontend/taxonomy_terms.php:48
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:39
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:39
 msgid "Hide child terms, where the parent checkbox is unchecked?"
 msgstr ""
 
-#: backend/tabs/instance/frontend/taxonomy_terms.php:48
+#: backend/tabs/instance/frontend/taxonomy_terms.php:57
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:48
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:48
 msgid "Maintain term hierarchy?"
@@ -8463,17 +8479,17 @@ msgstr ""
 #: backend/tabs/instance/general/attachment_results.php:66
 #: backend/tabs/instance/general/sources.php:114
 #: build/ajax-search-pro/backend/tabs/instance/general/attachment_results.php:66
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:578
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:587
 #: build/full/ajax-search-pro/backend/tabs/instance/general/attachment_results.php:66
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:578
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:587
 msgid "WARNING: <strong>Search in terms</strong> can be database heavy operation. Not recommended for big databases."
 msgstr ""
 
 #: backend/tabs/instance/general/attachment_results.php:70
 #: build/ajax-search-pro/backend/tabs/instance/general/attachment_results.php:70
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:346
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:355
 #: build/full/ajax-search-pro/backend/tabs/instance/general/attachment_results.php:70
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:346
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:355
 msgid "Allowed mime types"
 msgstr ""
 
@@ -8628,13 +8644,13 @@ msgstr ""
 
 #: backend/tabs/instance/general/image_options.php:22
 #: build/ajax-search-pro/backend/tabs/instance/general/image_options.php:22
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:105
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:240
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:114
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:249
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:258
 #: build/full/ajax-search-pro/backend/tabs/instance/general/image_options.php:22
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:105
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:240
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:114
 #: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:249
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:258
 msgid "Image background color?"
 msgstr ""
 
@@ -8712,9 +8728,9 @@ msgstr ""
 
 #: backend/tabs/instance/general/image_options.php:141
 #: build/ajax-search-pro/backend/tabs/instance/general/image_options.php:151
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:231
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:240
 #: build/full/ajax-search-pro/backend/tabs/instance/general/image_options.php:151
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:231
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:240
 msgid "Default image url"
 msgstr ""
 
@@ -9207,19 +9223,19 @@ msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:100
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:100
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:198
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:207
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:216
 #: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:100
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:198
 #: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:207
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:216
 msgid "Post type results ordering"
 msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:111
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:111
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:189
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:198
 #: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:111
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:189
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:198
 msgid "Mixed results order"
 msgstr ""
 
@@ -9479,122 +9495,118 @@ msgid "Author weight"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:3
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:401
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:467
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:401
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:467
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:410
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:476
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:410
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:476
 msgid "Search engine"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:14
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:478
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:478
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:487
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:487
 msgid "Index table engine will only work if you have the <a href=\"%s\">index table</a> generated."
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:15
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:479
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:479
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:488
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:488
 msgid "To learn more about the pros. and cons. of the index table read the <a href=\"%s\" target=\"_blank\">documentation about the index table</a>."
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:22
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:486
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:486
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:495
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:495
 msgid ""
 "Since you have the Index table engine selected, some options here are disabled,<br> because they are available\n"
 "\ton the <a href=\"%s\" target=\"_blank\">index table</a> options page."
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:26
-#: build/ajax-search-pro/backend/search.php:91
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:11
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:419
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:428
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:490
-#: build/full/ajax-search-pro/backend/search.php:91
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:11
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:419
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:437
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:499
 #: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:428
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:490
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:437
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:499
 msgid "Search in custom post types"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:32
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:496
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:496
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:505
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:505
 msgid "Return comments as results?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:39
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:503
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:503
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:512
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:512
 msgid "Search in title?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:46
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:510
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:510
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:519
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:519
 msgid "Search in content?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:53
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:517
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:517
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:526
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:526
 msgid "Search in post excerpts?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:60
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:524
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:524
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:533
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:533
 msgid "Search in post permalinks?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:65
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:529
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:529
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:538
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:538
 msgid "Might not work correctly in some cases unfortunately."
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:70
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:534
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:534
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:543
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:543
 msgid "Search in post (and CPT) IDs?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:78
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:542
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:542
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:551
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:551
 msgid "Search all custom fields?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:84
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:548
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:548
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:557
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:557
 msgid "..or search in selected custom fields?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:92
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:556
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:556
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:565
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:565
 msgid "Post statuses to search"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:100
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:564
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:564
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:573
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:573
 msgid "Search and return password protected posts?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:106
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:570
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:570
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:579
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:579
 msgid "Search in terms? (categories, tags)"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:111
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:575
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:575
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:584
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:584
 msgid "Will search in terms (categories, tags) related to posts."
 msgstr ""
 
@@ -9611,9 +9623,9 @@ msgid "Return post tags as results?"
 msgstr ""
 
 #: backend/tabs/instance/general/sources2.php:17
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:455
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:464
 #: build/ajax-search-pro/backend/tabs/instance/general/sources2.php:17
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:455
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:464
 #: build/full/ajax-search-pro/backend/tabs/instance/general/sources2.php:17
 msgid "Return taxonomy terms as results"
 msgstr ""
@@ -9667,21 +9679,21 @@ msgid "Ex. categories that does not contain posts"
 msgstr ""
 
 #: backend/tabs/instance/general/sources2.php:70
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:359
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:371
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:368
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:380
 #: build/ajax-search-pro/backend/tabs/instance/general/sources2.php:70
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:359
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:371
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:368
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:380
 #: build/full/ajax-search-pro/backend/tabs/instance/general/sources2.php:70
 msgid "Exclude categories/terms by ID"
 msgstr ""
 
 #: backend/tabs/instance/general/sources2.php:75
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:364
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:385
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:373
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:394
 #: build/ajax-search-pro/backend/tabs/instance/general/sources2.php:75
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:364
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:385
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:373
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:394
 #: build/full/ajax-search-pro/backend/tabs/instance/general/sources2.php:75
 msgid "Comma \",\" separated list of category/term IDs."
 msgstr ""
@@ -9744,37 +9756,37 @@ msgid "Secondary result ordering"
 msgstr ""
 
 #: backend/tabs/instance/general/user_search.php:134
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:328
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:337
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:346
 #: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:134
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:328
 #: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:337
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:346
 #: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:134
 msgid "User roles exclude"
 msgstr ""
 
 #: backend/tabs/instance/general/user_search.php:141
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:276
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:293
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:285
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:302
 #: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:141
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:276
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:293
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:285
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:302
 #: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:141
 msgid "Exclude or Include users from results"
 msgstr ""
 
 #: backend/tabs/instance/general/user_search.php:153
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:267
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:276
 #: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:153
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:267
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:276
 #: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:153
 msgid "Search in following user meta fields"
 msgstr ""
 
 #: backend/tabs/instance/general/user_search.php:162
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:258
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:267
 #: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:162
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:258
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:267
 #: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:162
 msgid "Search in these BP Xprofile fields"
 msgstr ""
@@ -12148,25 +12160,25 @@ msgid "Search box height"
 msgstr ""
 
 #: backend/tabs/instance/theme/overall_box.php:44
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:96
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:105
 #: build/ajax-search-pro/backend/tabs/instance/theme/overall_box.php:44
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:96
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:105
 #: build/full/ajax-search-pro/backend/tabs/instance/theme/overall_box.php:44
 msgid "Search box background color"
 msgstr ""
 
 #: backend/tabs/instance/theme/overall_box.php:50
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:123
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:132
 #: build/ajax-search-pro/backend/tabs/instance/theme/overall_box.php:50
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:123
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:132
 #: build/full/ajax-search-pro/backend/tabs/instance/theme/overall_box.php:50
 msgid "Search box border"
 msgstr ""
 
 #: backend/tabs/instance/theme/overall_box.php:56
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:114
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:123
 #: build/ajax-search-pro/backend/tabs/instance/theme/overall_box.php:56
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:114
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:123
 #: build/full/ajax-search-pro/backend/tabs/instance/theme/overall_box.php:56
 msgid "Search box Shadow"
 msgstr ""
@@ -13040,12 +13052,12 @@ msgstr ""
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:98
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:105
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:112
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:110
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:115
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:120
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:158
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:165
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:172
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:122
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:127
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:132
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:187
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:194
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:201
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Border.php:118
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Border.php:125
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Border.php:132
@@ -13054,27 +13066,27 @@ msgstr ""
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:98
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:105
 #: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/BoxShadow.php:112
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:110
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:115
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:120
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:158
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:165
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:172
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:122
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:127
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:132
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:187
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:194
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:201
 msgid "Integers only!"
 msgstr ""
 
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:118
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:118
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:130
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/DateFilter.php:130
 msgid "Days"
 msgstr ""
 
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:134
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:134
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:163
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:163
 msgid "Normal"
 msgstr ""
 
-#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:135
-#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:135
+#: build/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:164
+#: build/full/ajax-search-pro/backend/Classes/Options/src/Standard/Font.php:164
 msgid "Bold"
 msgstr ""
 
@@ -13113,66 +13125,71 @@ msgstr ""
 msgid "New filters"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:21
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:36
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:21
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:36
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:19
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:19
+msgid "Settings box animation"
+msgstr ""
+
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:30
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:45
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:30
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:45
 msgid "Date Filter"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:51
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:60
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:51
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:69
 #: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:60
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:69
 msgid "Select the animation"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:69
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:78
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:69
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:87
 #: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:78
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:87
 msgid "Select the loader"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:87
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:87
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:96
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:96
 msgid "Title font"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:132
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:132
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:141
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:141
 msgid "Text with regex"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:148
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:148
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:157
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:157
 msgid "Regular Array"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:160
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:160
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:169
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:169
 msgid "Associative array"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:219
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:219
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:228
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:228
 msgid "Image number the parser should get from the fields"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:311
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:311
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:320
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:320
 msgid "Exclude or Include users from results (all included)"
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:351
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:351
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:360
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:360
 msgid ""
 "<strong>Comma separated list</strong> of allowed mime types. List of <a href=\"%s\"\n"
 "target=\"_blank\">default allowed mime types</a> in WordPress."
 msgstr ""
 
-#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:437
-#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:437
+#: build/ajax-search-pro/backend/tabs/instance/general/sources.php:446
+#: build/full/ajax-search-pro/backend/tabs/instance/general/sources.php:446
 msgid ".or search in selected custom fields?"
 msgstr ""
 
@@ -13188,62 +13205,62 @@ msgstr ""
 msgid "Route error"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Instances.php:553
-#: build/full/ajax-search-pro/includes/classes/Core/Instances.php:553
+#: build/ajax-search-pro/includes/classes/Core/Instances.php:632
+#: build/full/ajax-search-pro/includes/classes/Core/Instances.php:632
 #: includes/classes/Core/Instances.php:546
 msgid "Invalid data"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Instances.php:557
-#: build/full/ajax-search-pro/includes/classes/Core/Instances.php:557
+#: build/ajax-search-pro/includes/classes/Core/Instances.php:636
+#: build/full/ajax-search-pro/includes/classes/Core/Instances.php:636
 #: includes/classes/Core/Instances.php:550
 msgid "Invalid JSON data"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Manager.php:126
-#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:126
+#: build/ajax-search-pro/includes/classes/Core/Manager.php:147
+#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:147
 #: includes/classes/Core/Manager.php:125
 msgid "Every 2 Minutes"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Manager.php:130
-#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:130
+#: build/ajax-search-pro/includes/classes/Core/Manager.php:151
+#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:151
 #: includes/classes/Core/Manager.php:129
 msgid "Every 3 Minutes"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Manager.php:134
-#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:134
+#: build/ajax-search-pro/includes/classes/Core/Manager.php:155
+#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:155
 #: includes/classes/Core/Manager.php:133
 msgid "Every 5 Minutes"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Manager.php:138
-#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:138
+#: build/ajax-search-pro/includes/classes/Core/Manager.php:159
+#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:159
 #: includes/classes/Core/Manager.php:137
 msgid "Every 15 Minutes"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Manager.php:142
-#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:142
+#: build/ajax-search-pro/includes/classes/Core/Manager.php:163
+#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:163
 #: includes/classes/Core/Manager.php:141
 msgid "Every 30 Minutes"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Manager.php:317
-#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:317
+#: build/ajax-search-pro/includes/classes/Core/Manager.php:339
+#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:339
 #: includes/classes/Core/Manager.php:316
 msgid "<b>Ajax Search Pro notice: </b> The Index Table options have been modified, please re-create the index table!"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Manager.php:318
-#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:318
+#: build/ajax-search-pro/includes/classes/Core/Manager.php:340
+#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:340
 #: includes/classes/Core/Manager.php:317
 msgid "Let's do it!"
 msgstr ""
 
-#: build/ajax-search-pro/includes/classes/Core/Manager.php:319
-#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:319
+#: build/ajax-search-pro/includes/classes/Core/Manager.php:341
+#: build/full/ajax-search-pro/includes/classes/Core/Manager.php:341
 #: includes/classes/Core/Manager.php:318
 msgid "Hide this message"
 msgstr ""

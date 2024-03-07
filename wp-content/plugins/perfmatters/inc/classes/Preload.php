@@ -19,8 +19,11 @@ class Preload
     public static function queue() 
     {
         //fetch priority
+        if(!empty(Config::$options['preload']['disable_core_fetch'])) {
+            add_filter('wp_get_loading_optimization_attributes', array('Perfmatters\Preload', 'disable_core_fetch'));
+        }
+       
         self::$fetch_priority = apply_filters('perfmatters_fetch_priority', Config::$options['preload']['fetch_priority'] ?? array());
-
         if(!empty(self::$fetch_priority)) {
             add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\Preload', 'add_fetch_priority'));
         }
@@ -70,7 +73,7 @@ class Preload
         if(!empty($parent_selectors)) {
 
             //match all selectors
-            preg_match_all('#<(div|section|figure)(\s[^>]*?(' . implode('|', $parent_selectors) . ').*?)>.*?<(link|img|script).*?<\/\g1>#is', $html, $parents, PREG_SET_ORDER);
+            preg_match_all('#<(div|section|figure)(\s[^>]*?(' . implode('|', $parent_selectors) . ').*?)>.*?<\/\g1>#is', $html, $parents, PREG_SET_ORDER);
 
             if(!empty($parents)) {
 
@@ -195,6 +198,8 @@ class Preload
                                     $url = site_url($url);
                                 }
 
+                                $ver = '';
+
                                 if(strpos($url, '?') === false) {
 
                                     $ver = $scripts_arr[$line['url']]->ver;
@@ -244,6 +249,33 @@ class Preload
     //add critical image preloads
     public static function add_critical_image_preloads(&$html, $clean_html) {
 
+        //exclude images from preloading by parent selector
+        $parent_exclusions = apply_filters('perfmatters_critical_image_parent_exclusions', array());
+        if(!empty($parent_exclusions)) {
+
+            //match all selectors
+            preg_match_all('#<(div|section|figure)(\s[^>]*?(' . implode('|', $parent_exclusions) . ').*?)>.*?<\/\g1>#is', $clean_html, $selectors, PREG_SET_ORDER);
+
+            if(!empty($selectors)) {
+
+                foreach($selectors as $selector) {
+
+                    //match all img tags
+                    preg_match_all('#<img([^>]+?)\/?>#is', $selector[0], $images, PREG_SET_ORDER);
+
+                    if(!empty($images)) {
+
+                        //loop through images
+                        foreach($images as $image) {
+
+                            //remove image from current working clean html
+                            $clean_html = str_replace($image[0], '', $clean_html);
+                        }
+                    }
+                }
+            }
+        }
+
         //match all image formats
         preg_match_all('#(<picture.*?)?<img([^>]+?)\/?>(?><\/picture>)?#is', $clean_html, $matches, PREG_SET_ORDER);
 
@@ -251,7 +283,8 @@ class Preload
 
             $exclusions = apply_filters('perfmatters_critical_image_exclusions', array(
                 ';base64',
-                'w3.org'
+                'w3.org',
+                'data-perfmatters-skip-preload'
             ));
 
             $count = 0;
@@ -355,5 +388,10 @@ class Preload
         }
 
         return $location_match;
+    }
+
+    public static function disable_core_fetch($loading_attrs) {
+        unset($loading_attrs['fetchpriority']);
+        return $loading_attrs;
     }
 }

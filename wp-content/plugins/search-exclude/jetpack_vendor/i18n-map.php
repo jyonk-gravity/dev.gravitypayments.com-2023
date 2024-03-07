@@ -6,7 +6,7 @@ return array(
   'packages' => array(
     'jetpack-assets' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-assets',
-      'ver' => '2.0.3',
+      'ver' => '2.1.2',
     ),
     'wp-dashboard-widget-news' => array(
       'path' => 'jetpack_vendor/quadlayers/wp-dashboard-widget-news',
@@ -14,7 +14,7 @@ return array(
     ),
     'wp-notice-plugin-promote' => array(
       'path' => 'jetpack_vendor/quadlayers/wp-notice-plugin-promote',
-      'ver' => '1.1.3',
+      'ver' => '1.1.4',
     ),
     'wp-notice-plugin-required' => array(
       'path' => 'jetpack_vendor/quadlayers/wp-notice-plugin-required',
@@ -26,7 +26,7 @@ return array(
     ),
     'wp-plugin-suggestions' => array(
       'path' => 'jetpack_vendor/quadlayers/wp-plugin-suggestions',
-      'ver' => '1.0.8',
+      'ver' => '1.0.9',
     ),
     'wp-plugin-table-links' => array(
       'path' => 'jetpack_vendor/quadlayers/wp-plugin-table-links',

@@ -560,6 +560,7 @@ function asp_do_init_options() {
         'taxonomy_logic' => 'and',
         'frontend_terms_empty' => 1,
         'frontend_terms_ignore_empty' => 1,
+        'frontend_terms_parent_child_assignment' => 1,
         'frontend_terms_hide_children' => 0,
         'frontend_term_hierarchy' => 1,
         'frontend_terms_hide_empty' => 0,

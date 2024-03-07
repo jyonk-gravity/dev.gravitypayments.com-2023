@@ -129,8 +129,14 @@ class CSS
                 //need to generate used css
                 if(!$used_css_exists) {
 
+                    //get any custom set url
+                    $custom_url = apply_filters('perfmatters_local_stylesheet_url', !empty(Config::$options['assets']['rucss_cdn_url']) ? Config::$options['assets']['rucss_cdn_url'] : '');
+
+                    //prep local url
+                    $local_url = !empty($custom_url) ? trailingslashit($custom_url) : array(trailingslashit(home_url()), trailingslashit(site_url()));
+
                     //get local stylesheet path
-                    $url = str_replace(trailingslashit(apply_filters('perfmatters_local_stylesheet_url', (!empty(Config::$options['assets']['rucss_cdn_url']) ? Config::$options['assets']['rucss_cdn_url'] : home_url()))), '', explode('?', $stylesheet[2])[0]);
+                    $url = str_replace($local_url, '', explode('?', $stylesheet[2])[0]);
     
                     $file = Utilities::get_root_dir_path() . ltrim($url, '/');
 
@@ -317,7 +323,8 @@ class CSS
             '.elementor-motion-effects-layer',
             '.ast-header-break-point', //astra
             '.dropdown-nav-special-toggle', //kadence
-            'rs-fw-forcer' //rev slider
+            'rs-fw-forcer', //rev slider
+            'div.product' //woocommerce
         );
         if(!empty(Config::$options['assets']['rucss_excluded_selectors'])) {
             self::$excluded_selectors = array_merge(self::$excluded_selectors, Config::$options['assets']['rucss_excluded_selectors']);

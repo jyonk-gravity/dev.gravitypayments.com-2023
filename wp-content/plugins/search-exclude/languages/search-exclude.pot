@@ -1,37 +1,42 @@
-# Copyright (C) 2023 QuadLayers
+# Copyright (C) 2024 QuadLayers
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Search Exclude 2.0.7\n"
+"Project-Id-Version: Search Exclude 2.0.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-search-exclude\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-12-18T12:09:43+00:00\n"
+"POT-Creation-Date: 2024-03-06T07:04:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: search-exclude\n"
 
 #. Plugin Name of the plugin
+#: search-exclude.php
 msgid "Search Exclude"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: search-exclude.php
 msgid "https://wordpress.org/plugins/search-exclude"
 msgstr ""
 
 #. Description of the plugin
+#: search-exclude.php
 msgid "Hide any page or post from the WordPress search results by checking off the checkbox."
 msgstr ""
 
 #. Author of the plugin
+#: search-exclude.php
 #: vendor_packages/wp-plugin-table-links.php:13
 msgid "QuadLayers"
 msgstr ""
 
 #. Author URI of the plugin
+#: search-exclude.php
 msgid "https://quadlayers.com"
 msgstr ""
 
@@ -89,7 +94,7 @@ msgid "This plugin allows you to add custom fields to the checkout page, related
 msgstr ""
 
 #: vendor_packages/wp-notice-plugin-promote.php:31
-msgid "It allows you to reduce the steps in the checkout process by skipping the shopping cart page. This can encourage buyers to shop more and quickly. You will increase your sales reducing cart abandonment."
+msgid "It allows you to reduce the steps in the checkout process by skipping the shopping cart page. This can encourage buyers to shop more quickly and potentially increase your sales by reducing cart abandonment."
 msgstr ""
 
 #: vendor_packages/wp-notice-plugin-promote.php:42
@@ -117,17 +122,17 @@ msgid "Hello! We have a special gift!"
 msgstr ""
 
 #: vendor_packages/wp-notice-plugin-promote.php:74
-msgid "Today we want to make you a special gift. Using the coupon code %1$s before the next 48 hours you can get a 20 percent discount on the premium version of the %2$s plugin."
+msgid "Today we have a special gift for you. Use the coupon code %1$s within the next 48 hours to receive a %2$s discount on the premium version of the %3$s plugin."
 msgstr ""
 
-#: vendor_packages/wp-notice-plugin-promote.php:82
-#: vendor_packages/wp-notice-plugin-promote.php:100
-#: vendor_packages/wp-notice-plugin-promote.php:118
+#: vendor_packages/wp-notice-plugin-promote.php:83
+#: vendor_packages/wp-notice-plugin-promote.php:101
+#: vendor_packages/wp-notice-plugin-promote.php:119
 msgid "More info!"
 msgstr ""
 
-#: vendor_packages/wp-notice-plugin-promote.php:92
-#: vendor_packages/wp-notice-plugin-promote.php:110
+#: vendor_packages/wp-notice-plugin-promote.php:93
+#: vendor_packages/wp-notice-plugin-promote.php:111
 msgid "Hello! We want to invite you to try our %s plugin!"
 msgstr ""
 

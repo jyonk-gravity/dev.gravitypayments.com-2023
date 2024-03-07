@@ -205,10 +205,10 @@ if ( !class_exists(__NAMESPACE__ . '\Post') ) {
 		 * Gets the custom field value, supporting ACF get_field() and WooCommerce multi currency
 		 *
 		 * @param string $field      Custom field label
-		 * @param object    $r          Result object
-		 * @param bool $use_acf    If true, will use the get_field() function from ACF
-		 * @param array $args       Search arguments
-		 * @param array $field_args Additional field arguments
+		 * @param object $r          Result object
+		 * @param bool   $use_acf    If true, will use the get_field() function from ACF
+		 * @param array  $args       Search arguments
+		 * @param array  $field_args Additional field arguments
 		 * @return mixed
 		 */
 		public static function getCFValue(string $field, $r, bool $use_acf, array $args = array(), array $field_args = array()) {
@@ -216,6 +216,9 @@ if ( !class_exists(__NAMESPACE__ . '\Post') ) {
 			$price_fields = array('_price', '_price_html', '_tax_price', '_sale_price', '_regular_price');
 			$datetime_fields = array('_EventStartDate', '_EventStartDateUTC', '_EventEndDate', '_EventEndDateUTC',
 				'_event_start_date', '_event_end_date', '_event_start', '_event_end', '_event_start_local', '_event_end_local');
+
+			$separator = $field_args['separator'] ?? ', ';
+			$separator = strval($separator);
 
 			if( ( in_array($field, $datetime_fields) || isset($field_args['date_format']) ) && isset($r->post_type) ) {
 				$mykey_values = get_post_custom_values($field, $r->id);
@@ -242,18 +245,20 @@ if ( !class_exists(__NAMESPACE__ . '\Post') ) {
 								if ( isset($mykey_values[0]['label']) ) {
 									$labels = array();
 									foreach ( $mykey_values as $choice ) {
-										if ( isset($choice['label']) )
+										if ( isset($choice['label']) ) {
 											$labels[] = $choice['label'];
+										}
 									}
-									if ( count($labels) > 0 )
-										$ret = implode(', ', $labels);
+									if ( count($labels) > 0 ) {
+										$ret = Str::anyToString($labels, $separator);
+									}
 									// Make sure this is not some sort of repeater or reference
 								} else if ( !is_object($mykey_values[0]) ) {
-									$ret = implode(', ', $mykey_values);
+									$ret = Str::anyToString($mykey_values, $separator);
 								}
 							}
 						} else {
-							$ret = $mykey_values;
+							$ret = Str::anyToString($mykey_values, $separator);
 						}
 					}
 				} else {
@@ -264,9 +269,9 @@ if ( !class_exists(__NAMESPACE__ . '\Post') ) {
 							if ( is_wp_error($ret) || $ret == '' ) {
 								$ret = $mykey_values[0];
 							}
-							$ret = Str::anyToString( $ret );
+							$ret = Str::anyToString( $ret, $separator );
 						} else {
-							$ret = Str::anyToString( maybe_unserialize( $mykey_values[0] ) );
+							$ret = Str::anyToString( $mykey_values[0], $separator );
 						}
 					}
 				}

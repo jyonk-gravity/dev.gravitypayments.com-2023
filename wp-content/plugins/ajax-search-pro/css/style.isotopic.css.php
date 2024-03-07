@@ -123,6 +123,14 @@ defined('ABSPATH') or die("You can't access this file directly.");
 }
 
 <?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?>.isotopic nav.asp_navigation ul li,
+    <?php echo $asp_res_ids2; ?>.isotopic nav.asp_navigation ul li,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?>.isotopic nav.asp_navigation ul li {
+    text-align: center;
+}
+
+<?php if ($use_compatibility == true): ?>
     <?php echo $asp_res_ids1; ?>.isotopic nav.asp_navigation ul li.asp_active,
     <?php echo $asp_res_ids2; ?>.isotopic nav.asp_navigation ul li.asp_active,
 <?php endif; ?>

@@ -972,6 +972,21 @@ function perfmatters_settings() {
         )
     );
 
+    //disable core fetch
+    add_settings_field(
+        'disable_core_fetch', 
+        perfmatters_title(__('Disable Core Fetch', 'perfmatters'), 'disable_core_fetch', 'https://perfmatters.io/docs/fetch-priority/#disable-core'), 
+        'perfmatters_print_input', 
+        'perfmatters_options', 
+        'preload', 
+        array(
+            'id' => 'disable_core_fetch',
+            'section' => 'preload',
+            'tooltip' => __('Disable the fetch priority attribute added by WordPress core.', 'perfmatters'),
+            'class' => 'pm-advanced-option'
+        )
+    );
+
     //preconnect
     add_settings_field(
         'preconnect', 

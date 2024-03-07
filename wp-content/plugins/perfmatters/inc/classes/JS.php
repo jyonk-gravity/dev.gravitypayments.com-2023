@@ -384,6 +384,22 @@ class JS
 						'jetMenuPublicSettings'
 	        		)
 	        	),
+	        	'kadence-blocks' => array(
+	        		'id' => 'kadence-blocks/kadence-blocks.php',
+	        		'title' => 'Kadence Blocks',
+	        		'exclusions' => array(
+	        			'kadence-blocks-tabs-js'
+	        		)
+	        	),
+	        	'kadence-blocks-pro' => array(
+	        		'id' => 'kadence-blocks-pro/kadence-blocks-pro.php',
+	        		'title' => 'Kadence Blocks Pro',
+	        		'exclusions' => array(
+	        			'kad-splide-js',
+						'kadence-slide-init-js',
+						'kadence-blocks-pro-splide-init-js'
+	        		)
+	        	),
 	        	'lightweight-cookie-notice' => array(
 	        		'id' => 'lightweight-cookie-notice-free/init.php',
 	        		'title' => 'Lightweight Cookie Notice',

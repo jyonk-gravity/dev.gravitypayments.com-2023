@@ -142,6 +142,7 @@ use WPDRMS\ASP\Utils\Css;defined('ABSPATH') or die("You can't access this file d
 
     #asp_absolute_overlay {
         background: <?php echo w_isset_def($style['box_compact_overlay_color'], 'rgba(255, 255, 255, 0.5)'); ?>;
+        text-align: center;
     }
 
     <?php if ($use_compatibility == true): ?>
@@ -254,9 +255,8 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
     line-height: normal;
   flex-grow: 1;
   order: 5;
-  /* Ipad and stuff.. */
-  -webkit-flex-grow: 1;
-  -webkit-order: 5;
+  margin: 0 0 0 10px;
+  padding: 0 5px;
 }
 
 <?php if ($use_compatibility == true): ?>
@@ -385,10 +385,7 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
   flex: 0 0 <?php echo wpdreams_width_from_px($style['boxheight']); ?>px;
   flex-grow: 0;
   order: 7;
-    /* Ipad and stuff.. */
-    -webkit-flex: 0 0 <?php echo wpdreams_width_from_px($style['boxheight']); ?>px;
-    -webkit-flex-grow: 0;
-    -webkit-order: 7;
+  text-align: center;
 }
 
 <?php if ($use_compatibility == true): ?>
@@ -399,6 +396,11 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
      fill: <?php echo $style['close_icon_fill']; ?>;
      background: <?php echo $style['close_icon_background']; ?>;
      box-shadow: 0px 0px 0px 2px <?php echo $style['close_icon_outline']; ?>;
+     border-radius: 50%;
+     box-sizing: border-box;
+     margin-left: -10px;
+     margin-top: -10px;
+     padding: 4px;
 }
 
 <?php if ($use_compatibility == true): ?>
@@ -449,6 +451,23 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
 
 <?php echo $asp_div_ids; ?> .probox .promagnifier:focus-visible {
 	outline: black outset;
+}
+
+<?php if ($use_compatibility == true): ?>
+	<?php echo $asp_div_ids1; ?> .probox .proloading .innericon,
+	<?php echo $asp_div_ids2; ?> .probox .proloading .innericon,
+	<?php echo $asp_div_ids1; ?> .probox .proclose .innericon,
+	<?php echo $asp_div_ids2; ?> .probox .proclose .innericon,
+	<?php echo $asp_div_ids1; ?> .probox .promagnifier .innericon,
+	<?php echo $asp_div_ids2; ?> .probox .promagnifier .innericon,
+	<?php echo $asp_div_ids1; ?> .probox .prosettings .innericon,
+	<?php echo $asp_div_ids2; ?> .probox .prosettings .innericon,
+<?php endif; ?>
+<?php echo $asp_div_ids; ?> .probox .proloading .innericon,
+<?php echo $asp_div_ids; ?> .probox .proclose .innericon,
+<?php echo $asp_div_ids; ?> .probox .promagnifier .innericon,
+<?php echo $asp_div_ids; ?> .probox .prosettings .innericon {
+	text-align: center;
 }
 
 <?php if ($use_compatibility == true): ?>

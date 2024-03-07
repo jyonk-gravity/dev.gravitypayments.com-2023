@@ -398,7 +398,9 @@ class LazyLoad
 
 			$lazy_image_count = 0;
 			$exclude_leading_images = apply_filters('perfmatters_exclude_leading_images', Config::$options['lazyload']['exclude_leading_images'] ?? 0);
-			$leading_image_exclusions = apply_filters('perfmatters_leading_image_exclusions', array());
+			$leading_image_exclusions = apply_filters('perfmatters_leading_image_exclusions', array(
+				'data-perfmatters-leading-skip'
+			));
 
 			//remove any duplicate images
 			$images = array_unique($images, SORT_REGULAR);
@@ -410,7 +412,9 @@ class LazyLoad
 
 	        	//check for leading image exclusion
 	        	if(!empty($leading_image_exclusions) && is_array($leading_image_exclusions)) {
+
                     foreach($leading_image_exclusions as $exclusion) {
+
                         if(strpos($image[0], $exclusion) !== false) {
                             $leading = false;
                         }
@@ -634,7 +638,7 @@ class LazyLoad
 		if(!empty(Config::$options['lazyload']['css_background_selectors'])) {
 
 			//match all selectors
-			preg_match_all('#<(?>div|section|figure)(\s[^>]*?(' . implode('|', Config::$options['lazyload']['css_background_selectors']) . ').*?)>#i', $buffer, $selectors, PREG_SET_ORDER);
+			preg_match_all('#<(?>div|section|figure|footer)(\s[^>]*?(' . implode('|', Config::$options['lazyload']['css_background_selectors']) . ').*?)>#i', $buffer, $selectors, PREG_SET_ORDER);
 
 			if(!empty($selectors)) {
 
@@ -664,40 +668,70 @@ class LazyLoad
 	}
 
 	//mark images inside parent exclusions as no-lazy
-	private static function lazyload_parent_exclusions($html, $buffer) {
+	private static function lazyload_parent_exclusions($html, &$buffer) {
+
+		$exclusions = array();
 
 		if(!empty(Config::$options['lazyload']['lazy_loading_parent_exclusions'])) {
+			$exclusions['default'] = implode('|', Config::$options['lazyload']['lazy_loading_parent_exclusions']);
+		}
 
-			//match all selectors
-			preg_match_all('#<(div|section|figure)(\s[^>]*?(' . implode('|', Config::$options['lazyload']['lazy_loading_parent_exclusions']) . ').*?)>.*?<img.*?<\/\g1>#is', $buffer, $selectors, PREG_SET_ORDER);
+		$leading_exclusions = apply_filters('perfmatters_leading_image_parent_exclusions', array());
+		if(!empty($leading_exclusions)) {
+			$exclusions['leading'] = implode('|', $leading_exclusions);
+		}
 
-			if(!empty($selectors)) {
 
-				foreach($selectors as $selector) {
+		if(!empty($exclusions)) {
 
-					//match all img tags
-					preg_match_all('#<img([^>]+?)\/?>#is', $selector[0], $images, PREG_SET_ORDER);
+			$inner = '';
+			foreach($exclusions as $key => $val) {
+				$inner.= '(?<' . $key . '>' . $val . ')|';
+			}
 
-					if(!empty($images)) {
+			$inner = rtrim($inner, '|');
 
-						//remove any duplicate images
-						$images = array_unique($images, SORT_REGULAR);
+			if(!empty($inner)) {
 
-						//loop through images
-				        foreach($images as $image) {
 
-				        	$image_atts = Utilities::get_atts_array($image[1]);
+				//match all selectors
+				preg_match_all('#<(div|section|figure)(\s[^>]*?(?>' . $inner . ').*?)>.*?<\/\g1>#is', $buffer, $selectors, PREG_SET_ORDER);
 
-				        	$image_atts['class'] = !empty($image_atts['class']) ? $image_atts['class'] . ' ' . 'no-lazy' : 'no-lazy';
+				if(!empty($selectors)) {
 
-				            //replace video attributes string
-							$new_image = str_replace($image[1], ' ' . Utilities::get_atts_string($image_atts), $image[0]);
+					foreach($selectors as $selector) {
 
-							//replace video with placeholder
-							$html = str_replace($image[0], $new_image, $html);
+						//match all img tags
+						preg_match_all('#<img([^>]+?)\/?>#is', $selector[0], $images, PREG_SET_ORDER);
 
-							unset($new_image);
-				        }
+						if(!empty($images)) {
+
+							//remove any duplicate images
+							$images = array_unique($images, SORT_REGULAR);
+
+							//loop through images
+					        foreach($images as $image) {
+
+					        	$image_atts = Utilities::get_atts_array($image[1]);
+
+					        	if(!empty($selector['default'])) {
+					        		$image_atts['class'] = !empty($image_atts['class']) ? $image_atts['class'] . ' ' . 'no-lazy' : 'no-lazy';
+					        	}
+
+					        	if(!empty($selector['leading'])) {
+					        		$image_atts['data-perfmatters-leading-skip'] = 1;
+					        	}
+
+					            //replace video attributes string
+								$new_image = str_replace($image[1], ' ' . Utilities::get_atts_string($image_atts), $image[0]);
+
+								//replace video with placeholder
+								$html = str_replace($image[0], $new_image, $html);
+								$buffer = str_replace($image[0], $new_image, $buffer);
+
+								unset($new_image);
+					        }
+						}
 					}
 				}
 			}

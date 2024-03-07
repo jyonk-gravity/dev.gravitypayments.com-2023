@@ -1283,7 +1283,7 @@ class SearchPostTypes extends AbstractSearch {
 										}
 										break;
 									case "RAND()":
-										$diff = 0;
+										$diff = $args['engine'] === 'regular' ? 0 : wp_rand( -1, 1 );
 										break;
 									default:
 										$diff = $b->relevance - $a->relevance;

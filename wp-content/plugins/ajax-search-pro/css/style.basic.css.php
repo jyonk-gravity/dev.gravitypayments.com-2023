@@ -231,7 +231,6 @@ div.asp_w.ajaxsearchpro.asp_non_compact {
     width: 0;
     height: 0;
     position: fixed;
-    text-align: center;
     background: rgba(255, 255, 255, 0.5);
     top: 0;
     left: 0;
@@ -283,8 +282,6 @@ div.asp_m.ajaxsearchpro .probox {
 div.asp_m.ajaxsearchpro .probox .proinput {
     width: 1px;
     height: 100%;
-    margin: 0px 0px 0px 10px;
-    padding: 0 5px;
     float: left;
     box-shadow: none;
     position: relative;
@@ -306,7 +303,6 @@ div.asp_m.ajaxsearchpro .probox .proinput input {
     border: 0px;
     background: transparent;
     box-shadow: none;
-    margin: -1px;
     padding: 0;
     left: 0;
     padding-top: 2px;
@@ -348,7 +344,6 @@ div.asp_m.ajaxsearchpro .probox .prosettings {
     box-shadow: none;
     margin: 0;
     padding: 0;
-    text-align: center;
     z-index: 1;
 }
 
@@ -401,16 +396,12 @@ div.asp_m.ajaxsearchpro .probox .proloading svg {
 
 div.asp_m.ajaxsearchpro .probox .proclose svg  {
     background: #333333;
-    border-radius: 50%;
     position: absolute;
     top: 50%;
     width: 20px;
     height: 20px;
-    margin-top: -10px;
     left: 50%;
-    margin-left: -10px;
     fill: #fefefe;
-    padding: 4px;
     box-sizing: border-box;
     box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.9);
 }
@@ -1007,7 +998,6 @@ div.asp_w.asp_r .photostack-start nav {
 div.asp_w.asp_r .photostack nav span {
     position: relative;
     display: inline-block;
-    margin: 0 5px;
     width: 30px;
     height: 30px;
     cursor: pointer;

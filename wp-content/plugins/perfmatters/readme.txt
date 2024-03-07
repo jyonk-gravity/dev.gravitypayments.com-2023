@@ -5,7 +5,7 @@ Tags: perfmatters
 Requires at least: 5.5
 Requires PHP: 7.0
 Tested up to: 6.4.3
-Stable tag: 2.2.4
+Stable tag: 2.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,21 @@ Perfmatters is a lightweight performance plugin developed to speed up your WordP
 Check out our [documentation](https://perfmatters.io/docs/) for more information on how to use Perfmatters.
 
 == Changelog ==
+
+= 2.2.5 - 02.29.2024 =
+* Added new perfmatters_critical_image_parent_exclusions filter.
+* Added new perfmatters_leading_image_parent_exclusions filter.
+* Added new Disable Core Fetch option to disable the fetch priority attribute added by WordPress core.
+* Added built-in WooCommerce CSS selector exclusion for better compatibility on single product posts.
+* Added Breakdance request parameters to excluded page builders array.
+* Added a REST API exception for WP Recipe Maker.
+* Added Delay JS quick exclusions for Kadence Blocks and Kadence Blocks Pro.
+* Added CSS Background Image support for the footer element.
+* Fixed an issue where dynamic preload version numbers would sometimes get added to the wrong resource.
+* Fixed an issue with certain multilingual setups where the base URL for generated files was incorrect.
+* Updated background processing library to the latest version (1.3.0).
+* Updated CSS parsing library to the latest version (8.5.1).
+* Minor style updates to plugin UI.
 
 = 2.2.4 - 02.05.2024 =
 * Added built-in Image Dimensions exclusion for blank placeholder SVGs.
