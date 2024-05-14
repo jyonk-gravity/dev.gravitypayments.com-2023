@@ -73,7 +73,7 @@
     ?>
 </div>
 <div class="item it_engine_index" style="position:relative;">
-    <div class='asp-setting-search-all-cf' style="position: absolute; right: 253px; top: 18px; z-index: 1000000;">
+    <div class='asp-setting-search-all-cf'>
     <?php
     $o = new wpdreamsYesNo("search_all_cf", __('Search all custom fields?', 'ajax-search-pro'),
         $sd['search_all_cf']);

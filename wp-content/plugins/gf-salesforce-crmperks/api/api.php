@@ -630,7 +630,7 @@ if($i>1){ $field_n.=$i; }
     $files=$this->verify_files($fields[$field_n],$files);
     unset($fields[$field_n]);  
   }
-}
+} 
 if(!empty($fields_info)){
     foreach($fields_info as $k=>$v){
         if(!empty($v['is_item']) && isset($meta['map'][$k])){
@@ -656,12 +656,13 @@ unset($fields['vx_camp_id']);
   if($debug){ ob_start();}
   //check primary key
   $search=array(); $search2=array();
-  if( !empty($meta['primary_key']) ){    
+  if( !empty($meta['primary_key']) || !empty($meta['primary_key_custom'])){    
 
   if(!empty($meta['primary_key_custom'])){
       $meta['primary_key']=$meta['primary_key_custom'];
   }
   $search=$this->get_search_val($meta['primary_key'],$fields,$fields_info); 
+  //var_dump($search); die();
   $search=apply_filters('crm_perks_salesforce_search',$search,$fields);
   if( !empty($meta['primary_key2']) ){
   $search2=$this->get_search_val($meta['primary_key2'],$fields,$fields_info);
@@ -975,7 +976,7 @@ public function get_search_val($field,$fields,$fields_info){
       }
      
   }else if(strpos($field,'+') !== false){
-      $search_arr=explode('+',$field); 
+      $search_arr=array_map('trim',explode('+',$field)); 
       foreach($search_arr as $field){
        if(isset($fields[$field])){
       $search[$field]= $fields[$field];     
@@ -983,15 +984,17 @@ public function get_search_val($field,$fields,$fields_info){
       } 
   }else if(isset($fields[$field]) && $fields[$field] !=''){
       $val=$fields[$field]; 
-      if(isset($fields_info[$field]['type'])){
+     $search=array( $field=>$val ); 
+  }
+  foreach($search as $field=>$val){
+         if(isset($fields_info[$field]['type'])){
           $type=$fields_info[$field]['type'];
           if( $type == 'phone'){
         // $val=preg_replace( '/[^0-9]/', '', $val );
           }else if( in_array($type,array('date','datetime'))){
-              $val=array('val'=>$val,'type'=>$type);
+              $search[$field]=array('val'=>$val,'type'=>$type);
           }
       }
-     $search=array( $field=>$val ); 
   } 
 return $search;   
 }  
@@ -1411,7 +1414,7 @@ public function search_in_sf($sales_object,$search,$search2=''){
           if(is_array($v)){
               $type=$v['type'];
               $v=$v['val'];
-          }
+          } 
           if(in_array($type,array('date','datetime'))){
          $v=esc_sql($v);
           }else{

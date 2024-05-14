@@ -122,6 +122,7 @@ function perfmatters_script_manager_scripts() {
 		return;
 	}
 
+	//js
 	wp_register_script('perfmatters-script-manager-js', plugins_url('js/script-manager.js', dirname(__FILE__)), array(), PERFMATTERS_VERSION);
 	wp_enqueue_script('perfmatters-script-manager-js');
 

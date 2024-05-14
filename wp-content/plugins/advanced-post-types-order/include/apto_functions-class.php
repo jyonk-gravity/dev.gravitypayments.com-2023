@@ -92,7 +92,19 @@
                     
                     //prepare the new Status settings introduced since 3.8.7
                     $settings['_status']    =   self::get_sort_statuses_setting($item_ID);
+     
+                    $settings['_rules']     =   self::get_sort_settings_rules( $settings['_rules'] );
                     
+                    $settings   =   apply_filters('apto/get_sort_settings', $settings, $item_ID);
+                    
+                    $APTO->cache_add_key('sort_settings/' . $item_ID, $settings );
+                    
+                    return $settings;
+                }
+                
+                
+            static public function get_sort_settings_rules( $rules )
+                {
                     $defaults   = array (
                                             'post_type'                     =>  array(),
                                             'taxonomy'                      =>  array(),
@@ -101,13 +113,9 @@
                                             'meta_relation'                 =>  'AND',
                                             'author'                        =>  array(),
                                         );
-                    $settings['_rules']          = wp_parse_args( $settings['_rules'], $defaults );
-                    
-                    $settings   =   apply_filters('apto/get_sort_settings', $settings, $item_ID);
-                    
-                    $APTO->cache_add_key('sort_settings/' . $item_ID, $settings );
-                    
-                    return $settings;
+                    $rules          = wp_parse_args( $rules, $defaults );
+                       
+                    return $rules;   
                 }
             
             
@@ -262,7 +270,7 @@
                 
             
             /**
-            * Check against the settings rule if it's a single woocommerce sort type
+            * Check the current SortID if it's a single woocommerce sort type
             * 
             */
             static public function is_woocommerce($sortID)
@@ -463,13 +471,21 @@
                     //deprecated filter      
                     $new_orderBy    =   apply_filters('apto_get_orderby', $new_orderBy, $orderBy, $query);
                     
-                    $new_orderBy    =   apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query, $order_list);
+                    $new_orderBy    =   apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query, $order_list );
                     
                     return $new_orderBy; 
                     
                 }
             
             
+            /**
+            * Create the orderBy formated field to be returned
+            * 
+            * @param mixed $orderBy
+            * @param mixed $query
+            * @param mixed $sort_view_id
+            * @param mixed $order_list
+            */
             function query_get_new_orderBy($orderBy, $query, $sort_view_id, $order_list)
                 {
                     
@@ -529,7 +545,7 @@
                                 if($temp_orderBy != $wpdb->posts . '.menu_order')
                                     {
                                         unset($temp_orderBy);
-                                        return  apply_filters('apto/get_orderby', $new_orderBy, 'DESC', $sort_view_id, $query);
+                                        //return  apply_filters('apto/get_orderby', $new_orderBy, 'DESC', $sort_view_id, $query);
                                     }
                                     else
                                     {
@@ -547,7 +563,7 @@
                                             }
                                         
                                           
-                                        return  apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query);
+                                        //return  apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query);
                                     }
                                                         
                             }
@@ -1853,7 +1869,15 @@
                     
                     return $meta_data;                    
                 }
-                
+            
+            
+            /**
+            * Return the query post types
+            *     
+            * @param mixed $query
+            * @param mixed $_if_empty_set_post_types
+            * @return mixed
+            */
             function query_get_post_types($query, $_if_empty_set_post_types = FALSE)
                 {
                     $query_post_types = isset($query->query_vars['post_type']) ? $query->query_vars['post_type'] :   array();
@@ -2052,8 +2076,11 @@
                     return  $query_pieces;   
                 }
                 
-            function get_order_list($sort_view_id)
+            function get_order_list( $sort_view_id )
                 {
+                    if ( empty ( $sort_view_id ) )
+                        return FALSE;
+                        
                     global $wpdb;
                     
                     $order_list = array();
@@ -2186,7 +2213,7 @@
             
             
             /**
-            * Retrieve the sort view ID
+            * Retrieve the sort view ID specified through attributes
             *     
             * @param mixed $sortID      This is the main sort ID holder
             * @param mixed $attr
@@ -2409,15 +2436,15 @@
                 {
 
                     if ( ( !defined('ICL_LANGUAGE_CODE') && ! defined('POLYLANG_VERSION') )   ||  $sort_settings['_view_type']    ==  "multiple")
-                        return $sort_settings['_rules'];
+                        return self::get_sort_settings_rules( $sort_settings['_rules'] );
                                         
                     $default_language   =   $this->get_blog_default_language(); 
                     $current_language   =   $this->get_blog_language();
                     if(isset($sort_settings['_rules_' . $current_language]))
-                        return $sort_settings['_rules_' . $current_language];
+                        return self::get_sort_settings_rules( $sort_settings['_rules_' . $current_language] );
                     
                     if($ReturnDefaultIfEmpty    === TRUE)
-                        return $sort_settings['_rules'];   
+                        return self::get_sort_settings_rules( $sort_settings['_rules'] );
                         else
                         return false;
                 }
@@ -3229,7 +3256,8 @@
                         
                     return ;   
                 }
-
+                
+         
                 
            /**
            * Disable the free plugin if active

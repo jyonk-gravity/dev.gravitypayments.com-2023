@@ -2,27 +2,31 @@
 /* Prevent direct access */
 defined( 'ABSPATH' ) or die( "You can't access this file directly." ); ?>
 <div id="asp-side-container">
-	<a class="wd-accessible-switch" data-aenable="<?php esc_attr_e('ENABLE ACCESSIBILITY', 'ajax-search-pro'); ?>" data-adisable="<?php esc_attr_e('DISABLE ACCESSIBILITY', 'ajax-search-pro'); ?>" href="#"><?php echo isset($_COOKIE['asp-accessibility']) ?
-	__('DISABLE ACCESSIBILITY', 'ajax-search-pro') :
-	__('ENABLE ACCESSIBILITY', 'ajax-search-pro'); ?></a>
-	<?php if ( isset($_GET['page'], $_GET['asp_sid']) && $_GET['page'] == 'asp_main_settings' ): ?>
+	<a class="wd-accessible-switch" data-aenable="<?php esc_attr_e('ENABLE ACCESSIBILITY', 'ajax-search-pro'); ?>" data-adisable="<?php esc_attr_e('DISABLE ACCESSIBILITY', 'ajax-search-pro'); ?>" href="#">
+		<?php
+		echo isset($_COOKIE['asp-accessibility']) ?
+		__('DISABLE ACCESSIBILITY', 'ajax-search-pro') :
+		__('ENABLE ACCESSIBILITY', 'ajax-search-pro');
+		?>
+	</a>
+	<?php if ( isset($_GET['page'], $_GET['asp_sid']) && $_GET['page'] == 'asp_main_settings' ) : ?>
 	<h2><?php _e("Can't find an option?", 'ajax-search-pro' ); ?></h2>
 	<input type="text" value="" id="asp-os-input" placeholder="<?php echo esc_attr__('Search in options', 'ajax-search-pro'); ?>">
 	<div id="asp-os-results"></div>
 	<?php endif; ?>
 	<div class="asp-beta-testing">
-		<h2>Want to test the latest features?</h2>
-		<p><a href="https://ajaxsearchpro.com/development-roadmap-beta-testing/" target="_blank">Join the beta testers!</a></p>
-		<p>Beta testers gain access to the latest updates before the final release.</p>
+		<h2><?php _e('Want to test the latest features?', 'ajax-search-pro' ); ?></h2>
+		<p><a href="https://ajaxsearchpro.com/development-roadmap-beta-testing/" target="_blank"><?php _e('Join the beta testers!', 'ajax-search-pro' ); ?></a></p>
+		<p><?php _e('Beta testers gain access to the latest updates before the final release.', 'ajax-search-pro' ); ?></p>
 	</div>
 	<div class="newsletter">
-		<h2>Subscribe to our newsletter</h2>
-		<p>Get the latest news and updates</p>
+		<h2><?php _e('Subscribe to our newsletter', 'ajax-search-pro' ); ?></h2>
+		<p><?php _e('Get the latest news and updates', 'ajax-search-pro' ); ?></p>
 		<form action="https://wp-dreams.us9.list-manage.com/subscribe/post?u=370663b5e3df02747aa5673ed&amp;id=65e28ba277&amp;f_id=00220ae1f0" method="post" name="mc-embedded-subscribe-form" target="_blank">
-			<input name="EMAIL" id="email" type="email" placeholder="email@domain.com"><input type="submit" value="Subscribe" name="subscribe">
+			<input name="EMAIL" id="email" type="email" placeholder="email@domain.com"><input type="submit" value="<?php esc_attr_e('Subscribe', 'ajax-search-pro' ); ?>" name="subscribe">
 		</form>
 	</div>
-	<h2><?php _e("Socials", 'ajax-search-pro' ); ?></h2>
+	<h2><?php _e('Socials', 'ajax-search-pro' ); ?></h2>
 	<p class="socials">
 		<a class="facebook" target="_blank" href="https://www.facebook.com/wpdreams">
 			<svg width="18" height="18" aria-hidden="true" role="img" focusable="false">
@@ -39,6 +43,6 @@ defined( 'ABSPATH' ) or die( "You can't access this file directly." ); ?>
 	</p>
 	<div class="asp-back-help">
 		<h2><?php echo __('Need help?', 'ajax-search-pro'); ?></h2>
-		<p><?php echo sprintf( __('Check the <a href="%s">Help & Updates</a> menu for resources.', 'ajax-search-pro'), get_admin_url() . "admin.php?page=asp_updates_help" ); ?></p>
+		<p><?php printf( __('Check the <a href="%s">Help & Updates</a> menu for resources.', 'ajax-search-pro'), get_admin_url() . 'admin.php?page=asp_updates_help' ); ?></p>
 	</div>
 </div>

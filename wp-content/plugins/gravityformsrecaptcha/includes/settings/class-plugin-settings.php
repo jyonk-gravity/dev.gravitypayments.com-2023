@@ -509,7 +509,7 @@ class Plugin_Settings {
 		$this->apply_status_changes( $result );
 
 		if ( is_wp_error( $result ) ) {
-			$this->addon->log_debug( __METHOD__ . '(): failed to verify reCAPTCHA token. ' . $result->get_error_message() );
+			$this->addon->log_debug( __METHOD__ . '(): Failed to verify reCAPTCHA token. ' . $result->get_error_message() );
 
 			wp_send_json_error();
 		}

@@ -25,7 +25,7 @@ class JS
 			add_filter('perfmatters_output_buffer_template_redirect', array('Perfmatters\JS', 'optimize'));
 
 			//fastclick
-			if($delay_check && !empty(Config::$options['assets']['fastclick'])) {
+			if($delay_check && !empty(apply_filters('perfmatters_delay_js_fastclick', !empty(Config::$options['assets']['fastclick'])))) {
 				add_filter('wp_head', array('Perfmatters\JS', 'print_fastclick'));
 			}
 		}
@@ -59,7 +59,7 @@ class JS
 		if($defer_check) {
 
 			//add jquery if needed
-			if(empty(Config::$options['assets']['defer_jquery'])) {
+			if(empty(apply_filters('perfmatters_defer_jquery', !empty(Config::$options['assets']['defer_jquery'])))) {
 				array_push($js_exclusions, 'jquery(?:\.min)?.js');
 			}
 
@@ -71,7 +71,7 @@ class JS
 			}
 
 			//convert exlusions to string for regex
-			$js_exclusions = implode('|', $js_exclusions);
+			$js_exclusions = implode('|', apply_filters('perfmatters_defer_js_exclusions', $js_exclusions));
 		}
 
 		if($delay_check) {
@@ -128,26 +128,18 @@ class JS
 			//delay javascript
 			if($delay_check) {
 
-				$delay_flag = false;
-
 				$delay_js_behavior = apply_filters('perfmatters_delay_js_behavior', Config::$options['assets']['delay_js_behavior'] ?? '');
 
 				if(empty($delay_js_behavior)) {
 
+					$delay_flag = false;
+
 					$delayed_scripts = apply_filters('perfmatters_delayed_scripts', Config::$options['assets']['delay_js_inclusions']);
 
 					if(!empty($delayed_scripts)) {
-
 						foreach($delayed_scripts as $delayed_script) {
 							if(strpos($tag, $delayed_script) !== false) {
-
 								$delay_flag = true;
-
-				    			if(!empty($atts_array['type'])) {
-				    				$atts_array['data-perfmatters-type'] = $atts_array['type'];
-				    			}
-
-				    			$atts_array['type'] = 'pmdelayedscript';
 				    			break;
 							}
 						}
@@ -155,25 +147,25 @@ class JS
 				}
 				else {
 
+					$delay_flag = true;
+
 					if(!empty($excluded_scripts)) {
 						foreach($excluded_scripts as $excluded_script) {
 							if(strpos($tag, $excluded_script) !== false) {
-								continue 2;
+								$delay_flag = false;
+								break;
 							}
 						}
 					}
+				}
 
-					$delay_flag = true;
+				if($delay_flag) {
 
 					if(!empty($atts_array['type'])) {
 	    				$atts_array['data-perfmatters-type'] = $atts_array['type'];
 	    			}
 
 	    			$atts_array['type'] = 'pmdelayedscript';
-				}
-
-				if($delay_flag) {
-
 	    			$atts_array['data-cfasync'] = "false";
 	    			$atts_array['data-no-optimize'] = "1";
 	    			$atts_array['data-no-defer'] = "1";
@@ -327,7 +319,9 @@ class JS
 	        		'title' => 'Cookie Notice & Compliance for GDPR',
 	        		'exclusions' => array(
 	        			'/plugins/cookie-notice/js/front.min.js',
-						'cnArgs'
+						'cnArgs',
+						'cdn.hu-manity.co',
+						'huOptions'
 	        		)
 	        	),
 	        	'cookieyes' => array(
@@ -422,6 +416,14 @@ class JS
 	        		'exclusions' => array(
 	        			'jquery.min.js',
 	        			'/modula-slider/'
+	        		)
+	        	),
+	        	'monumetric-ads' => array(
+	        		'id' => 'monumetric-ads/monumetric-ads.php',
+	        		'title' => 'Monumetric Ads',
+	        		'exclusions' => array(
+	        			'$MMT',
+	        			'monu.delivery'
 	        		)
 	        	),
 	        	'ninja-forms' => array(
@@ -564,7 +566,9 @@ class JS
 	                    'single-product.min.js',
 	                    'slick',
 	                    'functions.min.js',
-	                    'waypoint'
+	                    'waypoint',
+	                    'photoswipe',
+	                    'jquery.zoom.min.js'
 	                )
 	            ),
 	            'wp-armour' => array(
@@ -576,7 +580,7 @@ class JS
 	            ),
 	            'wpforms-lite' => array(
 	        		'id' => 'wpforms-lite/wpforms.php',
-	        		'title' => 'WP Forms Lite',
+	        		'title' => 'WPForms Lite',
 	        		'exclusions' => array(
 	        			'jquery.min.js',
 						'wpforms'
@@ -584,7 +588,7 @@ class JS
 	        	),
 	        	'wpforms' => array(
 	        		'id' => 'wpforms/wpforms.php',
-	        		'title' => 'WP Forms',
+	        		'title' => 'WPForms',
 	        		'exclusions' => array(
 	        			'jquery.min.js',
 						'wpforms'

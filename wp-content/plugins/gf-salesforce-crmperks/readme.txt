@@ -1,10 +1,10 @@
 === WP Gravity Forms Salesforce ===
 Contributors: crmperks, sbazzi, asif876
-Tags: salesforce, gravity forms salesforce, gravity forms salesforce add on, gravity forms salesforce crm, gravity forms salesforce integration, salesforce wordpress gravity forms
+Tags: salesforce, gravity forms salesforce, gravity forms salesforce crm, gravity forms salesforce integration, salesforce wordpress gravity forms
 Requires at least: 4.7
-Tested up to: 6.4
-Stable tag: 1.4.1
-Version: 1.4.1
+Tested up to: 6.5
+Stable tag: 1.4.3
+Version: 1.4.3
 Requires PHP: 5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -86,6 +86,10 @@ We have Salesforce add-on for Woocommerce. [Woocommerce Salesforce Integration](
 == Gravity Forms Pardot Integration ==
 
 We have a separate plugin for Pardot. [Gravity Forms Pardot Integration](https://www.crmperks.com/plugins/gravity-forms-plugins/gravity-forms-pardot-plugin/)
+
+== Gravity Forms Klaviyo Integration ==
+
+We have a separate plugin for Pardot. [Gravity Forms Klaviyo Integration](https://www.crmperks.com/plugins/gravity-forms-plugins/gravity-forms-klaviyo-integration/)
 
 == Screenshots ==
 
@@ -179,6 +183,12 @@ Yes, as you connect your normal salesforce account similarly, you can connect yo
 
 == Changelog ==
 
+
+= 1.4.3 =
+* fixed "custom primary key datetime" issue.
+
+= 1.4.2 =
+* fixed "custom primary key" issue.
 
 = 1.4.1 =
 * added "custom primary key" feature.

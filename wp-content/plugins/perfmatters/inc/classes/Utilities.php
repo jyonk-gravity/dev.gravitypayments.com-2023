@@ -84,7 +84,7 @@ class Utilities
 
     //return root directory path
     public static function get_root_dir_path() {
-        $wp_content_relative_path = str_replace(array(trailingslashit(home_url()), trailingslashit(site_url())), '', WP_CONTENT_URL);
+        $wp_content_relative_path = str_replace(array(trailingslashit(home_url()), trailingslashit(site_url())), '', content_url());
         $root_dir_path = str_replace($wp_content_relative_path, '', WP_CONTENT_DIR);
         return trailingslashit($root_dir_path);
     }

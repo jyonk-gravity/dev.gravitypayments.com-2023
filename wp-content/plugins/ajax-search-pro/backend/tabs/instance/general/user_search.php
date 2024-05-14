@@ -69,13 +69,13 @@
 	?>
 	<div wd-show-on="user_orderby_primary:customfp DESC,customfp ASC">
 	<?php
-    $o = new wpdreamsText("user_orderby_primary_cf", __('custom field', 'ajax-search-pro'), $sd['orderby_primary_cf']);
+    $o = new wpdreamsText("user_orderby_primary_cf", __('Field name', 'ajax-search-pro'), $sd['orderby_primary_cf']);
     $params[$o->getName()] = $o->getData();
 	?>
 	</div>
 	<div wd-show-on="user_orderby_primary:customfp DESC,customfp ASC">
 	<?php
-    $o = new wpdreamsCustomSelect("user_orderby_primary_cf_type", __('type', 'ajax-search-pro'),
+    $o = new wpdreamsCustomSelect("user_orderby_primary_cf_type", __('Field type', 'ajax-search-pro'),
         array(
             'selects' => array(
                 array('option' => __('numeric', 'ajax-search-pro'), 'value' => 'numeric'),
@@ -108,13 +108,13 @@
 		?>
 		<div wd-show-on="user_orderby_secondary:customfs DESC,customfs ASC">
 		<?php
-        $o = new wpdreamsText("user_orderby_secondary_cf", __('custom field', 'ajax-search-pro'), $sd['orderby_secondary_cf']);
+        $o = new wpdreamsText("user_orderby_secondary_cf", __('Field name', 'ajax-search-pro'), $sd['orderby_secondary_cf']);
         $params[$o->getName()] = $o->getData();
 		?>
 		</div>
 		<div wd-show-on="user_orderby_secondary:customfs DESC,customfs ASC">
 		<?php
-        $o = new wpdreamsCustomSelect("user_orderby_secondary_cf_type", __('type', 'ajax-search-pro'),
+        $o = new wpdreamsCustomSelect("user_orderby_secondary_cf_type", __('Field type', 'ajax-search-pro'),
             array(
                 'selects' => array(
                     array('option' => __('numeric', 'ajax-search-pro'), 'value' => 'numeric'),

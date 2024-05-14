@@ -241,6 +241,7 @@
 
         settingsCheckboxToggle: function( $node, checkState ) {
             let $this = this;
+
             checkState = typeof checkState == 'undefined' ? true : checkState;
             let $parent = $node,
                 $checkbox = $node.find('input[type="checkbox"]'),
@@ -252,8 +253,15 @@
                     typeof $parent.data("lvl") != "undefined" &&
                     parseInt($parent.data("lvl")) >= lvl
                 ) {
-                    if ( checkState )
+                    if (
+                        checkState &&
+                        (
+                            $this.o.settings.unselectChildren ||
+                            ( $this.o.settings.hideChildren && !$checkbox.prop("checked") ) // Uncheck if hidden
+                        )
+                    ) {
                         $parent.find('input[type="checkbox"]').prop("checked", $checkbox.prop("checked"));
+                    }
                     // noinspection JSUnresolvedVariable
                     if ( $this.o.settings.hideChildren ) {
                         if ( $checkbox.prop("checked") ) {
@@ -262,9 +270,9 @@
                             $parent.addClass("hiddend");
                         }
                     }
-                }
-                else
+                } else {
                     break;
+                }
                 i++;
                 if ( i > 400 ) break; // safety first
             }

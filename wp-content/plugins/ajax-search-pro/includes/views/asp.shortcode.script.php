@@ -58,6 +58,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
     "overridewpdefault": <?php echo $style['override_default_results']; ?>,
     "override_method": "<?php echo $style['override_method']; ?>",
     "settings": {
+        "unselectChildren": <?php echo $style['frontend_terms_parent_unselect_children']; ?>,
         "hideChildren": <?php echo $style['frontend_terms_hide_children']; ?>
     },
     "settingsimagepos": "<?php echo $style['settingsimagepos']; ?>",
@@ -189,7 +190,8 @@ defined('ABSPATH') or die("You can't access this file directly.");
 		"bodycommerce": <?php echo defined("DE_DB_WOO_VERSION") ? 1 : 0 ?>
 	},
     "preventBodyScroll": <?php echo wd_asp()->o['asp_compatibility']['js_prevent_body_scroll']; ?>,
-    "statistics": <?php echo get_option('asp_stat', 0) == 0 ? 0 : 1; ?>
+    "statistics": <?php echo get_option('asp_stat', 0) == 0 ? 0 : 1; ?>,
+	"preventEvents": <?php echo esc_attr( $prevent_events ); ?>
 }
 <?php
 

@@ -550,20 +550,31 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return bool
 	 */
 	private function initialize_api() {
+		static $result;
+
+		if ( is_bool( $result ) ) {
+			return $result;
+		}
+
+		$result     = false;
 		$site_key   = $this->plugin_settings->get_recaptcha_key( 'site_key_v3' );
 		$secret_key = $this->plugin_settings->get_recaptcha_key( 'secret_key_v3' );
 
 		if ( ! ( $site_key && $secret_key ) ) {
-			$this->log_debug( __METHOD__ . '(): missing v3 key configuration. Please check the add-on settings.' );
+			$this->log_debug( __METHOD__ . '(): Missing v3 key configuration. Please check the add-on settings.' );
+
 			return false;
 		}
 
 		if ( '1' !== $this->get_plugin_setting( 'recaptcha_keys_status_v3' ) ) {
-			$this->log_debug( __METHOD__ . '(): could not initialize reCAPTCHA v3 because site and/or secret key is invalid.' );
+			$this->log_debug( __METHOD__ . '(): Could not initialize reCAPTCHA v3 because site and/or secret key is invalid.' );
+
 			return false;
 		}
 
-		$this->log_debug( __METHOD__ . '(): Initializing API.' );
+		$result = true;
+		$this->log_debug( __METHOD__ . '(): API Initialized.' );
+
 		return true;
 	}
 
@@ -763,25 +774,39 @@ class GF_RECAPTCHA extends GFAddOn {
 	 */
 	public function check_for_spam_entry( $is_spam, $form, $entry ) {
 
-		if ( $is_spam || $this->is_disabled_by_form_setting( $form ) || ! $this->initialize_api() || $this->is_preview() ) {
+		if ( $is_spam ) {
+			$this->log_debug( __METHOD__ . '(): Skipping, entry has already been identified as spam by another anti-spam solution.' );
 			return $is_spam;
 		}
 
-		$is_spam = (float) $this->get_score_from_entry( $entry ) <= $this->get_spam_score_threshold();
+		$is_spam = $this->is_spam_submission( $form, $entry );
 		$this->log_debug( __METHOD__ . '(): Is submission considered spam? ' . ( $is_spam ? 'Yes.' : 'No.' ) );
 
 		return $is_spam;
 	}
 
-	public function is_spam_submission( $form ) {
-		if ( $this->is_disabled_by_form_setting( $form ) || $this->is_preview() || ! $this->initialize_api() ) {
+	/**
+	 * Determines if the submission is spam by comparing its score with the threshold.
+	 *
+	 * @since 1.4
+	 * @since 1.5 Added the optional $entry param.
+	 *
+	 * @param array $form  The form being processed.
+	 * @param array $entry The entry being processed.
+	 *
+	 * @return bool
+	 */
+	public function is_spam_submission( $form, $entry = array() ) {
+		if ( $this->should_skip_validation( $form ) ) {
+			$this->log_debug( __METHOD__ . '(): Score check skipped.' );
+
 			return false;
 		}
 
-		$score      = $this->token_verifier->get_score();
-		$threashold = $this->get_spam_score_threshold();
+		$score     = empty( $entry ) ? $this->token_verifier->get_score() : $this->get_score_from_entry( $entry );
+		$threshold = $this->get_spam_score_threshold();
 
-		return (float) $score <= (float) $threashold;
+		return (float) $score <= (float) $threshold;
 	}
 	/**
 	 * Get the Recaptcha score from the entry details.
@@ -812,6 +837,12 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return float
 	 */
 	private function get_spam_score_threshold() {
+		static $value;
+
+		if ( ! empty( $value ) ) {
+			return $value;
+		}
+
 		$value = (float) $this->get_plugin_setting( 'score_threshold_v3' );
 		if ( empty( $value ) ) {
 			$value = 0.5;
@@ -846,8 +877,8 @@ class GF_RECAPTCHA extends GFAddOn {
 	public function validate_submission( $submission_data ) {
 		$this->log_debug( __METHOD__ . '(): Validating form (#' . rgars( $submission_data, 'form/id' ) . ') submission.' );
 
-		if ( $this->should_skip_validation( $submission_data ) ) {
-			$this->log_debug( __METHOD__ . '(): Validation skipped. reCAPTCHA v3 is misconfigured, disabled, or the form was submitted in preview mode.' );
+		if ( $this->should_skip_validation( rgar( $submission_data, 'form' ) ) ) {
+			$this->log_debug( __METHOD__ . '(): Validation skipped.' );
 
 			return $submission_data;
 		}
@@ -864,23 +895,54 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * we want to skip the reCaptcha validation so it isn't triggered twice, as this will make it always fail.
 	 *
 	 * @since 1.4
+	 * @since 1.5 Changed param to $form array.
 	 *
-	 * @param array $submission_data The submitted form data.
+	 * @param array $form The form being processed.
 	 *
 	 * @return bool
 	 */
-	public function should_skip_validation( $submission_data ) {
+	public function should_skip_validation( $form ) {
+		static $result = array();
 
-		$is_recaptcha_configured = $this->initialize_api() && ! $this->is_disabled_by_form_setting( rgar( $submission_data, 'form' ) );
-		// Skip validation if reCaptcha is not configured or if the form is in preview mode.
-		if ( ! $is_recaptcha_configured || $this->is_preview() ) {
+		$form_id = rgar( $form, 'id' );
+		if ( isset( $result[ $form_id ] ) ) {
+			return $result[ $form_id ];
+		}
+
+		$result[ $form_id ] = true;
+
+		if ( $this->is_preview() ) {
+			$this->log_debug( __METHOD__ . '(): Yes! Form preview page.' );
+
+			return true;
+		}
+
+		if ( ! $this->initialize_api() ) {
+			$this->log_debug( __METHOD__ . '(): Yes! API not initialized.' );
+
+			return true;
+		}
+
+		if ( $this->is_disabled_by_form_setting( $form ) ) {
+			$this->log_debug( __METHOD__ . '(): Yes! Disabled by form setting.' );
+
+			return true;
+		}
+
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && ! isset( $_POST[ $this->field->get_input_name( $form_id ) ] ) ) {
+			$this->log_debug( __METHOD__ . '(): Yes! REST request without input.' );
+
 			return true;
 		}
 
 		// For older versions of Stripe, skip the first validation attempt and only validate on the second attempt. Newer versions of Stripe will validate twice without a problem.
 		if ( $this->is_stripe_validation() && version_compare( gf_stripe()->get_version(), '5.4.3', '<' ) ) {
+			$this->log_debug( __METHOD__ . '(): Yes! Older Stripe validation.' );
+
 			return true;
 		}
+
+		$result[ $form_id ] = false;
 
 		return false;
 	}

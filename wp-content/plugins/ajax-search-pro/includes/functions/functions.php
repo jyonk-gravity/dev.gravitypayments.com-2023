@@ -2619,9 +2619,9 @@ if ( !function_exists('asp_icl_t') ) {
         if (function_exists('pll_register_string') && function_exists('pll__')) {
 			PolylangStringTranslations::add($name, $value);
             $ret = pll__($value);
-        } else if (function_exists('icl_register_string') && function_exists('icl_t')) {
-            @icl_register_string('ajax-search-pro', $name, $value);
-            $ret = @icl_t('ajax-search-pro', $name, $value);
+        } else if (defined('WPML_PLUGIN_BASENAME') || defined('ICL_SITEPRESS_VERSION')) {
+	        do_action( 'wpml_register_single_string', 'ajax-search-pro', $name, $value );
+	        $ret = apply_filters('wpml_translate_single_string', $value, 'ajax-search-pro', $name);
         } else if (function_exists('qtranxf_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
             $ret = qtranxf_useCurrentLanguageIfNotFoundUseDefaultLanguage( $value );
         }

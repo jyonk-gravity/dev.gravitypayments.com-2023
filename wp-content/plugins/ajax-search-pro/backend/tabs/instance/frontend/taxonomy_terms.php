@@ -45,15 +45,6 @@
 </div>
 <div class="item">
     <?php
-    $o = new wpdreamsYesNo("frontend_terms_hide_children", __('Hide child terms, where the parent checkbox is unchecked?', 'ajax-search-pro'), $sd['frontend_terms_hide_children']);
-    $params[$o->getName()] = $o->getData();
-    ?>
-    <p class="descMsg">
-        <?php echo __('Automatically hides the checkbox options, where the parent terms are unchecked.', 'ajax-search-pro'); ?>
-    </p>
-</div>
-<div class="item">
-    <?php
     $o = new wpdreamsYesNo("frontend_term_hierarchy", __('Maintain term hierarchy?', 'ajax-search-pro'), $sd['frontend_term_hierarchy']);
     $params[$o->getName()] = $o->getData();
     ?>

@@ -61,10 +61,18 @@ class Tokenizer {
 		$str = Content::hebrewUnvocalize($str);
 		$str = Content::arabicRemoveDiacritics($str);
 
-		$stop_words = $this->getStopWords($post);
+		$negative_keywords = $this->getNegativeWords($post);
+		foreach ( $negative_keywords as $negative_keyword ) {
+			// If there is a negative keyword within, this case is over
+			if ( strpos($str, $negative_keyword) !== false ) {
+				return '';
+			}
+		}
+
+		$stop_words = $this->getStopWords();
 		foreach ( $stop_words as $stop_word ) {
-			// If there is a stopword within, this case is over
-			if ( strpos($str, $stop_word) !== false ) {
+			// whole word matches only
+			if ( preg_match('/\b'.$stop_word.'\b/', $str, $match, PREG_OFFSET_CAPTURE) ) {
 				return '';
 			}
 		}
@@ -304,7 +312,9 @@ class Tokenizer {
 			}
 		}
 
-		$stopWords = $this->getStopWords($post);
+		$stop_words = $this->getStopWords();
+		$negative_keywords = $this->getNegativeWords($post);
+
 		$keywords = array();
 
 		foreach( $words as $c_word ) {
@@ -313,9 +323,19 @@ class Tokenizer {
 			if ( $c_word == '' || $fn_strlen($c_word) < $args['min_word_length'] ) {
 				continue;
 			}
-			if ( !empty($stopWords) && in_array($c_word, $stopWords) ) {
+
+			// Only whole word matches for stop-words
+			if ( !empty($stop_words) && in_array($c_word, $stop_words) ) {
 				continue;
 			}
+
+			// Partial matches for negative keywords
+			foreach ( $negative_keywords as $negative_keyword ) {
+				if ( strpos($c_word, $negative_keyword) !== false ) {
+					continue 2;
+				}
+			}
+
 			// Numerics won't work otherwise, need to trim that later
 			if ( is_numeric($c_word) ) {
 				$c_word = " " . $c_word;
@@ -334,32 +354,41 @@ class Tokenizer {
 
 
 	/**
-	 * Returns the stop words, including the negative keywords for the current post object
+	 * Returns the stop words
 	 */
-	private function getStopWords( $post ): array {
-		$stopWords = array();
+	private function getStopWords( ): array {
+		$stop_words = array();
 		// Only compare to common words if $restrict is set to false
 		if ( $this->args['use_stopwords'] == 1 && $this->args['stopwords'] != "" ) {
 			$this->args['stopwords'] = str_replace(" ", "", $this->args['stopwords']);
-			$stopWords = explode( ',', $this->args['stopwords'] );
+			$stop_words = explode( ',', $this->args['stopwords'] );
 		}
+		$stop_words = array_unique( $stop_words );
+		foreach ( $stop_words as $sk => &$sv ) {
+			$sv = trim($sv);
+			if ( $sv == '' || MB::strlen($sv) < $this->args['min_word_length'] ) {
+				unset($stop_words[$sk]);
+			}
+		}
+
+		return $stop_words;
+	}
+
+	/**
+	 * Returns negative keywords for the current post object
+	 */
+	private function getNegativeWords( $post ): array {
 		// Post level stop-words, negative keywords
 		if ( $post !== false ) {
 			$negative_keywords = get_post_meta($post->ID, '_asp_negative_keywords', true);
 			if ( !empty($negative_keywords) ) {
 				$negative_keywords = trim( preg_replace('/\s+/', ' ',$negative_keywords) );
 				$negative_keywords = explode(' ', $negative_keywords);
-				$stopWords = array_merge($stopWords, $negative_keywords);
-			}
-		}
-		$stopWords = array_unique( $stopWords );
-		foreach ( $stopWords as $sk => &$sv ) {
-			$sv = trim($sv);
-			if ( $sv == '' || MB::strlen($sv) < $this->args['min_word_length'] ) {
-				unset($stopWords[$sk]);
+				$negative_keywords = array_filter($negative_keywords, fn($keyword)=>$keyword!=='');
+				return array_unique($negative_keywords);
 			}
 		}
 
-		return $stopWords;
+		return array();
 	}
 }

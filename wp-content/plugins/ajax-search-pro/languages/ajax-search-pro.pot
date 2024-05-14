@@ -2,41 +2,48 @@
 # This file is distributed under the same license as the Ajax Search Pro plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Pro 4.26.5\n"
+"Project-Id-Version: Ajax Search Pro 4.26.10\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ajax-search-pro\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-03-04T11:41:04+00:00\n"
+"POT-Creation-Date: 2024-05-02T17:14:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.6.0\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: ajax-search-pro\n"
 
 #. Plugin Name of the plugin
+#: ajax-search-pro.php
 #: build/ajax-search-pro/includes/classes/Core/Menu.php:34
 #: build/ajax-search-pro/includes/classes/Updates/Manager.php:102
 #: build/full/ajax-search-pro/includes/classes/Core/Menu.php:34
 #: build/full/ajax-search-pro/includes/classes/Updates/Manager.php:102
 #: includes/classes/Core/Menu.php:34
+#: includes/classes/Core/NavMenuMetaBox.php:34
+#: includes/classes/NavMenu/Controller.php:43
 #: includes/classes/Updates/Manager.php:105
 msgid "Ajax Search Pro"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: ajax-search-pro.php
 msgid "https://ajaxsearchpro.com"
 msgstr ""
 
 #. Description of the plugin
+#: ajax-search-pro.php
 msgid "The most powerful live search engine for WordPress."
 msgstr ""
 
 #. Author of the plugin
+#: ajax-search-pro.php
 msgid "Ernest Marcinko"
 msgstr ""
 
 #. Author URI of the plugin
+#: ajax-search-pro.php
 msgid "https://codecanyon.net/user/wpdreams"
 msgstr ""
 
@@ -829,7 +836,7 @@ msgid "Post format icon"
 msgstr ""
 
 #: backend/Classes/Options/PostType.php:70
-#: backend/settings/class/customposttypes-all.class.php:28
+#: backend/settings/class/customposttypes-all.class.php:29
 #: backend/settings/class/customposttypes.class.php:38
 #: backend/settings/class/customposttypeseditable.class.php:25
 #: backend/settings/class/wd_cpt_editable.class.php:25
@@ -847,7 +854,7 @@ msgid "Available post types"
 msgstr ""
 
 #: backend/Classes/Options/PostType.php:83
-#: backend/settings/class/customposttypes-all.class.php:37
+#: backend/settings/class/customposttypes-all.class.php:38
 #: backend/settings/class/customposttypes.class.php:49
 #: backend/settings/class/customposttypeseditable.class.php:37
 #: backend/settings/class/wd_cpt_editable.class.php:37
@@ -4992,7 +4999,7 @@ msgid "Hide (collapse) child terms, where the parent checkbox is unchecked?"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:89
-#: backend/tabs/instance/frontend/taxonomy_terms.php:52
+#: backend/tabs/instance/frontend/advanced.php:61
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:89
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:43
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:89
@@ -5043,7 +5050,7 @@ msgid "Maintain term hierarchy"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:114
-#: backend/tabs/instance/frontend/taxonomy_terms.php:61
+#: backend/tabs/instance/frontend/taxonomy_terms.php:52
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:114
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:52
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:114
@@ -5052,7 +5059,7 @@ msgid "Shows child terms hierarchically under their parents with padding. Suppor
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:117
-#: backend/tabs/instance/frontend/taxonomy_terms.php:68
+#: backend/tabs/instance/frontend/taxonomy_terms.php:59
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:117
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:59
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:117
@@ -5061,7 +5068,7 @@ msgid "Default term order"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:119
-#: backend/tabs/instance/frontend/taxonomy_terms.php:74
+#: backend/tabs/instance/frontend/taxonomy_terms.php:65
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:119
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:65
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:119
@@ -5070,7 +5077,7 @@ msgid "Name"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:120
-#: backend/tabs/instance/frontend/taxonomy_terms.php:75
+#: backend/tabs/instance/frontend/taxonomy_terms.php:66
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:120
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:66
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:120
@@ -5079,7 +5086,7 @@ msgid "Item count"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:121
-#: backend/tabs/instance/frontend/taxonomy_terms.php:76
+#: backend/tabs/instance/frontend/taxonomy_terms.php:67
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:121
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:67
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:121
@@ -5088,7 +5095,7 @@ msgid "ID"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:124
-#: backend/tabs/instance/frontend/taxonomy_terms.php:79
+#: backend/tabs/instance/frontend/taxonomy_terms.php:70
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:124
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:70
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:124
@@ -5097,7 +5104,7 @@ msgid "Ascending"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:125
-#: backend/tabs/instance/frontend/taxonomy_terms.php:80
+#: backend/tabs/instance/frontend/taxonomy_terms.php:71
 #: build/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:125
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:71
 #: build/full/ajax-search-pro/backend/settings/class/wd_frontfilters/views/taxonomy.php:125
@@ -5400,7 +5407,7 @@ msgid "Use all from"
 msgstr ""
 
 #: backend/sidebar.php:5
-#: backend/sidebar.php:7
+#: backend/sidebar.php:9
 #: build/ajax-search-pro/backend/sidebar.php:5
 #: build/ajax-search-pro/backend/sidebar.php:7
 #: build/full/ajax-search-pro/backend/sidebar.php:5
@@ -5409,7 +5416,7 @@ msgid "ENABLE ACCESSIBILITY"
 msgstr ""
 
 #: backend/sidebar.php:5
-#: backend/sidebar.php:6
+#: backend/sidebar.php:8
 #: build/ajax-search-pro/backend/sidebar.php:5
 #: build/ajax-search-pro/backend/sidebar.php:6
 #: build/full/ajax-search-pro/backend/sidebar.php:5
@@ -5417,31 +5424,55 @@ msgstr ""
 msgid "DISABLE ACCESSIBILITY"
 msgstr ""
 
-#: backend/sidebar.php:9
+#: backend/sidebar.php:13
 #: build/ajax-search-pro/backend/sidebar.php:9
 #: build/full/ajax-search-pro/backend/sidebar.php:9
 msgid "Can't find an option?"
 msgstr ""
 
-#: backend/sidebar.php:10
+#: backend/sidebar.php:14
 #: build/ajax-search-pro/backend/sidebar.php:10
 #: build/full/ajax-search-pro/backend/sidebar.php:10
 msgid "Search in options"
 msgstr ""
 
-#: backend/sidebar.php:25
+#: backend/sidebar.php:18
+msgid "Want to test the latest features?"
+msgstr ""
+
+#: backend/sidebar.php:19
+msgid "Join the beta testers!"
+msgstr ""
+
+#: backend/sidebar.php:20
+msgid "Beta testers gain access to the latest updates before the final release."
+msgstr ""
+
+#: backend/sidebar.php:23
+msgid "Subscribe to our newsletter"
+msgstr ""
+
+#: backend/sidebar.php:24
+msgid "Get the latest news and updates"
+msgstr ""
+
+#: backend/sidebar.php:26
+msgid "Subscribe"
+msgstr ""
+
+#: backend/sidebar.php:29
 #: build/ajax-search-pro/backend/sidebar.php:20
 #: build/full/ajax-search-pro/backend/sidebar.php:20
 msgid "Socials"
 msgstr ""
 
-#: backend/sidebar.php:41
+#: backend/sidebar.php:45
 #: build/ajax-search-pro/backend/sidebar.php:36
 #: build/full/ajax-search-pro/backend/sidebar.php:36
 msgid "Need help?"
 msgstr ""
 
-#: backend/sidebar.php:42
+#: backend/sidebar.php:46
 #: build/ajax-search-pro/backend/sidebar.php:37
 #: build/full/ajax-search-pro/backend/sidebar.php:37
 msgid "Check the <a href=\"%s\">Help & Updates</a> menu for resources."
@@ -5796,9 +5827,7 @@ msgid "Enable the REST API?"
 msgstr ""
 
 #: backend/tabs/compatibility/other.php:12
-#: build/ajax-search-pro/backend/tabs/compatibility/other.php:12
-#: build/full/ajax-search-pro/backend/tabs/compatibility/other.php:12
-msgid "Display the Ajax Search Pro meta box on these post types"
+msgid "Display the Ajax Search Pro Meta Boxes on these post types"
 msgstr ""
 
 #: backend/tabs/compatibility/query_options.php:3
@@ -6940,30 +6969,44 @@ msgid "Show posts/CPM with empty (missing) taxonomy terms?"
 msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:49
+msgid "Uncheck child terms when the parent term is unchecked"
+msgstr ""
+
+#: backend/tabs/instance/frontend/advanced.php:52
+msgid "When turned <strong>ON</strong> and using Checkbox filters, the child categories (terms) are automatically unchecked when the parent is unchecked."
+msgstr ""
+
+#: backend/tabs/instance/frontend/advanced.php:57
+#: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:39
+#: build/full/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:39
+msgid "Hide child terms, where the parent checkbox is unchecked?"
+msgstr ""
+
+#: backend/tabs/instance/frontend/advanced.php:66
 #: build/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:49
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:49
 msgid "Ignore checkbox filters that have nothing selected?"
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:52
+#: backend/tabs/instance/frontend/advanced.php:69
 #: build/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:52
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:52
 msgid "When turned <strong>ON</strong> and nothing is checked within a checkbox filter - then the search will ignore it completely - instead of excluding everything unchecked."
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:56
+#: backend/tabs/instance/frontend/advanced.php:73
 #: build/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:56
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:56
 msgid "Custom Fields connection Logic"
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:69
+#: backend/tabs/instance/frontend/advanced.php:86
 #: build/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:69
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:69
 msgid "Allow results with missing custom fields, when using custom field selectors?"
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:72
+#: backend/tabs/instance/frontend/advanced.php:89
 #: build/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:72
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:72
 msgid ""
@@ -6972,7 +7015,7 @@ msgid ""
 "            will allow displaying them as results regardless."
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:88
+#: backend/tabs/instance/frontend/advanced.php:105
 #: build/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:88
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/advanced.php:88
 msgid "Field order"
@@ -8341,12 +8384,6 @@ msgid "If a post from child category is not directly assigned to the parent cate
 msgstr ""
 
 #: backend/tabs/instance/frontend/taxonomy_terms.php:48
-#: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:39
-#: build/full/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:39
-msgid "Hide child terms, where the parent checkbox is unchecked?"
-msgstr ""
-
-#: backend/tabs/instance/frontend/taxonomy_terms.php:57
 #: build/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:48
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend/taxonomy_terms.php:48
 msgid "Maintain term hierarchy?"
@@ -8954,17 +8991,7 @@ msgstr ""
 msgid "Ordering"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:17
-#: backend/tabs/instance/general/user_search.php:52
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:17
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:52
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:17
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:52
-msgid "Primary ordering"
-msgstr ""
-
-#: backend/tabs/instance/general/ordering.php:20
-#: backend/tabs/instance/general/ordering.php:55
+#: backend/tabs/instance/general/ordering.php:18
 #: backend/tabs/instance/general/user_search.php:55
 #: backend/tabs/instance/general/user_search.php:94
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:20
@@ -8978,8 +9005,7 @@ msgstr ""
 msgid "Relevance"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:21
-#: backend/tabs/instance/general/ordering.php:56
+#: backend/tabs/instance/general/ordering.php:19
 #: backend/tabs/instance/general/user_search.php:56
 #: backend/tabs/instance/general/user_search.php:95
 #: backend/tabs/priorities/priorities_individual.php:20
@@ -8996,8 +9022,7 @@ msgstr ""
 msgid "Title descending"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:22
-#: backend/tabs/instance/general/ordering.php:57
+#: backend/tabs/instance/general/ordering.php:20
 #: backend/tabs/instance/general/user_search.php:57
 #: backend/tabs/instance/general/user_search.php:96
 #: backend/tabs/priorities/priorities_individual.php:21
@@ -9014,38 +9039,23 @@ msgstr ""
 msgid "Title ascending"
 msgstr ""
 
+#: backend/tabs/instance/general/ordering.php:21
+msgid "Publish Date descending"
+msgstr ""
+
+#: backend/tabs/instance/general/ordering.php:22
+msgid "Publish Date ascending"
+msgstr ""
+
 #: backend/tabs/instance/general/ordering.php:23
-#: backend/tabs/instance/general/ordering.php:58
-#: backend/tabs/instance/general/user_search.php:58
-#: backend/tabs/instance/general/user_search.php:97
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:23
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:58
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:58
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:97
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:23
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:58
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:58
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:97
-msgid "Date descending"
+msgid "Modified Date descending"
 msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:24
-#: backend/tabs/instance/general/ordering.php:59
-#: backend/tabs/instance/general/user_search.php:59
-#: backend/tabs/instance/general/user_search.php:98
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:24
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:59
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:59
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:98
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:24
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:59
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:59
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:98
-msgid "Date ascending"
+msgid "Modified Date ascending"
 msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:25
-#: backend/tabs/instance/general/ordering.php:60
 #: backend/tabs/instance/general/user_search.php:60
 #: backend/tabs/instance/general/user_search.php:99
 #: backend/tabs/priorities/priorities_individual.php:18
@@ -9063,7 +9073,6 @@ msgid "ID descending"
 msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:26
-#: backend/tabs/instance/general/ordering.php:61
 #: backend/tabs/instance/general/user_search.php:61
 #: backend/tabs/instance/general/user_search.php:100
 #: backend/tabs/priorities/priorities_individual.php:19
@@ -9093,7 +9102,6 @@ msgid "Menu order ascending"
 msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:29
-#: backend/tabs/instance/general/ordering.php:62
 #: backend/tabs/instance/general/user_search.php:62
 #: backend/tabs/instance/general/user_search.php:101
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:29
@@ -9107,8 +9115,17 @@ msgstr ""
 msgid "Random"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:30
-#: backend/tabs/instance/general/ordering.php:63
+#: backend/tabs/instance/general/ordering.php:31
+#: backend/tabs/instance/general/user_search.php:52
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:17
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:52
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:17
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:52
+msgid "Primary ordering"
+msgstr ""
+
+#: backend/tabs/instance/general/ordering.php:34
+#: backend/tabs/instance/general/ordering.php:59
 #: backend/tabs/instance/general/user_search.php:63
 #: backend/tabs/instance/general/user_search.php:102
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:30
@@ -9122,7 +9139,8 @@ msgstr ""
 msgid "Custom Field descending"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:31
+#: backend/tabs/instance/general/ordering.php:35
+#: backend/tabs/instance/general/ordering.php:60
 #: backend/tabs/instance/general/user_search.php:64
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:31
 #: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:64
@@ -9131,32 +9149,22 @@ msgstr ""
 msgid "Custom Field  ascending"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:37
-#: backend/tabs/instance/general/ordering.php:70
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:37
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:70
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:37
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:70
-msgid "custom field name"
+#: backend/tabs/instance/general/ordering.php:41
+#: backend/tabs/instance/general/ordering.php:66
+#: backend/tabs/instance/general/user_search.php:72
+#: backend/tabs/instance/general/user_search.php:111
+msgid "Field name"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:40
-#: backend/tabs/instance/general/ordering.php:73
+#: backend/tabs/instance/general/ordering.php:44
+#: backend/tabs/instance/general/ordering.php:69
 #: backend/tabs/instance/general/user_search.php:78
 #: backend/tabs/instance/general/user_search.php:117
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:40
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:73
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:78
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:117
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:40
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:73
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:78
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:117
-msgid "type"
+msgid "Field type"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:43
-#: backend/tabs/instance/general/ordering.php:76
+#: backend/tabs/instance/general/ordering.php:47
+#: backend/tabs/instance/general/ordering.php:72
 #: backend/tabs/instance/general/user_search.php:81
 #: backend/tabs/instance/general/user_search.php:120
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:43
@@ -9170,8 +9178,8 @@ msgstr ""
 msgid "numeric"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:44
-#: backend/tabs/instance/general/ordering.php:77
+#: backend/tabs/instance/general/ordering.php:48
+#: backend/tabs/instance/general/ordering.php:73
 #: backend/tabs/instance/general/user_search.php:82
 #: backend/tabs/instance/general/user_search.php:121
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:44
@@ -9185,22 +9193,13 @@ msgstr ""
 msgid "string or date"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:52
+#: backend/tabs/instance/general/ordering.php:56
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:52
 #: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:52
 msgid "Secondary ordering"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:64
-#: backend/tabs/instance/general/user_search.php:103
-#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:64
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:103
-#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:64
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:103
-msgid "Custom Field ascending"
-msgstr ""
-
-#: backend/tabs/instance/general/ordering.php:84
+#: backend/tabs/instance/general/ordering.php:80
 #: backend/tabs/instance/general/user_search.php:129
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:84
 #: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:129
@@ -9209,19 +9208,19 @@ msgstr ""
 msgid "If two elements match the primary ordering criteria, the <b>Secondary ordering</b> is used."
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:89
+#: backend/tabs/instance/general/ordering.php:85
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:89
 #: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:89
 msgid "Separate ordering options are available for <strong>User results</strong>, under the <a class=\"asp_to_tab\" href=\"#108\" tabid=\"108\" data-asp-os-highlight=\"user_orderby_primary\">User Search panel</a>."
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:94
+#: backend/tabs/instance/general/ordering.php:90
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:94
 #: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:94
 msgid "Use separate ordering for each post type group?"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:100
+#: backend/tabs/instance/general/ordering.php:96
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:100
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:207
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:216
@@ -9231,7 +9230,7 @@ msgstr ""
 msgid "Post type results ordering"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:111
+#: backend/tabs/instance/general/ordering.php:107
 #: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:111
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:198
 #: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:111
@@ -9740,19 +9739,44 @@ msgstr ""
 msgid "Search in user email addresses?"
 msgstr ""
 
-#: backend/tabs/instance/general/user_search.php:72
-#: backend/tabs/instance/general/user_search.php:111
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:72
-#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:111
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:72
-#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:111
-msgid "custom field"
+#: backend/tabs/instance/general/user_search.php:58
+#: backend/tabs/instance/general/user_search.php:97
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:23
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:58
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:58
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:97
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:23
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:58
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:58
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:97
+msgid "Date descending"
+msgstr ""
+
+#: backend/tabs/instance/general/user_search.php:59
+#: backend/tabs/instance/general/user_search.php:98
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:24
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:59
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:59
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:98
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:24
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:59
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:59
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:98
+msgid "Date ascending"
 msgstr ""
 
 #: backend/tabs/instance/general/user_search.php:91
 #: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:91
 #: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:91
 msgid "Secondary result ordering"
+msgstr ""
+
+#: backend/tabs/instance/general/user_search.php:103
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:64
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:103
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:64
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:103
+msgid "Custom Field ascending"
 msgstr ""
 
 #: backend/tabs/instance/general/user_search.php:134
@@ -12012,6 +12036,10 @@ msgstr ""
 msgid "Results box Shadow"
 msgstr ""
 
+#: backend/tabs/instance/theme/keyword_suggestions.php:56
+msgid "Go to Keyword Suggestions options >>"
+msgstr ""
+
 #: backend/tabs/instance/theme/magn_load.php:3
 #: build/ajax-search-pro/backend/tabs/instance/theme/magn_load.php:3
 #: build/full/ajax-search-pro/backend/tabs/instance/theme/magn_load.php:3
@@ -13120,9 +13148,32 @@ msgstr ""
 msgid "Submit a new feature request"
 msgstr ""
 
+#: build/ajax-search-pro/backend/tabs/compatibility/other.php:12
+#: build/full/ajax-search-pro/backend/tabs/compatibility/other.php:12
+msgid "Display the Ajax Search Pro meta box on these post types"
+msgstr ""
+
 #: build/ajax-search-pro/backend/tabs/instance/frontend_options.php:2
 #: build/full/ajax-search-pro/backend/tabs/instance/frontend_options.php:2
 msgid "New filters"
+msgstr ""
+
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:37
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:70
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:37
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:70
+msgid "custom field name"
+msgstr ""
+
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:40
+#: build/ajax-search-pro/backend/tabs/instance/general/ordering.php:73
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:78
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:117
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:40
+#: build/full/ajax-search-pro/backend/tabs/instance/general/ordering.php:73
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:78
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:117
+msgid "type"
 msgstr ""
 
 #: build/ajax-search-pro/backend/tabs/instance/general/sources.php:19
@@ -13193,6 +13244,13 @@ msgstr ""
 msgid ".or search in selected custom fields?"
 msgstr ""
 
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:72
+#: build/ajax-search-pro/backend/tabs/instance/general/user_search.php:111
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:72
+#: build/full/ajax-search-pro/backend/tabs/instance/general/user_search.php:111
+msgid "custom field"
+msgstr ""
+
 #: build/ajax-search-pro/includes/classes/Api/Rest0/Rest.php:71
 #: build/full/ajax-search-pro/includes/classes/Api/Rest0/Rest.php:71
 #: includes/classes/Api/Rest0/Rest.php:71
@@ -13219,49 +13277,49 @@ msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Core/Manager.php:147
 #: build/full/ajax-search-pro/includes/classes/Core/Manager.php:147
-#: includes/classes/Core/Manager.php:125
+#: includes/classes/Core/Manager.php:127
 msgid "Every 2 Minutes"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Core/Manager.php:151
 #: build/full/ajax-search-pro/includes/classes/Core/Manager.php:151
-#: includes/classes/Core/Manager.php:129
+#: includes/classes/Core/Manager.php:131
 msgid "Every 3 Minutes"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Core/Manager.php:155
 #: build/full/ajax-search-pro/includes/classes/Core/Manager.php:155
-#: includes/classes/Core/Manager.php:133
+#: includes/classes/Core/Manager.php:135
 msgid "Every 5 Minutes"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Core/Manager.php:159
 #: build/full/ajax-search-pro/includes/classes/Core/Manager.php:159
-#: includes/classes/Core/Manager.php:137
+#: includes/classes/Core/Manager.php:139
 msgid "Every 15 Minutes"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Core/Manager.php:163
 #: build/full/ajax-search-pro/includes/classes/Core/Manager.php:163
-#: includes/classes/Core/Manager.php:141
+#: includes/classes/Core/Manager.php:143
 msgid "Every 30 Minutes"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Core/Manager.php:339
 #: build/full/ajax-search-pro/includes/classes/Core/Manager.php:339
-#: includes/classes/Core/Manager.php:316
+#: includes/classes/Core/Manager.php:318
 msgid "<b>Ajax Search Pro notice: </b> The Index Table options have been modified, please re-create the index table!"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Core/Manager.php:340
 #: build/full/ajax-search-pro/includes/classes/Core/Manager.php:340
-#: includes/classes/Core/Manager.php:317
+#: includes/classes/Core/Manager.php:319
 msgid "Let's do it!"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Core/Manager.php:341
 #: build/full/ajax-search-pro/includes/classes/Core/Manager.php:341
-#: includes/classes/Core/Manager.php:318
+#: includes/classes/Core/Manager.php:320
 msgid "Hide this message"
 msgstr ""
 
@@ -13378,4 +13436,13 @@ msgstr ""
 #: build/full/ajax-search-pro/includes/classes/Updates/Remote.php:142
 #: includes/classes/Updates/Remote.php:142
 msgid "How to update?"
+msgstr ""
+
+#: includes/classes/Core/NavMenuMetaBox.php:90
+#: includes/classes/NavMenu/View.php:122
+msgid "Prevent custom script events"
+msgstr ""
+
+#: includes/classes/NavMenu/View.php:100
+msgid "Search"
 msgstr ""

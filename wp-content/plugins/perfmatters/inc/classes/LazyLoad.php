@@ -296,6 +296,7 @@ class LazyLoad
 
 		//replace image tags
 		if(!empty(Config::$options['lazyload']['lazy_loading'])) {
+			$html = self::lazyload_parent_leading_exclusions($html, $buffer);
 			$html = self::lazyload_parent_exclusions($html, $buffer);
 			$html = self::lazyload_pictures($html, $buffer);
 			$html = self::lazyload_background_images($html, $buffer);
@@ -667,71 +668,98 @@ class LazyLoad
 		return $html;
 	}
 
+	//exclude images from leading image exclusions by parent selector
+	private static function lazyload_parent_leading_exclusions($html, &$buffer) {
+
+		$parent_exclusions = apply_filters('perfmatters_leading_image_parent_exclusions', array());
+        if(!empty($parent_exclusions)) {
+
+        	//clean html doc
+            $clean_dom = new \DOMDocument();
+            $clean_dom->loadHTML($buffer, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
+            $xpath = new \DOMXpath($clean_dom);
+
+            //search for excluded parents
+            array_walk($parent_exclusions, function(&$exclusion) {
+                $exclusion = 'contains(@*, "' . $exclusion . '")';
+            });
+            $exclusion_string = implode(' or ', $parent_exclusions);
+            $elements = $xpath->query("//div[" . $exclusion_string . "]|//section[" . $exclusion_string . "]|//figure[" . $exclusion_string . "]");
+
+            if(!is_null($elements)) {
+
+            	//create main html DOMDocument to match and update in parallel
+            	$dom = new \DOMDocument();
+                $dom->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
+                $html_new = $dom->saveHTML();
+
+                $image_excluded = false;
+
+                //search for images inside parents
+                foreach($elements as $element) {
+                    $images = $element->getElementsByTagName('img');
+                    if(!empty($images)) {
+                        for($i = $images->length; --$i >= 0;) {
+
+                        	//add skip attribute to image in both documents
+                            $image = $images->item($i);
+                            $image_html_prev = $clean_dom->saveHTML($image);
+                            $image->setAttribute('data-perfmatters-leading-skip', 1);
+                            $image_html_new = $clean_dom->saveHTML($image);
+                            $html_new = str_replace($image_html_prev, $image_html_new, $html_new);
+                        }
+                        $image_excluded = true;
+                    }
+                }
+            }
+
+            //have excluded images
+            if($image_excluded) {
+
+            	//save both html copies
+            	$html = $html_new;
+                $buffer = $clean_dom->saveHTML();
+            }
+        }
+
+        return $html;
+	}
+
 	//mark images inside parent exclusions as no-lazy
 	private static function lazyload_parent_exclusions($html, &$buffer) {
 
-		$exclusions = array();
+        if(!empty(Config::$options['lazyload']['lazy_loading_parent_exclusions'])) {
 
-		if(!empty(Config::$options['lazyload']['lazy_loading_parent_exclusions'])) {
-			$exclusions['default'] = implode('|', Config::$options['lazyload']['lazy_loading_parent_exclusions']);
-		}
+			//match all selectors
+			preg_match_all('#<(div|section|figure)(\s[^>]*?(' . implode('|', Config::$options['lazyload']['lazy_loading_parent_exclusions']) . ').*?)>.*?<img.*?<\/\g1>#is', $buffer, $selectors, PREG_SET_ORDER);
 
-		$leading_exclusions = apply_filters('perfmatters_leading_image_parent_exclusions', array());
-		if(!empty($leading_exclusions)) {
-			$exclusions['leading'] = implode('|', $leading_exclusions);
-		}
+			if(!empty($selectors)) {
 
+				foreach($selectors as $selector) {
 
-		if(!empty($exclusions)) {
+					//match all img tags
+					preg_match_all('#<img([^>]+?)\/?>#is', $selector[0], $images, PREG_SET_ORDER);
 
-			$inner = '';
-			foreach($exclusions as $key => $val) {
-				$inner.= '(?<' . $key . '>' . $val . ')|';
-			}
+					if(!empty($images)) {
 
-			$inner = rtrim($inner, '|');
+						//remove any duplicate images
+						$images = array_unique($images, SORT_REGULAR);
 
-			if(!empty($inner)) {
+						//loop through images
+				        foreach($images as $image) {
 
+				        	$image_atts = Utilities::get_atts_array($image[1]);
 
-				//match all selectors
-				preg_match_all('#<(div|section|figure)(\s[^>]*?(?>' . $inner . ').*?)>.*?<\/\g1>#is', $buffer, $selectors, PREG_SET_ORDER);
+				        	$image_atts['class'] = !empty($image_atts['class']) ? $image_atts['class'] . ' ' . 'no-lazy' : 'no-lazy';
 
-				if(!empty($selectors)) {
+				            //replace video attributes string
+							$new_image = str_replace($image[1], ' ' . Utilities::get_atts_string($image_atts), $image[0]);
 
-					foreach($selectors as $selector) {
+							//replace video with placeholder
+							$html = str_replace($image[0], $new_image, $html);
 
-						//match all img tags
-						preg_match_all('#<img([^>]+?)\/?>#is', $selector[0], $images, PREG_SET_ORDER);
-
-						if(!empty($images)) {
-
-							//remove any duplicate images
-							$images = array_unique($images, SORT_REGULAR);
-
-							//loop through images
-					        foreach($images as $image) {
-
-					        	$image_atts = Utilities::get_atts_array($image[1]);
-
-					        	if(!empty($selector['default'])) {
-					        		$image_atts['class'] = !empty($image_atts['class']) ? $image_atts['class'] . ' ' . 'no-lazy' : 'no-lazy';
-					        	}
-
-					        	if(!empty($selector['leading'])) {
-					        		$image_atts['data-perfmatters-leading-skip'] = 1;
-					        	}
-
-					            //replace video attributes string
-								$new_image = str_replace($image[1], ' ' . Utilities::get_atts_string($image_atts), $image[0]);
-
-								//replace video with placeholder
-								$html = str_replace($image[0], $new_image, $html);
-								$buffer = str_replace($image[0], $new_image, $buffer);
-
-								unset($new_image);
-					        }
-						}
+							unset($new_image);
+				        }
 					}
 				}
 			}

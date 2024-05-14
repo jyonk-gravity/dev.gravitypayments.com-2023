@@ -9,7 +9,10 @@
 </div>
 <div class="item">
     <?php
-    $o = new wpdreamsCustomPostTypesAll("meta_box_post_types", __('Display the Ajax Search Pro meta box on these post types', 'ajax-search-pro'),
+    $o = new wpdreamsCustomPostTypesAll("meta_box_post_types", __('Display the Ajax Search Pro Meta Boxes on these post types', 'ajax-search-pro'),
         $com_options['meta_box_post_types']);
     ?>
+	<p class='descMsg'>
+		<?php echo __('Displays the Negative keywords & Additional keywords Meta Boxes and the Classic Editor buttons on the selected post types only.'); ?>
+	</p>
 </div>

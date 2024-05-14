@@ -112,7 +112,7 @@ class Social_Profiles_Helper {
 	/**
 	 * Gets the organization social profiles stored in the database.
 	 *
-	 * @return array The social profiles for the organization.
+	 * @return array<string, string> The social profiles for the organization.
 	 */
 	public function get_organization_social_profiles() {
 		$organization_social_profiles_fields = \array_keys( $this->get_organization_social_profile_fields() );
@@ -132,7 +132,7 @@ class Social_Profiles_Helper {
 			}
 
 			if ( $field_name === 'twitter_site' && $social_profile_value !== '' ) {
-				$organization_social_profiles[ $field_name ] = 'https://twitter.com/' . $social_profile_value;
+				$organization_social_profiles[ $field_name ] = 'https://x.com/' . $social_profile_value;
 				continue;
 			}
 
@@ -240,7 +240,7 @@ class Social_Profiles_Helper {
 				 */
 				if ( $field_name === 'twitter_site' ) {
 					$current_option = $this->options_helper->get( $field_name );
-					if ( ! \strpos( $social_profiles[ $field_name ], 'twitter.com/' . $current_option ) ) {
+					if ( ! \strpos( $social_profiles[ $field_name ], 'twitter.com/' . $current_option ) && ! \strpos( $social_profiles[ $field_name ], 'x.com/' . $current_option ) ) {
 						$failures[] = $field_name;
 					}
 				}

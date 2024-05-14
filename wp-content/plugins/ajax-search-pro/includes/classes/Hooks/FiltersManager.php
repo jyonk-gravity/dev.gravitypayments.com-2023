@@ -187,6 +187,12 @@ class FiltersManager {
 			"args" => 2
 		),
 		array(
+			"filter" => "asp/shortcode/include_styles",
+			"handler" => array("EtcFixes", "breakdanceFixShortcodeInEditor"),
+			"priority" => 10,
+			"args" => 1
+		),
+		array(
 			"filter" => "asp_post_content_before_tokenize_clear",
 			"handler" => array("EtcFixes", "diviInitModules"),
 			"priority" => 9999,

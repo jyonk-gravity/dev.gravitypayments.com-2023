@@ -84,7 +84,7 @@ class Images
         }
 
         //get image path
-        $parsed_url = parse_url($url);
+        $parsed_url = @parse_url($url);
         if(empty($parsed_url['path'])) {
             return false;
         }

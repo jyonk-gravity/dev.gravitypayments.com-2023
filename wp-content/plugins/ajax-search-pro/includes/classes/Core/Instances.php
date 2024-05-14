@@ -55,7 +55,7 @@ class Instances {
      * @param int $id
      * @param bool $force_refresh
      * @param bool|int $check_ownership
-     * @return bool|array
+     * @return array
      */
     public function get( $id = -1, $force_refresh = false, $check_ownership = false ) {
         if ($this->refresh || $force_refresh) {
@@ -121,7 +121,7 @@ class Instances {
      *
      * @param int $id
      * @param bool $force_refresh
-     * @return bool|array
+     * @return array
      */
     public function getWithoutData( $id = -1, $force_refresh = false ) {
         if ($this->refresh || $force_refresh) {
@@ -586,8 +586,13 @@ class Instances {
 		update_site_option('_asp_script_data', $this->script_data);
 	}
 
-	public function get_script_data( ) {
-		return get_option('_asp_script_data', array());
+	public function get_script_data( ): array {
+		/**
+		 * To avoid any data corruption, the datatype should be checked explicitly
+		 * https://github.com/WPDreams/ajax-search-pro-development/issues/101
+		 */
+		$script_data = get_option('_asp_script_data', array());
+		return is_array($script_data) ? $script_data : array();
 	}
 
 	public function getInstancesPrinted(): array {

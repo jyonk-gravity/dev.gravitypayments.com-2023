@@ -756,30 +756,34 @@ class SearchUsers extends AbstractSearch {
 				$_content = wd_substr_at_word($_content, $description_length);
 			}
 
-			add_filter('asp_user_advanced_field_value', function($value, $field) use($description_length, $sd, $s, $_s) {
-				$value = Post::dealWithShortcodes($value, $sd['shortcode_op'] == "remove");
-				$value = Html::stripTags($value, $sd['striptagsexclude']);
-				if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '') {
-					$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
-				} else if ( $value != '' && (  MB::strlen( $value ) > $description_length ) ) {
-					$value = wd_substr_at_word($value, $description_length);
-				}
-				return $value;
-			}, 10, 2);
-
 			if ( !empty($sd['user_search_advanced_description_field']) ) {
-				$r->content = $this->advField(
+				$cb = function($value, $field, $results, $field_args) use($description_length, $sd, $s, $_s) {
+					$value = Post::dealWithShortcodes($value, $sd['shortcode_op'] == "remove");
+					$strip_tags = $field_args['strip_tags'] ?? 1;
+					if ( strpos($field, 'html') === false && $strip_tags ) {
+						$value = Html::stripTags($value, $sd['striptagsexclude']);
+						if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '' ) {
+							$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
+						} else if ( $value != '' && (  MB::strlen( $value ) > $description_length ) ) {
+							$value = wd_substr_at_word($value, $description_length);
+						}
+					}
+					return $value;
+				};
+				add_filter('asp_user_advanced_field_value', $cb, 10, 4);
+				$_content = $this->advField(
 					array(
 						'main_field_slug' => 'descriptionfield',
-						'main_field_value'=> $r->content,
+						'main_field_value'=> $_content,
 						'r' => $r,
 						'field_pattern' => stripslashes( $sd['user_search_advanced_description_field'] )
 					),
 					$com_options['use_acf_getfield']
 				);
+				remove_filter('asp_user_advanced_field_value', $cb, 10);
 			}
 
-			$r->content = wd_closetags( $_content );	
+			$r->content = wd_closetags( $_content );
 			/*---------------------------------------------------------------*/
 
 			// --------------------------------- DATE -----------------------------------

@@ -309,7 +309,7 @@
                                 { 
                                     $reset_sort_view_ID =   intval($_POST['sort_view_ID']);
                                     
-                                     global $wpdb;
+                                    global $wpdb;
                                                         
                                     $query = "DELETE FROM `". $wpdb->prefix ."apto_sort_list`
                                                     WHERE `sort_view_id`    =   ". $reset_sort_view_ID;
@@ -334,6 +334,8 @@
                                                 }
                                                 
                                         }
+                                        
+                                    apply_filters('apto/order_reset', $reset_sort_view_ID );
                                     
                                     echo '<div id="message" class="updated"><p>' . __('Sort order reset successfully', 'apto') . '</p></div>';
                                 }

@@ -2,14 +2,17 @@
 namespace WPDRMS\ASP\Asset\Script;
 
 use stdClass;
+use WPDRMS\ASP\Asset\AssetManager;
 use WPDRMS\ASP\Asset\ManagerInterface;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 use WPDRMS\ASP\Utils\Html;
 use WPDRMS\ASP\Utils\Script;
 
-defined('ABSPATH') or die("You can't access this file directly.");
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
 
-class Manager implements ManagerInterface {
+class Manager extends AssetManager implements ManagerInterface {
 	use SingletonTrait;
 	private $prepared = array();
 	private $media_query = '';
@@ -120,7 +123,7 @@ class Manager implements ManagerInterface {
 
 	// -------------------------------------------- PUBLIC ---------------------------------------------------------
 
-	public function enqueue( $force = false ) {
+	public function enqueue( $force = false ): void {
 		if ( $force || $this->args['method'] == 'classic' ) {
 			// Do not allow async method in footer enqueue
 			$this->args['method'] = $this->args['method'] == 'optimized_async' ? 'optimized' :$this->args['method'];
@@ -133,7 +136,7 @@ class Manager implements ManagerInterface {
 		}
 	}
 
-	public function printInline( $instances = array() ) {
+	public function printInline( $instances = array() ): void {
 		if ( $this->args['method'] != 'classic' ) {
 			$this->initialize();
 			$output = $this->inline_instance . $this->inline . $this->preparedToInline();
@@ -143,7 +146,7 @@ class Manager implements ManagerInterface {
 		}
 	}
 
-	public function injectToBuffer($buffer, $instances) {
+	public function injectToBuffer($buffer, $instances): string {
 		if ( $this->args['method'] != 'classic' ) {
 			$this->initialize($instances);
 			$output = $this->inline_instance . $this->inline . $this->preparedToInline();
@@ -187,12 +190,7 @@ class Manager implements ManagerInterface {
 	}
 
 	private function adjustOptionsForCompatibility() {
-		if (
-			isset($_GET, $_GET['et_fb']) || // Divi frontend editor
-			isset($_GET, $_GET['vcv-ajax']) || // Visual Composer Frontend editor
-			isset($_GET, $_GET['fl_builder']) || // Beaver Builder Frontend editor
-			isset($_GET, $_GET['elementor-preview']) // Elementor Frontend
-		) {
+		if ( $this->conflict() ) {
 			$this->args['method'] = 'classic';
 		}
 	}

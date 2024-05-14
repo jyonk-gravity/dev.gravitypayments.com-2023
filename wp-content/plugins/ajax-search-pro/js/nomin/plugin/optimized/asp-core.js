@@ -2242,6 +2242,14 @@
         initOtherEvents: function() {
             let $this = this, handler, handler2;
 
+            /**
+             * Prevent parent events in Menus or similar. This argument is passed
+             * when the plugin is used via a navigation menu.
+             */
+            if ( $this.o.preventEvents && typeof jQuery !== 'undefined' ) {
+                jQuery($this.n('search').get(0)).closest('a, li').off();
+            }
+
             if ( helpers.isMobile() && helpers.detectIOS() ) {
                 /**
                  * Memorize the scroll top when the input is focused on IOS

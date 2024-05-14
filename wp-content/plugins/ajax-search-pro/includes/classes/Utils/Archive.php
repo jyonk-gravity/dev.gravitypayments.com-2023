@@ -40,6 +40,6 @@ class Archive {
 		if ( defined('ICL_LANGUAGE_CODE') ) {
 			$return = apply_filters( 'wpml_permalink', $return, ICL_LANGUAGE_CODE);
 		}
-		return $return;
+		return !is_wp_error($return) ? $return : '';
 	}
 }

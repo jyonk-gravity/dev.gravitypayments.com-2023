@@ -341,6 +341,7 @@ class SearchIndex extends SearchPostTypes {
 			$custom_field_selectp as customfp,
 			$custom_field_selects as customfs,
 			'' as post_date,
+			'' as post_modified,
 			'' as date,
 			0 as menu_order,
 			'' as title,
@@ -499,6 +500,7 @@ class SearchIndex extends SearchPostTypes {
 
 		// Do primary ordering here, because the results will slice, and we need the correct ones on the top
 		self::orderBy($results_arr, array(
+			'engine' => $args['engine'],
 			'primary_ordering' => $args['post_primary_order'],
 			'primary_ordering_metatype' => $args['post_primary_order_metatype'],
 			'secondary_ordering' => $args['post_primary_order']	// PRIMARY ORDER ON PURPOSE!! -> Secondary does not apply when primary == secondary
@@ -761,7 +763,6 @@ class SearchIndex extends SearchPostTypes {
 		if ( isset($args['_switch_on_preprocess']) && is_multisite() )
 			restore_current_blog();
 
-
 		// Merge the posts with the raw results to a new array
 		foreach ($the_posts as $r) {
 			$new_result = new stdClass();
@@ -790,6 +791,7 @@ class SearchIndex extends SearchPostTypes {
 
 			$new_result->date = $r->post_date ?? null;
 			$new_result->post_date = $new_result->date;
+			$new_result->post_modified = $r->post_modified ?? null;
 
 			$new_result->menu_order = $r->menu_order ?? 0;
 
@@ -811,6 +813,7 @@ class SearchIndex extends SearchPostTypes {
 		}
 
 		self::orderBy($pageposts, array(
+			'engine' => $args['engine'],
 			'primary_ordering' => $args['post_primary_order'],
 			'primary_ordering_metatype' => $args['post_primary_order_metatype'],
 			'secondary_ordering' => $args['post_secondary_order'],

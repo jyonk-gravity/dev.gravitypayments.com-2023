@@ -30,6 +30,7 @@ jQuery(function($){
     // Coditional rules via attributes
     WPD.Conditionals.init('div[tabid=1]');
     WPD.Conditionals.init('div[tabid=5]');
+    WPD.Conditionals.init('div[tabid=304]');
     WPD.Conditionals.init('div[tabid=404]');
     WPD.Conditionals.init('div[tabid=405]');
 

@@ -1,6 +1,14 @@
+## 1.5.0 | 2024-04-30
+- Fixed an issue where duplicate entries are created when using Conversational Forms with reCAPTCHA v3.
+- Fixed an issue where form submission hangs after Stripe 3DS validation.
+- Fixed an issue where all REST API submissions are marked as spam.
+- Note: If used alongside the Stripe Add-On, this version of the reCAPTCHA Add-On requires version 5.5.0 or later of the Stripe Add-On.
+
 ## 1.4.0 | 2024-01-17
 - Fixed an issue where reCaptcha v3 validation is not triggered when using the Stripe Payment Element.
 - Fixed the PHP 8.2 creation of dynamic property deprecation notice that occurs on form submission.
+
+## 1.3.0 | 2023-11-09
 - Fixed an issue where a JavaScript error can occur on the front-end if the page also includes custom or third-party forms.
 - Fixed an issue where the v3 settings aren't populated by the GF_RECAPTCHA_V3_SITE_KEY and GF_RECAPTCHA_V3_SECRET_KEY constants.
 

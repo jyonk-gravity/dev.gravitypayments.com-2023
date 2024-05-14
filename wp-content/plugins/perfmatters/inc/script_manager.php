@@ -112,6 +112,9 @@ if(isset($_POST['pmsm_global_refresh']) && wp_verify_nonce($_POST['pmsm_global_n
 global $perfmatters_script_manager_settings;
 $perfmatters_script_manager_settings = get_option('perfmatters_script_manager_settings');
 
+//load styles
+echo '<style id="perfmatters-script-manager-css">' . file_get_contents(plugin_dir_path(__DIR__) . 'css/script-manager.css') . '</style>';
+
 //build array of existing plugin disables
 global $perfmatters_disables;
 $perfmatters_disables = array();
@@ -140,9 +143,6 @@ $perfmatters_filters = array(
 //load script manager options
 global $perfmatters_script_manager_options;
 $perfmatters_script_manager_options = get_option('perfmatters_script_manager');
-
-//load styles
-include('script_manager_css.php');
 
 //disable shortcodes
 remove_all_shortcodes();

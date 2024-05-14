@@ -17,7 +17,11 @@
                 <input type="radio" class="asp_radio"
                        value="<?php echo $term->id; ?>"
                     <?php echo $term->default ? 'data-origvalue="1"' : ''; ?>
-                       name='<?php echo $filter->isMixed() ? "termset_single" : "termset[" . $taxonomy . "][]"; ?>'
+	                <?php if (isset($filter->data['custom_name'])): ?>
+		                name="<?php echo $filter->data['custom_name']; ?>"
+	                <?php else: ?>
+		                name="<?php echo $filter->isMixed() ? "termset_single" : "termset[" . $taxonomy . "][]"; ?>"
+	                <?php endif; ?>
                     <?php echo $term->selected ? ' checked="checked"' : ''; ?>>
                 <?php echo $term->label; ?>
             </label><br>

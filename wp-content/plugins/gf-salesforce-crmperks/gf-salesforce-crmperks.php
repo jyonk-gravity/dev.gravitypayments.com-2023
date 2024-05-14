@@ -2,9 +2,9 @@
 /**
 * Plugin Name: WP Gravity Forms Salesforce
 * Description: Integrates Gravity Forms with Salesforce allowing form submissions to be automatically sent to your Salesforce account 
-* Version: 1.4.1
+* Version: 1.4.3
 * Requires at least: 4.7
-* Tested up to: 6.4
+* Tested up to: 6.5
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/gravity-forms-plugins/gravity-forms-salesforce-plugin/
 * Author: CRM Perks.
@@ -25,7 +25,7 @@ class vxg_salesforce {
   public  $crm_name = 'salesforce';
   public  $id = 'vxg_salesforce';
   public  $domain = 'vxg-sales';
-  public  $version = "1.4.1";
+  public  $version = "1.4.3";
   public  $update_id = '30001';
   public  $min_gravityforms_version = '1.3.9';
   public $type = 'vxg_salesforce_pro';
@@ -683,6 +683,7 @@ return $result;
   case"empty": $check=$val == "";  break;
   case"not_empty": $check=$val != "";  break;
   }
+  //if($field == ''){ $check=true;} //user did not select any field
   $and_c[]=array("check"=>$check,"field_val"=>$fval,"input"=>$val,"field"=>$field,"op"=>$filter['op']);
   if($check !== null){
   if($and !== null){
@@ -1297,7 +1298,7 @@ public function do_actions(){
     * @param mixed $form
     * @param mixed $lead_id
     */
-public function update_entry($form,$lead_id){
+public function update_entry($form,$lead_id){ //with after hook update_entry($form,$lead_id){
 
     $meta=get_option($this->type.'_settings',array());
       if(!empty($meta['update']) || isset($_POST[$this->id.'_update']) ){
@@ -1704,7 +1705,7 @@ $temp=apply_filters($this->id.'_post_data', $temp ,$entry);
   $res=array("status"=>"4","extra"=>array("filter"=>$this->filter_condition),"data"=>$temp);  
   }
 
-///var_dump($temp); die();
+//var_dump($temp); die();
  
  $feed_id=$this->post('id',$feed);
   if($no_filter){ //get $res if no filter , other wise use filtered $res

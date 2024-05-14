@@ -1,14 +1,16 @@
 <?php
 namespace WPDRMS\ASP\Asset\Css;
 
+use WPDRMS\ASP\Asset\AssetManager;
 use WPDRMS\ASP\Asset\ManagerInterface;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 use WPDRMS\ASP\Utils\Html;
 
-/* Prevent direct access */
-defined('ABSPATH') or die("You can't access this file directly.");
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
 
-class Manager implements ManagerInterface {
+class Manager extends AssetManager implements ManagerInterface {
 	use SingletonTrait;
 
 	private
@@ -49,7 +51,7 @@ class Manager implements ManagerInterface {
 	/**
 	 * Called at wp_enqueue_scripts
 	 */
-	function enqueue( $force = false ) {
+	function enqueue( $force = false ): void {
 		if ( $force || $this->method == 'file' ) {
 			if ( !$this->generator->verifyFiles() ) {
 				$this->generator->generate();
@@ -70,7 +72,7 @@ class Manager implements ManagerInterface {
 	}
 
 	// asp_ob_end
-	function injectToBuffer($buffer, $instances) {
+	function injectToBuffer($buffer, $instances): string {
 		if ( $this->method != 'file' ) {
 			$output = $this->getBasic();
 			$output .= $this->getInstances( $instances );
@@ -82,7 +84,7 @@ class Manager implements ManagerInterface {
 	/**
 	 * Called at shutdown, after asp_ob_end, checks if the items were printed
 	 */
-	function printInline( $instances = array() ) {
+	function printInline( $instances = array() ): void {
 		if ( $this->method != 'file' ) {
 			echo $this->getBasic();
 			echo $this->getInstances($instances);
@@ -112,17 +114,7 @@ class Manager implements ManagerInterface {
 			}
 		}
 		
-		if (
-			current_user_can('administrator') && (
-				wp_is_json_request() || // Widgets screen
-				isset($_GET, $_GET['et_fb']) || // Divi frontend editor
-				isset($_GET, $_GET['vcv-ajax']) || // Visual Composer Frontend editor
-				isset($_GET, $_GET['fl_builder']) || // Beaver Builder Frontend editor
-				isset($_GET, $_GET['elementor-preview']) ||  // Elementor Frontend
-				isset($_GET, $_GET['wc-ajax']) ||  // WooCommerce Ajax Request
-				(isset($_GET, $_GET['action']) && $_GET['action'] == 'elementor') // Elementor Parts editor
-			)
-		) {
+		if ( $this->conflict() ) {
 			$this->method = 'file';
 		}
 	}

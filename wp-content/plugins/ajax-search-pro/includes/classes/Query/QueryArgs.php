@@ -469,7 +469,7 @@ class QueryArgs {
 		/*-------------------- FORCE CORRECT ORDERING -------------------*/
 		$correct_cpt_orders = array(
 			'relevance DESC', 'post_title DESC', 'post_title ASC', 'post_date DESC', 'post_date ASC', 'RAND()',
-			'id DESC', 'id ASC',
+			'post_modified DESC', 'post_modified ASC', 'id DESC', 'id ASC',
 			'customfp DESC', 'customfp ASC', 'customfs DESC', 'customfs ASC',
 			'menu_order DESC', 'menu_order ASC'
 		);

@@ -2,7 +2,7 @@
 Contributors: jonua
 Tags: acf table
 Requires at least: 5.3
-Tested up to: 6.4.2
+Tested up to: 6.5.2
 Stable tag: 1.3.21
 Requires PHP: 7.3
 License: GPLv2 or later
@@ -351,11 +351,31 @@ However, only when activated as a plugin will updates be available.
 
 *Note:* Please [contribute your language](https://translate.wordpress.org/projects/wp-plugins/advanced-custom-fields-table-field) to the plugin to make it even more useful.
 
+== PRO ==
+
+The Advanced Custom Fields Table Field plugin is also available in a professional version which includes more functionality and more flexibility. The additional Pro features are:
+
+* Predefined table
+* Table cell content types (simple text or configurable WordPress editor)
+* Table head and table foot
+* Stub column
+* Rowspan and colspan
+* Better way for moving rows and columns
+* Minimum and maximum amount of rows and columns
+* Style choice for the table and parts of the table
+
+The Pro version runs completely independend beside the free version and comes with its own field type.
+
+<a href="https://www.acf-table-field.com">To Pro Website</a>
 
 == Upgrade Notice ==
 
 
 == Changelog ==
+
+= 1.3.22 =
+* Fixes an issue where the trigger changed was executed to the field without any actual change to the field.
+* Fixes an issue where changes to the order of rows and columns and new rows and columns were not saved.
 
 = 1.3.21 =
 * Adds update_field() support for option pages

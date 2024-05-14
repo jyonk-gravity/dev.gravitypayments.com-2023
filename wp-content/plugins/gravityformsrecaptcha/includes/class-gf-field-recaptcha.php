@@ -93,16 +93,10 @@ class GF_Field_RECAPTCHA extends GF_Field {
 	public function validation_check( $validation_data ) {
 		$this->formId = absint( rgars( $validation_data, 'form/id' ) );
 
-		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && ! isset( $_POST[ $this->get_input_name() ] ) ) {
-			gf_recaptcha()->log_debug( __METHOD__ . '(): Aborting; REST request.' );
-
-			return $validation_data;
-		}
-
 		if ( $this->is_valid_field_data() ) {
 
 			// Set is_spam value.
-			$validation_data['is_spam'] = gf_recaptcha()->is_spam_submission( GFAPI::get_form( $this->formId ) );
+			$validation_data['is_spam'] = gf_recaptcha()->is_spam_submission( rgar( $validation_data, 'form' ) );
 
 			return $validation_data;
 		}

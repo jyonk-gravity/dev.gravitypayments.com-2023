@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-01-04 15:54-0800\n"
-"PO-Revision-Date: 2024-01-05 10:01+0200\n"
+"POT-Creation-Date: 2024-02-29 11:51-0800\n"
+"PO-Revision-Date: 2024-03-01 18:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk_UA\n"
@@ -79,7 +79,7 @@ msgstr "Ліцензію не вдалося вилучити."
 msgid "Used CSS cleared for all network sites."
 msgstr "Використаний CSS очищено для всіх сайтів мережі."
 
-#: inc/CLI.php:106 inc/classes/CSS.php:640 inc/classes/CSS.php:680
+#: inc/CLI.php:106 inc/classes/CSS.php:649 inc/classes/CSS.php:689
 msgid "Used CSS cleared."
 msgstr "Використані CSS очищено."
 
@@ -95,11 +95,11 @@ msgstr "Активи"
 msgid "Preloading"
 msgstr "Попереднє завантаження"
 
-#: inc/admin.php:40 inc/classes/Meta.php:136 inc/settings.php:1008
+#: inc/admin.php:40 inc/classes/Meta.php:136 inc/settings.php:1023
 msgid "Lazy Loading"
 msgstr "Відкладене завантаження"
 
-#: inc/admin.php:41 inc/settings.php:1208
+#: inc/admin.php:41 inc/settings.php:1223
 msgid "Fonts"
 msgstr "Шрифти"
 
@@ -111,11 +111,11 @@ msgstr "CDN"
 msgid "Analytics"
 msgstr "Analytics"
 
-#: inc/admin.php:49 inc/settings.php:1489
+#: inc/admin.php:49 inc/settings.php:1504
 msgid "Tools"
 msgstr "Інструменти"
 
-#: inc/admin.php:50 inc/settings.php:1632
+#: inc/admin.php:50 inc/settings.php:1647
 msgid "Database"
 msgstr "База даних"
 
@@ -177,16 +177,16 @@ msgstr "Доступ заборонено."
 msgid "Nonce is invalid."
 msgstr "Nonce недійсний."
 
-#: inc/classes/CSS.php:619 inc/classes/Meta.php:85 inc/settings.php:837
+#: inc/classes/CSS.php:628 inc/classes/Meta.php:85 inc/settings.php:837
 #: inc/settings.php:846
 msgid "Clear Used CSS"
 msgstr "Очистити використані CSS"
 
-#: inc/classes/CSS.php:619
+#: inc/classes/CSS.php:628
 msgid "Current"
 msgstr "Поточний"
 
-#: inc/classes/CSS.php:619
+#: inc/classes/CSS.php:628
 msgid "All"
 msgstr "Всі"
 
@@ -218,15 +218,15 @@ msgstr "Редакції"
 msgid "Auto Drafts"
 msgstr "Авто чернетки"
 
-#: inc/classes/DatabaseOptimizer.php:178 inc/settings.php:1685
+#: inc/classes/DatabaseOptimizer.php:178 inc/settings.php:1700
 msgid "Trashed Posts"
 msgstr "Видалені записи"
 
-#: inc/classes/DatabaseOptimizer.php:179 inc/settings.php:1700
+#: inc/classes/DatabaseOptimizer.php:179 inc/settings.php:1715
 msgid "Spam Comments"
 msgstr "Спам коментарі"
 
-#: inc/classes/DatabaseOptimizer.php:180 inc/settings.php:1715
+#: inc/classes/DatabaseOptimizer.php:180 inc/settings.php:1730
 msgid "Trashed Comments"
 msgstr "Видалені коментарі"
 
@@ -238,7 +238,7 @@ msgstr "Прострочені транзієнти"
 msgid "Transients"
 msgstr "Транзієнти"
 
-#: inc/classes/DatabaseOptimizer.php:183 inc/settings.php:1760
+#: inc/classes/DatabaseOptimizer.php:183 inc/settings.php:1775
 msgid "Tables"
 msgstr "Таблиці"
 
@@ -333,20 +333,20 @@ msgstr ""
 "Немає доступних feed, будь ласка, відвідайте <a href='%s'>Головну сторінку</"
 "a>!"
 
-#: inc/functions.php:172
+#: inc/functions.php:173
 msgid "Sorry, you do not have permission to make REST API requests."
 msgstr "У вас немає дозволу на запити до REST API."
 
-#: inc/functions.php:308 inc/functions.php:401 inc/functions.php:406
+#: inc/functions.php:309 inc/functions.php:402 inc/functions.php:407
 msgid "Comments are disabled."
 msgstr "Коментарі відключені."
 
-#: inc/functions.php:613 inc/functions.php:633 inc/functions.php:1233
+#: inc/functions.php:614 inc/functions.php:634 inc/functions.php:1234
 #: inc/functions_script_manager.php:1535 inc/functions_script_manager.php:1543
 msgid "Perfmatters Warning"
 msgstr "Попередження Perfmatters"
 
-#: inc/functions.php:614
+#: inc/functions.php:615
 msgid ""
 "WP_POST_REVISIONS is already enabled somewhere else on your site. We suggest "
 "only enabling this feature in one place."
@@ -354,7 +354,7 @@ msgstr ""
 "WP_POST_REVISIONS вже увімкнено десь на вашому сайті. Ми рекомендуємо "
 "ввімкнути цю функцію лише в одному місці."
 
-#: inc/functions.php:634
+#: inc/functions.php:635
 msgid ""
 "AUTOSAVE_INTERVAL is already enabled somewhere else on your site. We suggest "
 "only enabling this feature in one place."
@@ -362,11 +362,11 @@ msgstr ""
 "AUTOSAVE_INTERVAL вже ввімкнено десь на вашому сайті. Ми рекомендуємо "
 "ввімкнути цю функцію лише в одному місці."
 
-#: inc/functions.php:1026 inc/settings.php:444
+#: inc/functions.php:1027 inc/settings.php:444
 msgid "This has been disabled."
 msgstr "Це було відключено."
 
-#: inc/functions.php:1234
+#: inc/functions.php:1235
 msgid "Local Analytics is enabled but no Tracking ID is set."
 msgstr "Локальна аналітика ввімкнена, але ID відстеження не встановлено."
 
@@ -389,11 +389,11 @@ msgstr ""
 "Виберіть дочірній сайт, з якого ви бажаєте отримати налаштування за "
 "промовчанням."
 
-#: inc/functions_network.php:45 inc/settings.php:1496
+#: inc/functions_network.php:45 inc/settings.php:1511
 msgid "Clean Uninstall"
-msgstr "Чиста деінсталяція"
+msgstr "Повна деінсталяція"
 
-#: inc/functions_network.php:52 inc/settings.php:1503
+#: inc/functions_network.php:52 inc/settings.php:1518
 msgid ""
 "When enabled, this will cause all Perfmatters options data to be removed "
 "from your database when the plugin is uninstalled."
@@ -496,7 +496,7 @@ msgstr "УВІМК"
 msgid "OFF"
 msgstr "ВИМК"
 
-#: inc/functions_script_manager.php:551 inc/settings.php:1804
+#: inc/functions_script_manager.php:551 inc/settings.php:1819
 msgid "Disabled"
 msgstr "Вимкнено"
 
@@ -522,7 +522,7 @@ msgstr "Користувачі"
 #: inc/settings.php:310 inc/settings.php:329 inc/settings.php:349
 #: inc/settings.php:377 inc/settings.php:423 inc/settings.php:620
 #: inc/settings.php:754 inc/settings.php:774 inc/settings.php:936
-#: inc/settings.php:1037 inc/settings.php:1416 inc/settings.php:1435
+#: inc/settings.php:1052 inc/settings.php:1431 inc/settings.php:1450
 msgid "Default"
 msgstr "за замовчуванням"
 
@@ -539,12 +539,12 @@ msgid "Devices"
 msgstr "Пристрої"
 
 #: inc/functions_script_manager.php:701 inc/functions_script_manager.php:866
-#: inc/settings.php:2172 inc/settings.php:2218
+#: inc/settings.php:2187 inc/settings.php:2233
 msgid "Desktop"
 msgstr "Комп'ютер"
 
 #: inc/functions_script_manager.php:702 inc/functions_script_manager.php:867
-#: inc/settings.php:2173 inc/settings.php:2219
+#: inc/settings.php:2188 inc/settings.php:2234
 msgid "Mobile"
 msgstr "Мобільний"
 
@@ -562,7 +562,7 @@ msgstr "Невідповідність версії плагіна MU."
 
 #: inc/functions_script_manager.php:1536 inc/functions_script_manager.php:1544
 #: inc/script_manager.php:194 inc/script_manager.php:328
-#: inc/script_manager.php:340 inc/settings.php:2400
+#: inc/script_manager.php:340 inc/settings.php:2415
 msgid "View Documentation"
 msgstr "Дивитись документацію"
 
@@ -694,8 +694,8 @@ msgstr ""
 msgid "Global View"
 msgstr "Глобальний перегляд"
 
-#: inc/script_manager.php:171 inc/script_manager.php:287 inc/settings.php:2164
-#: inc/settings.php:2208 inc/settings.php:2251 perfmatters.php:175
+#: inc/script_manager.php:171 inc/script_manager.php:287 inc/settings.php:2179
+#: inc/settings.php:2223 inc/settings.php:2266 perfmatters.php:175
 msgid "Settings"
 msgstr "Налаштування"
 
@@ -1416,8 +1416,8 @@ msgstr "Delay (затримка)"
 msgid "Async"
 msgstr "Асинхронна"
 
-#: inc/settings.php:776 inc/settings.php:2165 inc/settings.php:2210
-#: inc/settings.php:2252
+#: inc/settings.php:776 inc/settings.php:2180 inc/settings.php:2225
+#: inc/settings.php:2267
 msgid "Remove"
 msgstr "Видалити"
 
@@ -1450,7 +1450,7 @@ msgstr ""
 "Виключіть видалення певних CSS-селекторів, додавши ID елемента, назву класу "
 "тощо (#id, .class). Формат: по одному в рядку"
 
-#: inc/settings.php:820 inc/settings.php:1243 inc/settings.php:1326
+#: inc/settings.php:820 inc/settings.php:1258 inc/settings.php:1341
 msgid "CDN URL"
 msgstr "URL-адреса CDN"
 
@@ -1560,10 +1560,18 @@ msgstr ""
 "(LCP)."
 
 #: inc/settings.php:978
+msgid "Disable Core Fetch"
+msgstr "Вимкнути вибірку ядра"
+
+#: inc/settings.php:985
+msgid "Disable the fetch priority attribute added by WordPress core."
+msgstr "Вимкніть атрибут пріоритету вибірки, доданий ядром WordPress."
+
+#: inc/settings.php:993
 msgid "Preconnect"
 msgstr "Попереднє підключення"
 
-#: inc/settings.php:985
+#: inc/settings.php:1000
 msgid ""
 "Preconnect allows the browser to set up early connections before an HTTP "
 "request, eliminating roundtrip latency and saving time for users. Format: "
@@ -1573,11 +1581,11 @@ msgstr ""
 "з'єднання до HTTP-запиту, усуваючи затримку в обидва боки та заощаджуючи час "
 "користувачів. Формат: https://example.com"
 
-#: inc/settings.php:992
+#: inc/settings.php:1007
 msgid "DNS Prefetch"
 msgstr "Попередня вибірка DNS"
 
-#: inc/settings.php:1002
+#: inc/settings.php:1017
 msgid ""
 "Resolve domain names before a user clicks. Format: //example.com (one per "
 "line)"
@@ -1585,36 +1593,36 @@ msgstr ""
 "Дозвольте доменні імена, перш ніж користувач клацне. Формат: //example.com "
 "(по одному в рядку)"
 
-#: inc/settings.php:1013
+#: inc/settings.php:1028
 msgid "Images"
 msgstr "Зображення"
 
-#: inc/settings.php:1020
+#: inc/settings.php:1035
 msgid "Enable lazy loading on images."
 msgstr "Увімкнути відкладене завантаження зображень."
 
-#: inc/settings.php:1028
+#: inc/settings.php:1043
 msgid "Exclude Leading Images"
 msgstr "Виключити провідні зображення"
 
-#: inc/settings.php:1044
+#: inc/settings.php:1059
 msgid "Exclude a certain number of images starting from the top of the page."
 msgstr ""
 "Виключити певну кількість зображень, починаючи з верхньої частини сторінки."
 
-#: inc/settings.php:1052
+#: inc/settings.php:1067
 msgid "iFrames and Videos"
 msgstr "iFrames та відео"
 
-#: inc/settings.php:1059
+#: inc/settings.php:1074
 msgid "Enable lazy loading on iframes and videos."
 msgstr "Увімкнути відкладене завантаження iframes та відео."
 
-#: inc/settings.php:1067
+#: inc/settings.php:1082
 msgid "YouTube Preview Thumbnails"
 msgstr "Мініатюри попереднього перегляду YouTube"
 
-#: inc/settings.php:1074
+#: inc/settings.php:1089
 msgid ""
 "Swap out YouTube iFrames with preview thumbnails. The original iFrame is "
 "loaded when the thumbnail is clicked."
@@ -1622,11 +1630,11 @@ msgstr ""
 "Замініть iFrame YouTube на мініатюри попереднього перегляду. Оригінальний "
 "iFrame завантажується, коли клацнути мініатюру."
 
-#: inc/settings.php:1082
+#: inc/settings.php:1097
 msgid "Exclude from Lazy Loading"
 msgstr "Виключити з відкладеного завантаження"
 
-#: inc/settings.php:1092
+#: inc/settings.php:1107
 msgid ""
 "Exclude specific elements from lazy loading. Exclude an element by adding "
 "the source URL (example.png) or by adding any unique portion of its "
@@ -1636,11 +1644,11 @@ msgstr ""
 "додавши вихідну URL-адресу (example.png) або будь-яку унікальну частину "
 "рядка атрибута (class = \"example\"). Формат: по одному на рядок"
 
-#: inc/settings.php:1099
+#: inc/settings.php:1114
 msgid "Exclude by Parent Selector"
 msgstr "Виключити за допомогою батьківського селектора"
 
-#: inc/settings.php:1109
+#: inc/settings.php:1124
 msgid ""
 "Exclude specific images from lazy loading by adding any unique portion of an "
 "attribute string (class=\"example\") from a parent container. Format: one "
@@ -1650,11 +1658,11 @@ msgstr ""
 "унікальну частину рядка атрибута (class=\"example\") із батьківського "
 "контейнера. Формат: один на рядок"
 
-#: inc/settings.php:1117
+#: inc/settings.php:1132
 msgid "Threshold"
 msgstr "Порогове значення"
 
-#: inc/settings.php:1127
+#: inc/settings.php:1142
 msgid ""
 "Extend the lazy loading threshold allowing images to load before they are "
 "visible in the viewport. (px or %)"
@@ -1662,47 +1670,47 @@ msgstr ""
 "Збільшіть поріг відкладеного завантаження, щоб зображення завантажувалися до "
 "того, як вони відобразяться у вікні перегляду. (px або %)"
 
-#: inc/settings.php:1134
+#: inc/settings.php:1149
 msgid "DOM Monitoring"
 msgstr "Моніторинг DOM"
 
-#: inc/settings.php:1141
+#: inc/settings.php:1156
 msgid ""
 "Watch for changes in the DOM and dynamically lazy load newly added elements."
 msgstr ""
 "Слідкуйте за змінами в DOM і динамічно відкладено завантажуйте додані "
 "елементи."
 
-#: inc/settings.php:1148
+#: inc/settings.php:1163
 msgid "Add Missing Image Dimensions"
 msgstr "Додати відсутні розміри зображення"
 
-#: inc/settings.php:1155
+#: inc/settings.php:1170
 msgid "Add missing width and height attributes to images."
 msgstr "Додати відсутні атрибути ширини та висоти до зображень."
 
-#: inc/settings.php:1162
+#: inc/settings.php:1177
 msgid "Fade In"
 msgstr "Плавне виникнення"
 
-#: inc/settings.php:1169
+#: inc/settings.php:1184
 msgid "Add fade in effect when images are loaded in."
 msgstr "Додати ефект плавної появи під час завантаження зображень."
 
-#: inc/settings.php:1176
+#: inc/settings.php:1191
 msgid "CSS Background Images"
 msgstr "Фонові зображення за допомогою CSS"
 
-#: inc/settings.php:1183
+#: inc/settings.php:1198
 msgid "Allow lazy loading of background images coming from (CSS) stylesheets."
 msgstr ""
 "Дозволити відкладене завантаження фонових зображень із таблиць стилів (CSS)."
 
-#: inc/settings.php:1191
+#: inc/settings.php:1206
 msgid "Background Selectors"
 msgstr "Селектори фону"
 
-#: inc/settings.php:1201
+#: inc/settings.php:1216
 msgid ""
 "Lazy load a CSS background image by adding a unique selector (ID or class) "
 "found on the element that the background image has been applied to. Format: "
@@ -1712,23 +1720,23 @@ msgstr ""
 "селектора (ID або класу), знайденого в елементі, до якого було застосовано "
 "фонове зображення. Формат: по одному на рядок"
 
-#: inc/settings.php:1213
+#: inc/settings.php:1228
 msgid "Local Google Fonts"
 msgstr "Локальні шрифти Google"
 
-#: inc/settings.php:1221
+#: inc/settings.php:1236
 msgid "Host Google Font files locally on your server or CDN."
 msgstr "Розміщуйте файли шрифтів Google локально на своєму сервері або CDN."
 
-#: inc/settings.php:1228
+#: inc/settings.php:1243
 msgid "Display Swap"
 msgstr "Display Swap"
 
-#: inc/settings.php:1236
+#: inc/settings.php:1251
 msgid "Add the font-display swap property to your Google Fonts."
 msgstr "Додати властивість font-display swap до власних шрифтів Google."
 
-#: inc/settings.php:1253
+#: inc/settings.php:1268
 msgid ""
 "Use your CDN URL when referencing Google Font files inside a parent "
 "stylesheet. Example: https://cdn.example.com"
@@ -1736,19 +1744,19 @@ msgstr ""
 "Використовуйте свою URL-адресу CDN, посилаючись на файли шрифтів Google у "
 "батьківській таблиці стилів. Приклад: https://cdn.example.com"
 
-#: inc/settings.php:1260 inc/settings.php:1269
+#: inc/settings.php:1275 inc/settings.php:1284
 msgid "Clear Local Fonts"
 msgstr "Очистити локальні шрифти"
 
-#: inc/settings.php:1271
+#: inc/settings.php:1286
 msgid "Remove all existing local Google Font files and stylesheets."
 msgstr "Видаліть усі наявні локальні файли шрифтів Google і таблиці стилів."
 
-#: inc/settings.php:1278
+#: inc/settings.php:1293
 msgid "Load Asynchronously"
 msgstr "Асинхронне завантаження"
 
-#: inc/settings.php:1286
+#: inc/settings.php:1301
 msgid ""
 "Load local font stylesheets asynchronously. Preloading individual font files "
 "is recommended when this option is enabled."
@@ -1756,20 +1764,20 @@ msgstr ""
 "Завантажуйте локальні таблиці стилів шрифтів асинхронно. Якщо цей параметр "
 "увімкнено, рекомендується попередньо завантажувати окремі файли шрифтів."
 
-#: inc/settings.php:1293
+#: inc/settings.php:1308
 msgid "Disable Google Fonts"
 msgstr "Вимкнути шрифти Google"
 
-#: inc/settings.php:1301
+#: inc/settings.php:1316
 msgid ""
 "Removes any instances of Google Fonts being loaded across your entire site."
 msgstr "Видаляє всі випадки завантаження шрифтів Google на всьому сайті."
 
-#: inc/settings.php:1312
+#: inc/settings.php:1327
 msgid "Enable CDN Rewrite"
 msgstr "Увімкнути перезапис CDN"
 
-#: inc/settings.php:1319
+#: inc/settings.php:1334
 msgid ""
 "Enables rewriting of your site URLs with your CDN URLs which can be "
 "configured below."
@@ -1777,7 +1785,7 @@ msgstr ""
 "Дозволяє перезаписати URL-адреси вашого сайту за допомогою ваших URL-адрес "
 "CDN, які можна налаштувати нижче."
 
-#: inc/settings.php:1335
+#: inc/settings.php:1350
 msgid ""
 "Enter your CDN URL without the trailing backslash. Example: https://cdn."
 "example.com"
@@ -1785,11 +1793,11 @@ msgstr ""
 "Введіть URL-адресу CDN без зворотної косої риски. Приклад: https://cdn."
 "example.com"
 
-#: inc/settings.php:1342
+#: inc/settings.php:1357
 msgid "Included Directories"
 msgstr "Включені каталоги"
 
-#: inc/settings.php:1351
+#: inc/settings.php:1366
 msgid ""
 "Enter any directories you would like to be included in CDN rewriting, "
 "separated by commas (,). Default: wp-content,wp-includes"
@@ -1797,11 +1805,11 @@ msgstr ""
 "Введіть будь-які каталоги, які ви хочете включити до перезапису CDN, "
 "розділивши їх комами (,). За замовчуванням: wp-content,wp-includes"
 
-#: inc/settings.php:1358
+#: inc/settings.php:1373
 msgid "CDN Exclusions"
 msgstr "Виключення з CDN"
 
-#: inc/settings.php:1367
+#: inc/settings.php:1382
 msgid ""
 "Enter any directories or file extensions you would like to be excluded from "
 "CDN rewriting, separated by commas (,). Default: .php"
@@ -1809,40 +1817,40 @@ msgstr ""
 "Введіть будь-які каталоги або розширення файлів, які ви хочете виключити з "
 "перезапису CDN, розділивши їх комами (,). За замовчуванням: .php"
 
-#: inc/settings.php:1373
+#: inc/settings.php:1388
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
-#: inc/settings.php:1378
+#: inc/settings.php:1393
 msgid "Enable Local Analytics"
 msgstr "Увімкнути аналітику"
 
-#: inc/settings.php:1385
+#: inc/settings.php:1400
 msgid "Enable syncing of the Google Analytics script to your own server."
 msgstr ""
 "Увімкнути синхронізацію скрипта Google Analytics з вашим власним сервером."
 
-#: inc/settings.php:1392
+#: inc/settings.php:1407
 msgid "Tracking ID"
 msgstr "ID відстеження"
 
-#: inc/settings.php:1400
+#: inc/settings.php:1415
 msgid "Input your Google Analytics tracking or measurement ID."
 msgstr "Введіть свій ID відстеження Google Analytics."
 
-#: inc/settings.php:1407
+#: inc/settings.php:1422
 msgid "Tracking Code Position"
 msgstr "Розташування коду відстеження"
 
-#: inc/settings.php:1416
+#: inc/settings.php:1431
 msgid "Header"
 msgstr "Header (заголовок)"
 
-#: inc/settings.php:1417
+#: inc/settings.php:1432
 msgid "Footer"
 msgstr "Footer (підвал)"
 
-#: inc/settings.php:1419
+#: inc/settings.php:1434
 msgid ""
 "Load your analytics script in the header (default) or footer of your site. "
 "Default: Header"
@@ -1850,11 +1858,11 @@ msgstr ""
 "Завантажте скрипт аналітики у заголовок чи підвал сайту. За замовчуванням: "
 "заголовок"
 
-#: inc/settings.php:1426
+#: inc/settings.php:1441
 msgid "Script Type"
 msgstr "Тип скрипту"
 
-#: inc/settings.php:1439
+#: inc/settings.php:1454
 msgid ""
 "Choose which script method you would like to use. Default Google Analytics 4 "
 "is larger and includes all features, while Minimal is smaller and only "
@@ -1864,20 +1872,20 @@ msgstr ""
 "Google Analytics 4 має більший розмір і включає всі функції, тоді як "
 "Мінімальний - менший і включає лише базові функції звітування."
 
-#: inc/settings.php:1446
+#: inc/settings.php:1461
 msgid "Track Logged In Admins"
 msgstr "Відстеження тих, хто увійшов до системи"
 
-#: inc/settings.php:1453
+#: inc/settings.php:1468
 msgid "Include logged-in WordPress admins in your Google Analytics reports."
 msgstr ""
 "Включіть авторизованих адміністраторів WordPress у звіти Google Analytics."
 
-#: inc/settings.php:1460
+#: inc/settings.php:1475
 msgid "Use MonsterInsights"
 msgstr "Використовувати MonsterInsights"
 
-#: inc/settings.php:1468
+#: inc/settings.php:1483
 msgid ""
 "Allows MonsterInsights to manage your Google Analytics while still using the "
 "locally hosted gtag.js file generated by Perfmatters."
@@ -1885,11 +1893,11 @@ msgstr ""
 "Дозволяє MonsterInsights керувати вашим Google Analytics, використовуючи при "
 "цьому локально розміщений файл gtag.js, створений Perfmatters."
 
-#: inc/settings.php:1475
+#: inc/settings.php:1490
 msgid "Enable AMP Support"
 msgstr "Увімкнути підтримку AMP"
 
-#: inc/settings.php:1482
+#: inc/settings.php:1497
 msgid ""
 "Enable support for analytics tracking on AMP sites. This is not a local "
 "script, but a native AMP script."
@@ -1897,11 +1905,11 @@ msgstr ""
 "Увімкнути підтримку відстеження аналітики на AMP-сайтах. Це не локальний "
 "скрипт, а власний AMP-скрипт."
 
-#: inc/settings.php:1512
+#: inc/settings.php:1527
 msgid "Accessibility Mode"
 msgstr "Режим спеціальних можливостей"
 
-#: inc/settings.php:1520
+#: inc/settings.php:1535
 msgid ""
 "Disable the use of visual UI elements in the plugin settings such as "
 "checkbox toggles and hovering tooltips."
@@ -1909,23 +1917,23 @@ msgstr ""
 "Вимкніть використання візуальних елементів інтерфейсу в налаштуваннях "
 "плагіна, таких як перемикачі прапорців і підказки, що наводяться."
 
-#: inc/settings.php:1527
+#: inc/settings.php:1542
 msgid "Hide Admin Bar Menu"
 msgstr "Сховати меню в адмін-панелі"
 
-#: inc/settings.php:1534
+#: inc/settings.php:1549
 msgid "Hide the Perfmatters menu in the admin bar."
 msgstr "Приховати меню Perfmatters в адмін-панелі."
 
-#: inc/settings.php:1541
+#: inc/settings.php:1556
 msgid "Show Advanced Options"
 msgstr "Показати додаткові параметри"
 
-#: inc/settings.php:1548
+#: inc/settings.php:1563
 msgid "Show advanced options in the Perfmatters UI."
 msgstr "Показати додаткові параметри в інтерфейсі користувача Perfmatters."
 
-#: inc/settings.php:1549
+#: inc/settings.php:1564
 msgid ""
 "Advanced options should only be used if you know exactly what you are doing, "
 "as they can break certain plugin functionality if used improperly."
@@ -1934,19 +1942,19 @@ msgstr ""
 "знаєте, що робите, оскільки вони можуть порушити певні функції плагіна при "
 "неправильному використанні."
 
-#: inc/settings.php:1556
+#: inc/settings.php:1571
 msgid "Disable for Logged In Users"
 msgstr "Вимкнути для зареєстрованих користувачів"
 
-#: inc/settings.php:1563
+#: inc/settings.php:1578
 msgid "Disable optimizations for logged in users."
 msgstr "Вимкнути оптимізацію для зареєстрованих користувачів."
 
-#: inc/settings.php:1570 inc/settings.php:1578
+#: inc/settings.php:1585 inc/settings.php:1593
 msgid "Restore Default Options"
 msgstr "Відновлення параметрів за замовчуванням"
 
-#: inc/settings.php:1579
+#: inc/settings.php:1594
 msgid ""
 "Are you sure? This will remove all existing plugin options and restore them "
 "to their default states."
@@ -1954,15 +1962,15 @@ msgstr ""
 "Ви впевнені? Це видалить всі існуючі параметри плагіна і відновить їх до "
 "стану за замовчуванням."
 
-#: inc/settings.php:1581
+#: inc/settings.php:1596
 msgid "Restore all plugin options to their default settings."
 msgstr "Відновити всі параметри плагіна до налаштувань за замовчуванням."
 
-#: inc/settings.php:1588 inc/settings.php:1596 inc/settings.php:2275
+#: inc/settings.php:1603 inc/settings.php:1611 inc/settings.php:2290
 msgid "Purge Meta Options"
 msgstr "Очистити мета-параметри"
 
-#: inc/settings.php:1597
+#: inc/settings.php:1612
 msgid ""
 "Are you sure? This will delete all existing Perfmatters meta options for all "
 "posts from the database."
@@ -1970,21 +1978,21 @@ msgstr ""
 "Ти впевнений? Це призведе до видалення всіх існуючих мета-параметрів "
 "Perfmatters для всіх дописів із бази даних."
 
-#: inc/settings.php:1598
+#: inc/settings.php:1613
 msgid ""
 "Permanently delete all existing Perfmatters meta options from your database."
 msgstr ""
 "Назавжди видаліть усі наявні мета-параметри Perfmatters із вашої бази даних."
 
-#: inc/settings.php:1605
+#: inc/settings.php:1620
 msgid "Export Settings"
 msgstr "Експорт налаштувань"
 
-#: inc/settings.php:1613
+#: inc/settings.php:1628
 msgid "Export Plugin Settings"
 msgstr "Експорт налаштувань плагіна"
 
-#: inc/settings.php:1615
+#: inc/settings.php:1630
 msgid ""
 "Export your Perfmatters settings for this site as a .json file. This lets "
 "you easily import the configuration into another site."
@@ -1992,31 +2000,31 @@ msgstr ""
 "Експортуйте налаштування Perfmatters для цього сайту як файл .json. Це "
 "дозволяє легко імпортувати конфігурацію на інший сайт."
 
-#: inc/settings.php:1622
+#: inc/settings.php:1637
 msgid "Import Settings"
 msgstr "Імпорт налаштувань"
 
-#: inc/settings.php:1627
+#: inc/settings.php:1642
 msgid "Import Perfmatters settings from an exported .json file."
 msgstr "Імпортуйте налаштування Perfmatters з експортованого .json-файлу."
 
-#: inc/settings.php:1637
+#: inc/settings.php:1652
 msgid "Scan Database"
 msgstr "Сканування БД"
 
-#: inc/settings.php:1645
+#: inc/settings.php:1660
 msgid "Scan Now"
 msgstr "Сканувати зараз"
 
-#: inc/settings.php:1648
+#: inc/settings.php:1663
 msgid "..."
 msgstr "..."
 
-#: inc/settings.php:1655
+#: inc/settings.php:1670
 msgid "Post Revisions"
 msgstr "Редакції запису"
 
-#: inc/settings.php:1663
+#: inc/settings.php:1678
 msgid ""
 "Include post revisions in your database optimization. This also includes "
 "revisions for pages and custom post types."
@@ -2024,11 +2032,11 @@ msgstr ""
 "Включити редакцію записів у оптимізацію БД. Це також включає в себе редакції "
 "для сторінок і користувацькі типи записів."
 
-#: inc/settings.php:1670
+#: inc/settings.php:1685
 msgid "Post Auto-Drafts"
 msgstr "Авто чернетки записів"
 
-#: inc/settings.php:1678
+#: inc/settings.php:1693
 msgid ""
 "Include post auto-drafts in your database optimization. This also includes "
 "auto-drafts for pages and custom post types."
@@ -2036,7 +2044,7 @@ msgstr ""
 "Включити авто чернетки записів в оптимізацію БД. Це також включає в себе "
 "авто-чернетки для сторінок і користувацькі типи записів."
 
-#: inc/settings.php:1693
+#: inc/settings.php:1708
 msgid ""
 "Include trashed posts in your database optimization. This also includes "
 "trashed pages and custom post types."
@@ -2044,43 +2052,43 @@ msgstr ""
 "Включити видалені записи оптимізацію БД. Сюди також входять завантажені "
 "сторінки та типи записів користувача."
 
-#: inc/settings.php:1708
+#: inc/settings.php:1723
 msgid "Include spam comments in your database optimization."
 msgstr "Включіть спам-коментарі в оптимізацію вашої БД."
 
-#: inc/settings.php:1723
+#: inc/settings.php:1738
 msgid "Include trashed comments in your database optimization."
 msgstr "Включіть видалені коментарі в оптимізацію БД."
 
-#: inc/settings.php:1730
+#: inc/settings.php:1745
 msgid "Expired Transients"
 msgstr "Прострочені транзієнти"
 
-#: inc/settings.php:1738
+#: inc/settings.php:1753
 msgid "Include expired transients in your database optimization."
 msgstr "Включити прострочені транзієнти до оптимізації БД."
 
-#: inc/settings.php:1745
+#: inc/settings.php:1760
 msgid "All Transients"
 msgstr "Усі транзієнти"
 
-#: inc/settings.php:1753
+#: inc/settings.php:1768
 msgid "Include all transients in your database optimization."
 msgstr "Включити усі транзієнти в оптимізацію БД."
 
-#: inc/settings.php:1768
+#: inc/settings.php:1783
 msgid "Include tables in your database optimization."
 msgstr "Включіть таблиці в оптимізацію БД."
 
-#: inc/settings.php:1775
+#: inc/settings.php:1790
 msgid "Optimize Database"
 msgstr "Оптимізація БД"
 
-#: inc/settings.php:1783
+#: inc/settings.php:1798
 msgid "Optimize Now"
 msgstr "Оптимізувати зараз"
 
-#: inc/settings.php:1786
+#: inc/settings.php:1801
 msgid ""
 "This will make permanent changes that cannot be reverted! Are you sure you "
 "want to proceed with optimization?"
@@ -2088,7 +2096,7 @@ msgstr ""
 "Це призведе до незворотних змін, які неможливо буде повернути! Ви впевнені, "
 "що хочете продовжити оптимізацію?"
 
-#: inc/settings.php:1787
+#: inc/settings.php:1802
 msgid ""
 "Run a one-time optimization of your WordPress database based on the selected "
 "options above. This process runs in the background."
@@ -2096,23 +2104,23 @@ msgstr ""
 "Запустіть одноразову оптимізацію вашої БД WordPress на основі вибраних вище "
 "опцій. Цей процес виконується у фоновому режимі."
 
-#: inc/settings.php:1794
+#: inc/settings.php:1809
 msgid "Scheduled Optimization"
 msgstr "Оптимізація за розкладом"
 
-#: inc/settings.php:1805
+#: inc/settings.php:1820
 msgid "Daily"
 msgstr "Щодня"
 
-#: inc/settings.php:1806
+#: inc/settings.php:1821
 msgid "Weekly"
 msgstr "Щотижня"
 
-#: inc/settings.php:1807
+#: inc/settings.php:1822
 msgid "Monthly"
 msgstr "Щомісячно"
 
-#: inc/settings.php:1809
+#: inc/settings.php:1824
 msgid ""
 "Schedule a routine optimization of your WordPress database based on the "
 "selected options above. This process runs in the background and starts "
@@ -2122,39 +2130,39 @@ msgstr ""
 "опцій. Цей процес виконується у фоновому режимі і починається одразу після "
 "збереження."
 
-#: inc/settings.php:2011
+#: inc/settings.php:2026
 msgid "Plugins"
 msgstr "Плагіни"
 
-#: inc/settings.php:2016
+#: inc/settings.php:2031
 msgid "Themes"
 msgstr "Теми"
 
-#: inc/settings.php:2124
+#: inc/settings.php:2139
 msgid "Add New"
 msgstr "Додати новий"
 
-#: inc/settings.php:2158
+#: inc/settings.php:2173
 msgid "Select Type"
 msgstr "Виберіть тип"
 
-#: inc/settings.php:2171 inc/settings.php:2217
+#: inc/settings.php:2186 inc/settings.php:2232
 msgid "All Devices"
 msgstr "Усі пристрої"
 
-#: inc/settings.php:2176 inc/settings.php:2222
+#: inc/settings.php:2191 inc/settings.php:2237
 msgid "Location"
 msgstr "Місцезнаходження"
 
-#: inc/settings.php:2202
+#: inc/settings.php:2217
 msgid "Select Priority"
 msgstr "Виберіть пріоритет"
 
-#: inc/settings.php:2288
+#: inc/settings.php:2303
 msgid "Import Plugin Settings"
 msgstr "Імпортувати налаштування плагіна"
 
-#: inc/settings.php:2378
+#: inc/settings.php:2393
 #, php-format
 msgid "Click %s to view documentation."
 msgstr "Натисніть %s, щоб переглянути документацію."

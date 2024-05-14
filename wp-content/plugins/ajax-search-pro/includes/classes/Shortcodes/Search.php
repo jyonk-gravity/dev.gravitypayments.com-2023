@@ -4,6 +4,7 @@ namespace WPDRMS\ASP\Shortcodes;
 use WPDRMS\ASP\Frontend\FiltersManager;
 use WPDRMS\ASP\Hooks\AjaxManager;
 use WPDRMS\ASP\Patterns\SingletonTrait;
+use WPDRMS\ASP\Utils\Css;
 use WPDRMS\ASP\Utils\MobileDetect;
 
 if (!defined('ABSPATH')) die('-1');
@@ -38,6 +39,7 @@ class Search extends AbstractShortcode {
 		extract(shortcode_atts(array(
 			'id' => 'something',
 			'extra_class' => '',
+			'prevent_events' => 0,
 			'include_styles' => 0,
 			'display_on_mobile' => 1
 		), $atts));
@@ -187,6 +189,7 @@ class Search extends AbstractShortcode {
 		$_st = &$style; // Shorthand
 		$out = '';
 
+		$include_styles = apply_filters('asp/shortcode/include_styles', $include_styles, $style, $id);
 		// Finally make preview changes after option changes
 		if ( AjaxManager::doingAjax("ajaxsearchpro_preview") || $include_styles == 1 ) {
 			ob_start();
@@ -197,7 +200,7 @@ class Search extends AbstractShortcode {
 			?>
 			<div style='display: none;' id="asp_preview_options"><?php echo base64_encode(serialize($style)); ?></div>
 			<style>
-				<?php echo $out; ?>
+				<?php echo Css::Minify($out); ?>
 			</style>
 			<?php
 			$out = ob_get_clean();

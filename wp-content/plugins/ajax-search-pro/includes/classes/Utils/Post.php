@@ -238,46 +238,61 @@ if ( !class_exists(__NAMESPACE__ . '\Post') ) {
 			} else { // ...or just a regular field?
 				if ( $use_acf && function_exists('get_field') ) {
 					$mykey_values = get_field($field, $r->id, true);
-					if ( !is_null($mykey_values) && $mykey_values != '' && $mykey_values !== false ) {
-						if ( is_array($mykey_values) ) {
-							if ( count($mykey_values) > 0 && isset($mykey_values[0]) ) {
-								// Field display mode as Array (both label and value)
-								if ( isset($mykey_values[0]['label']) ) {
-									$labels = array();
-									foreach ( $mykey_values as $choice ) {
-										if ( isset($choice['label']) ) {
-											$labels[] = $choice['label'];
-										}
-									}
-									if ( count($labels) > 0 ) {
-										$ret = Str::anyToString($labels, $separator);
-									}
-									// Make sure this is not some sort of repeater or reference
-								} else if ( !is_object($mykey_values[0]) ) {
-									$ret = Str::anyToString($mykey_values, $separator);
-								}
-							}
-						} else {
-							$ret = Str::anyToString($mykey_values, $separator);
-						}
-					}
 				} else {
-					$mykey_values = get_post_custom_values($field, $r->id);
-					if ( isset($mykey_values[0]) ) {
-						if ( isset($field_args['is_post_id']) && is_numeric($mykey_values[0]) ) {
-							$ret = get_the_title($mykey_values[0]);
-							if ( is_wp_error($ret) || $ret == '' ) {
-								$ret = $mykey_values[0];
-							}
-							$ret = Str::anyToString( $ret, $separator );
-						} else {
-							$ret = Str::anyToString( $mykey_values[0], $separator );
+					$mykey_values = get_post_meta($r->id, $field);
+				}
+				if ( !is_null($mykey_values) && $mykey_values !== '' && $mykey_values !== false ) {
+					if ( is_array($mykey_values) ) {
+						$ret_arr = array();
+						foreach ( $mykey_values as $value ) {
+							$ret_arr[] = self::processCFValue($value, $field_args);
 						}
+						$ret = Str::anyToString( $ret_arr, $separator );
+					} else {
+						$ret = self::processCFValue($mykey_values, $field_args);
+						$ret = Str::anyToString( $ret, $separator );
 					}
 				}
 			}
 
 			return $ret;
+		}
+
+		/**
+		 * @param mixed                 $value
+		 * @param array<string, string> $field_args
+		 * @return mixed
+		 */
+		private static function processCFValue( $value, array $field_args ) {
+			if ( is_array($value) ) {
+				if ( isset($value['label']) ) {
+					return $value['label'];
+				} else {
+					$ret = array();
+					foreach ( $value as $v ) {
+						$ret[] = self::processCFValue( $v, $field_args);
+					}
+					return $ret;
+				}
+			} elseif ( is_object($value) ) { // In case of objects try fetching the IDs
+				if ( isset($value->ID) ) {
+					$title = get_the_title($value->ID);
+					if ( !is_wp_error($title) && $title !== '' ) {
+						return $title;
+					}
+				}
+			} elseif ( isset($field_args['is_post_id']) && is_numeric($value) ) {
+				$title = get_the_title( intval($value) );
+				if ( is_wp_error($title) || $title === '' ) {
+					return $value;
+				} else {
+					return $title;
+				}
+			} else {
+				return $value;
+			}
+
+			return '';
 		}
 
 		/**

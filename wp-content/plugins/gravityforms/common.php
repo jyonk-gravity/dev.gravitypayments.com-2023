@@ -972,14 +972,52 @@ class GFCommon {
 	}
 
 	public static function insert_calculation_variables( $fields, $element_id, $onchange = '', $callback = '', $max_label_size = 40 ) {
-
 		if ( $fields == null ) {
 			$fields = array();
 		}
-
 		$onchange = empty( $onchange ) ? sprintf( "InsertVariable('%s', '%s');", esc_js( $element_id ), esc_js( $callback ) ) : $onchange;
 		$class    = 'gform_merge_tags';
 		?>
+
+		<select data-js-reload="gforms-calculation-variables" id="<?php echo esc_attr( $element_id ); ?>_variable_select" class="<?php echo esc_attr( $class ); ?>" onchange="<?php echo $onchange; ?>">
+			<option value=''><?php esc_html_e( 'Insert Merge Tag', 'gravityforms' ); ?></option>
+			<optgroup label="<?php esc_attr_e( 'Allowable form fields', 'gravityforms' ); ?>">
+				<?php foreach ( $fields as $field ) {
+					if ( ! self::is_valid_for_calcuation( $field ) ) {
+						continue;
+					}
+
+					if ( RGFormsModel::get_input_type( $field ) == 'checkbox' ) {
+						foreach ( $field->inputs as $input ) { ?>
+							<option value='<?php echo esc_attr( '{' . esc_html( GFCommon::get_label( $field, $input['id'] ) ) . ':' . $input['id'] . '}' ); ?>'><?php echo esc_html( GFCommon::get_label( $field, $input['id'] ) ); ?></option>
+						<?php }
+					} else {
+						self::insert_field_variable( $field, $max_label_size );
+					}
+				} ?>
+			</optgroup>
+
+			<?php
+			$form_id = isset( $fields[0] ) ? $fields[0]->formId : rgget( 'id' );
+			$form_id = absint( $form_id );
+
+			$custom_merge_tags = apply_filters( 'gform_custom_merge_tags', array(), $form_id, $fields, $element_id );
+
+			if ( is_array( $custom_merge_tags ) && ! empty( $custom_merge_tags ) ) { ?>
+
+				<optgroup label="<?php esc_attr_e( 'Custom', 'gravityforms' ); ?>">
+
+					<?php foreach ( $custom_merge_tags as $custom_merge_tag ) { ?>
+
+						<option value='<?php echo esc_attr( rgar( $custom_merge_tag, 'tag' ) ); ?>'><?php echo esc_html( rgar( $custom_merge_tag, 'label' ) ); ?></option>
+
+					<?php } ?>
+
+				</optgroup>
+
+			<?php } ?>
+
+		</select>
 
 		<?php
 	}
@@ -1326,11 +1364,12 @@ class GFCommon {
 
 	public static function get_ul_classes( $form ) {
 
-		$description_class = rgar( $form, 'descriptionPlacement' ) == 'above' ? 'description_above' : 'description_below';
-		$sublabel_class    = rgar( $form, 'subLabelPlacement' ) == 'above' ? 'form_sublabel_above' : 'form_sublabel_below';
 		$label_class       = rgempty( 'labelPlacement', $form ) ? 'top_label' : rgar( $form, 'labelPlacement' );
+		$description_class = ( rgar( $form, 'descriptionPlacement' ) == 'above' ) && ( $label_class == 'top_label' ) ? 'description_above' : 'description_below';
+		$validation_class  = rgar( $form, 'validationPlacement' ) == 'above' ? 'validation_above' : 'validation_below';
+		$sublabel_class    = rgar( $form, 'subLabelPlacement' ) == 'above' ? 'form_sublabel_above' : 'form_sublabel_below';
 
-		$css_class = preg_replace( '/\s+/', ' ', "gform_fields {$label_class} {$sublabel_class} {$description_class}" ); //removing extra spaces
+		$css_class = preg_replace( '/\s+/', ' ', "gform_fields {$label_class} {$sublabel_class} {$description_class} {$validation_class}" ); //removing extra spaces
 
 		return $css_class;
 	}
@@ -1969,12 +2008,12 @@ class GFCommon {
 		}
 
 		// Running through variable replacement
-		$to        = GFCommon::replace_variables( $email_to, $form, $lead, false, false, false, 'text', $data );
+		$to        = GFCommon::remove_extra_commas( GFCommon::replace_variables( $email_to, $form, $lead, false, false, false, 'text', $data ) );
 		$subject   = GFCommon::replace_variables( rgar( $notification, 'subject' ), $form, $lead, false, false, false, 'text', $data );
 		$from      = GFCommon::replace_variables( rgar( $notification, 'from' ), $form, $lead, false, false, false, 'text', $data );
 		$from_name = GFCommon::replace_variables( rgar( $notification, 'fromName' ), $form, $lead, false, false, false, 'text', $data );
-		$bcc       = GFCommon::replace_variables( rgar( $notification, 'bcc' ), $form, $lead, false, false, false, 'text', $data );
-		$replyTo   = GFCommon::replace_variables( rgar( $notification, 'replyTo' ), $form, $lead, false, false, false, 'text', $data );
+		$bcc       = GFCommon::remove_extra_commas( GFCommon::replace_variables( rgar( $notification, 'bcc' ), $form, $lead, false, false, false, 'text', $data ) );
+		$replyTo   = GFCommon::remove_extra_commas( GFCommon::replace_variables( rgar( $notification, 'replyTo' ), $form, $lead, false, false, false, 'text', $data ) );
 
 		/**
 		 * Enable the CC header for the notification.
@@ -1988,7 +2027,7 @@ class GFCommon {
 		$enable_cc = gf_apply_filters( array( 'gform_notification_enable_cc', $form['id'], $notification['id'] ), false, $notification, $form );
 
 		// Set CC if enabled.
-		$cc = $enable_cc ? GFCommon::replace_variables( rgar( $notification, 'cc' ), $form, $lead, false, false, false, 'text', $data ) : null;
+		$cc = $enable_cc ? GFCommon::remove_extra_commas( GFCommon::replace_variables( rgar( $notification, 'cc' ), $form, $lead, false, false, false, 'text', $data ) ) : null;
 
 		$message_format = rgempty( 'message_format', $notification ) ? 'html' : rgar( $notification, 'message_format' );
 
@@ -2065,6 +2104,23 @@ class GFCommon {
 		self::send_email( $from, $to, $bcc, $replyTo, $subject, $message, $from_name, $message_format, $attachments, $lead, $notification, $cc );
 
 		return compact( 'to', 'from', 'bcc', 'replyTo', 'subject', 'message', 'from_name', 'message_format', 'attachments', 'cc' );
+	}
+
+	/**
+	 * Strip extra commas from email headers.
+	 *
+	 * If an email field has multiple merge tags, and not all of the fields are
+	 * filled out, we can end up with extra commas that break the header.
+	 *
+	 * @since 2.8.6
+	 *
+	 * @param $email
+	 *
+	 * @return string
+	 */
+	public static function remove_extra_commas( $email ) {
+		//return rtrim( preg_replace( '/,+/', ',', $email ), ',' );
+		return ltrim( rtrim( preg_replace( '/,+/', ',', $email ), ',' ), ',' );
 	}
 
 	public static function send_notifications( $notification_ids, $form, $lead, $do_conditional_logic = true, $event = 'form_submission', $data = array() ) {
@@ -6637,7 +6693,7 @@ Content-Type: text/html;
 		$current_locale = version_compare( get_bloginfo( 'version', 'display' ), '5.0', '>=' ) ? determine_locale() : self::legacy_determine_locale();
 		$locale         = apply_filters( 'plugin_locale', $current_locale, $domain );
 
-		if ( $locale != 'en_US' && ! is_textdomain_loaded( $domain ) ) {
+		if ( ! empty( $domain ) && $locale != 'en_US' && ! is_textdomain_loaded( $domain ) ) {
 			if ( empty( $basename ) ) {
 				$basename = plugin_basename( self::get_base_path() );
 			}

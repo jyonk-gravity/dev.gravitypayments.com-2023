@@ -249,6 +249,7 @@
 
         settingsCheckboxToggle: function( $node, checkState ) {
             let $this = this;
+
             checkState = typeof checkState == 'undefined' ? true : checkState;
             let $parent = $node,
                 $checkbox = $node.find('input[type="checkbox"]'),
@@ -260,8 +261,15 @@
                     typeof $parent.data("lvl") != "undefined" &&
                     parseInt($parent.data("lvl")) >= lvl
                 ) {
-                    if ( checkState )
+                    if (
+                        checkState &&
+                        (
+                            $this.o.settings.unselectChildren ||
+                            ( $this.o.settings.hideChildren && !$checkbox.prop("checked") ) // Uncheck if hidden
+                        )
+                    ) {
                         $parent.find('input[type="checkbox"]').prop("checked", $checkbox.prop("checked"));
+                    }
                     // noinspection JSUnresolvedVariable
                     if ( $this.o.settings.hideChildren ) {
                         if ( $checkbox.prop("checked") ) {
@@ -270,9 +278,9 @@
                             $parent.addClass("hiddend");
                         }
                     }
-                }
-                else
+                } else {
                     break;
+                }
                 i++;
                 if ( i > 400 ) break; // safety first
             }
@@ -651,6 +659,17 @@
             });
             $(document).on($this.clickTouchend, handler);
 
+            const setOptionCheckedClass = ()=>{
+                $this.n('searchsettings').find('.asp_option, .asp_label').each(function(el){
+                    if ( $(el).find('input').prop("checked") ) {
+                        $(el).addClass('asp_option_checked');
+                    } else {
+                        $(el).removeClass('asp_option_checked');
+                    }
+                });
+            };
+            setOptionCheckedClass();
+
             // Note if the settings have changed
             $this.n('searchsettings').on('click', function(){
                 $this.settingsChanged = true;
@@ -677,12 +696,18 @@
             // Category level automatic checking and hiding
             $('.asp_option_cat input[type="checkbox"]', $this.n('searchsettings')).on('asp_chbx_change', function(){
                 $this.settingsCheckboxToggle( $(this).closest('.asp_option_cat') );
+                setOptionCheckedClass();
             });
+
+            // Radio clicks
+            $('input[type="radio"]', $this.n('searchsettings')).on('change', function(){
+                setOptionCheckedClass();
+            });
+
             // Init the hide settings
             $('.asp_option_cat', $this.n('searchsettings')).each(function(el){
                 $this.settingsCheckboxToggle( $(el), false );
             });
-
 
             // Emulate click on checkbox on the whole option
             //$('div.asp_option', $this.nodes.searchsettings).on('mouseup touchend', function(e){
@@ -694,6 +719,7 @@
                     return false;
                 }
                 $(this).find('input[type="checkbox"]').prop("checked", !$(this).find('input[type="checkbox"]').prop("checked"));
+
                 // Trigger a custom change event, for max compatibility
                 // .. the original change is buggy for some installations.
                 clearTimeout(t);
@@ -734,8 +760,10 @@
             // Select all checkboxes
             $('.asp_option_cat input[type="checkbox"], .asp_option_cff input[type="checkbox"]', $this.n('searchsettings')).on('asp_chbx_change', function(){
                 let className = $(this).data("targetclass");
-                if ( typeof className == 'string' && className != '')
+                if ( typeof className == 'string' && className != '') {
                     $("input." + className, $this.n('searchsettings')).prop("checked", $(this).prop("checked"));
+                }
+                setOptionCheckedClass();
             });
         }
     }

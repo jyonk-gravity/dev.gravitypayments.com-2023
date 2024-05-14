@@ -455,6 +455,7 @@ class SearchPostTypes extends AbstractSearch {
 			$this->c_blogid as blogid,
 			$wpdb->posts.post_date as date,
 			$wpdb->posts.post_date as post_date,
+			$wpdb->posts.post_modified as post_modified,
 			$select_content as content,
 			$select_excerpt as excerpt,
 			$wpdb->posts.post_type as post_type,
@@ -1176,6 +1177,7 @@ class SearchPostTypes extends AbstractSearch {
 
 	public static function orderBy(&$posts, $args = array()) {
 		$args = wp_parse_args($args, array(
+			'engine' => 'regular',
 			'primary_ordering' => 'relevance DESC',
 			'primary_ordering_metatype' => 'numeric',
 			'secondary_ordering' => 'relevance DESC',
@@ -1229,6 +1231,16 @@ class SearchPostTypes extends AbstractSearch {
 										break;
 									case "post_date ASC":
 										$diff = strtotime($a->post_date) - strtotime($b->post_date);
+										if ($diff == 0)
+											$diff = $a->id - $b->id;
+										break;
+									case "post_modified DESC":
+										$diff = strtotime($b->post_modified) - strtotime($a->post_modified);
+										if ($diff == 0)
+											$diff = $b->id - $a->id;
+										break;
+									case "post_modified ASC":
+										$diff = strtotime($a->post_modified) - strtotime($b->post_modified);
 										if ($diff == 0)
 											$diff = $a->id - $b->id;
 										break;
@@ -1648,18 +1660,21 @@ class SearchPostTypes extends AbstractSearch {
 				$_content = wd_substr_at_word($_content, $description_length);
 			}
 
-			add_filter('asp_cpt_advanced_field_value', function($value, $field) use($description_length, $sd, $s, $_s) {
-				$value = Post::dealWithShortcodes($value, $sd['shortcode_op'] == "remove");
-				$value = Html::stripTags($value, $sd['striptagsexclude']);
-				if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '' ) {
-					$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
-				} else if ( $value != '' && (  MB::strlen( $value ) > $description_length ) ) {
-					$value = wd_substr_at_word($value, $description_length);
-				}
-				return $value;
-			}, 10, 2);
-
 			if ( !empty($sd['advdescriptionfield']) ) {
+				$cb = function($value, $field, $results, $field_args) use($description_length, $sd, $s, $_s) {
+					$value = Post::dealWithShortcodes($value, $sd['shortcode_op'] == "remove");
+					$strip_tags = $field_args['strip_tags'] ?? 1;
+					if ( strpos($field, 'html') === false && $strip_tags ) {
+						$value = Html::stripTags($value, $sd['striptagsexclude']);
+						if ( $sd['description_context'] == 1 && count( $_s ) > 0 && $s != '' ) {
+							$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
+						} else if ( $value != '' && (  MB::strlen( $value ) > $description_length ) ) {
+							$value = wd_substr_at_word($value, $description_length);
+						}
+					}
+					return $value;
+				};
+				add_filter('asp_cpt_advanced_field_value', $cb, 10, 4);
 				$_content = $this->advField(
 					array(
 						'main_field_slug' => 'descriptionfield',
@@ -1669,6 +1684,7 @@ class SearchPostTypes extends AbstractSearch {
 					),
 					$com_options['use_acf_getfield']
 				);
+				remove_filter('asp_cpt_advanced_field_value', $cb, 10);
 			}
 
 			$r->content = wd_closetags( $_content );
@@ -1702,15 +1718,16 @@ class SearchPostTypes extends AbstractSearch {
 	/**
 	 * Generates the final field, based on the advanced field pattern
 	 *
-	 * @param $f_args - Field related arguments
-	 * @param $use_acf - If true, uses ACF get_field() function to get the meta
-	 * @param $empty_on_missing - If true, returns an empty string if any of the fields is empty.
+	 * @param array $f_args - Field related arguments
+	 * @param bool $use_acf - If true, uses ACF get_field() function to get the meta
+	 * @param bool $empty_on_missing - If true, returns an empty string if any of the fields is empty.
+	 * @param integer $depth - Recursion depth
 	 *
 	 * @return string Final post title
 	 * @noinspection PhpMissingParamTypeInspection
 	 *
 	 */
-	protected function advField( $f_args, $use_acf = false, $empty_on_missing = false  ): string {
+	protected function advField( array $f_args, bool $use_acf = false, bool $empty_on_missing = false, int $depth = 0  ): string {
 		$args = &$this->args;
 
 		$specials = array(
@@ -1732,6 +1749,18 @@ class SearchPostTypes extends AbstractSearch {
 		}
 		$field_pattern = $f_args['field_pattern']; // Let's not make changes to arguments, shall we.
 
+		// Handle shortcode patterns
+		if ( $depth === 0 && strpos($field_pattern, '[[') !== false ) {
+			$do_shortcodes = true;
+			$field_pattern = str_replace(
+				array('[[', ']]'),
+				array('____shortcode_start____', '____shortcode_end____'),
+				$field_pattern
+			);
+		} else {
+			$do_shortcodes = false;
+		}
+
 		// Find conditional patterns, like [prefix {field} suffix}
 		preg_match_all( "/(\[.*?\])/", $field_pattern, $matches );
 		if ( isset( $matches[0] ) && isset( $matches[1] ) && is_array( $matches[1] ) ) {
@@ -1741,7 +1770,8 @@ class SearchPostTypes extends AbstractSearch {
 				$processed_fieldset = $this->advField(
 					$_f_args,
 					$use_acf,
-					true
+					true,
+					$depth + 1
 				);
 				// Replace the original with the processed version, first occurrence, in case of duplicates
 				$field_pattern = Str::replaceFirst($fieldset, $processed_fieldset, $field_pattern);
@@ -1856,6 +1886,16 @@ class SearchPostTypes extends AbstractSearch {
 				$val = apply_filters('asp_cpt_advanced_field_value', $val, $field, $f_args['r'], $f_args);
 				$field_pattern = str_replace( '{'.$complete_field.'}', $val, $field_pattern );
 			}
+		}
+
+		// On depth=0 and if tags were found $do_shortcodes is true
+		if ( $do_shortcodes ) {
+			$field_pattern = str_replace(
+				array('____shortcode_start____', '____shortcode_end____'),
+				array('[', ']'),
+				$field_pattern
+			);
+			$field_pattern = do_shortcode($field_pattern);
 		}
 
 		return $field_pattern;

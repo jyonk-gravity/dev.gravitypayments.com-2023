@@ -35,6 +35,15 @@ var _this = this;
       }).then(function (token) {
         if (token.length && typeof token === 'string') {
           dataInput.val(token);
+        } // Sometimes the submit button is disabled to prevent the user from clicking it again,
+        // for example when 3DS is being processed for stripe elements.
+        // We need to enable it before submitting the form, otherwise it won't be submitted.
+
+
+        var $submitButton = $('#gform_submit_button_' + form[0].dataset.formid);
+
+        if ($submitButton.prop('disabled') === true) {
+          $submitButton.prop('disabled', false);
         }
 
         form.submit();
@@ -53,11 +62,7 @@ var _this = this;
 
   var addFormEventListeners = function addFormEventListeners(formId) {
     var $form = $("#gform_".concat(formId, ":not(.recaptcha-v3-initialized)"));
-    var $submit = $form.find("#gform_submit_button_".concat(formId));
     $form.on('submit', {
-      form: $form
-    }, getToken);
-    $submit.on('click', {
       form: $form
     }, getToken);
     $form.addClass('recaptcha-v3-initialized');

@@ -5,6 +5,7 @@ use WPDRMS\ASP\Asset\GeneratorInterface;
 use WPDRMS\ASP\Asset\Script\Requirements;
 use WPDRMS\ASP\Utils\FileManager;
 use WPDRMS\ASP\Utils\Str;
+use WPDRMS\ASP\Utils\Css;
 
 defined('ABSPATH') or die("You can't access this file directly.");
 
@@ -90,42 +91,6 @@ if ( !class_exists(__NAMESPACE__ . '\Generator') ) {
 			return $css_arr;
 		}
 
-		private function minify($css) {
-			// Normalize whitespace
-			$css = preg_replace( '/\s+/', ' ', $css );
-			// Remove spaces before and after comment
-			$css = preg_replace( '/(\s+)(\/\*(.*?)\*\/)(\s+)/', '$2', $css );
-			// Remove comment blocks, everything between /* and */, unless
-			// preserved with /*! ... */ or /** ... */
-			$css = preg_replace( '~/\*(?![\!|\*])(.*?)\*/~', '', $css );
-			// Remove space after , : ; { } */ >
-			$css = preg_replace( '/(,|:|;|\{|}|\*\/|>) /', '$1', $css );
-			// Remove space before , ; { } ( ) >
-			$css = preg_replace( '/ (,|;|\{|}|\(|\)|>)/', '$1', $css );
-			// Add back the space for media queries operator
-			$css = preg_replace( '/and\(/', 'and (', $css );
-			// Strips leading 0 on decimal values (converts 0.5px into .5px)
-			$css = preg_replace( '/(:| )0\.([0-9]+)(%|em|ex|px|in|cm|mm|pt|pc)/i', '${1}.${2}${3}', $css );
-			// Strips units if value is 0 (converts 0px to 0)
-			$css = preg_replace( '/(:| )(\.?)0(%|em|ex|px|in|cm|mm|pt|pc)/i', '${1}0', $css );
-			// Converts all zeros value into short-hand
-			$css = preg_replace( '/0 0 0 0;/', '0;', $css );
-			$css = preg_replace( '/0 0 0 0\}/', '0}', $css );
-			// Invisible inset box shadow
-			$css = preg_replace( '/box-shadow:0 0 0(?: 0)? [a-fA-F0-9()#,rgb]+(?: inset)?([};])/i', 'box-shadow:none${1}', $css );
-			// Transparent box shadow
-			$css = preg_replace( '/box-shadow:[0-9px ]+ (transparent inset|transparent)([};])/i', 'box-shadow:none${2}', $css );
-			// Invisible text shadow
-			$css = preg_replace( '/text-shadow:0 0(?: 0)? [a-fA-F0-9()#,rgb]+([};])/i', 'text-shadow:none${1}', $css );
-			// Transparent text shadow
-			$css = preg_replace( '/text-shadow:[0-9px ]+ transparent([};])/i', 'text-shadow:none${1}', $css );
-			// Shorten 6-character hex color codes to 3-character where possible
-			$css = preg_replace( '/#([a-f0-9])\\1([a-f0-9])\\2([a-f0-9])\\3/i', '#\1\2\3', $css );
-			// Remove ; before }
-			$css = preg_replace( '/;(?=\s*})/', '', $css );
-			return trim( $css );
-		}
-
 		private function saveFiles($basic_css, $instance_css_arr): string {
 			// Too big, disabled...
 			$css = implode(" ", $instance_css_arr);
@@ -133,15 +98,15 @@ if ( !class_exists(__NAMESPACE__ . '\Generator') ) {
 			// Individual CSS rules by search ID
 			foreach ($instance_css_arr as $sid => &$c) {
 				if ( $this->minify ) {
-					$c = $this->minify($c);
+					$c = Css::Minify($c);
 				}
 				FileManager::_o()->write(wd_asp()->cache_path . "search" . $sid . ".css", $c);
 			}
 
 			// Save the style instances file nevertheless, even if async enabled
 			if ( $this->minify ) {
-				$css = $this->minify($css);
-				$basic_css = $this->minify($basic_css);
+				$css = Css::Minify($css);
+				$basic_css = Css::Minify($basic_css);
 			}
 
 			FileManager::_o()->write(wd_asp()->cache_path . "style.instances.css", $basic_css . $css);

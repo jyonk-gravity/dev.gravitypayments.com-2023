@@ -822,6 +822,14 @@ class Manager {
 							}
 				        }
 				    } else {
+					    if ( is_object($v) ) { // In case of objects try fetching the IDs
+						    if ( isset($v->ID) ) {
+							    $title = get_the_title($v->ID);
+							    if ( !is_wp_error($title) && $title !== '' ) {
+								    $v = $title;
+							    }
+						    }
+					    }
     					$v = Str::anyToString( $v );
     					if ( $v != '' ) {
     						if ( isset($acf_labels[$v]) && $v != $acf_labels[$v] ) {

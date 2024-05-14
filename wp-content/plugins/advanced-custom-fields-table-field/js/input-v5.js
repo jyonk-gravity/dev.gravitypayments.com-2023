@@ -4,7 +4,7 @@
 
 		var t = this;
 
-		t.version = '1.3.21';
+		t.version = '1.3.22';
 
 		t.param = {};
 
@@ -601,7 +601,10 @@
 
 					// HEADER IS NOT ALLOWED
 
-					if ( p.field_options.use_header === 2 ) {
+					if (
+						p.field_options.use_header === 2 &&
+						p.data.p.o.uh !== 0
+					) {
 
 						p.obj_table.addClass( 'acf-table-hide-header' );
 
@@ -611,7 +614,10 @@
 
 					// HEADER IS REQUIRED
 
-					if ( p.field_options.use_header === 1 ) {
+					if (
+						p.field_options.use_header === 1 &&
+						p.data.p.o.uh !== 1
+					) {
 
 						p.data.p.o.uh = 1;
 						t.update_table_data_field( p );
@@ -1343,14 +1349,10 @@
 
 		t.field_changed = function( p ) {
 
-			if ( p.field_context === 'block' ) {
+			setTimeout( function() {
 
-				setTimeout( function() {
-
-					p.obj_root.trigger( 'change' );
-
-				}, 0 );
-			}
+				p.obj_root.trigger( 'change' );
+			}, 0 );
 		};
 
 		t.sort_cols = function( p ) {

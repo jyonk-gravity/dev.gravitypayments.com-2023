@@ -253,26 +253,47 @@ class Preload
         $parent_exclusions = apply_filters('perfmatters_critical_image_parent_exclusions', array());
         if(!empty($parent_exclusions)) {
 
-            //match all selectors
-            preg_match_all('#<(div|section|figure)(\s[^>]*?(' . implode('|', $parent_exclusions) . ').*?)>.*?<\/\g1>#is', $clean_html, $selectors, PREG_SET_ORDER);
+            //clean html doc
+            $clean_dom = new \DOMDocument();
+            $clean_dom->loadHTML($clean_html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
+            $xpath = new \DOMXpath($clean_dom);
 
-            if(!empty($selectors)) {
+            //search for excluded parents
+            array_walk($parent_exclusions, function(&$exclusion) {
+                $exclusion = 'contains(@*, "' . $exclusion . '")';
+            });
+            $exclusion_string = implode(' or ', $parent_exclusions);
+            $elements = $xpath->query("//div[" . $exclusion_string . "]|//section[" . $exclusion_string . "]|//figure[" . $exclusion_string . "]");
 
-                foreach($selectors as $selector) {
+            if(!is_null($elements)) {
 
-                    //match all img tags
-                    preg_match_all('#<img([^>]+?)\/?>#is', $selector[0], $images, PREG_SET_ORDER);
+                $image_excluded = false;
 
+                //search for images inside parents
+                foreach($elements as $element) {
+                    $images = $element->getElementsByTagName('img');
                     if(!empty($images)) {
+                        for($i = $images->length; --$i >= 0;) {
 
-                        //loop through images
-                        foreach($images as $image) {
-
-                            //remove image from current working clean html
-                            $clean_html = str_replace($image[0], '', $clean_html);
+                            //remove images from clean DOMDocument
+                            $image = $images->item($i);
+                            $image->parentNode->removeChild($image);
                         }
+                        $image_excluded = true;
                     }
                 }
+            }
+
+            //have excluded images
+            if($image_excluded) {
+
+                //save main html as DOMDocument to match
+                $dom = new \DOMDocument();
+                $dom->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
+                $html = $dom->saveHTML();
+
+                //save clean html
+                $clean_html = $clean_dom->saveHTML();
             }
         }
 

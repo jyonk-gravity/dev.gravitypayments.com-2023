@@ -926,6 +926,8 @@ input[type=button].wd_button_blue,
     flex-direction: row;
     flex-grow: 0;
     flex-shrink: 0;
+    justify-content: right;
+    gap: 12px 0;
 }
 
 #wpdreams .item-flex-two-column > *,
@@ -935,6 +937,7 @@ input[type=button].wd_button_blue,
 
 #wpdreams .item.item-flex-nogrow > div {
     flex-grow: 0;
+    margin: initial;
 }
 
 #wpdreams .item.item-flex-nogrow > div:first-child {

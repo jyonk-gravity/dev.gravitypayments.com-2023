@@ -1132,6 +1132,7 @@ class SearchQuery {
 
 
 		SearchPostTypes::orderBy($ra['allpageposts'], array(
+			'engine' => $args['engine'],
 			'primary_ordering' => $args['post_primary_order'],
 			'primary_ordering_metatype' => $args['post_primary_order_metatype'],
 			'secondary_ordering' => $args['post_secondary_order'],

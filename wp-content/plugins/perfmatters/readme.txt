@@ -4,8 +4,8 @@ Donate link: https://perfmatters.io
 Tags: perfmatters
 Requires at least: 5.5
 Requires PHP: 7.0
-Tested up to: 6.4.3
-Stable tag: 2.2.5
+Tested up to: 6.5.2
+Stable tag: 2.2.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,26 @@ Perfmatters is a lightweight performance plugin developed to speed up your WordP
 Check out our [documentation](https://perfmatters.io/docs/) for more information on how to use Perfmatters.
 
 == Changelog ==
+
+= 2.2.7 - 04.19.2024 =
+* Added new perfmatters_used_css_below filter.
+* Added new perfmatters_defer_js_exclusions filter.
+* Added new perfmatters_delay_js_fastclick filter.
+* Added additional DOMDocument flag to parent exclusion filters for better compatibility.
+* Added GiveWP request parameter to excluded page builders array.
+* Updated Delay JS quick exclusion for WooCommerce Single Product Gallery with additional scripts to help with zoom and lightbox functionality.
+* Updated Delay JS quick exclusion for Cookie Notice with additional scripts.
+* Moved Script Manager CSS to stylesheet printed inline instead of from a PHP file.
+
+= 2.2.6 - 03.18.2024 =
+* Added new perfmatters_defer_jquery filter.
+* Added Delay JS quick exclusion for Monumetric Ads.
+* Updated content URL reference to use content_url function instead of constant when generating root directory path.
+* Updated local stylesheet URL replace function to be case insensitive.
+* Updated new parent exclusion filters to use DOMDocument instead of regex to allow support for targeting images inside nested containers.
+* Fixed an issue where certain scripts were not being deferred properly when delay JavaScript option was also enabled.
+* Fixed an issue where abnormal image URLs would sometimes generate a warning when trying to parse for image dimensions.
+* Translation updates.
 
 = 2.2.5 - 02.29.2024 =
 * Added new perfmatters_critical_image_parent_exclusions filter.

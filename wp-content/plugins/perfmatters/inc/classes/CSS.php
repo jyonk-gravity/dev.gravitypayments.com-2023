@@ -136,7 +136,7 @@ class CSS
                     $local_url = !empty($custom_url) ? trailingslashit($custom_url) : array(trailingslashit(home_url()), trailingslashit(site_url()));
 
                     //get local stylesheet path
-                    $url = str_replace($local_url, '', explode('?', $stylesheet[2])[0]);
+                    $url = str_ireplace($local_url, '', explode('?', $stylesheet[2])[0]);
     
                     $file = Utilities::get_root_dir_path() . ltrim($url, '/');
 
@@ -182,8 +182,9 @@ class CSS
                 }
             }
 
-            //print used css inline after first title tag
-            $pos = strpos($html, '</title>');
+            //print used css
+            $tag = !apply_filters('perfmatters_used_css_below', false) ? '</title>' : '</head>';
+            $pos = strpos($html, $tag);
             if($pos !== false) {
 
                 //print file
@@ -200,8 +201,13 @@ class CSS
                 else {
                     $used_css_output = '<style id="perfmatters-used-css">' . file_get_contents($used_css_path) . '</style>';
                 }
-                
-                $html = substr_replace($html, '</title>' . $used_css_output, $pos, 8);
+
+                if($tag == '</title>') {
+                    $html = substr_replace($html, '</title>' . $used_css_output, $pos, 8);
+                }
+                else {
+                    $html = str_replace('</head>', $used_css_output . '</head>', $html);
+                }
             }
 
             //delay stylesheet script

@@ -552,7 +552,7 @@ $info_data= isset($info['data']) && is_array($info['data']) ? $info['data'] : ar
   //
     $api_type=$this->post('api',$info_data);   
   if($api_type == "web"){    
-  $fields=$this->web_fields($module,$map);
+  $fields=$this->web_fields($module,$map); 
   }else{
   if($this->ajax){ 
   $api=$this->get_api($info);

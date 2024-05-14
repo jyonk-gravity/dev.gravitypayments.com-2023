@@ -8,6 +8,7 @@ use WPDRMS\ASP\Hooks\AjaxManager;
 use WPDRMS\ASP\Hooks\FiltersManager;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 use WPDRMS\ASP\Updates\Remote as UpdatesRemote;
+use WPDRMS\Backend\Blocks\SearchBlocks;
 
 if (!defined('ABSPATH')) die('-1');
 
@@ -71,8 +72,9 @@ class Manager {
 		$this->loadIncludes();
 		$this->loadShortcodes();
 		$this->loadMenu();
-
 		$this->loadHooks();
+
+		\WPDRMS\ASP\NavMenu\Controller::getInstance();
 
 		wd_asp()->init->safety_check();
 
@@ -272,9 +274,9 @@ class Manager {
 			require_once(ASP_PATH . "/backend/metaboxes/default.php");
 		}
 
-		if ( wpdreams_on_backend_post_editor() || ( isset($_GET, $_GET['context']) && $_GET['context'] == 'edit') ) {
-			require_once(ASP_PATH . "/backend/gutenberg/gutenberg.php");
-		}
+		// FSE & Gutenberg
+		require_once ASP_PATH . '/backend/Blocks/SearchBlocks.php';
+		SearchBlocks::_o();
 
 		wd_asp()->css_manager = Asset\Css\Manager::getInstance();
 

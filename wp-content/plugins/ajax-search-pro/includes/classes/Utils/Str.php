@@ -160,8 +160,14 @@ if ( !class_exists(__NAMESPACE__ . '\Str') ) {
 				foreach ( $any as $sub_arr ) {
 					$str_arr[] = self::anyToString( $sub_arr, $separator, $level + 1 );
 				}
-				$str = implode($separator, $str_arr);
+				$str_arr = array_filter( $str_arr, fn( $value ) => $value !== '' );
+				$str = implode( $separator, $str_arr );
 			} else {
+				// Invalid values
+				if ( is_bool($any) || is_null($any) || ( is_float($any) && is_nan($any) ) ) {
+					return '';
+				}
+
 				// Check for objects, as those yield a fatal error when converted to strings
 				if ( !is_object($any) ) {
 					$str = (string) $any;
