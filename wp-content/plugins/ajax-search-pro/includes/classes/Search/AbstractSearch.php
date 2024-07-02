@@ -1,88 +1,102 @@
 <?php
 namespace WPDRMS\ASP\Search;
 
+use stdClass;
+use WPDRMS\ASP\Models\SearchQueryArgs;
 use WPDRMS\ASP\Utils\MB;
 use WPDRMS\ASP\Utils\Str;
 
-defined('ABSPATH') or die("You can't access this file directly.");
+defined('ABSPATH') || die("You can't access this file directly.");
 
+/**
+ * Search Abstract
+ *
+ * @phpstan-type ResultObj stdClass&object{
+ *     id: int,
+ *     blogid: int,
+ *     relevance: int
+ * }
+ *
+ * @phpstan-type QueryParts array<int, array<int, array<string>>>
+ */
 abstract class AbstractSearch {
-
-	// Total results count (unlimited)
-	public $results_count = 0;
-
-	// Actual results count, results which are returned
-	public $return_count = 0;
+	/**
+	 * @var int Total results count (unlimited)
+	 */
+	public int $results_count = 0;
 
 	/**
-	 * @var array of parameters
+	 * @var int Actual results count, results which are returned
 	 */
-	protected $args;
+	public int $return_count = 0;
 
-	protected $pre_field = '';
-	protected $suf_field = '';
-	protected $pre_like  = '';
-	protected $suf_like  = '';
+	/**
+	 * @var SearchQueryArgs Parameters
+	 */
+	protected SearchQueryArgs $args;
+
+	protected string $pre_field = '';
+	protected string $suf_field = '';
+	protected string $pre_like  = '';
+	protected string $suf_like  = '';
 
 	/**
 	 * @var int the remaining limit (number of items to look for)
 	 */
-	protected $remaining_limit;
+	protected int $remaining_limit;
 	/**
 	 * @var int the start of the limit
 	 */
-	protected $limit_start = 0;
+	protected int $limit_start = 0;
 	/**
 	 * @var int remaining limit modifier
 	 */
-	protected $remaining_limit_mod = 10;
+	protected int $remaining_limit_mod = 10;
 
 	/**
-	 * @var array of submitted options from the front end
+	 * @var array<string, mixed> Submitted options from the front end
 	 */
-	protected $options;
+	protected array $options;
+
 	/**
-	 * @var int the ID of the current search instance
+	 * @var ResultObj[] Results
 	 */
-	protected $searchId;
+	protected array $results = array();
 	/**
-	 * @var array of results
+	 * @var string The search phrase
 	 */
-	protected $results;
+	protected string $s;
 	/**
-	 * @var string the search phrase
+	 * @var string[] Each search phrase
 	 */
-	protected $s;
+	protected array $_s; // @phpcs:ignore
 	/**
-	 * @var array of each search phrase
+	 * @var string The reversed search phrase
 	 */
-	protected $_s;
+	protected string $sr;
 	/**
-	 * @var string the reversed search phrase
+	 * @var string[] Each reversed search phrase
 	 */
-	protected $sr;
-	/**
-	 * @var array of each reversed search phrase
-	 */
-	protected $_sr;
+	protected array $_sr; // @phpcs:ignore
 
 	/**
 	 * @var int the current blog ID
 	 */
-	protected $c_blogid;
+	protected int $c_blogid;
 	/**
 	 * @var string the final search query
 	 */
-	protected $query;
+	protected string $query;
 
 	/**
-	 * Create the class
+	 * @param SearchQueryArgs $args Parameters
 	 */
-	public function __construct($args) {
+	public function __construct( SearchQueryArgs $args ) {
 		$this->args = $args;
 
-		if ( isset($args['_remaining_limit_mod']) )
+		if ( isset($args['_remaining_limit_mod']) ) {
 			$this->remaining_limit_mod = $args['_remaining_limit_mod'];
+		}
 
 		$this->c_blogid = get_current_blog_id();
 	}
@@ -90,74 +104,79 @@ abstract class AbstractSearch {
 	/**
 	 * Initiates the search operation
 	 *
-	 * @param $s
-	 * @return array
-	 * @noinspection PhpMissingParamTypeInspection
+	 * @param string $s Search Phrase
+	 * @return ResultObj[]
 	 */
-	public function search( $s = '' ): array {
+	public function search( string $s = '' ): array {
 
-		if ( MB::strlen($s) > 120 )
+		if ( MB::strlen($s) > 120 ) {
 			$s = MB::substr($s, 0, 120);
+		}
 
 		$this->prepareKeywords($s);
 		$this->doSearch();
 		$this->postProcess();
 
-		return is_array($this->results) ? $this->results : array();
+		return $this->results;
 	}
 
-	public function prepareKeywords($s) {
+	/**
+	 * @param null|string $s Search Phrase
+	 * @return void
+	 */
+	public function prepareKeywords( ?string $s ): void {
 
-		if ( $s !== false )
+		if ( $s !== null ) {
 			$keyword = $s;
-		else
+		} else {
 			$keyword = $this->args['s'];
+		}
 
 		// This is the "japanese" ideographic space character, replaced by the regular space
-		$keyword = preg_replace("@[ 　]@u", ' ', $keyword);
+		$keyword = preg_replace('@[ 　]@u', ' ', $keyword);
 
-		$keyword = $this->compatibility($keyword);
+		$keyword     = $this->compatibility($keyword);
 		$keyword_rev = Str::reverse($keyword);
 
-		$this->s = Str::escape( $keyword );
+		$this->s  = Str::escape( $keyword );
 		$this->sr = Str::escape( $keyword_rev );
 
 		/**
 		 * Avoid double escape, explode the $keyword instead of $this->s
 		 * Regex to match individual words and phrases between double quotes
-		 **/
+		 */
 		if (
-			preg_match_all( '/«.*?»/', $keyword, $m ) > 0 &&  // Only if there is at lease one complete «text» match
+			preg_match_all( '/«.*?»/', $keyword, $m ) > 0 && // Only if there is at lease one complete «text» match
 			preg_match_all( '/«.*?(»|$)|((?<=[\t «,+])|^)[^\t »,+]+/', $keyword, $matches )
 		) {
 			$this->_s = $this->parseSearchTerms(  $matches[0] );
-		} else if (
+		} elseif (
 			preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $keyword, $matches )
 		) {
 			$this->_s = $this->parseSearchTerms(  $matches[0] );
 		} else {
-			$this->_s = $this->parseSearchTerms( explode(" ", $keyword) );
+			$this->_s = $this->parseSearchTerms( explode(' ', $keyword) );
 		}
 		if (
-			preg_match_all( '/«.*?»/', $keyword_rev, $m ) > 0 &&  // Only if there is at lease one complete «text» match
+			preg_match_all( '/«.*?»/', $keyword_rev, $m ) > 0 && // Only if there is at lease one complete «text» match
 			preg_match_all( '/«.*?(»|$)|((?<=[\t «,+])|^)[^\t »,+]+/', $keyword_rev, $matches )
 		) {
 			$this->_sr = $this->parseSearchTerms(  array_reverse($matches[0]) );
-		} else if ( preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $keyword_rev, $matches ) ) {
+		} elseif ( preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $keyword_rev, $matches ) ) {
 			$this->_sr = $this->parseSearchTerms(  array_reverse($matches[0]) );
 		} else {
-			$this->_sr = $this->parseSearchTerms( array_reverse( explode(" ", $keyword_rev ) ) );
+			$this->_sr = $this->parseSearchTerms( array_reverse( explode(' ', $keyword_rev ) ) );
 		}
 
-		foreach ($this->_s as $k=>$w) {
+		foreach ( $this->_s as $k =>$w ) {
 			if ( MB::strlen($w) < $this->args['min_word_length'] ) {
-				unset($this->_s[$k]);
+				unset($this->_s[ $k ]);
 			}
 		}
 
-		foreach ($this->_sr as $k=>$w) {
+		foreach ( $this->_sr as $k =>$w ) {
 			if ( MB::strlen($w) < $this->args['min_word_length'] ) {
-				unset($this->_sr[$k]);
+				unset($this->_sr[ $k ]);
 			}
 		}
 
@@ -165,7 +184,7 @@ abstract class AbstractSearch {
 		 * Reindex the arrays, in case there are missing keys from the previous removals
 		 */
 		if ( count($this->_s) > 0 ) {
-			$this->_s = array_values($this->_s);
+			$this->_s  = array_values($this->_s);
 			$this->_sr = array_values($this->_sr);
 		}
 	}
@@ -173,29 +192,31 @@ abstract class AbstractSearch {
 	/**
 	 * Check if the terms are suitable for searching.
 	 *
-	 * @param array $terms Terms to check.
-	 * @return array Terms
+	 * @param string[] $terms Terms to check.
+	 * @return string[] Terms
 	 */
-	protected function parseSearchTerms(array $terms ): array {
+	protected function parseSearchTerms( array $terms ): array {
 		$checked = array();
 
 		foreach ( $terms as $term ) {
 			// keep before/after spaces when term is for exact match
 			if ( preg_match( '/^".+"$/', $term ) ) {
 				$term = trim($term, "\"'");
-			} else if ( preg_match( '/^«.+»$/', $term ) ) { // same for russian quotes
+			} elseif ( preg_match( '/^«.+»$/', $term ) ) { // same for russian quotes
 				$term = trim($term, "«»'");
 			} else {
 				$term = trim($term, "\"' ");
 			}
-			if ( $term != '' )
+			if ( $term !== '' ) {
 				$checked[] = $term;
+			}
 		}
 
-		if ( count($checked) > 0 )
+		if ( count($checked) > 0 ) {
 			$checked = Str::escape(
 				array_slice(array_unique($checked), 0, $this->args['_keyword_count_limit'])
 			);
+		}
 
 		return $checked;
 	}
@@ -203,31 +224,32 @@ abstract class AbstractSearch {
 	/**
 	 * The search function
 	 */
-	abstract protected function doSearch();
+	abstract protected function doSearch(): void;
 
 	/**
 	 * Post-processing abstract
 	 */
-	protected function postProcess() {}
+	protected function postProcess(): void {}
 
 	/**
 	 * Converts the keyword to the correct case and sets up the pre-suff fields.
 	 *
-	 * @param $s
+	 * @param string $s
 	 * @return string
 	 */
-	protected function compatibility($s): string {
+	protected function compatibility( string $s ): string {
 		/**
 		 *  On forced case sensitivity: Let's add BINARY keyword before the LIKE
 		 *  On forced case in-sensitivity: Append the lower() function around each field
 		 */
 		if ( $this->args['_db_force_case'] === 'sensitivity' ) {
 			$this->pre_like = 'BINARY ';
-		} else if ( $this->args['_db_force_case'] === 'insensitivity' ) {
-			if ( function_exists( 'mb_convert_case' ) )
-				$s = mb_convert_case( $s, MB_CASE_LOWER, "UTF-8" );
-			else
+		} elseif ( $this->args['_db_force_case'] === 'insensitivity' ) {
+			if ( function_exists( 'mb_convert_case' ) ) {
+				$s = mb_convert_case( $s, MB_CASE_LOWER, 'UTF-8' );
+			} else {
 				$s = strtoupper( $s );
+			}
 			// if no mb_ functions :(
 
 			$this->pre_field .= 'lower(';
@@ -237,16 +259,16 @@ abstract class AbstractSearch {
 		/**
 		 *  Check if utf8 is forced on LIKE
 		 */
-		if ( w_isset_def( $this->args['_db_force_utf8_like'], 0 ) == 1 )
+		if ( $this->args['_db_force_utf8_like'] ) {
 			$this->pre_like .= '_utf8';
+		}
 
 		/**
 		 *  Check if unicode is forced on LIKE, but only apply if utf8 is not
 		 */
-		if ( w_isset_def( $this->args['_db_force_unicode'], 0 ) == 1
-			&& w_isset_def( $this->args['_db_force_utf8_like'], 0 ) == 0
-		)
+		if ( $this->args['_db_force_unicode'] && !$this->args['_db_force_utf8_like'] ) {
 			$this->pre_like .= 'N';
+		}
 
 		return $s;
 	}
@@ -254,69 +276,68 @@ abstract class AbstractSearch {
 	/**
 	 * Builds the query from the parts
 	 *
-	 * @param $parts
+	 * @param QueryParts $parts
 	 *
 	 * @return string query
 	 */
-	protected function buildQuery( $parts ): string {
+	protected function buildQuery( array $parts ): string {
 
-		$args = &$this->args;
-		$kw_logic = str_replace('EX', '', strtoupper( $args['keyword_logic'] ) );
-		$kw_logic = $kw_logic != 'AND' && $kw_logic != 'OR' ? 'AND' : $kw_logic;
+		$args     = &$this->args;
+		$kw_logic = str_replace('ex', '', $args['keyword_logic'] );
+		$kw_logic = $kw_logic !== 'and' && $kw_logic !== 'or' ? 'and' : $kw_logic;
 
 		$r_parts = array(); // relevance parts
 
 		/*------------------------- Build like --------------------------*/
-		$exact_query = '';
+		$exact_query    = '';
 		$like_query_arr = array();
-		foreach ( $parts as $k=>$part ) {
-			if ( $k == 0 )
+		foreach ( $parts as $k =>$part ) {
+			if ( $k === 0 ) {
 				$exact_query = '(' . implode(' OR ', $part[0]) . ')';
-			else
+			} else {
 				$like_query_arr[] = '(' . implode(' OR ', $part[0]) . ')';
+			}
 		}
-		$like_query = implode(' ' . $kw_logic . ' ', $like_query_arr);
+		$like_query = implode(' ' . strtoupper($kw_logic) . ' ', $like_query_arr);
 
 		// When $exact query is empty, then surely $like_query must be empty too, see above
-		if ( $exact_query == '' ) {
-			$like_query = "(1)";
+		if ( $exact_query === '' ) {
+			$like_query = '(1)';
+		} elseif ( $like_query !== '' ) {
+			$like_query = "( $exact_query OR $like_query )";
 		} else {
-			// Both $like_query and $exact_query set
-			if ( $like_query != '' ) {
-				$like_query = "( $exact_query OR $like_query )";
-			} else {
-				$like_query = "( $exact_query )";
-			}
+			$like_query = "( $exact_query )";
 		}
 		/*---------------------------------------------------------------*/
 
 		/*---------------------- Build relevance ------------------------*/
 		foreach ( $parts as $part ) {
-			if ( isset($part[1]) && count($part[1]) > 0 )
+			if ( isset($part[1]) && count($part[1]) > 0 ) {
 				$r_parts = array_merge( $r_parts, $part[1] );
+			}
 		}
 		$relevance = implode( ' + ', $r_parts );
-		if ( $args['_post_use_relevance'] != 1 || $relevance == "" ) {
-			$relevance = "(1)";
+		if ( !$args['_post_use_relevance'] || $relevance === '' ) {
+			$relevance = '(1)';
 		} else {
 			$relevance = "($relevance)";
 		}
 		/*---------------------------------------------------------------*/
 
 		if ( isset($this->remaining_limit) ) {
-			if ($this->limit_start != 0)
-				$limit = $this->limit_start . ", " . $this->remaining_limit;
-			else
+			if ( $this->limit_start !== 0 ) {
+				$limit = $this->limit_start . ', ' . $this->remaining_limit;
+			} else {
 				$limit = $this->remaining_limit;
+			}
 		} else {
 			$limit = 10;
 		}
 
 		return str_replace(
-			array( "{relevance_query}", "{like_query}", "{remaining_limit}" ),
+			array( '{relevance_query}', '{like_query}', '{remaining_limit}' ),
 			array( $relevance, $like_query, $limit ),
 			$this->query
 		);
-
 	}
 }

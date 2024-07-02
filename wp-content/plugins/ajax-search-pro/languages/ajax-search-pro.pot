@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Ajax Search Pro plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Pro 4.26.10\n"
+"Project-Id-Version: Ajax Search Pro 4.26.12\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ajax-search-pro\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-05-02T17:14:25+00:00\n"
+"POT-Creation-Date: 2024-06-21T08:41:17+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: ajax-search-pro\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: includes/classes/Core/Menu.php:34
 #: includes/classes/Core/NavMenuMetaBox.php:34
 #: includes/classes/NavMenu/Controller.php:43
-#: includes/classes/Updates/Manager.php:105
+#: includes/classes/Updates/Manager.php:106
 msgid "Ajax Search Pro"
 msgstr ""
 
@@ -2072,187 +2072,187 @@ msgstr ""
 msgid "or the blue button below to find out more."
 msgstr ""
 
-#: backend/index_table.php:616
+#: backend/index_table.php:617
 #: build/ajax-search-pro/backend/index_table.php:616
 #: build/full/ajax-search-pro/backend/index_table.php:616
 msgid "Success:"
 msgstr ""
 
-#: backend/index_table.php:617
+#: backend/index_table.php:618
 #: build/ajax-search-pro/backend/index_table.php:617
 #: build/full/ajax-search-pro/backend/index_table.php:617
 msgid "items were imported!"
 msgstr ""
 
-#: backend/index_table.php:618
+#: backend/index_table.php:619
 #: build/ajax-search-pro/backend/index_table.php:618
 #: build/full/ajax-search-pro/backend/index_table.php:618
 msgid "Something went wrong, please try again later."
 msgstr ""
 
-#: backend/index_table.php:619
+#: backend/index_table.php:620
 #: build/ajax-search-pro/backend/index_table.php:619
 #: build/full/ajax-search-pro/backend/index_table.php:619
 msgid "There are no synonyms in the database to export."
 msgstr ""
 
-#: backend/index_table.php:620
+#: backend/index_table.php:621
 #: build/ajax-search-pro/backend/index_table.php:620
 #: build/full/ajax-search-pro/backend/index_table.php:620
 msgid "The file is empty or invalid. Please make sure to upload and choose the correct one."
 msgstr ""
 
-#: backend/index_table.php:621
+#: backend/index_table.php:622
 #: build/ajax-search-pro/backend/index_table.php:621
 #: build/full/ajax-search-pro/backend/index_table.php:621
 msgid "Nothing was imported. The items in this file are already in the database."
 msgstr ""
 
-#: backend/index_table.php:622
+#: backend/index_table.php:623
 #: build/ajax-search-pro/backend/index_table.php:622
 #: build/full/ajax-search-pro/backend/index_table.php:622
 msgid "Something went wrong, please check your connection, and try again."
 msgstr ""
 
-#: backend/index_table.php:623
+#: backend/index_table.php:624
 #: build/ajax-search-pro/backend/index_table.php:623
 #: build/full/ajax-search-pro/backend/index_table.php:623
 msgid "This keyword already exists in the database! (use the search above if you look to edit it)"
 msgstr ""
 
-#: backend/index_table.php:624
+#: backend/index_table.php:625
 #: build/ajax-search-pro/backend/index_table.php:624
 #: build/full/ajax-search-pro/backend/index_table.php:624
 msgid "The keyword was not deleted, please try refreshing this page!"
 msgstr ""
 
-#: backend/index_table.php:625
+#: backend/index_table.php:626
 #: build/ajax-search-pro/backend/index_table.php:625
 #: build/full/ajax-search-pro/backend/index_table.php:625
 msgid "The keyword field is empty, please enter a keyword!"
 msgstr ""
 
-#: backend/index_table.php:626
+#: backend/index_table.php:627
 #: build/ajax-search-pro/backend/index_table.php:626
 #: build/full/ajax-search-pro/backend/index_table.php:626
 msgid "The synonyms field is missing, please enter some synonyms!"
 msgstr ""
 
-#: backend/index_table.php:627
+#: backend/index_table.php:628
 #: build/ajax-search-pro/backend/index_table.php:627
 #: build/full/ajax-search-pro/backend/index_table.php:627
 msgid "Are you sure you want to delete this keyword?"
 msgstr ""
 
-#: backend/index_table.php:628
+#: backend/index_table.php:629
 #: build/ajax-search-pro/backend/index_table.php:628
 #: build/full/ajax-search-pro/backend/index_table.php:628
 msgid "Are you sure you want to delete all of the synonyms?"
 msgstr ""
 
-#: backend/index_table.php:629
+#: backend/index_table.php:630
 #: build/ajax-search-pro/backend/index_table.php:629
 #: build/full/ajax-search-pro/backend/index_table.php:629
 msgid "Export Synonyms"
 msgstr ""
 
-#: backend/index_table.php:630
+#: backend/index_table.php:631
 #: build/ajax-search-pro/backend/index_table.php:630
 #: build/full/ajax-search-pro/backend/index_table.php:630
 msgid "Import Synonyms"
 msgstr ""
 
-#: backend/index_table.php:631
+#: backend/index_table.php:632
 #: build/ajax-search-pro/backend/index_table.php:631
 #: build/full/ajax-search-pro/backend/index_table.php:631
 msgid "Close"
 msgstr ""
 
-#: backend/index_table.php:641
+#: backend/index_table.php:642
 #: build/ajax-search-pro/backend/index_table.php:641
 #: build/full/ajax-search-pro/backend/index_table.php:641
 msgid "Okay!"
 msgstr ""
 
-#: backend/index_table.php:642
+#: backend/index_table.php:643
 #: build/ajax-search-pro/backend/index_table.php:642
 #: build/full/ajax-search-pro/backend/index_table.php:642
 msgid "Yes, take me there!"
 msgstr ""
 
-#: backend/index_table.php:643
+#: backend/index_table.php:644
 #: build/ajax-search-pro/backend/index_table.php:643
 #: build/full/ajax-search-pro/backend/index_table.php:643
 msgid "Maybe later"
 msgstr ""
 
-#: backend/index_table.php:644
+#: backend/index_table.php:645
 #: build/ajax-search-pro/backend/index_table.php:644
 #: build/full/ajax-search-pro/backend/index_table.php:644
 msgid "Congratulations, but wait!"
 msgstr ""
 
-#: backend/index_table.php:645
+#: backend/index_table.php:646
 #: build/ajax-search-pro/backend/index_table.php:645
 #: build/full/ajax-search-pro/backend/index_table.php:645
 msgid "Did you know?"
 msgstr ""
 
-#: backend/index_table.php:646
+#: backend/index_table.php:647
 #: build/ajax-search-pro/backend/index_table.php:646
 #: build/full/ajax-search-pro/backend/index_table.php:646
 msgid "Progress:"
 msgstr ""
 
-#: backend/index_table.php:647
+#: backend/index_table.php:648
 #: build/ajax-search-pro/backend/index_table.php:647
 #: build/full/ajax-search-pro/backend/index_table.php:647
 msgid "Keywords found so far:"
 msgstr ""
 
-#: backend/index_table.php:648
+#: backend/index_table.php:649
 #: build/ajax-search-pro/backend/index_table.php:648
 #: build/full/ajax-search-pro/backend/index_table.php:648
 msgid "Processing blog no."
 msgstr ""
 
-#: backend/index_table.php:649
+#: backend/index_table.php:650
 #: build/ajax-search-pro/backend/index_table.php:649
 #: build/full/ajax-search-pro/backend/index_table.php:649
 msgid "Success. <strong>%s</strong> new keywords were added to the database."
 msgstr ""
 
-#: backend/index_table.php:650
+#: backend/index_table.php:651
 #: build/ajax-search-pro/backend/index_table.php:650
 #: build/full/ajax-search-pro/backend/index_table.php:650
 msgid "Success. The index table was emptied."
 msgstr ""
 
-#: backend/index_table.php:651
+#: backend/index_table.php:652
 #: build/ajax-search-pro/backend/index_table.php:651
 #: build/full/ajax-search-pro/backend/index_table.php:651
 msgid "Something went wrong. Here is the error message returned:"
 msgstr ""
 
-#: backend/index_table.php:652
+#: backend/index_table.php:653
 #: build/ajax-search-pro/backend/index_table.php:652
 #: build/full/ajax-search-pro/backend/index_table.php:652
 msgid "Timeout error. Try lowering the <strong>Post limit per iteration</strong> option below."
 msgstr ""
 
-#: backend/index_table.php:653
+#: backend/index_table.php:654
 #: build/ajax-search-pro/backend/index_table.php:653
 #: build/full/ajax-search-pro/backend/index_table.php:653
 msgid "Status:"
 msgstr ""
 
-#: backend/index_table.php:654
+#: backend/index_table.php:655
 #: build/ajax-search-pro/backend/index_table.php:654
 #: build/full/ajax-search-pro/backend/index_table.php:654
 msgid "Code:"
 msgstr ""
 
-#: backend/index_table.php:655
+#: backend/index_table.php:656
 #: build/ajax-search-pro/backend/index_table.php:655
 #: build/full/ajax-search-pro/backend/index_table.php:655
 msgid "Initializing, please wait."
@@ -5170,8 +5170,7 @@ msgid "FREE License tier"
 msgstr ""
 
 #: backend/settings/class/wd_ms_license_activator.class.php:20
-#: backend/updates_help.php:64
-#: backend/updates_help.php:72
+#: backend/updates_help.php:61
 #: build/ajax-search-pro/backend/settings/class/wd_ms_license_activator.class.php:20
 #: build/ajax-search-pro/backend/updates_help.php:64
 #: build/ajax-search-pro/backend/updates_help.php:72
@@ -5182,6 +5181,7 @@ msgid "Deactivate"
 msgstr ""
 
 #: backend/settings/class/wd_ms_license_activator.class.php:28
+#: backend/updates_help.php:53
 #: build/ajax-search-pro/backend/settings/class/wd_ms_license_activator.class.php:28
 #: build/full/ajax-search-pro/backend/settings/class/wd_ms_license_activator.class.php:28
 msgid "Activate"
@@ -8843,31 +8843,35 @@ msgstr ""
 msgid "BuddyPress avatar"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:211
+#: backend/tabs/instance/general/image_options.php:224
+msgid "Default: 96x96. For avatars where the size is defined by a single value, the width is used."
+msgstr ""
+
+#: backend/tabs/instance/general/image_options.php:228
 #: build/ajax-search-pro/backend/tabs/instance/general/image_options.php:221
 #: build/full/ajax-search-pro/backend/tabs/instance/general/image_options.php:221
 msgid "Default user image"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:218
+#: backend/tabs/instance/general/image_options.php:236
 #: build/ajax-search-pro/backend/tabs/instance/general/image_options.php:228
 #: build/full/ajax-search-pro/backend/tabs/instance/general/image_options.php:228
 msgid "Advanced image options"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:226
+#: backend/tabs/instance/general/image_options.php:244
 #: build/ajax-search-pro/backend/tabs/instance/general/image_options.php:236
 #: build/full/ajax-search-pro/backend/tabs/instance/general/image_options.php:236
 msgid "If the image parser finds multiple images, then the image from this position is returned"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:229
+#: backend/tabs/instance/general/image_options.php:247
 #: build/ajax-search-pro/backend/tabs/instance/general/image_options.php:239
 #: build/full/ajax-search-pro/backend/tabs/instance/general/image_options.php:239
 msgid "Exclude images by file names (comma separated)"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:233
+#: backend/tabs/instance/general/image_options.php:251
 #: build/ajax-search-pro/backend/tabs/instance/general/image_options.php:243
 #: build/full/ajax-search-pro/backend/tabs/instance/general/image_options.php:243
 msgid "If any part of the image filename or path contains any of the above strings, it is excluded."
@@ -11375,7 +11379,7 @@ msgid "Minimal character count to trigger autocomplete"
 msgstr ""
 
 #: backend/tabs/instance/suggest/autocomplete.php:88
-#: backend/tabs/instance/suggest/keywords.php:33
+#: backend/tabs/instance/suggest/keywords.php:43
 #: build/ajax-search-pro/backend/tabs/instance/suggest/autocomplete.php:88
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:33
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/autocomplete.php:88
@@ -11384,7 +11388,7 @@ msgid "Google places API key"
 msgstr ""
 
 #: backend/tabs/instance/suggest/autocomplete.php:92
-#: backend/tabs/instance/suggest/keywords.php:37
+#: backend/tabs/instance/suggest/keywords.php:47
 #: build/ajax-search-pro/backend/tabs/instance/suggest/autocomplete.php:92
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:37
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/autocomplete.php:92
@@ -11417,9 +11421,7 @@ msgid "Keyword exceptions (comma separated)"
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:3
-#: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:3
-#: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:3
-msgid "Predictively suggest results when nothing matches the search keyword?"
+msgid "Predictively suggest results on the live results box when nothing matches the search keyword?"
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:8
@@ -11429,66 +11431,74 @@ msgid "The first matching keyword is going to be used from the selected <strong>
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:13
+msgid "(Experimental) Predictively suggest results on the results page when nothing matches the search keyword?"
+msgstr ""
+
+#: backend/tabs/instance/suggest/keywords.php:18
+msgid "WARNING: This may not work in every case! When enabled, the predicted results will also be shown on the search results page."
+msgstr ""
+
+#: backend/tabs/instance/suggest/keywords.php:23
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:13
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:13
 msgid "Keyword suggestions on no results?"
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:18
+#: backend/tabs/instance/suggest/keywords.php:28
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:18
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:18
 msgid "Keyword suggestions appear when no results match the keyword."
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:24
+#: backend/tabs/instance/suggest/keywords.php:34
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:24
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:24
 msgid "Keyword suggestion sources"
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:42
+#: backend/tabs/instance/suggest/keywords.php:52
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:42
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:42
 msgid "Max. suggestion count"
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:45
+#: backend/tabs/instance/suggest/keywords.php:55
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:45
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:45
 msgid "word length"
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:49
+#: backend/tabs/instance/suggest/keywords.php:59
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:49
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:49
 msgid "Google suggestions language"
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:54
+#: backend/tabs/instance/suggest/keywords.php:64
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:54
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:54
 msgid "The length of each suggestion in characters. 30-50 is a good number to avoid too long suggestions."
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:59
+#: backend/tabs/instance/suggest/keywords.php:69
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:59
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:59
 msgid "No results text"
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:63
+#: backend/tabs/instance/suggest/keywords.php:73
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:63
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:63
 msgid "Supports HTML and variable {phrase}"
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:68
+#: backend/tabs/instance/suggest/keywords.php:78
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:68
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:68
 msgid "Did you mean text"
 msgstr ""
 
-#: backend/tabs/instance/suggest/keywords.php:72
+#: backend/tabs/instance/suggest/keywords.php:82
 #: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:72
 #: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:72
 msgid "Supports HTML"
@@ -12948,25 +12958,31 @@ msgstr ""
 msgid "Delete rule"
 msgstr ""
 
-#: backend/updates_help.php:20
+#: backend/updates_help.php:23
 #: build/ajax-search-pro/backend/updates_help.php:20
 #: build/full/ajax-search-pro/backend/updates_help.php:20
 msgid "Version status"
 msgstr ""
 
 #: backend/updates_help.php:25
-#: build/ajax-search-pro/backend/updates_help.php:25
-#: build/full/ajax-search-pro/backend/updates_help.php:25
-msgid "You have the latest version installed:"
+msgid "Installed version:"
 msgstr ""
 
-#: backend/updates_help.php:28
+#: backend/updates_help.php:26
+msgid "Newest version: "
+msgstr ""
+
+#: backend/updates_help.php:27
+msgid "Last update: "
+msgstr ""
+
+#: backend/updates_help.php:29
 #: build/ajax-search-pro/backend/updates_help.php:28
 #: build/full/ajax-search-pro/backend/updates_help.php:28
 msgid "Support"
 msgstr ""
 
-#: backend/updates_help.php:30
+#: backend/updates_help.php:31
 #: build/ajax-search-pro/backend/updates_help.php:30
 #: build/full/ajax-search-pro/backend/updates_help.php:30
 msgid ""
@@ -12974,53 +12990,52 @@ msgid ""
 "                feel free to <a href=\"%s\" target=\"_blank\">open a support ticket</a>."
 msgstr ""
 
-#: backend/updates_help.php:33
+#: backend/updates_help.php:34
 #: build/ajax-search-pro/backend/updates_help.php:33
 #: build/full/ajax-search-pro/backend/updates_help.php:33
 msgid "Useful Resources"
 msgstr ""
 
-#: backend/updates_help.php:36
+#: backend/updates_help.php:37
 #: build/ajax-search-pro/backend/updates_help.php:36
 #: build/full/ajax-search-pro/backend/updates_help.php:36
 msgid "Onlie Documentation"
 msgstr ""
 
-#: backend/updates_help.php:37
+#: backend/updates_help.php:38
 #: build/ajax-search-pro/backend/updates_help.php:37
 #: build/full/ajax-search-pro/backend/updates_help.php:37
 msgid "Knowledge base"
 msgstr ""
 
-#: backend/updates_help.php:38
+#: backend/updates_help.php:39
 #: build/ajax-search-pro/backend/updates_help.php:38
 #: build/ajax-search-pro/includes/classes/Updates/Manager.php:112
 #: build/full/ajax-search-pro/backend/updates_help.php:38
 #: build/full/ajax-search-pro/includes/classes/Updates/Manager.php:112
-#: includes/classes/Updates/Manager.php:115
+#: includes/classes/Updates/Manager.php:116
 msgid "Changelog"
 msgstr ""
 
-#: backend/updates_help.php:39
+#: backend/updates_help.php:40
 #: build/ajax-search-pro/backend/updates_help.php:39
 #: build/full/ajax-search-pro/backend/updates_help.php:39
 msgid "How to manual update?"
 msgstr ""
 
-#: backend/updates_help.php:45
+#: backend/updates_help.php:46
 #: build/ajax-search-pro/backend/updates_help.php:45
 #: build/full/ajax-search-pro/backend/updates_help.php:45
 msgid "Automatic Updates"
 msgstr ""
 
-#: backend/updates_help.php:48
+#: backend/updates_help.php:49
 #: build/ajax-search-pro/backend/updates_help.php:48
 #: build/full/ajax-search-pro/backend/updates_help.php:48
 msgid "To activate Automatic Updates, please activate your purchase code with this site."
 msgstr ""
 
-#: backend/updates_help.php:49
-#: backend/updates_help.php:60
+#: backend/updates_help.php:50
 #: build/ajax-search-pro/backend/updates_help.php:49
 #: build/ajax-search-pro/backend/updates_help.php:60
 #: build/full/ajax-search-pro/backend/updates_help.php:49
@@ -13028,43 +13043,24 @@ msgstr ""
 msgid "Purchase code"
 msgstr ""
 
-#: backend/updates_help.php:52
-#: build/ajax-search-pro/backend/updates_help.php:52
-#: build/full/ajax-search-pro/backend/updates_help.php:52
-msgid "Activate for this site"
-msgstr ""
-
-#: backend/updates_help.php:54
+#: backend/updates_help.php:55
 #: build/ajax-search-pro/backend/updates_help.php:54
 #: build/full/ajax-search-pro/backend/updates_help.php:54
 msgid "<p>If you activated the plugin <b>with this site before</b>, and you see this activation form, just enter the purchase code again to re-activate.</p>"
 msgstr ""
 
-#: backend/updates_help.php:57
-#: build/ajax-search-pro/backend/updates_help.php:57
-#: build/full/ajax-search-pro/backend/updates_help.php:57
-msgid "If the purchase code is activated with a <b>different site</b>, then you will have to first de-activate it from there, or use the form below if the site does not work anymore:"
+#: backend/updates_help.php:59
+#: build/ajax-search-pro/backend/updates_help.php:70
+#: build/full/ajax-search-pro/backend/updates_help.php:70
+msgid "Auto updates are activated for this site with purchase code:"
 msgstr ""
 
-#: backend/updates_help.php:58
-#: build/ajax-search-pro/backend/updates_help.php:58
-#: build/full/ajax-search-pro/backend/updates_help.php:58
-msgid "Site URL"
-msgstr ""
-
-#: backend/updates_help.php:66
-#: backend/updates_help.php:74
+#: backend/updates_help.php:63
 #: build/ajax-search-pro/backend/updates_help.php:66
 #: build/ajax-search-pro/backend/updates_help.php:74
 #: build/full/ajax-search-pro/backend/updates_help.php:66
 #: build/full/ajax-search-pro/backend/updates_help.php:74
 msgid "<b>NOTICE:</b> After deactivation there is a <b>30 minute</b> wait time until you can re-activate the same purchase code to prevent malicious activity."
-msgstr ""
-
-#: backend/updates_help.php:70
-#: build/ajax-search-pro/backend/updates_help.php:70
-#: build/full/ajax-search-pro/backend/updates_help.php:70
-msgid "Auto updates are activated for this site with purchase code:"
 msgstr ""
 
 #: build/ajax-search-pro/backend/Classes/Options/src/Standard/Border.php:98
@@ -13251,6 +13247,31 @@ msgstr ""
 msgid "custom field"
 msgstr ""
 
+#: build/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:3
+#: build/full/ajax-search-pro/backend/tabs/instance/suggest/keywords.php:3
+msgid "Predictively suggest results when nothing matches the search keyword?"
+msgstr ""
+
+#: build/ajax-search-pro/backend/updates_help.php:25
+#: build/full/ajax-search-pro/backend/updates_help.php:25
+msgid "You have the latest version installed:"
+msgstr ""
+
+#: build/ajax-search-pro/backend/updates_help.php:52
+#: build/full/ajax-search-pro/backend/updates_help.php:52
+msgid "Activate for this site"
+msgstr ""
+
+#: build/ajax-search-pro/backend/updates_help.php:57
+#: build/full/ajax-search-pro/backend/updates_help.php:57
+msgid "If the purchase code is activated with a <b>different site</b>, then you will have to first de-activate it from there, or use the form below if the site does not work anymore:"
+msgstr ""
+
+#: build/ajax-search-pro/backend/updates_help.php:58
+#: build/full/ajax-search-pro/backend/updates_help.php:58
+msgid "Site URL"
+msgstr ""
+
 #: build/ajax-search-pro/includes/classes/Api/Rest0/Rest.php:71
 #: build/full/ajax-search-pro/includes/classes/Api/Rest0/Rest.php:71
 #: includes/classes/Api/Rest0/Rest.php:71
@@ -13386,55 +13407,55 @@ msgstr ""
 #. translators: %s: Plugin name - Elementor Pro.
 #: build/ajax-search-pro/includes/classes/Updates/Manager.php:108
 #: build/full/ajax-search-pro/includes/classes/Updates/Manager.php:108
-#: includes/classes/Updates/Manager.php:111
+#: includes/classes/Updates/Manager.php:112
 msgid "More information about %s"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Updates/Manager.php:110
 #: build/full/ajax-search-pro/includes/classes/Updates/Manager.php:110
-#: includes/classes/Updates/Manager.php:113
+#: includes/classes/Updates/Manager.php:114
 msgid "View details"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Updates/Manager.php:112
 #: build/full/ajax-search-pro/includes/classes/Updates/Manager.php:112
-#: includes/classes/Updates/Manager.php:115
+#: includes/classes/Updates/Manager.php:116
 msgid "View Ajax Search Pro Pro Changelog"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Updates/Manager.php:170
 #: build/full/ajax-search-pro/includes/classes/Updates/Manager.php:170
-#: includes/classes/Updates/Manager.php:173
+#: includes/classes/Updates/Manager.php:174
 msgid "Activate your license"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Updates/Manager.php:170
 #: build/full/ajax-search-pro/includes/classes/Updates/Manager.php:170
-#: includes/classes/Updates/Manager.php:173
+#: includes/classes/Updates/Manager.php:174
 msgid "for automatic updates or"
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Updates/Manager.php:170
 #: build/full/ajax-search-pro/includes/classes/Updates/Manager.php:170
-#: includes/classes/Updates/Manager.php:173
+#: includes/classes/Updates/Manager.php:174
 msgid "download new version from CodeCanyon."
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Updates/Manager.php:172
 #: build/full/ajax-search-pro/includes/classes/Updates/Manager.php:172
-#: includes/classes/Updates/Manager.php:175
+#: includes/classes/Updates/Manager.php:176
 msgid "Update Ajax Search Pro now."
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Updates/Remote.php:139
 #: build/full/ajax-search-pro/includes/classes/Updates/Remote.php:139
-#: includes/classes/Updates/Remote.php:139
+#: includes/classes/Updates/Remote.php:134
 msgid "Ajax Search Pro version <strong>%s</strong> is available."
 msgstr ""
 
 #: build/ajax-search-pro/includes/classes/Updates/Remote.php:142
 #: build/full/ajax-search-pro/includes/classes/Updates/Remote.php:142
-#: includes/classes/Updates/Remote.php:142
+#: includes/classes/Updates/Remote.php:139
 msgid "How to update?"
 msgstr ""
 

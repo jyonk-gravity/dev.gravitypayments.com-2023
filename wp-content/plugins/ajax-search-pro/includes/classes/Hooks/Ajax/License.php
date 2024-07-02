@@ -16,24 +16,24 @@ class License extends AbstractAjax {
 			if ( !isset($_POST['op']) ) die(-2);
 
 			if ( ASP_DEMO ) {
-				print_r(json_encode(array("status"=>0, "msg"=>"This functions is disabled on this demo.")));
+				print_r(json_encode(array("status"=>0, "message"=>"This functions is disabled on this demo.")));
 				die();
 			}
 	
 			if ( $this->excessiveUsage() ) {
-				print_r(json_encode(array("status"=>0, "msg"=>"WP Excessive usage Warning: Please wait a few seconds before the next request.")));
+				print_r(json_encode(array("status"=>0, "message"=>"WP Excessive usage Warning: Please wait a few seconds before the next request.")));
 				die();
 			}
 	
 			if ( $_POST['op'] == "activate" && !empty($_POST['asp_key']) ) {
 				$key = $this->preValidateKey( $_POST['asp_key'] );
 				if ( $key === false ) {
-					print_r(json_encode(array("status"=>0, "msg"=>"WP: Invalid key specified.")));
+					print_r(json_encode(array("status"=>0, "message"=>"WP: Invalid key specified.")));
 					die();
 				}
 				$res = EnvatoLicense::activate( $key );
 				if ($res === false)
-					print_r(json_encode(array("status"=>0, "msg"=>"WP: Connection error, please try again later.")));
+					print_r(json_encode(array("status"=>0, "message"=>"WP: Connection error, please try again later.")));
 				else
 					print_r(json_encode($res));
 	
@@ -41,37 +41,14 @@ class License extends AbstractAjax {
 			} else if ($_POST['op'] == "deactivate") {
 				$res = EnvatoLicense::deactivate();
 				if ($res === false)
-					print_r(json_encode(array("status"=>0, "msg"=>"WP: Connection error, please try again later.")));
+					print_r(json_encode(array("status"=>0, "message"=>"WP: Connection error, please try again later.")));
 				else
 					print_r(json_encode($res));
-	
-				die();
-			} else if ($_POST['op'] == "deactivate_remote") {
-				if ( empty($_POST['site_url']) || empty($_POST['asp_key']) ) {
-					print_r(json_encode(array("status" => 0, "msg" => "Site url or purchase key was not specified.")));
-				} else {
-					if ( strpos($_POST['site_url'], "//") === false)
-						$_POST['site_url'] = "//".$_POST['site_url'];
-					$host = parse_url($_POST['site_url'], PHP_URL_HOST);
-					if ( !empty($host) ) {
-						$key = $this->preValidateKey( $_POST['asp_key'] );
-						if ( $key === false ) {
-							print_r(json_encode(array("status"=>0, "msg"=>"WP: Invalid key specified.")));
-							die();
-						}
-						$res = EnvatoLicense::deactivateRemote( $key, $host);
-						if ($res === false)
-							print_r(json_encode(array("status"=>0, "msg"=>"WP: Connection error, please try again later.")));
-						else
-							print_r(json_encode($res));
-					} else {
-						print_r(json_encode(array("status"=>0, "msg"=>"Invalid URL." . $host)));
-					}
-				}
+
 				die();
 			}
 			// We reached here, something is missing..
-			print_r(json_encode(array("status"=>0, "msg"=>"WP: Missing information, please check the input fields.")));
+			print_r(json_encode(array("status"=>0, "message"=>"WP: Missing information, please check the input fields.")));
 		}
 		die();
 	}

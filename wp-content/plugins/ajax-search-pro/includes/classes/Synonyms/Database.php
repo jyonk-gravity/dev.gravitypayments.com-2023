@@ -103,7 +103,7 @@ if ( !class_exists(__NAMESPACE__ . '\Database') ) {
                         (keyword LIKE '%s')
                          then 1 else 0 end
                       )
-                     ) as relevance
+                     ) as `relevance`
                      FROM `$table`
                      WHERE
                       keyword LIKE '%s' 

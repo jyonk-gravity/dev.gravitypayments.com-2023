@@ -67,8 +67,8 @@ class PostSearch extends AbstractOption  {
 		$asp_query = new SearchQuery(array(
 			"s" => $phrase,
 			"_ajax_search" => false,
-			'keyword_logic' => 'AND',
-			'secondary_logic' => 'OR',
+			'keyword_logic' => 'and',
+			'secondary_logic' => 'or',
 			"posts_per_page" => 20,
 			'post_type' => $post_types,
 			'post_status' => array(),

@@ -255,6 +255,7 @@ class Preload
 
             //clean html doc
             $clean_dom = new \DOMDocument();
+            $clean_dom->encoding = 'utf-8';
             $clean_dom->loadHTML($clean_html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
             $xpath = new \DOMXpath($clean_dom);
 
@@ -289,8 +290,9 @@ class Preload
 
                 //save main html as DOMDocument to match
                 $dom = new \DOMDocument();
+                $dom->encoding = 'utf-8';
                 $dom->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
-                $html = $dom->saveHTML();
+                $html = '<!DOCTYPE html>' . $dom->saveHTML($dom->documentElement);
 
                 //save clean html
                 $clean_html = $clean_dom->saveHTML();
@@ -305,7 +307,8 @@ class Preload
             $exclusions = apply_filters('perfmatters_critical_image_exclusions', array(
                 ';base64',
                 'w3.org',
-                'data-perfmatters-skip-preload'
+                'data-perfmatters-skip-preload',
+                'wpml-ls-flag'
             ));
 
             $count = 0;

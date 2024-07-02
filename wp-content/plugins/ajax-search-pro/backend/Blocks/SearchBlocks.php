@@ -46,7 +46,7 @@ class SearchBlocks {
 			wp_register_script(
 				'wd-asp-gutenberg',
 				ASP_URL_NP . 'backend/Blocks/assets/search-block.js',
-				array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components' ),
+				array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-server-side-render' ),
 				self::$media_query,
 				true
 			);

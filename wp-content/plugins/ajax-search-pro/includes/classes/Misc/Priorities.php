@@ -56,15 +56,15 @@ class Priorities {
 
 		$querystr = "
 		SELECT
-	  $wpdb->posts.post_title as title,
+	  $wpdb->posts.post_title as `title`,
 	  $wpdb->posts.ID as id,
-	  $wpdb->posts.post_date as date,
-	  $wpdb->users.user_nicename as author,
-	  $wpdb->posts.post_type as post_type,
+	  $wpdb->posts.post_date as `date`,
+	  $wpdb->users.user_nicename as `author`,
+	  $wpdb->posts.post_type as `post_type`,
 	  CASE WHEN $pt.priority IS NULL
 			   THEN 100
 			   ELSE $pt.priority
-	  END AS priority
+	  END as `priority`
 		FROM $wpdb->posts
 	LEFT JOIN $wpdb->users ON $wpdb->users.ID = $wpdb->posts.post_author
 	LEFT JOIN $pt ON ($pt.post_id = $wpdb->posts.ID AND $pt.blog_id = " . get_current_blog_id() . ")

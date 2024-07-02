@@ -339,7 +339,7 @@ class LazyLoad
 		//youtube thumbnails
 		if(!empty(Config::$options['lazyload']['lazy_loading_iframes']) && !empty(Config::$options['lazyload']['youtube_preview_thumbnails'])) {
 			$styles.= '.perfmatters-lazy-youtube{position:relative;width:100%;max-width:100%;height:0;padding-bottom:56.23%;overflow:hidden}.perfmatters-lazy-youtube img{position:absolute;top:0;right:0;bottom:0;left:0;display:block;width:100%;max-width:100%;height:auto;margin:auto;border:none;cursor:pointer;transition:.5s all;-webkit-transition:.5s all;-moz-transition:.5s all}.perfmatters-lazy-youtube img:hover{-webkit-filter:brightness(75%)}.perfmatters-lazy-youtube .play{position:absolute;top:50%;left:50%;right:auto;width:68px;height:48px;margin-left:-34px;margin-top:-24px;background:url('.plugins_url('perfmatters/img/youtube.svg').') no-repeat;background-position:center;background-size:cover;pointer-events:none;filter:grayscale(1)}.perfmatters-lazy-youtube:hover .play{filter:grayscale(0)}.perfmatters-lazy-youtube iframe{position:absolute;top:0;left:0;width:100%;height:100%;z-index:99}';
-			if(current_theme_supports('responsive-embeds')) {
+			if(current_theme_supports('responsive-embeds') || in_array('wp-embed-responsive', get_body_class())) {
 				$styles.= '.wp-has-aspect-ratio .wp-block-embed__wrapper{position:relative;}.wp-has-aspect-ratio .perfmatters-lazy-youtube{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;padding-bottom:0}';
 			}
 		}
@@ -691,7 +691,7 @@ class LazyLoad
             	//create main html DOMDocument to match and update in parallel
             	$dom = new \DOMDocument();
                 $dom->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
-                $html_new = $dom->saveHTML();
+                $html_new = '<!DOCTYPE html>' . $dom->saveHTML($dom->documentElement);
 
                 $image_excluded = false;
 

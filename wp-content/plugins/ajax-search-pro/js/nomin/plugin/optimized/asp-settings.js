@@ -758,7 +758,7 @@
             });
 
             // Select all checkboxes
-            $('.asp_option_cat input[type="checkbox"], .asp_option_cff input[type="checkbox"]', $this.n('searchsettings')).on('asp_chbx_change', function(){
+            $('.asp_option input[type="checkbox"]', $this.n('searchsettings')).on('asp_chbx_change', function(){
                 let className = $(this).data("targetclass");
                 if ( typeof className == 'string' && className != '') {
                     $("input." + className, $this.n('searchsettings')).prop("checked", $(this).prop("checked"));

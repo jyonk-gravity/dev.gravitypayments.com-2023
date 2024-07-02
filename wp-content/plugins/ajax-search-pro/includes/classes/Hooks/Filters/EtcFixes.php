@@ -87,7 +87,7 @@ class EtcFixes extends AbstractFilter {
 	 */
 	function fixPostFormatStandardArgs( $args ) {
 		if ( isset($args['post_tax_filter']) && is_array($args['post_tax_filter']) ) {
-			foreach ( $args['post_tax_filter'] as &$v ) {
+			foreach ( $args['post_tax_filter'] as $v ) {
 				if ( $v['taxonomy'] == 'post_format' ) {
 					if ( isset($v['_termset']) && in_array(-200, $v['_termset']) && !in_array(-200, $v['exclude']) ) {
 						// Case 1: Checkbox, not unselected, but displayed

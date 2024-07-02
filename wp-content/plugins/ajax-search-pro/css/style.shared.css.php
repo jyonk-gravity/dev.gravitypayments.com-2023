@@ -880,15 +880,21 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
 
 /* Search settings */
 <?php
-if ( $style['fss_hover_columns'] == "auto" )
-    $_hov_cwidth = 'none';
-else
-    $_hov_cwidth = ($style['fss_hover_columns'] * $style['fss_column_width'] + 8) . 'px';
+$style['fss_column_width'] = $style['fss_column_width'] !== '' ? intval($style['fss_column_width']) : 200;
+$style['fss_column_width'] = max($style['fss_column_width'], 100);
 
-if ( $style['fss_block_columns'] == "auto" )
+if ( $style['fss_hover_columns'] === "auto" ) {
+    $_hov_cwidth = 'none';
+} else {
+	$_hov_cwidth = (intval($style['fss_hover_columns']) * intval($style['fss_column_width']) + 8) . 'px';
+}
+
+if ( $style['fss_block_columns'] === "auto" ) {
     $_blc_cwidth = 'none';
-else
-    $_blc_cwidth = ($style['fss_block_columns'] * $style['fss_column_width'] + 8) . 'px';
+} else {
+	$_blc_cwidth = ($style['fss_block_columns'] * $style['fss_column_width'] + 8) . 'px';
+}
+
 ?>
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_set_ids; ?>.searchsettings,

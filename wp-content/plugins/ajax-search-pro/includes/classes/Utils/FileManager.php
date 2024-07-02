@@ -1,130 +1,149 @@
 <?php
 
 namespace WPDRMS\ASP\Utils;
+
 use InvalidArgumentException;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 
+/**
+ * File manager/wrapper
+ */
 class FileManager {
 	use SingletonTrait;
 
-    function initialized(bool $include = false, string $check_method = ''): bool {
-        global $wp_filesystem;
-        if ( $include && empty($wp_filesystem) ) {
-            require_once (ABSPATH . '/wp-admin/includes/file.php');
-        }
-        if ( function_exists('WP_Filesystem') && WP_Filesystem() === true && is_object($wp_filesystem) ) {
-            if ( $check_method != '' ) {
-                return method_exists($wp_filesystem, $check_method);
-            }
-            return true;
-        }
-        // Did not init
-        return false;
-    }
+	public function initialized( bool $init = false, string $check_method = '' ): bool {
+		global $wp_filesystem;
+		if ( $init && empty($wp_filesystem) ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+		}
+		if ( function_exists('WP_Filesystem') && WP_Filesystem() === true && is_object($wp_filesystem) ) {
+			if ( $check_method !== '' ) {
+				return method_exists($wp_filesystem, $check_method);
+			}
+			return true;
+		}
+		// Did not init
+		return false;
+	}
 
-    function wrapper(string $function) {
-        global $wp_filesystem;
-        $args = func_get_args();
-        array_shift($args);
-        return $this->initialized(false, $function) ?
-            call_user_func_array(array($wp_filesystem, $function), $args) :
-            call_user_func_array($function, $args);
-    }
+	/**
+	 * @param callable-string $func
+	 * @return mixed
+	 */
+	public function wrapper( string $func ) {
+		global $wp_filesystem;
+		$args = func_get_args();
+		array_shift($args);
+		return $this->initialized(false, $func) ?
+			call_user_func_array(array( $wp_filesystem, $func ), $args) : // @phpstan-ignore-line
+			call_user_func_array($func, $args);
+	}
 
-    function mtime($file) {
-        global $wp_filesystem;
-        // Did it fail?
-        if ( $this->initialized(false, 'mtime') ) {
-            return $wp_filesystem->mtime($file);
-        }
-        return filemtime( $file );
-    }
+	/**
+	 * @param string $file
+	 * @return false|int
+	 */
+	public function mtime( string $file ) {
+		global $wp_filesystem;
+		// Did it fail?
+		if ( $this->initialized(false, 'mtime') ) {
+			return $wp_filesystem->mtime($file);
+		}
+		return filemtime( $file );
+	}
 
-    function isFile($file) {
-        return $this->wrapper('is_file', $file);
-    }
+	public function isFile( string $path ): bool {
+		return $this->wrapper('is_file', $path);
+	}
 
-    function isDir($file) {
-        return $this->wrapper('is_dir', $file);
-    }
+	public function isDir( string $path ): bool {
+		return $this->wrapper('is_dir', $path);
+	}
 
-    function read($filename) {
-        global $wp_filesystem;
-        // Replace double
-        $filename = str_replace(array('\\\\', '//'), array('\\', '/'), $filename);
+	/**
+	 * @param string $filename
+	 * @return false|string
+	 */
+	public function read( string $filename ) {
+		global $wp_filesystem;
+		// Replace double
+		$filename = str_replace(array( '\\\\', '//' ), array( '\\', '/' ), $filename);
 
-        if ( !file_exists($filename) )
-            return '';
+		if ( !file_exists($filename) ) {
+			return '';
+		}
 
-        if ( $this->initialized(false, 'get_contents') ) {
-            // All went well, return
-            return $wp_filesystem->get_contents( $filename );
-        }
+		if ( $this->initialized(false, 'get_contents') ) {
+			// All went well, return
+			return $wp_filesystem->get_contents( $filename );
+		}
 
-        return @file_get_contents($filename);
-    }
+		return @file_get_contents($filename); //@phpcs:ignore
+	}
 
-    function write(string $filename, string $contents): bool {
-        global $wp_filesystem;
-        // Replace double
-        $filename = str_replace(array('\\\\', '//'), array('\\', '/'), $filename);
-		$dir = $this->inAllowedDirectory($filename);
+	public function write( string $filename, string $contents ): bool {
+		global $wp_filesystem;
+		// Replace double
+		$filename = str_replace(array( '\\\\', '//' ), array( '\\', '/' ), $filename);
+		$dir      = $this->inAllowedDirectory($filename);
 
 		if ( $dir !== false ) {
 			// Make sure that the directory exists
-			$this->createRequiredDirectories( array($dir) );
+			$this->createRequiredDirectories( array( $dir ) );
 
 			// Did it fail?
 			if ( !$this->initialized(false, 'put_contents') ) {
 				/* any problems and we exit */
-				return !(@file_put_contents($filename, $contents) === false);
+				return !( @file_put_contents($filename, $contents) === false ); //@phpcs:ignore
 			}
 
 			// It worked, use it!
 			if ( defined('FS_CHMOD_FILE') ) {
 				if ( !$wp_filesystem->put_contents($filename, $contents, FS_CHMOD_FILE) ) {
-					return !(@file_put_contents($filename, $contents) === false);
+					return !( @file_put_contents($filename, $contents) === false ); //@phpcs:ignore
 				}
-			} else {
-				if ( !$wp_filesystem->put_contents($filename, $contents) ) {
-					return !(@file_put_contents($filename, $contents) === false);
-				}
+			} elseif ( !$wp_filesystem->put_contents($filename, $contents) ) {
+				return !( @file_put_contents($filename, $contents) === false ); //@phpcs:ignore
 			}
 		}
 
-        return true;
-    }
+		return true;
+	}
 
-    function delFile($filename) {
-        global $wp_filesystem;
+	/**
+	 * @param string $filename
+	 * @return bool
+	 */
+	public function delFile( string $filename ): bool {
+		global $wp_filesystem;
 		if ( $this->inAllowedDirectory($filename) ) {
 			// Did it fail?
 			if ( !$this->initialized(false, 'delete') ) {
 				/* any problems and we exit */
-				return @unlink($filename);
+				return @unlink($filename); //@phpcs:ignore
 			}
 			return $wp_filesystem->delete($filename);
 		} else {
 			return false;
 		}
-    }
+	}
 
 	/**
 	 * Delete files in directory according to a pattern
 	 *
-	 * @param $dir string
-	 * @param $file_arg string
+	 * @param string $dir
+	 * @param string $file_arg
 	 * @return int files and directories deleted
 	 */
-	public function deleteByPattern(string $dir, string $file_arg = '*.*'): int {
-		if ( $dir != '' && $dir != '/' ) {
+	public function deleteByPattern( string $dir, string $file_arg = '*.*' ): int {
+		if ( $dir !== '' && $dir !== '/' ) {
 			$count = 0;
-			$files = @glob($dir . $file_arg, GLOB_MARK);
+			$files = @glob($dir . $file_arg, GLOB_MARK); // @phpcs:ignore
 			// Glob can return FALSE on error
 			if ( is_array($files) ) {
-				foreach ($files as $file) {
+				foreach ( $files as $file ) {
 					$this->delFile($file);
-					$count++;
+					++$count;
 				}
 			}
 			return $count;
@@ -132,8 +151,8 @@ class FileManager {
 		return 0;
 	}
 
-    function rmdir(string $dir, bool $recursive = false, bool $force = false): bool {
-        global $wp_filesystem;
+	public function rmdir( string $dir, bool $recursive = false, bool $force = false ): bool {
+		global $wp_filesystem;
 		if ( $this->inAllowedDirectory($dir) ) {
 			if ( $force ) {
 				$this->recursiveRmdir($dir);
@@ -143,7 +162,7 @@ class FileManager {
 			// Did it fail?
 			if ( !$this->initialized(false, 'rmdir') ) {
 				// $recursive is not supported in the default php rmdir function
-				return rmdir($dir);
+				return rmdir($dir); // @phpcs:ignore
 			}
 
 			$wp_filesystem->rmdir($dir, $recursive);
@@ -152,55 +171,52 @@ class FileManager {
 		}
 
 		return false;
-    }
+	}
 
-    function recursiveRmdir( string $dirPath ) {
-        if ( !is_dir($dirPath) ) {
-            throw new InvalidArgumentException("$dirPath must be a directory");
-        }
-        if ( !str_ends_with($dirPath, '/') ) {
-            $dirPath .= '/';
-        }
-        $files = glob($dirPath . '*', GLOB_MARK);
-        foreach ($files as $file) {
-            if ( is_dir($file) ) {
-                $this->recursiveRmdir($file);
-            } else {
-                unlink($file);
-            }
-        }
-        rmdir($dirPath);
-    }
+	/**
+	 * @param string $path
+	 * @return void
+	 * @throws InvalidArgumentException
+	 */
+	public function recursiveRmdir( string $path ): void {
+		if ( !is_dir($path) ) {
+			return;
+		}
+		if ( !str_ends_with($path, '/') ) {
+			$path .= '/';
+		}
+		$files = glob($path . '*', GLOB_MARK);
+		if ( $files === false ) {
+			return;
+		}
+		foreach ( $files as $file ) {
+			if ( is_dir($file) ) {
+				$this->recursiveRmdir($file);
+			} else {
+				unlink($file); // @phpcs:ignore
+			}
+		}
+		rmdir($path); // @phpcs:ignore
+	}
 
-	function createRequiredDirectories( $directories = false ): bool {
+	/**
+	 * @param array<string> $directories
+	 * @return bool
+	 */
+	public function createRequiredDirectories( array $directories = array() ): bool {
 		global $wp_filesystem;
-		$directories = $directories === false ? array(wd_asp()->upload_path, wd_asp()->cache_path) : $directories;
+		$directories = empty($directories) ? array( wd_asp()->upload_path, wd_asp()->cache_path ) : $directories;
 
 		if ( $this->initialized(true, 'is_dir') ) {
 			foreach ( $directories as $directory ) {
 				if ( !$wp_filesystem->is_dir( $directory ) ) {
-					if ( !$wp_filesystem->mkdir( $directory, 0755 ) ) {
-						@mkdir( $directory, '0777', true );
-					}
-					if ( $wp_filesystem->is_dir( $directory ) && !@chmod($directory, 0755) ) {
-						if ( !@chmod($directory, 0664 ) ){
-							@chmod($directory, 0644 );
-						}
-					}
+					$wp_filesystem->mkdir( $directory, 0755, true );
 				}
 			}
 		} else {
 			foreach ( $directories as $directory ) {
 				if ( !is_dir($directory) ) {
-					if ( !@mkdir($directory, '0777', true) ) {
-						return false;
-					} else {
-						if ( !@chmod($directory, 0755) ) {
-							if ( !@chmod($directory, 0664) ) {
-								@chmod($directory, 0644);
-							}
-						}
-					}
+					@mkdir($directory, 0755, true); // @phpcs:ignore
 				}
 			}
 		}
@@ -208,14 +224,17 @@ class FileManager {
 		return true;
 	}
 
-	function removeRequiredDirectories() {
-		$directories = array(wd_asp()->upload_path, wd_asp()->cache_path);
+	/**
+	 * @return void
+	 */
+	public function removeRequiredDirectories(): void {
+		$directories = array( wd_asp()->upload_path, wd_asp()->cache_path );
 		foreach ( $directories as $directory ) {
 			if ( $this->pathSafetyCheck($directory) && $this->isDir($directory) ) {
 				$this->rmdir( $directory  );
-				if ( $this->isDir( $directory ) ) {
+				if ( $this->isDir( $directory ) ) { // @phpstan-ignore-line
 					$this->rmdir( $directory, true);
-					if ( $this->isDir( $directory ) ) {
+					if ( $this->isDir( $directory ) ) { // @phpstan-ignore-line
 						// Last attempt, with force
 						$this->rmdir( $directory, true, true);
 					}
@@ -224,13 +243,12 @@ class FileManager {
 		}
 	}
 
-	private function pathSafetyCheck($path): bool {
+	private function pathSafetyCheck( string $path ): bool {
 		if (
-			isset($path) &&
-			$path != '' &&
-			$path != '/' &&
-			$path != './' &&
-			str_replace('/', '', get_home_path()) != str_replace('/', '', $path) &&
+			$path !== '' &&
+			$path !== '/' &&
+			$path !== './' &&
+			str_replace('/', '', get_home_path()) !== str_replace('/', '', $path) &&
 			strpos($path, 'wp-content') > 5 &&
 			strpos($path, 'plugins') === false &&
 			strpos($path, 'wp-includes') === false &&
@@ -243,10 +261,14 @@ class FileManager {
 		return false;
 	}
 
-	private function inAllowedDirectory($path) {
+	/**
+	 * @param string $path
+	 * @return false|string
+	 */
+	private function inAllowedDirectory( string $path ) {
 		if ( strpos($path, wd_asp()->upload_path) !== false ) {
 			return wd_asp()->upload_path;
-		} else if ( strpos($path, wd_asp()->cache_path) !== false ) {
+		} elseif ( strpos($path, wd_asp()->cache_path) !== false ) {
 			return wd_asp()->cache_path;
 		}
 

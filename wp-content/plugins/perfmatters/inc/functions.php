@@ -61,9 +61,6 @@ if(!empty($perfmatters_options['hide_wp_version'])) {
 	remove_action('wp_head', 'wp_generator');
 	add_filter('the_generator', 'perfmatters_hide_wp_version');
 }
-if(!empty($perfmatters_options['remove_wlwmanifest_link'])) {
-	remove_action('wp_head', 'wlwmanifest_link');
-}
 if(!empty($perfmatters_options['remove_rsd_link'])) {
 	remove_action('wp_head', 'rsd_link');
 }
@@ -153,7 +150,8 @@ function perfmatters_rest_authentication_errors($result) {
 			'elementor',
 			'ws-form',
 			'litespeed',
-			'wp-recipe-maker'
+			'wp-recipe-maker',
+			'iawp'
 		));
 		foreach($exceptions as $exception) {
 			if(strpos($rest_route, $exception) !== false) {
@@ -1294,6 +1292,12 @@ if(!empty($perfmatters_options['remove_global_styles'])) {
 	});
 }
 
+/* Separate Block Styles
+/***********************************************************************/
+if(!empty($perfmatters_options['separate_block_styles'])) {
+	add_filter('should_load_separate_core_block_assets', '__return_true');
+}
+
 /* Header Code
 /***********************************************************************/
 if(!empty($perfmatters_options['assets']['header_code'])) {
@@ -1376,6 +1380,7 @@ function perfmatters_is_page_builder() {
 		'elementor-preview', //elementor
 		'fl_builder', //beaver builder
 		'et_fb', //divi
+		'et_pb_preview',
 		'ct_builder', //oxygen
 		'tve', //thrive
 		'app', //flatsome
@@ -1402,13 +1407,58 @@ function perfmatters_is_page_builder() {
 	return false;
 }
 
-//check if the current request is rest or ajax
+//check if the current request is dynamic
 function perfmatters_is_dynamic_request () {
-    if((defined('REST_REQUEST') && REST_REQUEST) || (function_exists('wp_is_json_request') && wp_is_json_request()) || wp_doing_ajax() || wp_doing_cron()) {
+    if((defined('REST_REQUEST') && REST_REQUEST) || (function_exists('wp_is_json_request') && wp_is_json_request() && !perfmatters_prefer_html_request()) || wp_doing_ajax() || wp_doing_cron()) {
         return true;
     }
 
     return false;
+}
+
+//check if html/xhtml is the preferred request
+function perfmatters_prefer_html_request() {
+
+    //check accept header
+    if(empty($_SERVER['HTTP_ACCEPT'])) {
+    	return false;
+    }
+
+    //get content types set in header
+    $content_types = explode(',', $_SERVER['HTTP_ACCEPT']);
+    $html_preference = 0;
+    $xhtml_preference = 0;
+    $highest_preference = 0;
+
+    //loop through accepted types
+    foreach($content_types as $type) {
+
+        //split parts
+        $type_parts = explode(';', trim($type));
+        $mime_type = $type_parts[0];
+
+        //default quality factor of 1 if not set
+        $q = 1.0;
+        if(isset($type_parts[1]) && strpos($type_parts[1], 'q=') === 0) {
+            $q = floatval(substr($type_parts[1], 2));
+        }
+
+        //update highest preference
+        if($q > $highest_preference) {
+            $highest_preference = $q;
+        }
+
+        //check mime type
+        if($mime_type === 'text/html') {
+            $html_preference = $q;
+        }
+        elseif($mime_type === 'application/xhtml+xml') {
+            $xhtml_preference = $q;
+        }
+    }
+
+    // Return true if text/html or application/xhtml+xml has the highest preference
+    return ($html_preference === $highest_preference || $xhtml_preference === $highest_preference);
 }
 
 /* EDD License Functions

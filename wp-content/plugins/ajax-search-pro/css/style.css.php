@@ -15,7 +15,7 @@ $use_compatibility = true;
 $use_strong_compatibility = true;
 $base_css = "";
 
-$asp_comp = get_option('asp_compatibility');
+$asp_comp = wd_asp()->o['asp_compatibility'];
 $comp_level = w_isset_def($asp_comp["css_compatibility_level"], "medium");
 
 if ($comp_level == "medium") {

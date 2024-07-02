@@ -25,7 +25,7 @@ class Manager {
 	 */
 	private $updates_o;
 
-	private $download_link_url = 'http://update.wp-dreams.com/u.php';
+	private $download_link_url = 'https://update.wp-dreams.com/';
 
 	/**
 	 * Initialize a new instance of the WordPress Auto-Update class
@@ -58,7 +58,6 @@ class Manager {
 	 * @return object $ transient
 	 */
 	public function check_update( $transient ) {
-
 		if ( empty( $transient->checked ) ) {
 			return $transient;
 		}
@@ -68,16 +67,18 @@ class Manager {
 			$download_url = '';
 			// No need to check the remote, as the ->getDownLoadURL will do it later
 			$license_key = EnvatoLicense::isActivated();
+
 			if ( $license_key !== false ) {
 				if ( get_site_transient('_asp_update_dl_url') === false ) {
+
 					$response = $this->getDownloadUrl( $license_key );
 					if ( !empty($response) ) {
 						if ( isset($response['status']) && $response['status'] != 1 ) {
 							EnvatoLicense::deactivate( false );
 							return new WP_Error( 'inactive', $response['msg'] );
 						} else {
-							$download_url = $response['data'];
-							set_site_transient('_asp_update_dl_url', $download_url, 3600 * 3);
+							$download_url = $response['url'];
+							set_site_transient('_asp_update_dl_url', $download_url, 60);
 						}
 					}
 				} else {
@@ -156,7 +157,7 @@ class Manager {
 				'high' => 'https://ajaxsearchpro.com/assets/banner-1544x500-min.png',
 				'low' => 'https://ajaxsearchpro.com/assets/banner-1544x500-min.png',
 			];
-			$information->download_link = 'http://codecanyon.net/downloads/';
+			$information->download_link = 'https://codecanyon.net/downloads/';
 
 			return $information;
 		}
@@ -186,9 +187,7 @@ class Manager {
 	public function getDownloadUrl( $license_key ) {
 		$url = rawurlencode( $_SERVER['HTTP_HOST'] );
 		$key = rawurlencode( $license_key );
-
-		$url = $this->download_link_url . '?file=asp&url=' . $url . '&key=' . $key . '&version=' . ASP_CURR_VER;
-
+		$url = $this->download_link_url . "tokens/generate/$key?url=" . $url;
 		$response = wp_remote_get( $url );
 
 		if ( is_wp_error( $response ) ) {

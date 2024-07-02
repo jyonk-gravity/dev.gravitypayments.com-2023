@@ -4,8 +4,8 @@ Donate link: https://perfmatters.io
 Tags: perfmatters
 Requires at least: 5.5
 Requires PHP: 7.0
-Tested up to: 6.5.2
-Stable tag: 2.2.7
+Tested up to: 6.5.5
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,51 @@ Perfmatters is a lightweight performance plugin developed to speed up your WordP
 Check out our [documentation](https://perfmatters.io/docs/) for more information on how to use Perfmatters.
 
 == Changelog ==
+
+= 2.3.1 - 06.27.2024 =
+* Added new Minify JS and Minify CSS features along with options to exclude specific files from minification and clear generated minified files when necessary.
+* UI Updates: What was previously the Assets tab has now been replaced by three more specific tabs, JavaScript, CSS, and Code. The main Script Manager toggle has been moved to Tools. Additional subheaders have also been added throughout to help with organization.
+* Added new perfmatters_minify_js filter.
+* Added new perfmatters_minify_js_exclusions filter.
+* Added new perfmatters_minify_css filter.
+* Added new perfmatters_minify_css_exclusions filter.
+* Added a REST API exception for Independent Analytics.
+* Added additional request parameter for Divi to excluded page builders array.
+* Added built-in critical image exclusion for WPML flag images.
+* Added Delay JS quick exclusion for Grow for WordPress.
+* Updated used CSS function to generate a separate file for each post type archive instead of a single shared stylesheet.
+* Fixed an issue that was causing an incorrect root directory to be returned for some environments.
+* Fixed an issue with preload and lazyload parent exclusion filters that was preventing them from excluding images correctly in some cases.
+* Translation updates.
+
+= 2.3.0 - 05.23.2024 =
+* Added a new function to verify the preferred content type from the HTTP header when determining if JSON is being requested. This should improve compatibility with certain hosting providers.
+* Added an additional check when removing unused CSS to avoid parsing print-only stylesheets.
+* Updated Delay JS quick exclusion for Termageddon + UserCentrics for better compatibility.
+* Removed option to disable wlwmanifest link output as that function was deprecated in WordPress 6.3.
+* Fixed an issue that was preventing lazy loaded images from displaying when defer inline scripts was enabled.
+* Fixed an issue where responsive styles for YouTube preview thumbnails were not printing on certain themes using responsive embeds.
+* Fixed an issue with DOMDocument where HTML entities coming from inline styles would display as their encoded values.
+* Fixed a missing tooltip on the scan database option.
+* Translation updates.
+
+= 2.2.9 - 05.16.2024 =
+* Fixed an issue that could cause a conflict with other JS deferral solutions when running at the same time.
+
+= 2.2.8 - 05.16.2024 =
+* Added new Defer JavaScript option to Include Inline Scripts.
+* Added new option to Separate Block Styles.
+* Added additional built-in CSS selector exclusions for Splide.
+* Updated Delay JS quick exclusion for Kadence Blocks with additional scripts.
+* Updated our staging site license key exception list with additional formats.
+* Updated deferral exclusion check to work with entire tag instead of just src URL.
+* Moved to printing responsive embed styles for YouTube preview thumbnails in all cases for better compatibility.
+* Fixed an issue where the CDN rewrite was not picking up URLs with a relative protocol.
+* Fixed an issue where an existing data-wp-strategy attribute would prevent a script from being able to be deferred.
+* Fixed an issue where the Script Manager was not giving the right feedback on save when a new line character was showing up in the AJAX response.
+* Fixed an issue on the network settings page where incorrect tab content would show up after saving.
+* Fixed an issue where the license tab was showing up at the subsite level if the plugin was not network activated in a multisite environment.
+* Translation updates.
 
 = 2.2.7 - 04.19.2024 =
 * Added new perfmatters_used_css_below filter.

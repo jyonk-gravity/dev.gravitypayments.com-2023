@@ -116,8 +116,8 @@ if (!class_exists("wd_CPTSelect")) {
                 $asp_query = new SearchQuery(array(
                     "s" => $phrase,
                     "_ajax_search" => false,
-                    'keyword_logic' => 'AND',
-                    'secondary_logic' => 'OR',
+                    'keyword_logic' => 'and',
+                    'secondary_logic' => 'or',
                     "posts_per_page" => 20,
                     'post_type' => $ptypes,
                     'post_status' => array('publish', 'future', 'pending', 'private'),

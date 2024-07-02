@@ -1,8 +1,6 @@
 <?php
 namespace Perfmatters;
 
-//use WpOrg\Requests\Requests; //wp 6.2+
-
 if(!defined('REQUESTS_SILENCE_PSR0_DEPRECATIONS')) {
     define('REQUESTS_SILENCE_PSR0_DEPRECATIONS', true);
 }
@@ -88,7 +86,7 @@ class Fonts
             foreach($google_fonts as $google_font) {
      
                 //create unique file details
-                $file_name = substr(md5($google_font[2]), 0, 12) . ".google-fonts.css";
+                $file_name = substr(md5($google_font[2]), 0, 12) . ".google-fonts.min.css";
                 $file_path = PERFMATTERS_CACHE_DIR . 'fonts/' . $file_name;
                 $file_url = PERFMATTERS_CACHE_URL . 'fonts/' . $file_name;
 
@@ -170,8 +168,9 @@ class Fonts
             }
         }
 
-        //save final css file
-        file_put_contents($file_path, $css);
+        //minify and save file
+        $minifier = new \MatthiasMullie\Minify\CSS($css);
+        $minifier->minify($file_path);
 
         return true;
     }

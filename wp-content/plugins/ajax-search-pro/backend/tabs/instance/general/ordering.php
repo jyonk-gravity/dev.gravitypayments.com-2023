@@ -56,8 +56,8 @@
         $o = new wpdreamsCustomSelect("orderby", __('Secondary ordering', 'ajax-search-pro'),
             array(
 	            'selects' => array_merge($common_orders, array(
-		            array('option' => __('Custom Field descending', 'ajax-search-pro'), 'value' => 'customfp DESC'),
-		            array('option' => __('Custom Field  ascending', 'ajax-search-pro'), 'value' => 'customfp ASC')
+		            array('option' => __('Custom Field descending', 'ajax-search-pro'), 'value' => 'customfs DESC'),
+		            array('option' => __('Custom Field  ascending', 'ajax-search-pro'), 'value' => 'customfs ASC')
 	            )),
                 'value' => $sd['orderby']
             ));

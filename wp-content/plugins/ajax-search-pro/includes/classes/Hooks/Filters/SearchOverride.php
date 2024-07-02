@@ -10,7 +10,9 @@ use WPDRMS\ASP\Utils\Archive;
 use WPDRMS\ASP\Utils\Search;
 use WPDRMS\ASP\Utils\WooCommerce;
 
-if (!defined('ABSPATH')) die('-1');
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
 
 
 class SearchOverride extends AbstractFilter {
@@ -26,7 +28,7 @@ class SearchOverride extends AbstractFilter {
 	 * @return bool
 	 * @noinspection PhpUnused
 	 */
-	public function maybeCancelWPQuery($query, $wp_query) {
+	public function maybeCancelWPQuery( $query, $wp_query ) {
 		// is_home check is needed for the blog/home page filtering, query reset will break it
 		if ( $this->checkSearchOverride(true, $wp_query) === true && !$wp_query->is_home ) {
 			$query = false;
@@ -40,21 +42,21 @@ class SearchOverride extends AbstractFilter {
 	 * @param $posts - array of posts
 	 * @param $wp_query - The instance of WP_Query() for this query
 	 */
-	public function override($posts, $wp_query) {
-		$checkOverride = $this->checkSearchOverride(false, $wp_query);
-		if ( $checkOverride === false) {
+	public function override( $posts, $wp_query ) {
+		$check_override = $this->checkSearchOverride(false, $wp_query);
+		if ( $check_override === false ) {
 			return $posts;
 		} else {
-			$_p_id = $checkOverride[0];
-			$s_data = $checkOverride[1];
+			$_p_id  = $check_override[0];
+			$s_data = $check_override[1];
 		}
 
 		// The get_query_var() is malfunctioning in some cases!!! use $_GET['paged']
-		//$paged = (get_query_var('paged') != 0) ? get_query_var('paged') : 1;
+		// $paged = (get_query_var('paged') != 0) ? get_query_var('paged') : 1;
 		if ( isset($_GET['asp_force_reset_pagination']) ) {
 			// For the correct pagination highlight
 			$_GET['paged'] = 1;
-			$paged = 1;
+			$paged         = 1;
 			set_query_var('paged', 1);
 			set_query_var('page', 1);
 		} else {
@@ -66,7 +68,7 @@ class SearchOverride extends AbstractFilter {
 		}
 
 		$instance = wd_asp()->instances->get($_p_id);
-		$sd = $instance['data'];
+		$sd       = $instance['data'];
 		// First check the asp_ls, as s might be set already
 		$phrase = $_GET['asp_ls'] ?? $_GET['s'] ?? '';
 
@@ -81,43 +83,50 @@ class SearchOverride extends AbstractFilter {
 		} else {
 			$posts_per_page = $sd['results_per_page'];
 		}
-		if ( $posts_per_page == 'auto' ) {
+		if ( $posts_per_page === 'auto' ) {
 			if ( isset($wp_query->query_vars, $wp_query->query_vars['posts_per_page']) ) {
 				$posts_per_page = $wp_query->query_vars['posts_per_page'];
 			} else {
 				$posts_per_page = get_option( 'posts_per_page' );
 			}
 		}
-		$posts_per_page = $posts_per_page == 0 ? 1 : $posts_per_page;
+		$posts_per_page = intval($posts_per_page);
+		$posts_per_page = $posts_per_page === 0 ? 1 : $posts_per_page;
 
 		$s_data = apply_filters('asp_search_override_data', $s_data, $posts, $wp_query, $_p_id, $phrase);
 
 		// A possible exit point for the user, if he sets the _abort argument
-		if ( isset($s_data['_abort']) )
+		if ( isset($s_data['_abort']) ) {
 			return $posts;
+		}
 
 		$args = array(
-			"s" => $phrase,
-			"_ajax_search" => false,
-			"posts_per_page" => $posts_per_page,
-			"page"  => $paged
+			's'              => $phrase,
+			'_ajax_search'   => false,
+			'posts_per_page' => $posts_per_page,
+			'page'           => $paged,
 		);
 
-		//$args = self::getAdditionalArgs($args);
-		add_filter('asp_query_args', array($this, 'getAdditionalArgs'));
-
-		if ( count($s_data) == 0 )
+		// $args = self::getAdditionalArgs($args);
+		add_filter('asp_query_args', array( $this, 'getAdditionalArgs' ));
+		if ( count($s_data) === 0 ) {
 			$asp_query = new SearchQuery($args, $_p_id);
-		else
+		} else {
 			$asp_query = new SearchQuery($args, $_p_id, $s_data);
+		}
 
 		$res = $asp_query->posts;
+
+		if ( $sd['result_suggestions_results_page'] && count($res) === 0 ) {
+			$asp_query->resultsSuggestions();
+			$res = $asp_query->posts;
+		}
 
 		do_action('asp_after_search', $phrase, $res, $_p_id);
 
 		// Elementor Posts widget no results text
 		if (
-			count($res) == 0 &&
+			count($res) === 0 &&
 			isset($wp_query->query_vars, $wp_query->query_vars['is_elementor'])
 		) {
 			echo Search::generateHTMLResults(array(), false, $_p_id, $phrase, 'elementor');
@@ -128,25 +137,30 @@ class SearchOverride extends AbstractFilter {
 			$wp_query->query_vars['post__in'] = array_unique(
 				array_merge(
 					$wp_query->query_vars['post__in'],
-					array_map(function($aspr){
-						return $aspr->id;
-					}, $asp_query->all_results)
+					array_map(
+						function ( $aspr ) {
+							return $aspr->id;
+						},
+						$asp_query->all_results
+					)
 				)
 			);
-			$wp_query->query_vars['orderby'] = 'post__in';
+			$wp_query->query_vars['orderby']  = 'post__in';
 		}
 
 		// Elementor override fix
-		if ( defined('ELEMENTOR_VERSION') && isset($wp_query->posts) )
+		if ( defined('ELEMENTOR_VERSION') && isset($wp_query->posts) ) {
 			$wp_query->posts = $res;
+		}
 
 		$wp_query->found_posts = $asp_query->found_posts;
-		if (($wp_query->found_posts / $posts_per_page) > 1)
+		if ( ( $wp_query->found_posts / $posts_per_page ) > 1 ) {
 			$wp_query->max_num_pages = ceil($wp_query->found_posts / $posts_per_page);
-		else
+		} else {
 			$wp_query->max_num_pages = 0;
+		}
 
-		self::$overrideCount++;
+		++self::$overrideCount;
 
 		return $res;
 	}
@@ -162,26 +176,24 @@ class SearchOverride extends AbstractFilter {
 		// WooCommerce price filter
 		if ( isset($_GET['min_price'], $_GET['max_price']) ) {
 			$args['post_meta_filter'][] = array(
-				'key'     => '_price',         // meta key
-				'value'   => array( floatval($_GET['min_price']), floatval($_GET['max_price']) ),
-				'operator' => 'BETWEEN'
+				'key'      => '_price',         // meta key
+				'value'    => array( floatval($_GET['min_price']), floatval($_GET['max_price']) ),
+				'operator' => 'BETWEEN',
 			);
 		}
 
 		// WooCommerce or other custom Ordering
 		if ( isset($_GET['orderby']) || isset($_GET['product_orderby']) ) {
 			$o_by = $_GET['orderby'] ?? $_GET['product_orderby'];
-			$o_by = str_replace(' ', '', (strtolower($o_by)));
+			$o_by = str_replace(' ', '', ( strtolower($o_by) ));
 			if ( isset($_GET['order']) || isset($_GET['product_order']) ) {
 				$o_way = $_GET['order'] ?? $_GET['product_order'];
+			} elseif ( $o_by == 'price' || $o_by == 'product_price' ) {
+				$o_way = 'ASC';
+			} elseif ( $o_by == 'alphabetical' ) {
+				$o_way = 'ASC';
 			} else {
-				if ( $o_by == 'price' || $o_by == 'product_price' ) {
-					$o_way = 'ASC';
-				} else if ( $o_by == 'alphabetical' ) {
-					$o_way = 'ASC';
-				} else {
-					$o_way = 'DESC';
-				}
+				$o_way = 'DESC';
 			}
 			$o_way = strtoupper($o_way);
 			if ( $o_way != 'DESC' && $o_way != 'ASC' ) {
@@ -196,7 +208,7 @@ class SearchOverride extends AbstractFilter {
 				case 'popularity':
 				case 'post_popularity':
 				case 'product_popularity':
-					$args['post_primary_order'] = "customfp $o_way";
+					$args['post_primary_order']          = "customfp $o_way";
 					$args['post_primary_order_metatype'] = 'numeric';
 					$args['_post_primary_order_metakey'] = 'total_sales';
 					break;
@@ -204,7 +216,7 @@ class SearchOverride extends AbstractFilter {
 				case 'post_rating':
 				case 'product_rating':
 					// Custom query args here
-					$args['cpt_query']['fields'] = "(
+					$args['cpt_query']['fields']  = "(
                             SELECT
                                 IF(AVG( $wpdb->commentmeta.meta_value ) IS NULL, 0, AVG( $wpdb->commentmeta.meta_value ))
                             FROM
@@ -235,7 +247,7 @@ class SearchOverride extends AbstractFilter {
 				case 'price':
 				case 'product_price':
 				case 'price-desc':
-					$args['post_primary_order'] = "customfp $o_way";
+					$args['post_primary_order']          = "customfp $o_way";
 					$args['post_primary_order_metatype'] = 'numeric';
 					$args['_post_primary_order_metakey'] = '_price';
 					break;
@@ -246,14 +258,14 @@ class SearchOverride extends AbstractFilter {
 		}
 
 		if ( isset($_GET['post_type']) && $_GET['post_type'] == 'product' ) {
-			$args['search_type'] = array("cpt");
-			$old_ptype = $args['post_type'];
-			$args['post_type'] = array();
-			if ( in_array("product", $old_ptype) ) {
-				$args['post_type'][] = "product";
+			$args['search_type'] = array( 'cpt' );
+			$old_ptype           = $args['post_type'];
+			$args['post_type']   = array();
+			if ( in_array('product', $old_ptype) ) {
+				$args['post_type'][] = 'product';
 			}
-			if ( in_array("product_variation", $old_ptype) ) {
-				$args['post_type'][] = "product_variation";
+			if ( in_array('product_variation', $old_ptype) ) {
+				$args['post_type'][] = 'product_variation';
 			}
 
 			// Exclude from search products
@@ -262,21 +274,21 @@ class SearchOverride extends AbstractFilter {
 			if ( $visibility_term !== false ) {
 				$found = false;
 				if ( isset($args['post_tax_filter']) ) {
-					foreach ($args['post_tax_filter'] as &$filter) {
+					foreach ( $args['post_tax_filter'] as &$filter ) {
 						if ( $filter['taxonomy'] == 'product_visibility' ) {
 							$filter['exclude'] = $filter['exclude'] ?? array();
-							$filter['exclude'] = array_merge($filter['exclude'], array($visibility_term->term_id));
-							$found = true;
+							$filter['exclude'] = array_merge($filter['exclude'], array( $visibility_term->term_id ));
+							$found             = true;
 							break;
 						}
 					}
 				}
 				if ( !$found ) {
 					$args['post_tax_filter'][] = array(
-						'taxonomy' => 'product_visibility',
-						'include' => array(),
-						'exclude' => array($visibility_term->term_id),
-						'allow_empty' => true
+						'taxonomy'    => 'product_visibility',
+						'include'     => array(),
+						'exclude'     => array( $visibility_term->term_id ),
+						'allow_empty' => true,
 					);
 				}
 			}
@@ -285,49 +297,52 @@ class SearchOverride extends AbstractFilter {
 		// Archive pages
 		if ( isset($_GET['asp_ls']) ) {
 			if ( WooCommerce::isShop() ) {
-				$args['search_type'] = array('cpt');
+				$args['search_type'] = array( 'cpt' );
 				// Only allow product or product variations if selected
-				$args['post_type'] = in_array('product_variation', $args['post_type']) ? array('product', 'product_variation') : array('product');
+				$args['post_type'] = in_array('product_variation', $args['post_type']) ? array( 'product', 'product_variation' ) : array( 'product' );
 				// Exclude from catalog products
 				$visibility_term = get_term_by('slug', 'exclude-from-search', 'product_visibility');
-				$catalog_term = get_term_by('slug', 'exclude-from-catalog', 'product_visibility');
+				$catalog_term    = get_term_by('slug', 'exclude-from-catalog', 'product_visibility');
 				if ( $visibility_term !== false && $catalog_term !== false ) {
 					$found = false;
 					if ( isset($args['post_tax_filter']) ) {
-						foreach ($args['post_tax_filter'] as &$filter) {
+						foreach ( $args['post_tax_filter'] as &$filter ) {
 							if ( $filter['taxonomy'] == 'product_visibility' ) {
 								$filter['exclude'] = $filter['exclude'] ?? array();
-								$filter['exclude'] = array_merge($filter['exclude'], array(
-									$visibility_term->term_id,
-									$catalog_term->term_id
-								));
-								$found = true;
+								$filter['exclude'] = array_merge(
+									$filter['exclude'],
+									array(
+										$visibility_term->term_id,
+										$catalog_term->term_id,
+									)
+								);
+								$found             = true;
 								break;
 							}
 						}
 					}
 					if ( !$found ) {
 						$args['post_tax_filter'][] = array(
-							'taxonomy' => 'product_visibility',
-							'include' => array(),
-							'exclude' => array(
+							'taxonomy'    => 'product_visibility',
+							'include'     => array(),
+							'exclude'     => array(
 								$visibility_term->term_id,
-								$catalog_term->term_id
+								$catalog_term->term_id,
 							),
-							'allow_empty' => true
+							'allow_empty' => true,
 						);
 					}
 				}
-			} else if ( Archive::isTaxonomyArchive() ) {
-				$args['search_type'] = array('cpt');
-				$found = false;
-				$children = get_term_children(get_queried_object()->term_id, get_queried_object()->taxonomy);
-				$include = !is_wp_error($children) ? array_merge(array(get_queried_object()->term_id), $children) : array(get_queried_object()->term_id);
+			} elseif ( Archive::isTaxonomyArchive() ) {
+				$args['search_type'] = array( 'cpt' );
+				$found               = false;
+				$children            = get_term_children(get_queried_object()->term_id, get_queried_object()->taxonomy);
+				$include             = !is_wp_error($children) ? array_merge(array( get_queried_object()->term_id ), $children) : array( get_queried_object()->term_id );
 				if ( isset($args['post_tax_filter']) ) {
-					foreach ($args['post_tax_filter'] as &$filter) {
+					foreach ( $args['post_tax_filter'] as &$filter ) {
 						if ( $filter['taxonomy'] == get_queried_object()->taxonomy ) {
 							$filter['include'] = array_diff($include, $filter['exclude']);
-							$found = true;
+							$found             = true;
 							break;
 						}
 					}
@@ -337,13 +352,13 @@ class SearchOverride extends AbstractFilter {
 						'taxonomy'    => get_queried_object()->taxonomy,
 						'include'     => $include,
 						'exclude'     => array(),
-						'allow_empty' => true
+						'allow_empty' => true,
 					);
 				}
-			} else if ( Archive::isPostTypeArchive() ) {
-				$args['search_type'] = array('cpt');
-				$post_type = $wp_query->get( 'post_type' );
-				$args['post_type'] = $post_type == '' ? 'post' : $post_type;
+			} elseif ( Archive::isPostTypeArchive() ) {
+				$args['search_type'] = array( 'cpt' );
+				$post_type           = $wp_query->get( 'post_type' );
+				$args['post_type']   = $post_type == '' ? array('post') : array($post_type);
 			}
 		}
 		return $args;
@@ -357,15 +372,16 @@ class SearchOverride extends AbstractFilter {
 	 * @param $wp_query - The instance of WP_Query() for this query
 	 * @return array|bool
 	 */
-	public function checkSearchOverride($check_only, $wp_query) {
+	public function checkSearchOverride( $check_only, $wp_query ) {
 		// Check the search query
 		if ( !$this->isSearch($wp_query) ) {
 			return false;
 		}
 		// If you get method is used, then the cookies are not present or not used
 		if ( isset($_GET['p_asp_data']) ) {
-			if ( $check_only )
+			if ( $check_only ) {
 				return true;
+			}
 			$_p_id = $_GET['p_asid'] ?? $_GET['np_asid'];
 			if ( $_GET['p_asp_data'] == 1 ) {
 				$s_data = $_GET;
@@ -373,29 +389,30 @@ class SearchOverride extends AbstractFilter {
 				// Legacy support
 				parse_str(base64_decode($_GET['p_asp_data']), $s_data);
 			}
-		} else if (
+		} elseif (
 			isset($_GET['s'], $_COOKIE['asp_data']) && (
 				( $_GET['s'] != '' && isset($_COOKIE['asp_phrase']) && $_COOKIE['asp_phrase'] == $_GET['s'] ) ||
 				( $_GET['s'] == '' )
 			)
 		) {
-			if ( $check_only )
+			if ( $check_only ) {
 				return true;
+			}
 			parse_str($_COOKIE['asp_data'], $s_data);
 			$_POST['np_asp_data'] = $_COOKIE['asp_data'];
-			$_POST['np_asid'] = $_COOKIE['asp_id'];
-			$_p_id = $_COOKIE['asp_id'];
+			$_POST['np_asid']     = $_COOKIE['asp_id'];
+			$_p_id                = $_COOKIE['asp_id'];
 		} else {
 			// Probably the search results page visited via URL, not triggered via search bar
-			if ( isset($_GET['post_type']) && $_GET['post_type'] == 'product') {
-				$override_id = get_option("asp_woo_override", -1);
+			if ( isset($_GET['post_type']) && $_GET['post_type'] == 'product' ) {
+				$override_id = get_option('asp_woo_override', -1);
 			} else {
-				$override_id = get_option("asp_st_override", -1);
+				$override_id = get_option('asp_st_override', -1);
 			}
 			if ( $override_id > -1 && wd_asp()->instances->exists( $override_id ) ) {
 				$inst = wd_asp()->instances->get( $override_id );
 				if ( $inst['data']['override_default_results'] == 1 ) {
-					return array($override_id, array());
+					return array( $override_id, array() );
 				}
 			}
 
@@ -403,11 +420,11 @@ class SearchOverride extends AbstractFilter {
 			return false;
 		}
 
-		return array($_p_id, $s_data);
+		return array( $_p_id, $s_data );
 	}
 
-	public function isSearch($wp_query) {
-		$is_search = true;
+	public function isSearch( $wp_query ) {
+		$is_search  = true;
 		$soft_check = defined('ELEMENTOR_VERSION') || wd_asp()->o['asp_compatibility']['query_soft_check'];
 		// This can't be a search query if none of this is set
 		if ( !isset($wp_query, $wp_query->query_vars, $_GET['s']) ) {
@@ -419,10 +436,8 @@ class SearchOverride extends AbstractFilter {
 				if ( !$wp_query->is_search() ) {
 					$is_search = false;
 				}
-			} else {
-				if ( !$wp_query->is_search() || !$wp_query->is_main_query() ) {
-					$is_search = false;
-				}
+			} elseif ( !$wp_query->is_search() || !$wp_query->is_main_query() ) {
+				$is_search = false;
 			}
 			if ( !$is_search && isset($wp_query->query_vars['aps_title']) ) {
 				$is_search = true;
@@ -446,8 +461,7 @@ class SearchOverride extends AbstractFilter {
 			if (
 				( wd_asp()->instances->getOption($_GET['p_asid'], 'woo_shop_live_search') && WooCommerce::isShop() ) ||
 				( wd_asp()->instances->getOption($_GET['p_asid'], 'cpt_archive_live_search') && Archive::isPostTypeArchive() ) ||
-				( wd_asp()->instances->getOption($_GET['p_asid'], 'taxonomy_archive_live_search') && Archive::isTaxonomyArchive() ) )
-			{
+				( wd_asp()->instances->getOption($_GET['p_asid'], 'taxonomy_archive_live_search') && Archive::isTaxonomyArchive() ) ) {
 				$is_search = true;
 			}
 		}
@@ -458,8 +472,9 @@ class SearchOverride extends AbstractFilter {
 		}
 
 		// Is this the admin area?
-		if ( $is_search && is_admin() )
+		if ( $is_search && is_admin() ) {
 			$is_search = false;
+		}
 
 		// Possibility to add exceptions
 		return apply_filters('asp_query_is_search', $is_search, $wp_query);
@@ -476,7 +491,7 @@ class SearchOverride extends AbstractFilter {
 	public function fixUrls( $url, $post ) {
 		if ( isset($post->asp_data, $post->asp_data->link) ) {
 			return $post->asp_data->link;
-		} else if ( isset($post->asp_guid) ) {
+		} elseif ( isset($post->asp_guid) ) {
 			return $post->asp_guid;
 		}
 		return $url;
@@ -496,18 +511,20 @@ class SearchOverride extends AbstractFilter {
 
 		if ( isset($post, $post->asp_guid) && is_object($post) && function_exists('genesis_markup') ) {
 			$pattern = "/(?<=href=(\"|'))[^\"']+(?=(\"|'))/";
-			$title = preg_replace($pattern, $post->asp_guid, $title);
+			$title   = preg_replace($pattern, $post->asp_guid, $title);
 
-			$output = genesis_markup( array(
-				'open'    => "<{$wrap} %s>",
-				'close'   => "</{$wrap}>",
-				'content' => $title,
-				'context' => 'entry-title',
-				'params'  => array(
-					'wrap'  => $wrap,
-				),
-				'echo'    => false,
-			) );
+			$output = genesis_markup(
+				array(
+					'open'    => "<{$wrap} %s>",
+					'close'   => "</{$wrap}>",
+					'content' => $title,
+					'context' => 'entry-title',
+					'params'  => array(
+						'wrap' => $wrap,
+					),
+					'echo'    => false,
+				)
+			);
 		}
 
 		return $output;

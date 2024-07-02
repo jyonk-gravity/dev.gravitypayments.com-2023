@@ -343,26 +343,6 @@ if ( !function_exists('wd_array_super_unique') ) {
     }
 }
 
-if (!function_exists("wd_explode")) {
-	/**
-	 * Explode with a trim function
-	 *
-	 * @param string $delim delimiter
-	 * @param string $str
-	 * @return string
-	 */
-    function wd_explode($delim = ',', $str = '') {
-        if ( !is_array($str) )
-            $str = explode($delim, $str);
-        foreach ( $str as $k => &$v) {
-            $v = trim($v);
-            if ( $v == '' )
-                unset($str[$k]);
-        }
-        return $str;
-    }
-}
-
 if (!function_exists("wd_current_page_url")) {
     /**
      * Returns the current page url
@@ -451,8 +431,26 @@ if (!function_exists("asp_get_image_from_content")) {
      * @return bool|string
      */
     function asp_get_image_from_content($content, $number = 0, $exclude = array()) {
-        if ($content == "" || !class_exists('\\domDocument'))
-            return false;
+        if ($content == "" || !class_exists('\\domDocument')) {
+	        return false;
+        }
+
+		if ( function_exists('mb_encode_numericentity') ) {
+			$encoded_content = mb_encode_numericentity(
+				htmlspecialchars_decode(
+					htmlentities( $content, ENT_NOQUOTES, 'UTF-8', false ),
+					ENT_NOQUOTES
+				),
+				array( 0x80, 0x10FFFF, 0, ~0 ),
+				'UTF-8'
+			);
+		} else {
+			$encoded_content = $content;
+		}
+
+		if ( $encoded_content === '' ) {
+			return false;
+		}
 
         // The arguments expects 1 as the first image, while it is the 0th
         $number = intval($number) - 1;
@@ -478,10 +476,7 @@ if (!function_exists("asp_get_image_from_content")) {
 
 		foreach ( $elements as $element ) {
 			$dom = new \domDocument();
-			if ( function_exists('mb_convert_encoding') )
-				@$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
-			else
-				@$dom->loadHTML($content);
+			@$dom->loadHTML($encoded_content);
 			$dom->preserveWhiteSpace = false;
 			@$images = $dom->getElementsByTagName($element);
 			if ($images->length > 0) {

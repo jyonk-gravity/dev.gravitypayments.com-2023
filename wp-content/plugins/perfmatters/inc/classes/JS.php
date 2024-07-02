@@ -3,6 +3,9 @@ namespace Perfmatters;
 
 class JS
 {
+	private static $run = [];
+	private static $data = [];
+
 	//initialize js
 	public static function init()
 	{
@@ -11,34 +14,45 @@ class JS
 		}
 
 		add_action('perfmatters_queue', array('Perfmatters\JS', 'queue'));
+
+		//minify admin bar
+		if(!empty(Config::$options['assets']['minify_js'])) {
+            Minify::queue_admin_bar();
+        }
+
+
+		//ajax actions
+		add_action('wp_ajax_perfmatters_clear_minified_js', array('Perfmatters\JS', 'clear_minified_js_ajax'));
 	}
 
 	//queue functions
 	public static function queue()
 	{
-		$defer_check = !empty(apply_filters('perfmatters_defer_js', !empty(Config::$options['assets']['defer_js'])));
-		$delay_check = !empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js'])));
+		//skip woocommerce
+		if(Utilities::is_woocommerce()) {
+			return;
+		}
 
-		if($defer_check || $delay_check) {
+		//setup optimizations to run
+		self::$run['defer'] = !empty(apply_filters('perfmatters_defer_js', !empty(Config::$options['assets']['defer_js']))) && !Utilities::get_post_meta('perfmatters_exclude_defer_js');
+		self::$run['delay'] = !empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js']))) && !Utilities::get_post_meta('perfmatters_exclude_delay_js');
+		self::$run['minify'] = !empty(apply_filters('perfmatters_minify_js', !empty(Config::$options['assets']['minify_js']))) && !Utilities::get_post_meta('perfmatters_exclude_minify_js');
 
-			//actions + filters
+		if(array_filter(self::$run)) {
+
+			//add to buffer
 			add_filter('perfmatters_output_buffer_template_redirect', array('Perfmatters\JS', 'optimize'));
 
 			//fastclick
-			if($delay_check && !empty(apply_filters('perfmatters_delay_js_fastclick', !empty(Config::$options['assets']['fastclick'])))) {
+			if(self::$run['delay'] && !empty(apply_filters('perfmatters_delay_js_fastclick', !empty(Config::$options['assets']['fastclick'])))) {
 				add_filter('wp_head', array('Perfmatters\JS', 'print_fastclick'));
 			}
 		}
 	}
 
-	//add defer tag to js files in html
+	//optimize js
 	public static function optimize($html)
 	{
-		//skip woocommerce
-		if(Utilities::is_woocommerce()) {
-			return $html;
-		}
-
 		//strip comments before search
 		$html_no_comments = preg_replace('/<!--(.*)-->/Uis', '', $html);
 
@@ -50,70 +64,7 @@ class JS
 			return $html;
 		}
 
-		$defer_check = !empty(apply_filters('perfmatters_defer_js', !empty(Config::$options['assets']['defer_js']))) && !Utilities::get_post_meta('perfmatters_exclude_defer_js');
-		$delay_check = !empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js']))) && !Utilities::get_post_meta('perfmatters_exclude_delay_js');
-
-		//build js exlusions array
-		$js_exclusions = array();
-
-		if($defer_check) {
-
-			//add jquery if needed
-			if(empty(apply_filters('perfmatters_defer_jquery', !empty(Config::$options['assets']['defer_jquery'])))) {
-				array_push($js_exclusions, 'jquery(?:\.min)?.js');
-			}
-
-			//add extra user exclusions
-			if(!empty(Config::$options['assets']['js_exclusions']) && is_array(Config::$options['assets']['js_exclusions'])) {
-				foreach(Config::$options['assets']['js_exclusions'] as $line) {
-					array_push($js_exclusions, preg_quote($line));
-				}
-			}
-
-			//convert exlusions to string for regex
-			$js_exclusions = implode('|', apply_filters('perfmatters_defer_js_exclusions', $js_exclusions));
-		}
-
-		if($delay_check) {
-
-			$delay_js_behavior = apply_filters('perfmatters_delay_js_behavior', Config::$options['assets']['delay_js_behavior'] ?? '');
-
-			if(!empty($delay_js_behavior)) {
-
-				$excluded_scripts = array(
-					'perfmatters-delayed-scripts-js',
-					'lazyload',
-					'lazyLoadInstance',
-					'lazysizes',
-					'customize-support',
-					'fastclick',
-					'jqueryParams',
-					'et_link_options_data'
-				);
-
-				if(!empty(Config::$options['assets']['delay_js_quick_exclusions'])) {
-
-					//load master array
-				    $master = self::get_quick_exclusions_master();
-
-					foreach(Config::$options['assets']['delay_js_quick_exclusions'] as $type => $items) {
-
-						foreach($items as $key => $val) {
-
-							if(!empty($master[$type][$key])) {
-								$excluded_scripts = array_merge($excluded_scripts, $master[$type][$key]['exclusions']);
-							}
-						}
-					}
-				}
-
-				if(!empty(Config::$options['assets']['delay_js_exclusions']) && is_array(Config::$options['assets']['delay_js_exclusions'])) {
-					$excluded_scripts = array_merge($excluded_scripts, Config::$options['assets']['delay_js_exclusions']);
-				}
-
-				$excluded_scripts = apply_filters('perfmatters_delay_js_exclusions', $excluded_scripts);
-			}
-		}
+		self::populate_data();
 
 		//loop through scripts
 		foreach($matches[0] as $i => $tag) {
@@ -125,103 +76,87 @@ class JS
 				continue;
 			}
 
-			//delay javascript
-			if($delay_check) {
+			$delay_flag = false;
+			$atts_array_new = $atts_array;
 
-				$delay_js_behavior = apply_filters('perfmatters_delay_js_behavior', Config::$options['assets']['delay_js_behavior'] ?? '');
+			//minify
+			if(self::$run['minify']) {
+				if(!empty($atts_array['src']) && $minified_src = Minify::minify($atts_array['src'])) {
+					$atts_array_new['src'] = $minified_src;
+				}
+			}
 
-				if(empty($delay_js_behavior)) {
+			//delay
+			if(self::$run['delay']) {
 
-					$delay_flag = false;
-
-					$delayed_scripts = apply_filters('perfmatters_delayed_scripts', Config::$options['assets']['delay_js_inclusions']);
-
-					if(!empty($delayed_scripts)) {
-						foreach($delayed_scripts as $delayed_script) {
-							if(strpos($tag, $delayed_script) !== false) {
-								$delay_flag = true;
-				    			break;
-							}
-						}
-					}
+				if(empty(self::$data['delay']['behavior'])) {
+					$delay_flag = Utilities::match_in_array($tag, self::$data['delay']['inclusions']);
 				}
 				else {
-
-					$delay_flag = true;
-
-					if(!empty($excluded_scripts)) {
-						foreach($excluded_scripts as $excluded_script) {
-							if(strpos($tag, $excluded_script) !== false) {
-								$delay_flag = false;
-								break;
-							}
-						}
-					}
+					$delay_flag = !Utilities::match_in_array($tag, self::$data['delay']['exclusions']);
 				}
 
 				if($delay_flag) {
 
 					if(!empty($atts_array['type'])) {
-	    				$atts_array['data-perfmatters-type'] = $atts_array['type'];
+	    				$atts_array_new['data-perfmatters-type'] = $atts_array['type'];
 	    			}
 
-	    			$atts_array['type'] = 'pmdelayedscript';
-	    			$atts_array['data-cfasync'] = "false";
-	    			$atts_array['data-no-optimize'] = "1";
-	    			$atts_array['data-no-defer'] = "1";
-	    			$atts_array['data-no-minify'] = "1";
+	    			$atts_array_new['type'] = 'pmdelayedscript';
+	    			$atts_array_new['data-cfasync'] = "false";
+	    			$atts_array_new['data-no-optimize'] = "1";
+	    			$atts_array_new['data-no-defer'] = "1";
+	    			$atts_array_new['data-no-minify'] = "1";
 
 	    			//wp rocket compatability
 					if(defined('WP_ROCKET_VERSION')) {
-						$atts_array['data-rocketlazyloadscript'] = "1";
+						$atts_array_new['data-rocketlazyloadscript'] = "1";
 					}
-
-	    			$delayed_atts_string = Utilities::get_atts_string($atts_array);
-
-	                $delayed_tag = sprintf('<script %1$s>', $delayed_atts_string) . $matches[3][$i] . '</script>';
-
-	    			//replace new full tag in html
-					$html = str_replace($tag, $delayed_tag, $html);
-
-					continue;
 				}
 			}
 
-			//defer javascript
-			if($defer_check) {
+			//defer
+			if(self::$run['defer'] && !$delay_flag) {
 
-				//src is not set
+				//inline script
 				if(empty($atts_array['src'])) {
-					continue;
+
+					//script content
+					if(!empty(Config::$options['assets']['defer_inline']) && !empty($matches[3][$i])) {
+					
+						//exclusion check
+						if(!Utilities::match_in_array($tag, self::$data['defer']['exclusions'])) {
+							$atts_array_new['defer'] = '';
+							$atts_array_new['src'] = 'data:text/javascript;base64,' . base64_encode($matches[3][$i]);
+							$matches[3][$i] = '';
+						}
+					}	
 				}
+				//standard script
+				else {
 
-				//check if src is excluded
-				if(!empty($js_exclusions) && preg_match('#(' . $js_exclusions . ')#i', $atts_array['src'])) {
-					continue;
+					//async check
+					if(!isset($atts_array['async']) && (empty($atts_array['data-wp-strategy']) || $atts_array['data-wp-strategy'] != 'async')) {
+						
+						//exclusion check
+						if(!Utilities::match_in_array($tag, self::$data['defer']['exclusions'])) {
+							$atts_array_new['defer'] = '';
+						}
+					}
 				}
+			}
 
-				//skip if there is already an async
-				if(stripos($matches[2][$i], 'async') !== false) {
-					continue;
-				}
-
-				//skip if there is already a defer
-				if(stripos($matches[2][$i], 'defer' ) !== false ) {
-					continue;
-				}
-
-				//add defer to opening tag
-				$deferred_tag_open = str_replace('>', ' defer>', $matches[1][$i]);
-
-				//replace new open tag in original full tag
-				$deferred_tag = str_replace($matches[1][$i], $deferred_tag_open, $tag);
-
-				//replace new full tag in html
-				$html = str_replace($tag, $deferred_tag, $html);
+			//replace script tag
+			if($atts_array_new !== $atts_array) {
+				$atts_array_new = array_merge($atts_array, $atts_array_new);
+				$new_atts_string = Utilities::get_atts_string($atts_array_new);
+	            $new_tag = sprintf('<script %1$s>', $new_atts_string) . $matches[3][$i] . '</script>';
+				$html = str_replace($tag, $new_tag, $html);
 			}
 		}
 
-		if($delay_check) {
+		//print delay js
+		if(self::$run['delay']) {
             $pos = strpos($html, '</body>');
             if($pos !== false) {
             	$html = substr_replace($html, self::print_delay_js() . '</body>', $pos, 7);
@@ -229,6 +164,80 @@ class JS
 		}
 
 		return $html;
+	}
+
+	private static function populate_data() {
+
+		//delay exclusions/inclusions
+		if(self::$run['delay']) {
+
+			//behavior
+			self::$data['delay']['behavior'] = apply_filters('perfmatters_delay_js_behavior', Config::$options['assets']['delay_js_behavior'] ?? '');
+
+			if(empty(self::$data['delay']['behavior'])) {
+
+				//inclusions for individual delay
+				self::$data['delay']['inclusions'] = apply_filters('perfmatters_delayed_scripts', Config::$options['assets']['delay_js_inclusions']);
+			}
+			else {
+
+				//exclusions for delay all
+				self::$data['delay']['exclusions'] = array(
+					'perfmatters-delayed-scripts-js',
+					'lazyload.min.js',
+					'lazyLoadInstance',
+					'lazysizes',
+					'customize-support',
+					'fastclick',
+					'jqueryParams',
+					'et_link_options_data'
+				);
+
+				//add quick exclusions
+				if(!empty(Config::$options['assets']['delay_js_quick_exclusions'])) {
+
+				    $master = self::get_quick_exclusions_master();
+
+					foreach(Config::$options['assets']['delay_js_quick_exclusions'] as $type => $items) {
+						foreach($items as $key => $val) {
+							if(!empty($master[$type][$key])) {
+								self::$data['delay']['exclusions'] = array_merge(self::$data['delay']['exclusions'], $master[$type][$key]['exclusions']);
+							}
+						}
+					}
+				}
+
+				//add manual exclusions
+				if(!empty(Config::$options['assets']['delay_js_exclusions']) && is_array(Config::$options['assets']['delay_js_exclusions'])) {
+					self::$data['delay']['exclusions'] = array_merge(self::$data['delay']['exclusions'], Config::$options['assets']['delay_js_exclusions']);
+				}
+
+				//final filter
+				self::$data['delay']['exclusions'] = apply_filters('perfmatters_delay_js_exclusions', self::$data['delay']['exclusions']);
+			}
+		}
+
+		//defer exclusions
+		if(self::$run['defer']) {
+
+			//base exclusions
+			self::$data['defer']['exclusions'] = array(
+				'perfmatters-lazy-load-js'
+			);
+
+			//add jquery
+			if(empty(apply_filters('perfmatters_defer_jquery', !empty(Config::$options['assets']['defer_jquery'])))) {
+				self::$data['defer']['exclusions'] = array_merge(self::$data['defer']['exclusions'], array('jquery.js', 'jquery.min.js'));
+			}
+
+			//add manual exclusions
+			if(!empty(Config::$options['assets']['js_exclusions']) && is_array(Config::$options['assets']['js_exclusions'])) {
+				self::$data['defer']['exclusions'] = array_merge(self::$data['defer']['exclusions'], Config::$options['assets']['js_exclusions']);
+			}
+
+			//final filter
+			self::$data['defer']['exclusions'] = apply_filters('perfmatters_defer_js_exclusions', self::$data['defer']['exclusions']);
+		}
 	}
 
 	//print inline delay js
@@ -275,483 +284,24 @@ class JS
 			return;
 		}
 
-		//skip woocommerce
-		if(Utilities::is_woocommerce()) {
-			return;
-		}
-
 		echo '<script src="' . plugins_url('perfmatters/vendor/fastclick/pmfastclick.min.js') . '"></script>';
 		echo '<script>"addEventListener"in document&&document.addEventListener("DOMContentLoaded",function(){FastClick.attach(document.body)},!1);</script>';
 	}
 
+	//return quick exclusion data array
 	public static function get_quick_exclusions_master() {
-		$master = array(
-	        'plugins' => array(
-	        	'atarim' => array(
-	        		'id' => 'atarim-visual-collaboration/atarim-visual-collaboration.php',
-	        		'title' => 'Atarim',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-	        			'/atarim-client-interface/',
-						'jQuery_WPF',
-						'upgrade_url'
-	        		)
-	        	),
-	        	'borlabs' => array(
-	        		'id' => 'borlabs-cookie/borlabs-cookie.php',
-	        		'title' => 'Borlabs Cookie',
-	        		'exclusions' => array(
-	        			'/plugins/borlabs-cookie/',
-						'borlabs-cookie',
-						'BorlabsCookie',
-						'jquery.min.js'
-	        		)
-	        	),
-	        	'complianz' => array(
-	        		'id' => 'complianz-gdpr/complianz-gpdr.php',
-	        		'title' => 'Complianz',
-	        		'exclusions' => array(
-	        			'complianz'
-	        		)
-	        	),
-	        	'cookie-notice' => array(
-	        		'id' => 'cookie-notice/cookie-notice.php',
-	        		'title' => 'Cookie Notice & Compliance for GDPR',
-	        		'exclusions' => array(
-	        			'/plugins/cookie-notice/js/front.min.js',
-						'cnArgs',
-						'cdn.hu-manity.co',
-						'huOptions'
-	        		)
-	        	),
-	        	'cookieyes' => array(
-	        		'id' => 'cookie-law-info/cookie-law-info.php',
-	        		'title' => 'CookieYes',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-	        			'/plugins/cookie-law-info/legacy/public/js/cookie-law-info-public.js',
-						'cookie-law-info-js-extra'
-	        		)
-	        	),
-	        	'gdpr-cookie-compliance' => array(
-	        		'id' => 'gdpr-cookie-compliance/moove-gdpr.php',
-	        		'title' => 'GDPR Cookie Compliance',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-	        			'/plugins/gdpr-cookie-compliance/',
-						'moove_gdpr'
-	        		)
-	        	),
-	        	'gravityforms' => array(
-	        		'id' => 'gravityforms/gravityforms.php',
-	        		'title' => 'Gravity Forms',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-	        			'gravityforms',
-	        			'gform',
-						'moxiejs-js',
-						'plupload-js'
-	        		)
-	        	),
-	        	'grow-social' => array(
-	        		'id' => 'social-pug/index.php',
-	        		'title' => 'Grow Social',
-	        		'exclusions' => array(
-	        			'dpsp-frontend-js-pro-js'
-	        		)
-	        	),
-	        	'jet-menu' => array(
-	        		'id' => 'jet-menu/jet-menu.php',
-	        		'title' => 'JetMenu',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-						'jquery-migrate.min.js',
-						'/elementor-pro/',
-						'/elementor/',
-						'/jet-blog/assets/js/lib/slick/slick.min.js',
-						'/jet-elements/',
-						'/jet-menu/',
-						'elementorFrontendConfig',
-						'ElementorProFrontendConfig',
-						'hasJetBlogPlaylist',
-						'JetEngineSettings',
-						'jetMenuPublicSettings'
-	        		)
-	        	),
-	        	'kadence-blocks' => array(
-	        		'id' => 'kadence-blocks/kadence-blocks.php',
-	        		'title' => 'Kadence Blocks',
-	        		'exclusions' => array(
-	        			'kadence-blocks-tabs-js'
-	        		)
-	        	),
-	        	'kadence-blocks-pro' => array(
-	        		'id' => 'kadence-blocks-pro/kadence-blocks-pro.php',
-	        		'title' => 'Kadence Blocks Pro',
-	        		'exclusions' => array(
-	        			'kad-splide-js',
-						'kadence-slide-init-js',
-						'kadence-blocks-pro-splide-init-js'
-	        		)
-	        	),
-	        	'lightweight-cookie-notice' => array(
-	        		'id' => 'lightweight-cookie-notice-free/init.php',
-	        		'title' => 'Lightweight Cookie Notice',
-	        		'exclusions' => array(
-	        			'/lightweight-cookie-notice-free/public/assets/js/production/general.js',
-						'daextlwcnf-general-js-after',
-						'daextlwcnf-general-js-extra'
-	        		)
-	        	),
-	        	'mediavine' => array(
-	        		'id' => 'mediavine-control-panel/mediavine-control-panel.php',
-	        		'title' => 'Mediavine',
-	        		'exclusions' => array(
-	        			'mediavine'
-	        		)
-	        	),
-	        	'modula-slider' => array(
-	        		'id' => 'modula-slider/modula-slider.php',
-	        		'title' => 'Modula Slider',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-	        			'/modula-slider/'
-	        		)
-	        	),
-	        	'monumetric-ads' => array(
-	        		'id' => 'monumetric-ads/monumetric-ads.php',
-	        		'title' => 'Monumetric Ads',
-	        		'exclusions' => array(
-	        			'$MMT',
-	        			'monu.delivery'
-	        		)
-	        	),
-	        	'ninja-forms' => array(
-	        		'id' => 'ninja-forms/ninja-forms.php',
-	        		'title' => 'Ninja Forms',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-	        			'/wp-includes/js/underscore.min.js',
-						'/wp-includes/js/backbone.min.js',
-						'/ninja-forms/assets/js/min/front-end.js',
-						'/ninja-forms/assets/js/min/front-end-deps.js',
-						'nfForms',
-						'nf-'
-	        		)
-	        	),
-	        	'presto-player' => array(
-	        		'id' => 'presto-player/presto-player.php',
-	        		'title' => 'Presto Player',
-	        		'exclusions' => array(
-	        			'presto'
-	        		)
-	        	),
-	        	'raptive-ads' => array(
-	        		'id' => 'adthrive-ads/adthrive-ads.php',
-	        		'title' => 'Raptive Ads',
-	        		'exclusions' => array(
-	        			'adthrive',
-	        			'raptive',
-	        			'adManagementConfig'
-	        		)
-	        	),
-	        	'real-bookie-banner-pro' => array(
-	        		'id' => 'real-cookie-banner-pro/index.php',
-	        		'title' => 'Real Cookie Banner Pro',
-	        		'exclusions' => array(
-	        			'vendor-banner.pro.js',
-						'banner.pro.js',
-						'realCookieBanner',
-						'real-cookie-banner-pro-banner-js-before'
-	        		)
-	        	),
-	        	'revslider' => array(
-	        		'id' => 'revslider/revslider.php',
-	        		'title' => 'Revolution Slider',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-						'jquery-migrate.min.js',
-						'revslider',
-						'rev_slider',
-						'setREVStartSize',
-						'window.RS_MODULES'
-	        		)
-	        	),
-	        	'sheknows-infuse' => array(
-	        		'id' => 'sheknows-infuse/sheknows-infuse.php',
-	        		'title' => 'SHE Media Infuse',
-	        		'exclusions' => array(
-	        			'blogherads'
-	        		)
-	        	),
-	        	'shortpixel' => array(
-	        		'id' => 'shortpixel-adaptive-images/short-pixel-ai.php',
-	        		'title' => 'ShortPixel Adaptive Images',
-	        		'exclusions' => array(
-	        			'shortpixel.ai/assets/js/bundles/spai-lib'
-	        		)
-	        	),
-	        	'slick-engagement' => array(
-	        		'id' => 'slick-engagement/slick-engagement.php',
-	        		'title' => 'Slickstream',
-	        		'exclusions' => array(
-	        			'slickstream'
-	        		)
-	        	),
-	        	'smart-slider-3' => array(
-	        		'id' => 'smart-slider-3/smart-slider-3.php',
-	        		'title' => 'Smart Slider 3',
-	        		'exclusions' => array(
-	        			'/smart-slider-3/',
-						'_N2'
-	        		)
-	        	),
-	        	'smart-slider-3-pro' => array(
-	        		'id' => 'nextend-smart-slider3-pro/nextend-smart-slider3-pro.php',
-	        		'title' => 'Smart Slider 3 Pro',
-	        		'exclusions' => array(
-	        			'/nextend-smart-slider3-pro/',
-						'_N2'
-	        		)
-	        	),
-	            'elementor' => array(
-	                'id' => 'elementor/elementor.php',
-	                'title' => 'Elementor',
-	                'exclusions' => array(
-	                    'jquery.min.js',
-	                    'jquery.smartmenus.min.js',
-	                    'webpack.runtime.min.js',
-	                    'webpack-pro.runtime.min.js',
-						'/elementor/assets/js/frontend.min.js',
-						'/elementor-pro/assets/js/frontend.min.js',
-	                    'frontend-modules.min.js',
-	                    'elements-handlers.min.js',
-	                    'elementorFrontendConfig',
-	                    'ElementorProFrontendConfig',
-	                    'imagesloaded.min.js'
-	                )   
-	            ),
-	            'elementor-search' => array(
-	                'id' => 'elementor/elementor.php',
-	                'title' => 'Elementor Search',
-	                'exclusions' => array(
-	                    'webpack-pro.runtime.min.js',
-						'webpack.runtime.min.js',
-						'elements-handlers.min.js',
-						'jquery.smartmenus.min.js'
-	                )   
-	            ),
-	            'termageddon-usercentrics' => array(
-	                'id' => 'termageddon-usercentrics/termageddon-usercentrics.php',
-	                'title' => 'Termageddon + Usercentrics',
-	                'exclusions' => array(
-	                    'app.usercentrics.eu/browser-ui/latest/loader.js',
-						'privacy-proxy.usercentrics.eu/latest/uc-block.bundle.js'
-	                )   
-	            ),
-	            'thrive-leads'  => array(
-	                'id' => 'thrive-leads/thrive-leads.php',
-	                'title' => 'Thrive Leads',
-	                'exclusions' => array(
-	                    'jquery.min.js',
-	                    'tve_frontend-js'
-	                )
-	            ),
-	            'woocommerce-product-gallery' => array(
-	                'id' => 'woocommerce/woocommerce.php',
-	                'title' => 'WooCommerce Single Product Gallery',
-	                'exclusions' => array(
-	                    'jquery.min.js',
-	                    'flexslider',
-	                    'single-product.min.js',
-	                    'slick',
-	                    'functions.min.js',
-	                    'waypoint',
-	                    'photoswipe',
-	                    'jquery.zoom.min.js'
-	                )
-	            ),
-	            'wp-armour' => array(
-	            	'id' => 'honeypot/wp-armour.php',
-	            	'title' => 'WP Armour',
-	            	'exclusions' => array(
-	            		'wpa_field_info'
-	            	)
-	            ),
-	            'wpforms-lite' => array(
-	        		'id' => 'wpforms-lite/wpforms.php',
-	        		'title' => 'WPForms Lite',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-						'wpforms'
-	        		)
-	        	),
-	        	'wpforms' => array(
-	        		'id' => 'wpforms/wpforms.php',
-	        		'title' => 'WPForms',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-						'wpforms'
-	        		)
-	        	),
-	        	'wp-recipe-maker' => array(
-	        		'id' => 'wp-recipe-maker/wp-recipe-maker.php',
-	        		'title' => 'WP Recipe Maker',
-	        		'exclusions' => array(
-	        			'wprm-public-js',
-	        			'wprm-public-js-extra',
-	        			'wprmp-public-js',
-	        			'wprmp-public-js-extra',
-	        			'wprm-shared-js',
-						'wprmp-admin-js',
-						'wprm-admin-js',
-						'wprm-admin-modal-js'
-	        		)
-	        	),
-	        	'ws-form' => array(
-	        		'id' => 'ws-form/ws-form.php',
-	        		'title' => 'WS Form Lite',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-	        			'jquery/ui',
-						'ws-form',
-						'wsf-wp-footer',
-						'quicktags-js-extra'
-	        		)
-	        	),
-	        	'ws-form-pro' => array(
-	        		'id' => 'ws-form-pro/ws-form.php',
-	        		'title' => 'WS Form Pro',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-	        			'jquery/ui',
-						'ws-form-pro',
-						'wsf-wp-footer',
-						'quicktags-js-extra'
-	        		)
-	        	)
-	        ),
-	        'themes' => array(
-	        	'astra' => array(
-	        		'id' => 'astra',
-	        		'title' => 'Astra',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-						'astra'
-	        		)
-	        	),
-	        	'avada' => array(
-	        		'id' => 'avada',
-	        		'title' => 'Avada',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-	        			'avada-header.js',
-						'modernizr.js',
-						'jquery.easing.js',
-						'avadaHeaderVars'
-	        		)
-	        	),
-	        	'bricks' => array(
-	        		'id' => 'bricks',
-	        		'title' => 'Bricks',
-	        		'exclusions' => array(
-	        			'/themes/bricks/assets/js/bricks.min.js',
-	        			'/themes/bricks/assets/js/libs/swiper.min.js',
-	        			'bricks-scripts-js-extra'
-	        		)
-	        	),
-	        	'divi' => array(
-	        		'id' => 'divi',
-	        		'title' => 'Divi',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-						'/Divi/js/scripts.min.js',
-						'et_pb_custom',
-						'elm.style.display'
-	        		)
-	        	),
-	        	'divi-animations' => array(
-	        		'id' => 'divi',
-	        		'title' => 'Divi with Animations',
-	        		'exclusions' => array(
-						'jquery.min.js',
-						'jquery-migrate.min.js',
-						'.divi_preloader_wrapper_outer',
-						'/Divi/js/scripts.min.js',
-						'/Divi/js/custom.unified.js',
-						'/js/magnific-popup.js',
-						'et_pb_custom',
-						'et_animation_data',
-						'var DIVI',
-						'elm.style.display',
-						'easypiechart.js'
-	        		)
-	        	),
-	            'generatepress-masonry-blog' => array(
-	                'id' => 'generatepress',
-	                'title' => 'GeneratePress Masonry Blog',
-	                'exclusions' => array(
-	                    'generateBlog',
-	                    'scripts.min.js',
-	                    'masonry.min.js',
-	                    'imagesloaded.min.js'
-	                )
-	            ),
-	            'generatepress-mobile-menu' => array(
-	                'id' => 'generatepress',
-	                'title' => 'GeneratePress Mobile Menu',
-	                'exclusions' => array(
-	                    '/generatepress/assets/js/menu.min.js',
-	                    'generatepressMenu'
-	                )
-	            ),
-	            'generatepress-offside-menu' => array(
-	                'id' => 'generatepress',
-	                'title' => 'GeneratePress Offside Menu',
-	                'exclusions' => array(
-	                    '/generatepress/assets/js/menu.min.js',
-	                    'generatepressMenu',
-	                    'offside.min.js',
-	                    'offSide'
-	                )
-	            ),
-	            'mediavine-trellis' => array(
-	        		'id' => 'mediavine-trellis',
-	        		'title' => 'Mediavine Trellis',
-	        		'exclusions' => array(
-	        			'mv-trellis-localModel'
-	        		)
-	        	),
-	            'newspaper' => array(
-	        		'id' => 'newspaper',
-	        		'title' => 'Newspaper',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-						'jquery-migrate.min.js',
-						'tagdiv_theme.min.js',
-						'tdBlocksArray'
-	        		)
-	        	),
-	        	'oceanwp' => array(
-	        		'id' => 'oceanwp',
-	        		'title' => 'OceanWP Mobile Menu',
-	        		'exclusions' => array(
-	        			'drop-down-mobile-menu.min.js',
-						'oceanwpLocalize'
-	        		)
-	        	),
-	        	'salient' => array(
-	        		'id' => 'salient',
-	        		'title' => 'Salient',
-	        		'exclusions' => array(
-	        			'jquery.min.js',
-						'jquery-migrate.min.js',
-						'/salient/',
-						'/salient-nectar-slider/js/nectar-slider.js'
-	        		)
-	        	)
-	        )
-	    );
-	    return $master;
+		return include(PERFMATTERS_PATH . 'inc/data/delay_js_quick_exclusions.php');
 	}
+
+	//clear minified js ajax action
+    public static function clear_minified_js_ajax() {
+
+        Ajax::security_check();
+
+        Minify::clear_minified('js');
+
+        wp_send_json_success(array(
+            'message' => __('Minified JS cleared.', 'perfmatters'), 
+        ));
+    }
 }

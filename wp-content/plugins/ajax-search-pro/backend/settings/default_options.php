@@ -377,6 +377,8 @@ function asp_do_init_options() {
         'tax_image_custom_field' => '',
         'tax_image_default' => '',
         'user_image_default' => '',
+        'user_image_width' => 96,
+        'user_image_height' => 96,
         'image_parser_image_number' => 1,
         'image_parser_exclude_filenames' => '',
 
@@ -660,6 +662,7 @@ function asp_do_init_options() {
         /* Autocomplete & Keyword suggestion options */
         'keywordsuggestions' => 1,
         'result_suggestions' => 1,
+        'result_suggestions_results_page' => 0,
         'keyword_suggestion_source' => 'titles',
         'kws_google_places_api' => '',
         'keywordsuggestionslang' => "en",

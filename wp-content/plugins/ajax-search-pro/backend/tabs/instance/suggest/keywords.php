@@ -1,12 +1,22 @@
 <div class="item">
     <?php
-    $o = new wpdreamsYesNo("result_suggestions", __('Predictively suggest results when nothing matches the search keyword?', 'ajax-search-pro'),
+    $o = new wpdreamsYesNo("result_suggestions", __('Predictively suggest results on the live results box when nothing matches the search keyword?', 'ajax-search-pro'),
         $sd['result_suggestions']);
     $params[$o->getName()] = $o->getData();
     ?>
     <p class="descMsg">
         <?php echo __('The first matching keyword is going to be used from the selected <strong>Keyword Suggestion Sources</strong> below to conduct an additional search for possible results.', 'ajax-search-pro'); ?>
     </p>
+</div>
+<div class="item">
+	<?php
+	$o = new wpdreamsYesNo("result_suggestions_results_page", __('(Experimental) Predictively suggest results on the results page when nothing matches the search keyword?', 'ajax-search-pro'),
+		$sd['result_suggestions_results_page']);
+	$params[$o->getName()] = $o->getData();
+	?>
+	<p class="descMsg">
+		<?php echo __('WARNING: This may not work in every case! When enabled, the predicted results will also be shown on the search results page.', 'ajax-search-pro'); ?>
+	</p>
 </div>
 <div class="item">
     <?php

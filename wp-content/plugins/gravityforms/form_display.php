@@ -861,7 +861,7 @@ class GFFormDisplay {
 		$post_render_script = '
 			jQuery(document).trigger("gform_pre_post_render", [{ formId: "' . $form_id . '", currentPage: "' . $current_page . '", abort: function() { this.preventDefault(); } }]);
 	        
-	        if (event.defaultPrevented) {
+	        if (event && event.defaultPrevented) {
             	    return; 
         	}
 	        const gformWrapperDiv = document.getElementById( "gform_wrapper_' . $form_id . '" );
@@ -1164,9 +1164,10 @@ class GFFormDisplay {
 		//When called via a shortcode, this will be ignored (too late to enqueue), but the scripts will be enqueued via the enqueue_scripts event
 		self::enqueue_form_scripts( $form, $ajax );
 
-		$is_form_editor  = GFCommon::is_form_editor();
-		$is_entry_detail = GFCommon::is_entry_detail();
-		$is_admin        = $is_form_editor || $is_entry_detail;
+		$is_form_editor       = GFCommon::is_form_editor();
+		$is_entry_detail      = GFCommon::is_entry_detail();
+		$is_admin             = $is_form_editor || $is_entry_detail;
+		$should_render_hidden = self::has_conditional_logic( $form ) && rgar( rgget( 'attributes' ), 'formPreview' ) !== 'true';
 
 		if ( empty( $confirmation_message ) ) {
 			$wrapper_css_class = GFCommon::get_browser_class() . ' gform_wrapper';
@@ -1179,7 +1180,7 @@ class GFFormDisplay {
 
 			//Hiding entire form if conditional logic is on to prevent 'hidden' fields from blinking. Form will be set to visible in the conditional_logic.php after the rules have been applied.
 
-			$style = ( self::has_conditional_logic( $form ) && rgar( rgget( 'attributes' ), 'formPreview' ) !== 'true' ) ? "style='display:none'" : '';
+			$style = $should_render_hidden ? "style='display:none'" : '';
 
 			// Split form CSS class by spaces and apply wrapper to each.
 			$custom_wrapper_css_class = '';
@@ -1454,6 +1455,7 @@ class GFFormDisplay {
 						'var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;' .
 						"var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;" .
 						'if(is_form){' .
+						( $should_render_hidden ? "form_content.find('form').css('opacity', 0);" : "" ) .
 						"jQuery('#gform_wrapper_{$form_id}').html(form_content.html());" .
 						"if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_{$form_id}').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_{$form_id}').removeClass('gform_validation_error');}" .
 						"setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ {$scroll_position['default']} }, 50 );" .
@@ -1469,13 +1471,11 @@ class GFFormDisplay {
 						'if(!confirmation_content){' .
 						'confirmation_content = contents;' .
 						'}' .
-						'setTimeout(function(){' .
 						"jQuery('#gform_wrapper_{$form_id}').replaceWith(confirmation_content);" .
 						"{$scroll_position['confirmation']}" .
 						"jQuery(document).trigger('gform_confirmation_loaded', [{$form_id}]);" .
 						"window['gf_submitting_{$form_id}'] = false;" .
 						"wp.a11y.speak(jQuery('#gform_confirmation_message_{$form_id}').text());" .
-						'}, 50);' .
 						'}' .
 						'else{' .
 						"jQuery('#gform_{$form_id}').append(contents);" .
@@ -3514,6 +3514,7 @@ class GFFormDisplay {
             "window['gformInitPriceFields']();" .
 	        "gf_apply_rules({$form['id']}, " . json_encode( $fields_with_logic ) . ', true);' .
 			"jQuery('#gform_wrapper_{$form['id']}').show();" .
+			"jQuery('#gform_wrapper_{$form['id']} form').css('opacity', '');" .
 			"jQuery(document).trigger('gform_post_conditional_logic', [{$form['id']}, null, true]);" .
 			"gform.utils.trigger({ event: 'gform/conditionalLogic/init/end', native: false, data: { formId: {$form['id']}, fields: null, isInit: true } });" .
 
@@ -4809,23 +4810,23 @@ class GFFormDisplay {
 	                    		</div>";
 		}
 
-		if ( ! $ajax ) {
-			/**
-			 * Allows users to disable the spinner on non-ajax forms.
-			 *
-			 * @since 2.7
-			 *
-			 * @param bool $show Whether to show the spinner on non-ajax-forms.
-			 *
-			 * @return bool
-			 */
-			$always_show_spinner = gf_apply_filters( array( 'gform_always_show_spinner', $form_id ), true );
+		/**
+		 * Allows users to disable the spinner on non-ajax forms.
+		 *
+		 * @since 2.7
+		 *
+		 * @param bool $show Whether to show the spinner on non-ajax-forms.
+		 *
+		 * @return bool
+		 */
+		$always_show_spinner = gf_apply_filters( array( 'gform_always_show_spinner', $form_id ), true );
+		if ( ! $ajax && $always_show_spinner ) {
 			$default_spinner = GFCommon::get_base_url() . '/images/spinner.svg';
 			$spinner_url     = gf_apply_filters( array( 'gform_ajax_spinner_url', $form_id ), $default_spinner, $form );
 			$theme_slug      = self::get_form_theme_slug( $form );
 			$is_legacy       = $default_spinner !== $spinner_url || in_array( $theme_slug, array( 'gravity-theme', 'legacy' ) );
 
-			$text .= '<script>gform.initializeOnLoaded( function() {' .
+			$resume_form .= '<script>gform.initializeOnLoaded( function() {' .
 			         "gformInitSpinner( {$form_id}, '{$spinner_url}', " . ( $is_legacy ? 'true' : 'false' ) . " );" .
 			         " });</script>";
 		}

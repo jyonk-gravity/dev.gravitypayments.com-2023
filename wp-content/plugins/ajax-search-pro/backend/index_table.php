@@ -609,6 +609,7 @@ $asp_cron_data = get_option("asp_it_cron", array(
 </div>
 <?php
 $media_query = ASP_DEBUG == 1 ? asp_gen_rnd_str() : get_site_option("asp_media_query", "defn");
+wp_enqueue_script('jquery');
 wp_enqueue_script('asp-backend-synonyms', plugin_dir_url(__FILE__) . 'settings/assets/index-table/synonyms.js', array(
     'jquery'
 ), $media_query, true);

@@ -143,8 +143,12 @@
                     die();
                 }
             
-            
-            function general_interface_update($sortID)
+            /**
+            * General interface updates
+            * 
+            * @param mixed $sortID
+            */
+            function general_interface_update( $sortID )
                 {
                     
                     global $APTO;
@@ -2747,7 +2751,7 @@
                         
                     if($_USE_PAGED_AJAX === FALSE   ||  $ajax_total_pages   ==  $ajax_page)
                         {                            
-                            wp_cache_flush();
+                            $this->functions->site_cache_clear();
                             
                             do_action('apto/reorder-interface/order_update_complete', $sort_view_id);   
                         }

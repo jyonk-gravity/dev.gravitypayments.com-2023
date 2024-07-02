@@ -295,6 +295,8 @@ div.asp_m.ajaxsearchpro .probox .proinput form {
     /* some themes like to add un-removable margin and padding.. */
     margin: 0 !important;
     padding: 0 !important;
+	display: block !important;
+	max-width: unset !important;
 }
 
 div.asp_m.ajaxsearchpro .probox .proinput input {
@@ -1421,6 +1423,16 @@ div.asp_w.asp_s.searchsettings .asp_option {
     align-items: flex-start;
     margin: 0 0 10px 0;
     cursor: pointer;
+}
+
+div.asp_w.asp_sb.searchsettings .asp_option:focus,
+div.asp_w.asp_s.searchsettings .asp_option:focus {
+	outline: none;
+}
+
+div.asp_w.asp_sb.searchsettings .asp_option:focus-visible,
+div.asp_w.asp_s.searchsettings .asp_option:focus-visible {
+	outline-style: auto;
 }
 
 div.asp_w.asp_s.searchsettings .asp_option.asp-o-last,

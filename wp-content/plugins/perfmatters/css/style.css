@@ -105,9 +105,12 @@
 
 /* general ui */
 .perfmatters-settings-section {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-bottom: 1px solid #f2f2f2;
   padding-bottom: 20px;
+}
+.perfmatters-settings-section h2 {
+  padding-top: 10px;
 }
 #perfmatters-admin .section-content {
   display: none;
@@ -121,7 +124,7 @@
   line-height: normal;
   margin: 0px auto 10px auto;
 }
-#perfmatters-admin .perfmatters-settings-section:first-of-type h2:first-of-type {
+#perfmatters-admin .perfmatters-settings-header {
   display: flex;
   align-items: center;
   font-size: 22px;
@@ -132,7 +135,7 @@
   border-radius: 3px 3px 0px 0px;
   color: #fff;
 }
-#perfmatters-admin .perfmatters-settings-section:first-of-type h2:first-of-type .dashicons {
+#perfmatters-admin .perfmatters-settings-header .dashicons {
   font-size:23px;
   width: 23px;
   height: 23px;

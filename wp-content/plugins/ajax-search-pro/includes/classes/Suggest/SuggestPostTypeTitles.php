@@ -2,6 +2,7 @@
 namespace WPDRMS\ASP\Suggest;
 
 use stdClass;
+use WPDRMS\ASP\Models\SearchQueryArgs;
 use WPDRMS\ASP\Query\QueryArgs;
 use WPDRMS\ASP\Utils\MB;
 use WPDRMS\ASP\Utils\Str;
@@ -55,7 +56,9 @@ class SuggestPostTypeTitles extends AbstractSuggest {
 		$polylang_query = "";
 
 		if ( $this->args['search_id'] > 0 ) {
-			$search_args = QueryArgs::get($this->args['search_id'], $this->args['options'], $this->args['args']);
+			$search_args = new SearchQueryArgs(
+				QueryArgs::get($this->args['search_id'], $this->args['options'], $this->args['args'])
+			);
 
 			// Allowed statuses
 			if ( count($search_args['post_status']) > 0) {
@@ -326,9 +329,9 @@ class SuggestPostTypeTitles extends AbstractSuggest {
 			 */
 			if (
 				$taxonomy == 'post_tag' &&
-				$args['_post_tags_active'] == 1 &&
+				$args['_post_tags_active'] &&
 				$tax_term_query == "" &&
-				$args["_post_tags_empty"] == 0
+				!$args["_post_tags_empty"]
 			) {
 				$tax_term_query = "
 				(

@@ -1,6 +1,8 @@
 <?php
 namespace WPDRMS\ASP\Utils;
 
+use WPDRMS\ASP\Models\SearchQueryArgs;
+
 defined('ABSPATH') or die("You can't access this file directly.");
 
 if ( !class_exists(__NAMESPACE__ . '\Post') ) {
@@ -207,11 +209,11 @@ if ( !class_exists(__NAMESPACE__ . '\Post') ) {
 		 * @param string $field      Custom field label
 		 * @param object $r          Result object
 		 * @param bool   $use_acf    If true, will use the get_field() function from ACF
-		 * @param array  $args       Search arguments
+		 * @param SearchQueryArgs  $args       Search arguments
 		 * @param array  $field_args Additional field arguments
 		 * @return mixed
 		 */
-		public static function getCFValue(string $field, $r, bool $use_acf, array $args = array(), array $field_args = array()) {
+		public static function getCFValue(string $field, $r, bool $use_acf, SearchQueryArgs $args, array $field_args = array()) {
 			$ret = '';
 			$price_fields = array('_price', '_price_html', '_tax_price', '_sale_price', '_regular_price');
 			$datetime_fields = array('_EventStartDate', '_EventStartDateUTC', '_EventEndDate', '_EventEndDateUTC',

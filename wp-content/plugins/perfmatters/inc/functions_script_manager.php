@@ -1,7 +1,7 @@
 <?php
 
 //actions and filters
-if(!empty($perfmatters_options['assets']['script_manager'])) {
+if(!empty($perfmatters_tools['script_manager'])) {
 	add_action('shutdown', 'perfmatters_script_manager', 0);
 	add_action('admin_bar_menu', 'perfmatters_script_manager_admin_bar', 1);
 	add_filter('post_row_actions', 'perfmatters_script_manager_row_actions', 10, 2);

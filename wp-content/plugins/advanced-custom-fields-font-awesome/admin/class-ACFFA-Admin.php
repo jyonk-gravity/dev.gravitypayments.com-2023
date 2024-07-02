@@ -25,7 +25,8 @@ class ACFFA_Admin
 		add_filter( 'pre_update_option_acffa_settings', [ $this, 'maybe_refresh_icons' ], 20, 2 );
 		add_filter( 'pre_update_option_acffa_settings', [ $this, 'revoke_access_token' ], 20, 2 );
 		add_filter( 'pre_update_option_acffa_settings', [ $this, 'clear_search_config_cache' ], 20, 2 );
-		add_filter( 'pre_update_option_acffa_settings', [ $this, 'get_fontawesome_kits' ], 25, 2 );
+		add_filter( 'pre_update_option_acffa_settings', [ $this, 'check_kits_settings' ], 25, 2 );
+		add_action( 'admin_init', [ $this, 'check_kits_api_key_filter'], 10 );
 		add_action( 'wp_ajax_ACFFA_delete_icon_set', [ $this, 'ajax_remove_icon_set' ] );
 		add_filter( 'ACFFA_show_fontawesome_pro_blurbs', [ $this, 'hide_fontawesome_pro_blurbs' ], 5, 1 );
 
@@ -522,59 +523,75 @@ class ACFFA_Admin
 
 	public function acffa_api_key_cb( $args )
 	{
-		$options = get_option( 'acffa_settings' );
-		?>
-		<p>
-			<?php _e( 'You can create an API token from your <a target="_blank" href="https://fontawesome.com/account/#api-tokens">FontAwesome Account</a> page', 'acf-font-awesome' ); ?><br>
-		</p>
-		<br>
-		<p>
-			<input type="text" class="regular-text code" value="<?php echo isset( $options[ $args[ 'label_for'] ] ) ? ( esc_attr( $options[ $args[ 'label_for'] ] ) ) : ''; ?>" id="<?php echo esc_attr( $args['label_for'] ); ?>" name="acffa_settings[<?php echo esc_attr( $args['label_for'] ); ?>]" />
+		if ( $api_key = apply_filters( 'ACFFA_fa_api_key', false ) ) {
+			?>
+				<p>
+					<?php _e( 'The API key has been set programatically using the "ACFFA_fa_api_key" filter.', 'acf-font-awesome' ); ?><br>
+				</p>
+			<?php
+		} else {
+			$options = get_option( 'acffa_settings' );
+			?>
+			<p>
+				<?php _e( 'You can create an API token from your <a target="_blank" href="https://fontawesome.com/account/#api-tokens">FontAwesome Account</a> page', 'acf-font-awesome' ); ?><br>
+			</p>
 			<br>
-			<span class="validation-label"><?php _e( 'Token Validation:', 'acf-font-awesome' ); ?></span>
-			<span class="validation-result">
-				<span class="empty"><?php _e( 'Please add your API token above.', 'acf-font-awesome' ); ?></span>
-				<span class="save"><?php _e( 'Save settings to validate token.', 'acf-font-awesome' ); ?></span>
-				<span class="success"><?php _e( 'Token successfully validated.', 'acf-font-awesome' ); ?></span>
-				<span class="error"><?php _e( 'Could not validate token. Please verify the token has been correctly entered.', 'acf-font-awesome' ); ?></span>
-			</span>
-		</p>
-		<?php
+			<p>
+				<input type="text" class="regular-text code" value="<?php echo isset( $options[ $args[ 'label_for'] ] ) ? ( esc_attr( $options[ $args[ 'label_for'] ] ) ) : ''; ?>" id="<?php echo esc_attr( $args['label_for'] ); ?>" name="acffa_settings[<?php echo esc_attr( $args['label_for'] ); ?>]" />
+				<br>
+				<span class="validation-label"><?php _e( 'Token Validation:', 'acf-font-awesome' ); ?></span>
+				<span class="validation-result">
+					<span class="empty"><?php _e( 'Please add your API token above.', 'acf-font-awesome' ); ?></span>
+					<span class="save"><?php _e( 'Save settings to validate token.', 'acf-font-awesome' ); ?></span>
+					<span class="success"><?php _e( 'Token successfully validated.', 'acf-font-awesome' ); ?></span>
+					<span class="error"><?php _e( 'Could not validate token. Please verify the token has been correctly entered.', 'acf-font-awesome' ); ?></span>
+				</span>
+			</p>
+			<?php
+		}
 	}
 
 	public function acffa_kit_cb( $args )
 	{
-		$options = get_option( 'acffa_settings' );
-		?>
-		<p>
-			<?php _e( 'FontAwesome kits are required for using FontAwesome Pro icons. Enter your API token above to select your kit.', 'acf-font-awesome' ); ?><br>
-		</p>
-		<br>
+		if ( $api_key = apply_filters( 'ACFFA_fa_kit_token', false ) ) {
+			?>
+				<p>
+					<?php _e( 'The kit token has been set programatically using the "ACFFA_fa_kit_token" filter.', 'acf-font-awesome' ); ?><br>
+				</p>
+			<?php
+		} else {
+			$options = get_option( 'acffa_settings' );
+			?>
+			<p>
+				<?php _e( 'FontAwesome kits are required for using FontAwesome Pro icons. Enter your API token above to select your kit.', 'acf-font-awesome' ); ?><br>
+			</p>
+			<br>
 
-		<table class="widefat" id="available_kits">
-			<thead>
-				<tr>
-					<td><?php _e( 'Select', 'acf-font-awesome' ); ?></td>
-					<td><?php _e( 'Kit Name', 'acf-font-awesome' ); ?></td>
-					<td><?php _e( 'Token', 'acf-font-awesome' ); ?></td>
-					<td><?php _e( 'Status', 'acf-font-awesome' ); ?></td>
-					<td><?php _e( 'License', 'acf-font-awesome' ); ?></td>
-					<td><?php _e( 'Technology', 'acf-font-awesome' ); ?></td>
-					<td><?php _e( 'Custom Icon(s)', 'acf-font-awesome' ); ?></td>
-					<td><?php _e( 'Version', 'acf-font-awesome' ); ?></td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr class="no_kits_found">
-					<td><input type="radio" name="acffa_settings[acffa_kit]" checked value=""></td>
-					<td colspan="7">
-						<?php _e( 'No Kits Found. <a target="_blank" href="https://fontawesome.com/kits">Create a new kit</a>', 'acf-font-awesome' ); ?>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<p><?php _e( 'Make changes to your kits on <a target="_blank" href="https://fontawesome.com/kits">fontawesome.com/kits</a>', 'acf-font-awesome' ); ?></p>
-		<?php
+			<table class="widefat" id="available_kits">
+				<thead>
+					<tr>
+						<td><?php _e( 'Select', 'acf-font-awesome' ); ?></td>
+						<td><?php _e( 'Kit Name', 'acf-font-awesome' ); ?></td>
+						<td><?php _e( 'Token', 'acf-font-awesome' ); ?></td>
+						<td><?php _e( 'Status', 'acf-font-awesome' ); ?></td>
+						<td><?php _e( 'License', 'acf-font-awesome' ); ?></td>
+						<td><?php _e( 'Technology', 'acf-font-awesome' ); ?></td>
+						<td><?php _e( 'Custom Icon(s)', 'acf-font-awesome' ); ?></td>
+						<td><?php _e( 'Version', 'acf-font-awesome' ); ?></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="no_kits_found">
+						<td><input type="radio" name="acffa_settings[acffa_kit]" checked value=""></td>
+						<td colspan="7">
+							<?php _e( 'No Kits Found. <a target="_blank" href="https://fontawesome.com/kits">Create a new kit</a>', 'acf-font-awesome' ); ?>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<p><?php _e( 'Make changes to your kits on <a target="_blank" href="https://fontawesome.com/kits">fontawesome.com/kits</a>', 'acf-font-awesome' ); ?></p>
+			<?php
+		}
 	}
 
 	public function acffa_kit_has_pro_cb( $args )
@@ -673,6 +690,7 @@ class ACFFA_Admin
 			<?php
 			foreach ( $custom_icon_sets_list[ $this->version ] as $icon_set_name => $icon_set_label ) {
 				$icon_set = get_option( $icon_set_name );
+				$icon_set = apply_filters( 'ACFFA_standardize_custom_icon_set_family_style', $icon_set );
 
 				if ( ! $icon_set ) {
 					$this->remove_icon_set( $custom_icon_sets_list, $icon_set_name, true );
@@ -683,20 +701,16 @@ class ACFFA_Admin
 					<ul class="icon-list">
 						<?php
 							if ( version_compare( ACFFA_MAJOR_VERSION, 6, '=' ) ) {
-								foreach ( $icon_set as $prefix => $icons ) {
+								foreach ( $icon_set as $family_style => $icons ) {
 									?>
 									<li>
-										<span class="style"><?php echo apply_filters( 'ACFFA_icon_prefix_label', 'Regular', $prefix ); ?></span>
+										<span class="style"><?php echo apply_filters( 'ACFFA_icon_prefix_label', 'Regular', $family_style ); ?></span>
 										<ul>
 											<?php
 												foreach ( $icons as $id => $icon_json ) {
-													$icon_info = json_decode( $icon_json );
-
-													if ( 'fak' == $icon_info->style ) {
-														echo '<li class="icon" data-icon-json="' . htmlentities( $icon_json ) . '"><i class="' . $icon_info->style . ' fa-' . $icon_info->id . ' fa-fw"></i>' . $icon_info->label . '</li>';
-													} else {
-														echo '<li class="icon" data-icon-json="' . htmlentities( $icon_json ) . '"><i class="fa-' . $icon_info->style . ' fa-' . $icon_info->id . ' fa-fw"></i>' . $icon_info->label . '</li>';
-													}
+													$icon_info	= json_decode( $icon_json );
+													$family		= isset( $icon_info->family ) ? $icon_info->family : apply_filters( 'ACFFA_default_family_by_style', 'classic', $icon_info->style );
+													echo '<li class="icon" data-icon-json="' . htmlentities( $icon_json ) . '"><i class="fa-' . $family . ' fa-' . $icon_info->style . ' fa-' . $icon_info->id . ' fa-fw"></i>' . $icon_info->label . '</li>';
 												}
 											?>
 										</ul>
@@ -798,9 +812,13 @@ class ACFFA_Admin
 		return $new_value;
 	}
 
-	public function get_fontawesome_kits( $new_value, $old_value )
+	public function check_kits_settings( $new_value, $old_value )
 	{
 		if ( version_compare( ACFFA_MAJOR_VERSION, 6, '!=' ) ) {
+			return $new_value;
+		}
+
+		if ( $ACFFA_fa_api_key = apply_filters( 'ACFFA_fa_api_key', false ) ) {
 			return $new_value;
 		}
 
@@ -808,10 +826,42 @@ class ACFFA_Admin
 			return $new_value;
 		}
 
-		$access_token = apply_filters( 'ACFFA_fontawesome_access_token', false, $new_value['acffa_api_key'] );
+		$this->get_fontawesome_kits( $new_value['acffa_api_key'] );
+
+		return $new_value;
+	}
+
+	public function check_kits_api_key_filter()
+	{
+		$ACFFA_fa_api_key		= apply_filters( 'ACFFA_fa_api_key', false );
+		$ACFFA_fa_api_key_db	= get_option( 'ACFFA_fa_api_key' );
+
+		if ( ! $ACFFA_fa_api_key && ! $ACFFA_fa_api_key_db ) {
+			return;
+		}
+
+		if ( $ACFFA_fa_api_key != $ACFFA_fa_api_key_db ) {
+			delete_transient( 'ACFFA_access_token' );
+			delete_transient( 'ACFFA_search_config' );
+			update_option( 'ACFFA_last_api_call_status', 'na' );
+			update_option( 'ACFFA_kits', [] );
+
+			if ( $ACFFA_fa_api_key ) {
+				update_option( 'ACFFA_fa_api_key', $ACFFA_fa_api_key, false );
+			} else {
+				delete_option( 'ACFFA_fa_api_key' );
+			}
+
+			$this->get_fontawesome_kits( $ACFFA_fa_api_key );
+		}
+	}
+
+	private function get_fontawesome_kits( $fa_api_key )
+	{
+		$access_token = apply_filters( 'ACFFA_fontawesome_access_token', false, $fa_api_key );
 
 		if ( ! $access_token ) {
-			return $new_value;
+			return;
 		}
 
 		$remote_get = wp_remote_post( 'https://api.fontawesome.com', [
@@ -836,8 +886,6 @@ class ACFFA_Admin
 				}
 			}
 		}
-
-		return $new_value;
 	}
 
 	private function save_new_icon_set( $label, $icons )
@@ -848,11 +896,13 @@ class ACFFA_Admin
 
 		if ( version_compare( ACFFA_MAJOR_VERSION, 6, '=' ) ) {
 			foreach( $icons as $icon ) {
-				$icon_details = json_decode( $icon );
-				if ( ! isset( $new_icon_set[ $icon_details->style ] ) ) {
-					$new_icon_set[ $icon_details->style ] = [];
+				$icon_details	= json_decode( $icon );
+				$family			= isset( $icon_details->family ) ? $icon_details->family : apply_filters( 'ACFFA_default_family_by_style', 'classic', $icon_details->style );
+				$family_style	= $family . '_' . $icon_details->style;
+				if ( ! isset( $new_icon_set[ $family_style ] ) ) {
+					$new_icon_set[ $family_style ] = [];
 				}
-				$new_icon_set[ $icon_details->style ][ $icon_details->id ] = $icon;
+				$new_icon_set[ $family_style ][ $icon_details->id ] = $icon;
 			}
 		} else if ( version_compare( ACFFA_MAJOR_VERSION, 5, '=' ) ) {
 			foreach( $icons as $icon ) {
