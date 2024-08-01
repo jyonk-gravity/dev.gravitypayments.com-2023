@@ -309,6 +309,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		add_action( 'wp_ajax_redirect_to_api', array( $this, 'ajax_redirect_to_api' ) );
 		add_action( 'wp_ajax_disconnect_account', array( $this, 'ajax_disconnect_account' ) );
 		add_action( 'wp_ajax_gf_ga_log_event_sent', array( $this, 'ajax_log_ga_event_sent' ) );
+		add_action( 'wp_ajax_nopriv_gf_ga_log_event_sent', array( $this, 'ajax_log_ga_event_sent' ) );
 
 		parent::init_ajax();
 	}
@@ -2412,14 +2413,12 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		// Begin sending events using the measurement protocol.
 		foreach ( $ga_codes as $code ) {
 
-			$this->log_debug( __METHOD__ . '(): Attempting to send event via Measurement Protocol. Secret (last 4): XXXXXX' . substr( $api_secret, - 4 ) . '. GA code: ' . $code . '. Event Name: ' . $event_name . '. Page URL: ' . $page_url . '. Parameters: ' . print_r( $parameters, true ) );
-
 			$response = $event->send( $code );
 
 			if ( is_wp_error( $response ) ) {
-				$this->log_debug( __METHOD__ . '(): Failed to send event to Google Analytics via Measurement Protocol. Secret (last 4): XXXXXX' . substr( $api_secret, - 4 ) . '. GA code: ' . $code . '. Event Name: ' . $event_name . '. Page URL: ' . $page_url . '. Parameters: ' . print_r( $parameters, true ) );
+				$this->log_debug( __METHOD__ . '(): Failed to send event to Google Analytics via Measurement Protocol. Secret (last 4): XXXXXX' . substr( $api_secret, - 4 ) . '. GA code: ' . $code . '. Event Name: ' . $event_name . '. Page URL: ' . $page_url . '. Parameters: ' . print_r( $event->get_params(), true ) );
 			} else {
-				$this->log_debug( __METHOD__ . '(): Successfully sent event to Google Analytics via Measurement Protocol. Secret (last 4): XXXXXX' . substr( $api_secret, - 4 ) . '. GA code: ' . $code . '. Event Name: ' . $event_name . '. Page URL: ' . $page_url . '. Parameters: ' . print_r( $parameters, true ) );
+				$this->log_debug( __METHOD__ . '(): Successfully sent event to Google Analytics via Measurement Protocol. Secret (last 4): XXXXXX' . substr( $api_secret, - 4 ) . '. GA code: ' . $code . '. Event Name: ' . $event_name . '. Page URL: ' . $page_url . '. Parameters: ' . print_r( $event->get_params(), true ) );
 			}
 		}
 	}

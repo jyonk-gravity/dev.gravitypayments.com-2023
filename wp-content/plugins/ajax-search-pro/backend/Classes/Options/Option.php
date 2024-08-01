@@ -97,7 +97,9 @@ class Option {
 		), $media_query, false);
 		wp_enqueue_style('wpd-options-jquery-select2', ASP_URL_NP . 'backend/Assets/Options/dist/select2.min.css', false, $media_query);
 
-		wp_enqueue_script('wpd-options', ASP_URL_NP . 'backend/Assets/Options/dist/options.min.js',
+		/*wp_enqueue_script('wpd-options', ASP_URL_NP . 'backend/Assets/Options/dist/options.min.js',
+			array('jquery', 'wpd-options-jquery-select2', 'jquery-ui-datepicker'), $media_query, true);*/
+		wp_enqueue_script('wpd-options', ASP_URL_NP . 'backend/Assets/Options/dist/App.js',
 			array('jquery', 'wpd-options-jquery-select2', 'jquery-ui-datepicker'), $media_query, true);
 		wp_enqueue_style('wpd-options', ASP_URL_NP . 'backend/Assets/Options/dist/options.min.css', array(), $media_query);
 	}

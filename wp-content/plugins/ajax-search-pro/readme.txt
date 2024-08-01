@@ -3,8 +3,8 @@ Contributors: wpdreams
 Tags: search, ajax, live
 Donate link: https://codecanyon.net/item/ajax-search-pro-for-wordpress-live-search-plugin/3357410
 Requires at least: 4.9
-Tested up to: 6.5
+Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 4.26.12
+Stable tag: 4.26.13
 
 Most powerful WordPress Search Engine

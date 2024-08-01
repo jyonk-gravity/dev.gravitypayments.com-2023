@@ -182,7 +182,6 @@
   right: 20px;
   line-height: 24px;
   color: #fff;
-  opacity: 0.5;
 }
 #perfmatters-admin #perfmatters-cta {
   display: flex; 
@@ -232,6 +231,7 @@
   background-color: #ccc;
   transition: .4s;
   border-radius: 50px;
+  cursor: pointer;
 }
 #perfmatters-admin .perfmatters-slider:before {
   position: absolute;
@@ -378,6 +378,9 @@
   padding: 3px 10px;
   background: #4A89DD;
   border-color: #4A89DD;
+}
+#perfmatters-admin-container .button-primary:hover {
+  background: #3F74BC;
 }
 #perfmatters-admin-container .button-primary:disabled {
   background: #4A89DD !important;

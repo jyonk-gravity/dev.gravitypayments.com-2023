@@ -155,7 +155,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
     "autop": {
         "state": "<?php echo $style['auto_populate']; ?>",
         "phrase": "<?php echo $style['auto_populate_phrase']; ?>",
-        "count": <?php echo $style['auto_populate_count']; ?>
+        "count": <?php echo intval($style['auto_populate_count']); ?>
     },
 	"wooShop": {
 		"useAjax": <?php echo ( \WPDRMS\ASP\Utils\WooCommerce::isShop() && $style['woo_shop_live_search']) ? 1 : 0; ?>,

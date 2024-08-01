@@ -177,15 +177,17 @@ class CSS
                         $file = Utilities::get_root_dir_path() . ltrim($url, '/');
 
                         //make sure local file exists
-                        if(!file_exists($file)) {
-                            $skip = true;;
-                        }
-                       
-                        //get used css from stylesheet
-                        $used_css = self::clean_stylesheet($atts_array['href'], @file_get_contents($file));
+                        if(file_exists($file)) {
 
-                        //add used stylesheet css to total used
-                        $used_css_string.= $used_css;
+                            //get used css from stylesheet
+                            $used_css = self::clean_stylesheet($atts_array['href'], @file_get_contents($file));
+
+                            //add used stylesheet css to total used
+                            $used_css_string.= $used_css;
+                        }
+                        else {
+                            $skip = true;
+                        }
                     }
 
                     if(!$skip) {
@@ -284,7 +286,7 @@ class CSS
         $type = '';
 
         if($wp_query->is_page) {
-            $type = is_front_page() ? 'front' : 'page-' . $wp_query->post->ID;
+            $type = is_front_page() ? 'front' : (!empty($wp_query->post) ? 'page-' . $wp_query->post->ID : 'page');
         }
         elseif($wp_query->is_home) {
             $type = 'home';

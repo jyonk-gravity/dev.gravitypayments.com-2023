@@ -1393,7 +1393,9 @@ function perfmatters_is_page_builder() {
 		'cs_preview_state', //cornerstone
 		'breakdance', //breakdance
     	'breakdance_iframe',
-    	'givewp-route' //givewp
+    	'givewp-route', //givewp
+    	'gb-template-viewer', //generateblocks
+    	'trp-edit-translation' //translatepress
 	));
 
 	if(!empty($page_builders)) {

@@ -20,11 +20,11 @@ class Rest {
 	 */
 	private $routes = array(
 		'/woo_search' => array(
-			'methods' => 'GET, POST',
+			'methods' => 'GET',
 			'handler' => 'RouteWooSearch'
 		),
 		'/search' => array(
-			'methods' => 'GET, POST',
+			'methods' => 'GET',
 			'handler' => 'RouteSearch'
 		)
 	);

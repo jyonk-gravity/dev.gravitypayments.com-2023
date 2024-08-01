@@ -747,18 +747,18 @@
                     if(!isset($_POST['apto_sort_form_order_update']))
                         return FALSE;        
                     
+                    $sort_id        =   preg_replace( '/[^a-zA-Z0-9_\-]/', '', $_POST['sort_id'] );
+                    $sort_view_id   =   preg_replace( '/[^a-zA-Z0-9_\-]/', '', $_POST['sort_view_ID'] );
+                    
                     //check for order migrate to manual
                     if( isset($_POST['automatic_order_send_to_manual']))
                         {
-                            $this->automatic_order_send_to_manual();
+                            $this->automatic_order_send_to_manual( $sort_view_id );
                             return FALSE;
                         }
                     
                     global $APTO;
                                             
-                    $sort_id        =   $_POST['sort_id'];
-                    $sort_view_id   =   $_POST['sort_view_ID'];
-                    
                     $order_by               =   array_values($_POST['auto_order_by']);
                     $taxonomy_name          =   isset ( $_POST['auto_taxonomy_name'] )  ?   array_values($_POST['auto_taxonomy_name'])  :   array();
                     $custom_field_name      =   array_values($_POST['auto_custom_field_name']);
@@ -841,7 +841,9 @@
                                     $batch_sort_view_id =   $this->create_view($sort_id, $sort_view_meta);                                    
                                     
                                 }
-                        } 
+                        }
+                        
+                    do_action('apto/reorder-interface/automatic/order_update_complete', $sort_view_id); 
 
                 }
             
@@ -851,10 +853,8 @@
             * Check for automatic order send to manual
             * 
             */
-            function automatic_order_send_to_manual()
+            function automatic_order_send_to_manual( $sort_view_id )
                 {
-                    
-                    $sort_view_id   =   $_POST['sort_view_ID'];    
                     
                     $args   =   $this->functions->query_arguments_from_sort_settings( $sort_view_id );
                     
@@ -912,7 +912,7 @@
                             $results            =   $wpdb->get_var($mysql_query);
                         } 
                          
-                    do_action('apto_order_update_complete', $sort_view_id);        
+                    do_action('apto/reorder-interface/automatic/send-to-manual/order_update_complete', $sort_view_id);        
                     
                 }
                 

@@ -1,12 +1,14 @@
 <?php
 
 namespace WPDRMS\ASP\Api\Rest0;
-use ASP_Post, WP_Post, WP_REST_Request;
+
+use ASP_Post;
+use WP_Post;
+use WP_REST_Request;
 use WPDRMS\ASP\Query\SearchQuery;
 
 class RouteSearch implements RouteInterface {
 	private $args, $params;
-
 	/**
 	 * Handles the Search Route
 	 *
@@ -14,18 +16,23 @@ class RouteSearch implements RouteInterface {
 	 * @return WP_Post[]|ASP_Post[]
 	 */
 	function handle( WP_REST_Request $request ): array {
-		$defaults = $this->args = array(
-			's' => '',
-			'id' => -1,
-			'is_wp_json' => true,
-			'posts_per_page' => 9999
+		$defaults     = $this->args = array(
+			's'              => '',
+			'id'             => -1,
+			'is_wp_json'     => true,
+			'posts_per_page' => 9999,
 		);
 		$this->params = $request->get_params();
-		foreach ($defaults as $k => $v) {
-			if ( isset($this->params[$k]) && $this->params[$k] !== null ) {
-				$this->args[$k] = $this->params[$k];
+		foreach ( $defaults as $k => $v ) {
+			if ( isset($this->params[ $k ]) && $this->params[ $k ] !== null ) {
+				$this->args[ $k ] = $this->params[ $k ];
 			}
 		}
+
+		$search_id =  $this->args['id'];
+
+		// id does not exist in SearchQueryArgs constructor
+		unset($this->args['id']);
 
 		$this->getPostTypeArgs();
 		$this->getTaxonomyArgs();
@@ -33,36 +40,36 @@ class RouteSearch implements RouteInterface {
 		$this->getExclusionArgs();
 		$this->getInclusionArgs();
 
-		$this->args = apply_filters('asp_rest_search_query_args', $this->args, $this->args['id'], $request);
-		$asp_query = new SearchQuery($this->args, $this->args['id']);
+		$this->args = apply_filters('asp_rest_search_query_args', $this->args, $search_id, $request);
+		$asp_query  = new SearchQuery($this->args, $search_id);
 		return $asp_query->posts;
 	}
 
-	private function getTaxonomyArgs() {
+	private function getTaxonomyArgs(): void {
 		// Post taxonomy filter
 		if ( isset($this->params['post_tax_filter']) ) {
 			$this->args['post_tax_filter'] = array();
-			foreach ($this->params['post_tax_filter'] as $taxonomy => $terms) {
+			foreach ( $this->params['post_tax_filter'] as $taxonomy => $terms ) {
 				if ( taxonomy_exists($taxonomy) && is_array($terms) && count($terms) ) {
 					$this->args['post_tax_filter'][] = array(
-						'taxonomy' => $taxonomy,
-						'include' => array_map('intval', $terms),
-						'allow_empty' => false
+						'taxonomy'    => $taxonomy,
+						'include'     => array_map('intval', $terms),
+						'allow_empty' => false,
 					);
 				}
 			}
 		}
 	}
 
-	private function getPostTypeArgs() {
+	private function getPostTypeArgs(): void {
 	}
 
-	private function getPostMetaArgs() {
+	private function getPostMetaArgs(): void {
 	}
 
-	private function getExclusionArgs() {
+	private function getExclusionArgs(): void {
 	}
 
-	private function getInclusionArgs() {
+	private function getInclusionArgs(): void {
 	}
 }

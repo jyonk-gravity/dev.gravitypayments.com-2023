@@ -5,11 +5,12 @@ use WPDRMS\ASP\Misc\PriorityGroups;
 use WPDRMS\ASP\Index;
 use WPDRMS\ASP\Misc\Statistics;
 use WPDRMS\ASP\Models\SearchQueryArgs;
-use WPDRMS\ASP\Search\SearchAttachments;
 use WPDRMS\ASP\Search\SearchBlogs;
 use WPDRMS\ASP\Search\SearchBuddyPress;
 use WPDRMS\ASP\Search\SearchComments;
 use WPDRMS\ASP\Search\SearchIndex;
+use WPDRMS\ASP\Search\SearchMedia;
+use WPDRMS\ASP\Search\SearchMediaIndex;
 use WPDRMS\ASP\Search\SearchPeepsoActivities;
 use WPDRMS\ASP\Search\SearchPeepsoGroups;
 use WPDRMS\ASP\Search\SearchPostTypes;
@@ -105,6 +106,7 @@ class SearchQuery {
 			$page_id              = get_the_ID();
 			$this->args->_page_id = $page_id === false ? 0 : $page_id;
 		}
+		$this->args->_selected_blogs = array( 0 => get_current_blog_id() );
 	}
 
 	private function processArgs(): void {
@@ -217,7 +219,7 @@ class SearchQuery {
 		// ------------------ Part 2. Search data ----------------------
 
 		// Break after this point, if no search data is provided
-		if ( !isset($this->args['_sd']) ) {
+		if ( empty($this->args['_sd']) ) {
 			return;
 		}
 
@@ -532,7 +534,7 @@ class SearchQuery {
 						if ( $search_type === 'cpt' && count($args->post_type) > 0 ) {
 
 							if ( $args->posts_limit_distribute ) {
-								if ( isset($args->_sd) && $args->_sd['use_post_type_order'] ) {
+								if ( !empty($args->_sd) && $args->_sd['use_post_type_order'] ) {
 									$_temp_ptypes = array();
 									foreach ( $args->_sd['post_type_order'] as $p_order ) {
 										if ( in_array($p_order, $args->post_type, true) ) {
@@ -572,7 +574,7 @@ class SearchQuery {
 										$args->posts_limit_override = $_temp_ptype_limits[ $_tptype ][1];
 										$args->global_found_posts   = $this->found_posts;
 										// For exact matches the regular engine is used
-										if ( $args->engine == 'regular' || $args->_exact_matches || $args->s == '' ) {
+										if ( $args->engine === 'regular' || $args->_exact_matches || $args->s === '' ) {
 											$_posts = new SearchPostTypes($args);
 										} else {
 											$_posts = new SearchIndex($args);
@@ -678,7 +680,7 @@ class SearchQuery {
 									$args->keyword_logic = $logic;
 								}
 								$args->global_found_posts = $this->found_posts;
-								$_attachments             = new SearchAttachments($args);
+								$_attachments             = $args->attachments_use_index ? new SearchMediaIndex($args) :new SearchMedia($args);
 								$_att_res                 = $_attachments->search($s);
 								$ra['attachment_results'] = array_merge($ra['attachment_results'], $_att_res);
 								if ( $lk > 0 ) {
@@ -793,7 +795,7 @@ class SearchQuery {
 		}
 
 		// Order if search data is set
-		if ( isset($args->_sd) ) {
+		if ( !empty($args->_sd) ) {
 			$results_order = $args->_sd['results_order'];
 
 			if ( strpos($results_order, 'attachments') === false ) {
@@ -977,7 +979,7 @@ class SearchQuery {
 	}
 
 	private function group( $results ) {
-		if ( !isset($this->args['_sd']) ) {
+		if ( empty($this->args['_sd']) ) {
 			return false;
 		}
 
@@ -1156,7 +1158,7 @@ class SearchQuery {
 	}
 
 	private function applyExceptions( $s ) {
-		if ( !isset($this->args['_sd']) ) {
+		if ( empty($this->args['_sd']) ) {
 			return $s;
 		}
 

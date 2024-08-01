@@ -1,10 +1,21 @@
 <?php
 namespace WPDRMS\ASP\Index;
 
+
 defined('ABSPATH') or die("You can't access this file directly.");
 
 if ( !class_exists(__NAMESPACE__ . '\Content') ) {
 	class Content {
+		public static function mySQLFixes( $str ) {
+			return str_replace(array(
+				// SELECT œ LIKE oe => FALSE but SELECT œ = oe => TRUE
+				// When doing INSERT with "oe" or "œ" in keyword, it is ignored as it is considered already existing
+				'œ'
+			),array(
+				'oe'
+			), $str);
+		}
+
 		public static function arabicRemoveDiacritics( $str ) {
 			if ( is_array($str) ) {
 				foreach ($str as &$v) {

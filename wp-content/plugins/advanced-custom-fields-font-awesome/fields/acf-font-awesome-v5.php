@@ -212,6 +212,11 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				$select_value = ( 'null' != $field['value'] ) ? $field['value'] : $field['default_value'];
 			}
 
+			$icon_json = json_decode( $select_value );
+			if ( is_array( $select_value ) || is_object( $icon_json ) ) {
+				$select_value = false;
+			}
+
 			$field['type'] = 'select';
 			$field['ui'] = 1;
 			$field['ajax'] = 1;

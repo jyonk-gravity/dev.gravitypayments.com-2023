@@ -99,6 +99,8 @@
                     
                     $APTO->cache_add_key('sort_settings/' . $item_ID, $settings );
                     
+                    $settings   =   apply_filters('apto/get_sort_settings', $settings, $item_ID );
+                    
                     return $settings;
                 }
                 
@@ -237,6 +239,9 @@
                     $settings          = wp_parse_args( $settings, $defaults );
                     
                     $APTO->cache_add_key('sort_view_settings/' . $item_ID, $settings );
+                    
+                    
+                    $settings   =   apply_filters('apto/get_sort_view_settings', $settings, $item_ID );
                     
                     return $settings;
                 }

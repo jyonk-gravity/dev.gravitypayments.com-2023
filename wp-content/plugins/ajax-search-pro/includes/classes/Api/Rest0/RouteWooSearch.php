@@ -35,9 +35,13 @@ class RouteWooSearch implements RouteInterface {
 			$args['post_type'] = array('product');
 		}
 
-		$args = apply_filters('asp_rest_woo_search_query_args', $args, $args['id'], $request);
+		$search_id =   $args['id'];
+		// id does not exist in SearchQueryArgs constructor
+		unset( $args['id']);
 
-		$asp_query = new SearchQuery($args, $args['id']);
+		$args = apply_filters('asp_rest_woo_search_query_args', $args, $search_id, $request);
+
+		$asp_query = new SearchQuery($args, $search_id);
 
 		return $asp_query->posts;
 	}

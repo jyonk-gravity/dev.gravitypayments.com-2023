@@ -2655,7 +2655,9 @@ if (!function_exists("asp_get_terms_ordered_by_ids")) {
         $tags = get_terms($taxonomy, array("include" => $ids));
 
         foreach ($tags as $tag) {
-            $final_tags_arr[$tag_keys_arr[$tag->term_id]] = $tag;
+	        if ( isset($tag_keys_arr[$tag->term_id]) ) {
+		        $final_tags_arr[$tag_keys_arr[$tag->term_id]] = $tag;
+	        }
         }
 
         ksort($final_tags_arr);

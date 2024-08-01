@@ -1,0 +1,194 @@
+openapi: 3.0.0
+info:
+  title: 'Ajax Search Pro for WordPress'
+  version: '1.0'
+paths:
+  /wp-json/ajax-search-pro/v0/search:
+    get:
+      tags:
+        - search
+      description: 'Generic search'
+      operationId: bb1fbe42b291685a0d9861a6fc837608
+      parameters:
+        -
+          name: s
+          in: query
+          required: true
+          schema:
+            type: string
+        -
+          name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Results array.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WP_Post_ASP'
+  /wp-json/ajax-search-pro/v0/woo_search:
+    get:
+      tags:
+        - woocommerce
+      description: 'WooCommerce Specific Search'
+      operationId: d515ad7c0a131df3bbf0444af736ebe5
+      parameters:
+        -
+          name: s
+          in: query
+          required: true
+          schema:
+            type: string
+        -
+          name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Product results array.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WP_Post_ASP'
+components:
+  schemas:
+    ASP_Data:
+      properties:
+        title:
+          description: 'Title including advanced title field data'
+          type: string
+        id:
+          description: 'Result ID'
+          type: integer
+        blogid:
+          description: 'Result blog ID'
+          type: integer
+          nullable: true
+        date:
+          description: 'Result blog ID'
+          type: string
+        content:
+          description: 'Content including advanced title field data'
+          type: string
+        excerpt:
+          description: 'Excerpt data'
+          type: string
+          nullable: true
+        post_type:
+          description: 'Post type'
+          type: string
+          nullable: true
+        content_type:
+          description: 'Content type'
+          type: string
+        author:
+          description: Author
+          type: string
+          nullable: true
+        asp_guid:
+          description: 'URL of the search result when search ID is not set'
+          type: string
+          nullable: true
+        url:
+          description: 'URL of the search result when search ID is set'
+          type: string
+          nullable: true
+        image:
+          description: 'Image URL when search ID is set'
+          type: string
+          nullable: true
+      type: object
+    WP_Post_ASP:
+      properties:
+        ID:
+          description: 'Post ID.'
+          type: integer
+        post_author:
+          description: "ID of post author.\n\nA numeric string, for compatibility reasons."
+          type: string
+        post_date:
+          description: 'The post''s local publication time.'
+          type: string
+        post_date_gmt:
+          description: 'The post''s GMT publication time.'
+          type: string
+        post_content:
+          description: 'The post''s content.'
+          type: string
+        post_title:
+          description: 'The post''s title.'
+          type: string
+        post_excerpt:
+          description: 'The post''s excerpt.'
+          type: string
+        post_status:
+          description: 'The post''s status.'
+          type: string
+        comment_status:
+          description: 'Whether comments are allowed.'
+          type: string
+        ping_status:
+          description: 'Whether pings are allowed.'
+          type: string
+        post_password:
+          description: 'The post''s password in plain text.'
+          type: string
+        post_name:
+          description: 'The post''s slug.'
+          type: string
+        to_ping:
+          description: 'URLs queued to be pinged.'
+          type: string
+        pinged:
+          description: 'URLs that have been pinged.'
+          type: string
+        post_modified:
+          description: 'The post''s local modified time.'
+          type: string
+        post_modified_gmt:
+          description: 'The post''s GMT modified time.'
+          type: string
+        post_content_filtered:
+          description: 'A utility DB field for post content.'
+          type: string
+        post_parent:
+          description: 'ID of a post''s parent post.'
+          type: integer
+        guid:
+          description: 'The unique identifier for a post, not necessarily a URL, used as the feed GUID.'
+          type: string
+        menu_order:
+          description: 'A field used for ordering posts.'
+          type: integer
+        post_type:
+          description: 'The post''s type, like post or page.'
+          type: string
+        post_mime_type:
+          description: 'An attachment''s mime type.'
+          type: string
+        comment_count:
+          description: "Cached comment count.\n\nA numeric string, for compatibility reasons."
+          type: string
+        filter:
+          description: "Stores the post object's sanitization level.\n\nDoes not correspond to a DB field."
+          type: string
+        asp_data:
+          $ref: '#/components/schemas/ASP_Data'
+      type: object
+tags:
+  -
+    name: search
+    description: search
+  -
+    name: woocommerce
+    description: woocommerce
+

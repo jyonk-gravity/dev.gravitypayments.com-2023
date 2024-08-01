@@ -2,16 +2,16 @@
 # This file is distributed under the GPL-3.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms Google Analytics Add-On 2.2.0\n"
+"Project-Id-Version: Gravity Forms Google Analytics Add-On 2.3.0\n"
 "Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
 "Last-Translator: Gravity Forms <support@gravityforms.com>\n"
 "Language-Team: Gravity Forms <support@gravityforms.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-07T16:26:17+00:00\n"
+"POT-Creation-Date: 2024-07-03T12:58:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: gravityformsgoogleanalytics\n"
 
 #. Plugin Name of the plugin
@@ -35,152 +35,152 @@ msgid "https://gravityforms.com"
 msgstr ""
 
 #. translators: 1: reauthentication version number 2: open <a> tag, 3: close </a> tag
-#: class-gf-google-analytics.php:394
+#: class-gf-google-analytics.php:395
 msgid "Gravity Forms Google Analytics v%1$s requires re-authentication in order to correctly send data to Google Analytics 4. Please %2$sdisconnect and reconnect%3$s to ensure data can be sent to GA4."
 msgstr ""
 
-#: class-gf-google-analytics.php:470
+#: class-gf-google-analytics.php:471
 msgid "Update Settings"
 msgstr ""
 
-#: class-gf-google-analytics.php:471
+#: class-gf-google-analytics.php:472
 msgid "Disconnecting"
 msgstr ""
 
-#: class-gf-google-analytics.php:472
+#: class-gf-google-analytics.php:473
 msgid "Redirecting..."
 msgstr ""
 
-#: class-gf-google-analytics.php:473
+#: class-gf-google-analytics.php:474
 msgid "Connect"
 msgstr ""
 
-#: class-gf-google-analytics.php:474
+#: class-gf-google-analytics.php:475
 msgid "Connecting"
 msgstr ""
 
-#: class-gf-google-analytics.php:475
+#: class-gf-google-analytics.php:476
 msgid "You must select a Workspace"
 msgstr ""
 
-#: class-gf-google-analytics.php:476
+#: class-gf-google-analytics.php:477
 msgid "You must select a View"
 msgstr ""
 
-#: class-gf-google-analytics.php:477
+#: class-gf-google-analytics.php:478
 msgid "You must select a Google Analytics account"
 msgstr ""
 
-#: class-gf-google-analytics.php:478
+#: class-gf-google-analytics.php:479
 msgid "You must select a Tag Manager Account"
 msgstr ""
 
-#: class-gf-google-analytics.php:612
+#: class-gf-google-analytics.php:613
 msgid "You don't have sufficient permissions to update the form settings."
 msgstr ""
 
-#: class-gf-google-analytics.php:1098
+#: class-gf-google-analytics.php:1099
 msgid "There was an error retrieving Google Analytics data streams."
 msgstr ""
 
-#: class-gf-google-analytics.php:1103
+#: class-gf-google-analytics.php:1104
 msgid "Select a data stream"
 msgstr ""
 
-#: class-gf-google-analytics.php:1153
+#: class-gf-google-analytics.php:1154
 msgid "Select a Container"
 msgstr ""
 
-#: class-gf-google-analytics.php:1188
+#: class-gf-google-analytics.php:1189
 msgid "Could not retrieve Tag Manager workspaces"
 msgstr ""
 
-#: class-gf-google-analytics.php:1197
+#: class-gf-google-analytics.php:1198
 msgid "Select a Workspace"
 msgstr ""
 
-#: class-gf-google-analytics.php:1436
+#: class-gf-google-analytics.php:1437
 msgid "Nonce validation failed."
 msgstr ""
 
-#: class-gf-google-analytics.php:1497
+#: class-gf-google-analytics.php:1498
 msgid "Nonce validation has failed."
 msgstr ""
 
-#: class-gf-google-analytics.php:1511
+#: class-gf-google-analytics.php:1512
 msgid "User does not have required permissions to setup Google Analytics."
 msgstr ""
 
-#: class-gf-google-analytics.php:1525
+#: class-gf-google-analytics.php:1526
 msgid "Unable to initialize Google Anaylics API."
 msgstr ""
 
-#: class-gf-google-analytics.php:1559
+#: class-gf-google-analytics.php:1560
 msgid "Processing... Please wait."
 msgstr ""
 
-#: class-gf-google-analytics.php:1613
+#: class-gf-google-analytics.php:1614
 msgid "Disconnect"
 msgstr ""
 
-#: class-gf-google-analytics.php:1615
+#: class-gf-google-analytics.php:1616
 #: includes/settings/class-plugin-settings.php:188
 #: includes/settings/class-plugin-settings.php:193
 msgid "Manual Configuration"
 msgstr ""
 
-#: class-gf-google-analytics.php:1617
+#: class-gf-google-analytics.php:1618
 #: includes/settings/class-plugin-settings.php:167
 #: includes/settings/class-plugin-settings.php:172
 #: includes/settings/class-plugin-settings.php:347
 msgid "Google Analytics"
 msgstr ""
 
-#: class-gf-google-analytics.php:1619
+#: class-gf-google-analytics.php:1620
 #: includes/settings/class-plugin-settings.php:181
 msgid "Google Tag Manager"
 msgstr ""
 
-#: class-gf-google-analytics.php:1621
+#: class-gf-google-analytics.php:1622
 #: includes/settings/class-plugin-settings.php:163
 msgid "Google Measurement Protocol"
 msgstr ""
 
-#: class-gf-google-analytics.php:1623
+#: class-gf-google-analytics.php:1624
 msgid "Not connected"
 msgstr ""
 
-#: class-gf-google-analytics.php:1671
+#: class-gf-google-analytics.php:1672
 msgid "Measurement ID not specified."
 msgstr ""
 
-#: class-gf-google-analytics.php:1819
-#: class-gf-google-analytics.php:1831
+#: class-gf-google-analytics.php:1820
+#: class-gf-google-analytics.php:1832
 msgid "It appears that you do not have a Google Analytics account for the account you selected."
 msgstr ""
 
-#: class-gf-google-analytics.php:1833
-#: class-gf-google-analytics.php:1941
+#: class-gf-google-analytics.php:1834
+#: class-gf-google-analytics.php:1942
 msgid "Return to Settings"
 msgstr ""
 
-#: class-gf-google-analytics.php:1840
+#: class-gf-google-analytics.php:1841
 msgid "Select an account"
 msgstr ""
 
-#: class-gf-google-analytics.php:1846
+#: class-gf-google-analytics.php:1847
 msgid "This account does not have any properties..."
 msgstr ""
 
-#: class-gf-google-analytics.php:1905
+#: class-gf-google-analytics.php:1906
 msgid "Select a Tag Manager Account"
 msgstr ""
 
-#: class-gf-google-analytics.php:1939
+#: class-gf-google-analytics.php:1940
 msgid "It appears that you do not have a Google Tag Manager account for the account you selected."
 msgstr ""
 
-#: class-gf-google-analytics.php:2406
+#: class-gf-google-analytics.php:2407
 msgid "No title found"
 msgstr ""
 

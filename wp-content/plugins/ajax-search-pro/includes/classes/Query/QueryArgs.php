@@ -91,21 +91,21 @@ class QueryArgs {
 				'_taxonomy_group_logic'      => $sd['taxonomy_logic'],
 
 				// LIMITS
-				'posts_limit'                => $sd['posts_limit'],
-				'posts_limit_override'       => $sd['posts_limit_override'],
-				'posts_limit_distribute'     => $sd['posts_limit_distribute'],
-				'taxonomies_limit'           => $sd['taxonomies_limit'],
-				'taxonomies_limit_override'  => $sd['taxonomies_limit_override'],
-				'users_limit'                => $sd['users_limit'],
-				'users_limit_override'       => $sd['users_limit_override'],
-				'blogs_limit'                => $sd['blogs_limit'],
-				'blogs_limit_override'       => $sd['blogs_limit_override'],
-				'buddypress_limit'           => $sd['buddypress_limit'],
-				'buddypress_limit_override'  => $sd['buddypress_limit_override'],
-				'comments_limit'             => $sd['comments_limit'],
-				'comments_limit_override'    => $sd['comments_limit_override'],
-				'attachments_limit'          => $sd['attachments_limit'],
-				'attachments_limit_override' => $sd['attachments_limit_override'],
+				'posts_limit'                => intval($sd['posts_limit']),
+				'posts_limit_override'       => intval($sd['posts_limit_override']),
+				'posts_limit_distribute'     => $sd['posts_limit_distribute'], // this is bool
+				'taxonomies_limit'           => intval($sd['taxonomies_limit']),
+				'taxonomies_limit_override'  => intval($sd['taxonomies_limit_override']),
+				'users_limit'                => intval($sd['users_limit']),
+				'users_limit_override'       => intval($sd['users_limit_override']),
+				'blogs_limit'                => intval($sd['blogs_limit']),
+				'blogs_limit_override'       => intval($sd['blogs_limit_override']),
+				'buddypress_limit'           => intval($sd['buddypress_limit']),
+				'buddypress_limit_override'  => intval($sd['buddypress_limit_override']),
+				'comments_limit'             => intval($sd['comments_limit']),
+				'comments_limit_override'    => intval($sd['comments_limit_override']),
+				'attachments_limit'          => intval($sd['attachments_limit']),
+				'attachments_limit_override' => intval($sd['attachments_limit_override']),
 			)
 		);
 		$args['_qtranslate_lang'] = $o['qtranslate_lang'] ?? '';
@@ -162,7 +162,12 @@ class QueryArgs {
 			}
 		}
 
-		$args['_exact_matches']        = isset($o['asp_gen']) && is_array($o['asp_gen']) && in_array('exact', $o['asp_gen'], true);
+		if ( in_array('exact', $sd['frontend_fields']['selected'], true) ) {
+			$args['_exact_matches'] = isset($o['asp_gen']) && is_array($o['asp_gen']) && in_array('exact', $o['asp_gen'], true);
+		} else {
+			$args['_exact_matches'] = $sd['exactonly'];
+		}
+
 		$args['_exact_match_location'] = $sd['exact_match_location'];
 
 		// Is the secondary logic allowed on exact matching?
@@ -233,8 +238,8 @@ class QueryArgs {
 		}
 
 		/*--------------------- OTHER FILTER RELATED --------------------*/
-		$args['filters_changed'] = $o['filters_changed'] ?? ($args['filters_changed'] ?? false);
-		$args['filters_initial'] = $o['filters_initial'] ?? ($args['filters_initial'] ?? true);
+		$args['filters_changed'] = $o['filters_changed'] ?? ( $args['filters_changed'] ?? false );
+		$args['filters_initial'] = $o['filters_initial'] ?? ( $args['filters_initial'] ?? true );
 
 		/*--------------------- GENERAL FIELDS --------------------------*/
 		$args['search_type'] = array();
@@ -369,13 +374,15 @@ class QueryArgs {
 		}
 
 		/*---------------------- Selected blogs -------------------------*/
-		$args['_selected_blogs'] = w_isset_def($sd['selected-blogs'], array( 0 => get_current_blog_id() ));
-		if ( $args['_selected_blogs'] === 'all' ) {
+		$sd['selected-blogs'] = w_isset_def($sd['selected-blogs'], array( 0 => get_current_blog_id() ));
+		if ( $sd['selected-blogs'] === 'all' ) {
 			if ( is_multisite() ) {
 				$args['_selected_blogs'] = wpdreams_get_blog_list(0, 'all', true);
 			} else {
 				$args['_selected_blogs'] = array( 0 => get_current_blog_id() );
 			}
+		} else {
+			$args['_selected_blogs'] = $sd['selected-blogs'];
 		}
 		if ( count($args['_selected_blogs']) <= 0 ) {
 			$args['_selected_blogs'] = array( 0 => get_current_blog_id() );
@@ -650,7 +657,7 @@ class QueryArgs {
 		// ----------------------------------------------------------------
 		$args['_show_more_results'] = $sd['showmoreresults'];
 		$args['woo_currency']       = $o['woo_currency'] ?? ( function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '' );
-		$args['_page_id']           = $o['current_page_id'] ?? ($args['_page_id'] ?? 0);
+		$args['_page_id']           = $o['current_page_id'] ?? ( $args['_page_id'] ?? 0 );
 		$args['_is_autopopulate']   = isset($_POST['autop']); // phpcs:ignore
 
 		if ( $sd['groupby_cpt_title'] && $args['cpt_query']['groupby'] === '' ) {

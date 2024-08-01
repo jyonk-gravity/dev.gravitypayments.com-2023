@@ -24,7 +24,7 @@ trait ObjectAsArrayTrait {
 	/**
 	 * @param array<string, mixed> $args
 	 */
-	public function __construct( array $args ) {
+	public function __construct( array $args = array() ) {
 		foreach ( $args as $property => $value ) {
 			if ( isset($this->{$property}) ) {
 				$this->{$property} = $value;

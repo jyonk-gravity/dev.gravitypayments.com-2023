@@ -311,10 +311,11 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return array
 	 */
 	public function scripts() {
+		$frontend_script_name = version_compare( GFForms::$version, '2.9.0-dev-1', '<' ) ? 'frontend-legacy' : 'frontend';
 		$scripts = array(
 			array(
-				'handle'    => "{$this->asset_prefix}frontend",
-				'src'       => $this->get_script_url( 'frontend' ),
+				'handle'    => $this->asset_prefix . $frontend_script_name,
+				'src'       => $this->get_script_url( $frontend_script_name ),
 				'version'   => $this->_version,
 				'deps'      => array( 'jquery', "{$this->asset_prefix}recaptcha" ),
 				'in_footer' => true,

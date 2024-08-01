@@ -64,25 +64,32 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			];
 
 			$icon_sets_args['choices'] = [
-				'solid'			=> __( 'Solid', 'acf-font-awesome' ),
-				'sharp_solid'	=> __( 'Solid (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'regular'		=> __( 'Regular', 'acf-font-awesome' ),
-				'sharp_regular'	=> __( 'Regular (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'light'			=> __( 'Light', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'sharp_light'	=> __( 'Light (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'thin'			=> __( 'Thin', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'sharp_thin'	=> __( 'Thin (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'duotone'		=> __( 'Duotone', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'fak'			=> __( 'Uploaded Icons', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'brands'		=> __( 'Brands', 'acf-font-awesome' ),
-				'custom'		=> __( 'Custom Icon Set', 'acf-font-awesome' )
+				'solid'					=> __( 'Solid', 'acf-font-awesome' ),
+				'sharp_solid'			=> __( 'Solid (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'regular'				=> __( 'Regular', 'acf-font-awesome' ),
+				'sharp_regular'			=> __( 'Regular (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'light'					=> __( 'Light', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'sharp_light'			=> __( 'Light (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'thin'					=> __( 'Thin', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'sharp_thin'			=> __( 'Thin (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'sharp-duotone_solid'	=> __( 'Duotone (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'duotone_solid'			=> __( 'Duotone', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'fak'					=> __( 'Uploaded Icons', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'brands'				=> __( 'Brands', 'acf-font-awesome' ),
+				'custom'				=> __( 'Custom Icon Set', 'acf-font-awesome' )
 			];
+
+			// Fix duotone family previously saved with no style
+			if ( isset( $field['icon_sets'] ) && is_array( $field['icon_sets'] ) ) {
+				if ( ( $key = array_search( 'duotone', $field['icon_sets'] ) ) !== FALSE ) {
+					$field['icon_sets'][ $key ] = 'duotone_solid';
+				}
+			}
 
 			$selected_field_sets	= ! empty( $field['icon_sets'] ) ? $field['icon_sets'] : [ 'solid', 'regular', 'brands' ];
 			$selected_field_sets	= apply_filters( 'ACFFA_v5_upgrade_compat_selected_field_sets', $selected_field_sets );
 
 			$icon_sets_args['value'] = $selected_field_sets;
-
 
 			acf_render_field_setting( $field, $icon_sets_args );
 
@@ -359,7 +366,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 									}
 								}
 							} else {
-								$path_data_element = '<path d="' . $icon_json->path . '" />';
+								$path_data_element .= '<path d="' . $icon_json->path . '" />';
 							}
 							$path_data_element .= '</svg>';
 

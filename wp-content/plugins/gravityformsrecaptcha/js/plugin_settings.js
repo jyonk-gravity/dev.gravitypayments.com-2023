@@ -4,6 +4,7 @@ var __webpack_exports__ = {};
   !*** ./js/src/plugin_settings.js ***!
   \***********************************/
 /* global jQuery, gform, grecaptcha, gforms_recaptcha_recaptcha_strings */
+
 (function ($) {
   /**
    * Handles reCAPTCHA v2 plugin settings validation.
@@ -14,6 +15,7 @@ var __webpack_exports__ = {};
    */
   var recaptchaV2Settings = function recaptchaV2Settings() {
     var v2Settings = {};
+
     /**
      * Initialize reCAPTCHA v2 settings.
      *
@@ -21,11 +23,11 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
     v2Settings.init = function () {
       v2Settings.cacheElements();
       v2Settings.addEventListeners();
     };
+
     /**
      * Cache the fields used by this handler.
      *
@@ -33,8 +35,6 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     v2Settings.cacheElements = function () {
       v2Settings.container = $('div[id="gform_setting_reset_v2"]');
       v2Settings.fields = {
@@ -44,6 +44,7 @@ var __webpack_exports__ = {};
         type: $('input[name="_gform_setting_type_v2"]')
       };
     };
+
     /**
      * Add event listeners for this handler.
      *
@@ -51,8 +52,6 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     v2Settings.addEventListeners = function () {
       v2Settings.fields.siteKey.on('change', window.loadRecaptcha);
       v2Settings.fields.secretKey.on('change', window.loadRecaptcha);
@@ -60,6 +59,7 @@ var __webpack_exports__ = {};
         return window.loadRecaptcha();
       });
     };
+
     /**
      * Handles showing and hiding the reCAPTCHA itself.
      *
@@ -67,10 +67,9 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     window.loadRecaptcha = function () {
       var self = {};
+
       /**
        * Initialize the reCAPTCHA rendering process.
        *
@@ -78,23 +77,24 @@ var __webpack_exports__ = {};
        *
        * @return {void}
        */
-
       self.init = function () {
         v2Settings.recaptcha = $('#recaptcha');
         v2Settings.save = $('#gform-settings-save');
-        self.flushExistingState(); // Reset key status.
+        self.flushExistingState();
+
+        // Reset key status.
         // Note: recaptcha is misspelled here for legacy reasons.
+        $('#recpatcha .gform-settings-field__feedback').remove();
 
-        $('#recpatcha .gform-settings-field__feedback').remove(); // If no public or private key is provided, exit.
-
+        // If no public or private key is provided, exit.
         if (!self.canBeDisplayed()) {
           self.hideRecaptcha();
           return;
         }
-
         v2Settings.save.prop('disabled', true);
         self.showSelectedRecaptcha();
       };
+
       /**
        * Renders the v2 reCAPTCHA.
        *
@@ -104,8 +104,6 @@ var __webpack_exports__ = {};
        *
        * @return {void}
        */
-
-
       self.render = function (typeValue) {
         // Render reCAPTCHA.
         grecaptcha.render('recaptcha', {
@@ -118,6 +116,7 @@ var __webpack_exports__ = {};
           }
         });
       };
+
       /**
        * Flush the existing state of the reCAPTCHA handler.
        *
@@ -125,14 +124,13 @@ var __webpack_exports__ = {};
        *
        * @return {void}
        */
-
-
       self.flushExistingState = function () {
         window.___grecaptcha_cfg.clients = {};
         window.___grecaptcha_cfg.count = 0;
         v2Settings.recaptcha.html('');
         v2Settings.fields.reset.val('1');
       };
+
       /**
        * Determines whether the reCAPTCHA can be shown.
        *
@@ -140,11 +138,10 @@ var __webpack_exports__ = {};
        *
        * @return {boolean} Whether the reCAPTCHA can be shown.
        */
-
-
       self.canBeDisplayed = function () {
         return v2Settings.fields.siteKey.val() && v2Settings.fields.secretKey.val();
       };
+
       /**
        * Hides the reCAPTCHA element.
        *
@@ -152,12 +149,11 @@ var __webpack_exports__ = {};
        *
        * @return {void}
        */
-
-
       self.hideRecaptcha = function () {
         v2Settings.save.prop('disabled', false);
         v2Settings.container.hide();
       };
+
       /**
        * Show the selected reCAPTCHA type.
        *
@@ -165,37 +161,29 @@ var __webpack_exports__ = {};
        *
        * @return {void}
        */
-
-
       self.showSelectedRecaptcha = function () {
         var typeValue = $('input[name="_gform_setting_type_v2"]:checked').val();
         self.render(typeValue);
-
         switch (typeValue) {
           case 'checkbox':
             $('#gforms_checkbox_recaptcha_message, label[for="reset"]').show();
             break;
-
           case 'invisible':
             $('#gforms_checkbox_recaptcha_message, label[for="reset"]').hide();
             break;
-
           default:
             throw new Error('Unexpected type selected.');
         }
-
         v2Settings.container.show();
-
         if (typeValue === 'invisible') {
           grecaptcha.execute();
         }
       };
-
       self.init();
     };
-
     v2Settings.init();
   };
+
   /**
    * Handles reCAPTCHA v3 plugin settings validation.
    *
@@ -203,10 +191,9 @@ var __webpack_exports__ = {};
    *
    * @return {void}
    */
-
-
   var recaptchaV3Settings = function recaptchaV3Settings() {
     var v3Settings = {};
+
     /**
      * Initializes the reCAPTCHA v3 settings handler.
      *
@@ -214,7 +201,6 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
     v3Settings.init = function () {
       v3Settings.token = '';
       v3Settings.strings = gforms_recaptcha_recaptcha_strings;
@@ -222,6 +208,7 @@ var __webpack_exports__ = {};
       v3Settings.validateKeysV3();
       v3Settings.addEventListeners();
     };
+
     /**
      * Cache HTML elements for the v3 reCAPTCHA settings.
      *
@@ -229,8 +216,6 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     v3Settings.cacheElements = function () {
       v3Settings.fields = {
         siteKey: '#site_key_v3',
@@ -246,6 +231,7 @@ var __webpack_exports__ = {};
         save: $('#gform-settings-save')
       };
     };
+
     /**
      * Setup event listeners for field validation.
      *
@@ -253,13 +239,10 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     v3Settings.addEventListeners = function () {
       if (!v3Settings.strings.site_key.length) {
         return;
       }
-
       $(v3Settings.fields.siteKey).on('keyup', function () {
         return v3Settings.clearValidationFeedback();
       });
@@ -267,6 +250,7 @@ var __webpack_exports__ = {};
         return v3Settings.clearValidationFeedback();
       });
     };
+
     /**
      * Empty out the validation feedback if the fields are modified, as we can't yet know the status.
      *
@@ -274,12 +258,11 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     v3Settings.clearValidationFeedback = function () {
       v3Settings.unsetValid(v3Settings.cache.siteKey.closest('.gform-settings-input__container'));
       v3Settings.unsetValid(v3Settings.cache.secretKey.closest('.gform-settings-input__container'));
     };
+
     /**
      * Handles validation of the v3 site key.
      *
@@ -287,23 +270,18 @@ var __webpack_exports__ = {};
      *
      * @return {Promise<unknown>} Returns a promise so this can be verified synchronously if checking the secret key.
      */
-
-
     v3Settings.getRecaptchaToken = function () {
       return new Promise(function (resolve, reject) {
         var siteKeyContainer = v3Settings.cache.siteKey.closest('.gform-settings-input__container');
-
         try {
           var siteKey = v3Settings.cache.siteKey;
           var siteKeyValue = siteKey.val().trim();
-
           if (0 === siteKeyValue.length) {
             v3Settings.unsetValid(siteKeyContainer);
             v3Settings.unsetValid(v3Settings.cache.keysStatus.closest('.gform-settings-input__container'));
             $(v3Settings.fields.keysStatus).find('input').val('0');
             return;
           }
-
           grecaptcha.ready(function () {
             try {
               grecaptcha.execute(siteKeyValue, {
@@ -320,6 +298,7 @@ var __webpack_exports__ = {};
         }
       });
     };
+
     /**
      * Handles validation of the v3 site and secret keys.
      *
@@ -330,20 +309,16 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     v3Settings.validateKeysV3 = function () {
       var siteKeyContainer = v3Settings.cache.siteKey.closest('.gform-settings-input__container');
       var secretKeyContainer = v3Settings.cache.secretKey.closest('.gform-settings-input__container');
       var keysStatusInput = $(v3Settings.fields.keysStatus).find('input');
-
       if (!$(v3Settings.fields.siteKey).val().trim().length) {
         v3Settings.unsetValid(siteKeyContainer);
         v3Settings.unsetValid(secretKeyContainer);
         keysStatusInput.val('0');
         return;
       }
-
       v3Settings.getRecaptchaToken().then(function (token) {
         v3Settings.token = token;
       }).catch(function () {
@@ -369,13 +344,11 @@ var __webpack_exports__ = {};
               v3Settings.setValid(secretKeyContainer);
               keysStatusInput.val('1');
               break;
-
             case '0':
               v3Settings.setInvalid(siteKeyContainer);
               v3Settings.setInvalid(secretKeyContainer);
               keysStatusInput.val('0');
               break;
-
             default:
               v3Settings.unsetValid(siteKeyContainer);
               v3Settings.unsetValid(secretKeyContainer);
@@ -384,6 +357,7 @@ var __webpack_exports__ = {};
         });
       });
     };
+
     /**
      * Updates the text field to display no feedback.
      *
@@ -393,12 +367,11 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     v3Settings.unsetValid = function (el) {
       el.removeClass('gform-settings-input__container--feedback-success');
       el.removeClass('gform-settings-input__container--feedback-error');
     };
+
     /**
      * Updates the text field to display the successful feedback.
      *
@@ -408,12 +381,11 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     v3Settings.setValid = function (el) {
       el.addClass('gform-settings-input__container--feedback-success');
       el.removeClass('gform-settings-input__container--feedback-error');
     };
+
     /**
      * Updates the text field to display the error feedback.
      *
@@ -423,16 +395,12 @@ var __webpack_exports__ = {};
      *
      * @return {void}
      */
-
-
     v3Settings.setInvalid = function (el) {
       el.removeClass('gform-settings-input__container--feedback-success');
       el.addClass('gform-settings-input__container--feedback-error');
     };
-
     v3Settings.init();
   };
-
   $(document).ready(function () {
     recaptchaV3Settings();
     recaptchaV2Settings();

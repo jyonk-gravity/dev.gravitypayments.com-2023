@@ -3,6 +3,8 @@
 		$com_options['rest_api_enabled']
 	); ?>
 	<p class='descMsg'>
+		<?php echo sprintf( __('You can download the <a target="_blank" href="%s">OpenAPI Swagger file here</a>.'),
+			ASP_URL . 'swagger.yaml' ); ?>
 		<?php echo sprintf( __('Check the <a target="_blank" href="%s">REST API</a> section of the knowledge base for more info.'),
 			'https://knowledgebase.ajaxsearchpro.com/other/rest-api' ); ?>
 	</p>

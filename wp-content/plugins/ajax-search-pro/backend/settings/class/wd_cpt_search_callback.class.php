@@ -103,7 +103,6 @@ if (!class_exists("wd_CPTSearchCallBack")) {
                         'title', 'ids'
                     )
                 ));
-
                 $results = $asp_query->posts;
                 Ajax::prepareHeaders();
                 print_r(self::$delimiter . json_encode($results) . self::$delimiter);

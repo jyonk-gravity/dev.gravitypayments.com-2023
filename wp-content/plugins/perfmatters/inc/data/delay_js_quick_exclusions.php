@@ -434,6 +434,13 @@ return array(
                 'offSide'
             )
         ),
+        'kadence-menu' => array(
+            'id' => 'kadence',
+            'title' => 'Kadence Menu',
+            'exclusions' => array(
+                'kadence-navigation-js'
+            )
+        ),
         'mediavine-trellis' => array(
     		'id' => 'mediavine-trellis',
     		'title' => 'Mediavine Trellis',

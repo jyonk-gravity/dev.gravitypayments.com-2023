@@ -422,7 +422,7 @@ class SearchPostTypes extends AbstractSearch {
 
 		/*------------------- Post type based ordering ------------------*/
 		$p_type_priority = '';
-		if ( $sd['use_post_type_order'] == 1 ) { // @phpcs:ignore
+		if ( w_isset_def($sd['use_post_type_order'], 0) ) { // @phpcs:ignore
 			foreach ( $sd['post_type_order'] as $pk => $p_order ) {
 				$p_type_priority .= "
 				WHEN '$p_order' THEN $pk ";
@@ -751,7 +751,6 @@ class SearchPostTypes extends AbstractSearch {
 		if ( !$args['_ajax_search'] && $this->results_count > $this->remaining_limit ) {
 			$this->results_count = $this->remaining_limit;
 		}
-
 		// Slice the needed ones only
 		$all_pageposts = array_slice($all_pageposts, $args['_call_num'] * $this->remaining_limit, $this->remaining_limit);
 
@@ -1413,7 +1412,7 @@ class SearchPostTypes extends AbstractSearch {
 		do_action('asp_start_post_processing');
 
 		// No post-processing if the search data param is missing or explicitly set
-		if ( !isset($args['_sd']) || !$args['_post_process'] ) {
+		if ( empty($args['_sd']) || !$args['_post_process'] ) {
 			$this->results = $pageposts;
 			return;
 		}

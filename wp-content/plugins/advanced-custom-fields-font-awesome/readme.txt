@@ -4,7 +4,7 @@ Contributors: mattkeys
 Tags: Advanced Custom Fields, ACF, Font Awesome, FontAwesome
 Requires at least: 3.5
 Tested up to: 6.5
-Stable tag: 4.0.7
+Stable tag: 4.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Adds a new 'Font Awesome Icon' field to the popular Advanced Custom Fields plugi
 
 Add a [Font Awesome](http://fontawesome.io/) icon field type to Advanced Custom Fields.
 
-* Specify which FontAwesome icon sets to use (Solid, Regular, Light, Thin, Duotone, Brands, and Custom Upload Icons) (Some features only available with FontAwesome 5.x or 6.x icons)
+* Specify which FontAwesome icon sets to use (Solid, Regular, Light, Thin, Duotone, Duotone Sharp, Brands, and Custom Upload Icons) (Some features only available with FontAwesome 5.x or 6.x icons)
 * Create your own custom filtered list of FontAwesome icons to use with your fields. Use different custom icon sets with different fields
 * Returns Icon Element, Icon Class, Icon Unicode, or an Object including the element, class, unicode value, and SVG data (if applicable)
 * Optionally enqueues Font Awesome in footer where needed (when a FontAwesome field is being used on the page))
@@ -84,6 +84,17 @@ This notification message is filterable so you can customize it to better repres
 2. Searchable list of all icons, including large live preview
 
 == Changelog ==
+
+= 4.1.1 =
+* Bugfix icon sets not saving properly when editing FontAwesome icon field
+
+= 4.1.0 =
+* Added support for Duotone Sharp icons
+
+= 4.0.9 =
+* Bugfix certain SVG icons that were previously before 4.0.8 update not outputting properly.
+* Bugfix certain custom icons that were previously selected before 4.0.8 update not outputting properly.
+* Bugfix resolve potential PHP warning in admin post edit screens when downgrading from FontAwesome 6 to 5 icon sets.
 
 = 4.0.8 =
 * Bugfix php warning when returning some custom icons as an object
@@ -260,6 +271,17 @@ This notification message is filterable so you can customize it to better repres
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 4.1.1 =
+* Bugfix icon sets not saving properly when editing FontAwesome icon field
+
+= 4.1.0 =
+* Added support for Duotone Sharp icons
+
+= 4.0.9 =
+* Bugfix certain SVG icons that were previously before 4.0.8 update not outputting properly.
+* Bugfix certain custom icons that were previously selected before 4.0.7 update not outputting properly.
+* Bugfix resolve potential PHP warning in admin post edit screens when downgrading from FontAwesome 6 to 5 icon sets.
 
 = 4.0.8 =
 * Bugfix php warning when returning some custom icons as an object

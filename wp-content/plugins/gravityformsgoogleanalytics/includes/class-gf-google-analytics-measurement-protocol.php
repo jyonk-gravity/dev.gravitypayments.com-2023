@@ -127,6 +127,17 @@ class GF_Google_Analytics_Measurement_Protocol {
 	}
 
 	/**
+	 * Gets the custom event parameters.
+	 *
+	 * @since 2.3
+	 *
+	 * @return array Returns the custom event parameters.
+	 */
+	public function get_params() {
+		return $this->parameters;
+	}
+
+	/**
 	 * Sets the User's IP
 	 *
 	 * @since 1.0.0
@@ -202,21 +213,29 @@ class GF_Google_Analytics_Measurement_Protocol {
 			$user_properties[ $user_properties_var ] = $this->{$user_properties_vars[ $key ]};
 		}
 
+		$session_id = $this->get_browser_session_id( $google_analytics_code );
+
+		if ( $session_id ) {
+			$this->parameters['session_id'] = $session_id;
+		}
+
 		$url = $this->endpoint . 'measurement_id=' . $google_analytics_code . '&api_secret=' . $this->api_secret;
+
+		$body = array(
+			'client_id' => $this->cid,
+			'events'    => array(
+				'name'   => $this->event_name,
+				'params' => $this->parameters,
+			),
+		);
+
+		gf_google_analytics()->log_debug( __METHOD__ . '(): Sending data to Google Analytics Measurement Protocol. URL (last 4 of api_secret only): ' . substr( $url, 0, strpos( $url, 'api_secret=' ) + 11 ) . 'XXXXXXX' . substr( $url, -4 ) . ' - Body: ' . print_r( $body, true ) );
 
 		// Perform the POST.
 		return wp_remote_post(
 			$url,
 			array(
-				'body' => wp_json_encode(
-					array(
-						'client_id' => $this->cid,
-						'events'    => array(
-							'name'   => $this->event_name,
-							'params' => $this->parameters,
-						),
-					),
-				),
+				'body' => wp_json_encode( $body ),
 			)
 		);
 	}
@@ -252,6 +271,25 @@ class GF_Google_Analytics_Measurement_Protocol {
 
 		// nothing found - return random uuid client id.
 		return GFFormsModel::get_uuid();
+	}
+
+	/**
+	 * Get the session id
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param string $measurement_id The measurement id.
+	 *
+	 * @return int The session id.
+	 */
+	private function get_browser_session_id( $measurement_id ) {
+		// Cookie name example: '_ga_1YS1VWHG3V'.
+		$cookie_name = '_ga_' . str_replace( 'G-', '', $measurement_id );
+		if ( isset( $_COOKIE[ $cookie_name ] ) ) {
+			$parts = explode( '.', sanitize_text_field( wp_unslash( $_COOKIE[ $cookie_name ] ) ) );
+
+			return $parts[2];
+		}
 	}
 
 	/**

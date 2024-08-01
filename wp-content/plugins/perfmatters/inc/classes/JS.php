@@ -222,7 +222,8 @@ class JS
 
 			//base exclusions
 			self::$data['defer']['exclusions'] = array(
-				'perfmatters-lazy-load-js'
+				'perfmatters-lazy-load-js',
+				'jqueryParams'
 			);
 
 			//add jquery

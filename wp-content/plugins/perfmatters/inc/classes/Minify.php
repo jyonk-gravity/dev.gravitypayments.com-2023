@@ -47,7 +47,7 @@ class Minify
 
 		//minified vars
 		$minified_path = PERFMATTERS_CACHE_DIR . 'minify/' . $file_name;
-		$minified_url = PERFMATTERS_CACHE_URL . 'minify/' . $file_name . ($parsed_url['query'] ? '?' . $parsed_url['query'] : '');
+		$minified_url = PERFMATTERS_CACHE_URL . 'minify/' . $file_name . (!empty($parsed_url['query']) ? '?' . $parsed_url['query'] : '');
 
 		//check if minified file already exists
 		if(!is_file($minified_path)) {
@@ -65,6 +65,9 @@ class Minify
 
 		//check if minified file is smaller than original
 		$file_size = filesize($file_path);
+		if(empty($file_size)) {
+			return;
+		}
 		$file_size_min = filesize($minified_path);
 		$bytes_wasted = $file_size - $file_size_min;
 		$percent_wasted = ($bytes_wasted / $file_size) * 100;

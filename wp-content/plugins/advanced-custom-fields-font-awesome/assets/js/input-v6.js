@@ -61,6 +61,9 @@
 				$prefix = 'sharp_thin';
 				break;
 
+			case 'fasds':
+				$prefix = 'sharp-duotone';
+
 			case 'fad':
 				prefix = 'duotone';
 				break;

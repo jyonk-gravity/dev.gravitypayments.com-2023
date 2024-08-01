@@ -6,6 +6,8 @@ defined('ABSPATH') or die("You can't access this file directly.");
 if ( !class_exists(__NAMESPACE__ . '\Script') ) {
 	class Script {
 		public static function objectToInlineScript($handle, $object_name, $data, $position = 'before', $safe_mode = false, $print = true) {
+			$data = apply_filters('asp/utils/script/to_inline/data', $data, $handle, $object_name);
+
 			// Taken from WP_Srcripts -> localize
 			foreach ( (array) $data as $key => $value ) {
 				if ( is_string($value) ) {

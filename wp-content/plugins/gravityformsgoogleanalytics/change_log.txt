@@ -1,3 +1,7 @@
+### 2.3.0 - 2024-07-02
+- Added the session ID to the event data sent to Google Analytics when using Google Measurement Protocol.
+- Fixed an issue where the result of sending an event to Google might not be written to the log when triggered by a non-logged in user.
+
 ### 2.2.0 | 2024-02-07
 - Added support for the {source_page_number} and {current_page_number} merge tags in pagination settings.
 - Fixed a link on the plugin settings page.

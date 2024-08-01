@@ -180,6 +180,7 @@ class ACFFA_Loader_6
 				'sharp_regular',
 				'sharp_light',
 				'sharp_thin',
+				'sharp-duotone_solid',
 				'duotone_solid',
 				'kit_custom',
 				'kit-duotone_custom'
@@ -199,6 +200,7 @@ class ACFFA_Loader_6
 		$search_custom_icon_set	= false;
 
 		if ( isset( $active_icon_sets ) // Make sure we have an icon set
+			 && is_array( $active_icon_sets ) // Got a bug report from a user that the code made it this far without a valid array somehow
 			 && in_array( 'kit_custom', $active_icon_sets ) // Make sure that icon set is 'custom'
 			 && isset( $field['custom_icon_set'] ) // Make sure a custom set has been chosen
 			 && stristr( $field['custom_icon_set'], 'ACFFA_custom_icon_list_v' . ACFFA_MAJOR_VERSION ) // Make sure that chosen custom set matches this version of FontAwesome
@@ -420,6 +422,10 @@ class ACFFA_Loader_6
 				$label = __( 'Thin (Sharp)', 'acf-font-awesome' );
 				break;
 
+			case 'sharp-duotone_solid':
+				$label = __( 'Duotone (Sharp)', 'acf-font-awesome' );
+				break;
+
 			case 'duotone_solid':
 			case 'duotone':
 				$label = __( 'Duotone', 'acf-font-awesome' );
@@ -583,6 +589,14 @@ class ACFFA_Loader_6
 				];
 				break;
 
+			case 'sharp-duotone_solid':
+				$icon_details = [
+					'family'	=> 'sharp-duotone',
+					'style'		=> 'solid',
+					'prefix'	=> 'fasds'
+				];
+				break;
+
 			case 'kit_custom':
 				$icon_details = [
 					'family'	=> 'kit',
@@ -644,6 +658,7 @@ class ACFFA_Loader_6
 	{
 		switch( $style ) {
 			case 'custom':
+			case 'fak':
 				$default_family = 'kit';
 				break;
 

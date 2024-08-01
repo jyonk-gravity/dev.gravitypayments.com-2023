@@ -99,10 +99,6 @@ class Manager extends AssetManager implements ManagerInterface {
 				'src' => 'js/{js_source}/plugin/optimized/asp-autocomplete.js',
 				'prereq' => array('wd-asp-ajaxsearchpro'),
 			),
-			'wd-asp-ajaxsearchpro-load' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-load.js',
-				'prereq' => true, // TRUE => previously loaded script
-			),
 			'wd-asp-ajaxsearchpro-wrapper' => array(
 				'src' => 'js/{js_source}/plugin/optimized/asp-wrapper.js',
 				'prereq' => true, // TRUE => previously loaded script
