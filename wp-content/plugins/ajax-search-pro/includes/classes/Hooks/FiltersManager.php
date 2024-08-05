@@ -233,6 +233,13 @@ class FiltersManager {
 			"priority" => 9999,
 			"args" => 1
 		),
+
+		array(
+			"filter" => "pre_get_rocket_option_exclude_js",
+			"handler" => array("JsCompatibility", "pre_get_rocket_option_exclude_js"),
+			"priority" => 9999,
+			"args" => 1
+		),
 	);
 
 	/**

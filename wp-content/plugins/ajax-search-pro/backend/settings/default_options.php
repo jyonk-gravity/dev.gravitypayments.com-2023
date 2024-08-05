@@ -152,7 +152,6 @@ function asp_do_init_options() {
         'load_google_fonts' => 1,
         'script_loading_method' => 'optimized',
         'init_instances_inviewport_only' => 1,
-        'load_lazy_js' => 0,
 		'css_loading_method' => 'optimized',	// optimized, inline, file
         'selective_enabled' => 0,
         'selective_front' => 1,

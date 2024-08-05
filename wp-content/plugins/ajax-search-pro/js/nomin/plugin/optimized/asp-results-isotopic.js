@@ -87,9 +87,6 @@ external_AjaxSearchPro_namespaceObject.plugin.initIsotopicPagination = function(
       }
       $this.isotopicPagerScroll();
       $this.removeAnimation();
-      if (typeof window.WPD.lazy != "undefined") {
-        document.dispatchEvent(new Event("wpd-lazy-trigger"));
-      }
       $this.n("resultsDiv").trigger("nav_switch");
     }, timeout);
   });
@@ -143,7 +140,11 @@ external_AjaxSearchPro_namespaceObject.plugin.showIsotopicResults = function() {
       if ($this.isotopic != null && typeof $this.isotopic.destroy != "undefined" && $this.call_num === 0)
         $this.isotopic.destroy();
       if ($this.call_num === 0 || $this.isotopic == null) {
-        $this.isotopic = new rpp_isotope("#ajaxsearchprores" + $this.o.rid + " .resdrg", {
+        let selector = "#ajaxsearchprores" + $this.o.rid + " .resdrg";
+        if (external_DoMini_namespaceObject(selector).length === 0) {
+          selector = "div[id^=ajaxsearchprores" + $this.o.id + "] .resdrg";
+        }
+        $this.isotopic = new rpp_isotope(selector, {
           // options
           isOriginLeft: !external_DoMini_namespaceObject("body").hasClass("rtl"),
           itemSelector: "div.item",
@@ -189,18 +190,16 @@ external_AjaxSearchPro_namespaceObject.plugin.preProcessIsotopicResults = functi
     if (hasImage) {
       let src = $img.data("src"), filter = $this.o.isotopic.blurOverlay && !results_isotopic_helpers.isMobile() ? "aspblur" : "no_aspblur";
       overlayImage = external_DoMini_namespaceObject("<div data-src='" + src + "' ></div>");
-      if (typeof WPD.lazy == "undefined") {
-        overlayImage.css({
-          "background-image": "url(" + src + ")"
-        });
-      }
+      overlayImage.css({
+        "background-image": "url(" + src + ")"
+      });
       overlayImage.css({
         "filter": "url(#" + filter + ")",
         "-webkit-filter": "url(#" + filter + ")",
         "-moz-filter": "url(#" + filter + ")",
         "-o-filter": "url(#" + filter + ")",
         "-ms-filter": "url(#" + filter + ")"
-      }).addClass("asp_item_overlay_img asp_lazy");
+      }).addClass("asp_item_overlay_img");
       overlayImage = overlayImage.get(0).outerHTML;
     }
     external_DoMini_namespaceObject(el).prepend(overlayImage + overlay + image);

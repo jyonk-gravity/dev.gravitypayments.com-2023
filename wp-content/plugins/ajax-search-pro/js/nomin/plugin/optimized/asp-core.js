@@ -716,11 +716,6 @@ base.plugin.showResults = function() {
     document.activeElement.blur();
   if ($this.o.settingsHideOnRes && $this.att("blocking") === false)
     $this.hideSettings?.();
-  if (typeof WPD.lazy != "undefined") {
-    setTimeout(function() {
-      WPD.lazy(".asp_lazy");
-    }, 100);
-  }
   $this.eh.resulsDivHoverMouseEnter = $this.eh.resulsDivHoverMouseEnter || function() {
     external_DoMini_namespaceObject(".item", $this.n("resultsDiv")).removeClass("hovered");
     external_DoMini_namespaceObject(this).addClass("hovered");
@@ -874,19 +869,22 @@ base.plugin.updateNoResultsHeader = function() {
   }
 };
 base.plugin.updateInfoHeader = function(totalCount) {
-  let $this = this, content, $rt = $this.n("resultsDiv").find(".asp_results_top"), phrase = $this.n("text").val().trim();
+  let $this = this, content = "", $rt = $this.n("resultsDiv").find(".asp_results_top"), phrase = $this.n("text").val().trim();
   if ($rt.length > 0) {
     if ($this.n("items").length <= 0 || $this.n("resultsDiv").find(".asp_nores").length > 0) {
       $rt.css("display", "none");
     } else {
-      if (typeof $this.resInfoBoxTxt == "undefined") {
-        $this.resInfoBoxTxt = $this.n("resultsDiv").find(".asp_results_top .asp_rt_phrase").length > 0 ? $this.n("resultsDiv").find(".asp_results_top .asp_rt_phrase").html() : "";
-        $this.resInfoBoxTxtNoPhrase = $this.n("resultsDiv").find(".asp_results_top .asp_rt_nophrase").length > 0 ? $this.n("resultsDiv").find(".asp_results_top .asp_rt_nophrase").html() : "";
+      if (typeof $this.updateInfoHeader.resInfoBoxTxt == "undefined") {
+        $this.updateInfoHeader.resInfoBoxTxt = $this.n("resultsDiv").find(".asp_results_top .asp_rt_phrase").length > 0 ? $this.n("resultsDiv").find(".asp_results_top .asp_rt_phrase").html() : "";
+        $this.updateInfoHeader.resInfoBoxTxtNoPhrase = $this.n("resultsDiv").find(".asp_results_top .asp_rt_nophrase").length > 0 ? $this.n("resultsDiv").find(".asp_results_top .asp_rt_nophrase").html() : "";
       }
-      if (phrase !== "" && $this.resInfoBoxTxt !== "") {
-        content = $this.resInfoBoxTxt;
-      } else if (phrase === "" && $this.resInfoBoxTxtNoPhrase !== "") {
-        content = $this.resInfoBoxTxtNoPhrase;
+      if (phrase !== "" && $this.updateInfoHeader.resInfoBoxTxt !== "") {
+        content = $this.updateInfoHeader.resInfoBoxTxt;
+      } else if (phrase === "" && $this.updateInfoHeader.resInfoBoxTxtNoPhrase !== "") {
+        content = $this.updateInfoHeader.resInfoBoxTxtNoPhrase;
+      }
+      if (content === void 0) {
+        return;
       }
       if (content !== "") {
         content = content.replaceAll("{phrase}", results_helpers.escapeHtml($this.n("text").val()));
@@ -911,7 +909,6 @@ base.plugin.createResultsScroll = function(type) {
   let $this = this, t, $resScroll = $this.n("results");
   type = typeof type == "undefined" ? "vertical" : type;
   $resScroll.on("scroll", function() {
-    document.dispatchEvent(new Event("wpd-lazy-trigger"));
     if ($this.o.show_more.infinite) {
       clearTimeout(t);
       t = setTimeout(function() {

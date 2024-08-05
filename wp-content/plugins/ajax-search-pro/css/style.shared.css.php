@@ -720,6 +720,15 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
   background-repeat: no-repeat;
 }
 
+
+<?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?> .results .item .asp_image img,
+    <?php echo $asp_res_ids2; ?> .results .item .asp_image img,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?> .results .item .asp_image img {
+  object-fit: <?php echo w_isset_def($style['image_display_mode'], "cover"); ?>;
+}
+
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_res_ids1; ?> .results .item .asp_item_overlay_img,
     <?php echo $asp_res_ids2; ?> .results .item .asp_item_overlay_img,

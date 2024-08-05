@@ -68,7 +68,7 @@ if ( !class_exists(__NAMESPACE__ . '\Generator') ) {
 		}
 
 		function fileName(): string {
-			return $this->fileHandle() . '.js';
+			return $this->fileHandle() . '.min.js';
 		}
 
 		function fileHandle(): string {

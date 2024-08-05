@@ -812,7 +812,9 @@ $entry_exists=true;
  }
   }
   }
-
+$json='[{"quantity":3,"PricebookEntryId":"01u3s000007wSaSAAU","UnitPrice":265.2,"custom_text__c":"xxxx"},{"quantity":4,"PricebookEntryId":"01u3s000007wSaSAAU","UnitPrice":265.2,"custom_text__c":"xxxx"},{"quantity":1,"PricebookEntryId":"01u3s000007wSaIAAU","UnitPrice":200,"custom_text__c":"xxxx"}]';
+//$line_items=json_decode($json,1);  
+//echo json_encode($line_items); var_dump($extra); die();
 if(!empty($line_items)){
  $k=1; $old_lines=$old_keys=array();
  $line_object=$object;
@@ -820,28 +822,29 @@ if(!empty($line_items)){
  if($status == '2'){
  $q='SELECT ID, '.$object.'Id,PricebookEntryId,Quantity,UnitPrice from '.$line_object.'Item where '.$object."Id='".$id."'";
  $path='/services/data/'.$this->api_version.'/query?q='.urlencode($q);
- $res=$this->post_sales_arr($path,'GET');
+ $res=$this->post_sales_arr($path,'GET'); 
  $extra['Old Items']=$res;  
  if(!empty($res['records'])){
   foreach($res['records'] as $kk=>$vv){
-  $old_lines[$kk]=$vv;   
-  $old_keys[$kk]=$vv['PricebookEntryId'];   
+  $old_lines[$vv['Id']]=$vv;   
+  $old_keys[$vv['Id']]=$vv['PricebookEntryId'];   
   }   
  }   
  }
+
     foreach($line_items as $item_id=>$item){
        // unset($item['PricebookEntryId']);
        // unset($item['Product2Id']);  {"quantity":7,"UnitPrice":"27.00"}
        if(empty($item['quantity'])){continue; }
-       $old_k=array_search($item['PricebookEntryId'],$old_keys);
+       $old_k=array_search($item['PricebookEntryId'],$old_keys); //var_dump($old_k);
        if(!empty($item['PricebookEntryId']) && $old_k !== false ){
-         $old_item=$old_lines[$old_k]; unset($old_lines[$old_k]);
-         if($old_item['quantity'] != $item['quantity']){    
+         $old_item=$old_lines[$old_k]; unset($old_lines[$old_k]);unset($old_keys[$old_k]); //var_dump($old_item);
+        // if($old_item['quantity'] != $item['quantity']){    
         $item_patch=array('quantity'=>$item['quantity'],'UnitPrice'=>$item['UnitPrice']);     
  $item_res=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item/".$old_item['Id'],"PATCH",$item_patch);  
- $extra['Item Patch '.$k]=$item_patch;  
- $extra['Item Response '.$k]=$item_res;    
-         }   
+ $extra['Item Patch '.$old_item['Id']]=$item_patch;  
+ $extra['Item Response '.$old_item['Id']]=$item_res;    
+       //  }   
        }else{
         $item[$object.'id']=$id;
   $item_res=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item","POST",$item);  
@@ -854,7 +857,7 @@ if(!empty($line_items)){
        $extra['Item Del '.$item['Id']]=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item/".$item['Id'],"DELETE");
      }
   $fields['lines']=$line_items;  
-}
+} //var_dump($extra); die();
 if(!empty($id)){
     if(is_array($files) ){
         foreach($files as $k=>$file){ $k++;

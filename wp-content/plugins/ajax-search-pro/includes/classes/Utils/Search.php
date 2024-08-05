@@ -20,7 +20,12 @@ class Search {
 		$phrase = strip_tags( Str::escape( Str::clear($phrase) ) );
 
 		$comp_settings = wd_asp()->o['asp_compatibility'];
-		$load_lazy = w_isset_def($comp_settings['load_lazy_js'], 0);
+
+		/**
+		 * It's left here for correct results templating function
+		 * @deprecated 4.27
+		 */
+		$load_lazy = 1;
 
 		PolylangStringTranslations::init();
 

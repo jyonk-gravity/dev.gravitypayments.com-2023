@@ -75,7 +75,11 @@ class Search extends AbstractAjax {
 			}
 		}
 
-		if (count($results) <= 0 && $sd['keywordsuggestions']) {
+		if (
+			count($results) <= 0 &&
+			$sd['keywordsuggestions'] &&
+			(!isset($_GET['asp_call_num']) || $_GET['asp_call_num'] < 2)
+		) {
 			$results = $asp_query->resultsSuggestions();
 		} else if (count($results) > 0) {
 			$results = apply_filters('asp_only_non_keyword_results', $results, $id, $s, $asp_query->getArgs());

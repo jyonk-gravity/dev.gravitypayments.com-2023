@@ -11,6 +11,15 @@ use WPDRMS\ASP\Patterns\SingletonTrait;
 class FileManager {
 	use SingletonTrait;
 
+	/**
+	 * @var string[]
+	 */
+	private array $allowed_directories;
+
+	private function __construct() {
+		$this->allowed_directories = array( wd_asp()->upload_path, wd_asp()->cache_path );
+	}
+
 	public function initialized( bool $init = false, string $check_method = '' ): bool {
 		global $wp_filesystem;
 		if ( $init && empty($wp_filesystem) ) {
@@ -85,11 +94,10 @@ class FileManager {
 		global $wp_filesystem;
 		// Replace double
 		$filename = str_replace(array( '\\\\', '//' ), array( '\\', '/' ), $filename);
-		$dir      = $this->inAllowedDirectory($filename);
 
-		if ( $dir !== false ) {
+		if ( $this->inAllowedDirectory($filename) ) {
 			// Make sure that the directory exists
-			$this->createRequiredDirectories( array( $dir ) );
+			$this->createRequiredDirectories();
 
 			// Did it fail?
 			if ( !$this->initialized(false, 'put_contents') ) {
@@ -200,22 +208,12 @@ class FileManager {
 	}
 
 	/**
-	 * @param array<string> $directories
 	 * @return bool
 	 */
-	public function createRequiredDirectories( array $directories = array() ): bool {
-		global $wp_filesystem;
-		$directories = empty($directories) ? array( wd_asp()->upload_path, wd_asp()->cache_path ) : $directories;
-
-		if ( $this->initialized(true, 'is_dir') ) {
-			foreach ( $directories as $directory ) {
-				if ( !$wp_filesystem->is_dir( $directory ) ) {
-					$wp_filesystem->mkdir( $directory, 0755, true );
-				}
-			}
-		} else {
-			foreach ( $directories as $directory ) {
-				if ( !is_dir($directory) ) {
+	public function createRequiredDirectories(): bool {
+		foreach ( $this->allowed_directories as $directory ) {
+			if ( !is_dir($directory) ) {
+				if ( !wp_mkdir_p($directory) ) {
 					@mkdir($directory, 0755, true); // @phpcs:ignore
 				}
 			}
@@ -228,8 +226,7 @@ class FileManager {
 	 * @return void
 	 */
 	public function removeRequiredDirectories(): void {
-		$directories = array( wd_asp()->upload_path, wd_asp()->cache_path );
-		foreach ( $directories as $directory ) {
+		foreach ( $this->allowed_directories as $directory ) {
 			if ( $this->pathSafetyCheck($directory) && $this->isDir($directory) ) {
 				$this->rmdir( $directory  );
 				if ( $this->isDir( $directory ) ) { // @phpstan-ignore-line
@@ -263,15 +260,14 @@ class FileManager {
 
 	/**
 	 * @param string $path
-	 * @return false|string
+	 * @return bool
 	 */
-	private function inAllowedDirectory( string $path ) {
-		if ( strpos($path, wd_asp()->upload_path) !== false ) {
-			return wd_asp()->upload_path;
-		} elseif ( strpos($path, wd_asp()->cache_path) !== false ) {
-			return wd_asp()->cache_path;
+	private function inAllowedDirectory( string $path ): bool {
+		foreach ( $this->allowed_directories as $directory ) {
+			if ( strpos($path, $directory) !== false ) {
+				return true;
+			}
 		}
-
 		return false;
 	}
 }

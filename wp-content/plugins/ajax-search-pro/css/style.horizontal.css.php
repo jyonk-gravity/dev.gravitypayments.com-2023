@@ -157,5 +157,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
 	position: absolute;
 	width: 100%;
 	height: 100%;
+	top: 0;
+	left: 0;
 	<?php echo $style['hresultimageshadow']; ?>
 }

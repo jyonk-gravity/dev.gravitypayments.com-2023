@@ -1483,7 +1483,7 @@ class SearchPostTypes extends AbstractSearch {
 					'image_bg_color'     => $image_settings['image_bg_color'],
 				);
 				$r->image   = Post::parseImage($r, $image_args);
-				if ( $r->image === '' && $r->post_type === 'product_variation' ) {
+				if ( $r->image === '' && $r->post_type === 'product_variation' && function_exists('wc_get_product') ) {
 					$wc_prod_var_o = wc_get_product( $r->id ); // @phpstan-ignore-line
 					$r->image      = Post::parseImage(wc_get_product( $wc_prod_var_o->get_parent_id() ), $image_args); // @phpstan-ignore-line
 				}

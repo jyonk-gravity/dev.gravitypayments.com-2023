@@ -36,11 +36,6 @@ class Requirements {
 					$required = true;
 				}
 				break;
-			case 'wd-asp-lazy':
-				if ( wd_asp()->o['asp_compatibility']['load_lazy_js'] == 1 ) {
-					$required = true;
-				}
-				break;
 			case 'wd-asp-nouislider':
 				if ( !wd_in_array_r('noui', $unused) ) {
 					$required = true;

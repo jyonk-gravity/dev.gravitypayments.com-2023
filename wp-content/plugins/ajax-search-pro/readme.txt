@@ -5,6 +5,6 @@ Donate link: https://codecanyon.net/item/ajax-search-pro-for-wordpress-live-sear
 Requires at least: 4.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 4.26.13
+Stable tag: 4.26.14
 
 Most powerful WordPress Search Engine

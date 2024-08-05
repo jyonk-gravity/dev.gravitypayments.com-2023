@@ -530,9 +530,7 @@ class SearchQuery {
 								$args->_exact_matches = $_args['_exact_matches'];
 							}
 						}
-
 						if ( $search_type === 'cpt' && count($args->post_type) > 0 ) {
-
 							if ( $args->posts_limit_distribute ) {
 								if ( !empty($args->_sd) && $args->_sd['use_post_type_order'] ) {
 									$_temp_ptypes = array();
@@ -626,6 +624,7 @@ class SearchQuery {
 										$posts_re->relevance = $posts_re->relevance + ( ( count($logics) - $lk ) * 1000000 );
 									}
 									$ra['allpageposts'] = array_merge($ra['allpageposts'], $_posts_res);
+
 									if ( $lk > 0 ) {
 										$this->found_posts += $_posts->return_count;
 									} else {

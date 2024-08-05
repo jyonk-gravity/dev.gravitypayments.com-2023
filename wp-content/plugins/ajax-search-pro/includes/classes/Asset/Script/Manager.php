@@ -32,10 +32,6 @@ class Manager extends AssetManager implements ManagerInterface {
 			'src' => 'js/{js_source}/external/jquery.select2.js',
 			'prereq' => array('jquery')
 		),
-		'wd-asp-lazy' => array(
-			'src' => 'js/{js_source}/external/lazy.js',
-			'prereq' => array('wd-asp-ajaxsearchpro')
-		),
 		'wd-asp-nouislider' => array(
 			'src' => 'js/{js_source}/external/nouislider.all.js',
 			'prereq' => false
@@ -45,11 +41,11 @@ class Manager extends AssetManager implements ManagerInterface {
 			'prereq' => false
 		),
 		'wd-asp-ajaxsearchpro' => array(
-			'src' => 'js/{js_source}/plugin/merged/asp.js',
+			'src' => 'js/{js_source}/plugin/merged/asp{js_min}.js',
 			'prereq' => false
 		),
 		'wd-asp-prereq-and-wrapper' => array(
-			'src' => 'js/{js_source}/plugin/merged/asp-prereq-and-wrapper.js',
+			'src' => 'js/{js_source}/plugin/merged/asp-prereq-and-wrapper{js_min}.js',
 			'prereq' => false
 		)
 	);
@@ -195,6 +191,7 @@ class Manager extends AssetManager implements ManagerInterface {
 		$handles = is_string($handles) ? array($handles) : $handles;
 		$handles = count($handles) == 0 ? array_keys($this->scripts) : $handles;
 		$js_source = $minified ? "min" : "nomin";
+		$js_min = $minified ? '.min' : '';
 		$return = array();
 
 		foreach ( $handles as $handle ) {
@@ -202,34 +199,6 @@ class Manager extends AssetManager implements ManagerInterface {
 				continue;
 			}
 			if ( isset($this->scripts[$handle]) ) {
-				if ( defined('ASP_DEBUG') &&
-					ASP_DEBUG == 1 &&
-					isset($this->dev_scripts[$handle]) &&
-					wd_asp()->manager->getContext() != "backend"
-				) {
-					$src = $this->dev_scripts[$handle]['src'];
-					$src = !is_array($src) ? array($src) : $src;
-					$i = 0;
-					foreach ( $src as $file_path ) {
-						$_handle = $i == 0 ? $handle : $handle . '_' . $i;
-						$url = esc_url_raw(str_replace(
-							wp_normalize_path( untrailingslashit( ABSPATH ) ),
-							site_url(),
-							wp_normalize_path( $file_path )
-						));
-						$return[] = array(
-							'handle' => $_handle,
-							'src' => str_replace(
-								array('{js_source}'),
-								array($js_source),
-								$url
-							),
-							'prereq' => $this->scripts[$handle]['prereq']
-						);
-						++$i;
-					}
-					continue;
-				}
 
 				if ( $optimized && isset($this->optimized_scripts[$handle]) ) {
 					$prev_handle = '';
@@ -246,12 +215,12 @@ class Manager extends AssetManager implements ManagerInterface {
 							'path' => ASP_PATH . str_replace(
 									array('{js_source}'),
 									array($js_source),
-									$optimized_script['src']
+									$js_source == 'min' ? str_replace('.js', '.min.js', $optimized_script['src']) : $optimized_script['src']
 								),
 							'src' => ASP_URL . str_replace(
 									array('{js_source}'),
 									array($js_source),
-									$optimized_script['src']
+									$js_source == 'min' ? str_replace('.js', '.min.js', $optimized_script['src']) : $optimized_script['src']
 								),
 							'prereq' => $prereq
 						);
@@ -267,12 +236,12 @@ class Manager extends AssetManager implements ManagerInterface {
 					'path' => ASP_PATH . str_replace(
 							array('{js_source}'),
 							array($js_source),
-							$this->scripts[$handle]['src']
+							str_replace('{js_min}', $js_min, $this->scripts[$handle]['src'])
 						),
 					'src' => ASP_URL . str_replace(
 							array('{js_source}'),
 							array($js_source),
-							$this->scripts[$handle]['src']
+							str_replace('{js_min}', $js_min, $this->scripts[$handle]['src'])
 						),
 					'prereq' => $this->scripts[$handle]['prereq']
 				);

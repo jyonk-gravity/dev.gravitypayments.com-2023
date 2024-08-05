@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Ajax Search Pro package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Pro 4.26.13\n"
+"Project-Id-Version: Ajax Search Pro 4.26.14\n"
 "Report-Msgid-Bugs-To: WPDreams\n"
-"POT-Creation-Date: 2024-07-31 12:47:47+00:00\n"
+"POT-Creation-Date: 2024-08-05 09:35:23+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -67,19 +67,19 @@ msgid ">> Enter manually <<"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:220
-#: backend/settings/default_options.php:356
+#: backend/settings/default_options.php:355
 msgid "Featured image"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:221
-#: backend/settings/default_options.php:357
+#: backend/settings/default_options.php:356
 #: backend/tabs/instance/advanced/content.php:105
 #: backend/tabs/instance/advanced/content.php:128
 msgid "Post Content"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:222
-#: backend/settings/default_options.php:358
+#: backend/settings/default_options.php:357
 #: backend/tabs/instance/advanced/content.php:63
 #: backend/tabs/instance/advanced/content.php:85
 #: backend/tabs/instance/advanced/content.php:106
@@ -88,23 +88,23 @@ msgid "Post Excerpt"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:223
-#: backend/settings/default_options.php:359
+#: backend/settings/default_options.php:358
 #: backend/tabs/priorities/priority_groups.php:119
 msgid "Custom field"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:224
-#: backend/settings/default_options.php:360
+#: backend/settings/default_options.php:359
 msgid "Page Screenshot"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:225
-#: backend/settings/default_options.php:361
+#: backend/settings/default_options.php:360
 msgid "Default image"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:226
-#: backend/settings/default_options.php:362
+#: backend/settings/default_options.php:361
 msgid "Post format icon"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 #: backend/settings/class/datefilter.class.php:28
 #: backend/settings/class/dateinterval.class.php:31
 #: backend/settings/class/dateinterval.class.php:48
-#: backend/settings/default_options.php:363
+#: backend/settings/default_options.php:362
 #: backend/tabs/instance/advanced/content.php:83
 #: backend/tabs/instance/advanced/content.php:127
 #: backend/tabs/instance/layout/search_box_layout.php:73
@@ -411,7 +411,7 @@ msgid "Restore defaults"
 msgstr ""
 
 #: backend/analytics.php:337 backend/cache_settings.php:59
-#: backend/compatibility_settings.php:124 backend/index_table.php:570
+#: backend/compatibility_settings.php:123 backend/index_table.php:570
 msgid "Save options"
 msgstr ""
 
@@ -428,7 +428,7 @@ msgid "Caching method"
 msgstr ""
 
 #: backend/cache_settings.php:30
-#: backend/tabs/compatibility/cssjs_loading.php:62
+#: backend/tabs/compatibility/cssjs_loading.php:54
 msgid "File"
 msgstr ""
 
@@ -550,23 +550,23 @@ msgstr ""
 msgid "Other options"
 msgstr ""
 
-#: backend/compatibility_settings.php:101
+#: backend/compatibility_settings.php:100
 msgid "Search compatibility settings successfuly updated!"
 msgstr ""
 
-#: backend/compatibility_settings.php:110
+#: backend/compatibility_settings.php:109
 msgid "CSS & JS compatibility"
 msgstr ""
 
-#: backend/compatibility_settings.php:111
+#: backend/compatibility_settings.php:110
 msgid "CSS & JS loading"
 msgstr ""
 
-#: backend/compatibility_settings.php:112
+#: backend/compatibility_settings.php:111
 msgid "Query compatibility"
 msgstr ""
 
-#: backend/compatibility_settings.php:113
+#: backend/compatibility_settings.php:112
 msgid "Other"
 msgstr ""
 
@@ -3283,7 +3283,7 @@ msgid "Classic"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:23
-#: backend/tabs/compatibility/cssjs_loading.php:60
+#: backend/tabs/compatibility/cssjs_loading.php:52
 msgid "Optimized (recommended)"
 msgstr ""
 
@@ -3315,81 +3315,71 @@ msgid ""
 "javascript thread work and increase the google lighthouse score."
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:49
-msgid "Use the Lazy Loader jQuery script to load the images?"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_loading.php:53
-msgid ""
-"Will load an use a modified version of <a href=\"%s\" "
-"target=\"_blank\">Lazy Load</a> script to load the images of results."
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_loading.php:58
+#: backend/tabs/compatibility/cssjs_loading.php:50
 msgid "Style (CSS) loading method"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:61
+#: backend/tabs/compatibility/cssjs_loading.php:53
 msgid "Inline"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:71
+#: backend/tabs/compatibility/cssjs_loading.php:63
 msgid ""
 "<b>Optimized</b> - The basic CSS file is enqueued on-demand, then the "
 "customized styles are printed inline on-demand"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:72
+#: backend/tabs/compatibility/cssjs_loading.php:64
 msgid "<b>Inline</b> - Everything is printed inline on-demand"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:73
+#: backend/tabs/compatibility/cssjs_loading.php:65
 msgid "<b>File (classic)</b> - Everything is enqueued as a single CSS file"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:80
+#: backend/tabs/compatibility/cssjs_loading.php:72
 msgid "Selective loading options"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:82
+#: backend/tabs/compatibility/cssjs_loading.php:74
 msgid ""
 "THESE OPTIONS ARE NOT RECOMMENDED - use it only if you know what you are "
 "doing!"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:83
+#: backend/tabs/compatibility/cssjs_loading.php:75
 msgid ""
 "The plugin <strong>automatically detects</strong> which pages have the "
 "search shortcodes, and loads the assets only on those pages."
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:86
+#: backend/tabs/compatibility/cssjs_loading.php:78
 msgid "Enable selective script & style loading?"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:89
+#: backend/tabs/compatibility/cssjs_loading.php:81
 msgid ""
 "It enables the rules below, so the scritps and styles can be excluded from "
 "specific parts of your website."
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:92
+#: backend/tabs/compatibility/cssjs_loading.php:84
 msgid "Load scripts & styles on the front page?"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:97
+#: backend/tabs/compatibility/cssjs_loading.php:89
 msgid "Load scripts & styles on archive pages?"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:107
+#: backend/tabs/compatibility/cssjs_loading.php:99
 msgid "Exclude on pages"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:108
+#: backend/tabs/compatibility/cssjs_loading.php:100
 msgid "Include on pages"
 msgstr ""
 
-#: backend/tabs/compatibility/cssjs_loading.php:118
+#: backend/tabs/compatibility/cssjs_loading.php:110
 msgid "Comma separated list of Post/Page/CPT IDs."
 msgstr ""
 

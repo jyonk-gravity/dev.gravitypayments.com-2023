@@ -41,19 +41,12 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
             <?php do_action('asp_res_vertical_before_image'); ?>
 
-            <?php if ( $load_lazy == 1 ): ?>
-                <a class='asp_res_image_url' href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
-                    <div class='asp_image asp_lazy' data-src="<?php echo esc_attr($r->image); ?>">
-                        <div class='void'></div>
-                    </div>
-                </a>
-            <?php else: ?>
-                <a class='asp_res_image_url' href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
-                    <div class='asp_image' data-src="<?php echo esc_attr($r->image); ?>" style='background-image: url("<?php echo $r->image; ?>");'>
-                        <div class='void'></div>
-                    </div>
-                </a>
-            <?php endif; ?>
+            <a class='asp_res_image_url' href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
+                <div class='asp_image' data-src="<?php echo esc_attr($r->image); ?>">
+	                <img loading="lazy" alt="<?php echo esc_attr($r->title); ?>" src="<?php echo $r->image; ?>" />
+	                <div class="void"></div>
+                </div>
+            </a>
 
             <?php do_action('asp_res_vertical_after_image'); ?>
 

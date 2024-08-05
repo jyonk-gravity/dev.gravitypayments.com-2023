@@ -1563,11 +1563,6 @@ base.plugin.showResults = function() {
     document.activeElement.blur();
   if ($this.o.settingsHideOnRes && $this.att("blocking") === false)
     $this.hideSettings?.();
-  if (typeof WPD.lazy != "undefined") {
-    setTimeout(function() {
-      WPD.lazy(".asp_lazy");
-    }, 100);
-  }
   $this.eh.resulsDivHoverMouseEnter = $this.eh.resulsDivHoverMouseEnter || function() {
     domini(".item", $this.n("resultsDiv")).removeClass("hovered");
     domini(this).addClass("hovered");
@@ -1721,19 +1716,22 @@ base.plugin.updateNoResultsHeader = function() {
   }
 };
 base.plugin.updateInfoHeader = function(totalCount) {
-  let $this = this, content, $rt = $this.n("resultsDiv").find(".asp_results_top"), phrase = $this.n("text").val().trim();
+  let $this = this, content = "", $rt = $this.n("resultsDiv").find(".asp_results_top"), phrase = $this.n("text").val().trim();
   if ($rt.length > 0) {
     if ($this.n("items").length <= 0 || $this.n("resultsDiv").find(".asp_nores").length > 0) {
       $rt.css("display", "none");
     } else {
-      if (typeof $this.resInfoBoxTxt == "undefined") {
-        $this.resInfoBoxTxt = $this.n("resultsDiv").find(".asp_results_top .asp_rt_phrase").length > 0 ? $this.n("resultsDiv").find(".asp_results_top .asp_rt_phrase").html() : "";
-        $this.resInfoBoxTxtNoPhrase = $this.n("resultsDiv").find(".asp_results_top .asp_rt_nophrase").length > 0 ? $this.n("resultsDiv").find(".asp_results_top .asp_rt_nophrase").html() : "";
+      if (typeof $this.updateInfoHeader.resInfoBoxTxt == "undefined") {
+        $this.updateInfoHeader.resInfoBoxTxt = $this.n("resultsDiv").find(".asp_results_top .asp_rt_phrase").length > 0 ? $this.n("resultsDiv").find(".asp_results_top .asp_rt_phrase").html() : "";
+        $this.updateInfoHeader.resInfoBoxTxtNoPhrase = $this.n("resultsDiv").find(".asp_results_top .asp_rt_nophrase").length > 0 ? $this.n("resultsDiv").find(".asp_results_top .asp_rt_nophrase").html() : "";
       }
-      if (phrase !== "" && $this.resInfoBoxTxt !== "") {
-        content = $this.resInfoBoxTxt;
-      } else if (phrase === "" && $this.resInfoBoxTxtNoPhrase !== "") {
-        content = $this.resInfoBoxTxtNoPhrase;
+      if (phrase !== "" && $this.updateInfoHeader.resInfoBoxTxt !== "") {
+        content = $this.updateInfoHeader.resInfoBoxTxt;
+      } else if (phrase === "" && $this.updateInfoHeader.resInfoBoxTxtNoPhrase !== "") {
+        content = $this.updateInfoHeader.resInfoBoxTxtNoPhrase;
+      }
+      if (content === void 0) {
+        return;
       }
       if (content !== "") {
         content = content.replaceAll("{phrase}", results_helpers.escapeHtml($this.n("text").val()));
@@ -1758,7 +1756,6 @@ base.plugin.createResultsScroll = function(type) {
   let $this = this, t, $resScroll = $this.n("results");
   type = typeof type == "undefined" ? "vertical" : type;
   $resScroll.on("scroll", function() {
-    document.dispatchEvent(new Event("wpd-lazy-trigger"));
     if ($this.o.show_more.infinite) {
       clearTimeout(t);
       t = setTimeout(function() {
@@ -4027,9 +4024,6 @@ base.plugin.initIsotopicPagination = function() {
       }
       $this.isotopicPagerScroll();
       $this.removeAnimation();
-      if (typeof window.WPD.lazy != "undefined") {
-        document.dispatchEvent(new Event("wpd-lazy-trigger"));
-      }
       $this.n("resultsDiv").trigger("nav_switch");
     }, timeout);
   });
@@ -4083,7 +4077,11 @@ base.plugin.showIsotopicResults = function() {
       if ($this.isotopic != null && typeof $this.isotopic.destroy != "undefined" && $this.call_num === 0)
         $this.isotopic.destroy();
       if ($this.call_num === 0 || $this.isotopic == null) {
-        $this.isotopic = new rpp_isotope("#ajaxsearchprores" + $this.o.rid + " .resdrg", {
+        let selector = "#ajaxsearchprores" + $this.o.rid + " .resdrg";
+        if (domini(selector).length === 0) {
+          selector = "div[id^=ajaxsearchprores" + $this.o.id + "] .resdrg";
+        }
+        $this.isotopic = new rpp_isotope(selector, {
           // options
           isOriginLeft: !domini("body").hasClass("rtl"),
           itemSelector: "div.item",
@@ -4129,18 +4127,16 @@ base.plugin.preProcessIsotopicResults = function() {
     if (hasImage) {
       let src = $img.data("src"), filter = $this.o.isotopic.blurOverlay && !results_isotopic_helpers.isMobile() ? "aspblur" : "no_aspblur";
       overlayImage = domini("<div data-src='" + src + "' ></div>");
-      if (typeof WPD.lazy == "undefined") {
-        overlayImage.css({
-          "background-image": "url(" + src + ")"
-        });
-      }
+      overlayImage.css({
+        "background-image": "url(" + src + ")"
+      });
       overlayImage.css({
         "filter": "url(#" + filter + ")",
         "-webkit-filter": "url(#" + filter + ")",
         "-moz-filter": "url(#" + filter + ")",
         "-o-filter": "url(#" + filter + ")",
         "-ms-filter": "url(#" + filter + ")"
-      }).addClass("asp_item_overlay_img asp_lazy");
+      }).addClass("asp_item_overlay_img");
       overlayImage = overlayImage.get(0).outerHTML;
     }
     domini(el).prepend(overlayImage + overlay + image);
