@@ -37,7 +37,7 @@ if(isset($_POST['pmsm_save_settings'])) {
 	else {
 
 		//update settings
-		update_option('perfmatters_script_manager_settings', (!empty($_POST['perfmatters_script_manager_settings']) ? $_POST['perfmatters_script_manager_settings'] : ''));
+		update_option('perfmatters_script_manager_settings', (!empty($_POST['perfmatters_script_manager_settings']) ? $_POST['perfmatters_script_manager_settings'] : ''), false);
 	}
 }
 
@@ -49,18 +49,18 @@ if(isset($_POST['pmsm_disclaimer_close'])) {
 			$settings = array();
 		}
 		$settings['hide_disclaimer'] = 1;
-		update_option('perfmatters_script_manager_settings', $settings);
+		update_option('perfmatters_script_manager_settings', $settings, false);
 	}
 }
 
 //process reset form
-if(isset($_POST['perfmatters_script_manager_settings_reset'])) {
+if(isset($_POST['perfmatters_script_manager_settings_reset']) && wp_verify_nonce($_POST['pmsm_reset_nonce'], 'pmsm_reset')) {
 	delete_option('perfmatters_script_manager');
 	delete_option('perfmatters_script_manager_settings');
 }
 
 //global trash
-if(isset($_POST['pmsm_global_trash'])) {
+if(isset($_POST['pmsm_global_trash']) && wp_verify_nonce($_POST['pmsm_global_nonce'], 'pmsm_global')) {
 
 	$trash = explode("|", $_POST['pmsm_global_trash']);
 
@@ -79,12 +79,12 @@ if(isset($_POST['pmsm_global_trash'])) {
 		//clean up the options array before saving
 		perfmatters_script_manager_filter_options($options);
 
-		update_option('perfmatters_script_manager', $options);
+		update_option('perfmatters_script_manager', $options, false);
 	}
 }
 
 //global refresh
-if(isset($_POST['pmsm_global_refresh'])) {
+if(isset($_POST['pmsm_global_refresh']) && wp_verify_nonce($_POST['pmsm_global_nonce'], 'pmsm_global')) {
 
 	$refresh = explode("|", $_POST['pmsm_global_refresh']);
 
@@ -104,13 +104,16 @@ if(isset($_POST['pmsm_global_refresh'])) {
 		//clean up the options array before saving
 		perfmatters_script_manager_filter_options($options);
 
-		update_option('perfmatters_script_manager', $options);
+		update_option('perfmatters_script_manager', $options, false);
 	}
 }
 
 //load script manager settings
 global $perfmatters_script_manager_settings;
 $perfmatters_script_manager_settings = get_option('perfmatters_script_manager_settings');
+
+//load styles
+echo '<style id="perfmatters-script-manager-css">' . file_get_contents(plugin_dir_path(__DIR__) . 'css/script-manager.css') . '</style>';
 
 //build array of existing plugin disables
 global $perfmatters_disables;
@@ -141,9 +144,6 @@ $perfmatters_filters = array(
 global $perfmatters_script_manager_options;
 $perfmatters_script_manager_options = get_option('perfmatters_script_manager');
 
-//load styles
-include('script_manager_css.php');
-
 //disable shortcodes
 remove_all_shortcodes();
 
@@ -159,7 +159,7 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 			echo "<span id='pmsm-menu-toggle'><span class='dashicons dashicons-menu'></span></span>";
 
 			//logo
-			echo "<img src='" . plugins_url('img/logo.svg', dirname(__FILE__)) . "' title='Perfmatters' id='perfmatters-logo' />";
+			echo "<img src='" . plugins_url('img/logo-light.svg', dirname(__FILE__)) . "' title='Perfmatters' id='perfmatters-logo' />";
 
 		echo "</div>";
 	
@@ -186,7 +186,7 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 				if(empty($perfmatters_script_manager_settings['hide_disclaimer'])) {
 					echo '<div class="pmsm-notice">';
 						echo '<form method="POST">';
-							echo $pmsm_tab != 'main' ? '<input type="hidden" name="tab" value="' . $pmsm_tab . '" />' : '';
+							echo $pmsm_tab != 'main' ? '<input type="hidden" name="tab" value="' . esc_attr($pmsm_tab) . '" />' : '';
 							wp_nonce_field('pmsm_disclaimer_close', 'pmsm_disclaimer_close_nonce');
 							echo '<button type="submit" id="pmsm-disclaimer-close" name="pmsm_disclaimer_close"/><span class="dashicons dashicons-dismiss"></span></button>';
 						echo '</form>';
@@ -202,7 +202,7 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 			echo '</div>';
 
 			//universal form
-			echo "<form method='POST' id='pmsm-" . $pmsm_tab . "-form'>";
+			echo "<form method='POST' id='pmsm-" . esc_attr($pmsm_tab) . "-form'>";
 
 				//content container
 				echo "<div id='perfmatters-script-manager-container'>";
@@ -222,44 +222,46 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 
 						//print scripts
 						foreach($master_array['resources'] as $category => $groups) {
-							if(!empty($groups)) {
-								echo "<h3>" . $category . "</h3>";
-								if($category != "misc") {
-									echo "<div style='background: #ffffff; padding: 10px;'>";
-									foreach($groups as $group => $details) {
-										echo "<div class='perfmatters-script-manager-group'>";
-										
-											echo "<div class='pmsm-group-heading'>";
+							echo '<div class="pmsm-category-container">';
+								if(!empty($groups)) {
+									echo "<h3>" . $category . "</h3>";
+									if($category != "misc") {
+										echo "<div style='background: #ffffff; padding: 10px;'>";
+										foreach($groups as $group => $details) {
+											echo "<div class='perfmatters-script-manager-group'>";
+											
+												echo "<div class='pmsm-group-heading'>";
 
-												echo "<h4>" . (!empty($details['name']) ? $details['name'] : "") . "</h4>";
+													echo "<h4>" . (!empty($details['name']) ? esc_html($details['name']) : "") . "</h4>";
 
-												//Status
-												echo "<div class='perfmatters-script-manager-status' style='float: right; white-space: nowrap; margin-left: 10px;'>";
+													//Status
+													echo "<div class='perfmatters-script-manager-status' style='display: flex; align-items: center; white-space: nowrap; margin-left: 10px;'>";
 
-													if(!empty($details['size'])) {
-														echo "<span class='pmsm-group-tag pmsm-group-size'>" . __('Total size', 'perfmatters') . ": " . round($details['size'] / 1024, 1) . " KB</span>";
-													}
+														if(!empty($details['size'])) {
+															echo "<span class='pmsm-group-tag pmsm-group-size'>" . __('Total size', 'perfmatters') . ": " . round($details['size'] / 1024, 1) . " KB</span>";
+														}
 
-												    perfmatters_script_manager_print_status($category, $group);
+													    perfmatters_script_manager_print_status($category, $group);
+													echo "</div>";
+
 												echo "</div>";
+												
+
+												$assets = !empty($details['assets']) ? $details['assets'] : false;
+
+												perfmatters_script_manager_print_section($category, $group, $assets);
 
 											echo "</div>";
-											
-
-											$assets = !empty($details['assets']) ? $details['assets'] : false;
-
-											perfmatters_script_manager_print_section($category, $group, $assets);
-
+										}
 										echo "</div>";
 									}
-									echo "</div>";
-								}
-								else {
-									if(!empty($groups['assets'])) {
-										perfmatters_script_manager_print_section($category, $category, $groups['assets']);
+									else {
+										if(!empty($groups['assets'])) {
+											perfmatters_script_manager_print_section($category, $category, $groups['assets']);
+										}
 									}
 								}
-							}
+							echo '</div>';
 						}
 
 						//loading wrapper
@@ -268,7 +270,7 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 								echo "<span class='pmsm-loading-text'>" . __('The Script Manager does not support AMP pages.', 'perfmatters') . "</span>";
 							}
 							else {
-								echo "<span class='pmsm-loading-text'>" . __('Loading Scripts', 'perfmatters') . "<span class='pmsm-spinner'></span></span>";
+								echo '<span class="pmsm-loading-text">' . __('Loading Scripts', 'perfmatters') . '<svg class="perfmatters-button-spinner" viewBox="0 0 100 100" role="presentation" focusable="false" style="background: rgba(0,0,0,.1); border-radius: 100%; width: 16px; height: auto; margin: 0px 0px 0px 8px; overflow: visible; opacity: 1; background-color: transparent;"><circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke" style="fill: transparent; stroke-width: 1.5px; stroke: #EDF3F9;"></circle><path d="m 50 0 a 50 50 0 0 1 50 50" vector-effect="non-scaling-stroke" style="fill: transparent; stroke-width: 1.5px; stroke: #4A89DD; stroke-linecap: round; transform-origin: 50% 50%; animation: 1.4s linear 0s infinite normal both running perfmatters-spinner;"></path></svg></span>';
 							}
 						echo "</div>";
 
@@ -409,10 +411,13 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 						echo "<div class='perfmatters-script-manager-toolbar-container'>";
 
 							//save button
-							echo "<div id='pmsm-save'>";
+							echo "<div id='pmsm-save' style='display: flex; align-items: center;'>";
 								if($pmsm_tab != 'global') {
-									echo "<input type='submit' name='pmsm_save_" . $pmsm_tab . "' value='" . __('Save', 'perfmatters') . "' />";
-									echo "<span class='pmsm-spinner'></span>";
+							        echo '<button type="submit" id="submit" name="pmsm_save_' . esc_attr($pmsm_tab) . '" class="button button-secondary" style="display: flex; align-items: center;">';
+							            echo '<span class="perfmatters-button-text">' . __('Save Changes', 'perfmatters') . '</span>';
+							            echo '<svg class="perfmatters-button-spinner" viewBox="0 0 100 100" role="presentation" focusable="false" style="background: rgba(0,0,0,.1); border-radius: 100%; width: 16px; height: 28px; margin: 0px 2px; overflow: visible; opacity: 1; background-color: transparent; display: none;"><circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke" style="fill: transparent; stroke-width: 1.5px; stroke: #fff;"></circle><path d="m 50 0 a 50 50 0 0 1 50 50" vector-effect="non-scaling-stroke" style="fill: transparent; stroke-width: 1.5px; stroke: #4A89DD; stroke-linecap: round; transform-origin: 50% 50%; animation: 1.4s linear 0s infinite normal both running perfmatters-spinner;"></path></svg>';
+							        echo '</button>';
+							        echo '<div id="pmsm-message" class="pmsm-message" style="margin-left: 10px; "></div>';
 								}
 							echo "</div>";
 
@@ -420,9 +425,6 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 							echo "<div class='pmsm-copyright'>© " . date("Y") . " Perfmatters</div>";
 
 						echo "</div>";
-
-						//message
-						echo "<div id='pmsm-message' class='pmsm-message'></div>";
 
 					echo "</div>";
 				echo "</div>";
@@ -432,6 +434,7 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 		//hidden reset form
 		if($pmsm_tab == 'settings') {
 			echo "<form method='POST' id='pmsm-reset-form' pmsm-confirm=\"" . __('Are you sure? This will remove and reset all of your existing Script Manager settings and cannot be undone!') . "\">";
+				wp_nonce_field('pmsm_reset', 'pmsm_reset_nonce');
 				echo "<input type='hidden' name='tab' value='settings' />";
 				echo "<input type='hidden' name='perfmatters_script_manager_settings_reset' class='pmsm-reset' value='submit' />";
 			echo "</form>";

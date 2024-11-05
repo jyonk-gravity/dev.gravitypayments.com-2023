@@ -64,7 +64,7 @@ class Plugin_Settings {
 	}
 
 	/**
-	 * Gets any custom plugin settings
+	 * Gets any custom plugin settings, ensuring they contain the latest values from the constants.
 	 *
 	 * @since 1.0
 	 *
@@ -75,6 +75,16 @@ class Plugin_Settings {
 	public function get_settings( $settings ) {
 		if ( ! is_array( $settings ) ) {
 			$settings = array();
+		}
+
+		$site_key = $this->get_recaptcha_key( 'site_key_v3', true );
+		if ( $site_key ) {
+			$settings['site_key_v3'] = $site_key;
+		}
+
+		$secret_key = $this->get_recaptcha_key( 'secret_key_v3', true );
+		if ( $secret_key ) {
+			$settings['secret_key_v3'] = $secret_key;
 		}
 
 		return array_merge(
@@ -126,6 +136,9 @@ class Plugin_Settings {
 	 * @return array
 	 */
 	private function get_v3_fields() {
+		$site_key   = $this->get_recaptcha_key( 'site_key_v3', true );
+		$secret_key = $this->get_recaptcha_key( 'secret_key_v3', true );
+
 		return array(
 			'id'     => 'gravityformsrecaptcha_v3',
 			'title'  => esc_html__( 'reCAPTCHA v3', 'gravityformsrecaptcha' ),
@@ -135,12 +148,16 @@ class Plugin_Settings {
 					'label'             => esc_html__( 'Site Key', 'gravityformsrecaptcha' ),
 					'type'              => 'text',
 					'feedback_callback' => array( $this, 'v3_keys_status_feedback_callback' ),
+					'readonly'          => empty( $site_key ) ? '' : 'readonly',
+					'after_input'       => $this->get_constant_message( $site_key, 'GF_RECAPTCHA_V3_SITE_KEY' ),
 				),
 				array(
 					'name'              => 'secret_key_v3',
 					'label'             => esc_html__( 'Secret Key', 'gravityformsrecaptcha' ),
 					'type'              => 'text',
 					'feedback_callback' => array( $this, 'v3_keys_status_feedback_callback' ),
+					'readonly'          => empty( $secret_key ) ? '' : 'readonly',
+					'after_input'       => $this->get_constant_message( $secret_key, 'GF_RECAPTCHA_V3_SECRET_KEY' ),
 				),
 				array(
 					'name'                => 'score_threshold_v3',
@@ -180,6 +197,24 @@ class Plugin_Settings {
 				),
 			),
 		);
+	}
+
+	/**
+	 * Returns the setting info message to be displayed when the value is defined using a constant.
+	 *
+	 * @since 1.3
+	 *
+	 * @param string $value    The value.
+	 * @param string $constant The constant name.
+	 *
+	 * @return string
+	 */
+	private function get_constant_message( $value, $constant ) {
+		if ( empty( $value ) ) {
+			return '';
+		}
+
+		return '<div class="alert gforms_note_info">' . sprintf( esc_html__( 'Value defined using the %s constant.', 'gravityformsrecaptcha' ), $constant ) . '</div>';
 	}
 
 	/**
@@ -474,7 +509,7 @@ class Plugin_Settings {
 		$this->apply_status_changes( $result );
 
 		if ( is_wp_error( $result ) ) {
-			$this->addon->log_debug( __METHOD__ . '(): failed to verify reCAPTCHA token. ' . $result->get_error_message() );
+			$this->addon->log_debug( __METHOD__ . '(): Failed to verify reCAPTCHA token. ' . $result->get_error_message() );
 
 			wp_send_json_error();
 		}
@@ -516,8 +551,8 @@ class Plugin_Settings {
 	 */
 	private function get_posted_keys() {
 		$settings          = $this->addon->get_plugin_settings();
-		$posted_site_key   = $this->get_recaptcha_key( 'site_key_v3' );
-		$posted_secret_key = $this->get_recaptcha_key( 'secret_key_v3' );
+		$posted_site_key   = $this->get_posted_key( 'site_key_v3' );
+		$posted_secret_key = $this->get_posted_key( 'secret_key_v3' );
 
 		if (
 			$posted_site_key === rgar( $settings, 'site_key_v3' )
@@ -533,21 +568,42 @@ class Plugin_Settings {
 	}
 
 	/**
-	 * Get the value of one of the reCAPTCHA keys from the plugin settings.
+	 * Gets the value of the specified input from the $_POST.
 	 *
-	 * Checks first for a value defined as a constant, and secondarily, the add-on options.
-	 *
-	 * @since 1.0
+	 * @since 1.3
 	 *
 	 * @param string $key_name The name of the key to retrieve.
 	 *
 	 * @return string
 	 */
-	public function get_recaptcha_key( $key_name ) {
-		$posted_key = sanitize_text_field( rgpost( "_gform_setting_{$key_name}" ) );
+	private function get_posted_key( $key_name ) {
+		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+			$key_name = "_gform_setting_{$key_name}";
+		}
 
-		if ( $posted_key && is_admin() ) {
-			return $posted_key;
+		return sanitize_text_field( rgpost( $key_name ) );
+	}
+
+	/**
+	 * Get the value of one of the reCAPTCHA keys from the plugin settings.
+	 *
+	 * Checks first for a value defined as a constant, and secondarily, the add-on options.
+	 *
+	 * @since 1.0
+	 * @since 1.3 Added the $only_from_constant param.
+	 *
+	 * @param string $key_name           The name of the key to retrieve.
+	 * @param bool   $only_from_constant Indicates if value should only be retrieved from the constant.
+	 *
+	 * @return string
+	 */
+	public function get_recaptcha_key( $key_name, $only_from_constant = false ) {
+		if ( ! $only_from_constant && is_admin() ) {
+			$posted_key = $this->get_posted_key( $key_name );
+
+			if ( $posted_key ) {
+				return $posted_key;
+			}
 		}
 
 		$keys = array(
@@ -561,7 +617,13 @@ class Plugin_Settings {
 			return '';
 		}
 
-		$key = rgar( $keys, $key_name, $this->addon->get_plugin_setting( $key_name ) );
+		$key = rgar( $keys, $key_name, '' );
+
+		if ( ! empty( $key ) || $only_from_constant ) {
+			return $key;
+		}
+
+		$key = $this->addon->get_plugin_setting( $key_name );
 
 		return ! empty( $key ) ? $key : '';
 	}

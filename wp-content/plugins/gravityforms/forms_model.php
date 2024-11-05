@@ -644,7 +644,7 @@ class GFFormsModel {
 	 * @return array The column IDs
 	 */
 	public static function get_form_db_columns() {
-		return array( 'id', 'title', 'date_created', 'is_active', 'is_trash' );
+		return array( 'id', 'title', 'date_created', 'date_updated', 'is_active', 'is_trash' );
 	}
 
 	/**
@@ -1606,6 +1606,7 @@ class GFFormsModel {
 				 * @since 2.3.3.9
 				 */
 				do_action( "gform_post_update_entry_property", $lead_id, $property_name, $property_value, $previous_value );
+				gf_feed_processor()->save()->dispatch();
 			}
 		}
 
@@ -3434,20 +3435,48 @@ class GFFormsModel {
 				}
 				break;
 
-			case 'fileupload' :
+			case 'fileupload':
+				$tmp_path = GFFormsModel::get_upload_path( $form['id'] ) . '/tmp/';
+				$tmp_url  = GFFormsModel::get_upload_url( $form['id'] ) . '/tmp/';
+				$value    = array(); // Initialize as empty array to store file info
+				// Check if it's a multiple file upload field
 				if ( $field->multipleFiles ) {
-					if ( ! empty( $value ) ) {
-						$value = json_encode( $value );
+					$temp_files = rgars( GFFormsModel::$uploaded_files, $form['id'] . '/' . $input_name );
+
+					if ( ! empty( $temp_files ) && is_array( $temp_files ) ) {
+						foreach ( $temp_files as $temp_file ) {
+							if ( rgar( $temp_file, 'temp_filename' ) ) {
+								$value[] = array(
+									'tmp_path'      => $tmp_path . $temp_file['temp_filename'],
+									'tmp_url'       => $tmp_url . $temp_file['temp_filename'],
+									'tmp_name'      => $temp_file['temp_filename'],
+									'uploaded_name' => rgar( $temp_file, 'uploaded_filename' ),
+								);
+							}
+						}
 					}
 				} else {
+					// Handle single file upload scenario
 					$file_info = self::get_temp_filename( $form['id'], $input_name );
-					if ( ! empty( $file_info ) ) {
-						$file_path = self::get_file_upload_path( $form['id'], $file_info['uploaded_filename'] );
-						$value     = $file_path['url'];
+					if ( ! empty( $file_info ) && isset( $file_info['temp_filename'] ) ) {
+						$value[] = array(
+							'tmp_path'      => $tmp_path . $file_info['temp_filename'],
+							'tmp_url'       => $tmp_url . $file_info['temp_filename'],
+							'tmp_name'      => $file_info['temp_filename'],
+							'uploaded_name' => rgar( $file_info, 'uploaded_filename' ),
+						);
 					}
 				}
 
+				if ( ! empty( $value ) ) {
+					$value = json_encode( $value ); // Encode the array of temp URLs as JSON string
+				} else {
+					// If no files were uploaded, set the value to an empty string for backwards compatibility
+					$value = '';
+				}
+
 				break;
+
 
 			default:
 
@@ -5437,7 +5466,7 @@ class GFFormsModel {
 				}
 			} else {
 				// Deleting details for this field
-				if ( is_array( $field->get_entry_inputs() ) ) {
+				if ( is_a( $field, 'GF_Field' ) && is_array( $field->get_entry_inputs() ) ) {
 					$_input_id = ( false === strpos( $input_id, '.' ) ) ? sprintf( '%d.%%', $input_id ) : $input_id;
 					$sql = $wpdb->prepare( "DELETE FROM $entry_meta_table_name WHERE entry_id=%d AND meta_key LIKE %s ", $entry_id, $_input_id );
 				} else {
@@ -5716,6 +5745,8 @@ class GFFormsModel {
 			}
 		}
 
+		$file_name = sanitize_file_name( $file_name );
+
 		//Add the original filename to our target path.
 		//Result is "uploads/filename.extension"
 		$extension = pathinfo( $file_name, PATHINFO_EXTENSION );
@@ -5724,7 +5755,6 @@ class GFFormsModel {
 		}
 
 		$file_name = wp_basename( $file_name, $extension );
-		$file_name = sanitize_file_name( $file_name );
 
 		$counter     = 1;
 		$target_path = $target_root . $file_name . $extension;
@@ -5758,14 +5788,12 @@ class GFFormsModel {
 
 	public static function drop_tables() {
 		global $wpdb;
-		remove_filter( 'query', array( 'GFForms', 'filter_query' ) );
 		foreach ( GF_Forms_Model_Legacy::get_legacy_tables() as $table ) {
 			$wpdb->query( "DROP TABLE IF EXISTS $table" );
 		}
 		foreach ( self::get_tables() as $table ) {
 			$wpdb->query( "DROP TABLE IF EXISTS $table" );
 		}
-		add_filter( 'query', array( 'GFForms', 'filter_query' ) );
 	}
 
 	/**
@@ -5794,9 +5822,6 @@ class GFFormsModel {
 		$legacy_tables = GF_Forms_Model_Legacy::get_legacy_tables();
 
 		$drop_tables = array_merge( $drop_tables, $legacy_tables );
-
-		// Prevent the legacy table query notice when they are dropped by wp_uninitialize_site().
-		remove_filter( 'query', array( 'GFForms', 'filter_query' ) );
 
 		return $drop_tables;
 	}
@@ -6254,7 +6279,7 @@ class GFFormsModel {
 
 		$new_key      = trim( $new_key );
 		$new_key_md5  = md5( $new_key );
-		$previous_key = get_option( 'rg_gforms_key' );
+		$previous_key = get_option( GFForms::LICENSE_KEY_OPT );
 
 		/**
 		 * @var License\GF_License_API_Connector $license_connector
@@ -6266,15 +6291,7 @@ class GFFormsModel {
 		delete_option( 'gform_version_info' );
 
 		if ( empty( $new_key ) ) {
-
-			if ( is_multisite() && is_main_site() ) {
-				$sites = get_sites();
-				foreach ( $sites as $site ) {
-					delete_blog_option( $site->blog_id, 'rg_gforms_key' );
-				}
-			}
-
-			delete_option( 'rg_gforms_key' );
+			self::update_license_key( '' );
 
 			// Unlink the site with the license key on Gravity API.
 			$license_connector->update_site_registration( '' );
@@ -6707,14 +6724,8 @@ class GFFormsModel {
 
 		$entry_meta_table_name = self::get_entry_meta_table_name();
 		$field_list             = '';
-		$fields                 = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT meta_key FROM $entry_meta_table_name WHERE form_id=%d", $form_id ) );
-		foreach ( $fields as $field ) {
-			$field_list .= intval( $field->meta_key ) . ',';
-		}
-
-		if ( ! empty( $field_list ) ) {
-			$field_list = substr( $field_list, 0, strlen( $field_list ) - 1 );
-		}
+		$fields                 = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT meta_key FROM $entry_meta_table_name WHERE form_id=%d AND meta_key REGEXP '^[0-9]+(\.[0-9]+)?$'", $form_id ) );
+		$field_list             = implode( ',', array_unique( array_map( 'intval', $fields ) ) );
 
 		return $field_list;
 	}
@@ -6738,15 +6749,15 @@ class GFFormsModel {
 			return null;
 		}
 
-		if ( is_numeric( $field_id ) ) {
-			// Removing floating part of field (i.e 1.3 -> 1) to return field by input id.
+		if ( is_numeric( $field_id ) || preg_match( '/^\d+\.\w+$/', $field_id ) ) {
+			// Removing the input-specific segment from the field ID (i.e 1.3 or 1.something -> 1).
 			$field_id = intval( $field_id );
 		}
 
 		global $_fields;
 		$key = $form['id'] . '_' . $field_id;
 		$return = null;
-		if (isset( $_fields[ $key ] ) ) {
+		if ( isset( $_fields[ $key ] ) ) {
 			return $_fields[ $key ];
 		}
 
@@ -6795,8 +6806,12 @@ class GFFormsModel {
 		return null;
 	}
 
+	/**
+	 * @deprecated 2.8 HTML5 setting was removed, and HTML5 is now always enabled.
+	 * @return true
+	 */
 	public static function is_html5_enabled() {
-		return get_option( 'rg_gforms_enable_html5', false );
+		return true;
 	}
 
 	/**
@@ -7080,6 +7095,52 @@ class GFFormsModel {
 		}
 
 		return $wpdb->get_col( $sql );
+	}
+
+	/**
+	 * Get forms and return any form column(s).
+	 *
+	 * @see GFFormsModel::get_form_ids()
+	 * @since 2.7.5
+	 *
+	 * @param bool   $active      True if active forms are returned. False to get inactive forms. Defaults to true.
+	 * @param bool   $trash       True if trashed forms are returned. False to exclude trash. Defaults to false.
+	 * @param string $sort_column The column to sort the results on.
+	 * @param string $sort_dir    The sort direction, ASC or DESC.
+	 * @param array  $columns     The columns to return. Defaults to ['id']. Other options are 'title', 'date_created', 'is_active', 'is_trash'. 'date_updated' may be supported, depending on the Gravity Forms version.
+	 *
+	 * @return array Forms indexed from 0 by SQL result row number. Each row is an associative array (column => value).
+	 */
+	public static function get_forms_columns( $active = true, $trash = false, $sort_column = 'id', $sort_dir = 'ASC', $columns = array( 'id' ) ) {
+		global $wpdb;
+
+		// Only allow valid columns.
+		$columns = array_intersect( $columns, GFFormsModel::get_form_db_columns() );
+
+		$sql   = 'SELECT ' . implode( ', ', $columns ) . ' FROM ' . GFFormsModel::get_form_table_name();
+		$where = array();
+
+		if ( null !== $active ) {
+			$where[] = $wpdb->prepare( 'is_active=%d', $active );
+		}
+
+		if ( null !== $trash ) {
+			$where[] = $wpdb->prepare( 'is_trash=%d', $trash );
+		}
+
+		if ( ! empty( $where ) ) {
+			$sql .= ' WHERE ' . join( ' AND ', $where );
+		}
+
+		if ( ! in_array( strtolower( $sort_column ), GFFormsModel::get_form_db_columns() ) ) {
+			$sort_column = 'id';
+		}
+
+		if ( ! empty( $sort_column ) ) {
+			$sql .= " ORDER BY $sort_column " . ( $sort_dir == 'ASC' ? 'ASC' : 'DESC' );
+		}
+
+		return $wpdb->get_results( $sql, ARRAY_A );
 	}
 
 	public static function get_entry_meta( $form_ids ) {
@@ -7681,8 +7742,13 @@ class GFFormsModel {
 		if ( isset( $form['labelPlacement'] ) ) {
 			$form['labelPlacement'] = GFCommon::whitelist( $form['labelPlacement'], array( 'top_label', 'left_label', 'right_label' ) );
 		}
+
 		if ( isset( $form['descriptionPlacement'] ) ) {
 			$form['descriptionPlacement'] = GFCommon::whitelist( $form['descriptionPlacement'], array( 'below', 'above' ) );
+		}
+
+		if ( isset( $form['validationPlacement'] ) ) {
+			$form['validationPlacement'] = GFCommon::whitelist( $form['validationPlacement'], array( 'below', 'above' ) );
 		}
 
 		if ( isset( $form['subLabelPlacement'] ) ) {
@@ -7738,11 +7804,11 @@ class GFFormsModel {
 			$form['scheduleForm']           = (bool) $form['scheduleForm'];
 			$form['scheduleStart']          = $form['scheduleForm'] ? wp_strip_all_tags( $form['scheduleStart'] ) : '';
 			$form['scheduleStartHour']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartHour'], 1, 12 ) : '';
-			$form['scheduleStartMinute']    = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartMinute'], 1, 60 ) : '';
+			$form['scheduleStartMinute']    = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartMinute'], 0, 59 ) : '';
 			$form['scheduleStartAmpm']      = $form['scheduleForm'] ? GFCommon::whitelist( $form['scheduleStartAmpm'], array( 'am', 'pm' ) ) : '';
 			$form['scheduleEnd']            = $form['scheduleForm'] ? wp_strip_all_tags( $form['scheduleEnd'] ) : '';
 			$form['scheduleEndHour']        = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndHour'], 1, 12 ) : '';
-			$form['scheduleEndMinute']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndMinute'], 1, 60 ) : '';
+			$form['scheduleEndMinute']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndMinute'], 0, 59 ) : '';
 			$form['scheduleEndAmpm']        = $form['scheduleForm'] ? GFCommon::whitelist( $form['scheduleEndAmpm'], array( 'am', 'pm' ) ) : '';
 			$form['schedulePendingMessage'] = $form['scheduleForm'] ? self::maybe_wp_kses( $form['schedulePendingMessage'] ) : '';
 			$form['scheduleMessage']        = $form['scheduleForm'] ? self::maybe_wp_kses( $form['scheduleMessage'] ) : '';
@@ -8153,21 +8219,44 @@ class GFFormsModel {
 	 * Updates the license key, If multisite, it updates the license key for all sites in the network.
 	 *
 	 * @since 2.7
+	 * @since 2.8.17 Updated to also store the key as a network option.
 	 *
-	 * @param string $license The license key.
+	 * @param string $license The license key MD5.
 	 *
 	 * @return void
 	 */
 	public static function update_license_key( $license ) {
-		if ( is_multisite() && is_main_site() ) {
-			$sites = get_sites();
-			foreach ( $sites as $site ) {
-				update_blog_option( $site->blog_id, 'rg_gforms_key', $license );
-				update_blog_option( $site->blog_id, 'gform_pending_installation', false );
+		if ( is_main_site() && GFCommon::is_network_active() ) {
+			if ( $license ) {
+				update_network_option( null, GFForms::LICENSE_KEY_OPT, $license );
+			} else {
+				delete_network_option( null, GFForms::LICENSE_KEY_OPT );
+			}
+
+			$ids = get_sites( array(
+				'fields'       => 'ids',
+				'number'       => 0,
+				'site__not_in' => array( get_current_blog_id() ),
+			) );
+
+			foreach ( $ids as $id ) {
+				switch_to_blog( $id );
+				if ( $license ) {
+					update_option( GFForms::LICENSE_KEY_OPT, $license );
+					delete_option( 'gform_pending_installation' );
+					delete_option( 'rg_gforms_message' );
+				} else {
+					delete_option( GFForms::LICENSE_KEY_OPT );
+				}
+				restore_current_blog();
 			}
 		}
 
-		update_option( 'rg_gforms_key', $license );
+		if ( $license ) {
+			update_option( GFForms::LICENSE_KEY_OPT, $license );
+		} else {
+			delete_option( GFForms::LICENSE_KEY_OPT );
+		}
 	}
 
 }

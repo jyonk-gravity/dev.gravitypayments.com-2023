@@ -45,10 +45,8 @@ add_filter("admin_menu", array($this, 'setup'), 10);
   add_action('gform_post_note_added', array($this, 'create_note'),10,6);
   add_action('gform_pre_note_deleted', array($this, 'delete_note'),10,2);
   //add_action('gform_delete_lead', array($this, 'delete_entry'));
-  //trash , restore entry
-  add_action('gform_update_status', array($this, 'entry_status'),10,3);
-    //update entry
-  add_action('gform_after_update_entry', array($this, 'update_entry'),10,2); 
+
+
   add_action('gform_entry_detail_sidebar_middle', array($this, 'send_entry_btn'),10,2);
      add_action( 'gform_entry_info', array($this, 'entry_info_send_checkbox'), 99, 2);
   
@@ -107,25 +105,7 @@ require_once(self::$path . 'templates/crm-entry-box.php');
   }
  // }
   }
-    /**
-    * Send entry to crm on update
-    * 
-    * @param mixed $form
-    * @param mixed $lead_id
-    */
-public function update_entry($form,$lead_id){
 
-    $meta=get_option($this->type.'_settings',array());
-      if(!empty($meta['update']) || isset($_POST[$this->id.'_update'])){
-  $entry=$this->get_gf_entry($lead_id);
- 
-    $push=$this->push($entry,$form,'update');
-        if(!empty($push['msg'])){
-  $this->screen_msg($push['msg'],$push['class']);  
-  }
-}
-
-}
   
     /**
   * Add settings and support link
@@ -141,26 +121,7 @@ public function update_entry($form,$lead_id){
         }
         return $links;
    }
-   public function entry_status($id,$status,$old){
-             $meta=get_option($this->type.'_settings',array());
-         $option = '';
-             if($status == 'active'){
-              $option= 'restore';   
-             }else if($status == 'trash'){
-                 $option='delete';
-             }
-         
-      if( !empty($option) && !empty($meta[$option])){
-        //  $option= $option == 'restore' ? '' : $option;
-        $entry=$this->get_gf_entry($id);
-        $form=array();
-        if(!empty($entry['form_id'])){
-        $form = RGFormsModel::get_form_meta($entry['form_id']);    
-        }
-       $this->push($entry,$form,$option); 
-      } 
-  
-  }
+
   /**
      * Renders the form settings page.
      *
@@ -591,7 +552,7 @@ $info_data= isset($info['data']) && is_array($info['data']) ? $info['data'] : ar
   //
     $api_type=$this->post('api',$info_data);   
   if($api_type == "web"){    
-  $fields=$this->web_fields($module,$map);
+  $fields=$this->web_fields($module,$map); 
   }else{
   if($this->ajax){ 
   $api=$this->get_api($info);
@@ -1374,7 +1335,7 @@ include_once(self::$path . "templates/feed-account.php");
 
   array_push($form['fields'],array("id" => "status" , "label" => esc_html__('Entry Status', 'gravity-forms-infusionsoft-crm')));
 
-  $skip_inputs=array('checkbox','select','time','date','radio'); 
+  $skip_inputs=array('checkbox','select','time','date','radio','poll'); 
   if(is_array($form['fields'])){
   foreach($form['fields'] as $field){
   if(isset($field["inputs"]) && is_array($field["inputs"]) && !in_array($field['type'] ,$skip_inputs) ){
@@ -1396,6 +1357,13 @@ include_once(self::$path . "templates/feed-account.php");
   }
   }
   }
+      if ( class_exists( 'GPDFAPI' )  && method_exists('GPDFAPI','create_pdf')) {
+
+           $pdfs  = GPDFAPI::get_form_pdfs( $form_id );
+           foreach($pdfs as $k=>$pdf){
+        $fields[] =  array('gravitypdf:'.$k, 'Pdf - '.$pdf['name']);       
+           }
+      }
   $fields[]=array('id',__('Entry ID','gravity-forms-salesforce-crm'));
   $fields[]=array('form_id',__('Form ID','gravity-forms-salesforce-crm'));
   $fields[]=array('entry_url',__('Entry URL','gravity-forms-salesforce-crm'));

@@ -31,6 +31,17 @@ class Full_Screen_Handler {
 
 	public function __construct( GF_JSON_Handler $handler ) {
 		$this->json_handler = $handler;
+
+		add_filter( 'redirect_canonical', function ( $redirect_url ) use ( $handler ) {
+
+			$form_for_display = apply_filters( 'gform_full_screen_form_for_display', null, '', $handler );
+
+			if ( is_404() && ! empty( $form_for_display ) ) {
+				return false;
+			}
+
+			return $redirect_url;
+		}, 10, 1 );
 	}
 
 	/**
@@ -95,13 +106,16 @@ class Full_Screen_Handler {
 		 * selecting the Form ID based on externally-defined conditions.
 		 *
 		 * @since 2.7
+		 * @since 2.7.4 Added the $json_handler parameter
+		 * @since 2.7.4 Set the $template param to null
 		 *
-		 * @param string $form_for_display The current Form ID found.
-		 * @param string $template         The current templat being loaded by template_load.
+		 * @param string          $form_for_display The current Form ID found.
+		 * @param string          $template         The current template being loaded by template_load.
+		 * @param GF_JSON_Handler $json_handler     The JSON handler to query the forms
 		 *
 		 * @return string
 		 */
-		$form_for_display = apply_filters( 'gform_full_screen_form_for_display', $form_for_display, $template );
+		$form_for_display = apply_filters( 'gform_full_screen_form_for_display', null, $template, $this->json_handler );
 
 		if ( ! $form_for_display ) {
 			return $template;

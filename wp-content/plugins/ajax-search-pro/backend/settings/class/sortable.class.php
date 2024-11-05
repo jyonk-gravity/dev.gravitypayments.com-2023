@@ -12,6 +12,8 @@ if (!class_exists("wpdreamsSortable")) {
      * @copyright Copyright (c) 2014, Ernest Marcinko
      */
     class wpdreamsSortable extends wpdreamsType {
+		private $types;
+
         function getType() {
             parent::getType();
             $this->processData();

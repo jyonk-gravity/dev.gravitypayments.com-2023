@@ -39,6 +39,7 @@
     <form name='asp_priorities' id="asp_priorities" method='post'>
         <fieldset>
             <legend><?php echo __('Filter Posts', 'ajax-search-pro'); ?></legend>
+            <input type="hidden" id="asp_priorities_request_nonce" value="<?php echo wp_create_nonce( 'asp_priorities_request_nonce' ); ?>">
             <?php print $_rr; ?>
         </fieldset>
     </form>

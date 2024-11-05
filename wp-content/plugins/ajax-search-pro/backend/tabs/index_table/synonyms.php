@@ -35,6 +35,7 @@ $langs = wpd_get_languages_array();
             <input type="button" id="asp-syn-import" class="asp_syn_add submit wd_button_syn" value="<?php echo __('Import', 'ajax-search-pro'); ?>"/>
             <input type="button" id="asp-syn-export" class="asp_syn_add submit wd_button_syn" value="<?php echo __('Export', 'ajax-search-pro'); ?>"/>
             <input type="button" id="asp-syn-remove-all" class="asp_syn_remove_all submit wd_button_syn" value="<?php echo __('Delete All', 'ajax-search-pro'); ?>"/>
+            <input type="hidden" id="asp_synonyms_request_nonce" value="<?php echo wp_create_nonce( 'asp_synonyms_request_nonce' ); ?>">
         </div>
     </div>
     <div class="wpd-synonyms-row wpd-synonyms-row-head">

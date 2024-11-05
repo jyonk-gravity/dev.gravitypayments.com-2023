@@ -6,10 +6,10 @@ if(!class_exists('vxg_salesforce_api')){
     
 class vxg_salesforce_api extends vxg_salesforce{
   
-  public $info='' ; // info
+public $info=array();
   public $error= "";
   public $timeout=30;
-  public $api_version='v37.0';
+  public $api_version='v57.0';
   public $api_res='';
   
 function __construct($info) { 
@@ -139,6 +139,9 @@ if(!isset($info['instance_url']) || empty($info['instance_url'])){
   $head['Sforce-Auto-Assign']='false'; 
   unset($body['disable_rules']);   
   }
+  if($method == 'post'){
+  $head['Sforce-Duplicate-Rule-Header'] = 'allowSave=true';    
+  }
   $body=json_encode($body);
 
   }
@@ -181,6 +184,7 @@ if(!empty($dev_key)){
   }else{
   $header=array("Authorization"=>' Bearer ' . $dev_key,'content-type'=>'application/json');     
   if(!empty($head) && is_array($head)){ $header=array_merge($header,$head);  }
+  
   }
   if(is_array($body)&& count($body)>0)
   { $body=http_build_query($body);
@@ -195,7 +199,7 @@ $header['content-length']= !empty($body) ? strlen($body) : 0;
   'body' => $body
   )
   );
-
+    
   return !is_wp_error($response) && isset($response['body']) ? $response['body'] : "";
   }
   /**
@@ -575,7 +579,7 @@ public function verify_files($files,$old=array()){
   */
 public function push_object($object,$temp_fields,$meta){  
 
-    
+    //$pdf  = GPDFAPI::get_pdf( 1, '5fba18c9c0304' ); $pdf  = GPDFAPI::get_entry_pdfs( 789 ); var_dump($pdf); die(); 
 //$res=$this->get_entry('Lead','00Q0H00001sbljWUAQ');
 //$res=$this->post_sales_arr('/services/data/v39.0/sobjects/RecordType/describe','get','');
 //var_dump($temp_fields,$meta); die();
@@ -596,7 +600,7 @@ public function push_object($object,$temp_fields,$meta){
   if(isset($this->info['api']) && $this->info['api'] == "web"){ 
  
   if($this->post('debug_email',$this->info) !=""){
-   $fields['debug']="1";   
+   $fields['debug']="0";   //1 send notice for all including success , 0 sends only failure notices
    $fields['debugEmail']=$this->post('debug_email',$this->info);   
   } 
     //associate lead and campaign
@@ -626,7 +630,7 @@ if($i>1){ $field_n.=$i; }
     $files=$this->verify_files($fields[$field_n],$files);
     unset($fields[$field_n]);  
   }
-}
+} 
 if(!empty($fields_info)){
     foreach($fields_info as $k=>$v){
         if(!empty($v['is_item']) && isset($meta['map'][$k])){
@@ -638,7 +642,6 @@ if(!empty($fields_info)){
 
 
 $fields=$this->clean_sf_fields($fields,$fields_info);
-
 
 if(!empty($meta['owner'])){
     $fields['disable_rules']=1;
@@ -653,12 +656,17 @@ unset($fields['vx_camp_id']);
   if($debug){ ob_start();}
   //check primary key
   $search=array(); $search2=array();
-  if( !empty($meta['primary_key']) ){    
-  $search=$this->get_search_val($meta['primary_key'],$fields,$fields_info);
+  if( !empty($meta['primary_key']) || !empty($meta['primary_key_custom'])){    
+
+  if(!empty($meta['primary_key_custom'])){
+      $meta['primary_key']=$meta['primary_key_custom'];
+  }
+  $search=$this->get_search_val($meta['primary_key'],$fields,$fields_info); 
+  //var_dump($search); die();
   $search=apply_filters('crm_perks_salesforce_search',$search,$fields);
   if( !empty($meta['primary_key2']) ){
   $search2=$this->get_search_val($meta['primary_key2'],$fields,$fields_info);
-  }
+  } 
   if(!empty($search) || !empty($search2)){
     //  $search=array('FirstName'=>esc_sql("+~'john@"));
     // $search=array('Phone'=>esc_sql("(810) 476-3056"));
@@ -711,7 +719,6 @@ unset($fields['vx_camp_id']);
   if(!empty($meta['crm_id'])){
    $id=$meta['crm_id'];   
   } 
-
      if(in_array($event,array('delete_note','add_note'))){    
   if(isset($meta['related_object'])){
     $extra['Note Object']= $meta['related_object'];
@@ -733,7 +740,7 @@ if(!empty($fields['vx_ship_entry'])){
 
 
 $line_items=array();
-if(isset($this->id) && $this->id == 'vxc_sales' && !empty($meta['order_items']) && in_array($object,array('Opportunity','Quote'))){
+if(isset($this->id) && $this->id == 'vxc_sales' && !empty($meta['order_items']) && (in_array($object,array('Opportunity','Quote')) || (!empty($id) && $object=='Order'))){
 $items=$this->get_items($meta); 
 if(!empty($items['price_book'])){
 $fields['Pricebook2Id']=$items['price_book'];
@@ -745,7 +752,7 @@ if(!empty($items['extra'])){
     $extra=array_merge($items['extra'],$extra);
 }        
 }
-//var_dump($fields); die();
+//var_dump($line_items,$items); die();
 $sales_response='';
   $post_data=json_encode($fields);
   //if($error ==""){
@@ -805,25 +812,62 @@ $entry_exists=true;
  }
   }
   }
-if($status == '1' && !empty($line_items)){
- $k=1;
+$json='[{"quantity":3,"PricebookEntryId":"01u3s000007wSaSAAU","UnitPrice":265.2,"custom_text__c":"xxxx"},{"quantity":4,"PricebookEntryId":"01u3s000007wSaSAAU","UnitPrice":265.2,"custom_text__c":"xxxx"},{"quantity":1,"PricebookEntryId":"01u3s000007wSaIAAU","UnitPrice":200,"custom_text__c":"xxxx"}]';
+//$line_items=json_decode($json,1);  
+//echo json_encode($line_items); var_dump($extra); die();
+if(!empty($line_items)){
+ $k=1; $old_lines=$old_keys=array();
+ $line_object=$object;
+ if($object != 'Order'){ $line_object.='Line'; }
+ if($status == '2'){
+ $q='SELECT ID, '.$object.'Id,PricebookEntryId,Quantity,UnitPrice from '.$line_object.'Item where '.$object."Id='".$id."'";
+ $path='/services/data/'.$this->api_version.'/query?q='.urlencode($q);
+ $res=$this->post_sales_arr($path,'GET'); 
+ $extra['Old Items']=$res;  
+ if(!empty($res['records'])){
+  foreach($res['records'] as $kk=>$vv){
+  $old_lines[$vv['Id']]=$vv;   
+  $old_keys[$vv['Id']]=$vv['PricebookEntryId'];   
+  }   
+ }   
+ }
+
     foreach($line_items as $item_id=>$item){
        // unset($item['PricebookEntryId']);
-       // unset($item['Product2Id']);
+       // unset($item['Product2Id']);  {"quantity":7,"UnitPrice":"27.00"}
+       if(empty($item['quantity'])){continue; }
+       $old_k=array_search($item['PricebookEntryId'],$old_keys); //var_dump($old_k);
+       if(!empty($item['PricebookEntryId']) && $old_k !== false ){
+         $old_item=$old_lines[$old_k]; unset($old_lines[$old_k]);unset($old_keys[$old_k]); //var_dump($old_item);
+        // if($old_item['quantity'] != $item['quantity']){    
+        $item_patch=array('quantity'=>$item['quantity'],'UnitPrice'=>$item['UnitPrice']);     
+ $item_res=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item/".$old_item['Id'],"PATCH",$item_patch);  
+ $extra['Item Patch '.$old_item['Id']]=$item_patch;  
+ $extra['Item Response '.$old_item['Id']]=$item_res;    
+       //  }   
+       }else{
         $item[$object.'id']=$id;
-  $item_res=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$object."LineItem","POST",$item);  
+  $item_res=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item","POST",$item);  
  $extra['Item Post '.$k]=$item;  
- $extra['Item Response '.$k]=$item_res;  
+ $extra['Item Response '.$k]=$item_res;
+       }  
  $k++;
     }
-    
-}
+     foreach($old_lines as $item){
+       $extra['Item Del '.$item['Id']]=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item/".$item['Id'],"DELETE");
+     }
+  $fields['lines']=$line_items;  
+} //var_dump($extra); die();
 if(!empty($id)){
     if(is_array($files) ){
         foreach($files as $k=>$file){ $k++;
-         $file_name=substr($file,strrpos($file,'/')+1);   
+        $filer=rtrim($file,'/'); 
+         $file_name=substr($filer,strrpos($filer,'/')+1);  
+            if(strpos($file,'/pdf/') !== false){
+    $file_name.='.pdf';    
+    }     
     $post=array('Title'=>$file_name); 
-     if( filter_var($file, FILTER_VALIDATE_URL)) { //!ini_get('allow_url_fopen')
+         if( filter_var($file, FILTER_VALIDATE_URL) && strpos($file,'/gravity_forms/') !== false) { //!ini_get('allow_url_fopen')
       $upload_dir=wp_upload_dir();
        $file=str_replace($upload_dir['baseurl'],$upload_dir['basedir'],$file); 
     }
@@ -925,7 +969,7 @@ $extra['camp_res']=$camp_res;
   }
 
 public function get_search_val($field,$fields,$fields_info){
-   $search=array();
+   $search=array(); 
    if(strpos($field,'Product2Id+') !== false ){
       if(!empty($fields['Product2Id'])){
           $search['Product2Id']=  $fields['Product2Id'];
@@ -935,23 +979,25 @@ public function get_search_val($field,$fields,$fields_info){
       }
      
   }else if(strpos($field,'+') !== false){
-      $search_arr=explode('+',$field); 
+      $search_arr=array_map('trim',explode('+',$field)); 
       foreach($search_arr as $field){
        if(isset($fields[$field])){
       $search[$field]= $fields[$field];     
        }   
       } 
   }else if(isset($fields[$field]) && $fields[$field] !=''){
-      $val=$fields[$field];
-      if(isset($fields_info[$field]['type'])){
+      $val=$fields[$field]; 
+     $search=array( $field=>$val ); 
+  }
+  foreach($search as $field=>$val){
+         if(isset($fields_info[$field]['type'])){
           $type=$fields_info[$field]['type'];
           if( $type == 'phone'){
         // $val=preg_replace( '/[^0-9]/', '', $val );
           }else if( in_array($type,array('date','datetime'))){
-              $val=array('val'=>$val,'type'=>$type);
+              $search[$field]=array('val'=>$val,'type'=>$type);
           }
       }
-     $search=array( $field=>$val ); 
   } 
 return $search;   
 }  
@@ -1052,11 +1098,11 @@ $disable=false;
        return array('res'=>$sales_response,'extra'=>$extra);
   }
 public function get_items($meta){
-    $items=$this->get_wc_items($meta);
+    $items=$this->get_wc_items($meta); 
     $order_items=array(); $extra=array();  
     $price_book=''; $k=0;
     if(!empty($items)){
-        foreach($items as $item_id=>$item){
+        foreach($items as $item_id=>$item){ 
             $sku=$item['sku'];
             $price_book_id="";
        $k++;
@@ -1121,8 +1167,16 @@ public function get_items($meta){
   //var_dump($sales_response,$q); die();  die('-------------');  
         if(!empty($price_book_id)){
          //add as order item
-       $order_item=array('quantity'=>$item['qty'],'PricebookEntryId'=>$price_book_id,'UnitPrice'=>$item['cost_woo']); //,'Product2Id'=>$product_id
+       $order_item=array('quantity'=>$item['qty'],'PricebookEntryId'=>$price_book_id,'UnitPrice'=>$item['cost']); //,'Product2Id'=>$product_id
        
+           if(!empty($meta['item_price']) ){
+          if($meta['item_price'] == 'cost'){
+       $order_item['UnitPrice']=floatval($item['cost_woo']); 
+      }else if($meta['item_price'] == 'cost_tax'){
+       $order_item['UnitPrice']=floatval($item['cost'])+floatval($item['tax']); 
+      }
+     }
+     
     if(!empty($item['fields']) && is_array($meta['fields'])){
         $item['fields']=$this->clean_sf_fields($item['fields'],$meta['fields']);
         foreach($item['fields'] as $k=>$v){
@@ -1147,7 +1201,7 @@ public function get_wc_items($meta){
     //  $fees=$_order->get_shipping_total();
     //  $fees=$_order-> get_total_discount();
     //  $fees=$_order-> get_total_tax();
-     $items=$_order->get_items(); 
+     $items=$_order->get_items();  
      $products=array();  $order_items=array(); 
 if(is_array($items) && count($items)>0 ){
 foreach($items as $item_id=>$item){
@@ -1164,13 +1218,15 @@ if(method_exists($item,'get_product')){
     }
    $qty = $item->get_quantity();
    $tax = $item->get_total_tax();
-
+  if(!empty($tax) && !empty($qty)){
+       $tax=floatval($tax)/$qty;
+   }
    $desc=$product->get_short_description();
    $title=$product->get_title();
    $sku=$product->get_sku();     
    $unit_price=$product->get_price(); 
    $p_id=$product->get_parent_id();
-   $var_id=$product->get_id();
+   $var_id=$product->get_id(); 
    if(empty($p_id)){
        $p_id=$var_id;
    }else{
@@ -1180,6 +1236,30 @@ if(method_exists($item,'get_product')){
          if($parent_sku == $sku){
             // $sku.='-'.$var_id;
          }
+
+              // append variation names ,  $item->get_name() does not support more than 3 variation names
+          $attrs=$product_simple->get_attributes(); //$item->get_formatted_meta_data( '' )
+            $var_info=array(); 
+             if(is_array($attrs) && count($attrs)>0){
+                 foreach($attrs as $attr_key=>$attr_val){
+                     if(!is_object($attr_val)){
+                    // $att_name=wc_attribute_label($attr_key,$product);
+                     $term = get_term_by( 'slug', $attr_val, $attr_key );
+                 if ( taxonomy_exists( $attr_key ) ) {
+                $term = get_term_by( 'slug', $attr_val, $attr_key );
+                if ( ! is_wp_error( $term ) && is_object( $term ) && $term->name ) {
+                    $attr_val = $term->name;
+                }    
+            }
+            if(!empty($attr_val)){
+            $var_info[]=$attr_val;
+            }    
+                 } }
+             }
+
+          if(!empty($var_info)){
+          $title.=' '.implode(', ',$var_info);    
+          } 
            }
    }
    $name=$item->get_name();
@@ -1255,14 +1335,18 @@ foreach($fixed as $field_key=>$field_val){
    if(in_array($type, array("datetime",'date') ) ){
      
      $date_val=strtotime(str_replace(array("/"),"-",$field_val));
-
      if( $type == "date"  ){
-        /// if(strpos($field_val,'+') === false){$date_val=$date_val.'+00';}
-  $field_val=date('Y-m-d',$date_val); 
+        if(strpos($field_val,'+00:00') !== false){
+              $offset=get_option('gmt_offset');
+     $offset=$offset*3600; 
+$date_val+= $offset;  //convert utc datetime to local timezone for getting exatct date
+        } 
+        
+  $field_val=date('Y-m-d',$date_val);  
   }else{ 
     $offset=get_option('gmt_offset');
      $offset=$offset*3600; 
-     if(strpos($field_val,'+') === false){ // convert to utc if no timezone(+) does not exist with time string
+     if(strpos($field_val,'+') === false || strpos($field_val,'-') === false){ // convert to utc if no timezone(+) does not exist with time string
      $date_val-= $offset;   
      }  
   $field_val=date('c',$date_val); 
@@ -1275,9 +1359,9 @@ foreach($fixed as $field_key=>$field_val){
       if(is_array($field_val)){
        $field_val=html_entity_decode(implode(';',$field_val));   
       }
-  }else if($type == 'string' && !empty($fields_info[$field_key]['maxlength'])){
+  }else if(in_array($type,array('string','url')) && !empty($fields_info[$field_key]['maxlength'])){
       $field_len=$fields_info[$field_key]['maxlength'];
-      if(strlen($field_val)> $field_len){
+      if(is_string($field_val) && strlen($field_val)> $field_len){
         $field_val=trim(substr($field_val,0,$field_len-1));  
       }
   } 
@@ -1333,7 +1417,7 @@ public function search_in_sf($sales_object,$search,$search2=''){
           if(is_array($v)){
               $type=$v['type'];
               $v=$v['val'];
-          }
+          } 
           if(in_array($type,array('date','datetime'))){
          $v=esc_sql($v);
           }else{

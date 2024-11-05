@@ -1,13 +1,19 @@
 === Search Exclude ===
 Contributors: quadlayers, pronskiy, williamdodson, stevelock
-Tags: admin, plugin, search
+Donate link: https://quadlayers.com/
+Tags: search exclude, search, wordpress search, exclude post, exclude page
 Requires at least: 4.7
-Tested up to: 6.1
-Stable tag: 1.3.1
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires PHP: 5.6
+Tested up to: 6.6
+Stable tag: 2.1.7
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Hide any post or page from the search results.
+
+== Presentation ==
+
+[QuadLayers](https://quadlayers.com/) | [Community](https://www.facebook.com/groups/quadlayers/)
 
 == Description ==
 
@@ -57,8 +63,8 @@ for newly created posts, but not pages. In this case you can add following code
 to your theme's function.php:
 
 `
-add_filter('default_content', 'excludeNewPostByDefault', 10, 2);
-function excludeNewPostByDefault($content, $post)
+add_filter('default_content', 'exclude_new_post_by_default', 10, 2);
+function exclude_new_post_by_default($content, $post)
 {
 	if ('post' === $post->post_type) {
         do_action('searchexclude_hide_from_search', array($post->ID), true);
@@ -91,6 +97,67 @@ function filterForProducts($exclude, $query)
 2. screenshot-2.png
 
 == Changelog ==
+
+= 2.1.7 =
+* Fix WordPress 6.1.3 compatibility
+* Fix big queries 
+* Remove notification 
+
+= 2.1.6 =
+* Refactor update 
+
+= 2.1.5 =
+* Refactor
+
+= 2.1.4 =
+* WordPress compatibility
+
+= 2.1.3 =
+* WordPress compatibility
+
+= 2.1.2 =
+* WordPress compatibility
+
+= 2.1.1 =
+* Packages update
+
+= 2.1.0 =
+* WordPress compatibility
+
+= 2.0.9 =
+* Fix PHP errors
+
+= 2.0.8 =
+* Translation strings
+
+= 2.0.7 =
+* WordPress compatibility
+
+= 2.0.6 =
+* WordPress compatibility
+
+= 2.0.5 =
+* Update portfolio link
+
+= 2.0.4 =
+* WordPress compatibility
+
+= 2.0.3 =
+* Fix strings translations
+
+= 2.0.2 =
+* Fix strings translations
+
+= 2.0.1 =
+* Fix strings translations
+
+= 2.0.0 =
+* i18n implemented
+* Composer implemented
+* Autoload implemented
+* Rename files to fit WordPress Development rules
+* Rename classes to fit WordPress Development rules
+* Rename variables to fit WordPress Development rules
 
 = 1.3.1 =
 * Author update.

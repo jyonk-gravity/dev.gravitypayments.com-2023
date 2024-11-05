@@ -1,5 +1,4 @@
 <ul id="subtabs"  class='tabs'>
-    <!--<li><a tabid="314" class='subtheme'><?php echo __('New filters', 'ajax-search-pro'); ?></a></li>-->
     <li><a tabid="301" class='subtheme current'><?php echo __('General', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="310" class='subtheme'><?php echo __('Generic filters', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="311" class='subtheme'><?php echo __('Content type', 'ajax-search-pro'); ?></a></li>
@@ -13,11 +12,6 @@
     <li><a tabid="304" class='subtheme'><?php echo __('Advanced', 'ajax-search-pro'); ?></a></li>
 </ul>
 <div class='tabscontent'>
-    <!--<div tabid="314">
-
-        <?php include(ASP_PATH."backend/tabs/instance/frontend/new_filters.php"); ?>
-
-    </div>-->
     <div tabid="301">
 
             <?php include(ASP_PATH."backend/tabs/instance/frontend/general.php"); ?>

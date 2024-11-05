@@ -90,6 +90,39 @@ class GF_Template_Library_Service_Provider extends GF_Service_Provider {
 		$this->add_data_store( $container );
 		$this->add_configs( $container );
 		$this->add_endpoints( $container );
+		$this->register_template_library_app();
+	}
+
+	private function register_template_library_app() {
+		$dev_min = defined( 'GF_SCRIPT_DEBUG' ) && GF_SCRIPT_DEBUG ? '' : '.min';
+
+		$args = array(
+			'app_name'     => 'template_library',
+			'script_name'  => 'gform_gravityforms_admin_vendors',
+			'object_name'  => 'gform_admin_config',
+			'chunk'        => './template-library',
+			'enqueue'      => array( $this, 'should_enqueue_library' ),
+			'css'          => array(
+				'handle' => 'template_library_styles',
+				'src'    => \GFCommon::get_base_url() . "/assets/css/dist/template-library{$dev_min}.css",
+				'deps'   => array( 'gform_admin_components' ),
+				'ver'    => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? filemtime( \GFCommon::get_base_path() . "/assets/css/dist/template-library{$dev_min}.css" ) : \GFForms::$version,
+			),
+			'root_element' => 'gf-template-library',
+		);
+
+		$this->register_app( $args );
+	}
+
+	public function should_enqueue_library() {
+		$current_page = trim( strtolower( rgget( 'page' ) ) );
+		$gf_pages     = array( 'gf_edit_forms', 'gf_new_form' );
+
+		if ( $current_page === 'gf_edit_forms' ) {
+			return empty( rgget( 'id' ) );
+		}
+
+		return in_array( $current_page, $gf_pages );
 	}
 
 	/**

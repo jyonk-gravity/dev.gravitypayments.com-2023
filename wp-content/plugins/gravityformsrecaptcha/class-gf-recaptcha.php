@@ -275,6 +275,10 @@ class GF_RECAPTCHA extends GFAddOn {
 
 		add_filter( 'gform_entry_is_spam', array( $this, 'check_for_spam_entry' ), 10, 3 );
 		add_filter( 'gform_validation', array( $this, 'validate_submission' ) );
+
+		add_filter( 'gform_field_content', array( $this, 'update_captcha_field_settings_link' ), 10, 2 );
+		add_filter( 'gform_incomplete_submission_pre_save', array( $this, 'add_recaptcha_v3_input_to_draft' ), 10, 3 );
+
 	}
 
 	/**
@@ -307,10 +311,11 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return array
 	 */
 	public function scripts() {
+		$frontend_script_name = version_compare( GFForms::$version, '2.9.0-dev-1', '<' ) ? 'frontend-legacy' : 'frontend';
 		$scripts = array(
 			array(
-				'handle'    => "{$this->asset_prefix}frontend",
-				'src'       => $this->get_script_url( 'frontend' ),
+				'handle'    => $this->asset_prefix . $frontend_script_name,
+				'src'       => $this->get_script_url( $frontend_script_name ),
 				'version'   => $this->_version,
 				'deps'      => array( 'jquery', "{$this->asset_prefix}recaptcha" ),
 				'in_footer' => true,
@@ -322,14 +327,22 @@ class GF_RECAPTCHA extends GFAddOn {
 
 		// Prevent plugin settings from loading on the frontend. Remove this condition to see it in action.
 		if ( is_admin() ) {
+			if ( $this->requires_recaptcha_script() ) {
+				$admin_deps = array( 'jquery', "{$this->asset_prefix}recaptcha" );
+			} else {
+				$admin_deps = array( 'jquery' );
+			}
+
 			$scripts[] = array(
 				'handle'  => "{$this->asset_prefix}plugin_settings",
 				'src'     => $this->get_script_url( 'plugin_settings' ),
 				'version' => $this->_version,
-				'deps'    => array( 'jquery', "{$this->asset_prefix}recaptcha" ),
+				'deps'    => $admin_deps,
 				'enqueue' => array(
-					'admin_page' => array( 'plugin_settings' ),
-					'tab'        => $this->_slug,
+					array(
+						'admin_page' => array( 'plugin_settings' ),
+						'tab'        => $this->_slug,
+					),
 				),
 			);
 		}
@@ -486,6 +499,28 @@ class GF_RECAPTCHA extends GFAddOn {
 		);
 	}
 
+	/**
+	 * Updates the query string for the settings link displayed in the form editor preview of the Captcha field.
+	 *
+	 * @since 1.2
+	 *
+	 * @param string    $field_content The field markup.
+	 * @param \GF_Field $field         The field being processed.
+	 *
+	 * @return string
+	 */
+	public function update_captcha_field_settings_link( $field_content, $field ) {
+		if ( $field->type !== 'captcha' || ! $field->is_form_editor() ) {
+			return $field_content;
+		}
+
+		return str_replace(
+			array( '&subview=recaptcha', '?page=gf_settings' ),
+			array( '', '?page=gf_settings&subview=gravityformsrecaptcha' ),
+			$field_content
+		);
+	}
+
 	// # HELPER METHODS ------------------------------------------------------------------------------------------------
 
 	/**
@@ -516,20 +551,31 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return bool
 	 */
 	private function initialize_api() {
+		static $result;
+
+		if ( is_bool( $result ) ) {
+			return $result;
+		}
+
+		$result     = false;
 		$site_key   = $this->plugin_settings->get_recaptcha_key( 'site_key_v3' );
 		$secret_key = $this->plugin_settings->get_recaptcha_key( 'secret_key_v3' );
 
 		if ( ! ( $site_key && $secret_key ) ) {
-			$this->log_debug( __METHOD__ . '(): missing v3 key configuration. Please check the add-on settings.' );
+			$this->log_debug( __METHOD__ . '(): Missing v3 key configuration. Please check the add-on settings.' );
+
 			return false;
 		}
 
 		if ( '1' !== $this->get_plugin_setting( 'recaptcha_keys_status_v3' ) ) {
-			$this->log_debug( __METHOD__ . '(): could not initialize reCAPTCHA v3 because site and/or secret key is invalid.' );
+			$this->log_debug( __METHOD__ . '(): Could not initialize reCAPTCHA v3 because site and/or secret key is invalid.' );
+
 			return false;
 		}
 
-		$this->log_debug( __METHOD__ . '(): Initializing API.' );
+		$result = true;
+		$this->log_debug( __METHOD__ . '(): API Initialized.' );
+
 		return true;
 	}
 
@@ -728,16 +774,41 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return bool
 	 */
 	public function check_for_spam_entry( $is_spam, $form, $entry ) {
-		if ( $is_spam || $this->is_disabled_by_form_setting( $form ) || ! $this->initialize_api() || $this->is_preview() ) {
+
+		if ( $is_spam ) {
+			$this->log_debug( __METHOD__ . '(): Skipping, entry has already been identified as spam by another anti-spam solution.' );
 			return $is_spam;
 		}
 
-		$is_spam = (float) $this->get_score_from_entry( $entry ) <= $this->get_spam_score_threshold();
+		$is_spam = $this->is_spam_submission( $form, $entry );
 		$this->log_debug( __METHOD__ . '(): Is submission considered spam? ' . ( $is_spam ? 'Yes.' : 'No.' ) );
 
 		return $is_spam;
 	}
 
+	/**
+	 * Determines if the submission is spam by comparing its score with the threshold.
+	 *
+	 * @since 1.4
+	 * @since 1.5 Added the optional $entry param.
+	 *
+	 * @param array $form  The form being processed.
+	 * @param array $entry The entry being processed.
+	 *
+	 * @return bool
+	 */
+	public function is_spam_submission( $form, $entry = array() ) {
+		if ( $this->should_skip_validation( $form ) ) {
+			$this->log_debug( __METHOD__ . '(): Score check skipped.' );
+
+			return false;
+		}
+
+		$score     = empty( $entry ) ? $this->token_verifier->get_score() : $this->get_score_from_entry( $entry );
+		$threshold = $this->get_spam_score_threshold();
+
+		return (float) $score <= (float) $threshold;
+	}
 	/**
 	 * Get the Recaptcha score from the entry details.
 	 *
@@ -767,6 +838,12 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return float
 	 */
 	private function get_spam_score_threshold() {
+		static $value;
+
+		if ( ! empty( $value ) ) {
+			return $value;
+		}
+
 		$value = (float) $this->get_plugin_setting( 'score_threshold_v3' );
 		if ( empty( $value ) ) {
 			$value = 0.5;
@@ -801,12 +878,8 @@ class GF_RECAPTCHA extends GFAddOn {
 	public function validate_submission( $submission_data ) {
 		$this->log_debug( __METHOD__ . '(): Validating form (#' . rgars( $submission_data, 'form/id' ) . ') submission.' );
 
-		if (
-			! $this->initialize_api()
-			|| $this->is_disabled_by_form_setting( rgar( $submission_data, 'form' ) )
-			|| $this->is_preview()
-		) {
-			$this->log_debug( __METHOD__ . '(): Validation skipped. reCAPTCHA v3 is misconfigured, disabled, or the form was submitted in preview mode.' );
+		if ( $this->should_skip_validation( rgar( $submission_data, 'form' ) ) ) {
+			$this->log_debug( __METHOD__ . '(): Validation skipped.' );
 
 			return $submission_data;
 		}
@@ -814,6 +887,107 @@ class GF_RECAPTCHA extends GFAddOn {
 		$this->log_debug( __METHOD__ . '(): Validating reCAPTCHA v3.' );
 
 		return $this->field->validation_check( $submission_data );
+	}
+
+	/**
+	 * Check If reCaptcha validation should be skipped.
+	 *
+	 * In some situations where the form validation could be triggered twice, for example while making a stripe payment element transaction
+	 * we want to skip the reCaptcha validation so it isn't triggered twice, as this will make it always fail.
+	 *
+	 * @since 1.4
+	 * @since 1.5 Changed param to $form array.
+	 *
+	 * @param array $form The form being processed.
+	 *
+	 * @return bool
+	 */
+	public function should_skip_validation( $form ) {
+		static $result = array();
+
+		$form_id = rgar( $form, 'id' );
+		if ( isset( $result[ $form_id ] ) ) {
+			return $result[ $form_id ];
+		}
+
+		$result[ $form_id ] = true;
+
+		if ( $this->is_preview() ) {
+			$this->log_debug( __METHOD__ . '(): Yes! Form preview page.' );
+
+			return true;
+		}
+
+		if ( ! $this->initialize_api() ) {
+			$this->log_debug( __METHOD__ . '(): Yes! API not initialized.' );
+
+			return true;
+		}
+
+		if ( $this->is_disabled_by_form_setting( $form ) ) {
+			$this->log_debug( __METHOD__ . '(): Yes! Disabled by form setting.' );
+
+			return true;
+		}
+
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST && ! isset( $_POST[ $this->field->get_input_name( $form_id ) ] ) ) {
+			$this->log_debug( __METHOD__ . '(): Yes! REST request without input.' );
+
+			return true;
+		}
+
+		// For older versions of Stripe, skip the first validation attempt and only validate on the second attempt. Newer versions of Stripe will validate twice without a problem.
+		if ( $this->is_stripe_validation() && version_compare( gf_stripe()->get_version(), '5.4.3', '<' ) ) {
+			$this->log_debug( __METHOD__ . '(): Yes! Older Stripe validation.' );
+
+			return true;
+		}
+
+		$result[ $form_id ] = false;
+
+		return false;
+	}
+
+	/**
+	 * Check if this is a stripe validation request.
+	 *
+	 * @since 1.4
+	 *
+	 * @return bool Returns true if this is a stripe validation request. Returns false otherwise.
+	 */
+	public function is_stripe_validation() {
+		return function_exists( 'gf_stripe' ) && rgpost( 'action' ) === 'gfstripe_validate_form';
+	}
+
+	/**
+	 * Check if this is a preview request, taking into account Stripe's validation request.
+	 *
+	 * @since 1.4
+	 *
+	 * @return bool Returns true if this is a preview request. Returns false otherwise.
+	 */
+	public function is_preview() {
+
+		return parent::is_preview() || ( $this->is_stripe_validation() && rgget( 'preview' ) === '1' );
+	}
+
+	/**
+	 * Add the recaptcha v3 input and value to the draft.
+	 *
+	 * @since 1.2
+	 *
+	 * @param array  $submission_json The json containing the submitted values and the partial entry created from the values.
+	 * @param string $resume_token    The resume token.
+	 * @param array  $form            The form data.
+	 *
+	 * @return string The json string for the submission with the recaptcha v3 input and value added.
+	 */
+	public function add_recaptcha_v3_input_to_draft( $submission_json, $resume_token, $form ) {
+		$submission                                   = json_decode( $submission_json, true );
+		$input_name                                   = $this->field->get_input_name( rgar( $form , 'id' ) );
+		$submission[ 'partial_entry' ][ $input_name ] = rgpost( $input_name );
+
+		return wp_json_encode( $submission );
 	}
 
 }

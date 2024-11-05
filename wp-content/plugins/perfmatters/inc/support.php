@@ -1,6 +1,8 @@
 <?php
-//documentation
+perfmatters_settings_header(__('Support', 'perfmatters'), 'dashicons-editor-help');
 echo '<div class="perfmatters-settings-section">';
+	
+	//documentation
 	echo '<h2>' . __('Documentation', 'perfmatters') . '</h2>';
 	echo '<div class="form-table">';
 		echo '<div style="margin: 1em auto;">' . __('Need help? Check out our in-depth documentation. Every feature has a step-by-step walkthrough.', 'perfmatters') . '</div>';

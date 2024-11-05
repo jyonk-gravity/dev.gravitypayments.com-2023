@@ -122,7 +122,7 @@
                 {
                     $filtred_queries    =   array();
                     
-                    foreach($queries as $key  =>  $data)
+                    foreach( $queries as $key  =>  $data )
                         {
                             if ( 'relation' === $key ) 
                                 {
@@ -137,7 +137,12 @@
                             else if ( is_array( $data ) ) 
                                 {
                                     //this is a nested subquery
-                                    //TO BE IMPLEMENTED
+                                    reset ( $data );
+                                    
+                                    $data   =   current ( $data );
+                                    
+                                    if ( self::tax_is_first_order_clause( $data ) )
+                                        $filtred_queries[]  =   $data;
                                 }
                         }
                     
@@ -164,6 +169,7 @@
                     $terms_map  =   array();    
                     foreach($filtred_queries    as  $fq_key    =>  $meta_item)
                         {
+                            $query_tax_terms    =   array();
                                 
                             //identify the term
                             switch ( strtolower($meta_item['field']) )

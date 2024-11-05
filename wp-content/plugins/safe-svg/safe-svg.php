@@ -3,29 +3,79 @@
  * Plugin Name:       Safe SVG
  * Plugin URI:        https://wordpress.org/plugins/safe-svg/
  * Description:       Enable SVG uploads and sanitize them to stop XML/SVG vulnerabilities in your WordPress website
- * Version:           2.0.3
- * Requires at least: 4.7
- * Requires PHP:      7.0
+ * Version:           2.2.6
+ * Requires at least: 6.4
+ * Requires PHP:      7.4
  * Author:            10up
  * Author URI:        https://10up.com
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * License:           GPL-2.0-or-later
+ * License URI:       https://spdx.org/licenses/GPL-2.0-or-later.html
  * Text Domain:       safe-svg
  * Domain Path:       /languages
  *
  * @package safe-svg
  */
 
+namespace SafeSvg;
+
+use enshrined\svgSanitize\Sanitizer;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'SAFE_SVG_VERSION', '2.0.3' );
+define( 'SAFE_SVG_VERSION', '2.2.6' );
+define( 'SAFE_SVG_PLUGIN_DIR', __DIR__ );
+define( 'SAFE_SVG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-// Try and include our autoloader.
-if ( is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
+/**
+ * Get the minimum version of PHP required by this plugin.
+ *
+ * @since 2.1.1
+ *
+ * @return string Minimum version required.
+ */
+function minimum_php_requirement() {
+	return '7.4';
+}
+
+/**
+ * Whether PHP installation meets the minimum requirements
+ *
+ * @since 2.1.1
+ *
+ * @return bool True if meets minimum requirements, false otherwise.
+ */
+function site_meets_php_requirements() {
+	return version_compare( phpversion(), minimum_php_requirement(), '>=' );
+}
+
+// Try and include our autoloader, ensuring our PHP version is met first.
+if ( ! site_meets_php_requirements() ) {
+	add_action(
+		'admin_notices',
+		function() {
+			?>
+			<div class="notice notice-error">
+				<p>
+					<?php
+					echo wp_kses_post(
+						sprintf(
+							/* translators: %s: Minimum required PHP version */
+							__( 'Safe SVG requires PHP version %s or later. Please upgrade PHP or disable the plugin.', 'safe-svg' ),
+							esc_html( minimum_php_requirement() )
+						)
+					);
+					?>
+				</p>
+			</div>
+			<?php
+		}
+	);
+	return;
+} elseif ( is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
-} elseif ( ! class_exists( 'enshrined\\svgSanitize\\Sanitizer' ) ) {
+} elseif ( ! class_exists( Sanitizer::class ) ) {
 	add_action(
 		'admin_notices',
 		function() {
@@ -49,10 +99,15 @@ if ( is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
 	return;
 }
 
-require 'includes/safe-svg-tags.php';
-require 'includes/safe-svg-attributes.php';
+require __DIR__ . '/includes/safe-svg-tags.php';
+require __DIR__ . '/includes/safe-svg-attributes.php';
+require __DIR__ . '/includes/safe-svg-settings.php';
+require __DIR__ . '/includes/blocks.php';
+require __DIR__ . '/includes/optimizer.php';
 
-if ( ! class_exists( 'safe_svg' ) ) {
+new \SafeSVG\Optimizer();
+
+if ( ! class_exists( 'SafeSvg\\safe_svg' ) ) {
 
 	/**
 	 * Class safe_svg
@@ -70,10 +125,12 @@ if ( ! class_exists( 'safe_svg' ) ) {
 		 * Set up the class
 		 */
 		public function __construct() {
-			$this->sanitizer = new enshrined\svgSanitize\Sanitizer();
+			$this->sanitizer = new Sanitizer();
 			$this->sanitizer->minify( true );
 
+			add_action( 'init', array( $this, 'setup_blocks' ) );
 			add_filter( 'upload_mimes', array( $this, 'allow_svg' ) );
+			add_filter( 'wp_handle_sideload_prefilter', array( $this, 'check_for_svg' ) );
 			add_filter( 'wp_handle_upload_prefilter', array( $this, 'check_for_svg' ) );
 			add_filter( 'wp_check_filetype_and_ext', array( $this, 'fix_mime_type_svg' ), 75, 4 );
 			add_filter( 'wp_prepare_attachment_for_js', array( $this, 'fix_admin_preview' ), 10, 3 );
@@ -84,6 +141,45 @@ if ( ! class_exists( 'safe_svg' ) ) {
 			add_filter( 'wp_generate_attachment_metadata', array( $this, 'skip_svg_regeneration' ), 10, 2 );
 			add_filter( 'wp_get_attachment_metadata', array( $this, 'metadata_error_fix' ), 10, 2 );
 			add_filter( 'wp_calculate_image_srcset_meta', array( $this, 'disable_srcset' ), 10, 4 );
+
+			new safe_svg_settings();
+		}
+
+		/**
+		 * Custom function to check if user can upload svg.
+		 *
+		 * Use core caps if setting hasn't every been updated.
+		 *
+		 * @return bool
+		 */
+		public function current_user_can_upload_svg() {
+			$upload_roles = get_option( 'safe_svg_upload_roles', [] );
+			$can_upload   = false;
+
+			if ( empty( $upload_roles ) ) {
+				// Fallback to upload_files check for backwards compatibility.
+				$can_upload = current_user_can( 'upload_files' );
+			} else {
+				// Use our custom capability if some upload roles are set.
+				$can_upload = current_user_can( 'safe_svg_upload_svg' );
+			}
+
+			/**
+			 * Determine if the current user can upload an svg.
+			 *
+			 * @param bool $can_upload Can the current user upload an svg?
+			 *
+			 * @return bool
+			 */
+			return (bool) apply_filters( 'safe_svg_current_user_can_upload', $can_upload );
+		}
+
+		/**
+		 * Setup the blocks.
+		 */
+		public function setup_blocks() {
+			// Setup blocks.
+			Blocks\setup();
 		}
 
 		/**
@@ -94,8 +190,10 @@ if ( ! class_exists( 'safe_svg' ) ) {
 		 * @return mixed
 		 */
 		public function allow_svg( $mimes ) {
-			$mimes['svg']  = 'image/svg+xml';
-			$mimes['svgz'] = 'image/svg+xml';
+			if ( $this->current_user_can_upload_svg() ) {
+				$mimes['svg']  = 'image/svg+xml';
+				$mimes['svgz'] = 'image/svg+xml';
+			}
 
 			return $mimes;
 		}
@@ -148,6 +246,15 @@ if ( ! class_exists( 'safe_svg' ) ) {
 			$type        = ! empty( $wp_filetype['type'] ) ? $wp_filetype['type'] : '';
 
 			if ( 'image/svg+xml' === $type ) {
+				if ( ! $this->current_user_can_upload_svg() ) {
+					$file['error'] = __(
+						'Sorry, you are not allowed to upload SVG files.',
+						'safe-svg'
+					);
+
+					return $file;
+				}
+
 				if ( ! $this->sanitize( $file['tmp_name'] ) ) {
 					$file['error'] = __(
 						"Sorry, this file couldn't be sanitized so for security reasons wasn't uploaded",
@@ -183,8 +290,8 @@ if ( ! class_exists( 'safe_svg' ) ) {
 			/**
 			 * Load extra filters to allow devs to access the safe tags and attrs by themselves.
 			 */
-			$this->sanitizer->setAllowedTags( new safe_svg_tags() );
-			$this->sanitizer->setAllowedAttrs( new safe_svg_attributes() );
+			$this->sanitizer->setAllowedTags( new SafeSvgTags\safe_svg_tags() );
+			$this->sanitizer->setAllowedAttrs( new SafeSvgAttr\safe_svg_attributes() );
 
 			$clean = $this->sanitizer->sanitize( $dirty );
 
@@ -233,7 +340,7 @@ if ( ! class_exists( 'safe_svg' ) ) {
 		public function fix_admin_preview( $response, $attachment, $meta ) {
 
 			if ( 'image/svg+xml' === $response['mime'] ) {
-				$dimensions = $this->svg_dimensions( get_attached_file( $attachment->ID ) );
+				$dimensions = $this->svg_dimensions( $attachment->ID );
 
 				if ( $dimensions ) {
 					$response = array_merge( $response, $dimensions );
@@ -289,7 +396,7 @@ if ( ! class_exists( 'safe_svg' ) ) {
 		 */
 		public function one_pixel_fix( $image, $attachment_id, $size, $icon ) {
 			if ( get_post_mime_type( $attachment_id ) === 'image/svg+xml' ) {
-				$dimensions = $this->svg_dimensions( get_attached_file( $attachment_id ) );
+				$dimensions = $this->svg_dimensions( $attachment_id );
 
 				if ( $dimensions ) {
 					$image[1] = $dimensions['width'];
@@ -306,13 +413,13 @@ if ( ! class_exists( 'safe_svg' ) ) {
 		/**
 		 * If the featured image is an SVG we wrap it in an SVG class so we can apply our CSS fix.
 		 *
-		 * @param string $content Admin post thumbnail HTML markup.
-		 * @param int    $post_id Post ID.
-		 * @param int    $thumbnail_id Thumbnail ID.
+		 * @param string   $content Admin post thumbnail HTML markup.
+		 * @param int      $post_id Post ID.
+		 * @param int|null $thumbnail_id Thumbnail attachment ID, or null if there isn't one.
 		 *
 		 * @return string
 		 */
-		public function featured_image_fix( $content, $post_id, $thumbnail_id ) {
+		public function featured_image_fix( $content, $post_id, $thumbnail_id = null ) {
 			$mime = get_post_mime_type( $thumbnail_id );
 
 			if ( 'image/svg+xml' === $mime ) {
@@ -350,7 +457,7 @@ if ( ! class_exists( 'safe_svg' ) ) {
 					$width  = $size[0];
 					$height = $size[1];
 				// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found, Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure
-				} elseif ( 'full' === $size && $dimensions = $this->svg_dimensions( get_attached_file( $id ) ) ) {
+				} elseif ( 'full' === $size && $dimensions = $this->svg_dimensions( $id ) ) {
 					$width  = $dimensions['width'];
 					$height = $dimensions['height'];
 				} else {
@@ -390,7 +497,7 @@ if ( ! class_exists( 'safe_svg' ) ) {
 				$relative_path = str_replace( trailingslashit( $upload_dir['basedir'] ), '', $svg_path );
 				$filename      = basename( $svg_path );
 
-				$dimensions = $this->svg_dimensions( $svg_path );
+				$dimensions = $this->svg_dimensions( $attachment_id );
 
 				if ( ! $dimensions ) {
 					return $metadata;
@@ -465,15 +572,48 @@ if ( ! class_exists( 'safe_svg' ) ) {
 		/**
 		 * Get SVG size from the width/height or viewport.
 		 *
-		 * @param string|false $svg The file path to where the SVG file should be, false otherwise.
+		 * @param integer $attachment_id The attachment ID of the SVG being processed.
 		 *
 		 * @return array|bool
 		 */
-		protected function svg_dimensions( $svg ) {
-			$svg    = @simplexml_load_file( $svg ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			$width  = 0;
-			$height = 0;
-			if ( $svg ) {
+		protected function svg_dimensions( $attachment_id ) {
+			/**
+			 * Calculate SVG dimensions and orientation.
+			 *
+			 * This filter allows you to implement your own sizing. By returning a non-false
+			 * value, it will short-circuit this function and return your set value.
+			 *
+			 * @param boolean Default value of the filter.
+			 * @param integer $attachment_id The attachment ID of the SVG being processed.
+			 *
+			 * @return array|false An array of SVG dimensions and orientation or false.
+			 */
+			$short_circuit = apply_filters( 'safe_svg_pre_dimensions', false, $attachment_id );
+
+			if ( false !== $short_circuit ) {
+				return $short_circuit;
+			}
+
+			if ( ! function_exists( 'simplexml_load_file' ) ) {
+				return false;
+			}
+
+			$svg      = get_attached_file( $attachment_id );
+			$metadata = wp_get_attachment_metadata( $attachment_id );
+			$width    = 0;
+			$height   = 0;
+
+			if ( $svg && ! empty( $metadata['width'] ) && ! empty( $metadata['height'] ) ) {
+				$width  = floatval( $metadata['width'] );
+				$height = floatval( $metadata['height'] );
+			} elseif ( $svg ) {
+				$svg = @simplexml_load_file( $svg ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+
+				// Ensure the svg could be loaded.
+				if ( ! $svg ) {
+					return false;
+				}
+
 				$attributes = $svg->attributes();
 
 				if ( isset( $attributes->viewBox ) ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
@@ -498,10 +638,10 @@ if ( ! class_exists( 'safe_svg' ) ) {
 				 *
 				 * @hook safe_svg_use_width_height_attributes
 				 *
-				 * @param {bool} $false If the width & height attributes should be used first. Default false.
-				 * @param {string} $svg The file path to the SVG.
+				 * @param bool   $use_width_height_attributes If the width & height attributes should be used first. Default false.
+				 * @param string $svg                         The file path to the SVG.
 				 *
-				 * @return {bool} If we should use the width & height attributes first or not.
+				 * @return bool If we should use the width & height attributes first or not.
 				 */
 				$use_width_height = (bool) apply_filters( 'safe_svg_use_width_height_attributes', false, $svg );
 
@@ -528,18 +668,28 @@ if ( ! class_exists( 'safe_svg' ) ) {
 				}
 			}
 
-			return array(
+			$dimensions = array(
 				'width'       => $width,
 				'height'      => $height,
 				'orientation' => ( $width > $height ) ? 'landscape' : 'portrait',
 			);
+
+			/**
+			 * Calculate SVG dimensions and orientation.
+			 *
+			 * @param array  $dimensions An array containing width, height, and orientation.
+			 * @param string $svg        The file path to the SVG.
+			 *
+			 * @return array An array of SVG dimensions and orientation.
+			 */
+			return apply_filters( 'safe_svg_dimensions', $dimensions, $svg );
 		}
 
 		/**
 		 * Disable the creation of srcset on SVG images.
 		 *
 		 * @param array  $image_meta The image meta data.
-		 * @param int[]  $size_array    {
+		 * @param int[]  $size_array {
 		 *     An array of requested width and height values.
 		 *
 		 *     @type int $0 The width in pixels.
@@ -549,7 +699,7 @@ if ( ! class_exists( 'safe_svg' ) ) {
 		 * @param int    $attachment_id The image attachment ID.
 		 */
 		public function disable_srcset( $image_meta, $size_array, $image_src, $attachment_id ) {
-			if ( $attachment_id && 'image/svg+xml' === get_post_mime_type( $attachment_id ) ) {
+			if ( $attachment_id && 'image/svg+xml' === get_post_mime_type( $attachment_id ) && is_array( $image_meta ) ) {
 				$image_meta['sizes'] = array();
 			}
 
@@ -582,4 +732,4 @@ if ( ! class_exists( 'safe_svg' ) ) {
 	}
 }
 
-$safe_svg = new safe_svg();
+new safe_svg();

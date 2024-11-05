@@ -41,7 +41,7 @@
             {
                 "param": "post",
                 "operator": "==",
-                "value": "1451"
+                "value": "1445"
             }
         ]
     ],
@@ -65,5 +65,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1677548262
+    "modified": 1695930437
 }

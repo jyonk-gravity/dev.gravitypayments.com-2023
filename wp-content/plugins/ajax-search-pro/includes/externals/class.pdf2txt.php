@@ -77,7 +77,7 @@ if (!class_exists("ASP_PDF2Text")) {
 
         function decodePDF() {
             // WordPress specific
-            $infile = file_exists($this->filename) ? FileManager::_o()->read($this->filename) : '';
+            $infile = file_exists($this->filename) ? FileManager::instance()->read($this->filename) : '';
 
             // Read the data from pdf file
             if (empty($infile))

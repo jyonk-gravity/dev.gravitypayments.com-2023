@@ -6,6 +6,7 @@ use EnableMediaReplace\Notices\NoticeController as Notices;
 use EnableMediaReplace\Externals\Elementor as Elementor;
 use EnableMediaReplace\Externals\WpBakery as WpBakery;
 use EnableMediaReplace\Externals\SiteOrigin as SiteOrigin;
+use EnableMediaReplace\Externals\WPOffload as WPOffload;
 
 
 class Externals
@@ -28,6 +29,7 @@ class Externals
       $this->loadElementor();
       $this->loadBakery(); // in case of urlencoded issues, this class should be used probably.
 			$this->loadSiteOrigins();
+	   $this->loadWpOffload();
   }
 
   protected function check() //  check if any of the options should be disabled due to conflicts
@@ -35,7 +37,8 @@ class Externals
     /*if (class_exists('FLBuilder'))
     {
       $this->replaceSearchType = false;
-      $this->messages[] = __('Replace and Search feature is not compatible with Beaver Builder.', 'enable-media-replace');
+      $this->messages[]				return true;
+ = __('Replace and Search feature is not compatible with Beaver Builder.', 'enable-media-replace');
     } */
 }
 
@@ -76,6 +79,11 @@ class Externals
 	public function loadSiteOrigins()
 	{
 		 SiteOrigin::getInstance();
+	}
+
+	public function loadWPOffload()
+	{
+		 WPOffload::getInstance();
 	}
 
 } // class

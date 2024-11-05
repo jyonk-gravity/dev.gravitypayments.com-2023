@@ -75,8 +75,7 @@ class GF_Block_Form extends GF_Block {
 	// # SCRIPT / STYLES -----------------------------------------------------------------------------------------------
 	public function register_block_assets() {
 		parent::register_block_assets();
-
-		if ( function_exists( 'wp_enqueue_block_style' ) ) {
+		if ( function_exists( 'wp_enqueue_block_style' ) && is_admin() ) {
 			wp_enqueue_block_style( $this->type, array( 'handle' => 'gravity_forms_theme_reset' ) );
 			wp_enqueue_block_style( $this->type, array( 'handle' => 'gravity_forms_theme_foundation' ) );
 			wp_enqueue_block_style( $this->type, array( 'handle' => 'gravity_forms_theme_framework' ) );
@@ -133,8 +132,17 @@ class GF_Block_Form extends GF_Block {
 		// Prepare styling dependencies.
 		$deps = array( 'wp-edit-blocks' );
 
+		/**
+		 * Allows users to disable all CSS files from being loaded on the Front End.
+		 *
+		 * @since 2.8
+		 *
+		 * @param boolean Whether to disable css.
+		 */
+		$disable_css = apply_filters( 'gform_disable_css', get_option( 'rg_gforms_disable_css' ) );
+
 		// Add Gravity Forms styling if CSS is enabled.
-		if ( '1' !== get_option( 'rg_gforms_disable_css', false ) ) {
+		if ( ! $disable_css ) {
 			$deps = array_merge( $deps, array( 'gform_basic', 'gforms_formsmain_css', 'gforms_ready_class_css', 'gforms_browsers_css', 'gform_theme' ) );
 
 			/**
@@ -151,14 +159,14 @@ class GF_Block_Form extends GF_Block {
 			}
 		}
 
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+		$dev_min = defined( 'GF_SCRIPT_DEBUG' ) && GF_SCRIPT_DEBUG ? '' : '.min';
 
 		return array(
 			array(
 				'handle'  => $this->style_handle,
-				'src'     => GFCommon::get_base_url() . "/assets/css/dist/blocks{$min}.css",
+				'src'     => GFCommon::get_base_url() . "/assets/css/dist/blocks{$dev_min}.css",
 				'deps'    => $deps,
-				'version' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? filemtime( GFCommon::get_base_path() . "/assets/css/dist/blocks{$min}.css" ) : GFForms::$version,
+				'version' => defined( 'GF_SCRIPT_DEBUG' ) && GF_SCRIPT_DEBUG ? filemtime( GFCommon::get_base_path() . "/assets/css/dist/blocks{$dev_min}.css" ) : GFForms::$version,
 			),
 		);
 
@@ -177,17 +185,7 @@ class GF_Block_Form extends GF_Block {
 	 * @return string
 	 */
 	public function render_block( $attributes = array() ) {
-
-		add_filter( 'gform_form_block_attribute_values', function( $attr ) use ( $attributes ) {
-			$form_id = rgar( $attributes, 'formId', 0 );
-
-			if ( ! array_key_exists( $form_id, $attr ) ) {
-				$attr[ $form_id ] = array();
-			}
-
-			$attr[ $form_id ][] = $attributes;
-			return $attr;
-		} );
+		GFForms::get_service_container()->get( 'block_attributes' )->store( $attributes );
 
 		// Prepare variables.
 		$form_id      = rgar( $attributes, 'formId' ) ? $attributes['formId'] : false;
@@ -228,16 +226,17 @@ class GF_Block_Form extends GF_Block {
 		}
 
 		// Encode field values.
-		$field_values = htmlspecialchars( $field_values );
-		$field_values = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $field_values );
+		$field_values = htmlspecialchars_decode( $field_values );
+		$field_values = str_replace( array( '&#038;', '&#091;', '&#093;' ), array( '&', '[', ']' ), $field_values );
+		parse_str( $field_values, $field_value_array ); //parsing query string like string for field values and placing them into an associative array
+		$field_values = stripslashes_deep( $field_value_array );
 
-		// If no field values are set, set field values to a empty string
-		parse_str( $field_values, $field_value_array );
-		if ( empty( $field_value_array ) ) {
+		// If no field values are set, set field values to an empty string
+		if ( empty( $field_values ) ) {
 			$field_values = '';
 		}
 
-		return sprintf( '[gravityforms id="%d" title="%s" description="%s" ajax="%s" tabindex="%d" field_values="%s"]', $form_id, ( $title ? 'true' : 'false' ), ( $description ? 'true' : 'false' ), ( $ajax ? 'true' : 'false' ), $tabindex, $field_values );
+		return gravity_form( $form_id, $title, $description, false, $field_values, $ajax, $tabindex, false );
 
 	}
 

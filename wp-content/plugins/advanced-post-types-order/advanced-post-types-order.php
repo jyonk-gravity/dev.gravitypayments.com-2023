@@ -1,13 +1,14 @@
 <?php
-/*
-Plugin Name: Advanced Post Types Order
-Plugin URI: http://www.nsp-code.com
-Description: Order Post Types Objects using a Drag and Drop Sortable javascript capability
-Author: Nsp Code
-Author URI: http://www.nsp-code.com 
-Version: 4.7
-Requires PHP: 7.3
-Requires at least: 4.1
+/**
+* Plugin Name: Advanced Post Types Order
+* Plugin URI: http://www.nsp-code.com
+* Description: Order Post Types Objects using a Drag and Drop Sortable javascript capability
+* Author: Nsp Code
+* Author URI: http://www.nsp-code.com 
+* Version: 5.5.2
+* Requires PHP: 5.2
+* Requires at least: 4.1
+* PHP tested up to: 8.2.4
 */
 
     
@@ -15,7 +16,7 @@ Requires at least: 4.1
     define('APTO_URL_PROTOCOL',     plugins_url('', __FILE__));
     define('APTO_URL',              str_replace(array('https:', 'http:'), "", APTO_URL_PROTOCOL));
 
-    define('APTO_VERSION',          '4.7');
+    define('APTO_VERSION',          '5.5.2');
     define('APTO_DB_VERSION',       '1.1');
     define('APTO_APP_API_URL',      'https://api.nsp-code.com/index.php'); 
     
@@ -29,7 +30,19 @@ Requires at least: 4.1
     add_action( 'plugins_loaded', 'apto_load_textdomain'); 
     function apto_load_textdomain() 
         {
-            load_plugin_textdomain('apto', FALSE, dirname( plugin_basename( __FILE__ ) ) . '/lang');
+            $locale             =   get_locale();
+            $plugin_textdomain  =   'apto';
+
+            // Check if the specific translation file exists
+            if (file_exists( APTO_PATH . "/languages/$plugin_textdomain-$locale.mo")) {
+                load_textdomain( $plugin_textdomain, APTO_PATH . "/languages/$plugin_textdomain-$locale.mo" );
+            } else {
+                $general_locale = substr($locale, 0, 2);
+                $general_mofile = APTO_PATH . "/languages/$plugin_textdomain-$general_locale.mo";
+                
+                if (file_exists($general_mofile))
+                    load_textdomain( $plugin_textdomain, $general_mofile );
+            }
         }
 
     
@@ -47,7 +60,7 @@ Requires at least: 4.1
 
     include_once(APTO_PATH . '/extends/extends.php');
     
-    include_once(APTO_PATH . '/include/compatability.php');
+    include_once(APTO_PATH . '/include/apto_compatability.php');
 
     register_deactivation_hook(__FILE__, 'APTO_deactivated');
     register_activation_hook(__FILE__, 'APTO_activated');
@@ -166,7 +179,7 @@ Requires at least: 4.1
                 }
         }
             
-    add_action('init', 'APTO_init', 1 );
+    add_action('init', 'APTO_init', -1 );
     function APTO_init()
         {
             global $APTO;   
@@ -176,7 +189,6 @@ Requires at least: 4.1
                     add_filter('pre_get_posts',         array($APTO, 'pre_get_posts'));
                     add_filter('posts_orderby',         array($APTO, 'posts_orderby'), 99, 2);
                         
-                    add_filter('posts_orderby_request', array($APTO->functions, 'wp_ecommerce_orderby'), 99, 2);
                     add_filter('posts_groupby',         array($APTO, 'APTO_posts_groupby'), 99, 2);
                     add_filter('posts_distinct',        array($APTO, 'APTO_posts_distinct'), 99, 2);
                 }

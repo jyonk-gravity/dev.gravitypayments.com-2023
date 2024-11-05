@@ -13,6 +13,7 @@ use GFCommon;
 use GFAddOn;
 use GFAPI;
 use GFFormsModel;
+use GFCache;
 
 class Form_Settings {
 
@@ -22,6 +23,7 @@ class Form_Settings {
 	 * @var GF_Google_Analytics
 	 */
 	private $addon;
+
 	/**
 	 * Defines the capability needed to access the Add-On form settings page.
 	 *
@@ -82,19 +84,22 @@ class Form_Settings {
 		// Set up the data we need to display the tabs.
 		$tab_attributes = $this->get_tab_attributes();
 
-		$feed_settings_params = http_build_query( array_merge( $_GET, array( 'settingstype' => 'feed' ) ) );
-		$form_settings_params = http_build_query( array_merge( $_GET, array( 'settingstype' => 'form' ) ) );
+		// Remove the feed id from the form settings url to ensure correct saving.
+		$form_settings_params = $_GET;
+		unset( $form_settings_params['fid'] );
+		$feed_settings_url = http_build_query( array_merge( $_GET, array( 'settingstype' => 'feed' ) ) );
+		$form_settings_url = http_build_query( array_merge( $form_settings_params, array( 'settingstype' => 'form' ) ) );
 
 		// Display the navigation tabs.
 		echo '<nav class="gform-settings-tabs__navigation" role="tablist" style="margin-bottom:.875rem">
-			<a role="tab" href="' . admin_url( 'admin.php?' . esc_html( $feed_settings_params ) ) . '" ' . esc_attr( $tab_attributes['feed_link_attrs'] ) . '>' . esc_html__( 'Feed Settings', 'gravityformsgoogleanalytics' ) . '</a>
-			<a role="tab" href="' . admin_url( 'admin.php?' . esc_html( $form_settings_params ) ) . '" ' . esc_attr( $tab_attributes['form_link_attrs'] ) . '>' . esc_html__( 'Form Settings', 'gravityformsgoogleanalytics' ) . '</a>
+			<a role="tab" href="' . admin_url( 'admin.php?' . esc_html( $feed_settings_url ) ) . '" ' . esc_attr( $tab_attributes['feed_link_attrs'] ) . '>' . esc_html__( 'Feed Settings', 'gravityformsgoogleanalytics' ) . '</a>
+			<a role="tab" href="' . admin_url( 'admin.php?' . esc_html( $form_settings_url ) ) . '" ' . esc_attr( $tab_attributes['form_link_attrs'] ) . '>' . esc_html__( 'Form Settings', 'gravityformsgoogleanalytics' ) . '</a>
 		</nav>';
 
 		// Display the tab contents.
 		if ( 'form_settings' == $tab_attributes['current_tab'] ) {
 
-			if ( ! $this->addon->initialize_api() ) {
+			if ( ! $this->addon->can_create_feed() ) {
 				printf( '<div>%s</div>', $this->addon->configure_addon_message() );
 				return;
 			}
@@ -108,6 +113,27 @@ class Form_Settings {
 					'initial_values' => GF_Google_Analytics::get_instance()->get_form_settings( $form ),
 					'save_callback'  => function( $values ) use ( $form ) {
 						$this->save_form_settings( $form, $values );
+					},
+					'before_fields'  => function() use ( $form ) {
+						?>
+
+						<script type="text/javascript">
+
+							gform.addFilter( 'gform_merge_tags', 'addPaginationMergeTags' );
+
+							function addPaginationMergeTags( mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option ) {
+								mergeTags[ 'other' ].tags.push( {
+									tag: '{source_page_number}',
+									label: <?php echo json_encode( __( 'Source Page Number', 'gravityforms' ) ) ?> } );
+								mergeTags[ 'other' ].tags.push( {
+									tag: '{current_page_number}',
+									label: <?php echo json_encode( __( 'Current Page Number', 'gravityforms' ) ) ?> } );
+
+								return mergeTags;
+							}
+						</script>
+						<?php
+
 					},
 					'after_fields'   => function() use ( $form ) {
 
@@ -175,21 +201,8 @@ class Form_Settings {
 				),
 			),
 			array(
-				'title'  => esc_html__( 'Feed Goal', 'gravityformsgoogleanalytics' ),
-				'fields' => $this->get_goal_select_fields( $form, 'feed' ),
-			),
-			array(
-				'title'  => __( 'Advanced', 'gravityformsgoogleanalytics' ),
-				'fields' => array(
-					array(
-						'label'         => esc_html__( 'Submission Event Value', 'gravityformsgoogleanalytics' ),
-						'type'          => 'text',
-						'name'          => 'gaeventvalue',
-						'class'         => 'medium merge-tag-support mt-position-right',
-						'tooltip'       => sprintf( '<strong>%s</strong>%s', esc_html__( 'Submission Event Value', 'gravityformsgoogleanalytics' ), __( 'Enter your Google Analytics event value for form submission. Default is 0. Total fields may be used here, but Google Analytics expects integers, so the value used will be rounded (e.g., 29.50 will be rounded to 30).', 'gravityformsgoogleanalytics' ) ),
-						'default_value' => 0,
-					),
-				),
+				'title'  => esc_html__( 'Event Parameters', 'gravityformsgoogleanalytics' ),
+				'fields' => $this->get_ga4_event_fields( $form, 'feed' ),
 			),
 			array(
 				'title'  => __( 'Conditional Logic Settings', 'gravityformsgoogleanalytics' ),
@@ -206,185 +219,276 @@ class Form_Settings {
 	}
 
 	/**
-	 * Check if the selected goal exists, and if not, clear the relevant settings.
+	 * Get event parameter fieldmap field.
 	 *
-	 * @since 1.0
-	 *
-	 * @param string $type Whether we're checking feed or pagination fields.
-	 *
-	 * @return bool whether or not the goal exists.
-	 */
-	private function maybe_delete_previous_goal( $type ) {
-		$goals = $this->addon->get_goals();
-
-		// If we're doing manual config, no need to maybe erase prior goal.
-		if ( $this->addon->manual_configuration() ) {
-			return;
-		}
-		if ( $type === 'feed' ) {
-			$active_feed = $this->addon->get_current_feed();
-			if ( ! isset( $active_feed['meta'] ) ) {
-				return false;
-			}
-			if ( $goals ) {
-				foreach ( $goals as $goal ) {
-					if ( rgar( $goal, 'name' ) === rgar( $active_feed['meta'], 'gaeventgoal' ) ) {
-						return true;
-					}
-				}
-			}
-			if ( $active_feed['id'] ) {
-				$this->addon->update_feed_meta( $active_feed['id'], $active_feed['meta'] );
-			}
-			return false;
-		}
-
-		$current_settings = $this->addon->get_form_settings( $this->addon->get_current_form() );
-		if ( $current_settings && rgar( $current_settings, 'pagination_gaeventgoal' ) ) {
-			$selected_goal = rgar( $current_settings, 'pagination_gaeventgoal' );
-			if ( $goals ) {
-				foreach ( $goals as $goal ) {
-					if ( rgar( $goal, 'name' ) === $selected_goal ) {
-						return true;
-					}
-				}
-			}
-			$current_settings = array();
-			$this->addon->save_form_settings( $this->addon->get_current_form(), $current_settings );
-			return false;
-		}
-	}
-
-	public function manual_goal_config_fields( $form, $type ) {
-		if ( $type !== 'pagination' && $type !== 'feed' ) {
-			return;
-		}
-
-		$this->maybe_delete_previous_goal( $type );
-
-		$prefix = ( $type === 'pagination' ) ? 'pagination_' : '';
-		return array(
-			array(
-				'type'    => 'select_goal',
-				'name'    => 'select_goal',
-				'label'   => __( 'Goal', 'gravityformsgoogleanalytics' ),
-				'tooltip' => sprintf( '<strong>%s</strong>%s', esc_html__( 'Goal Selection', 'gravityformsgoogleanalytics' ), esc_html__( 'Select an existing Google Analytics goal or create a new one.', 'gravityformsgoogleanalytics' ) ),
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventgoalid',
-				'default_value' => 0,
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventgoal',
-				'default_value' => __( 'Submission:', 'gravityformsgoogleanalytics' ) . ' ' . $form['title'],
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventcategory',
-				'default_value' => '',
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventaction',
-				'default_value' => '',
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventlabel',
-				'default_value' => '',
-			),
-			array(
-				'type'    => 'event_category',
-				'name'    => 'feed_event_category',
-				'label'   => __( 'Event Category', 'gravityformsgoogleanalytics' ),
-				'tooltip' => sprintf( '<strong>%s</strong>%s', esc_html__( 'Event Category', 'gravityformsgoogleanalytics' ), esc_html__( 'This will be the event category used for Google Analytics.', 'gravityformsgoogleanalytics' ) ),
-			),
-			array(
-				'type'    => 'event_action',
-				'name'    => 'feed_event_action',
-				'label'   => __( 'Event Action', 'gravityformsgoogleanalytics' ),
-				'tooltip' => sprintf( '<strong>%s</strong>%s', esc_html__( 'Event Action', 'gravityformsgoogleanalytics' ), esc_html__( 'This will be the event action used for Google Analytics.', 'gravityformsgoogleanalytics' ) ),
-			),
-			array(
-				'type'    => 'event_label',
-				'name'    => 'feed_event_label',
-				'label'   => __( 'Event Label', 'gravityformsgoogleanalytics' ),
-				'tooltip' => sprintf( '<strong>%s</strong>%s', esc_html__( 'Event Label', 'gravityformsgoogleanalytics' ), esc_html__( 'This will be the event label used for Google Analytics.', 'gravityformsgoogleanalytics' ) ),
-			),
-		);
-	}
-
-	/**
-	 * Get the fields that are used to select a goal.
-	 *
-	 * @since 1.0
+	 * @since 2.0
 	 *
 	 * @param array  $form The current form object.
 	 * @param string $type Whether we're rendering feed or pagination fields.
 	 *
 	 * @return array Array of fields.
 	 */
-	public function get_goal_select_fields( $form, $type ) {
+	public function get_ga4_event_fields( $form, $type ) {
 		if ( $type !== 'pagination' && $type !== 'feed' ) {
 			return;
 		}
+		$options = $this->addon->get_options();
 
-		$this->maybe_delete_previous_goal( $type );
+		$mode   = rgar( $options, 'mode' );
+		$prefix = ( $type === 'pagination' ) ? 'pagination_' : 'submission_';
 
-		$prefix = ( $type === 'pagination' ) ? 'pagination_' : '';
-		return array(
-			array(
-				'type'    => 'select_goal',
-				'name'    => 'select_goal',
-				'label'   => __( 'Goal', 'gravityformsgoogleanalytics' ),
-				'tooltip' => sprintf( '<strong>%s</strong>%s', esc_html__( 'Goal Selection', 'gravityformsgoogleanalytics' ), esc_html__( 'Select an existing Google Analytics goal or create a new one.', 'gravityformsgoogleanalytics' ) ),
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventgoalid',
-				'default_value' => 0,
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventgoal',
-				'default_value' => __( 'Submission:', 'gravityformsgoogleanalytics' ) . ' ' . $form['title'],
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventcategory',
-				'default_value' => '',
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventaction',
-				'default_value' => '',
-			),
-			array(
-				'type'          => 'hidden',
-				'name'          => $prefix . 'gaeventlabel',
-				'default_value' => '',
-			),
-			array(
-				'type'    => 'event_category',
-				'name'    => 'feed_event_category',
-				'label'   => __( 'Event Category', 'gravityformsgoogleanalytics' ),
-				'tooltip' => sprintf( '<strong>%s</strong>%s', esc_html__( 'Event Category', 'gravityformsgoogleanalytics' ), esc_html__( 'This will be the event category used for Google Analytics.', 'gravityformsgoogleanalytics' ) ),
-			),
-			array(
-				'type'    => 'event_action',
-				'name'    => 'feed_event_action',
-				'label'   => __( 'Event Action', 'gravityformsgoogleanalytics' ),
-				'tooltip' => sprintf( '<strong>%s</strong>%s', esc_html__( 'Event Action', 'gravityformsgoogleanalytics' ), esc_html__( 'This will be the event action used for Google Analytics.', 'gravityformsgoogleanalytics' ) ),
-			),
-			array(
-				'type'    => 'event_label',
-				'name'    => 'feed_event_label',
-				'label'   => __( 'Event Label', 'gravityformsgoogleanalytics' ),
-				'tooltip' => sprintf( '<strong>%s</strong>%s', esc_html__( 'Event Label', 'gravityformsgoogleanalytics' ), esc_html__( 'This will be the event label used for Google Analytics.', 'gravityformsgoogleanalytics' ) ),
-			),
-		);
+		if ( $mode !== 'gtm' ) {
+			return array(
+				array(
+					'name'                => $prefix . 'parameters',
+					'description'         => esc_html__( 'Parameter names must be 40 characters or fewer and are limited to alphanumeric characters and underscores. They cannot begin or end with an underscore. Values are limited to 100 characters or fewer.', 'gravityformsgoogleanalytics' ),
+					'label'               => esc_html__( 'Parameters', 'gravityformsgoogleanalytics' ),
+					'type'                => 'generic_map',
+					'tooltip'             => '<h6>' . esc_html__( 'Submission Parameters', 'gravityformsgoogleanalytics' ) . '</h6>' . esc_html__( 'Set the parameters that will be sent to Google Analytics for this feed.', 'gravityformsgoogleanalytics' ),
+					'limit'               => 25,
+					'key_field'           => array(
+						'title'        => esc_html__( 'Parameter Name', 'gravityformsgoogleanalytics' ),
+						'allow_custom' => true,
+						'placeholder'  => esc_html__( 'Enter a parameter name', 'gravityformsgoogleanalytics' ),
+					),
+					'value_field'         => array(
+						'title'        => esc_html__( 'Parameter Value', 'gravityformsgoogleanalytics' ),
+						'allow_custom' => true,
+						'placeholder'  => esc_html__( 'Enter a value', 'gravityformsgoogleanalytics' ),
+					),
+					'validation_callback' => array( $this, 'custom_parameter_validation_callback' ),
+				),
+			);
+		} else {
+
+			$trigger_choices  = $this->get_tag_manager_trigger_choices( $options );
+			$variable_choices = $this->get_tag_manager_variable_choices( $options );
+
+			if ( empty( $trigger_choices ) ) {
+				$trigger_setting = array(
+					'name'     => $prefix . 'trigger',
+					'type'     => 'text',
+					'label'    => esc_html__( 'Tag Manager Trigger', 'gravityformsgoogleanalytics' ),
+					'tooltip'  => '<h6>' . esc_html__( 'Tag Manager Trigger', 'gravityformsgoogleanalytics' ) . '</h6>' . esc_html__( 'Set the trigger that will be sent to tag manager when this feed is processed.', 'gravityformsgoogleanalytics' ),
+					'required' => true,
+				);
+			} else {
+				$trigger_setting = array(
+					'name'     => $prefix . 'trigger',
+					'type'     => 'select_custom',
+					'label'    => esc_html__( 'Tag Manager Trigger', 'gravityformsgoogleanalytics' ),
+					'choices'  => $trigger_choices,
+					'tooltip'  => '<h6>' . esc_html__( 'Tag Manager Trigger', 'gravityformsgoogleanalytics' ) . '</h6>' . esc_html__( 'Set the trigger that will be sent to tag manager when this feed is processed.', 'gravityformsgoogleanalytics' ),
+					'required' => true,
+				);
+			}
+
+			return array(
+				$trigger_setting,
+				array(
+					'name'                => $prefix . 'parameters',
+					'label'               => esc_html__( 'Parameters', 'gravityformsgoogleanalytics' ),
+					'type'                => 'generic_map',
+					'tooltip'             => '<h6>' . esc_html__( 'Submission Parameters', 'gravityformsgoogleanalytics' ) . '</h6>' . esc_html__( 'Set the parameters that will be sent to Google Analytics for this feed.', 'gravityformsgoogleanalytics' ),
+					'limit'               => 25,
+					'key_field'           => array(
+						'title'        => esc_html__( 'Parameter Name', 'gravityformsgoogleanalytics' ),
+						'allow_custom' => true,
+						'placeholder'  => esc_html__( 'Enter a parameter name', 'gravityformsgoogleanalytics' ),
+						'choices'      => $variable_choices,
+					),
+					'value_field'         => array(
+						'title'        => esc_html__( 'Parameter Value', 'gravityformsgoogleanalytics' ),
+						'allow_custom' => true,
+						'placeholder'  => esc_html__( 'Enter a value', 'gravityformsgoogleanalytics' ),
+					),
+				),
+			);
+		}
+	}
+
+	/**
+	 * Callback for validation the custom parameters.
+	 *
+	 * @since 2.0
+	 *
+	 * @param object $field      The field being validated.
+	 * @param array  $parameters The parameters being validated.
+	 *
+	 * @return void
+	 */
+	public function custom_parameter_validation_callback( $field, $parameters ) {
+
+		foreach ( $parameters as $parameter ) {
+			$key = 'gf_custom' === $parameter['key'] ? $parameter['custom_key'] : $parameter['key'];
+
+			if ( 'gf_custom' === $parameter['value'] ) {
+				$value = $parameter['custom_value'];
+			} else {
+				$value = $parameter['value'];
+			}
+
+			$field_error = $this->validate_parameter( $key, $value );
+
+			if ( $field_error ) {
+				$this->addon->set_field_error( $field, $field_error );
+			}
+		}
+
+	}
+
+	/**
+	 * Parameter validation
+	 *
+	 * @since 2.0
+	 *
+	 * @param string $key   The parameter key.
+	 * @param string $value The parameter value.
+	 *
+	 * @return string The validation error.
+	 */
+	public function validate_parameter( $key, $value ) {
+		if ( ! is_string( $key ) || ! is_string( $value ) ) {
+			return esc_html__( 'Parameter names and values must be strings.', 'gravityformsgoogleanalytics' );
+		}
+
+		if ( mb_strlen( $key ) > 40 ) {
+			return esc_html__( 'Parameter names must be 40 characters or less.', 'gravityformsgoogleanalytics' );
+		}
+
+		if ( mb_strlen( $value ) > 100 ) {
+			return esc_html__( 'Parameter values must be 100 characters or less.', 'gravityformsgoogleanalytics' );
+		}
+
+		if ( ! preg_match( '/^(?!_)[\w]*(?<!_)$/u', $key ) ) {
+			return esc_html__( 'Parameter names cannot begin or end with an underscore, and must contain only letters, numbers, and underscores.', 'gravityformsgoogleanalytics' );
+		}
+	}
+
+	/**
+	 * Get tag manager trigger choices.
+	 *
+	 * @since 2.0
+	 *
+	 * @param array $options The add-on's options.
+	 *
+	 * @return array Array of trigger choices.
+	 */
+	private function get_tag_manager_trigger_choices( $options ) {
+		if ( rgar( $options, 'is_manual' ) === true ) {
+			return array();
+		}
+		$trigger_choices = \GFCache::get( 'tag_manager_trigger_choices' );
+		if ( $trigger_choices ) {
+			return $trigger_choices;
+		}
+
+		$ga4_account = rgar( $options, 'ga4_account' );
+		$api_path    = rgar( $ga4_account, 'gtm_api_path' );
+		$workspace   = rgar( $ga4_account, 'gtm_workspace_id' );
+		$triggers    = rgar( $this->addon->get_tag_manager_triggers( array(), $api_path, $workspace ), 'trigger' );
+
+		if ( is_wp_error( $triggers ) || empty( $triggers ) || ! is_array( $triggers ) ) {
+			return false;
+		}
+
+		$trigger_choices = array();
+		foreach ( $triggers as $trigger ) {
+
+			$trigger_event_name = $this->get_trigger_event_name( $trigger );
+			$trigger_choices[] = array(
+				'label' => $trigger['name'],
+				'value' => $trigger_event_name,
+			);
+		}
+		\GFCache::set( 'tag_manager_trigger_choices', $trigger_choices );
+		return $trigger_choices;
+	}
+
+	/**
+	 * Get the trigger event name.
+	 *
+	 * @since 2.1
+	 *
+	 * @param array $trigger The trigger.
+	 *
+	 * @return string The trigger event name.
+	 */
+	private function get_trigger_event_name( $trigger ) {
+		if ( $trigger['type'] !== 'customEvent' ) {
+			return $trigger['name'];
+		}
+
+		// There's no convenient api method to get this value, but it should always be in the same place for custom events.
+		$event_name = rgars( $trigger, 'customEventFilter/0/parameter/1/value' );
+
+		if ( $event_name ) {
+			return $event_name;
+		} else {
+			return $trigger['name'];
+		}
+	}
+
+	/**
+	 * Get tag manager variable choices.
+	 *
+	 * @since 2.0
+	 *
+	 * @param array $options The add-on's options.
+	 *
+	 * @return array Array of variable choices.
+	 */
+	private function get_tag_manager_variable_choices( $options ) {
+		if ( rgar( $options, 'is_manual' ) === true ) {
+			return array();
+		}
+
+		$variable_choices = \GFCache::get( 'tag_manager_variable_choices' );
+		if ( $variable_choices ) {
+			return $variable_choices;
+		}
+
+		$ga4_account = rgar( $options, 'ga4_account' );
+		$api_path    = rgar( $ga4_account, 'gtm_api_path' );
+		$workspace   = rgar( $ga4_account, 'gtm_workspace_id' );
+
+		$variables      = rgar( $this->addon->get_tag_manager_variables( array(), $api_path, $workspace ), 'variable' );
+		$variable_choices = array();
+
+		if ( rgempty( $variables ) ) {
+			return $variable_choices;
+		}
+
+		foreach ( $variables as $variable ) {
+			if ( rgar( $variable, 'type' ) !== 'v' ) {
+				continue;
+			}
+			$variable_choices[] = array(
+				'label' => $variable['name'],
+				'value' => $this->get_variable_value( $variable ),
+			);
+		}
+		\GFCache::set( 'tag_manager_variable_choices', $variable_choices );
+		return $variable_choices;
+	}
+
+	/**
+	 * Get the value of the tag manager variable
+	 *
+	 * @since 2.0
+	 *
+	 * @param array $variable The variable from which to retrieve the value.
+	 *
+	 * @return string Returns the variable's value or a blank string if the variable isn't found.
+	 */
+	public function get_variable_value( $variable ) {
+		foreach ( $variable['parameter'] as $parameter ) {
+			if ( rgar( $parameter, 'key' ) === 'name' ) {
+				return rgar( $parameter, 'value' );
+			}
+		}
+
+		return '';
 	}
 
 	/**
@@ -395,13 +499,13 @@ class Form_Settings {
 	 * @return array
 	 */
 	public function feed_list_columns() {
-		return array(
-			'feedName'        => esc_html__( 'Name', 'gravityformsgoogleanalytics' ),
-			'gaeventcategory' => esc_html__( 'Category', 'gravityformsgoogleanalytics' ),
-			'gaeventaction'   => esc_html__( 'Action', 'gravityformsgoogleanalytics' ),
-			'gaeventlabel'    => esc_html__( 'Label', 'gravityformsgoogleanalytics' ),
-			'gaeventvalue'    => esc_html__( 'Value', 'gravityformsgoogleanalytics' ),
-		);
+		$columns = array( 'feedName' => esc_html__( 'Name', 'gravityformsgoogleanalytics' ) );
+
+		if ( $this->addon->get_options( '', 'mode' ) == 'gtm' ) {
+			$columns['submission_trigger'] = esc_html__( 'Trigger', 'gravityformsgoogleanalytics' );
+		}
+
+		return $columns;
 	}
 
 	/**
@@ -414,6 +518,10 @@ class Form_Settings {
 	 * @return array Updated form settings
 	 */
 	public function pagination_form_settings( $form ) {
+		if ( rgget( 'settingstype' ) !== 'form' ) {
+			return array();
+		}
+
 		if ( isset( $form['pagination'] ) ) {
 			return array(
 				array(
@@ -430,20 +538,11 @@ class Form_Settings {
 								),
 							),
 						),
-						array(
-							'name'          => 'pagination_value',
-							'label'         => esc_html__( 'Pagination Event Value', 'gravityformsgoogleanalytics' ),
-							'type'          => 'text',
-							'input_type'    => 'number',
-							'default_value' => 0,
-							'tooltip'       => sprintf( '<strong>%s</strong>%s', esc_html__( 'Pagination Event Value', 'gravityformsgoogleanalytics' ), __( 'Enter your Google Analytics event value for pagination events. This value will be sent whenever the user moves between pages. Default is 0. Google Analytics expects integers, so the value used will be rounded (e.g., 29.50 will be rounded to 30).', 'gravityformsgoogleanalytics' ) ),
-						),
 					),
 				),
 				array(
-					'title'      => 'Select Goal',
-					'fields'     => $this->get_goal_select_fields( $form, 'pagination' ),
-					'id'         => 'select_goal_group',
+					'title'      => esc_html__( 'Event Parameters', 'gravityformsgoogleanalytics' ),
+					'fields'     => $this->get_ga4_event_fields( $form, 'pagination' ),
 					'dependency' => array(
 						'live'   => true,
 						'fields' => array(

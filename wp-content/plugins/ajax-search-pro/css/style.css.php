@@ -15,7 +15,7 @@ $use_compatibility = true;
 $use_strong_compatibility = true;
 $base_css = "";
 
-$asp_comp = get_option('asp_compatibility');
+$asp_comp = wd_asp()->o['asp_compatibility'];
 $comp_level = w_isset_def($asp_comp["css_compatibility_level"], "medium");
 
 if ($comp_level == "medium") {
@@ -29,10 +29,17 @@ if ($comp_level == "medium") {
     $use_strong_compatibility = false;
 }
 
+
 $asp_container_class = '.asp_w_container.asp_w_container_'.$id;
 
-$asp_div_ids1 = '#ajaxsearchpro'.$id.'_1';
-$asp_div_ids2 = '#ajaxsearchpro'.$id.'_2';
+if ( isset($_POST['action']) && $_POST['action'] === 'ajaxsearchpro_preview' ) {
+	$asp_css_prefix = '';
+} else {
+	$asp_css_prefix = apply_filters('asp/assets/css/prefix', '', $id);
+}
+
+$asp_div_ids1 = $asp_css_prefix . '#ajaxsearchpro'.$id.'_1';
+$asp_div_ids2 = $asp_css_prefix . '#ajaxsearchpro'.$id.'_2';
 
 $asp_res_ids1 = '#ajaxsearchprores'.$id.'_1';
 $asp_res_ids2 = '#ajaxsearchprores'.$id.'_2';
@@ -40,13 +47,13 @@ $asp_res_ids2 = '#ajaxsearchprores'.$id.'_2';
 $asp_set_ids1 = '#ajaxsearchprosettings'.$id.'_1';
 $asp_set_ids2 = '#ajaxsearchprosettings'.$id.'_2';
 
-$asp_bset_ids1 = '#ajaxsearchprobsettings'.$id.'_1';
-$asp_bset_ids2 = '#ajaxsearchprobsettings'.$id.'_2';
+$asp_bset_ids1 =  $asp_css_prefix . '#ajaxsearchprobsettings'.$id.'_1';
+$asp_bset_ids2 =  $asp_css_prefix . '#ajaxsearchprobsettings'.$id.'_2';
 
-$asp_div_ids = 'div.asp_m.asp_m_'.$id;
+$asp_div_ids = $asp_css_prefix . 'div.asp_m.asp_m_'.$id;
 $asp_res_ids = 'div.asp_r.asp_r_'.$id;
 $asp_set_ids = 'div.asp_s.asp_s_'.$id;
-$asp_bset_ids = 'div.asp_sb.asp_sb_'.$id;
+$asp_bset_ids = $asp_css_prefix . 'div.asp_sb.asp_sb_'.$id;
 
 
 if (!class_exists('aspCSSCompatibilityReplace')) {

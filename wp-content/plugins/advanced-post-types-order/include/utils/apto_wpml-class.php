@@ -92,7 +92,7 @@
             * @param mixed $sortID
             * @param mixed $sort_view_id
             */
-            static function translate_objects_to_language($data_list, $lang_code)
+            static function translate_objects_to_language( $data_list, $lang_code )
                 {
                     $translate_list =   array();
                     
@@ -104,7 +104,7 @@
                             
                             //check if translated
                             if($translated_post_id < 1)
-                                return FALSE;
+                                continue;
                             
                             $translate_list[$translated_post_id]    =   "null";
                         }

@@ -62,9 +62,9 @@ $_themes = Themes::get('search');
 $_sb_themes = Themes::get('search_buttons');
 
 if ( is_multisite() ) {
-    $search = wd_asp()->instances->get($_GET['asp_sid'] + 0, false, true);
+    $search = wd_asp()->instances->get(intval($_GET['asp_sid']), false, true);
 } else {
-    $search = wd_asp()->instances->get($_GET['asp_sid'] + 0);
+    $search = wd_asp()->instances->get(intval($_GET['asp_sid']));
 }
 if ( empty($search) ) {
     $s_id = $_GET['asp_sid'] + 0;
@@ -72,12 +72,22 @@ if ( empty($search) ) {
     <div id='wpdreams' class='asp-be wpdreams wrap'>
         <div class="wpdreams-box">
             <h1><?php echo __('Woops', 'ajax-search-pro'); ?></h1>
-            <div class="errorMsg"><?php echo sprintf( __('This search instance (id=%s) does not exists.', 'ajax-search-pro'), $s_id ); ?></div>
+            <div class="errorMsg"><?php echo esc_html(sprintf( __('This search instance (id=%s) does not exists.', 'ajax-search-pro'), $s_id )); ?></div>
         </div>
     </div>
     <?php
     return;
 }
+
+$metadata = require_once ASP_PATH . 'build/js/timed-modal.asset.php';
+wp_enqueue_script(
+	'wpd-timed-modal',
+	ASP_URL_NP . 'build/js/timed-modal.js',
+	$metadata['dependencies'],
+	$metadata['version'],
+	array('in_footer'=>true)
+);
+
 /**
  * The search data does not have unset option values as the
  * $asp_globals->instances has it already merged with default options
@@ -94,13 +104,20 @@ $sd = &$search['data'];
     <span><?php echo __('Preview', 'ajax-search-pro'); ?></span>
     <a name='refresh' class='refresh' searchid='0' href='#'><?php echo __('Refresh', 'ajax-search-pro'); ?></a>
     <a name='hide' class='maximise'><?php echo __('Show', 'ajax-search-pro'); ?></a>
+    <input type="hidden" id="asp_backend_preview_nonce" value="<?php echo wp_create_nonce( 'asp_backend_preview_nonce' ); ?>">
     <label><?php echo __('Background:', 'ajax-search-pro'); ?> </label><input type="text" id="bgcolorpicker" value="#ffffff"/>
 
     <div style="text-align: center;
         margin: 11px 0 17px;
         font-size: 12px;
-        color: #aaa;"><?php echo __('Please note, that some functions may not work in preview mode.<br>The first loading can take up to 15 seconds!', 'ajax-search-pro'); ?>
+        color: #aaa;">
+	    <?php echo __('Please note, that some functions may not work in preview mode.<br>The first loading can take up to 15 seconds!', 'ajax-search-pro'); ?>
     </div>
+	<div style="display: flex; justify-content: center; flex-wrap: nowrap; gap: 12px;">
+		<div style="cursor: pointer;" class="wpd-txt-small-icon wpd-txt-small-icon-desktop" data-device="desktop"></div>
+		<div style="cursor: pointer;" class="wpd-txt-small-icon wpd-txt-small-icon-tablet" data-device="tablet"></div>
+		<div style="cursor: pointer;" class="wpd-txt-small-icon wpd-txt-small-icon-phone" data-device="phone"></div>
+	</div>
     <div class='big-loading hidden'></div>
     <div class="data hidden asp_preview_data"></div>
 </div>
@@ -112,7 +129,7 @@ $sd = &$search['data'];
     <h3 style="flex-wrap: wrap; flex-basis: 100%; min-width: 100%;text-align: left; margin-top: 0;margin-left: 40px;"><?php echo __('Shortcode generator', 'ajax-search-pro'); ?></h3>
     <div class="wpd-modal-close"></div>
     <div class="sortablecontainer wpd_md_col">
-        <p class="descMsg"><?php echo sprintf( __('This tool is to help you generate a Column/Row based layout for the plugin. For more info on shortcodes, <a href="%s" target="_blank">check this video</a> tutorial.', 'ajax-search-pro'), 'http://wp-dreams.com/go/?to=yt-shortcodes' ); ?></p>
+        <p class="descMsg"><?php echo sprintf( __('This tool is to help you generate a Column/Row based layout for the plugin. For more info on shortcodes, <a href="%s" target="_blank">check this video</a> tutorial.', 'ajax-search-pro'), 'https://documentation.ajaxsearchpro.com/getting-started/search-shortcodes' ); ?></p>
         <ul class="ui-sortable">
             <li item="search"><b><?php echo __('Search box', 'ajax-search-pro'); ?></b><br><label><?php echo __('Ratio:', 'ajax-search-pro'); ?> <input type="number" value="100" min="5" max="100"/>%</label><a class="deleteIcon"></a></li>
             <li item="settings" class="hiddend"><b><?php echo __('Settings box', 'ajax-search-pro'); ?></b><br><label><?php echo __('Ratio:', 'ajax-search-pro'); ?> <input type="number" value="100" min="5" max="100"/>%</label><a class="deleteIcon"></a></li>
@@ -135,7 +152,7 @@ $sd = &$search['data'];
         <p style="margin-top: 10px;"><?php echo __('<b>Copy</b> the shorcode generated:', 'ajax-search-pro'); ?><br></p><textarea>[wd_asp='search' id=1]</textarea>
     </div>
 </div>
-<div id='wpdreams' class='asp-be wpdreams wrap<?php echo isset($_COOKIE['asp-accessibility']) ? ' wd-accessible' : ''; ?>' style="min-width: 1280px;" data-searchid="<?php echo $_GET['asp_sid']; ?>">
+<div id='wpdreams' class='asp-be wpdreams wrap<?php echo isset($_COOKIE['asp-accessibility']) ? ' wd-accessible' : ''; ?>' style="min-width: 1280px;" data-searchid="<?php echo $search['id']; ?>">
 	<?php do_action('asp_admin_notices'); ?>
 
 	<!-- This forces custom Admin Notices location -->

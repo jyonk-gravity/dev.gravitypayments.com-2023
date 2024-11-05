@@ -27,9 +27,24 @@ abstract class GFAddOn {
 	 */
 	protected $_version;
 	/**
+	 * The minimum Gravity Forms version required for the add-on to load.
+	 *
 	 * @var string Gravity Forms minimum version requirement
 	 */
 	protected $_min_gravityforms_version;
+
+	/**
+	 * The minimum Gravity Forms version required to support all the features of an add-on.
+	 *
+	 * Failing to meet this version won't prevent the add-on from loading, but some features of the add-on will not work as expected or will be disabled,
+	 * A notice will be displayed in the admin asking the user to upgrade to the latest Gravity Form version.
+	 *
+	 * @var string Gravity Forms minimum version for supporting all features.
+	 *
+	 * @since 2.7.12
+	 */
+	protected $_min_compatible_gravityforms_version;
+
 	/**
 	 * @var string URL-friendly identifier used for form settings, add-on settings, text domain localization...
 	 */
@@ -39,7 +54,7 @@ abstract class GFAddOn {
 	 */
 	protected $_path;
 	/**
-	 * @var string Full path the the plugin. Example: __FILE__
+	 * @var string Full path to the plugin. Example: __FILE__
 	 */
 	protected $_full_path;
 	/**
@@ -161,7 +176,7 @@ abstract class GFAddOn {
 		if ( $this->_enable_rg_autoupgrade ) {
 			require_once( 'class-gf-auto-upgrade.php' );
 			$is_gravityforms_supported = $this->is_gravityforms_supported( $this->_min_gravityforms_version );
-			new GFAutoUpgrade( $this->_slug, $this->_version, $this->_min_gravityforms_version, $this->_title, $this->_full_path, $this->get_path(), $this->_url, $is_gravityforms_supported );
+			new GFAutoUpgrade( $this->get_slug(), $this->_version, $this->_min_gravityforms_version, $this->_title, $this->_full_path, $this->get_path(), $this->_url, $is_gravityforms_supported );
 		}
 
 		$this->pre_init();
@@ -190,6 +205,7 @@ abstract class GFAddOn {
 		      ->set_form_css_properties( array( $this, 'theme_layer_form_css_properties' ) )
 		      ->set_styles( array( $this, 'theme_layer_styles' ) )
 		      ->set_scripts( array( $this, 'theme_layer_scripts' ) )
+		      ->set_capability( $this->get_form_settings_capabilities() )
 		      ->register();
 		add_action( 'gform_form_after_open', array( $this, 'output_third_party_styles' ), 998, 2 );
 	}
@@ -339,9 +355,13 @@ abstract class GFAddOn {
 
 		$this->setup();
 
-		// Add form settings only when there are form settings fields configured or form_settings() method is implemented
-		if ( self::has_form_settings_page() ) {
-			$this->form_settings_init();
+		// Add form settings only when there are form settings fields configured or form_settings() method is implemented.
+		if ( $this::has_form_settings_page() ) {
+			/*
+			 * Despite the "init_admin" name, the parent function is executed at init hook,
+			 * so we need to run form_settings_init in admin_init to allow addons filter the settings.
+			 */
+			add_action( 'admin_init', array( $this, 'form_settings_init' ) );
 		}
 
 		// Add plugin page when there is a plugin page configured or plugin_page() method is implemented
@@ -397,6 +417,7 @@ abstract class GFAddOn {
 		add_filter( 'gform_noconflict_scripts', array( $this, 'register_noconflict_scripts' ) );
 		add_filter( 'gform_noconflict_styles', array( $this, 'register_noconflict_styles' ) );
 		add_action( 'gform_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10, 2 );
+		add_action( 'admin_notices', array( $this, 'maybe_display_upgrade_notice' ) );
 
 	}
 
@@ -502,12 +523,12 @@ abstract class GFAddOn {
 	 * Override this function to add AJAX hooks or to add initialization code when an AJAX request is being performed
 	 */
 	public function init_ajax() {
-		if ( rgpost( 'view' ) == 'gf_results_' . $this->_slug ) {
+		if ( rgpost( 'view' ) == 'gf_results_' . $this->get_slug() ) {
 			require_once( GFCommon::get_base_path() . '/tooltips.php' );
 			require_once( 'class-gf-results.php' );
-			$gf_results = new GFResults( $this->_slug, $this->get_results_page_config() );
-			add_action( 'wp_ajax_gresults_get_results_gf_results_' . $this->_slug, array( $gf_results, 'ajax_get_results' ) );
-			add_action( 'wp_ajax_gresults_get_more_results_gf_results_' . $this->_slug, array( $gf_results, 'ajax_get_more_results' ) );
+			$gf_results = new GFResults( $this->get_slug(), $this->get_results_page_config() );
+			add_action( 'wp_ajax_gresults_get_results_gf_results_' . $this->get_slug(), array( $gf_results, 'ajax_get_results' ) );
+			add_action( 'wp_ajax_gresults_get_more_results_gf_results_' . $this->get_slug(), array( $gf_results, 'ajax_get_more_results' ) );
 		} elseif ( $this->method_is_overridden( 'get_locking_config' ) ) {
 			require_once( GFCommon::get_base_path() . '/includes/locking/class-gf-locking.php' );
 			require_once( 'class-gf-addon-locking.php' );
@@ -785,18 +806,18 @@ abstract class GFAddOn {
 	public function setup() {
 
 		//Upgrading add-on
-		$installed_version = get_option( 'gravityformsaddon_' . $this->_slug . '_version' );
+		$installed_version = get_option( 'gravityformsaddon_' . $this->get_slug() . '_version' );
 
 		//Making sure version has really changed. Gets around aggressive caching issue on some sites that cause setup to run multiple times.
 		if ( $installed_version != $this->_version ) {
-			$installed_version = GFForms::get_wp_option( 'gravityformsaddon_' . $this->_slug . '_version' );
+			$installed_version = GFForms::get_wp_option( 'gravityformsaddon_' . $this->get_slug() . '_version' );
 		}
 
 		//Upgrade if version has changed
 		if ( $installed_version != $this->_version ) {
 			$this->install_translations();
 			$this->upgrade( $installed_version );
-			update_option( 'gravityformsaddon_' . $this->_slug . '_version', $this->_version );
+			update_option( 'gravityformsaddon_' . $this->get_slug() . '_version', $this->_version );
 		}
 	}
 
@@ -819,10 +840,10 @@ abstract class GFAddOn {
 		// Forcing Upgrade
 		if( $force_upgrade ){
 
-			$installed_version = get_option( 'gravityformsaddon_' . $this->_slug . '_version' );
+			$installed_version = get_option( 'gravityformsaddon_' . $this->get_slug() . '_version' );
 
 			$this->upgrade( $installed_version );
-			update_option( 'gravityformsaddon_' . $this->_slug . '_version', $this->_version );
+			update_option( 'gravityformsaddon_' . $this->get_slug() . '_version', $this->_version );
 
 		}
 
@@ -1101,7 +1122,7 @@ abstract class GFAddOn {
 	 * @return string
 	 */
 	public function theme_layer_slug() {
-		return $this->_slug;
+		return $this->get_slug();
 	}
 
 	/**
@@ -1222,14 +1243,14 @@ abstract class GFAddOn {
 	public function output_third_party_styles( $markup, $form ) {
 		$settings           = $this->get_current_settings();
 		$all_block_settings = apply_filters( 'gform_form_block_attribute_values', array() );
-		$block_settings     = isset( $all_block_settings[ $form['id'] ][ $form['page_instance'] ] ) ? $all_block_settings[ $form['id'] ][ $form['page_instance'] ] : array();
+		$page_instance      = isset( $form['page_instance'] ) ? $form['page_instance'] : 0;
+		$block_settings     = isset( $all_block_settings[ $form['id'] ][ $page_instance ] ) ? $all_block_settings[ $form['id'] ][ $page_instance ] : array();
 		$properties         = call_user_func_array( array( $this, 'theme_layer_third_party_styles' ), array( $form['id'], $settings, $block_settings ) );
 
 		if ( empty( $properties ) ) {
 			return $markup;
 		}
 
-		$page_instance   = isset( $form['page_instance'] ) ? $form['page_instance'] : 0;
 		$base_identifier = sprintf( 'gform.extensions.styles.%s', $this->get_slug() );
 		$form_identifier = sprintf( 'gform.extensions.styles.%s[%s]', $this->get_slug(), $form['id'] );
 		$full_identifier = sprintf( 'gform.extensions.styles.%s[%s][%s]', $this->get_slug(), $form['id'], $page_instance );
@@ -1529,14 +1550,14 @@ abstract class GFAddOn {
 			add_filter( 'gform_filter_ui', $results_page_config['callbacks']['filter_ui'], 10, 5 );
 		}
 
-		$gf_results = new GFResults( $this->_slug, $results_page_config );
+		$gf_results = new GFResults( $this->get_slug(), $results_page_config );
 		$gf_results->init();
 	}
 
 	//--------------  Logging integration  --------------------------------------
 
 	public function set_logging_supported( $plugins ) {
-		$plugins[ $this->_slug ] = $this->_title;
+		$plugins[ $this->get_slug() ] = $this->_title;
 
 		return $plugins;
 	}
@@ -1624,8 +1645,8 @@ abstract class GFAddOn {
 		$caps = array();
 
 		// Add capabilities.
-		if ( ! empty( $this->_capabilities_form_settings ) && is_string( $this->_capabilities_form_settings ) ) {
-			$caps[ $this->_capabilities_form_settings ] = esc_html__( 'Form Settings', 'gravityforms' );
+		if ( ! empty( $this->get_form_settings_capabilities() ) && is_string( $this->get_form_settings_capabilities() ) ) {
+			$caps[ $this->get_form_settings_capabilities() ] = esc_html__( 'Form Settings', 'gravityforms' );
 		}
 		if ( ! empty( $this->_capabilities_uninstall ) && is_string( $this->_capabilities_uninstall ) ) {
 			$caps[ $this->_capabilities_uninstall ] = esc_html__( 'Uninstall', 'gravityforms' );
@@ -1850,7 +1871,7 @@ abstract class GFAddOn {
 		?>
 
 		<form id="gform-settings" action="" method="post">
-			<?php wp_nonce_field( $this->_slug . '_save_settings', '_' . $this->_slug . '_save_settings_nonce' ) ?>
+			<?php wp_nonce_field( $this->get_slug() . '_save_settings', '_' . $this->get_slug() . '_save_settings_nonce' ) ?>
 			<?php $this->settings( $sections ); ?>
 
 		</form>
@@ -4155,6 +4176,15 @@ abstract class GFAddOn {
 	//--------------  Form settings  ---------------------------------------------------
 
 	/**
+	 * Get the capabilities required to access the form settings page.
+	 *
+	 * @return array
+	 */
+	public function get_form_settings_capabilities() {
+		return $this->_capabilities_form_settings;
+	}
+
+	/**
 	 * Initializes form settings page
 	 * Hooks up the required scripts and actions for the Form Settings page
 	 */
@@ -4163,9 +4193,9 @@ abstract class GFAddOn {
 		$subview = rgget( 'subview' );
 		add_filter( 'gform_form_settings_menu', array( $this, 'add_form_settings_menu' ), 10, 2 );
 
-		if ( rgget( 'page' ) == 'gf_edit_forms' && $view == 'settings' && $subview == $this->_slug && $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
+		if ( rgget( 'page' ) == 'gf_edit_forms' && $view == 'settings' && $subview == $this->get_slug() && $this->current_user_can_any( $this->get_form_settings_capabilities() ) ) {
 			require_once( GFCommon::get_base_path() . '/tooltips.php' );
-			add_action( 'gform_form_settings_page_' . $this->_slug, array( $this, 'form_settings_page' ) );
+			add_action( 'gform_form_settings_page_' . $this->get_slug(), array( $this, 'form_settings_page' ) );
 
 			// Let feed add-ons handle initializing their settings.
 			if ( $this->method_is_overridden( 'form_settings_fields' ) ) {
@@ -4186,7 +4216,7 @@ abstract class GFAddOn {
 				 *
 				 * @return array
 				 */
-				$sections = gf_apply_filters( array( 'gform_form_settings_fields', rgar( $form, 'id' ), $this->_slug ), $sections, $form );
+				$sections = gf_apply_filters( array( 'gform_addon_form_settings_fields', rgar( $form, 'id' ), $this->get_slug() ), $sections, $form );
 
 
 				$sections = $this->prepare_settings_sections( $sections, 'form_settings' );
@@ -4194,7 +4224,7 @@ abstract class GFAddOn {
 				// Initialize new settings renderer.
 				$renderer = new Settings(
 					array(
-						'capability'     => $this->_capabilities_form_settings,
+						'capability'     => $this->get_form_settings_capabilities(),
 						'fields'         => $sections,
 						'initial_values' => $this->get_form_settings( $form ),
 						'save_callback'  => function( $values ) use ( $form ) {
@@ -4239,7 +4269,7 @@ abstract class GFAddOn {
 	 */
 	public function create_plugin_page_menu( $menus ) {
 
-		$menus[] = array( 'name' => $this->_slug, 'label' => $this->get_short_title(), 'callback' => array( $this, 'plugin_page_container' ), 'permission' => $this->_capabilities_plugin_page );
+		$menus[] = array( 'name' => $this->get_slug(), 'label' => $this->get_short_title(), 'callback' => array( $this, 'plugin_page_container' ), 'permission' => $this->_capabilities_plugin_page );
 
 		return $menus;
 	}
@@ -4311,7 +4341,14 @@ abstract class GFAddOn {
 	 * @return true|false True on success or false on error
 	 */
 	public function save_form_settings( $form, $settings ) {
-		$form[ $this->_slug ] = $settings;
+		$existing_meta     = GFFormsModel::get_form_meta( $form['id'] );
+		$existing_settings = rgar( $existing_meta, $this->get_slug() );
+
+		if ( is_array( $existing_settings ) ) {
+			$settings = array_merge( $existing_settings, $settings );
+		}
+
+		$form[ $this->get_slug() ] = $settings;
 		$result               = GFFormsModel::update_form_meta( $form['id'], $form );
 
 		return ! ( false === $result );
@@ -4437,7 +4474,7 @@ abstract class GFAddOn {
 		 *
 		 * @param array $addon_menus A modifiable array of admin addon menus
 		 */
-		$addon_menus = apply_filters( 'gform_addon_app_navigation_' . $this->_slug, $addon_menus );
+		$addon_menus = apply_filters( 'gform_addon_app_navigation_' . $this->get_slug(), $addon_menus );
 
 		$parent_menu = self::get_parent_menu( $menu_items, $addon_menus );
 
@@ -4461,7 +4498,7 @@ abstract class GFAddOn {
 		 *
 		 * @param int $menu_position The Menu position of the add-on menu
 		 */
-		$menu_position = apply_filters( 'gform_app_menu_position_' . $this->_slug, $menu_position );
+		$menu_position = apply_filters( 'gform_app_menu_position_' . $this->get_slug(), $menu_position );
 		$this->app_hook_suffix = add_menu_page( $this->get_short_title(), $this->get_short_title(), $has_full_access ? 'gform_full_access' : $min_cap, $parent_menu['name'], $callback, $this->get_app_menu_icon(), $menu_position );
 
 		if ( method_exists( $this, 'load_screen_options' ) ) {
@@ -4481,7 +4518,7 @@ abstract class GFAddOn {
 		}
 
 		if ( $this->has_app_settings() ) {
-			add_submenu_page( $parent_menu['name'], esc_html__( 'Settings', 'gravityforms' ), esc_html__( 'Settings', 'gravityforms' ), $has_full_access ? 'gform_full_access' : $this->_capabilities_app_settings, $this->_slug . '_settings', array( $this, 'app_tab_page' ) );
+			add_submenu_page( $parent_menu['name'], esc_html__( 'Settings', 'gravityforms' ), esc_html__( 'Settings', 'gravityforms' ), $has_full_access ? 'gform_full_access' : $this->_capabilities_app_settings, $this->get_slug() . '_settings', array( $this, 'app_tab_page' ) );
 		}
 
 	}
@@ -4511,7 +4548,7 @@ abstract class GFAddOn {
 				}
 			}
 		} elseif ( $this->has_app_settings() && $this->current_user_can_any( $this->_capabilities_app_settings ) ) {
-			$parent = array( 'name' => $this->_slug . '_settings', 'callback' => array( $this, 'app_settings' ) );
+			$parent = array( 'name' => $this->get_slug() . '_settings', 'callback' => array( $this, 'app_settings' ) );
 		}
 
 		return $parent;
@@ -4570,7 +4607,7 @@ abstract class GFAddOn {
 		$page        = sanitize_text_field( rgget( 'page' ) );
 		$current_tab = sanitize_text_field( rgget( 'view' ) );
 
-		if ( $page == $this->_slug . '_settings' ) {
+		if ( $page == $this->get_slug() . '_settings' ) {
 
 			$tabs = $this->get_app_settings_tabs();
 
@@ -4650,7 +4687,7 @@ abstract class GFAddOn {
 	 * @return array
 	 */
 	public function get_form_settings( $form ) {
-		return rgar( $form, $this->_slug );
+		return rgar( $form, $this->get_slug() );
 	}
 
 	/**
@@ -4667,10 +4704,10 @@ abstract class GFAddOn {
 	public function add_form_settings_menu( $tabs, $form_id ) {
 
 		$tabs[] = array(
-			'name'           => $this->_slug,
+			'name'           => $this->get_slug(),
 			'label'          => $this->get_short_title(),
 			'query'          => array( 'fid' => null ),
-			'capabilities'   => $this->_capabilities_form_settings,
+			'capabilities'   => $this->get_form_settings_capabilities(),
 			'icon'           => $this->get_menu_icon(),
 			'icon_namespace' => $this->get_icon_namespace(),
 		);
@@ -4704,7 +4741,7 @@ abstract class GFAddOn {
 		// Register settings page.
 		GFForms::add_settings_page(
 			array(
-				'name'           => $this->_slug,
+				'name'           => $this->get_slug(),
 				'tab_label'      => $this->get_short_title(),
 				'icon'           => $this->get_menu_icon(),
 				'icon_namespace' => $this->get_icon_namespace(),
@@ -4714,14 +4751,14 @@ abstract class GFAddOn {
 		);
 
 		// Load Tooltips functions.
-		if ( rgget( 'page' ) == 'gf_settings' && $subview == $this->_slug && $this->current_user_can_any( $this->_capabilities_settings_page ) ) {
+		if ( rgget( 'page' ) == 'gf_settings' && $subview == $this->get_slug() && $this->current_user_can_any( $this->_capabilities_settings_page ) ) {
 			require_once( GFCommon::get_base_path() . '/tooltips.php' );
 		}
 
 		// Add link to Plugin Settings page on Plugins page.
 		add_filter( 'plugin_action_links', array( $this, 'plugin_settings_link' ), 10, 2 );
 
-		if ( $this->is_plugin_settings( $this->_slug ) ) {
+		if ( $this->is_plugin_settings( $this->get_slug() ) ) {
 
 			// Get fields.
 			$sections = $this->plugin_settings_fields();
@@ -4759,7 +4796,7 @@ abstract class GFAddOn {
 			return $links;
 		}
 
-		array_unshift( $links, '<a href="' . admin_url( 'admin.php' ) . '?page=gf_settings&subview=' . $this->_slug . '">' . esc_html__( 'Settings', 'gravityforms' ) . '</a>' );
+		array_unshift( $links, '<a href="' . admin_url( 'admin.php' ) . '?page=gf_settings&subview=' . $this->get_slug() . '">' . esc_html__( 'Settings', 'gravityforms' ) . '</a>' );
 
 		return $links;
 
@@ -4861,7 +4898,7 @@ abstract class GFAddOn {
 	 * @return array|false
 	 */
 	public function get_plugin_settings() {
-		return get_option( 'gravityformsaddon_' . $this->_slug . '_settings' );
+		return get_option( 'gravityformsaddon_' . $this->get_slug() . '_settings' );
 	}
 
 	/**
@@ -4889,7 +4926,7 @@ abstract class GFAddOn {
 	 * @param array $settings Plugin settings to be saved.
 	 */
 	public function update_plugin_settings( $settings ) {
-		update_option( 'gravityformsaddon_' . $this->_slug . '_settings', $settings );
+		update_option( 'gravityformsaddon_' . $this->get_slug() . '_settings', $settings );
 	}
 
 	/**
@@ -4941,7 +4978,7 @@ abstract class GFAddOn {
 		 *
 		 * @param array $setting_tabs Contains the information on the settings tabs.
 		 */
-		$setting_tabs = apply_filters( 'gform_addon_app_settings_menu_' . $this->_slug, $setting_tabs );
+		$setting_tabs = apply_filters( 'gform_addon_app_settings_menu_' . $this->get_slug(), $setting_tabs );
 
 		if ( $this->current_user_can_uninstall() ) {
 			$setting_tabs[] = array( 'name' => 'uninstall', 'label' => esc_html__( 'Uninstall', 'gravityforms' ), 'callback' => array( $this, 'app_settings_uninstall_tab' ) );
@@ -5157,7 +5194,7 @@ abstract class GFAddOn {
 	 * @return mixed
 	 */
 	public function get_app_settings() {
-		return get_option( 'gravityformsaddon_' . $this->_slug . '_app_settings' );
+		return get_option( 'gravityformsaddon_' . $this->get_slug() . '_app_settings' );
 	}
 
 	/**
@@ -5180,7 +5217,7 @@ abstract class GFAddOn {
 	 * @param array $settings - App settings to be saved
 	 */
 	public function update_app_settings( $settings ) {
-		update_option( 'gravityformsaddon_' . $this->_slug . '_app_settings', $settings );
+		update_option( 'gravityformsaddon_' . $this->get_slug() . '_app_settings', $settings );
 	}
 
 	/**
@@ -5191,7 +5228,7 @@ abstract class GFAddOn {
 
 		if ( $this->is_save_postback() ) {
 
-			check_admin_referer( $this->_slug . '_save_settings', '_' . $this->_slug . '_save_settings_nonce' );
+			check_admin_referer( $this->get_slug() . '_save_settings', '_' . $this->get_slug() . '_save_settings_nonce' );
 
 			if ( ! $this->current_user_can_any( $this->_capabilities_app_settings ) ) {
 				GFCommon::add_error_message( esc_html__( "You don't have sufficient permissions to update the settings.", 'gravityforms' ) );
@@ -5419,7 +5456,6 @@ abstract class GFAddOn {
 
 		// remove entry meta
 		$meta_table = version_compare( GFFormsModel::get_database_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_meta_table_name() : GFFormsModel::get_entry_meta_table_name();
-		remove_filter( 'query', array( 'GFForms', 'filter_query' ) );
 		foreach ( $forms as $form ) {
 			$all_form_ids[] = $form->id;
 			$entry_meta     = $this->get_entry_meta( array(), $form->id );
@@ -5430,15 +5466,14 @@ abstract class GFAddOn {
 				}
 			}
 		}
-		add_filter( 'query', array( 'GFForms', 'filter_query' ) );
 
 		//remove form settings
 		if ( ! empty( $all_form_ids ) ) {
 			$form_metas = GFFormsModel::get_form_meta_by_id( $all_form_ids );
 			require_once( GFCommon::get_base_path() . '/form_detail.php' );
 			foreach ( $form_metas as $form_meta ) {
-				if ( isset( $form_meta[ $this->_slug ] ) ) {
-					unset( $form_meta[ $this->_slug ] );
+				if ( isset( $form_meta[ $this->get_slug() ] ) ) {
+					unset( $form_meta[ $this->get_slug() ] );
 					$form_json = json_encode( $form_meta );
 					GFFormDetail::save_form_info( $form_meta['id'], addslashes( $form_json ) );
 				}
@@ -5446,9 +5481,9 @@ abstract class GFAddOn {
 		}
 
 		//removing options
-		delete_option( 'gravityformsaddon_' . $this->_slug . '_settings' );
-		delete_option( 'gravityformsaddon_' . $this->_slug . '_app_settings' );
-		delete_option( 'gravityformsaddon_' . $this->_slug . '_version' );
+		delete_option( 'gravityformsaddon_' . $this->get_slug() . '_settings' );
+		delete_option( 'gravityformsaddon_' . $this->get_slug() . '_app_settings' );
+		delete_option( 'gravityformsaddon_' . $this->get_slug() . '_version' );
 
 
 		//Deactivating plugin
@@ -5492,6 +5527,11 @@ abstract class GFAddOn {
 			self::display_plugin_message( $message, true );
 		}
 
+		if ( self::is_gravityforms_supported( $this->_min_gravityforms_version ) && ! self::is_gravityforms_compatible() ) {
+			$message = $this->compatibility_message();
+			self::display_plugin_message( $message, true );
+		}
+
 		if ( ! $this->_enable_rg_autoupgrade ) {
 			return;
 		}
@@ -5506,6 +5546,19 @@ abstract class GFAddOn {
 	 */
 	public function plugin_message() {
 		$message = sprintf( esc_html__( 'Gravity Forms %s is required. Activate it now or %spurchase it today!%s', 'gravityforms' ), $this->_min_gravityforms_version, "<a href='https://www.gravityforms.com'>", '</a>' );
+
+		return $message;
+	}
+
+	/**
+	 * Returns the message that will be displayed if the current version of Gravity Forms is not compatible with the add-on.
+	 *
+	 * Override this method to display a custom message.
+	 *
+	 * @since 2.7.12
+	 */
+	public function compatibility_message() {
+		$message = esc_html__( 'Some features of the add-on are not available on the current version of Gravity Forms. Please update to the latest Gravity Forms version for full compatibility.', 'gravityforms' );
 
 		return $message;
 	}
@@ -5537,7 +5590,7 @@ abstract class GFAddOn {
 	public function log_error( $message ) {
 		if ( class_exists( 'GFLogging' ) ) {
 			GFLogging::include_logger();
-			GFLogging::log_message( $this->_slug, $message, KLogger::ERROR );
+			GFLogging::log_message( $this->get_slug(), $message, KLogger::ERROR );
 		}
 	}
 
@@ -5551,7 +5604,7 @@ abstract class GFAddOn {
 	public function log_debug( $message ) {
 		if ( class_exists( 'GFLogging' ) ) {
 			GFLogging::include_logger();
-			GFLogging::log_message( $this->_slug, $message, KLogger::DEBUG );
+			GFLogging::log_message( $this->get_slug(), $message, KLogger::DEBUG );
 		}
 	}
 
@@ -5763,7 +5816,7 @@ abstract class GFAddOn {
 		 *
 		 * @return string
 		 */
-		$field_value = gf_apply_filters( array( 'gform_addon_field_value', $form['id'], $field_id ), $field_value, $form, $entry, $field_id, $this->_slug );
+		$field_value = gf_apply_filters( array( 'gform_addon_field_value', $form['id'], $field_id ), $field_value, $form, $entry, $field_id, $this->get_slug() );
 
 		return $this->maybe_override_field_value( $field_value, $form, $entry, $field_id );
 	}
@@ -5780,7 +5833,7 @@ abstract class GFAddOn {
 	 */
 	public function maybe_override_field_value( $field_value, $form, $entry, $field_id ) {
 		/* Get Add-On slug */
-		$slug = str_replace( 'gravityforms', '', $this->_slug );
+		$slug = str_replace( 'gravityforms', '', $this->get_slug() );
 
 		return gf_apply_filters( array(
 			"gform_{$slug}_field_value",
@@ -6039,6 +6092,60 @@ abstract class GFAddOn {
 	}
 
 	/**
+	 * Checks whether the current version of Gravity Forms is compatible with all features of an add-on.
+	 *
+	 * @since 2.7.12
+	 *
+	 * @param string $min_compatible_gravityforms_version The version to compare the current version with.
+	 *
+	 * @return bool|mixed
+	 */
+	public function is_gravityforms_compatible( $min_compatible_gravityforms_version = '' ) {
+		if ( isset( $this->_min_gravityforms_version ) && empty( $min_compatible_gravityforms_version ) ) {
+			$min_compatible_gravityforms_version = $this->_min_compatible_gravityforms_version;
+		}
+
+		if ( empty( $min_compatible_gravityforms_version ) ) {
+			return true;
+		}
+
+		static $results = array();
+
+		if ( ! isset( $results[ $min_compatible_gravityforms_version ] ) ) {
+			$results[ $min_compatible_gravityforms_version ] = version_compare( GFForms::$version, $min_compatible_gravityforms_version, '>=' );
+		}
+
+		return $results[ $min_compatible_gravityforms_version ];
+	}
+
+	/**
+	 * Display an upgrade notice if the current version of Gravity Forms is not fully supported.
+	 *
+	 * @since 2.7.12
+	 */
+	public function maybe_display_upgrade_notice() {
+		if ( $this->is_gravityforms_compatible() ) {
+			return;
+		}
+
+		$message = sprintf(
+			/* translators: 1: Add-on title */
+			esc_html__(
+				'Some features of the %1$s Add-on are not available on this version of Gravity Forms. Please update to the latest version for full compatibility.',
+				'gravityforms'
+			),
+			$this->get_short_title()
+		);
+		?>
+
+		<div class="gf-notice notice notice-error">
+			<p><?php echo wp_kses( $message, array( 'a' => array( 'href' => true ) ) ); ?></p>
+		</div>
+		<?php
+	}
+
+
+	/**
 	 * Returns this plugin's short title. Used to display the plugin title in small areas such as tabs
 	 */
 	public function get_short_title() {
@@ -6087,7 +6194,7 @@ abstract class GFAddOn {
 	 *
 	 */
 	public function get_plugin_settings_url() {
-		return add_query_arg( array( 'page' => 'gf_settings', 'subview' => $this->_slug ), admin_url( 'admin.php' ) );
+		return add_query_arg( array( 'page' => 'gf_settings', 'subview' => $this->get_slug() ), admin_url( 'admin.php' ) );
 	}
 
 	/**
@@ -6209,7 +6316,7 @@ abstract class GFAddOn {
 	 */
 	public function is_app_settings( $tab = '' ) {
 
-		$is_app_settings = rgget( 'page' ) == $this->_slug . '_settings';
+		$is_app_settings = rgget( 'page' ) == $this->get_slug() . '_settings';
 		$is_tab          = $this->_tab_matches( $tab );
 
 		if ( $is_app_settings && $is_tab ) {
@@ -6225,7 +6332,7 @@ abstract class GFAddOn {
 	 */
 	public function is_plugin_page() {
 
-		return strtolower( rgget( 'page' ) ) == strtolower( $this->_slug );
+		return strtolower( rgget( 'page' ) ) == strtolower( $this->get_slug() );
 	}
 
 	/**
@@ -6264,7 +6371,7 @@ abstract class GFAddOn {
 	 * Returns TRUE if the current page is the results page. Otherwise, returns FALSE
 	 */
 	public function is_results() {
-		if ( rgget( 'page' ) == 'gf_entries' && rgget( 'view' ) == 'gf_results_' . $this->_slug ) {
+		if ( rgget( 'page' ) == 'gf_entries' && rgget( 'view' ) == 'gf_results_' . $this->get_slug() ) {
 			return true;
 		}
 
@@ -6368,6 +6475,9 @@ abstract class GFAddOn {
 	 * @since 2.0
 	 */
 	public function get_slug() {
+		if ( empty( $this->_slug ) ) {
+			$this->_slug = plugin_basename( dirname( $this->_full_path ) );
+		}
 		return $this->_slug;
 	}
 
@@ -6397,6 +6507,10 @@ abstract class GFAddOn {
 	 * @since 2.4.17
 	 */
 	public function update_path() {
+		if ( ! $this->_path || ! $this->_full_path ) {
+			return;
+		}
+
 		$path_dirname = dirname( $this->_path );
 		if ( $path_dirname !== '.' ) {
 			$full_path_dirname = basename( dirname( $this->_full_path ) );
@@ -6432,7 +6546,7 @@ abstract class GFAddOn {
 	 * @since 2.0.7
 	 */
 	public function load_text_domain() {
-		GFCommon::load_gf_text_domain( $this->_slug, plugin_basename( dirname( $this->_full_path ) ) );
+		GFCommon::load_gf_text_domain( $this->get_slug(), plugin_basename( dirname( $this->_full_path ) ) );
 	}
 
 	/**

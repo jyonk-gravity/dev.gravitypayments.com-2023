@@ -53,5 +53,5 @@
 	?>
 </div>
 <div class="item">
-	<a class="asp_to_tab" href="#502" tabid="502">Go to Keyword Suggestions options >></a>
+	<a class="asp_to_tab" href="#502" tabid="502"><?php echo __('Go to Keyword Suggestions options >>', 'ajax-search-pro'); ?></a>
 </div>

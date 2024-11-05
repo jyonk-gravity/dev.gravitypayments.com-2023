@@ -559,12 +559,12 @@ class GFLogging extends GFAddOn {
 		$plugin_setting = $instance->get_plugin_setting( $plugin );
 
 		// If logging is turned off, exit.
-		if ( rgempty( 'enable', $plugin_setting ) ) {
+		if ( ! rgar( $plugin_setting, 'enable' ) ) {
 			return;
 		}
 
 		// Log message.
-		$log = $instance->get_logger( $plugin, $plugin_setting['log_level'] );
+		$log = $instance->get_logger( $plugin, rgar( $plugin_setting, 'log_level', KLogger::DEBUG ) );
 
 		/**
 		* Filters the logging message.
@@ -672,7 +672,7 @@ class GFLogging extends GFAddOn {
 
 		$plugin_setting = $this->get_plugin_setting( $plugin_name );
 
-		if ( rgempty( 'file_name', $plugin_setting ) ) {
+		if ( ! rgar( $plugin_setting, 'file_name' ) ) {
 			return '';
 		}
 
@@ -722,18 +722,20 @@ class GFLogging extends GFAddOn {
 	}
 
 	/**
-	 * Get log file size for plugin
+	 * Get log file size by plugin slug or file path.
 	 *
 	 * @since 1.2.1
-	 * @access public
-	 * @param  string $plugin_name Plugin slug.
+	 * @since 2.8.3 Updated params.
+	 *
+	 * @param string $plugin_name_or_path The plugin slug or log file path.
+	 * @param bool   $is_path             Indicates if the file path is being provided instead of the plugin slug.
 	 *
 	 * @return string File size with unit of measurement.
 	 */
-	public function get_log_file_size( $plugin_name ) {
+	public function get_log_file_size( $plugin_name_or_path, $is_path = false ) {
 
 		// Get log file name.
-		$file = $this->get_log_file_name( $plugin_name );
+		$file = $is_path ? $plugin_name_or_path : $this->get_log_file_name( $plugin_name_or_path );
 
 		// Get log file size.
 		$size = filesize( $file );
@@ -997,7 +999,7 @@ class GFLogging extends GFAddOn {
 				}
 
 				// Save new settings.
-				update_blog_option( $blog_id, 'gravityformsaddon_' . $this->_slug . '_settings', $new_settings );
+				update_blog_option( $blog_id, 'gravityformsaddon_' . $this->get_slug() . '_settings', $new_settings );
 
 				// Delete old settings.
 				delete_blog_option( $blog_id, 'gf_logging_settings' );
@@ -1075,7 +1077,7 @@ class GFLogging extends GFAddOn {
 
 	public function delete_settings() {
 		delete_option( 'gform_enable_logging' );
-		delete_option( 'gravityformsaddon_' . $this->_slug . '_settings' );
+		delete_option( 'gravityformsaddon_' . $this->get_slug() . '_settings' );
 	}
 
 	/**

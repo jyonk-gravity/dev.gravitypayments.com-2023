@@ -81,10 +81,6 @@
                     if (empty($matched_sort_id))
                         return;
                     
-                    //no hierarhical yet
-                    if($this->interface_helper->get_is_hierarhical_by_settings($matched_sort_id) === TRUE)
-                        return;
-                    
                     //check the option of this sort if allow interface sorting
                     $sort_settings  =   $this->APTO->functions->get_sort_settings($matched_sort_id);
                     
@@ -112,6 +108,10 @@
                     //return if post author filtering
                     if (isset($_GET['author']))
                         return false;
+                    
+                    //Provide a way to disable the drag & drop in certain scenarios
+                    if ( ! apply_filters( 'apto/default_interface_sort/allow', TRUE, $matched_sort_id ) )
+                        return;
                     
                     
                     global $wp_query;
@@ -171,6 +171,9 @@
                                 }
                         }
                     
+                    $taxonomy   =   apply_filters( 'apto/default_interface_sort/taxonomy', $taxonomy );
+                    $term_id    =   apply_filters( 'apto/default_interface_sort/term_id', $term_id );
+                    
                     $paged  =   get_query_var('paged', 1);
                     if($paged   <   1)
                         $paged  =   1;
@@ -211,8 +214,8 @@
                     
                     global $wpdb;
                     
-                    $post_type  =   filter_var ( $_POST['post_type'],   FILTER_SANITIZE_STRING);
-                    $taxonomy   =   filter_var ( $_POST['taxonomy'],    FILTER_SANITIZE_STRING);
+                    $post_type  =   preg_replace( '/[^a-zA-Z0-9_\-]/', '', $_POST['post_type'] );
+                    $taxonomy   =   preg_replace( '/[^a-zA-Z0-9_\-]/', '', $_POST['taxonomy'] );
                     $term_id    =   filter_var ( $_POST['term_id'],     FILTER_SANITIZE_NUMBER_INT);
                     $paged      =   filter_var ( $_POST['paged'],       FILTER_SANITIZE_NUMBER_INT);
                     $sort_id    =   filter_var ( $_POST['sort_id'],     FILTER_SANITIZE_NUMBER_INT);
@@ -269,8 +272,12 @@
                         }
                     
                     global $userdata;
-                    $objects_per_page   =   get_user_meta($userdata->ID ,'edit_' . $post_type . '_per_page', TRUE);
-                    if(empty($objects_per_page))
+                    if ( $post_type == 'attachment' )
+                        $objects_per_page   =   get_user_meta( $userdata->ID , 'upload_per_page', TRUE );
+                        else
+                        $objects_per_page   =   get_user_meta( $userdata->ID ,'edit_' .  $post_type  .'_per_page', TRUE );
+                    $objects_per_page   =   apply_filters( "edit_{$post_type}_per_page", $objects_per_page );
+                    if( empty ( $objects_per_page ) )
                         $objects_per_page   =   20;
                     
                     $edit_start_at      =   $paged  *   $objects_per_page   -   $objects_per_page;

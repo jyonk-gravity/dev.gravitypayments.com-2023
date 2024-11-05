@@ -158,52 +158,54 @@ if ( !function_exists('wd_strip_tags_ws') ) {
 }
 
 if (!function_exists("wd_closetags")) {
-    /**
-     * Close unclosed HTML tags
-     *
-     * @param $html
-     * @return string
-     */
-    function wd_closetags ( $html ) {
-        $unpaired = array('hr', 'br', 'img');
+	/**
+	 * Close unclosed HTML tags
+	 *
+	 * @param $html
+	 * @return string
+	 */
+	function wd_closetags ( $html ) {
+		$html = trim($html);
+		$unpaired = array('hr', 'br', 'img');
 
-        // put all opened tags into an array
-        preg_match_all ( "#<([a-z]+)( .*)?(?!/)>#iU", $html, $result );
-        $openedtags = $result[1];
-        // remove unpaired tags
-        if (is_array($openedtags) && count($openedtags)>0) {
-            foreach ($openedtags as $k=>$tag) {
-                if (in_array($tag, $unpaired))
-                    unset($openedtags[$k]);
-            }
-        } else {
-	        // Replace a possible un-closed tag from the end, 30 characters backwards check
-	        $html = preg_replace('/(.*)(\<[a-zA-Z].{0,30})$/', '$1', $html);
-            return $html;
-        }
-        // put all closed tags into an array
-        preg_match_all ( "#</([a-z]+)>#iU", $html, $result );
-        $closedtags = $result[1];
-        $len_opened = count ( $openedtags );
-        // all tags are closed
-        if( count ( $closedtags ) == $len_opened ) {
-	        // Replace a possible un-closed tag from the end, 30 characters backwards check
-	        $html = preg_replace('/(.*)(\<[a-zA-Z].{0,30})$/', '$1', $html);
-            return $html;
-        }
-        $openedtags = array_reverse ( $openedtags );
-        // close tags
-        for( $i = 0; $i < $len_opened; $i++ ) {
-            if ( !in_array ( $openedtags[$i], $closedtags ) ) {
-                $html .= "</" . $openedtags[$i] . ">";
-            } else {
-                unset ( $closedtags[array_search ( $openedtags[$i], $closedtags)] );
-            }
-        }
-	    // Replace a possible un-closed tag from the end, 30 characters backwards check
-	    $html = preg_replace('/(.*)(\<[a-zA-Z].{0,30})$/', '$1', $html);
-        return $html;
-    }
+		// put all opened tags into an array
+		preg_match_all ( "#<([a-z]+)( .*)?(?!/)>#iU", $html, $result );
+		$openedtags = $result[1];
+		// remove unpaired tags
+		if (is_array($openedtags) && count($openedtags)>0) {
+			foreach ($openedtags as $k=>$tag) {
+				if (in_array($tag, $unpaired))
+					unset($openedtags[$k]);
+			}
+		} else {
+			// Replace a possible un-closed tag from the end, 30 characters backwards check
+			$html = preg_replace('/(.*)(\<[a-zA-Z]{0,30})$/', '$1', $html);
+			return $html;
+		}
+		// put all closed tags into an array
+		preg_match_all ( "#</([a-z]+)>#iU", $html, $result );
+		$closedtags = $result[1];
+		$len_opened = count ( $openedtags );
+		// all tags are closed
+		if( count ( $closedtags ) == $len_opened ) {
+			// Replace a possible un-closed tag from the end, 30 characters backwards check
+			$html = preg_replace('/(.*)(\<[a-zA-Z]{0,30})$/', '$1', $html);
+			return $html;
+		}
+		$openedtags = array_reverse ( $openedtags );
+		// close tags
+		for( $i = 0; $i < $len_opened; $i++ ) {
+			if ( !in_array ( $openedtags[$i], $closedtags ) ) {
+				$html .= "</" . $openedtags[$i] . ">";
+			} else {
+				unset ( $closedtags[array_search ( $openedtags[$i], $closedtags)] );
+			}
+		}
+
+		// Replace a possible un-closed tag from the end, 30 characters backwards check
+		$html = preg_replace('/(.*)(\<[a-zA-Z]{0,30})$/', '$1', $html);
+		return $html;
+	}
 }
 
 if (!function_exists("wd_mysql_escape_mimic")) {
@@ -341,26 +343,6 @@ if ( !function_exists('wd_array_super_unique') ) {
     }
 }
 
-if (!function_exists("wd_explode")) {
-	/**
-	 * Explode with a trim function
-	 *
-	 * @param string $delim delimiter
-	 * @param string $str
-	 * @return string
-	 */
-    function wd_explode($delim = ',', $str = '') {
-        if ( !is_array($str) )
-            $str = explode($delim, $str);
-        foreach ( $str as $k => &$v) {
-            $v = trim($v);
-            if ( $v == '' )
-                unset($str[$k]);
-        }
-        return $str;
-    }
-}
-
 if (!function_exists("wd_current_page_url")) {
     /**
      * Returns the current page url
@@ -449,8 +431,26 @@ if (!function_exists("asp_get_image_from_content")) {
      * @return bool|string
      */
     function asp_get_image_from_content($content, $number = 0, $exclude = array()) {
-        if ($content == "" || !class_exists('\\domDocument'))
-            return false;
+        if ($content == "" || !class_exists('\\domDocument')) {
+	        return false;
+        }
+
+		if ( function_exists('mb_encode_numericentity') ) {
+			$encoded_content = mb_encode_numericentity(
+				htmlspecialchars_decode(
+					htmlentities( $content, ENT_NOQUOTES, 'UTF-8', false ),
+					ENT_NOQUOTES
+				),
+				array( 0x80, 0x10FFFF, 0, ~0 ),
+				'UTF-8'
+			);
+		} else {
+			$encoded_content = $content;
+		}
+
+		if ( $encoded_content === '' ) {
+			return false;
+		}
 
         // The arguments expects 1 as the first image, while it is the 0th
         $number = intval($number) - 1;
@@ -476,10 +476,7 @@ if (!function_exists("asp_get_image_from_content")) {
 
 		foreach ( $elements as $element ) {
 			$dom = new \domDocument();
-			if ( function_exists('mb_convert_encoding') )
-				@$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
-			else
-				@$dom->loadHTML($content);
+			@$dom->loadHTML($encoded_content);
 			$dom->preserveWhiteSpace = false;
 			@$images = $dom->getElementsByTagName($element);
 			if ($images->length > 0) {
@@ -829,6 +826,10 @@ if (!function_exists("wpdreams_box_shadow_css")) {
 
 if (!function_exists("wpdreams_gradient_css")) {
 	function wpd_gradient_get_color_only( $data ) {
+		if ( preg_match('/rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*0\s*\)/', $data) ) {
+			return 'transparent';
+		}
+
 		preg_match('/.*\-(.*?)$/', $data, $matches);
 		if ( isset($matches[1]) ) {
 			return wpdreams_admin_hex2rgb($matches[1]);
@@ -1006,7 +1007,9 @@ if ( !function_exists("asp_results_to_wp_obj") ) {
                     $r->asp_guid = $res->asp_guid;
                     $res->asp_id = $r->id;  // Save the ID in case needed for some reason
                     $res->blogid = $r->blogid;
-					$res->guid = $r->link;
+                    if ( isset($r->link) ) {
+					    $res->guid = $r->link;
+                    }
 
                     /**
                      * On multisite the page and other post type links are filtered in such a way
@@ -1174,7 +1177,7 @@ if ( !function_exists("asp_acf_get_post_object_field_values") ) {
 		$return = array();
 		$_return = array();
 		foreach ( $field_object['post_type'] as $post_type ) {
-			$posts = get_posts( array('post_type' => $post_type, 'posts_per_page' => -1, 'post_status' => 'publish') );
+			$posts = get_posts( array('post_type' => $post_type, 'posts_per_page' => -1, 'post_status' => 'publish', 'suppress_filters' => false) );
 			if ( !is_wp_error($posts) && count($posts) > 0 ) {
 				$_return = array_merge($_return, $posts);
 			}
@@ -1234,7 +1237,7 @@ if ( !function_exists("asp_acf_get_field_choices") ) {
 
         // Method 3: Let us try going through the ACF registered post types
         if ( empty($results) ) {
-            $acf_posts = get_posts( array('post_type' => 'acf', 'posts_per_page' => -1, 'post_status' => 'all') );
+            $acf_posts = get_posts( array('post_type' => 'acf', 'posts_per_page' => -1, 'post_status' => 'all', 'suppress_filters' => false) );
             if ( !is_wp_error($acf_posts) ) {
                 foreach ($acf_posts as $acf) {
                     $meta = get_post_meta($acf->ID);
@@ -1291,7 +1294,7 @@ if ( !function_exists("asp_acf_get_field_type") ) {
 
         // Method 3: Let us try going through the ACF registered post types
         if ( $type === false ) {
-            $acf_posts = get_posts( array('post_type' => 'acf', 'posts_per_page' => -1, 'post_status' => 'all') );
+            $acf_posts = get_posts( array('post_type' => 'acf', 'posts_per_page' => -1, 'post_status' => 'all', 'suppress_filters' => false) );
             if ( !is_wp_error($acf_posts) ) {
                 foreach ($acf_posts as $acf) {
                     $meta = get_post_meta($acf->ID);
@@ -1721,9 +1724,11 @@ if ( !function_exists("asp_parse_custom_field_filters") ) {
 				$default = array($bfield->asp_f_number_range_default1, $bfield->asp_f_number_range_default2);
 
 				if ( isset($o['_fo']) && isset($o['_fo']['aspf'][$unique_field_name]['lower']) ) {
+                    $lower = $o['_fo']['aspf'][$unique_field_name]['lower'];
+                    $upper = $o['_fo']['aspf'][$unique_field_name]['upper'];
 					$value = array(
-						Str::forceNumeric($o['_fo']['aspf'][$unique_field_name]['lower']),
-						Str::forceNumeric($o['_fo']['aspf'][$unique_field_name]['upper'])
+						$lower === '' ? $lower : Str::forceNumeric($lower),
+						$upper === '' ? $upper : Str::forceNumeric($upper)
 					);
 				} else {
 					$value = $default;
@@ -1959,8 +1964,17 @@ if ( !function_exists('asp_parse_tax_term_filters') ) {
                     ));
                 }
 
-                if (is_wp_error($_needed_terms_full))
-                    continue;
+				/*
+				 * DO NOT CONTINUE HERE
+				 *
+				 * The filter should be still considered, as the user either:
+				 *  - use the asp_fontend_get_taxonomy_terms hook
+				 *  - the taxonomy is not yet registered and only the asp_parse_filters() function is trying to
+				 *    fetch the filters for the Asset managers
+				 */
+                if ( is_wp_error($_needed_terms_full) ) {
+					$_needed_terms_full = array();
+				}
 
                 $_needed_terms_full = apply_filters('asp_fontend_get_taxonomy_terms',
                     $_needed_terms_full,
@@ -2188,8 +2202,7 @@ if ( !function_exists('asp_parse_post_tag_filters') ) {
         $_sfto = $o["selected-show_frontend_tags"];
 
         if ($_sfto['source'] == "all") {
-            // Limit all tags to 400. I mean that should be more than enough..
-            $_sftags = get_terms("post_tag", array("number"=>400));
+            $_sftags = get_terms("post_tag", array("number"=>10000));
         } else {
             $_sftags = asp_get_terms_ordered_by_ids("post_tag", $_sfto['tag_ids']);
         }
@@ -2605,9 +2618,9 @@ if ( !function_exists('asp_icl_t') ) {
         if (function_exists('pll_register_string') && function_exists('pll__')) {
 			PolylangStringTranslations::add($name, $value);
             $ret = pll__($value);
-        } else if (function_exists('icl_register_string') && function_exists('icl_t')) {
-            @icl_register_string('ajax-search-pro', $name, $value);
-            $ret = @icl_t('ajax-search-pro', $name, $value);
+        } else if (defined('WPML_PLUGIN_BASENAME') || defined('ICL_SITEPRESS_VERSION')) {
+	        do_action( 'wpml_register_single_string', 'ajax-search-pro', $name, $value );
+	        $ret = apply_filters('wpml_translate_single_string', $value, 'ajax-search-pro', $name);
         } else if (function_exists('qtranxf_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
             $ret = qtranxf_useCurrentLanguageIfNotFoundUseDefaultLanguage( $value );
         }
@@ -2646,7 +2659,9 @@ if (!function_exists("asp_get_terms_ordered_by_ids")) {
         $tags = get_terms($taxonomy, array("include" => $ids));
 
         foreach ($tags as $tag) {
-            $final_tags_arr[$tag_keys_arr[$tag->term_id]] = $tag;
+	        if ( isset($tag_keys_arr[$tag->term_id]) ) {
+		        $final_tags_arr[$tag_keys_arr[$tag->term_id]] = $tag;
+	        }
         }
 
         ksort($final_tags_arr);

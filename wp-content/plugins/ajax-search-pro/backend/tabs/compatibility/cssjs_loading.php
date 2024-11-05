@@ -45,14 +45,6 @@
 			<?php echo __('Lazy loader for the search initializer script. It can reduce the initial javascript thread work and increase the google lighthouse score.', 'ajax-search-pro'); ?>
 		</p>
 	</div>
-    <div class="item">
-        <?php $o = new wpdreamsYesNo("load_lazy_js", __('Use the Lazy Loader jQuery script to load the images?', 'ajax-search-pro'),
-            $com_options['load_lazy_js']
-        ); ?>
-        <p class='descMsg'>
-            <?php echo sprintf( __('Will load an use a modified version of <a href="%s" target="_blank">Lazy Load</a> script to load the images of results.', 'ajax-search-pro'), 'http://jquery.eisbehr.de/lazy/' ); ?>
-        </p>
-    </div>
 	<div class="item">
 		<?php
 		$o = new wpdreamsCustomSelect("css_loading_method", __('Style (CSS) loading method', 'ajax-search-pro'), array(

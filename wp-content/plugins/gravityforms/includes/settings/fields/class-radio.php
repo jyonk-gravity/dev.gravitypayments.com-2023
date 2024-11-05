@@ -36,6 +36,15 @@ class Radio extends Base {
 	public $image_select = false;
 
 	/**
+	 * Whether the inputs should be horizontal.
+	 *
+	 * @since 2.5
+	 *
+	 * @var bool
+	 */
+	public $horizontal;
+
+	/**
 	 * Initialize field.
 	 *
 	 * @since 2.5
@@ -100,7 +109,7 @@ class Radio extends Base {
 		foreach ( $choices as $i => $choice ) {
 
 			// Prepare choice attributes.
-			$choice['id']   = rgempty( 'id', 'choice' ) ? sprintf( '%s%s', $this->name, $i ) : $choice['id'];
+			$choice['id']   = rgempty( 'id', $choice ) ? sprintf( '%s%s', $this->name, $i ) : $choice['id'];
 			$choice_value   = isset( $choice['value'] ) ? $choice['value'] : $choice['label'];
 			$choice_tooltip = $this->settings->maybe_get_tooltip( $choice );
 

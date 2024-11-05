@@ -15,6 +15,7 @@ jQuery(function ($) {
             id = $(this).attr('keyword');
             var data = {
                 action: 'ajaxsearchpro_deletekeyword',
+                asp_statistics_request_nonce: $('#asp_statistics_request_nonce').val(),
                 keywordid: id
             };
             jQuery.post(ajaxurl, data, function (response) {

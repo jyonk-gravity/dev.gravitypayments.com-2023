@@ -12,6 +12,7 @@ if (!isset($_POST['action']))
 //to the relative location of the wp-load.php
 if ( file_exists('../../../wp-load.php') ) {
 	require_once('../../../wp-load.php');
+
 } else if ( file_exists(dirname('../../../index.php' ) . '/.wordpress/wp-load.php') ) {
 	// FLYWHEEL hosting
 	require_once( dirname('../../../index.php' ) . '/.wordpress/wp-load.php' );

@@ -150,7 +150,7 @@ function getCorrectDefaultFieldId( field ) {
 		return null;
 	}
 
-	if ( field.type === 'checkbox' || field.type === 'radio' || ! field.inputs || ! field.inputs.length ) {
+	if ( field.type === 'checkbox' || field.type === 'radio' || field.inputType === 'checkbox' || field.inputType === 'radio' || ! field.inputs || ! field.inputs.length ) {
 		return field.id;
 	}
 
@@ -254,22 +254,48 @@ function getAddressOptions( field, inputId, value ) {
 
 	var fieldAddressOptions = addressOptions[ field.addressType ];
 
-	// Address options are grouped by a key; parse them as sub-items.
+	// Associative arrays are expected to have alphanumeric keys (country codes).
+	// If asort() is used in the gform_countries filter, the resulting array will be
+	// associative even if the original array was plain, we only need the values.
+	if ( ! Array.isArray( fieldAddressOptions ) ) {
+		var allNumericKeys = true;
+		for ( var key in fieldAddressOptions ) {
+			if ( isNaN( key ) ) {
+				allNumericKeys = false;
+				break;
+			}
+		}
+		if ( allNumericKeys ) {
+			fieldAddressOptions = Object.values( fieldAddressOptions );
+		}
+	}
+
+	// True associative arrays (country codes) are handled here.
 	if ( ! Array.isArray( fieldAddressOptions ) ) {
 
 		for ( var locale in fieldAddressOptions ) {
 			var group = fieldAddressOptions[ locale ];
+			var config;
 
-			for ( var i = 0; i < group.length; i++ ) {
-				var option = group[ i ];
+			if( Array.isArray( group ) ) {
+				// Address options are grouped by a key; parse them as sub-items.
+				for (var i = 0; i < group.length; i++) {
+					var option = group[i];
 
-				var config = {
-					label: option,
-					value: option,
-					selected: option == value ? 'selected="selected"' : '',
+					config = {
+						label: option,
+						value: option,
+						selected: option == value ? 'selected="selected"' : '',
+					}
+					options.push(config);
 				}
-
-				options.push( config );
+			} else {
+				config = {
+					label: group,
+					value: locale,
+					selected: locale == value ? 'selected="selected"' : '',
+				}
+				options.push(config);
 			}
 		}
 
@@ -324,12 +350,13 @@ function generateGFConditionalLogic( fieldId, objectType ) {
  * @return {boolean}
  */
 function isValidFlyoutClick( e ) {
-	return (
+	var isValidFlyoutClick = (
 		'jsConditonalToggle' in e.target.dataset ||
 		'jsAddRule' in e.target.dataset ||
 		'jsDeleteRule' in e.target.dataset ||
 		e.target.classList.contains( 'gform-field__toggle-input' )
 	);
+	return gform.applyFilters( 'gform_conditional_logic_is_valid_flyout_click', isValidFlyoutClick, e );
 }
 
 /**
@@ -758,6 +785,26 @@ GFConditionalLogic.prototype.renderRules = function() {
 }
 
 /**
+ * Update the visibility of the conditional logic icon in compact view.
+ */
+GFConditionalLogic.prototype.updateCompactView = function() {
+	if( this.objectType == 'next_button' ) {
+		return;
+	}
+
+	const icon = document.querySelector( '#gfield_' + this.fieldId + '-conditional-logic-icon' );
+	if ( ! icon ) {
+		return;
+	}
+
+	if ( this.state.enabled ) {
+		icon.style.display = 'block';
+	} else {
+		icon.style.display = 'none';
+	}
+}
+
+/**
  * Gather an object populated with the DOM elements we'll be interacting with.
  *
  * @return {object}
@@ -1010,6 +1057,7 @@ GFConditionalLogic.prototype.updateState = function( stateKey, stateValue ) {
 		this.renderSidebar();
 		this.renderMainControls( true );
 		this.renderRules();
+		this.updateCompactView();
 	}
 };
 

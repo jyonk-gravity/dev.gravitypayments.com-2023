@@ -70,7 +70,6 @@ if (ASP_DEMO) $_POST = null;
                 "usecustomajaxhandler" => $_POST['usecustomajaxhandler'],
                 // Loading
                 "script_loading_method" => $_POST['script_loading_method'],
-                "load_lazy_js" => $_POST['load_lazy_js'],
                 "init_instances_inviewport_only" => $_POST['init_instances_inviewport_only'],
                 "css_loading_method" => $_POST['css_loading_method'],
                 'selective_enabled' => $_POST['selective_enabled'],

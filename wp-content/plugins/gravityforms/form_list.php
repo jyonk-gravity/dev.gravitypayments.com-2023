@@ -205,7 +205,6 @@ class GFFormList {
                     <?php $table->display(); ?>
                     </form>
                 </div>
-				<div data-js="gf-template-library"></div>
 	<?php
 		GFForms::admin_footer();
 	}
@@ -321,6 +320,7 @@ class GFFormList {
 					description: jQuery('#new_form_description').val(),
 					labelPlacement:'top_label',
 					descriptionPlacement:'below',
+					validationPlacement:'below',
 					button: {
 						type: 'text',
 						text: <?php echo json_encode( esc_html__( 'Submit', 'gravityforms' ) ); ?>,
@@ -610,9 +610,15 @@ class GF_Form_List_Table extends WP_List_Table {
 				$text  = esc_html__( 'Inactive', 'gravityforms' );
 			}
 			?>
-			<button type="button" class="gform-status-indicator <?php echo esc_attr( $class ); ?>" onclick="ToggleActive( this, <?php echo absint( $form->id ); ?> );" onkeypress="ToggleActive( this, <?php echo absint( $form->id ); ?> );">
-				<svg role="presentation" focusable="false" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><circle cx="3" cy="2" r="1" stroke-width="2"/></svg>
-				<span class="gform-status-indicator-status"><?php echo esc_html( $text ); ?></span>
+			<button
+				type="button"
+				class="gform-status-indicator gform-status-indicator--size-sm gform-status-indicator--theme-cosmos <?php echo esc_attr( $class ); ?>"
+				onclick="ToggleActive( this, <?php echo absint( $form->id ); ?> );"
+				onkeypress="ToggleActive( this, <?php echo absint( $form->id ); ?> );"
+			>
+				<span class="gform-status-indicator-status gform-typography--weight-medium gform-typography--size-text-xs">
+					<?php echo esc_html( $text ); ?>
+				</span>
 			</button>
 			<?php
 		}
@@ -620,7 +626,7 @@ class GF_Form_List_Table extends WP_List_Table {
 	}
 
 	function column_title( $form ) {
-		echo '<strong><a href="?page=gf_edit_forms&id='. absint( $form->id ) .'">' . esc_html( $form->title ) . '</a></strong>';
+		echo '<strong><a href="?page=gf_edit_forms&id='. absint( $form->id ) .'" aria-label="' . esc_attr( $form->title ) . ' ' . esc_attr( '(Edit)', 'gravityforms' ) . '">' . esc_html( $form->title ) . '</a></strong>';
 	}
 
 	function column_id( $form ) {
@@ -726,7 +732,7 @@ class GF_Form_List_Table extends WP_List_Table {
 		if ( rgget( 's' ) ) {
 			printf(
 				esc_html__( "No forms were found for your search query. %sView all forms%s.", 'gravityforms' ),
-				'<a href="' . remove_query_arg( 's' ) . '">',
+				'<a href="' . esc_url( remove_query_arg( 's' ) ) . '">',
 				'</a>'
 			);
 		} else if ( $this->filter == 'trash' ) {

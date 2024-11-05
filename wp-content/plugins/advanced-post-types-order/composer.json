@@ -10,7 +10,6 @@
                           "homepage": "http://www.nsp-code.com/"
                         }
                       ],
-    "hash"          : "361097790029763",
     "type"          : "wordpress-plugin",
     "require"       : {
                             "composer/installers": "~1.0"

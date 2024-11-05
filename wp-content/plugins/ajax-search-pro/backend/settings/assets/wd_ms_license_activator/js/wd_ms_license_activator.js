@@ -1,4 +1,5 @@
 jQuery(function($){
+    let nonce = $('#asp_mediaservice_request_nonce').val();
     let activate = function(e){
         e.preventDefault();
         let $parent = $(this).closest('.wd_MSLicenseActivator');
@@ -7,6 +8,7 @@ jQuery(function($){
             license = $(this).parent().find('input[name=ms_license_key]').val();
         let data = {
             'action': 'asp_media_service',
+            'asp_mediaservice_request_nonce': nonce,
             'ms_license_key': license
         };
         $this.attr('disabled', 'disabled');
@@ -51,6 +53,7 @@ jQuery(function($){
             $log.find('p').addClass('hiddend');
             let data = {
                 'action': 'asp_media_service',
+                'asp_mediaservice_request_nonce': nonce,
                 'ms_deactivate': 1
             };
             $.ajax({

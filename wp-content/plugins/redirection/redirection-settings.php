@@ -60,6 +60,8 @@ function red_get_default_options() {
 		'newsletter'          => false,
 		'redirect_cache'      => 1,   // 1 hour
 		'ip_logging'          => 0,   // No IP logging
+		'ip_headers'          => [],
+		'ip_proxy'            => [],
 		'last_group_id'       => 0,
 		'rest_api'            => REDIRECTION_API_JSON,
 		'https'               => false,
@@ -100,6 +102,23 @@ function red_set_options( array $settings = [] ) {
 		}
 	}
 
+	if ( isset( $settings['ip_proxy'] ) && is_array( $settings['ip_proxy'] ) ) {
+		$options['ip_proxy'] = array_map( function( $ip ) {
+			$ip = new Redirection_IP( $ip );
+			return $ip->get();
+		}, $settings['ip_proxy'] );
+
+		$options['ip_proxy'] = array_values( array_filter( $options['ip_proxy'] ) );
+	}
+
+	if ( isset( $settings['ip_headers'] ) && is_array( $settings['ip_headers'] ) ) {
+		$available = Redirection_Request::get_ip_headers();
+		$options['ip_headers'] = array_filter( $settings['ip_headers'], function( $header ) use ( $available ) {
+			return in_array( $header, $available, true );
+		} );
+		$options['ip_headers'] = array_values( $options['ip_headers'] );
+	}
+
 	if ( isset( $settings['rest_api'] ) && in_array( intval( $settings['rest_api'], 10 ), array( 0, 1, 2, 3, 4 ), true ) ) {
 		$options['rest_api'] = intval( $settings['rest_api'], 10 );
 	}
@@ -117,8 +136,12 @@ function red_set_options( array $settings = [] ) {
 	}
 
 	if ( isset( $settings['associated_redirect'] ) && is_string( $settings['associated_redirect'] ) ) {
-		$sanitizer = new Red_Item_Sanitize();
-		$options['associated_redirect'] = trim( $sanitizer->sanitize_url( $settings['associated_redirect'] ) );
+		$options['associated_redirect'] = '';
+
+		if ( strlen( $settings['associated_redirect'] ) > 0 ) {
+			$sanitizer = new Red_Item_Sanitize();
+			$options['associated_redirect'] = trim( $sanitizer->sanitize_url( $settings['associated_redirect'] ) );
+		}
 	}
 
 	if ( isset( $settings['monitor_types'] ) && count( $monitor_types ) === 0 ) {
@@ -227,7 +250,12 @@ function red_set_options( array $settings = [] ) {
 	}
 
 	if ( isset( $settings['permalinks'] ) && is_array( $settings['permalinks'] ) ) {
-		$options['permalinks'] = array_map( 'sanitize_text_field', $settings['permalinks'] );
+		$options['permalinks'] = array_map(
+			function ( $permalink ) {
+				return sanitize_option( 'permalink_structure', $permalink );
+			},
+			$settings['permalinks']
+		);
 		$options['permalinks'] = array_values( array_filter( array_map( 'trim', $options['permalinks'] ) ) );
 		$options['permalinks'] = array_slice( $options['permalinks'], 0, 10 ); // Max 10
 	}

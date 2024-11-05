@@ -13,6 +13,7 @@ if (!class_exists("wpdreamsCustomPostTypesAll")) {
 	 */
 	class wpdreamsCustomPostTypesAll extends wpdreamsType {
 	    private $selected;
+		private $types;
 
 		function getType() {
 			parent::getType();

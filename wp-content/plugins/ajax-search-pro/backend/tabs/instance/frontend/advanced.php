@@ -44,6 +44,23 @@
             <?php echo __('This decides what happens if the posts does not have any terms from the selected taxonomies. For example posts with no categories, when using a category filter.', 'ajax-search-pro'); ?>
         </p>
     </div>
+	<div class="item">
+		<?php
+		$o = new wpdreamsYesNo("frontend_terms_parent_unselect_children", __('Uncheck child terms when the parent term is unchecked', 'ajax-search-pro'), $sd['frontend_terms_parent_unselect_children']);
+		?>
+		<p class="descMsg">
+			<?php echo __('When turned <strong>ON</strong> and using Checkbox filters, the child categories (terms) are automatically unchecked when the parent is unchecked.', 'ajax-search-pro'); ?>
+		</p>
+	</div>
+	<div class="item">
+		<?php
+		$o = new wpdreamsYesNo("frontend_terms_hide_children", __('Hide child terms, where the parent checkbox is unchecked?', 'ajax-search-pro'), $sd['frontend_terms_hide_children']);
+		$params[$o->getName()] = $o->getData();
+		?>
+		<p class="descMsg">
+			<?php echo __('Automatically hides the checkbox options, where the parent terms are unchecked.', 'ajax-search-pro'); ?>
+		</p>
+	</div>
     <div class="item">
         <?php
         $o = new wpdreamsYesNo("frontend_terms_ignore_empty", __('Ignore checkbox filters that have nothing selected?', 'ajax-search-pro'), $sd['frontend_terms_ignore_empty']);

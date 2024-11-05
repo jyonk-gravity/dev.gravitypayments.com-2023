@@ -206,6 +206,23 @@
         $params[$o->getName()] = $o->getData();
         ?>
     </div>
+	<div class="item item-flex-nogrow item-flex-wrap">
+		<div>
+			<?php
+			$o = new wpdreamsTextSmall('user_image_width', 'Source image width:',
+				$sd['user_image_width']);
+			$params[$o->getName()] = $o->getData();
+			?>px,
+		</div>
+		<div>
+			<?php
+			$o = new wpdreamsTextSmall('user_image_height', ' height:',
+				$sd['user_image_height']);
+			$params[$o->getName()] = $o->getData();
+			?>px
+		</div>
+		<div class="descMsg item-flex-grow item-flex-100"><?php echo __('Default: 96x96. For avatars where the size is defined by a single value, the width is used.', 'ajax-search-pro') ?></div>
+	</div>
     <div class="item">
         <?php
         $o = new wpdreamsUpload('user_image_default', __('Default user image', 'ajax-search-pro'),
@@ -213,6 +230,7 @@
         $params[$o->getName()] = $o->getData();
         ?>
     </div>
+
 </fieldset>
 <fieldset>
     <legend><?php echo __('Advanced image options', 'ajax-search-pro'); ?></legend>

@@ -35,7 +35,10 @@ wp_enqueue_style('wpdreams-jqPlotstyle');
 
 global $wpdb;
 
-if (isset($_POST['asp_stat'])) {
+if ( 
+    isset($_POST['asp_stat'], $_POST['asp_statistics_request_nonce']) && 
+    wp_verify_nonce( $_POST['asp_statistics_request_nonce'], 'asp_statistics_request_nonce' )
+) {
     update_option("asp_stat", $_POST['asp_stat']);
 }
 $asp_stat = get_option("asp_stat", 0);
@@ -44,15 +47,23 @@ $where = "";
 if ( isset($_POST['searchform']) ) {
     $where = " WHERE search_id=" . ( $_POST['searchform'] + 0);
 }
-if (isset($_POST['clearstatistics']))
+if ( 
+    isset($_POST['clearstatistics'], $_POST['asp_statistics_request_nonce_3']) &&
+    wp_verify_nonce( $_POST['asp_statistics_request_nonce_3'], 'asp_statistics_request_nonce_3' )
+) {
     Statistics::clearAll();
+}
 
 $top20 = isset($_POST['searchform']) ? Statistics::getTop(20, $_POST['searchform']) : Statistics::getTop(20);
 $last20 = isset($_POST['searchform']) ? Statistics::getLast(20, $_POST['searchform']) : Statistics::getLast(20);
 $top500 = isset($_POST['searchform']) ? Statistics::getTop(500, $_POST['searchform']) : Statistics::getTop(500);
 
-if (isset($_POST['searchform']))
+if (
+    isset($_POST['searchform'], $_POST['asp_statistics_request_nonce_2']) &&
+    wp_verify_nonce( $_POST['asp_statistics_request_nonce_2'], 'asp_statistics_request_nonce_2' )
+) {
     $current_search = wd_asp()->instances->get($_POST['searchform'] + 0);
+}
 
 ?>
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/sidebar.css?v='.ASP_CURR_VER; ?>" />
@@ -74,11 +85,14 @@ if (isset($_POST['searchform']))
         <fieldset>
             <legend><?php echo __('Statistics Options', 'ajax-search-pro'); ?></legend>
             <form style='margin:20px;' name="asp_stat_settings" action="" method="POST">
+                <input type="hidden" id="asp_statistics_request_nonce" 
+                       name="asp_statistics_request_nonce" value="<?php echo wp_create_nonce( 'asp_statistics_request_nonce' ); ?>">
                 <div class="item">
                     <?php $o = new wpdreamsYesNo("asp_stat", __('Enable statistics?', 'ajax-search-pro'), $asp_stat); ?>
                 </div>
             </form>
             <form style='float:left;margin:20px;' name="settings" action="" method="POST">
+                <input type="hidden" name="asp_statistics_request_nonce_3" value="<?php echo wp_create_nonce( 'asp_statistics_request_nonce_3' ); ?>">    
                 <input name="clearstatistics" class='submit' type="submit"
                        onclick='var c=confirm("<?php echo esc_attr__('Are you sure?', 'ajax-search-pro'); ?>");if (!c) event.preventDefault();'
                        value="<?php echo esc_attr__('Clear search Statistics', 'ajax-search-pro'); ?>"/>
@@ -91,6 +105,7 @@ if (isset($_POST['searchform']))
                         <option value='<?php echo $search['id'] ?>'><?php echo esc_html( $search['name'] ); ?></option>
                     <?php } ?>
                 </select>
+                <input type="hidden" name="asp_statistics_request_nonce_2" value="<?php echo wp_create_nonce( 'asp_statistics_request_nonce_2' ); ?>">
                 <input type='submit' class='submit' value='<?php echo esc_attr__('Get Statistics!', 'ajax-search-pro'); ?>'/>
             </form>
             <div class='clear'></div>

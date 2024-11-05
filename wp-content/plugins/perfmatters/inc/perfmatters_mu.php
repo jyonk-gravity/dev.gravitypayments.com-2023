@@ -3,7 +3,7 @@
 Plugin Name: Perfmatters MU
 Plugin URI: https://perfmatters.io/
 Description: Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.
-Version: 2.0.5
+Version: 2.3.4
 Author: forgemedia
 Author URI: https://forgemedia.io/
 License: GPLv2 or later
@@ -22,12 +22,12 @@ function perfmatters_mu_disable_plugins($plugins) {
     }
 
     //only filter GET requests
-    if(!isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'GET') {
+    if((!isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'GET') && !isset($_GET['perfmatters'])) {
         return $plugins;
     }
 
     //dont filter if its a rest or ajax request
-    if((defined('REST_REQUEST') && REST_REQUEST) || (function_exists('wp_is_json_request') && wp_is_json_request()) || wp_doing_ajax() || wp_doing_cron()) {
+    if((defined('REST_REQUEST') && REST_REQUEST) || (defined('WP_CLI') && WP_CLI) || (function_exists('wp_is_json_request') && wp_is_json_request() && !pmsm_mu_prefer_html_request()) || wp_doing_ajax() || wp_doing_cron()) {
         return $plugins;
     }
 
@@ -46,9 +46,14 @@ function perfmatters_mu_disable_plugins($plugins) {
         return $plugins;
     }
 
+    //page builder check
+    if(pmsm_mu_is_page_builder()) {
+        return $plugins;
+    }
+
     //make sure script manager is enabled
-    $perfmatters_options = get_option('perfmatters_options');
-    if(empty($perfmatters_options['assets']['script_manager'])) {
+    $perfmatters_tools = get_option('perfmatters_tools');
+    if(empty($perfmatters_tools['script_manager'])) {
         return $plugins;
     }
 
@@ -81,6 +86,7 @@ function perfmatters_mu_disable_plugins($plugins) {
 
     //testing mode check
     if(!empty($pmsm_settings['testing_mode'])) {
+        wp_cookie_constants();
         require_once(wp_normalize_path(ABSPATH) . 'wp-includes/pluggable.php');
         if(!function_exists('wp_get_current_user') || !current_user_can('manage_options')) {
             return $plugins;
@@ -94,11 +100,10 @@ function perfmatters_mu_disable_plugins($plugins) {
 
     //make sure mu hasn't run already
     global $mu_run_flag;
+    global $mu_plugins;
     if($mu_run_flag) {
-        return $plugins;
+        return $mu_plugins;
     }
-
-    $mu_run_flag = true;
 
     //get script manager configuration
     $pmsm = get_option('perfmatters_script_manager');
@@ -159,6 +164,7 @@ function perfmatters_mu_disable_plugins($plugins) {
 
                 //remove plugin from list
                 $m_array = preg_grep('/^' . $handle . '.*/', $plugins);
+                $single_array = array();
                 if(!empty($m_array) && is_array($m_array)) {
                     if(count($m_array) > 1) {
                         $single_array = preg_grep('/' . $handle . '\.php/', $m_array);
@@ -174,6 +180,9 @@ function perfmatters_mu_disable_plugins($plugins) {
         }
     }
 
+    $mu_run_flag = true;
+    $mu_plugins = $plugins;
+
     return $plugins;
 }
 
@@ -187,9 +196,7 @@ add_action('plugins_loaded', 'perfmatters_mu_remove_filters', 1);
 function perfmatters_mu_get_current_ID() {
 
     //load necessary parts for url_to_postid
-    if(!defined('LOGGED_IN_COOKIE')) {
-        wp_cookie_constants();
-    }
+    wp_cookie_constants();
     require_once(wp_normalize_path(ABSPATH) . 'wp-includes/pluggable.php');
     global $wp_rewrite;
     global $wp;
@@ -203,8 +210,7 @@ function perfmatters_mu_get_current_ID() {
     if($currentID === 0) {
 
         //check for home url match
-        //$request = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER['REQUEST_URI']);
-        $request = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $request = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER['REQUEST_URI'], '?');
 
         if(trailingslashit(home_url()) !== trailingslashit($request)) {
             $currentID = '';
@@ -258,6 +264,80 @@ function pmsm_mu_check_device_type($option) {
         }
     }
     return false;
+}
+
+//check if page builder is being used
+function pmsm_mu_is_page_builder() {
+    $page_builders = apply_filters('perfmatters_page_builders', array(
+        'elementor-preview', //elementor
+        'fl_builder', //beaver builder
+        'et_fb', //divi
+        'ct_builder', //oxygen
+        'tve', //thrive
+        'app', //flatsome
+        'uxb_iframe',
+        'fb-edit', //fusion builder
+        'builder',
+        'bricks', //bricks
+        'vc_editable', //wp bakery
+        'op3editor', //optimizepress
+        'cs_preview_state' //cornerstone
+    ));
+
+    if(!empty($page_builders)) {
+        foreach($page_builders as $page_builder) {
+            if(isset($_REQUEST[$page_builder])) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+//check if html/xhtml is the preferred request
+function pmsm_mu_prefer_html_request() {
+
+    //check accept header
+    if(empty($_SERVER['HTTP_ACCEPT'])) {
+        return false;
+    }
+
+    //get content types set in header
+    $content_types = explode(',', $_SERVER['HTTP_ACCEPT']);
+    $html_preference = 0;
+    $xhtml_preference = 0;
+    $highest_preference = 0;
+
+    //loop through accepted types
+    foreach($content_types as $type) {
+
+        //split parts
+        $type_parts = explode(';', trim($type));
+        $mime_type = $type_parts[0];
+
+        //default quality factor of 1 if not set
+        $q = 1.0;
+        if(isset($type_parts[1]) && strpos($type_parts[1], 'q=') === 0) {
+            $q = floatval(substr($type_parts[1], 2));
+        }
+
+        //update highest preference
+        if($q > $highest_preference) {
+            $highest_preference = $q;
+        }
+
+        //check mime type
+        if($mime_type === 'text/html') {
+            $html_preference = $q;
+        }
+        elseif($mime_type === 'application/xhtml+xml') {
+            $xhtml_preference = $q;
+        }
+    }
+
+    // Return true if text/html or application/xhtml+xml has the highest preference
+    return ($html_preference === $highest_preference || $xhtml_preference === $highest_preference);
 }
 
 //custom url_to_postid() replacement - modified from https://gist.github.com/Webcreations907/ce5b77565dfb9a208738
@@ -358,6 +438,14 @@ function perfmatters_url_to_postid($url) {
         $url = str_replace( '://www.', '://', $url );
     }
 
+    if ( trim( $url, '/' ) === home_url() && 'page' === get_option( 'show_on_front' ) ) {
+        $page_on_front = get_option( 'page_on_front' );
+
+        if ( $page_on_front && get_post( $page_on_front ) instanceof WP_Post ) {
+            return (int) $page_on_front;
+        }
+    }
+
     // Strip 'index.php/' if we're not using path info permalinks
     if ( isset( $wp_rewrite ) && ! $wp_rewrite->using_index_permalinks() ) {
         $url = str_replace( 'index.php/', '', $url );
@@ -402,7 +490,7 @@ function perfmatters_url_to_postid($url) {
                 }
  
                 $post_status_obj = get_post_status_object( $page->post_status );
-                if ( ! $post_status_obj->public && ! $post_status_obj->protected
+                if (is_object($post_status_obj) && ! $post_status_obj->public && ! $post_status_obj->protected
                     && ! $post_status_obj->private && $post_status_obj->exclude_from_search ) {
                     continue;
                 }
@@ -463,9 +551,11 @@ function perfmatters_url_to_postid($url) {
             *************************************************************************/
 
             // Taken from class-wp.php
-            foreach ( $GLOBALS['wp_post_types'] as $post_type => $t ) {
-                if ( $t->query_var ) {
-                    $post_type_query_vars[ $t->query_var ] = $post_type;
+            if(!empty($GLOBALS['wp_post_types'])) {
+                foreach ( $GLOBALS['wp_post_types'] as $post_type => $t ) {
+                    if ( $t->query_var ) {
+                        $post_type_query_vars[ $t->query_var ] = $post_type;
+                    }
                 }
             }
 

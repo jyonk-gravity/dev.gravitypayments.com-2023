@@ -61,9 +61,6 @@ if(!empty($perfmatters_options['hide_wp_version'])) {
 	remove_action('wp_head', 'wp_generator');
 	add_filter('the_generator', 'perfmatters_hide_wp_version');
 }
-if(!empty($perfmatters_options['remove_wlwmanifest_link'])) {
-	remove_action('wp_head', 'wlwmanifest_link');
-}
 if(!empty($perfmatters_options['remove_rsd_link'])) {
 	remove_action('wp_head', 'rsd_link');
 }
@@ -150,7 +147,11 @@ function perfmatters_rest_authentication_errors($result) {
 		$exceptions = apply_filters('perfmatters_rest_api_exceptions', array(
 			'contact-form-7',
 			'wordfence',
-			'elementor'
+			'elementor',
+			'ws-form',
+			'litespeed',
+			'wp-recipe-maker',
+			'iawp'
 		));
 		foreach($exceptions as $exception) {
 			if(strpos($rest_route, $exception) !== false) {
@@ -531,12 +532,6 @@ function perfmatters_disable_woocommerce_scripts() {
 				$classes = array_diff($classes, array('woocommerce-no-js'));
 				return array_values($classes);
 			},10, 1);
-
-			//Dequue Cart Fragmentation Script
-			if(empty($perfmatters_options['disable_woocommerce_cart_fragmentation'])) {
-				wp_dequeue_script('wc-cart-fragments');
-				wp_deregister_script('wc-cart-fragments');
-			}
 		}
 	}
 }
@@ -549,8 +544,19 @@ if(!empty($perfmatters_options['disable_woocommerce_cart_fragmentation'])) {
 
 function perfmatters_disable_woocommerce_cart_fragmentation() {
 	if(class_exists('WooCommerce')) {
-		wp_dequeue_script('wc-cart-fragments');
-		wp_deregister_script('wc-cart-fragments');
+
+		global $wp_scripts;
+
+		if(!empty($wp_scripts->registered['wc-cart-fragments'])) {
+
+			$cart_fragments_src = $wp_scripts->registered['wc-cart-fragments']->src;
+			$wp_scripts->registered['wc-cart-fragments']->src = null;
+
+			add_action('wp_head', function() use ($cart_fragments_src) {
+
+				echo '<script>function perfmatters_check_cart_fragments(){if(null!==document.getElementById("perfmatters-cart-fragments"))return!1;if(document.cookie.match("(^|;) ?woocommerce_cart_hash=([^;]*)(;|$)")){var e=document.createElement("script");e.id="perfmatters-cart-fragments",e.src="' . $cart_fragments_src . '",e.async=!0,document.head.appendChild(e)}}perfmatters_check_cart_fragments(),document.addEventListener("click",function(){setTimeout(perfmatters_check_cart_fragments,1e3)});</script>';
+			});
+		}
 	}
 }
 
@@ -985,12 +991,6 @@ function perfmatters_admin_url($url) {
 			} 
 		}
 	}
-	/*elseif(!is_admin() && (function_exists('is_user_logged_in') || !is_user_logged_in())) {
-		$options = get_option('perfmatters_options');
-		if(!empty($options['login_url'])) {
-			$url = preg_replace('/\/wp-admin\/$/', '/' . $options['login_url'] . '/', $url);
-		}
-	}*/
 
 	return $url;
 }
@@ -1049,7 +1049,7 @@ function perfmatters_enqueue_instant_page() {
 	$exclude_instant_page = Perfmatters\Utilities::get_post_meta('perfmatters_exclude_instant_page');
 
 	if(!$exclude_instant_page) {
-		wp_register_script('perfmatters-instant-page', plugins_url('vendor/instant-page/instantpage.js', dirname(__FILE__)), array(), PERFMATTERS_VERSION, true);
+		wp_register_script('perfmatters-instant-page', plugins_url('vendor/instant-page/pminstantpage.min.js', dirname(__FILE__)), array(), PERFMATTERS_VERSION, true);
 		wp_enqueue_script('perfmatters-instant-page');
 	}
 }
@@ -1059,7 +1059,7 @@ function perfmatters_instant_page_attribute($tag, $handle) {
 	if($handle !== 'perfmatters-instant-page') {
 		return $tag;
 	}
-	return str_replace(' src', ' data-cfasync="false" data-no-optimize="1" src', $tag);
+	return str_replace(' src', ' async data-no-optimize="1" src', $tag);
 }
 
 /* Google Analytics
@@ -1070,16 +1070,13 @@ if(!empty($perfmatters_options['analytics']['enable_local_ga'])) {
 
 	$print_analytics = true;
 
-	if(empty($perfmatters_options['analytics']['script_type']) || $perfmatters_options['analytics']['script_type'] == 'gtag' || $perfmatters_options['analytics']['script_type'] == 'gtagv4') {
+	if(empty($perfmatters_options['analytics']['script_type'])) {
 		if(!wp_next_scheduled('perfmatters_update_ga')) {
 			wp_schedule_event(time(), 'daily', 'perfmatters_update_ga');
 		}
-		if(empty($perfmatters_options['analytics']['script_type']) || $perfmatters_options['analytics']['script_type'] == 'gtag') {
-			if(!empty($perfmatters_options['analytics']['use_monster_insights'])) {
-				$print_analytics = false;
-				add_filter('monsterinsights_frontend_output_analytics_src', 'perfmatters_monster_ga', 1000);
-				add_filter('monsterinsights_frontend_output_gtag_src', 'perfmatters_monster_ga_gtag', 1000);
-			}
+		if(!empty($perfmatters_options['analytics']['use_monster_insights'])) {
+			$print_analytics = false;
+			add_filter('monsterinsights_frontend_output_gtag_src', 'perfmatters_monster_ga_gtag', 1000);
 		}
 	}
 	else {
@@ -1111,7 +1108,7 @@ else {
 	}
 }
 
-//update analytics.js
+//update analytics local files
 function perfmatters_update_ga() {
 
 	$options = get_option('perfmatters_options');
@@ -1119,22 +1116,13 @@ function perfmatters_update_ga() {
 	$queue = array();
 
 	$upload_dir = wp_get_upload_dir();
-
-	//add analytics.js to the queue
-	if(empty($options['analytics']['script_type']) || $options['analytics']['script_type'] == 'gtag') {
-		$queue['analytics'] = array(
-			'remote' => 'https://www.google-analytics.com/analytics.js',
-			'local' => dirname(dirname(__FILE__)) . '/js/analytics.js'
-		);
-	}
 	
-	//add gtag to queue
-	if((!empty($options['analytics']['script_type']) && ($options['analytics']['script_type'] == 'gtag' || $options['analytics']['script_type'] == 'gtagv4')) || (empty($options['analytics']['script_type']) && !empty($options['analytics']['use_monster_insights']))) {
+	//add gtagv4 to queue
+	if(empty($options['analytics']['script_type'])) {
 		if(!empty($options['analytics']['tracking_id'])) {
-			$script_type = !empty($options['analytics']['script_type']) ? $options['analytics']['script_type'] : 'gtag';
-			$queue[$script_type]= array(
+			$queue['gtagv4']= array(
 				'remote' => 'https://www.googletagmanager.com/gtag/js?id=' . $options['analytics']['tracking_id'],
-				'local' => $upload_dir['basedir'] . '/perfmatters/' . $script_type . '.js'
+				'local' => $upload_dir['basedir'] . '/perfmatters/gtagv4.js'
 			);
 		}
 	}
@@ -1152,20 +1140,8 @@ function perfmatters_update_ga() {
 			    if(!is_dir($upload_dir['basedir']  . '/perfmatters/')) {
 			    	wp_mkdir_p($upload_dir['basedir']  . '/perfmatters/');
 			    }
-
-			    if($type == 'gtag') {
-			    	$plugins_url = (!empty($options['analytics']['cdn_url']) ? trailingslashit($options['analytics']['cdn_url']) . 'wp-content/plugins' : str_replace('http:', 'https:', plugins_url())) . '/perfmatters/js/';
-			    	$split_upload_dir = explode('/wp-content/', $upload_dir['baseurl']);
-			    	$uploads_url = (!empty($options['analytics']['cdn_url']) ? trailingslashit($options['analytics']['cdn_url']) . 'wp-content/' . $split_upload_dir[1] : $upload_dir['baseurl']) . '/perfmatters';
-			    	$body = str_replace('https://www.google-analytics.com/', $plugins_url, $file['body']);
-			    	$body = str_replace('/gtag/js?id=', '/gtag.js?id=', $body);
-		            $body = str_replace('"//www.googletagmanager.com"', '"' . preg_replace('(^https?:)', "", $uploads_url) . '"', $body);
-			    }
-			    else {
-			    	$body = $file['body'];
-			    }
-
-			   	file_put_contents($files['local'], $body);
+			   
+			   	file_put_contents($files['local'], $file['body']);
 			}
 		}
 	}
@@ -1191,53 +1167,16 @@ function perfmatters_print_ga() {
 	$output = '';
 
 	if(empty($options['analytics']['script_type'])) {
-		$output.= "<script>";
-		    $output.= "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-					(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-					m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-					})(window,document,'script','" . str_replace('http:', 'https:', plugins_url()) . "/perfmatters/js/analytics.js','ga');";
-		    $output.= "ga('create', '" . $options['analytics']['tracking_id'] . "', 'auto');";
-
-		    //disable display features
-		    if(!empty($options['analytics']['disable_display_features'])) {
-		    	$output.= "ga('set', 'allowAdFeatures', false);";
-		    }
-
-		    //anonymize ip
-		   	if(!empty($options['analytics']['anonymize_ip'])) {
-		   		$output.= "ga('set', 'anonymizeIp', true);";
-		   	}
-
-		    $output.= "ga('send', 'pageview');";
-
-		    //adjusted bounce rate
-		    if(!empty($options['analytics']['adjusted_bounce_rate'])) {
-		    	$output.= 'setTimeout("ga(' . "'send','event','adjusted bounce rate','" . $options['analytics']['adjusted_bounce_rate'] . " seconds')" . '"' . "," . $options['analytics']['adjusted_bounce_rate'] * 1000 . ");";
-		    }
-	    $output.= "</script>";
-	}
-	elseif($options['analytics']['script_type'] == 'gtag') {
-		$output.= '<script src="' . $upload_dir['baseurl'] . '/perfmatters/gtag.js?id=' . $options['analytics']['tracking_id'] . '"></script>'; 
-		$output.= '<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag("js", new Date());gtag("config", "' . $options['analytics']['tracking_id'] . '", {' . (!empty($options['analytics']['anonymize_ip']) ? '"anonymize_ip": true' : '') . '});';
-		if(!empty($options['analytics']['dual_tracking']) && !empty($options['analytics']['measurement_id'])) {
-    		$output.= 'gtag("config", "' . $options['analytics']['measurement_id'] . '");';
-    	}
-		$output.= '</script>';
-	}
-	elseif($options['analytics']['script_type'] == 'gtagv4') {
-    	$output.= '<script src="' . $upload_dir['baseurl'] . '/perfmatters/gtagv4.js?id=' . $options['analytics']['tracking_id'] . '"></script>'; 
+		$output.= '<script async src="' . $upload_dir['baseurl'] . '/perfmatters/gtagv4.js?id=' . $options['analytics']['tracking_id'] . '"></script>'; 
     	$output.= '<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag("js", new Date());gtag("config", "' . $options['analytics']['tracking_id'] . '");</script>';
 	}
-	elseif($options['analytics']['script_type'] == 'minimal') {
-		$output.= '<script>window.pmGAID="' . $options['analytics']['tracking_id'] . '";' . (!empty($options['analytics']['anonymize_ip']) ? 'window.pmGAAIP=true;' : '') . '</script>';
-		$output.= '<script src="' . str_replace('http:', 'https:', plugins_url()) . '/perfmatters/js/analytics-minimal.js"></script>';
-	}
-	elseif($options['analytics']['script_type'] == 'minimal_inline') {
-		$output.= '<script>(function(a,b,c){var d=a.history,e=document,f=navigator||{},g=localStorage,h=encodeURIComponent,i=d.pushState,k=function(){return Math.random().toString(36)},l=function(){return g.cid||(g.cid=k()),g.cid},m=function(r){var s=[];for(var t in r)r.hasOwnProperty(t)&&void 0!==r[t]&&s.push(h(t)+"="+h(r[t]));return s.join("&")},n=function(r,s,t,u,v,w,x){var z="https://www.google-analytics.com/collect",A=m({v:"1",ds:"web",aip:c.anonymizeIp?1:void 0,tid:b,cid:l(),t:r||"pageview",sd:c.colorDepth&&screen.colorDepth?screen.colorDepth+"-bits":void 0,dr:e.referrer||void 0,dt:e.title,dl:e.location.origin+e.location.pathname+e.location.search,ul:c.language?(f.language||"").toLowerCase():void 0,de:c.characterSet?e.characterSet:void 0,sr:c.screenSize?(a.screen||{}).width+"x"+(a.screen||{}).height:void 0,vp:c.screenSize&&a.visualViewport?(a.visualViewport||{}).width+"x"+(a.visualViewport||{}).height:void 0,ec:s||void 0,ea:t||void 0,el:u||void 0,ev:v||void 0,exd:w||void 0,exf:"undefined"!=typeof x&&!1==!!x?0:void 0});if(f.sendBeacon)f.sendBeacon(z,A);else{var y=new XMLHttpRequest;y.open("POST",z,!0),y.send(A)}};d.pushState=function(r){return"function"==typeof d.onpushstate&&d.onpushstate({state:r}),setTimeout(n,c.delay||10),i.apply(d,arguments)},n(),a.ma={trackEvent:function o(r,s,t,u){return n("event",r,s,t,u)},trackException:function q(r,s){return n("exception",null,null,null,null,r,s)}}})(window,"' . $options['analytics']['tracking_id'] . '",{' . (!empty($options['analytics']['anonymize_ip']) ? 'anonymizeIp:true,' : '') . 'colorDepth:true,characterSet:true,screenSize:true,language:true});</script>';
+	elseif($options['analytics']['script_type'] == 'minimalv4') {
+		$output.= '<script>window.pmGAID="' . $options['analytics']['tracking_id'] . '";</script>';
+		$output.= '<script async src="' . str_replace('http:', 'https:', plugins_url()) . '/perfmatters/js/analytics-minimal-v4.js"></script>';
 	}
 
 	//amp analytics
-	if(!empty($options['analytics']['enable_amp']) && (empty($options['analytics']['script_type']) || $options['analytics']['script_type'] != 'gtagv4')) {
+	if(!empty($options['analytics']['enable_amp'])) {
 		if(function_exists('is_amp_endpoint') && is_amp_endpoint()) {
 			$output.= '<script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>';
 			$output.= '<amp-analytics type="gtag" data-credentials="include"><script type="application/json">{"vars" : {"gtag_id": "' . $options['analytics']['tracking_id'] . '", "config" : {"' . $options['analytics']['tracking_id'] . '": { "groups": "default" }}}}</script></amp-analytics>';
@@ -1249,15 +1188,16 @@ function perfmatters_print_ga() {
 	}
 }
 
-//return local anlytics url for Monster Insights
-function perfmatters_monster_ga($url) {
-	return str_replace('http:', 'https:', plugins_url()) . "/perfmatters/js/analytics.js";
-}
-
-//return local gtag url for Monster Insights
+//return local gtag url for monster insights
 function perfmatters_monster_ga_gtag($url) {
-	$upload_dir = wp_get_upload_dir();
-	return $upload_dir['baseurl'] . '/perfmatters/gtag.js';
+	$perfmatters_options = get_option('perfmatters_options');
+
+	if(!empty($perfmatters_options['analytics']['tracking_id'])) {
+		$upload_dir = wp_get_upload_dir();
+		return $upload_dir['baseurl'] . '/perfmatters/gtagv4.js?id=' . $perfmatters_options['analytics']['tracking_id'];
+	}
+
+	return $url;
 }
 
 //run analytics updater after settings update if we need to
@@ -1268,19 +1208,15 @@ function perfmatters_update_option_perfmatters_options($old_value, $new_value) {
 
 	$update_flag = false;
 
-	if($new_script_type != $old_script_type && (empty($new_script_type) || $new_script_type == 'gtag' || $new_script_type == 'gtagv4')) {
+	if($new_script_type != $old_script_type && empty($new_script_type)) {
 		$update_flag = true;
 	}
 
-	if(!empty($new_value['analytics']['tracking_id']) && $new_value['analytics']['tracking_id'] != ($old_value['analytics']['tracking_id'] ?? '') && ($new_script_type == 'gtag' || $new_script_type == 'gtagv4')) {
+	if(!empty($new_value['analytics']['tracking_id']) && $new_value['analytics']['tracking_id'] != ($old_value['analytics']['tracking_id'] ?? '') && empty($new_script_type)) {
 		$update_flag = true;
 	}
 
-	if(($new_value['analytics']['cdn_url'] ?? '') != ($old_value['analytics']['cdn_url'] ?? '') && $new_script_type == 'gtag') {
-		$update_flag = true;
-	}
-
-	if(empty($new_value['analytics']['script_type']) && empty($old_value['analytics']['use_monster_insights']) && !empty($new_value['analytics']['use_monster_insights'])) {
+	if(empty($old_value['analytics']['use_monster_insights']) && !empty($new_value['analytics']['use_monster_insights'])) {
 		$update_flag = true;
 	}
 
@@ -1356,6 +1292,12 @@ if(!empty($perfmatters_options['remove_global_styles'])) {
 	});
 }
 
+/* Separate Block Styles
+/***********************************************************************/
+if(!empty($perfmatters_options['separate_block_styles'])) {
+	add_filter('should_load_separate_core_block_assets', '__return_true');
+}
+
 /* Header Code
 /***********************************************************************/
 if(!empty($perfmatters_options['assets']['header_code'])) {
@@ -1410,140 +1352,14 @@ foreach($filters as $filter) {
 //check option update for custom inputs and modify result
 function perfmatters_pre_update_option_perfmatters_options($new_value, $old_value) {
 
-	//clear used css button press
-	if(!empty($new_value['assets']['clear_used_css'])) {
-
-		Perfmatters\CSS::clear_used_css();
-
-		//display message
-		add_settings_error('perfmatters', 'perfmatters-clear-success', __('Used CSS cleared.', 'perfmatters'), 'success');
-
-		return $old_value;
-	}
-
+	//clear used css
 	if((empty($new_value['assets']['rucss_excluded_stylesheets']) !== empty($old_value['assets']['rucss_excluded_stylesheets'])) || (empty($new_value['assets']['rucss_excluded_selectors']) !== empty($old_value['assets']['rucss_excluded_selectors']))) {
 		Perfmatters\CSS::clear_used_css();
 	}
 
-	//clear local fonts button press
-	if(!empty($new_value['fonts']['clear_fonts'])) {
-
-		Perfmatters\Fonts::clear_local_fonts();
-
-		//display message
-		add_settings_error('perfmatters', 'perfmatters-clear-success', __('Local fonts cleared.', 'perfmatters'), 'success');
-
-		return $old_value;
-	}
-
+	//clear local fonts
 	if((empty($new_value['fonts']['display_swap']) !== empty($old_value['fonts']['display_swap'])) || (isset($new_value['fonts']['cdn_url']) && isset($old_value['fonts']['cdn_url']) && $new_value['fonts']['cdn_url'] !== $old_value['fonts']['cdn_url'])) {
 		Perfmatters\Fonts::clear_local_fonts();
-	}
-
-	return $new_value;
-}
-
-//check option update for custom inputs and modify result
-function perfmatters_pre_update_option_perfmatters_tools($new_value, $old_value) {
-
-	//restore plugin default options
-	if(!empty($new_value['restore_defaults'])) {
-		$defaults = perfmatters_default_options();
-		if(!empty($defaults)) {
-			update_option("perfmatters_options", $defaults);
-		}
-		add_settings_error('perfmatters', 'perfmatters-restore-success', __('Successfully restored default options.', 'perfmatters'), 'success');
-		return $old_value;
-	}
-
-	//purge meta options button press
-	if(!empty($new_value['purge_meta'])) {
-
-		//no meta options selected
-		if(empty($_POST['perfmatters_tools_temp']['purge_meta_options'])) {
-			add_settings_error('perfmatters', 'perfmatters-purge-meta-error', __('No meta options selected.', 'perfmatters'), 'error');
-			return $old_value;
-		}
-
-		global $wpdb;
-
-		$purged = array();
-
-		//delete selected options from postmeta table
-		foreach($_POST['perfmatters_tools_temp']['purge_meta_options'] as $key => $meta_key) {
-
-			$result = $wpdb->delete($wpdb->prefix . 'postmeta', array('meta_key' => $meta_key));
-
-			if($result !== false) {
-				$purged[] = $meta_key;
-			}
-		}
-
-		//display message
-		if(!empty($purged)) {
-			add_settings_error('perfmatters', 'perfmatters-purge-success', __('Meta options purged.', 'perfmatters'), 'success');
-		}
-		else {
-			add_settings_error('perfmatters', 'perfmatters-purge-error', __('Meta options not purged.', 'perfmatters'), 'error');
-		}
-
-		return $old_value;
-	}
-
-	//export settings button was pressed
-	if(!empty($new_value['export_settings'])) {
-
-		$settings = array();
-
-		$settings['perfmatters_options'] = get_option('perfmatters_options');
-		$settings['perfmatters_tools'] = get_option('perfmatters_tools');
-
-		ignore_user_abort(true);
-
-		//setup headers
-		nocache_headers();
-		header('Content-Type: application/json; charset=utf-8');
-		header('Content-Disposition: attachment; filename=perfmatters-settings-export-' . date('Y-m-d') . '.json');
-		header('Expires: 0');
-
-		//print encoded file
-		echo json_encode($settings);
-		exit;
-	}
-
-	if(!empty($new_value['import_settings']) || !empty($new_value['import_settings_file'])) {
-
-		//get temporary file
-		$import_file = $_FILES['perfmatters_import_settings_file']['tmp_name'];
-
-		//cancel if there's no file
-		if(empty($import_file)) {
-			add_settings_error('perfmatters', 'perfmatters-import-error', __('No import file given.', 'perfmatters'), 'error');
-			return $old_value;
-		}
-
-		//check if uploaded file is valid
-		$file_parts = explode('.', $_FILES['perfmatters_import_settings_file']['name']);
-		$extension = end($file_parts);
-		if($extension != 'json') {
-			add_settings_error('perfmatters', 'perfmatters-import-error', __('Please upload a valid .json file.', 'perfmatters'), 'error');
-			return $old_value;
-		}
-
-		//unpack settings from file
-		$settings = (array) json_decode(file_get_contents($import_file), true);
-
-		if(isset($settings['perfmatters_options'])) {
-			update_option('perfmatters_options', $settings['perfmatters_options']);
-		}
-
-		if(isset($settings['perfmatters_tools'])) {
-			update_option('perfmatters_tools', $settings['perfmatters_tools']);
-		}
-
-		add_settings_error('perfmatters', 'perfmatters-import-success', __('Successfully imported Perfmatters settings.', 'perfmatters'), 'success');
-
-		return $old_value;
 	}
 
 	return $new_value;
@@ -1552,7 +1368,6 @@ function perfmatters_pre_update_option_perfmatters_tools($new_value, $old_value)
 //add filter to update options
 function perfmatters_update_options() {
 	add_filter('pre_update_option_perfmatters_options', 'perfmatters_pre_update_option_perfmatters_options', 10, 2);
-	add_filter('pre_update_option_perfmatters_tools', 'perfmatters_pre_update_option_perfmatters_tools', 10, 2);
 	add_filter('update_option_perfmatters_options', 'perfmatters_update_option_perfmatters_options', 10, 2);
 }
 add_action('admin_init', 'perfmatters_update_options');
@@ -1561,9 +1376,11 @@ add_action('admin_init', 'perfmatters_update_options');
 function perfmatters_is_page_builder() {
 
 	$page_builders = apply_filters('perfmatters_page_builders', array(
+		'customizer',
 		'elementor-preview', //elementor
 		'fl_builder', //beaver builder
 		'et_fb', //divi
+		'et_pb_preview',
 		'ct_builder', //oxygen
 		'tve', //thrive
 		'app', //flatsome
@@ -1572,12 +1389,19 @@ function perfmatters_is_page_builder() {
 		'builder',
 		'bricks', //bricks
 		'vc_editable', //wp bakery
-		'op3editor' //optimizepress
+		'op3editor', //optimizepress
+		'cs_preview_state', //cornerstone
+		'breakdance', //breakdance
+    	'breakdance_iframe',
+    	'givewp-route', //givewp
+    	'gb-template-viewer', //generateblocks
+    	'trp-edit-translation', //translatepress
+    	'td_action' //tagdiv
 	));
 
 	if(!empty($page_builders)) {
 		foreach($page_builders as $page_builder) {
-			if(isset($_GET[$page_builder])) {
+			if(isset($_REQUEST[$page_builder])) {
 				return true;
 			}
 		}
@@ -1586,36 +1410,79 @@ function perfmatters_is_page_builder() {
 	return false;
 }
 
-//check if the current request is rest or ajax
+//check if the current request is dynamic
 function perfmatters_is_dynamic_request () {
-    if((defined('REST_REQUEST') && REST_REQUEST) || (function_exists('wp_is_json_request') && wp_is_json_request()) || wp_doing_ajax() || wp_doing_cron()) {
+    if((defined('REST_REQUEST') && REST_REQUEST) || (function_exists('wp_is_json_request') && wp_is_json_request() && !perfmatters_prefer_html_request()) || wp_doing_ajax() || wp_doing_cron()) {
         return true;
     }
 
     return false;
 }
 
+//check if html/xhtml is the preferred request
+function perfmatters_prefer_html_request() {
+
+    //check accept header
+    if(empty($_SERVER['HTTP_ACCEPT'])) {
+    	return false;
+    }
+
+    //get content types set in header
+    $content_types = explode(',', $_SERVER['HTTP_ACCEPT']);
+    $html_preference = 0;
+    $xhtml_preference = 0;
+    $highest_preference = 0;
+
+    //loop through accepted types
+    foreach($content_types as $type) {
+
+        //split parts
+        $type_parts = explode(';', trim($type));
+        $mime_type = $type_parts[0];
+
+        //default quality factor of 1 if not set
+        $q = 1.0;
+        if(isset($type_parts[1]) && strpos($type_parts[1], 'q=') === 0) {
+            $q = floatval(substr($type_parts[1], 2));
+        }
+
+        //update highest preference
+        if($q > $highest_preference) {
+            $highest_preference = $q;
+        }
+
+        //check mime type
+        if($mime_type === 'text/html') {
+            $html_preference = $q;
+        }
+        elseif($mime_type === 'application/xhtml+xml') {
+            $xhtml_preference = $q;
+        }
+    }
+
+    // Return true if text/html or application/xhtml+xml has the highest preference
+    return ($html_preference === $highest_preference || $xhtml_preference === $highest_preference);
+}
+
 /* EDD License Functions
 /***********************************************************************/
-function perfmatters_activate_license() {
+function perfmatters_activate_license($network = false) {
 
 	//grab existing license data
-	$license = is_network_admin() ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
+	$license = is_network_admin() || $network ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
 
 	if(!empty($license)) {
 
-		//data to send in our API request
 		$api_params = array(
 			'edd_action'=> 'activate_license',
 			'license' 	=> $license,
-			'item_name' => urlencode(PERFMATTERS_ITEM_NAME), // the name of our product in EDD
+			'item_name' => urlencode(PERFMATTERS_ITEM_NAME),
 			'url'       => home_url()
 		);
 
-		//Call the custom API.
+		//EDD API request
 		$response = wp_remote_post(PERFMATTERS_STORE_URL, array('timeout' => 15, 'sslverify' => true, 'body' => $api_params));
 
-		//make sure the response came back okay
 		if(is_wp_error($response)) {
 			return false;
 		}
@@ -1623,59 +1490,70 @@ function perfmatters_activate_license() {
 		//decode the license data
 		$license_data = json_decode(wp_remote_retrieve_body($response));
 
-		//update stored option
-		if(is_network_admin()) {
-			update_site_option('perfmatters_edd_license_status', $license_data->license);
-		}
-		else {
-			update_option('perfmatters_edd_license_status', $license_data->license);
+		//license is valid
+		if(!empty($license_data->license) && $license_data->license == 'valid') {
+
+			//update stored option
+			if(is_network_admin() || $network) {
+				update_site_option('perfmatters_edd_license_status', $license_data->license);
+				return true;
+			}
+			else {
+				update_option('perfmatters_edd_license_status', $license_data->license, false);
+				return true;
+			}
 		}
 	}
+
+	return false;
 }
 
-function perfmatters_deactivate_license() {
+function perfmatters_deactivate_license($network = false) {
 
 	//grab existing license data
-	$license = is_network_admin() ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
+	$license = is_network_admin() || $network ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
 
 	if(!empty($license)) {
 
-		// data to send in our API request
 		$api_params = array(
 			'edd_action'=> 'deactivate_license',
 			'license' 	=> $license,
-			'item_name' => urlencode(PERFMATTERS_ITEM_NAME), // the name of our product in EDD
+			'item_name' => urlencode(PERFMATTERS_ITEM_NAME),
 			'url'       => home_url()
 		);
 
-		// Call the custom API.
+		//EDD API request
 		$response = wp_remote_post(PERFMATTERS_STORE_URL, array('timeout' => 15, 'sslverify' => true, 'body' => $api_params));
 
-		// make sure the response came back okay
 		if(is_wp_error($response)) {
 			return false;
 		}
 
-		// decode the license data
+		//decode the license data
 		$license_data = json_decode(wp_remote_retrieve_body($response));
 
-		// $license_data->license will be either "deactivated" or "failed"
+		//license is deactivated
 		if($license_data->license == 'deactivated') {
+
 			//update license option
-			if(is_network_admin()) {
+			if(is_network_admin() || $network) {
 				delete_site_option('perfmatters_edd_license_status');
+				return true;
 			}
 			else {
 				delete_option('perfmatters_edd_license_status');
+				return true;
 			}
 		}
 	}
+
+	return false;
 }
 
-function perfmatters_check_license() {
+function perfmatters_check_license($network = false) {
 
 	//grab existing license data
-	$license = is_network_admin() ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
+	$license = is_network_admin() || $network ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
 
 	if(!empty($license)) {
 
@@ -1698,11 +1576,11 @@ function perfmatters_check_license() {
 		$license_data = json_decode(wp_remote_retrieve_body($response));
 
 		//update license option
-		if(is_network_admin()) {
+		if(is_network_admin() || $network) {
 			update_site_option('perfmatters_edd_license_status', $license_data->license);
 		}
 		else {
-			update_option('perfmatters_edd_license_status', $license_data->license);
+			update_option('perfmatters_edd_license_status', $license_data->license, false);
 		}
 		
 		//return license data for use

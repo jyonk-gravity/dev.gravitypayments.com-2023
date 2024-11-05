@@ -14,30 +14,36 @@
         </span>
     </legend>
     <div class="item wd-primary-order item-flex-nogrow item-flex-wrap"><?php
+	    $common_orders = array(
+		    array('option' => __('Relevance', 'ajax-search-pro'), 'value' => 'relevance DESC'),
+		    array('option' => __('Title descending', 'ajax-search-pro'), 'value' => 'post_title DESC'),
+		    array('option' => __('Title ascending', 'ajax-search-pro'), 'value' => 'post_title ASC'),
+		    array('option' => __('Publish Date descending', 'ajax-search-pro'), 'value' => 'post_date DESC'),
+		    array('option' => __('Publish Date ascending', 'ajax-search-pro'), 'value' => 'post_date ASC'),
+		    array('option' => __('Modified Date descending', 'ajax-search-pro'), 'value' => 'post_modified DESC'),
+		    array('option' => __('Modified Date ascending', 'ajax-search-pro'), 'value' => 'post_modified ASC'),
+		    array('option' => __('ID descending', 'ajax-search-pro'), 'value' => 'id DESC'),
+		    array('option' => __('ID ascending', 'ajax-search-pro'), 'value' => 'id ASC'),
+		    array('option' => __('Menu order descending', 'ajax-search-pro'), 'value' => 'menu_order DESC'),
+		    array('option' => __('Menu order ascending', 'ajax-search-pro'), 'value' => 'menu_order ASC'),
+		    array('option' => __('Author descending', 'ajax-search-pro'), 'value' => 'author DESC'),
+		    array('option' => __('Author ascending', 'ajax-search-pro'), 'value' => 'author ASC'),
+		    array('option' => __('Random', 'ajax-search-pro'), 'value' => 'RAND()'),
+	    );
         $o = new wpdreamsCustomSelect("orderby_primary", __('Primary ordering', 'ajax-search-pro'),
             array(
-                'selects' => array(
-                    array('option' => __('Relevance', 'ajax-search-pro'), 'value' => 'relevance DESC'),
-                    array('option' => __('Title descending', 'ajax-search-pro'), 'value' => 'post_title DESC'),
-                    array('option' => __('Title ascending', 'ajax-search-pro'), 'value' => 'post_title ASC'),
-                    array('option' => __('Date descending', 'ajax-search-pro'), 'value' => 'post_date DESC'),
-                    array('option' => __('Date ascending', 'ajax-search-pro'), 'value' => 'post_date ASC'),
-					array('option' => __('ID descending', 'ajax-search-pro'), 'value' => 'id DESC'),
-					array('option' => __('ID ascending', 'ajax-search-pro'), 'value' => 'id ASC'),
-                    array('option' => __('Menu order descending', 'ajax-search-pro'), 'value' => 'menu_order DESC'),
-                    array('option' => __('Menu order ascending', 'ajax-search-pro'), 'value' => 'menu_order ASC'),
-                    array('option' => __('Random', 'ajax-search-pro'), 'value' => 'RAND()'),
+                'selects' => array_merge($common_orders, array(
                     array('option' => __('Custom Field descending', 'ajax-search-pro'), 'value' => 'customfp DESC'),
                     array('option' => __('Custom Field  ascending', 'ajax-search-pro'), 'value' => 'customfp ASC')
-                ),
+                )),
                 'value' => $sd['orderby_primary']
             ));
         $params[$o->getName()] = $o->getData();
 
-        $o = new wpdreamsText("orderby_primary_cf", __('custom field name', 'ajax-search-pro'), $sd['orderby_primary_cf']);
+        $o = new wpdreamsText("orderby_primary_cf", __('Field name', 'ajax-search-pro'), $sd['orderby_primary_cf']);
         $params[$o->getName()] = $o->getData();
 
-        $o = new wpdreamsCustomSelect("orderby_primary_cf_type", __('type', 'ajax-search-pro'),
+        $o = new wpdreamsCustomSelect("orderby_primary_cf_type", __('Field type', 'ajax-search-pro'),
             array(
                 'selects' => array(
                     array('option' => __('numeric', 'ajax-search-pro'), 'value' => 'numeric'),
@@ -49,33 +55,25 @@
         ?>
     </div>
     <div class="item wd-secondary-order item-flex-nogrow item-flex-wrap"><?php
-        $o = new wpdreamsCustomSelect("orderby", __('Secondary ordering', 'ajax-search-pro'),
+        $o = new wpdreamsCustomSelect("orderby_secondary", __('Secondary ordering', 'ajax-search-pro'),
             array(
-                'selects' => array(
-                    array('option' => __('Relevance', 'ajax-search-pro'), 'value' => 'relevance DESC'),
-                    array('option' => __('Title descending', 'ajax-search-pro'), 'value' => 'post_title DESC'),
-                    array('option' => __('Title ascending', 'ajax-search-pro'), 'value' => 'post_title ASC'),
-                    array('option' => __('Date descending', 'ajax-search-pro'), 'value' => 'post_date DESC'),
-                    array('option' => __('Date ascending', 'ajax-search-pro'), 'value' => 'post_date ASC'),
-					array('option' => __('ID descending', 'ajax-search-pro'), 'value' => 'id DESC'),
-					array('option' => __('ID ascending', 'ajax-search-pro'), 'value' => 'id ASC'),
-                    array('option' => __('Random', 'ajax-search-pro'), 'value' => 'RAND()'),
-                    array('option' => __('Custom Field descending', 'ajax-search-pro'), 'value' => 'customfs DESC'),
-                    array('option' => __('Custom Field ascending', 'ajax-search-pro'), 'value' => 'customfs ASC')
-                ),
-                'value' => $sd['orderby']
+	            'selects' => array_merge($common_orders, array(
+		            array('option' => __('Custom Field descending', 'ajax-search-pro'), 'value' => 'customfs DESC'),
+		            array('option' => __('Custom Field  ascending', 'ajax-search-pro'), 'value' => 'customfs ASC')
+	            )),
+                'value' => $sd['orderby_secondary']
             ));
         $params[$o->getName()] = $o->getData();
 
-        $o = new wpdreamsText("orderby_secondary_cf", __('custom field name', 'ajax-search-pro'), $sd['orderby_secondary_cf']);
+        $o = new wpdreamsText("orderby_secondary_cf", __('Field name', 'ajax-search-pro'), $sd['orderby_secondary_cf']);
         $params[$o->getName()] = $o->getData();
 
-        $o = new wpdreamsCustomSelect("orderby_secondary_cf_type", __('type', 'ajax-search-pro'),
+        $o = new wpdreamsCustomSelect("orderby_secondary_cf_type", __('Field type', 'ajax-search-pro'),
             array(
-                'selects' => array(
-                    array('option' => __('numeric', 'ajax-search-pro'), 'value' => 'numeric'),
-                    array('option' => __('string or date', 'ajax-search-pro'), 'value' => 'string')
-                ),
+	            'selects' => array(
+		            array('option' => __('numeric', 'ajax-search-pro'), 'value' => 'numeric'),
+		            array('option' => __('string or date', 'ajax-search-pro'), 'value' => 'string')
+	            ),
                 'value' => $sd['orderby_secondary_cf_type']
             ));
         $params[$o->getName()] = $o->getData();

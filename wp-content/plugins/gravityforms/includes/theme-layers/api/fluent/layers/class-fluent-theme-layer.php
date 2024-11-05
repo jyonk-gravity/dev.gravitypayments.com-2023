@@ -30,9 +30,9 @@ class Fluent_Theme_Layer extends GF_All_Access_Theme_Layer {
 		return $this->_overidden_fields;
 	}
 
-	public function form_css_properties( $form_id = 0, $settings = array(), $block_settings = array() ) {
+	public function form_css_properties( $form_id = 0, $settings = array(), $block_settings = array(), $form = array() ) {
 		if ( is_callable( $this->_form_css_properties ) ) {
-			return call_user_func_array( $this->_form_css_properties, array( $form_id, $settings, $block_settings ) );
+			return call_user_func_array( $this->_form_css_properties, array( $form_id, $settings, $block_settings, $form ) );
 		}
 
 		return $this->_form_css_properties;
@@ -98,6 +98,10 @@ class Fluent_Theme_Layer extends GF_All_Access_Theme_Layer {
 
 	public function set_icon( $icon ) {
 		$this->icon = $icon;
+	}
+
+	public function set_capability( $capability ) {
+		$this->form_settings_capability = $capability;
 	}
 
 }

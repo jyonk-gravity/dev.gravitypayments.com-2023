@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
-
 /************************************************\
 Hiding unwanted notices on ASP admin pages
 \************************************************/
@@ -25,8 +24,7 @@ Very general Reset
 \************************************************/
 .wpdreams,
 .wpdreams * {
-    font:normal 13px/100% 'Roboto', sans-serif;
-    font-size: 13px;
+    font:normal 14px/100% 'Roboto', sans-serif;
     padding: auto;
     margin: auto;
     border: none;
@@ -420,6 +418,7 @@ div#wpdreams .wpd-text-right {
     width: 16px;
 }
 
+.wpd-txt-small-icon,
 #wpdreams .wpd-txt-small-icon {
     width: 24px;
     height: 24px;
@@ -427,27 +426,39 @@ div#wpdreams .wpd-text-right {
     vertical-align: top;
 }
 
+.wpd-txt-small-icon.wpd-txt-small-icon_active::after,
+#wpdreams .wpd-txt-small-icon.wpd-txt-small-icon_active::after {
+    content: "";
+    display: block;
+    box-shadow: 3px 3px 0px 0px #ff5c00;
+    height: 28px;
+    width: 28px;
+}
+
+.wpd-txt-small-icon.wpd-txt-small-icon-desktop,
 #wpdreams .wpd-txt-small-icon.wpd-txt-small-icon-desktop {
     background: url(icons/icon-desktop.png) no-repeat center;
 }
+.wpd-txt-small-icon.wpd-txt-small-icon-tablet,
 #wpdreams .wpd-txt-small-icon.wpd-txt-small-icon-tablet {
     background: url(icons/icon-tablet.png) no-repeat 3px 0;
 }
+.wpd-txt-small-icon.wpd-txt-small-icon-phone,
 #wpdreams .wpd-txt-small-icon.wpd-txt-small-icon-phone {
     background: url(icons/icon-phone.png) no-repeat 5px 0;
 }
 
 #wpdreams .wpdreamsTextSmall input,
 #wpdreams input.threedigit {
-    width: 45px;
+    width: 50px;
 }
 
 #wpdreams input.fourdigit {
-    width: 55px;
+    width: 60px;
 }
 
 #wpdreams input.ninedigit {
-    width: 80px;
+    width: 90px;
 }
 
 #wpdreams input[type=radio] {
@@ -461,12 +472,14 @@ div#wpdreams .wpd-text-right {
     z-index:10;
     background:#FFF;
     bottom:-365px;
-    right:20px !important;
+    right:5px !important;
+    left: auto !important;
     border:1px solid #ccc;
     width:500px;
     height:400px;
     box-shadow: 0 0 16px -12px #000000;
     -webkit-box-shadow: 0 0 16px -8px #000000;
+    overflow: hidden;
 }
 
 #asp_preview_window .data {
@@ -613,8 +626,8 @@ div#wpdreams .wpd-text-right {
 }
 
 #wpdreams a.subtheme {
-    background: none repeat scroll 0 0 #414D50;
-    font-size: 12px;
+    background: none repeat scroll 0 0 #2b2929;
+    font-size: 13px;
     margin: 5px 7px 0 0;
     padding: 3px 6px;
     text-shadow: 1px 1px 0 black;
@@ -926,6 +939,8 @@ input[type=button].wd_button_blue,
     flex-direction: row;
     flex-grow: 0;
     flex-shrink: 0;
+    justify-content: right;
+    gap: 12px 0;
 }
 
 #wpdreams .item-flex-two-column > *,
@@ -935,6 +950,7 @@ input[type=button].wd_button_blue,
 
 #wpdreams .item.item-flex-nogrow > div {
     flex-grow: 0;
+    margin: initial;
 }
 
 #wpdreams .item.item-flex-nogrow > div:first-child {
@@ -994,7 +1010,7 @@ input[type=button].wd_button_blue,
     -webkit-box-shadow:rgba(0,0,0,0.1) 0px 0px 8px;
     padding:10px;
     margin:10px;
-    width: 790px;
+    width: 840px;
 }
 
 #wpdreams .wpdreams-box.wpdreams-box-wide {

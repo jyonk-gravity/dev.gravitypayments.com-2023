@@ -100,27 +100,42 @@ use WPDRMS\ASP\Utils\Css;defined('ABSPATH') or die("You can't access this file d
   <?php echo $style['boxshadow']; ?>
 }
 
+<?php ob_start(); ?>
 <?php if ( $style['box_width'] != $style['box_width_tablet'] ): ?>
-@media only screen and (min-width: 641px) and (max-width: 1024px) {
-	.asp_w_container_<?php echo $id; ?> {
-		width: <?php echo w_isset_def($style['box_width_tablet'], '100%'); ?>;
-	}
-    div.asp_main_container.asp_w+[id*=asp-try-<?php echo $id; ?>] {
-        width: <?php echo w_isset_def($style['box_width_tablet'], '100%'); ?>;
-    }
+.asp_w_container_<?php echo $id; ?> {
+	width: <?php echo w_isset_def($style['box_width_tablet'], '100%'); ?>;
+}
+div.asp_main_container.asp_w+[id*=asp-try-<?php echo $id; ?>] {
+	width: <?php echo w_isset_def($style['box_width_tablet'], '100%'); ?>;
 }
 <?php endif; ?>
+<?php $css_for_tablet = ob_get_clean(); ?>
+<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
+		$css_for_tablet,
+		'tablet',
+		$style['media_query_mobile_max_width']+1,
+		$style['media_query_tablet_max_width'],
+		$preview ?? false
+); ?>
 
+
+<?php ob_start(); ?>
 <?php if ( $style['box_width'] != $style['box_width_phone'] ): ?>
-@media only screen and (max-width: 640px) {
-	.asp_w_container_<?php echo $id; ?> {
-		width: <?php echo w_isset_def($style['box_width_phone'], '100%'); ?>;
-	}
-    div.asp_main_container.asp_w+[id*=asp-try-<?php echo $id; ?>] {
-        width: <?php echo w_isset_def($style['box_width_phone'], '100%'); ?>;
-    }
+.asp_w_container_<?php echo $id; ?> {
+	width: <?php echo w_isset_def($style['box_width_phone'], '100%'); ?>;
+}
+div.asp_main_container.asp_w+[id*=asp-try-<?php echo $id; ?>] {
+    width: <?php echo w_isset_def($style['box_width_phone'], '100%'); ?>;
 }
 <?php endif; ?>
+<?php $css_for_phone = ob_get_clean(); ?>
+<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
+		$css_for_phone,
+		'phone',
+		0,
+		$style['media_query_mobile_max_width'],
+		$preview ?? false
+); ?>
 
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_div_ids1; ?> .probox,
@@ -142,6 +157,7 @@ use WPDRMS\ASP\Utils\Css;defined('ABSPATH') or die("You can't access this file d
 
     #asp_absolute_overlay {
         background: <?php echo w_isset_def($style['box_compact_overlay_color'], 'rgba(255, 255, 255, 0.5)'); ?>;
+        text-align: center;
     }
 
     <?php if ($use_compatibility == true): ?>
@@ -254,9 +270,8 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
     line-height: normal;
   flex-grow: 1;
   order: 5;
-  /* Ipad and stuff.. */
-  -webkit-flex-grow: 1;
-  -webkit-order: 5;
+  margin: 0 0 0 10px;
+  padding: 0 5px;
 }
 
 <?php if ($use_compatibility == true): ?>
@@ -385,10 +400,7 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
   flex: 0 0 <?php echo wpdreams_width_from_px($style['boxheight']); ?>px;
   flex-grow: 0;
   order: 7;
-    /* Ipad and stuff.. */
-    -webkit-flex: 0 0 <?php echo wpdreams_width_from_px($style['boxheight']); ?>px;
-    -webkit-flex-grow: 0;
-    -webkit-order: 7;
+  text-align: center;
 }
 
 <?php if ($use_compatibility == true): ?>
@@ -399,6 +411,11 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
      fill: <?php echo $style['close_icon_fill']; ?>;
      background: <?php echo $style['close_icon_background']; ?>;
      box-shadow: 0px 0px 0px 2px <?php echo $style['close_icon_outline']; ?>;
+     border-radius: 50%;
+     box-sizing: border-box;
+     margin-left: -10px;
+     margin-top: -10px;
+     padding: 4px;
 }
 
 <?php if ($use_compatibility == true): ?>
@@ -449,6 +466,23 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
 
 <?php echo $asp_div_ids; ?> .probox .promagnifier:focus-visible {
 	outline: black outset;
+}
+
+<?php if ($use_compatibility == true): ?>
+	<?php echo $asp_div_ids1; ?> .probox .proloading .innericon,
+	<?php echo $asp_div_ids2; ?> .probox .proloading .innericon,
+	<?php echo $asp_div_ids1; ?> .probox .proclose .innericon,
+	<?php echo $asp_div_ids2; ?> .probox .proclose .innericon,
+	<?php echo $asp_div_ids1; ?> .probox .promagnifier .innericon,
+	<?php echo $asp_div_ids2; ?> .probox .promagnifier .innericon,
+	<?php echo $asp_div_ids1; ?> .probox .prosettings .innericon,
+	<?php echo $asp_div_ids2; ?> .probox .prosettings .innericon,
+<?php endif; ?>
+<?php echo $asp_div_ids; ?> .probox .proloading .innericon,
+<?php echo $asp_div_ids; ?> .probox .proclose .innericon,
+<?php echo $asp_div_ids; ?> .probox .promagnifier .innericon,
+<?php echo $asp_div_ids; ?> .probox .prosettings .innericon {
+	text-align: center;
 }
 
 <?php if ($use_compatibility == true): ?>
@@ -605,19 +639,28 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
     width: <?php echo $style['results_width']; ?>;
     margin: <?php echo $style['results_margin']; ?>;
 }
+
+<?php ob_start(); ?>
 <?php if ( $style['results_width'] != $style['results_width_tablet'] ): ?>
-@media only screen and (min-width: 641px) and (max-width: 1024px) {
-    <?php if ($use_compatibility == true): ?>
+   <?php if ($use_compatibility == true): ?>
         <?php echo $asp_res_ids1; ?>,
         <?php echo $asp_res_ids2; ?>,
     <?php endif; ?>
     <?php echo $asp_res_ids; ?> {
         width: <?php echo $style['results_width_tablet']; ?>;
     }
-}
 <?php endif; ?>
+<?php $css_for_tablet = ob_get_clean(); ?>
+<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
+		$css_for_tablet,
+		'tablet',
+		$style['media_query_mobile_max_width']+1,
+		$style['media_query_tablet_max_width'],
+		$preview ?? false
+); ?>
+
+<?php ob_start(); ?>
 <?php if ( $style['results_width'] != $style['results_width_phone'] ): ?>
-@media only screen and (max-width: 640px) {
     <?php if ($use_compatibility == true): ?>
         <?php echo $asp_res_ids1; ?>,
         <?php echo $asp_res_ids2; ?>,
@@ -625,8 +668,15 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
     <?php echo $asp_res_ids; ?> {
         width: <?php echo $style['results_width_phone']; ?>;
     }
-}
 <?php endif; ?>
+<?php $css_for_phone = ob_get_clean(); ?>
+<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
+		$css_for_phone,
+		'phone',
+		0,
+		$style['media_query_mobile_max_width'],
+		$preview ?? false
+); ?>
 
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_res_ids1; ?> .asp_nores,
@@ -701,6 +751,15 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
   background-repeat: no-repeat;
 }
 
+
+<?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?> .results .item .asp_image img,
+    <?php echo $asp_res_ids2; ?> .results .item .asp_image img,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?> .results .item .asp_image img {
+  object-fit: <?php echo w_isset_def($style['image_display_mode'], "cover"); ?>;
+}
+
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_res_ids1; ?> .results .item .asp_item_overlay_img,
     <?php echo $asp_res_ids2; ?> .results .item .asp_item_overlay_img,
@@ -709,11 +768,6 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
    background-size: <?php echo w_isset_def($style['image_display_mode'], "cover"); ?>;
    background-repeat: no-repeat;
 }
-
-<?php
-  $_vimagew = wpdreams_width_from_px($style['hreswidth']);
-  $_vimageh = wpdreams_width_from_px($style['hor_img_height']);
-?>
 
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_res_ids1; ?> .results .item .asp_content,
@@ -861,15 +915,21 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
 
 /* Search settings */
 <?php
-if ( $style['fss_hover_columns'] == "auto" )
-    $_hov_cwidth = 'none';
-else
-    $_hov_cwidth = ($style['fss_hover_columns'] * $style['fss_column_width'] + 8) . 'px';
+$style['fss_column_width'] = $style['fss_column_width'] !== '' ? intval($style['fss_column_width']) : 200;
+$style['fss_column_width'] = max($style['fss_column_width'], 100);
 
-if ( $style['fss_block_columns'] == "auto" )
+if ( $style['fss_hover_columns'] === "auto" ) {
+    $_hov_cwidth = 'none';
+} else {
+	$_hov_cwidth = (intval($style['fss_hover_columns']) * intval($style['fss_column_width']) + 8) . 'px';
+}
+
+if ( $style['fss_block_columns'] === "auto" ) {
     $_blc_cwidth = 'none';
-else
-    $_blc_cwidth = ($style['fss_block_columns'] * $style['fss_column_width'] + 8) . 'px';
+} else {
+	$_blc_cwidth = ($style['fss_block_columns'] * $style['fss_column_width'] + 8) . 'px';
+}
+
 ?>
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_set_ids; ?>.searchsettings,

@@ -6,7 +6,7 @@ class CDN
     //initialize cdn
     public static function init() 
     {
-        add_action('wp', array('Perfmatters\CDN', 'queue'));
+        add_action('perfmatters_queue', array('Perfmatters\CDN', 'queue'));
     }
 
     //queue functions
@@ -22,6 +22,7 @@ class CDN
     //rewrite urls in html
     public static function rewrite($html) 
     {
+
         //filter check
         if(!apply_filters('perfmatters_cdn', true)) {
             return $html;
@@ -30,7 +31,7 @@ class CDN
         //prep site url
         $siteURL  = '//' . ((!empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : parse_url(home_url(), PHP_URL_HOST));
         $escapedSiteURL = quotemeta($siteURL);
-        $regExURL = 'https?:' . substr($escapedSiteURL, strpos($escapedSiteURL, '//'));
+        $regExURL = '(?:https?:)?' . substr($escapedSiteURL, strpos($escapedSiteURL, '//'));
 
         //prep included directories
         $directories = 'wp\-content|wp\-includes';
@@ -64,7 +65,7 @@ class CDN
         $extensions = implode('|', $extensions_array);
 
         //rewrite urls in html
-        $regEx = '#(?<=[(\"\']|&quot;)(?:' . $regExURL . ')?\/(?:(?:' . $directories . ')[^\"\')]+)\.(' . $extensions . ')[^\"\')]*(?=[\"\')]|&quot;)#';
+        $regEx = '#(?<=[(\"\']|&quot;)(?:' . $regExURL . ')?\/(?:[^\"\')]?)(?:(?:' . $directories . ')[^\"\')]+).(' . $extensions . ')[^\"\')]*(?=[\"\')]|&quot;)#';
 
         //base exclusions
         $exclusions = array('script-manager.js');
@@ -76,16 +77,14 @@ class CDN
         }
 
         //set cdn url
-        $cdnURL = Config::$options['cdn']['cdn_url'];
+        $cdnURL = untrailingslashit(Config::$options['cdn']['cdn_url']);
 
         //replace urls
         $html = preg_replace_callback($regEx, function($url) use ($siteURL, $cdnURL, $exclusions) {
 
             //check for exclusions
-            foreach($exclusions as $exclusion) {
-                if(!empty($exclusion) && stristr($url[0], $exclusion) != false) {
-                    return $url[0];
-                }
+            if(Utilities::match_in_array($url[0], $exclusions)) {
+                return $url[0];
             }
 
             //replace url with no scheme

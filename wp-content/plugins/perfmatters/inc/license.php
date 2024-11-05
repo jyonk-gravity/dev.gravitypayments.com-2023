@@ -1,13 +1,13 @@
 <?php
 //save license key
-if(isset($_POST['perfmatters_save_license']) && isset($_POST['perfmatters_edd_license_key'])) {
+if(isset($_POST['perfmatters_save_license']) && isset($_POST['perfmatters_edd_license_key']) && wp_verify_nonce($_POST['perfmatters_license_nonce'], 'perfmatters_license')) {
 
 	//save license option
 	if(is_network_admin()) {
 		update_site_option('perfmatters_edd_license_key', trim($_POST['perfmatters_edd_license_key']));
 	}
 	else {
-		update_option('perfmatters_edd_license_key', trim($_POST['perfmatters_edd_license_key']));
+		update_option('perfmatters_edd_license_key', trim($_POST['perfmatters_edd_license_key']), false);
 	}
 
 	if(is_multisite()) {
@@ -28,17 +28,17 @@ if(isset($_POST['perfmatters_save_license']) && isset($_POST['perfmatters_edd_li
 }
 
 //activate license
-if(isset($_POST['perfmatters_edd_license_activate'])) {
+if(isset($_POST['perfmatters_edd_license_activate']) && wp_verify_nonce($_POST['perfmatters_license_nonce'], 'perfmatters_license')) {
 	perfmatters_activate_license();
 }
 
 //deactivate license
-if(isset($_POST['perfmatters_edd_license_deactivate'])) {
+if(isset($_POST['perfmatters_edd_license_deactivate']) && wp_verify_nonce($_POST['perfmatters_license_nonce'], 'perfmatters_license')) {
 	perfmatters_deactivate_license();
 }
 
 //remove license
-if(isset($_POST['perfmatters_remove_license'])) {
+if(isset($_POST['perfmatters_remove_license']) && wp_verify_nonce($_POST['perfmatters_license_nonce'], 'perfmatters_license')) {
 
 	//deactivate before removing
 	perfmatters_deactivate_license();
@@ -55,13 +55,14 @@ if(isset($_POST['perfmatters_remove_license'])) {
 //get license key
 $license = is_network_admin() ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
 
+perfmatters_settings_header(__('License', 'perfmatters'), 'dashicons-admin-network');
+
 //start custom license form
 echo "<form method='post' action=''>";
+	
+	wp_nonce_field('perfmatters_license', 'perfmatters_license_nonce');
 
 	echo '<div class="perfmatters-settings-section">';
-
-		//tab header
-		echo "<h2>" . __('License', 'perfmatters') . "</h2>";
 
 		echo "<table class='form-table'>";
 			echo "<tbody>";
@@ -75,7 +76,7 @@ echo "<form method='post' action=''>";
 
 						if(empty($license)) {
 							//save license button
-							echo "<input type='submit' name='perfmatters_save_license' class='button button-primary' value='" . __('Save License', 'perfmatters') . "'>";
+							echo "<input type='submit' name='perfmatters_save_license' class='button button-secondary' value='" . __('Save License', 'perfmatters') . "'>";
 						}
 						else {
 							//remove license button
@@ -133,7 +134,7 @@ echo "<form method='post' action=''>";
 									echo ucfirst($license_info->license);
 									if($license_info->license == "expired") {
 										echo "<br />";
-										echo "<a href='https://perfmatters.io/checkout/?edd_license_key=" . $license . "&download_id=696' class='button-primary' style='margin-top: 10px;' target='_blank'>" . __('Renew Your License for Updates + Support!', 'perfmatters') . "</a>";
+										echo "<a href='https://perfmatters.io/checkout/?edd_license_key=" . $license . "&download_id=696' class='button button-secondary' style='margin-top: 10px;' target='_blank'>" . __('Renew Your License for Updates + Support!', 'perfmatters') . "</a>";
 									}
 								echo "</td>";
 							echo "</tr>";

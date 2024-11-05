@@ -12,7 +12,7 @@ if (!class_exists("wpdreamsCustomPostTypesEditable")) {
      * @copyright Copyright (c) 2014, Ernest Marcinko
      */
     class wpdreamsCustomPostTypesEditable extends wpdreamsType {
-        private $selected, $_t;
+        private $selected, $_t, $types;
 
         function getType() {
             parent::getType();

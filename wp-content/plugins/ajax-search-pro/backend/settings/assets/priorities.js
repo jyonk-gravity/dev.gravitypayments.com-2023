@@ -21,6 +21,7 @@ jQuery(function($){
         e.preventDefault();
         var data = {
             action: 'ajaxsearchpro_priorities',
+            'asp_priorities_request_nonce': $('#asp_priorities_request_nonce').val(),
             options: $("#asp_priorities").serialize(),
             ptask: "get"
         };
@@ -58,6 +59,7 @@ jQuery(function($){
         var $this = $(this);
         var data = {
             action: 'ajaxsearchpro_priorities',
+            'asp_priorities_request_nonce': $('#asp_priorities_request_nonce').val(),
             options: $("#asp_priorities_list").serialize(),
             ptask: "set"
         };

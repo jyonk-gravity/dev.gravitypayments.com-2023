@@ -145,10 +145,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		    });
 
 		    //save button feedback
-		    var saveButton = document.querySelector('#pmsm-save input');
-		    var saveSpinner = document.querySelector('#pmsm-save .pmsm-spinner');
-		    saveButton.value = pmsm.messages.buttonSaving;
-		    saveSpinner.style.display = "inline-block";
+		    var saveButton = document.querySelector('#pmsm-save button');
+		    var saveText = document.querySelector('#pmsm-save .perfmatters-button-text');
+		    var saveSpinner = document.querySelector('#pmsm-save .perfmatters-button-spinner');
+		    saveButton.disabled = true;
+		    saveText.style.display = 'none';
+		    saveSpinner.style.display = "block";
 
 		    //get form data
 		    const formData = new FormData(e.target);
@@ -165,11 +167,14 @@ document.addEventListener("DOMContentLoaded", function() {
 		    	//successful request
 		        if(this.status >= 200 && this.status < 400) {
 
-		            //setup message variable
-		    		var message;
+		        	var response = this.response.trim();
 
-		            if(this.response == 'update_success') {
-			    		message = pmsm.messages.updateSuccess;
+		            //setup message variable
+		    		var message = [];
+
+		            if(response == 'update_success') {
+			    		message.text = pmsm.messages.updateSuccess;
+			    		message.color = 'green';
 
 			    		//if script status was toggled back on, clear child input values
 			    		var changedScriptStatusToggles = e.target.querySelectorAll('.perfmatters-script-manager-section .perfmatters-status-toggle.pmsm-changed');
@@ -222,14 +227,17 @@ document.addEventListener("DOMContentLoaded", function() {
 				        });
 
 			    	}
-			    	else if(this.response == 'update_failure') {
-			    		message = pmsm.messages.updateFailure;
+			    	else if(response == 'update_failure') {
+			    		message.text = pmsm.messages.updateFailure;
+			    		message.color = 'red';
 			    	}
-			    	else if(this.response == 'update_nooption') {
-			    		message = pmsm.messages.updateNoOption;
+			    	else if(response == 'update_nooption') {
+			    		message.text = pmsm.messages.updateNoOption;
+			    		message.color = 'red';
 			    	}
-			    	else if(this.response == 'update_nochange') {
-			    		message = pmsm.messages.updateNoChange;
+			    	else if(response == 'update_nochange') {
+			    		message.text = pmsm.messages.updateNoChange;
+			    		message.color = 'red';
 			    	}
 
 			    	//display message
@@ -242,7 +250,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				    	input.disabled = false;
 				    });
 
-			        saveButton.value = pmsm.messages.buttonSave;
+				    //re-enable button
+					saveButton.disabled = false;
+			        saveText.style.display = "block";
 			        saveSpinner.style.display = "none";
 		        }
 		        else {
@@ -255,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	    	};
 
 	    	//send request
-	    	request.send('action=pmsm_save&current_id=' + pmsm.currentID + '&pmsm_data=' + encodeURIComponent(formDataString));
+	    	request.send('action=pmsm_save&nonce=' + pmsm.nonce + '&current_id=' + pmsm.currentID + '&pmsm_data=' + encodeURIComponent(formDataString));
 		});
 	}
 
@@ -312,8 +322,9 @@ function pmsmPopupMessage(message) {
 
 	if(message) {
 		var messageContainer = document.getElementById('pmsm-message');
+		messageContainer.style.color = message.color;
 
-		messageContainer.innerHTML = message;
+		messageContainer.innerHTML = message.text;
 
 		messageContainer.classList.add('pmsm-fade');
 

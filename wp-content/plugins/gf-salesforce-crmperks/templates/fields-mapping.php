@@ -562,6 +562,16 @@ foreach($ops as $v_op){
   
     <div class="vx_row">
   <div class="vx_col1">
+  <label for="crm_primary_custom"><?php esc_html_e('Custom Primary Key','gravity-forms-salesforce-crm') ?></label>
+  </div><div class="vx_col2">
+  <input type="text" id="crm_primary_custom" name="meta[primary_key_custom]" class="vx_sel vx_input_100" autocomplete="off" value="<?php echo $this->post('primary_key_custom',$meta) ?>">
+  <div class="description" style="float: none; width: 90%"><?php esc_html_e('You can Override Parimary key with your custom key, you set multiple fields as Primary key e.g Title+email+custom_text', 'gravity-forms-salesforce-crm'); ?></div>
+  </div>
+  <div class="clear"></div>
+  </div>
+  
+    <div class="vx_row">
+  <div class="vx_col1">
   <label for="crm_primary_field2"><?php esc_html_e('Second Primary Key','gravity-forms-salesforce-crm') ?></label>
   </div><div class="vx_col2">
   <select id="crm_primary_field2" name="meta[primary_key2]" class="vx_sel vx_input_100" autocomplete="off">

@@ -7,7 +7,7 @@ class LazyLoad
 	//initialize lazyload iframe functions
 	public static function init_iframes()
 	{
-		add_action('wp', array('Perfmatters\LazyLoad', 'queue_iframes'));
+		add_action('perfmatters_queue', array('Perfmatters\LazyLoad', 'queue_iframes'));
 	}
 
 	//queue iframe functions
@@ -59,10 +59,10 @@ class LazyLoad
 				$iframe_atts = Utilities::get_atts_array($iframe[1]);
 
 				//dont check excluded if forced attribute was found
-				if(!self::lazyload_excluded($iframe[1], self::lazyload_forced_atts())) {
+				if(!Utilities::match_in_array($iframe[1], self::lazyload_forced_atts())) {
 
 					//skip if exluded attribute was found
-					if(self::lazyload_excluded($iframe[1], self::lazyload_excluded_atts())) {
+					if(Utilities::match_in_array($iframe[1], self::lazyload_excluded_atts())) {
 						continue;
 					}
 
@@ -198,10 +198,10 @@ class LazyLoad
 				$video_atts = Utilities::get_atts_array($video[1]);
 
 				//dont check excluded if forced attribute was found
-				if(!self::lazyload_excluded($video[1], self::lazyload_forced_atts())) {
+				if(!Utilities::match_in_array($video[1], self::lazyload_forced_atts())) {
 
 					//skip if exluded attribute was found
-					if(self::lazyload_excluded($video[1], self::lazyload_excluded_atts())) {
+					if(Utilities::match_in_array($video[1], self::lazyload_excluded_atts())) {
 						continue;
 					}
 
@@ -222,6 +222,12 @@ class LazyLoad
 				//migrate src
 				$video_atts['data-src'] = $video_atts['src'];
 				unset($video_atts['src']);
+
+				//migrate poster
+				if(!empty($video_atts['poster'])) {
+					$video_atts['data-poster'] = $video_atts['poster'];
+					unset($video_atts['poster']);
+				}
 
 				//replace video attributes string
 				$video_lazyload  = str_replace($video[1], ' ' . Utilities::get_atts_string($video_atts), $video[0]);
@@ -244,7 +250,7 @@ class LazyLoad
 	//initialize lazy loading
 	public static function init_images()
 	{
-		add_action('wp', array('Perfmatters\LazyLoad', 'queue_images'));
+		add_action('perfmatters_queue', array('Perfmatters\LazyLoad', 'queue_images'));
 	}
 
 	//queue image functions
@@ -290,6 +296,8 @@ class LazyLoad
 
 		//replace image tags
 		if(!empty(Config::$options['lazyload']['lazy_loading'])) {
+			$html = self::lazyload_parent_leading_exclusions($html, $buffer);
+			$html = self::lazyload_parent_exclusions($html, $buffer);
 			$html = self::lazyload_pictures($html, $buffer);
 			$html = self::lazyload_background_images($html, $buffer);
 			$html = self::lazyload_images($html, $buffer);
@@ -330,20 +338,20 @@ class LazyLoad
 
 		//youtube thumbnails
 		if(!empty(Config::$options['lazyload']['lazy_loading_iframes']) && !empty(Config::$options['lazyload']['youtube_preview_thumbnails'])) {
-			$styles.= '.perfmatters-lazy-youtube{position:relative;width:100%;max-width:100%;height:0;padding-bottom:56.23%;overflow:hidden}.perfmatters-lazy-youtube img{position:absolute;top:0;right:0;bottom:0;left:0;display:block;width:100%;max-width:100%;height:auto;margin:auto;border:none;cursor:pointer;transition:.5s all;-webkit-transition:.5s all;-moz-transition:.5s all}.perfmatters-lazy-youtube img:hover{-webkit-filter:brightness(75%)}.perfmatters-lazy-youtube .play{position:absolute;top:50%;left:50%;right:auto;width:68px;height:48px;margin-left:-34px;margin-top:-24px;background:url('.plugins_url('perfmatters/img/youtube.svg').') no-repeat;background-position:center;background-size:cover;pointer-events:none}.perfmatters-lazy-youtube iframe{position:absolute;top:0;left:0;width:100%;height:100%;z-index:99}';
-			if(current_theme_supports('responsive-embeds')) {
+			$styles.= '.perfmatters-lazy-youtube{position:relative;width:100%;max-width:100%;height:0;padding-bottom:56.23%;overflow:hidden}.perfmatters-lazy-youtube img{position:absolute;top:0;right:0;bottom:0;left:0;display:block;width:100%;max-width:100%;height:auto;margin:auto;border:none;cursor:pointer;transition:.5s all;-webkit-transition:.5s all;-moz-transition:.5s all}.perfmatters-lazy-youtube img:hover{-webkit-filter:brightness(75%)}.perfmatters-lazy-youtube .play{position:absolute;top:50%;left:50%;right:auto;width:68px;height:48px;margin-left:-34px;margin-top:-24px;background:url('.plugins_url('perfmatters/img/youtube.svg').') no-repeat;background-position:center;background-size:cover;pointer-events:none;filter:grayscale(1)}.perfmatters-lazy-youtube:hover .play{filter:grayscale(0)}.perfmatters-lazy-youtube iframe{position:absolute;top:0;left:0;width:100%;height:100%;z-index:99}';
+			if(current_theme_supports('responsive-embeds') || in_array('wp-embed-responsive', get_body_class())) {
 				$styles.= '.wp-has-aspect-ratio .wp-block-embed__wrapper{position:relative;}.wp-has-aspect-ratio .perfmatters-lazy-youtube{position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;padding-bottom:0}';
 			}
 		}
-
+ 
 		//fade in effect
 		if(!empty(Config::$options['lazyload']['fade_in'])) {
-			$styles.= '.perfmatters-lazy:not(picture),.perfmatters-lazy>img{opacity:0}.perfmatters-lazy.pmloaded,.perfmatters-lazy>img.pmloaded,.perfmatters-lazy[data-ll-status=entered],.perfmatters-lazy.pmloaded>img{opacity:1;transition:opacity ' . apply_filters('perfmatters_fade_in_speed', 500) . 'ms}';
+			$styles.= '.perfmatters-lazy.pmloaded,.perfmatters-lazy.pmloaded>img,.perfmatters-lazy>img.pmloaded,.perfmatters-lazy[data-ll-status=entered]{animation:' . apply_filters('perfmatters_fade_in_speed', 500) . 'ms pmFadeIn}@keyframes pmFadeIn{0%{opacity:0}100%{opacity:1}}';
 		}
 
 		//css background images
 		if(!empty(Config::$options['lazyload']['css_background_images'])) {
-			$styles.='body .perfmatters-lazy-css-bg:not([data-ll-status=entered]),body .perfmatters-lazy-css-bg:not([data-ll-status=entered]) *,body .perfmatters-lazy-css-bg:not([data-ll-status=entered])::before{background-image:none!important;will-change:transform;transition:opacity 0.025s ease-in,transform 0.025s ease-in!important;}';
+			$styles.='body .perfmatters-lazy-css-bg:not([data-ll-status=entered]),body .perfmatters-lazy-css-bg:not([data-ll-status=entered]) *,body .perfmatters-lazy-css-bg:not([data-ll-status=entered])::before,body .perfmatters-lazy-css-bg:not([data-ll-status=entered])::after{background-image:none!important;will-change:transform;transition:opacity 0.025s ease-in,transform 0.025s ease-in!important;}';
 		}
 		
 		//print styles
@@ -367,7 +375,7 @@ class LazyLoad
 		$output.= 'window.addEventListener("LazyLoad::Initialized",function(e){var lazyLoadInstance=e.detail.instance;';
 
 			//dom monitoring
-			if(!empty(Config::$options['lazyload']['lazy_loading_dom_monitoring'])) { 
+			if(!empty(Config::$options['lazyload']['lazy_loading_dom_monitoring']) || !empty(Config::$options['lazyload']['elements'])) { 
 				$output.= 'var target=document.querySelector("body");var observer=new MutationObserver(function(mutations){lazyLoadInstance.update()});var config={childList:!0,subtree:!0};observer.observe(target,config);';
 			}
 
@@ -391,6 +399,9 @@ class LazyLoad
 
 			$lazy_image_count = 0;
 			$exclude_leading_images = apply_filters('perfmatters_exclude_leading_images', Config::$options['lazyload']['exclude_leading_images'] ?? 0);
+			$leading_image_exclusions = apply_filters('perfmatters_leading_image_exclusions', array(
+				'data-perfmatters-leading-skip'
+			));
 
 			//remove any duplicate images
 			$images = array_unique($images, SORT_REGULAR);
@@ -398,12 +409,27 @@ class LazyLoad
 			//loop through images
 	        foreach($images as $image) {
 
-	        	$lazy_image_count++;
+	        	$leading = true;
 
-	        	if($lazy_image_count <= $exclude_leading_images) {
-	        		continue;
-	        	}
+	        	//check for leading image exclusion
+	        	if(!empty($leading_image_exclusions) && is_array($leading_image_exclusions)) {
 
+                    foreach($leading_image_exclusions as $exclusion) {
+
+                        if(strpos($image[0], $exclusion) !== false) {
+                            $leading = false;
+                        }
+                    }
+                }
+
+                //skip leading images
+                if($leading) {
+                	$lazy_image_count++;
+		        	if($lazy_image_count <= $exclude_leading_images) {
+		        		continue;
+		        	}
+                }
+	        	
 	        	//prepare lazy load image
 	            $lazy_image = self::lazyload_image($image);
 
@@ -429,10 +455,10 @@ class LazyLoad
 				$picture_atts = Utilities::get_atts_array($picture[1]);
 
 				//dont check excluded if forced attribute was found
-				if(!self::lazyload_excluded($picture[1], self::lazyload_forced_atts())) {
+				if(!Utilities::match_in_array($picture[1], self::lazyload_forced_atts())) {
 
 					//skip if no-lazy class is found
-					if((!empty($picture_atts['class']) && strpos($picture_atts['class'], 'no-lazy') !== false) || self::lazyload_excluded($picture[0], self::lazyload_excluded_atts())) {
+					if((!empty($picture_atts['class']) && strpos($picture_atts['class'], 'no-lazy') !== false) || Utilities::match_in_array($picture[0], self::lazyload_excluded_atts())) {
 
 						//mark image for exclusion later
 						preg_match('#<img([^>]+?)\/?>#is', $picture[0], $image);
@@ -457,7 +483,7 @@ class LazyLoad
 		            foreach($sources as $source) {
 
 		            	//skip if exluded attribute was found
-						if(self::lazyload_excluded($source[1], self::lazyload_excluded_atts())) {
+						if(Utilities::match_in_array($source[1], self::lazyload_excluded_atts())) {
 							continue;
 						}
 
@@ -495,7 +521,7 @@ class LazyLoad
 				$element_atts = Utilities::get_atts_array($element[2]);
 
 				//dont check excluded if forced attribute was found
-				if(!self::lazyload_excluded($element[2], self::lazyload_forced_atts())) {
+				if(!Utilities::match_in_array($element[2], self::lazyload_forced_atts())) {
 
 					//skip if no-lazy class is found
 					if(!empty($element_atts['class']) && strpos($element_atts['class'], 'no-lazy') !== false) {
@@ -503,7 +529,7 @@ class LazyLoad
 					}
 
 					//skip if exluded attribute was found
-					if(self::lazyload_excluded($element[2], self::lazyload_excluded_atts())) {
+					if(Utilities::match_in_array($element[2], self::lazyload_excluded_atts())) {
 						continue;
 					}
 				}
@@ -562,7 +588,7 @@ class LazyLoad
 		$image_atts = Utilities::get_atts_array($image[1]);
 
 		//get new attributes
-		if(empty($image_atts['src']) || (!self::lazyload_excluded($image[1], self::lazyload_forced_atts()) && ((!empty($image_atts['class']) && strpos($image_atts['class'], 'no-lazy') !== false) || self::lazyload_excluded($image[1], self::lazyload_excluded_atts())))) {
+		if(empty($image_atts['src']) || (!Utilities::match_in_array($image[1], self::lazyload_forced_atts()) && ((!empty($image_atts['class']) && strpos($image_atts['class'], 'no-lazy') !== false) || Utilities::match_in_array($image[1], self::lazyload_excluded_atts()) || (!empty($image_atts['fetchpriority']) && $image_atts['fetchpriority'] == 'high')))) {
 			return $image[0];
 		}
 		else {
@@ -613,13 +639,18 @@ class LazyLoad
 		if(!empty(Config::$options['lazyload']['css_background_selectors'])) {
 
 			//match all selectors
-			preg_match_all('#<(?>div|section)(\s[^>]*?(' . implode('|', Config::$options['lazyload']['css_background_selectors']) . ').*?)>#i', $buffer, $selectors, PREG_SET_ORDER);
+			preg_match_all('#<(?>div|section|figure|footer)(\s[^>]*?(' . implode('|', Config::$options['lazyload']['css_background_selectors']) . ').*?)>#i', $buffer, $selectors, PREG_SET_ORDER);
 
 			if(!empty($selectors)) {
 
 				foreach($selectors as $selector) {
 
 					$selector_atts = Utilities::get_atts_array($selector[1]);
+
+					//skip if no-lazy class is found
+					if(!empty($selector_atts['class']) && strpos($selector_atts['class'], 'no-lazy') !== false) {
+						continue;
+					}
 
 					$selector_atts['class'] = !empty($selector_atts['class']) ? $selector_atts['class'] . ' ' . 'perfmatters-lazy-css-bg' : 'perfmatters-lazy-css-bg';
 
@@ -630,6 +661,185 @@ class LazyLoad
 					$html = str_replace($selector[0], $selector_lazyload, $html);
 
 					unset($selector_lazyload);
+				}
+			}
+		}
+
+		return $html;
+	}
+
+	//initialize lazy loading elements
+	public static function init_elements()
+	{
+		add_action('perfmatters_queue', array('Perfmatters\LazyLoad', 'queue_elements'));
+	}
+
+	//queue element functions
+	public static function queue_elements()
+	{
+		//check filters
+		if(empty(apply_filters('perfmatters_lazyload', !empty(Config::$options['lazyload']['elements'])))) {
+			return;
+		}
+
+		if(empty(apply_filters('perfmatters_lazy_elements', !empty(Config::$options['lazyload']['elements'])))) {
+			return;
+		}
+
+		//skip woocommerce
+		if(Utilities::is_woocommerce()) {
+			return;
+		}
+
+		//check post meta
+		if(Utilities::get_post_meta('perfmatters_exclude_lazy_loading')) {
+			return;
+		}
+
+		//actions + filters
+		add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\LazyLoad', 'lazyload_elements'));
+
+		//disable wp rocket lazy render for compatibility
+		add_filter('rocket_lrc_optimization', '__return_false', 999);
+	}
+
+	//lazy load elements
+	public static function lazyload_elements($html) {
+
+		if(!empty(Config::$options['lazyload']['elements'])) {
+
+			$selectors = array(
+				'perfmatters-lazy-element',
+			);
+
+			//get exclusions added from settings
+			if(!empty(Config::$options['lazyload']['element_selectors']) && is_array(Config::$options['lazyload']['element_selectors'])) {
+				$selectors = array_unique(array_merge($selectors, Config::$options['lazyload']['element_selectors']));
+			}
+			
+			//filter final exclusions array
+			$selectors = apply_filters('perfmatters_lazy_element_selectors', $selectors);
+
+		    foreach($selectors as $selector) {
+
+		        //get all elements with the selector
+		        $elements = HTML::get_selector_elements($html, $selector);
+
+		        if(!empty($elements)) {
+		        	foreach($elements as $element) {
+			        	if(strpos($element, 'data-perfmatters-lazy-element') === false) {
+                            $lazy_element = '<div data-perfmatters-lazy-element style="height:1000px; width:100%;"><noscript>' . str_replace('noscript', 'pmnoscript', $element) . '</noscript></div>';
+			        		$html = str_replace($element, $lazy_element, $html);
+                        }
+			   		}
+		        }
+		    }
+
+		    if(!empty($lazy_element)) {
+
+			    $script = '<script id="perfmatters-lazy-elements-js" defer>!function(){var e=document.querySelectorAll("div[data-perfmatters-lazy-element]");if(e.length){var t=new IntersectionObserver((function(e,t){e.forEach((function(e){if(e.isIntersecting){var r=e.target.querySelector("noscript");if(r){var n,o=(new DOMParser).parseFromString(r.textContent.replaceAll("pmnoscript","noscript"),"text/html");(n=e.target).replaceWith.apply(n,o.body.childNodes)}t.unobserve(e.target)}}))}),{root:null,rootMargin:"300px 0px"});e.forEach((function(e){return t.observe(e)}))}}();</script>';
+
+				//add inline script to body tag
+				$html = str_replace('</body>', $script . '</body>', $html);
+		    }
+		}
+
+		return $html;
+	}
+
+	//exclude images from leading image exclusions by parent selector
+	private static function lazyload_parent_leading_exclusions($html, &$buffer) {
+
+		$parent_exclusions = apply_filters('perfmatters_leading_image_parent_exclusions', array());
+        if(!empty($parent_exclusions)) {
+
+        	//clean html doc
+            $clean_dom = new \DOMDocument();
+            $clean_dom->loadHTML($buffer, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
+            $xpath = new \DOMXpath($clean_dom);
+
+            //search for excluded parents
+            array_walk($parent_exclusions, function(&$exclusion) {
+                $exclusion = 'contains(@*, "' . $exclusion . '")';
+            });
+            $exclusion_string = implode(' or ', $parent_exclusions);
+            $elements = $xpath->query("//div[" . $exclusion_string . "]|//section[" . $exclusion_string . "]|//figure[" . $exclusion_string . "]");
+
+            if(!is_null($elements)) {
+
+            	//create main html DOMDocument to match and update in parallel
+            	$dom = new \DOMDocument();
+                $dom->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
+                $html_new = '<!DOCTYPE html>' . $dom->saveHTML($dom->documentElement);
+
+                $image_excluded = false;
+
+                //search for images inside parents
+                foreach($elements as $element) {
+                    $images = $element->getElementsByTagName('img');
+                    if(!empty($images)) {
+                        for($i = $images->length; --$i >= 0;) {
+
+                        	//add skip attribute to image in both documents
+                            $image = $images->item($i);
+                            $image_html_prev = $clean_dom->saveHTML($image);
+                            $image->setAttribute('data-perfmatters-leading-skip', 1);
+                            $image_html_new = $clean_dom->saveHTML($image);
+                            $html_new = str_replace($image_html_prev, $image_html_new, $html_new);
+                        }
+                        $image_excluded = true;
+                    }
+                }
+            }
+
+            //have excluded images
+            if($image_excluded) {
+
+            	//save both html copies
+            	$html = $html_new;
+                $buffer = $clean_dom->saveHTML();
+            }
+        }
+
+        return $html;
+	}
+
+	//mark images inside parent exclusions as no-lazy
+	private static function lazyload_parent_exclusions($html, &$buffer) {
+
+        if(!empty(Config::$options['lazyload']['lazy_loading_parent_exclusions'])) {
+
+			//match all selectors
+			preg_match_all('#<(div|section|figure)(\s[^>]*?(' . implode('|', Config::$options['lazyload']['lazy_loading_parent_exclusions']) . ').*?)>.*?<img.*?<\/\g1>#is', $buffer, $selectors, PREG_SET_ORDER);
+
+			if(!empty($selectors)) {
+
+				foreach($selectors as $selector) {
+
+					//match all img tags
+					preg_match_all('#<img([^>]+?)\/?>#is', $selector[0], $images, PREG_SET_ORDER);
+
+					if(!empty($images)) {
+
+						//remove any duplicate images
+						$images = array_unique($images, SORT_REGULAR);
+
+						//loop through images
+				        foreach($images as $image) {
+
+				        	$image_atts = Utilities::get_atts_array($image[1]);
+
+				        	$image_atts['class'] = !empty($image_atts['class']) ? $image_atts['class'] . ' ' . 'no-lazy' : 'no-lazy';
+
+				            //replace video attributes string
+							$new_image = str_replace($image[1], ' ' . Utilities::get_atts_string($image_atts), $image[0]);
+
+							//replace video with placeholder
+							$html = str_replace($image[0], $new_image, $html);
+
+							unset($new_image);
+				        }
+					}
 				}
 			}
 		}
@@ -648,7 +858,10 @@ class LazyLoad
 		//base exclusions
 		$attributes = array(
 			'data-perfmatters-preload',
-			'gform_ajax_frame'
+			'gform_ajax_frame',
+			';base64',
+			'skip-lazy',
+			'fetchpriority="high"'
 		); 
 
 		//get exclusions added from settings
@@ -657,24 +870,5 @@ class LazyLoad
 		}
 
 	    return apply_filters('perfmatters_lazyload_excluded_attributes', $attributes);
-	}
-
-	//check for excluded attributes in attributes string
-	private static function lazyload_excluded($string, $excluded) {
-	    if(!is_array($excluded)) {
-	        (array) $excluded;
-	    }
-
-	    if(empty($excluded)) {
-	        return false;
-	    }
-
-	    foreach($excluded as $exclude) {
-	        if(strpos($string, $exclude) !== false) {
-	            return true;
-	        }
-	    }
-
-	    return false;
 	}
 }

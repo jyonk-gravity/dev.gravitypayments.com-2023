@@ -456,13 +456,14 @@
                                         "html": "HTML",
                                         "json": "JSON",
                                         "shell-session": "Shell",
+                                        "swift": "Swift",
                                         "markup": "Custom"
                                     },
                                     "default_value": false,
-                                    "allow_null": 0,
-                                    "multiple": 0,
-                                    "ui": 0,
                                     "return_format": "array",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "ui": 0,
                                     "ajax": 0,
                                     "placeholder": "",
                                     "parent_repeater": "field_5f57d3bdde573"
@@ -715,13 +716,14 @@
                                                                 "html": "HTML",
                                                                 "json": "JSON",
                                                                 "shell-session": "Shell",
+                                                                "swift": "Swift",
                                                                 "markup": "Custom"
                                                             },
                                                             "default_value": false,
-                                                            "allow_null": 0,
-                                                            "multiple": 0,
-                                                            "ui": 0,
                                                             "return_format": "array",
+                                                            "multiple": 0,
+                                                            "allow_null": 0,
+                                                            "ui": 0,
                                                             "ajax": 0,
                                                             "placeholder": "",
                                                             "parent_repeater": "field_5f7387ebb755b"
@@ -1459,38 +1461,11 @@
                     ],
                     "min": "",
                     "max": ""
-                },
-                "layout_63fd54d9a474c": {
-                    "key": "layout_63fd54d9a474c",
-                    "name": "api_reference",
-                    "label": "API Reference",
-                    "display": "block",
-                    "sub_fields": [
-                        {
-                            "key": "field_63fd54e9a474e",
-                            "label": "API Reference URL",
-                            "name": "api_reference_url",
-                            "aria-label": "",
-                            "type": "url",
-                            "instructions": "Add the URL to the API reference YML file.",
-                            "required": 0,
-                            "conditional_logic": 0,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "placeholder": ""
-                        }
-                    ],
-                    "min": "",
-                    "max": ""
                 }
             },
+            "button_label": "Add Content Block",
             "min": "",
-            "max": "",
-            "button_label": "Add Content Block"
+            "max": ""
         }
     ],
     "location": [
@@ -1523,5 +1498,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1677546773
+    "modified": 1707932161
 }

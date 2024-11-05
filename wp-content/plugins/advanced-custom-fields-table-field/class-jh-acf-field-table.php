@@ -21,7 +21,7 @@ class jh_acf_field_table extends acf_field {
 		*  settings (array) Array of settings
 		*/
 		$this->settings = array(
-			'version' => '1.3.20',
+			'version' => '1.3.26',
 			'dir_url' => plugins_url( '', __FILE__ ) . '/',
 		);
 
@@ -448,6 +448,16 @@ class jh_acf_field_table extends acf_field {
 					$data = get_term_meta( str_replace('term_', '', $post_id ), $field['name'], true );
 				}
 
+				//try options
+				if (
+					empty( $data ) AND (
+						$post_id = 'options' OR
+						$post_id = 'option'
+					)
+				) {
+					$data = get_option('options_' . $field['name']);
+				}
+
 				// prevents updating a field, thats data are not defined yet
 				if ( empty( $data ) ) {
 
@@ -573,6 +583,18 @@ class jh_acf_field_table extends acf_field {
 			$value = array();
 
 			// IF HEADER DATA
+
+			if ( isset( $a['p']['o']['uh'] ) ) {
+
+				if ( 0 === $a['p']['o']['uh'] ) {
+
+					$value['use_header'] = false;
+				}
+				elseif ( 1 === $a['p']['o']['uh'] ) {
+
+					$value['use_header'] = true;
+				}
+			}
 
 			if ( ! empty( $a['p']['o']['uh'] ) ) {
 
@@ -749,6 +771,25 @@ class jh_acf_field_table extends acf_field {
 	*/
 
 	/**
+	* get_rest_schema()
+	*
+	* Provides the rest api scheme.
+	*/
+
+	public function get_rest_schema( array $field ) {
+
+		$schema = array(
+			'type'     => array( 'object', 'null' ),
+			'title' => 'ACF table custom field type',
+			'type' => array( 'object', 'boolean' ),
+			//'properties' => array(),
+			'required' => ! empty( $field['required'] ) ? array() : false,
+		);
+
+		return $schema;
+	}
+
+	/**
 	* table_slash()
 	*
 	* Add slashes to a string or strings in an array.
@@ -782,7 +823,10 @@ class jh_acf_field_table extends acf_field {
 
 		} else {
 
-			$value = addslashes( $value );
+			if ( null !== $value ) {
+
+				$value = addslashes( $value );
+			}
 		}
 
 		return $value;

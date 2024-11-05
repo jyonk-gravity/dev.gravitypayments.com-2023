@@ -21,7 +21,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
  *
  * You can leave empty lines for better visibility, they are cleared before output.
  *
- * MORE INFO: https://wp-dreams.com/knowledge-base/result-templating/
+ * MORE INFO: https://knowledgebase.ajaxsearchpro.com/hooks/templating/result-templating
  *
  * @since: 4.0
  */
@@ -31,11 +31,9 @@ defined('ABSPATH') or die("You can't access this file directly.");
     <?php do_action('asp_res_isotopic_begin_item'); ?>
 
     <?php if ( !empty($r->image) ): ?>
-        <?php if ( $load_lazy == 1 ): ?>
-            <div class='asp_image asp_lazy' data-src="<?php echo esc_attr($r->image); ?>"></div>
-        <?php else: ?>
-            <div class='asp_image' data-src="<?php echo esc_attr($r->image); ?>" style="background-image: url('<?php echo $r->image; ?>');"></div>
-        <?php endif; ?>
+	    <div class='asp_image' data-src="<?php echo esc_attr($r->image); ?>">
+		    <img loading="lazy" alt="<?php echo esc_attr($r->title); ?>" src="<?php echo $r->image; ?>" />
+	    </div>
     <?php endif; ?>
 
     <?php do_action('asp_res_isotopic_after_image'); ?>

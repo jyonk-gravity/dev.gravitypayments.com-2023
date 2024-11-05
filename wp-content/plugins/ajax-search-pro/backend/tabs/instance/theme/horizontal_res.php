@@ -18,34 +18,103 @@
         <?php echo __('When turned OFF, the results box will break space, instead of showing a horizontal scroll.', 'ajax-search-pro'); ?>
     </p>
 </div>
-<div class="item"><?php
-    $o = new wpdreamsNumericUnit("hreswidth", __('Result width', 'ajax-search-pro'), array(
-        'value' => $sd['hreswidth'],
-        'units'=>array('px'=>'px')));
-    $params[$o->getName()] = $o->getData();
-    ?>
-</div>
-<div class="item"><?php
-    $o = new wpdreamsNumericUnit("hor_img_height", __('Result image height', 'ajax-search-pro'), array(
-        'value' => $sd['hor_img_height'],
-        'units'=>array('px'=>'px')));
-    $params[$o->getName()] = $o->getData();
-    ?>
-    <p class="descMsg">
-        <?php echo __('The image width is calcualted from the Result width option.', 'ajax-search-pro'); ?>
-    </p>
-</div>
-<div class="item"><?php
-    $o = new wpdreamsTextSmall("horizontal_res_height", __('Result height', 'ajax-search-pro'), $sd['horizontal_res_height']);
-    $params[$o->getName()] = $o->getData();
-    ?>
-    <p class="descMsg">
-        <?php echo sprintf(
-            __('Use with <a href="%s" target="_blank">CSS units</a> (like %s or %s or %s ..) Default: <strong>%s</strong>', 'ajax-search-pro'),
-            'https://www.w3schools.com/cssref/css_units.asp', '200px', '30vh', '30%', 'auto'
-        ); ?>
-    </p>
-</div>
+
+<fieldset>
+	<legend><?php echo __('Horizontal result sizes', 'ajax-search-pro'); ?></legend>
+	<div class="item item-flex-nogrow item-flex-wrap wpd-horizontal-res-width">
+		<p class="infoMsg item-flex-grow item-flex-100">
+			<?php echo __('For witdh % (percentage) values only work if the <strong>Display the results scrollbar</strong> option is <strong>turned OFF</strong> above.', 'ajax-search-pro'); ?>
+		</p>
+		<?php
+		$o = new wpdreamsTextSmall("h_item_width", __('Result width', 'ajax-search-pro'), array(
+			'icon' => 'desktop',
+			'value' => $sd['h_item_width']
+		));
+		$params[$o->getName()] = $o->getData();
+		$o = new wpdreamsTextSmall("h_item_width_tablet", '', array(
+			'icon' => 'tablet',
+			'value' => $sd['h_item_width_tablet']
+		));
+		$params[$o->getName()] = $o->getData();
+		$o = new wpdreamsTextSmall("h_item_width_phone", '', array(
+			'icon' => 'phone',
+			'value' => $sd['h_item_width_phone']
+		));
+		$params[$o->getName()] = $o->getData();
+		?>
+		<div class="descMsg item-flex-grow item-flex-100">
+			<?php echo __('Default: <strong>150px</strong>', 'ajax-search-pro'); ?>
+			<?php echo sprintf(
+				__('Use with <a href="%s" target="_blank">CSS units</a> (like %s or %s or %s ..)', 'ajax-search-pro'),
+				'https://www.w3schools.com/cssref/css_units.asp', '200px', '32%', 'auto', '200px'
+			); ?>
+		</div>
+	</div>
+	<div class="item item-flex-nogrow item-flex-wrap wpd-horizontal-res-height">
+		<?php
+		$o = new wpdreamsTextSmall("h_item_height", __('Result height', 'ajax-search-pro'), array(
+			'icon' => 'desktop',
+			'value' => $sd['h_item_height']
+		));
+		$params[$o->getName()] = $o->getData();
+		$o = new wpdreamsTextSmall("h_item_height_tablet", '', array(
+			'icon' => 'tablet',
+			'value' => $sd['h_item_height_tablet']
+		));
+		$params[$o->getName()] = $o->getData();
+		$o = new wpdreamsTextSmall("h_item_height_phone", '', array(
+			'icon' => 'phone',
+			'value' => $sd['h_item_height_phone']
+		));
+		$params[$o->getName()] = $o->getData();
+		?>
+		<div class="descMsg item-flex-grow item-flex-100">
+			<?php echo __('Default: <strong>auto</strong>', 'ajax-search-pro'); ?>
+			<?php echo __('Use values in pixels or auto only, ex: 200px, auto. % values will not work.') ?>
+		</div>
+	</div>
+	<div class="item item-flex-nogrow item-flex-wrap wpd-horizontal-res-image">
+		<?php
+		$o = new wpdreamsTextSmall("h_image_height", __('Image height', 'ajax-search-pro'), array(
+			'icon' => 'desktop',
+			'value' => $sd['h_image_height']
+		));
+		$params[$o->getName()] = $o->getData();
+		$o = new wpdreamsTextSmall("h_image_height_tablet", '', array(
+			'icon' => 'tablet',
+			'value' => $sd['h_image_height_tablet']
+		));
+		$params[$o->getName()] = $o->getData();
+		$o = new wpdreamsTextSmall("h_image_height_phone", '', array(
+			'icon' => 'phone',
+			'value' => $sd['h_image_height_phone']
+		));
+		$params[$o->getName()] = $o->getData();
+		?>
+		<p class="descMsg item-flex-grow item-flex-100">
+			<?php echo __('Default: <strong>150px</strong>. Only <strong>auto</strong> or <strong>px</strong> values are accepted.', 'ajax-search-pro'); ?>
+		</p>
+	</div>
+	<div class="item" wd-disable-on="h_res_show_scrollbar:1">
+		<?php
+		$o = new wpdreamsCustomSelect("h_item_alignment", __('Result item alignment', 'ajax-search-pro'),
+			array(
+				'selects' => array(
+					array('option' => __('Center', 'ajax-search-pro'), 'value' => 'center'),
+					array('option' => __('Left', 'ajax-search-pro'), 'value' => 'left'),
+					array('option' => __('Right', 'ajax-search-pro'), 'value' => 'right'),
+				),
+				'value' => $sd['h_item_alignment']
+			));
+		$params[$o->getName()] = $o->getData();
+		?>
+		<p class="descMsg">
+			<?php echo __('Default: <strong>Center</strong>. Sets where each results is aligned in the results container.', 'ajax-search-pro'); ?><br>
+			<?php echo __('Applies only when the <strong>Display the results scrollbar?</strong> option is turned OFF above.', 'ajax-search-pro'); ?>
+		</p>
+	</div>
+</fieldset>
+
 <div class="item"><?php
     $o = new wpdreamsNumericUnit("hressidemargin", __('Result side margin', 'ajax-search-pro'), array(
         'value' => $sd['hressidemargin'],

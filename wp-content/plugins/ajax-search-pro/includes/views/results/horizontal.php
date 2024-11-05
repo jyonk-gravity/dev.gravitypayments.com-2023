@@ -21,7 +21,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
  *
  * You can leave empty lines for better visibility, they are cleared before output.
  *
- * MORE INFO: https://wp-dreams.com/knowledge-base/result-templating/
+ * MORE INFO: https://knowledgebase.ajaxsearchpro.com/hooks/templating/result-templating
  *
  * @since: 4.0
  */
@@ -32,18 +32,10 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
     <?php if (!empty($r->image)): ?>
         <a class='asp_res_image_url' href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
-            <?php if ( $load_lazy == 1 ): ?>
-                <div class='asp_image<?php echo $s_options['image_display_mode'] == "contain" ? " asp_image_auto" : ""; ?> asp_lazy'
-                     data-src="<?php echo esc_attr($r->image); ?>">
-                    <div class='void'></div>
-                </div>
-            <?php else: ?>
-                <div class='asp_image<?php echo $s_options['image_display_mode'] == "contain" ? " asp_image_auto" : ""; ?>'
-                     data-src="<?php echo esc_attr($r->image); ?>"
-                     style="background-image: url('<?php echo $r->image; ?>');">
-                    <div class='void'></div>
-                </div>
-            <?php endif; ?>
+            <div class='asp_image<?php echo $s_options['image_display_mode'] == "contain" ? " asp_image_auto" : ""; ?>'>
+	            <img loading="lazy" alt="<?php echo esc_attr($r->title); ?>" src="<?php echo $r->image; ?>" />
+                <div class="void"></div>
+            </div>
         </a>
     <?php endif; ?>
 

@@ -1,0 +1,1 @@
+function gfmc_validate_form_columns(n,t,a,e){var c=check_start_and_end_quantities(t);if(0!==c)return c>0?c+gfmc.tooManyColumnStarts:-c+gfmc.tooManyColumnEnds}function check_start_and_end_quantities(n){var t=0,a=0;return jQuery.each(n.fields,(n,e)=>{"column_start"===e.type&&t++,"column_end"===e.type&&a++}),t-a}

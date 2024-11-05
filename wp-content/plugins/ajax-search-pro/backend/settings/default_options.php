@@ -49,7 +49,7 @@ function asp_do_init_options() {
         'it_blog_ids' => '',
         'it_limit' => 25,
         'it_use_stopwords' => 0,
-        'it_stopwords' => @file_get_contents(ASP_PATH . '/stopwords.txt'),
+        'it_stopwords' => 'a, about, above, across, after, afterwards, again, against, all, almost, alone, along, already, also, although, always, am, among, amongst, amoungst, amount, an, and, another, any, anyhow, anyone, anything, anyway, anywhere, are, around, as, at, back, be, became, because, become, becomes, becoming, been, before, beforehand, behind, being, below, beside, besides, between, beyond, bill, both, bottom, but, by, call, can, cannot, cant, co, con, could, couldnt, cry, de, describe, detail, do, done, down, due, during, each, eg, eight, either, eleven, else, elsewhere, empty, enough, etc, even, ever, every, everyone, everything, everywhere, except, few, fifteen, fify, fill, find, fire, first, five, for, former, formerly, forty, found, four, from, front, full, further, get, give, go, had, has, hasnt, have, he, hence, her, here, hereafter, hereby, herein, hereupon, hers, herself, him, himself, his, how, however, hundred, ie, if, in, inc, indeed, interest, into, is, it, its, itself, keep, last, latter, latterly, least, less, ltd, made, many, may, me, meanwhile, might, mill, mine, more, moreover, most, mostly, move, much, must, my, myself, name, namely, neither, never, nevertheless, next, nine, no, nobody, none, noone, nor, not, nothing, now, nowhere, of, off, often, on, once, one, only, onto, or, other, others, otherwise, our, ours, ourselves, out, over, own, part, per, perhaps, please, put, rather, re, same, see, seem, seemed, seeming, seems, serious, several, she, should, show, side, since, sincere, six, sixty, so, some, somehow, someone, something, sometime, sometimes, somewhere, still, such, system, take, ten, than, that, the, their, them, themselves, then, thence, there, thereafter, thereby, therefore, therein, thereupon, these, they, thickv, thin, third, this, those, though, three, through, throughout, thru, thus, to, together, too, top, toward, towards, twelve, twenty, two, un, under, until, up, upon, us, very, via, was, we, well, were, what, whatever, when, whence, whenever, where, whereafter, whereas, whereby, wherein, whereupon, wherever, whether, which, while, whither, who, whoever, whole, whom, whose, why, will, with, within, without, would, yet, you, your, yours, yourself, yourselves',
         'it_min_word_length' => 1,
         'it_extract_iframes' => 0,
         'it_extract_gutenberg_blocks' => 1,
@@ -152,7 +152,6 @@ function asp_do_init_options() {
         'load_google_fonts' => 1,
         'script_loading_method' => 'optimized',
         'init_instances_inviewport_only' => 1,
-        'load_lazy_js' => 0,
 		'css_loading_method' => 'optimized',	// optimized, inline, file
         'selective_enabled' => 0,
         'selective_front' => 1,
@@ -338,7 +337,7 @@ function asp_do_init_options() {
         'secondary_kw_logic' => 'none',
 
         'orderby_primary' => 'relevance DESC',
-        'orderby' => 'post_date DESC',
+        'orderby_secondary' => 'post_date DESC',
         'orderby_primary_cf' => '',
         'orderby_secondary_cf' => '',
         'orderby_primary_cf_type' => 'numeric',
@@ -377,6 +376,8 @@ function asp_do_init_options() {
         'tax_image_custom_field' => '',
         'tax_image_default' => '',
         'user_image_default' => '',
+        'user_image_width' => 96,
+        'user_image_height' => 96,
         'image_parser_image_number' => 1,
         'image_parser_exclude_filenames' => '',
 
@@ -560,6 +561,8 @@ function asp_do_init_options() {
         'taxonomy_logic' => 'and',
         'frontend_terms_empty' => 1,
         'frontend_terms_ignore_empty' => 1,
+        'frontend_terms_parent_child_assignment' => 1,
+        'frontend_terms_parent_unselect_children' => 1,
         'frontend_terms_hide_children' => 0,
         'frontend_term_hierarchy' => 1,
         'frontend_terms_hide_empty' => 0,
@@ -658,6 +661,7 @@ function asp_do_init_options() {
         /* Autocomplete & Keyword suggestion options */
         'keywordsuggestions' => 1,
         'result_suggestions' => 1,
+        'result_suggestions_results_page' => 0,
         'keyword_suggestion_source' => 'titles',
         'kws_google_places_api' => '',
         'keywordsuggestionslang' => "en",
@@ -919,10 +923,20 @@ function asp_do_init_options() {
 
         'blogtitleorderby' => 'desc',
 
-        'hreswidth' => '150px',
+        'h_item_width' => '150px',
+        'h_item_width_tablet' => '150px',
+        'h_item_width_phone' => '150px',
+        'h_item_alignment' => 'center',
+
         'h_res_show_scrollbar' => 1,
-        'hor_img_height' => '150px',
-        'horizontal_res_height' => 'auto',
+
+        'h_image_height' => '150px',
+        'h_image_height_tablet' => '150px',
+        'h_image_height_phone' => '150px',
+
+        'h_item_height' => 'auto',
+        'h_item_height_tablet' => 'auto',
+        'h_item_height_phone' => 'auto',
         'hressidemargin' => '8px',
         'hrespadding' => '7px',
         'hresultinanim' => 'bounceIn',
@@ -993,6 +1007,8 @@ function asp_do_init_options() {
         'custom_css_h' => '',
         'res_z_index' => 11000,
         'sett_z_index' => 11001,
+		'media_query_mobile_max_width' => 640,
+		'media_query_tablet_max_width' => 1024,
 
 //Relevance options
         'userelevance' => 1,

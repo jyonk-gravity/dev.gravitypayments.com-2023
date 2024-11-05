@@ -203,6 +203,7 @@ div.asp_w.ajaxsearchpro input[type="search"] {
 
 /* This clear class is bulletproof */
 .asp_clear {
+    display: block !important;
     clear: both !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -230,7 +231,6 @@ div.asp_w.ajaxsearchpro.asp_non_compact {
     width: 0;
     height: 0;
     position: fixed;
-    text-align: center;
     background: rgba(255, 255, 255, 0.5);
     top: 0;
     left: 0;
@@ -282,8 +282,6 @@ div.asp_m.ajaxsearchpro .probox {
 div.asp_m.ajaxsearchpro .probox .proinput {
     width: 1px;
     height: 100%;
-    margin: 0px 0px 0px 10px;
-    padding: 0 5px;
     float: left;
     box-shadow: none;
     position: relative;
@@ -297,6 +295,8 @@ div.asp_m.ajaxsearchpro .probox .proinput form {
     /* some themes like to add un-removable margin and padding.. */
     margin: 0 !important;
     padding: 0 !important;
+	display: block !important;
+	max-width: unset !important;
 }
 
 div.asp_m.ajaxsearchpro .probox .proinput input {
@@ -305,7 +305,6 @@ div.asp_m.ajaxsearchpro .probox .proinput input {
     border: 0px;
     background: transparent;
     box-shadow: none;
-    margin: -1px;
     padding: 0;
     left: 0;
     padding-top: 2px;
@@ -347,7 +346,6 @@ div.asp_m.ajaxsearchpro .probox .prosettings {
     box-shadow: none;
     margin: 0;
     padding: 0;
-    text-align: center;
     z-index: 1;
 }
 
@@ -400,16 +398,12 @@ div.asp_m.ajaxsearchpro .probox .proloading svg {
 
 div.asp_m.ajaxsearchpro .probox .proclose svg  {
     background: #333333;
-    border-radius: 50%;
     position: absolute;
     top: 50%;
     width: 20px;
     height: 20px;
-    margin-top: -10px;
     left: 50%;
-    margin-left: -10px;
     fill: #fefefe;
-    padding: 4px;
     box-sizing: border-box;
     box-shadow: 0px 0px 0px 2px rgba(255, 255, 255, 0.9);
 }
@@ -1006,7 +1000,6 @@ div.asp_w.asp_r .photostack-start nav {
 div.asp_w.asp_r .photostack nav span {
     position: relative;
     display: inline-block;
-    margin: 0 5px;
     width: 30px;
     height: 30px;
     cursor: pointer;
@@ -1430,6 +1423,16 @@ div.asp_w.asp_s.searchsettings .asp_option {
     align-items: flex-start;
     margin: 0 0 10px 0;
     cursor: pointer;
+}
+
+div.asp_w.asp_sb.searchsettings .asp_option:focus,
+div.asp_w.asp_s.searchsettings .asp_option:focus {
+	outline: none;
+}
+
+div.asp_w.asp_sb.searchsettings .asp_option:focus-visible,
+div.asp_w.asp_s.searchsettings .asp_option:focus-visible {
+	outline-style: auto;
 }
 
 div.asp_w.asp_s.searchsettings .asp_option.asp-o-last,

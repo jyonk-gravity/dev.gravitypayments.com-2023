@@ -360,7 +360,7 @@ function cptui_products_sidebar() {
 		}
 		printf(
 			'<p><a href="%s">%s</a></p>',
-			'https://pluginize.com/plugins/custom-post-type-ui-extended/ref/pluginizeaff/?campaign=cptui-sidebar-remove',
+			'https://pluginize.com/plugins/custom-post-type-ui-extended/',
 			esc_html__( 'Remove these ads?', 'custom-post-type-ui' )
 		);
 	}
@@ -429,7 +429,7 @@ function cptui_newsletter_form() {
  * Add our Email Octopus scripts and stylesheet.
  *
  * @author Scott Anderson <scott.anderson@webdevstudios.com>
- * @since  NEXT
+ * @since  1.7.3
  */
 function enqueue_email_octopus_assets() {
 
@@ -513,9 +513,9 @@ function cptui_default_ads( $ads = [] ) {
 	];
 
 	$ads[] = [
-		'url'   => 'https://maintainn.com/?utm_source=Pluginize-v2&utm_medium=Plugin-Sidebar&utm_campaign=CPTUI',
-		'image' => plugin_dir_url( __DIR__ ) . 'images/wds_ads/maintainn.png',
-		'text'  => 'Maintainn product ad',
+		'url'   => 'https://pluginize.com/plugins/wp-search-with-algolia-pro/?utm_source=cptui-sidebar&utm_medium=text&utm_campaign=wp-search-with-algolia-pro',
+		'image' => plugin_dir_url( __DIR__ ) . 'images/wds_ads/wp-search-with-algolia-pro.png',
+		'text'  => 'WP Search with Algolia Pro product ad',
 	];
 
 	return $ads;
@@ -1002,3 +1002,55 @@ function cptui_get_add_new_link( $content_type = '' ) {
 
 	return cptui_admin_url( 'admin.php?page=cptui_manage_' . $content_type );
 }
+
+/**
+ * Register theme support for CPTUI based content types, for extra assurance.
+ *
+ * @since 1.14.0
+ */
+function cptui_post_thumbnail_theme_support() {
+	$post_types = cptui_get_post_type_data();
+
+	$supported = [];
+	foreach ( $post_types as $post_type ) {
+		if ( empty( $post_type['supports'] ) ) {
+			continue;
+		}
+		if (
+			// Some way, somehow, null can end up saved in the supports spot.
+			// Lets check for an array first.
+			is_array( $post_type['supports'] ) &&
+			in_array( 'thumbnail', $post_type['supports'] )
+		) {
+			$supported[] = $post_type['name'];
+		}
+	}
+	if ( ! empty( $supported ) ) {
+		add_theme_support( 'post-thumbnails', $supported );
+	}
+}
+add_action( 'after_setup_theme', 'cptui_post_thumbnail_theme_support' );
+
+function cptui_add_dialog_missing_post_type_confirm() {
+?>
+	<dialog id="cptui-select-post-type-confirm">
+		<p><?php esc_html_e( 'Please select a post type to associate with.', 'custom-post-type-ui' ); ?></p>
+		<button id="cptui-select-post-type-confirm-close" class="confirm button-secondary" type="button"><?php esc_html_e( 'OK', 'custom-post-type-ui' ); ?></button>
+	</dialog>
+<?php
+}
+add_action( 'cptui_taxonomy_after_fieldsets', 'cptui_add_dialog_missing_post_type_confirm' );
+
+function cptui_add_dialog_delete_content_type_confirm() {
+	?>
+	<dialog id="cptui-content-type-delete" class="wp-core-ui">
+		<p><?php esc_html_e( 'Are you sure you want to delete this? Deleting will NOT remove created content.', 'custom-post-type-ui' ); ?></p>
+		<div class="cptui-confirm-deny-delete">
+			<button id="cptui-content-type-confirm-delete" class="confirm button-secondary" type="button"><?php esc_html_e( 'OK', 'custom-post-type-ui' ); ?></button>
+			<button id="cptui-content-type-deny-delete" class="confirm button-secondary" type="button"><?php esc_html_e( 'Cancel', 'custom-post-type-ui' ); ?></button>
+		</div>
+	</dialog>
+	<?php
+}
+#add_action( 'cptui_post_type_after_fieldsets', 'cptui_add_dialog_delete_content_type_confirm' );
+#add_action( 'cptui_taxonomy_after_fieldsets', 'cptui_add_dialog_delete_content_type_confirm' );

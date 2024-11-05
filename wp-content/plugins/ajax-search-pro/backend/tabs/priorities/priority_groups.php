@@ -1,8 +1,10 @@
 <?php
-if ( isset($_POST['priority_groups']) ) {
+if (
+		isset($_POST['priority_groups'], $_POST['priority_groups_nonce']) &&
+		wp_verify_nonce( $_POST['priority_groups_nonce'], 'priority_groups_nonce' )
+) {
     wd_asp()->priority_groups->setEncoded($_POST['priority_groups'], true);
 }
-//wd_asp()->priority_groups->debug();
 ?>
 
 <?php if (ASP_DEMO): ?>
@@ -24,19 +26,21 @@ if ( isset($_POST['priority_groups']) ) {
 <p id="pg_information">
     <?php echo sprintf( __('If you don\'t know what priority groups are, check the <a href="%s" target="_blank">Priority</a> and the
     <a href="%s" target="_blank">Priority groups</a> documentations first.', 'ajax-search-pro'),
-        'https://wp-dreams.com/go/?to=asp-doc-result-priority',
-    'https://wp-dreams.com/go/?to=asp-doc-result-priority-group'
+        'https://documentation.ajaxsearchpro.com/result-priority-settings',
+    'https://documentation.ajaxsearchpro.com/result-priority-settings/priorities-by-rules-priority-groups'
     ); ?>
 </p>
 <p class="noticeMsg">
     <?php echo __('PLEASE NOTE: Always create <strong>as few rules as possible</strong>, as they may affect the search performance negatively.', 'ajax-search-pro'); ?>
 </p>
-<form method="POST">
+<form method="POST" class="wd-main-options-form">
     <p style="text-align: right">
         <input type="button" id="pg_remove_all" value="<?php echo esc_attr__('Remove all', 'ajax-search-pro'); ?>" style="float: left;" class="submit wd_button_opaque">
         <input type="button" id="pg_add_new" value="<?php echo esc_attr__('Add new!', 'ajax-search-pro'); ?>" class="submit wd_button_green">
         <input type="button" id="pg_save" value="<?php echo esc_attr__('Save Groups', 'ajax-search-pro'); ?>" class="submit wd_button wd_button_blue">
     </p>
+	<input type="hidden" name="priority_groups_nonce"
+	       value="<?php echo wp_create_nonce( 'priority_groups_nonce' ); ?>">
     <input name="priority_groups" id="priority_groups" type="hidden" value="<?php echo wd_asp()->priority_groups->getForDisplayEncoded(); ?>"/>
 </form>
 

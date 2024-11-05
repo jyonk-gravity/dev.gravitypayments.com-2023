@@ -883,9 +883,11 @@ class Settings {
 		// Prepare hidden styling.
 		$hidden = rgar( $field, 'hidden' ) === true || rgar( $field, 'type' ) === 'hidden' ? ' style="display:none;"' : '';
 
+		$field_name = $field->name ? str_replace( array( '[', ']' ), array( '_', null ), $field->name ) : '';
+
 		printf(
 			'<div id="gform_setting_%s" class="gform-settings-field gform-settings-field__%s" %s>',
-			esc_attr( str_replace( array( '[', ']' ), array( '_', null ), $field->name ) ),
+			esc_attr( $field_name ),
 			$field->type,
 			$hidden
 		);
@@ -1448,6 +1450,10 @@ class Settings {
 	 */
 	public function has_card_layout( $section ) {
 		if ( ! rgar( $section, 'fields' ) || 1 !== count( $section['fields'] ) ) {
+			return false;
+		}
+
+		if ( ! rgars( $section['fields'], '0/type' ) ) {
 			return false;
 		}
 
@@ -2545,6 +2551,10 @@ class Settings {
 	 * @return bool|array|string
 	 */
 	public function get_value( $name, $default_value = '', $values = false ) {
+
+		if ( empty( $name ) ) {
+			return '';
+		}
 
 		// Get current values.
 		if ( ! $values || ! is_array( $values ) ) {

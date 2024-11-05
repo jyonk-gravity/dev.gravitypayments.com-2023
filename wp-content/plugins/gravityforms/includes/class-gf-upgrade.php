@@ -68,7 +68,7 @@ class GF_Upgrade {
 			$this->install();
 
 			// Show installation wizard for all new installations as long as the key wasn't already set e.g. by the CLI.
-			if ( ! get_option( 'rg_gforms_key' ) ) {
+			if ( ! GFCommon::get_key() ) {
 				update_option( 'gform_pending_installation', true );
 			}
 		} elseif ( $this->is_downgrading() ) {
@@ -155,12 +155,64 @@ class GF_Upgrade {
 
 		$this->test_auto_increment();
 
+		$this->sync_auto_updates( $from_db_version );
+		$this->set_license_network_option();
+
 		// Start upgrade routine
 		if ( $force_upgrade || ! ( defined( 'GFORM_AUTO_DB_MIGRATION_DISABLED' ) && GFORM_AUTO_DB_MIGRATION_DISABLED ) ) {
 			$this->post_upgrade_schema( $from_db_version, $force_upgrade );
 		}
 
 		return true;
+	}
+
+	/**
+	 * Ensures the network option for the license key is set.
+	 *
+	 * @since 2.8.17
+	 *
+	 * @return void
+	 */
+	public function set_license_network_option() {
+		if ( ! GFCommon::is_network_active() ) {
+			return;
+		}
+
+		if ( ! is_main_site() ) {
+			delete_option( 'gform_pending_installation' );
+			delete_option( 'rg_gforms_message' );
+
+			return;
+		}
+
+		$key = get_network_option( null, GFForms::LICENSE_KEY_OPT );
+		if ( $key ) {
+			return;
+		}
+
+		$key = GFCommon::get_key();
+		if ( ! $key ) {
+			return;
+		}
+
+		update_network_option( null, GFForms::LICENSE_KEY_OPT, $key );
+	}
+
+	/**
+	 * Updates the WP auto_update_plugins option to match the background updates setting.
+	 *
+	 * @since 2.7.2
+	 *
+	 * @param string $previous_version The previous version.
+	 *
+	 * @return void
+	 */
+	public function sync_auto_updates( $previous_version ) {
+		if ( ! version_compare( $previous_version, '2.7.1.1', '<' ) ) {
+			return;
+		}
+
+		GFForms::get_service_container()->get( Gravity_Forms\Gravity_Forms\Updates\GF_Auto_Updates_Service_Provider::GF_AUTO_UPDATES_HANDLER )->activation_sync();
 	}
 
 	/**
@@ -181,6 +233,12 @@ class GF_Upgrade {
 
 		// Turn background updates on by default for all new installations.
 		update_option( 'gform_enable_background_updates', true );
+
+		// Set Orbital as the default theme for all new installations.
+		update_option( 'rg_gforms_default_theme', 'orbital', false );
+
+		// Setting the version of Gravity Forms that was installed initially
+		update_option( 'rg_form_original_version', GFForms::$version, false );
 
 		// Auto-setting and auto-validating license key based on value configured via the GF_LICENSE_KEY constant or the gf_license_key variable
 		// Auto-populating reCAPTCHA keys base on constant
@@ -1354,8 +1412,6 @@ WHERE ln.id NOT IN
 	 * Upgrade routine from gravity forms version 2.0.4.7 and below
 	 */
 	protected function post_upgrade_schema_2047() {
-		remove_filter( 'query', array( 'GFForms', 'filter_query' ) );
-
 		global $wpdb;
 
 		$versions = $this->get_versions();

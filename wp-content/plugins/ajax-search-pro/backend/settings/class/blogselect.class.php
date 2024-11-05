@@ -110,8 +110,7 @@ if (!class_exists("wpdreamsBlogselect")) {
 		function processData() {
 			$this->data = str_replace("\n", "", $this->data);
 			$this->selected = null;
-
-			if ($this->data != "") {
+			if (!empty($this->data)) {
 				// Check for the use-all checkbox
 				$tmp = explode( "xxx", $this->data );
 				if (isset($tmp[1]))

@@ -32,6 +32,8 @@ class Field_Select extends Select {
 	 */
 	public $args = array();
 
+	public $fields_callback;
+
 	/**
 	 * Initialize Field Select field.
 	 *
@@ -161,7 +163,9 @@ class Field_Select extends Select {
 		}
 
 		// Convert all auto-population choices to lowercase.
-		$default_value_choices = array_map( 'strtolower', $default_value_choices );
+		foreach( $default_value_choices as $key => $value ) {
+			$default_value_choices[ $key ] = $value ? strtolower( $value ) : $value;
+		}
 
 		// Loop through fields.
 		foreach ( $this->choices as $choice ) {

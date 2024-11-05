@@ -4,7 +4,7 @@
 
 		var t = this;
 
-		t.version = '1.3.20';
+		t.version = '1.3.26';
 
 		t.param = {};
 
@@ -124,7 +124,7 @@
 
 						clearInterval( interval );
 
-					}, 500 );
+					}, 250 );
 
 				});
 
@@ -421,7 +421,7 @@
 
 		t.data_default = function( p ) {
 
-			// DEFINE DEFAULT DATA {
+			// DEFINES DEFAULT TABLE DATA {
 
 				p.data_defaults = {
 
@@ -465,14 +465,35 @@
 
 			// }
 
-			// MERGE DEFAULT DATA {
+			// ADDS MISSING DATA OR DATA SECTIONS FROM DEFAULT {
 
 				if ( p.data ) {
 
-					if ( typeof p.data.b === 'array' ) {
+					if ( typeof p.data.c !== 'object' ) {
 
-						$.extend( true, p.data, p.data_defaults );
+						p.data.c = p.data_defaults.c;
 					}
+
+					if ( typeof p.data.h !== 'object' ) {
+
+						p.data.b = p.data_defaults.h;
+					}
+
+					if ( typeof p.data.b !== 'object' ) {
+
+						p.data.b = p.data_defaults.b;
+					}
+
+					if ( typeof p.data.p !== 'object' ) {
+
+						p.data.p = p.data_defaults.p;
+					}
+
+					if ( typeof p.data.acftf !== 'object' ) {
+
+						p.data.acftf === p.data_defaults.acftf;
+					}
+
 				}
 				else {
 
@@ -481,9 +502,17 @@
 
 			// }
 
+			// MERGES MISSING SECTION PARAMETERS FROM DEFAULTS {
+
+				p.data.acftf = $.extend( true, p.data_defaults.acftf, p.data.acftf );
+				p.data.p = $.extend( true, p.data_defaults.p, p.data.p );
+
+			// }
 		};
 
 		t.table_render = function( p ) {
+
+			let build_table_json = false;
 
 			// TABLE HTML MAIN {
 
@@ -504,17 +533,43 @@
 
 			// }
 
-			// TOP CELLS {
+			// CHECK FOR EQUAL COLUMNS IN COLUMNS DATA AND FIRST BODY ROW DATA {
 
-				if ( p.data.c ) {
+				if (
+					p.data.c &&
+					p.data.b &&
+					p.data.c.length < p.data.b[0].length
+				 ) {
 
-					for ( i in p.data.c ) {
+					build_table_json = true;
 
-						p.obj_top_insert.before( t.param.htmltable.top_cell );
+					let length =  p.data.b[0].length;
+
+					for ( let index = 0; index < length; index++ ) {
+
+						p.data.c[ index ] = { o: {} };
 					}
 				}
 
-				t.table_top_labels( p );
+				let cols = p.data.c.length;
+
+			// }
+
+			// TOP CELLS {
+
+				// INSERT TOP CELLS {
+
+					if ( p.data.c ) {
+
+						for ( i in p.data.c ) {
+
+							p.obj_top_insert.before( t.param.htmltable.top_cell );
+						}
+					}
+
+					t.table_top_labels( p );
+
+				// }
 
 			// }
 
@@ -524,8 +579,34 @@
 
 					for ( i in p.data.h ) {
 
+						// PREVENTS TO MANY CELLS {
+
+							if ( cols <= i ) {
+
+								build_table_json = true;
+								break;
+							}
+
+						// }
+
 						p.obj_header_insert.before( t.param.htmltable.header_cell.replace( '<!--ph-->', p.data.h[ i ].c.replace( /xxx&quot/g, '"' ) ) );
 					}
+
+					// ADDS MISSING CELLS {
+
+						let existing_cells = i + 1;
+
+						if ( cols > existing_cells  ) {
+
+							for ( let add_i = 0; add_i < (cols - existing_cells); add_i++ ) {
+
+								p.obj_header_insert.before( t.param.htmltable.header_cell.replace( '<!--ph-->', '' ) );
+							}
+
+							build_table_json = true;
+						}
+
+					// }
 				}
 
 			// }
@@ -556,10 +637,38 @@
 
 						for( i in p.data.b[ row_i ] ) {
 
+							i = parseInt( i );
+
+							// PREVENTS TO MANY CELLS {
+
+								if ( cols <= i ) {
+
+									build_table_json = true;
+									break;
+								}
+
+							// }
+
 							row_insert.before( t.param.htmltable.body_cell.replace( '<!--ph-->', p.data.b[ row_i ][ i ].c.replace( /xxx&quot/g, '"' ) ) );
 						}
 
-						row_i = row_i + 1
+						// ADDS MISSING CELLS {
+
+							let existing_cells = i + 1;
+
+							if ( cols > existing_cells  ) {
+
+								for ( let add_i = 0; add_i < (cols - existing_cells); add_i++ ) {
+
+									row_insert.before( t.param.htmltable.body_cell.replace( '<!--ph-->', '' ) );
+								}
+
+								build_table_json = true;
+							}
+
+						// }
+
+						row_i = row_i + 1;
 					} );
 				}
 
@@ -573,6 +682,15 @@
 
 						p.obj_bottom_insert.before( t.param.htmltable.bottom_cell );
 					}
+				}
+
+			// }
+
+			// BUILD TABLE JSON {
+
+				if ( true === build_table_json ) {
+
+					t.table_build_json( p );
 				}
 
 			// }
@@ -601,7 +719,10 @@
 
 					// HEADER IS NOT ALLOWED
 
-					if ( p.field_options.use_header === 2 ) {
+					if (
+						p.field_options.use_header === 2 &&
+						p.data.p.o.uh !== 0
+					) {
 
 						p.obj_table.addClass( 'acf-table-hide-header' );
 
@@ -611,7 +732,10 @@
 
 					// HEADER IS REQUIRED
 
-					if ( p.field_options.use_header === 1 ) {
+					if (
+						p.field_options.use_header === 1 &&
+						p.data.p.o.uh !== 1
+					) {
 
 						p.data.p.o.uh = 1;
 						t.update_table_data_field( p );
@@ -921,7 +1045,8 @@
 		t.table_build_json = function( p ) {
 
 			var i = 0,
-				i2 = 0;
+				i2 = 0,
+				rerender_table = false;
 
 			p.data = t.data_get( p );
 			t.data_default( p );
@@ -942,6 +1067,8 @@
 					i = i + 1;
 				} );
 
+				let cols = p.data.c.length;
+
 			// }
 
 			// HEADER {
@@ -950,11 +1077,38 @@
 
 				p.obj_table.find( '.acf-table-header-cont' ).each( function() {
 
+					// PREVENTS TO MANY CELLS {
+
+						if ( cols <= i ) {
+
+							rerender_table = true;
+							return;
+						}
+
+					// }
+
 					p.data.h[ i ] = {};
 					p.data.h[ i ].c = $( this ).html();
 
 					i = i + 1;
 				} );
+
+				// ADDS MISSING CELLS {
+
+					let existing_cells = i;
+
+					if ( cols > existing_cells  ) {
+
+						for ( let add_i = 0; add_i < (cols - existing_cells); add_i++ ) {
+
+							let new_i = p.data.h.length;
+							p.data.h[ new_i ] = {};
+							p.data.h[ new_i ].c = '';
+							rerender_table = true;
+						}
+					}
+
+				// }
 
 			// }
 
@@ -969,11 +1123,38 @@
 
 					$( this ).find( '.acf-table-body-cell .acf-table-body-cont' ).each( function() {
 
+						// PREVENTS TO MANY CELLS {
+
+							if ( cols <= i2 ) {
+
+								rerender_table = true;
+								return;
+							}
+
+						// }
+
 						p.data.b[ i ][ i2 ] = {};
 						p.data.b[ i ][ i2 ].c = $( this ).html();
 
 						i2 = i2 + 1;
 					} );
+
+					// ADDS MISSING CELLS {
+
+						let existing_cells = i2;
+
+						if ( cols > existing_cells  ) {
+
+							for ( let add_i = 0; add_i < (cols - existing_cells); add_i++ ) {
+
+								let new_i = p.data.b[ i ].length;
+								p.data.b[ i ][ new_i ] = {};
+								p.data.b[ i ][ new_i ].c = '';
+								rerender_table = true;
+							}
+						}
+
+					// }
 
 					i2 = 0;
 					i = i + 1;
@@ -986,6 +1167,16 @@
 				t.update_table_data_field( p );
 
 			// }
+
+			// RERENDER TABLE (DATA REPAIR OCCURED) {
+
+				if ( true === rerender_table ) {
+
+					t.table_render( p );
+				}
+
+			// }
+
 		};
 
 		t.update_table_data_field = function( p ) {
@@ -1343,14 +1534,10 @@
 
 		t.field_changed = function( p ) {
 
-			if ( p.field_context === 'block' ) {
+			setTimeout( function() {
 
-				setTimeout( function() {
-
-					p.obj_root.trigger( 'change' );
-
-				}, 0 );
-			}
+				p.obj_root.trigger( 'change' );
+			}, 0 );
 		};
 
 		t.sort_cols = function( p ) {

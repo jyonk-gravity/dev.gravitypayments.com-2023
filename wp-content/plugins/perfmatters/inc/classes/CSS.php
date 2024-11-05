@@ -10,10 +10,14 @@ use Sabberworm\CSS\Property\Charset;
 use Sabberworm\CSS\RuleSet\DeclarationBlock;
 use Sabberworm\CSS\Settings;
 use Sabberworm\CSS\Value\URL;
+//use MatthiasMullie\Minify;
 use WP_Admin_Bar;
 
 class CSS
 {
+    private static $run = [];
+    private static $data = [];
+    private static $url_type;
     private static $used_selectors;
     private static $excluded_selectors;
 
@@ -24,141 +28,203 @@ class CSS
             return;
         }
 
+        add_action('perfmatters_queue', array('Perfmatters\CSS', 'queue'));
+
         if(!empty(Config::$options['assets']['remove_unused_css'])) {
-            add_action('wp', array('Perfmatters\CSS', 'queue'));
             add_action('wp_ajax_perfmatters_clear_post_used_css', array('Perfmatters\CSS', 'clear_post_used_css'));
             add_action('admin_bar_menu', array('Perfmatters\CSS', 'admin_bar_menu'));
             add_action('admin_notices', array('Perfmatters\CSS', 'admin_notices'));
             add_action('admin_post_perfmatters_clear_used_css', array('Perfmatters\CSS', 'admin_bar_clear_used_css'));
         }
+
+        if(!empty(Config::$options['assets']['minify_css'])) {
+            Minify::queue_admin_bar();
+        }
+
+        //ajax actions
+        add_action('wp_ajax_perfmatters_clear_used_css', array('Perfmatters\CSS', 'clear_used_css_ajax'));
+        add_action('wp_ajax_perfmatters_clear_minified_css', array('Perfmatters\CSS', 'clear_minified_css_ajax'));
     }
 
     //queue functions
     public static function queue() 
     {
-        add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\CSS', 'remove_unused_css'));
-    }
-
-    //remove unused css
-    public static function remove_unused_css($html)
-    {
-        if(empty(apply_filters('perfmatters_remove_unused_css', true))) {
-            return $html;
-        }
-
-        if(Utilities::get_post_meta('perfmatters_exclude_unused_css')) {
-            return $html;
-        }
-
-        //only logged out
-        if(is_user_logged_in()) {
-            return $html;
-        }
-
         //skip woocommerce
         if(Utilities::is_woocommerce()) {
-            return $html;
+            return;
         }
 
-        //only known url types
-        $type = self::get_url_type();
-        if(empty($type)) {
-            return $html;
+        //setup optimizations to run
+        self::$run['rucss'] = !empty(apply_filters('perfmatters_remove_unused_css', !empty(Config::$options['assets']['remove_unused_css']))) && !Utilities::get_post_meta('perfmatters_exclude_unused_css') && !is_user_logged_in() && self::$url_type = self::get_url_type();
+        self::$run['minify'] = !empty(apply_filters('perfmatters_minify_css', !empty(Config::$options['assets']['minify_css']))) && !Utilities::get_post_meta('perfmatters_exclude_minify_css');
+
+        if(array_filter(self::$run)) {
+
+            //add to buffer
+            add_filter('perfmatters_output_buffer_template_redirect', array('Perfmatters\CSS', 'optimize'));
         }
+    }
 
-        //setup file variables
-        $used_css_path = PERFMATTERS_CACHE_DIR . 'css/' . $type . '.used.css';
-        $used_css_url = PERFMATTERS_CACHE_URL . 'css/' . $type . '.used.css';
-        $used_css_exists = file_exists($used_css_path);
-
+    //optimize css
+    public static function optimize($html)
+    {
+        //strip comments before search
+        $html_no_comments = preg_replace('/<!--(.*)-->/Uis', '', $html);
+        
         //match all stylesheets
-        preg_match_all('#<link\s[^>]*?href=[\'"]([^\'"]+?\.css.*?)[\'"][^>]*?\/?>#i', $html, $stylesheets, PREG_SET_ORDER);
+        preg_match_all('#<link(\s[^>]*?href=[\'"]([^\'"]+?\.css.*?)[\'"][^>]*?)\/?>#i', $html_no_comments, $stylesheets, PREG_SET_ORDER);
 
-        if(!empty($stylesheets)) {
+        //no stylesheets found
+        if(empty($stylesheets)) {
+            return $html;
+        }  
+
+        //global styles array in case we need to update registered src
+        global $wp_styles;
+
+        //pre loop
+        //unused css
+        if(self::$run['rucss']) {
 
             //create our css cache directory
             if(!is_dir(PERFMATTERS_CACHE_DIR . 'css/')) {
                 @mkdir(PERFMATTERS_CACHE_DIR . 'css/', 0755, true);
             }
 
+            //setup file variables
+            $used_css_path = PERFMATTERS_CACHE_DIR . 'css/' . self::$url_type . '.used.css';
+            $used_css_url = PERFMATTERS_CACHE_URL . 'css/' . self::$url_type . '.used.css';
+            $used_css_exists = file_exists($used_css_path);
+
             //populate used selectors
             self::get_used_selectors($html);
             self::get_excluded_selectors();
 
+            //stylesheet exclusions
+            self::$data['rucss']['exclusions']['stylesheet'] = array(
+                'dashicons.min.css', //core
+                '/uploads/elementor/css/post-', //elementor
+                'animations.min.css',
+                '/animations/',
+                'woocommerce-mobile', //woocommerce
+                'woocommerce-smallscreen',
+                '/uploads/oxygen/css/', //oxygen
+                '/uploads/bb-plugin/cache/', //beaver builder
+                '/uploads/generateblocks/', //generateblocks
+                '/et-cache/', //divi
+                '/widget-google-reviews/assets/css/public-main.css', //plugin for google reviews
+                '.google-fonts.', //google fonts
+                '//fonts.googleapis.com/css'
+            );
+            if(!empty(Config::$options['assets']['rucss_excluded_stylesheets'])) {
+                self::$data['rucss']['exclusions']['stylesheet'] = array_merge(self::$data['rucss']['exclusions']['stylesheet'], Config::$options['assets']['rucss_excluded_stylesheets']);
+            }
+            self::$data['rucss']['exclusions']['stylesheet'] = apply_filters('perfmatters_rucss_excluded_stylesheets', self::$data['rucss']['exclusions']['stylesheet']);
+
             $used_css_string = '';
+        }
 
-            //loop through stylesheets
-            foreach($stylesheets as $key => $stylesheet) {
+        //loop through stylesheets
+        foreach($stylesheets as $key => $stylesheet) {
 
-                //stylesheet check
-                if(!preg_match('#\srel=[\'"]stylesheet[\'"]#is', $stylesheet[0])) {
-                    continue;
-                }
+            //get attribute array
+            $atts_array = !empty($stylesheet[1]) ? Utilities::get_atts_array($stylesheet[1]) : array();
 
-                //ignore google fonts
-                if(stripos($stylesheet[1], '//fonts.googleapis.com/css') !== false || stripos($stylesheet[1], '.google-fonts.css') !== false) {
-                    continue;
-                }
+            //stylesheet check
+            if(empty($atts_array['rel']) || $atts_array['rel'] != 'stylesheet') {
+                continue;
+            }
 
-                //exclude entire stylesheets
-                $stylesheet_exclusions = array(
-                    'dashicons.min.css', //core
-                    '/uploads/elementor/css/post-', //elementor
-                    'animations.min.css',
-                    'woocommerce-mobile.min.css', //woocommerce
-                    'woocommerce-smallscreen.css',
-                    '/uploads/oxygen/css/', //oxygen
-                    '/uploads/bb-plugin/cache/', //beaver builder
-                    '/uploads/generateblocks/', //generateblocks
-                    '/et-cache/' //divi
-                );
-                if(!empty(Config::$options['assets']['rucss_excluded_stylesheets'])) {
-                    $stylesheet_exclusions = array_merge($stylesheet_exclusions, Config::$options['assets']['rucss_excluded_stylesheets']);
-                }
-                $stylesheet_exclusions = apply_filters('perfmatters_rucss_excluded_stylesheets', $stylesheet_exclusions);
-                foreach($stylesheet_exclusions as $exclude) {
-                    if(strpos($stylesheet[1], $exclude) !== false) {
-                        unset($stylesheets[$key]);
-                        continue 2;
+            //copy atts array
+            $atts_array_new = $atts_array;
+
+            //minify
+            if(self::$run['minify']) {
+                if(!empty($atts_array['href']) && $minified_src = Minify::minify($atts_array['href'])) {
+                    $atts_array_new['href'] = $minified_src;
+
+                    //update registered src
+                    if(!empty($atts_array['id'])) {
+                        $handle = rtrim($atts_array['id'], '-css');
+                        if(isset($wp_styles->registered[$handle])) {
+                            $wp_styles->registered[$handle]->src = $minified_src;
+                        }
                     }
-                }
-
-                //need to generate used css
-                if(!$used_css_exists) {
-
-                    //get local stylesheet path
-                    $url = str_replace(trailingslashit(apply_filters('perfmatters_local_stylesheet_url', (!empty(Config::$options['assets']['rucss_cdn_url']) ? Config::$options['assets']['rucss_cdn_url'] : site_url()))), '', explode('?', $stylesheet[1])[0]);
-
-                    $file = str_replace('/wp-content', '/', WP_CONTENT_DIR) . $url;
-
-                    //make sure local file exists
-                    if(!file_exists($file)) {
-                        continue;
-                    }
-                   
-                    //get used css from stylesheet
-                    $used_css = self::clean_stylesheet($stylesheet[1], @file_get_contents($file));
-
-                    //add used stylesheet css to total used
-                    $used_css_string.= $used_css;
-                }
-            
-                //delay stylesheets
-                if(empty(Config::$options['assets']['rucss_stylesheet_behavior'])) {
-                    $new_link = preg_replace('#href=([\'"]).+?\1#', 'data-pmdelayedstyle="' . $stylesheet[1] . '"',$stylesheet[0]);
-                    $html = str_replace($stylesheet[0], $new_link, $html);
-                }
-                //async stylesheets
-                elseif(Config::$options['assets']['rucss_stylesheet_behavior'] == 'async') {
-                    $new_link = preg_replace(array('#media=([\'"]).+?\1#', '#onload=([\'"]).+?\1#'), '', $stylesheet[0]);
-                    $new_link = str_replace('<link', '<link media="print" onload="this.media=\'all\';this.onload=null;"', $new_link);
-                    $html = str_replace($stylesheet[0], $new_link, $html);
-                }
-                //remove stylesheets
-                elseif(Config::$options['assets']['rucss_stylesheet_behavior'] == 'remove') {
-                    $html = str_replace($stylesheet[0], '', $html);
                 }
             }
+
+            //unused css
+            if(self::$run['rucss']) {
+
+                $skip = false;
+
+                //print check
+                if(!empty($atts_array['media']) && $atts_array['media'] == 'print') {
+                    $skip = true;
+                }
+
+                //exclusion check
+                if(!$skip && !Utilities::match_in_array($stylesheet[0], self::$data['rucss']['exclusions']['stylesheet'])) {
+                
+                    //need to generate used css
+                    if(!$used_css_exists) {
+
+                        //get any custom set url
+                        $custom_url = apply_filters('perfmatters_local_stylesheet_url', !empty(Config::$options['assets']['rucss_cdn_url']) ? Config::$options['assets']['rucss_cdn_url'] : '');
+
+                        //prep local url
+                        $local_url = !empty($custom_url) ? trailingslashit($custom_url) : array(trailingslashit(home_url()), trailingslashit(site_url()));
+
+                        //get local stylesheet path
+                        $url = str_ireplace($local_url, '', explode('?', $atts_array['href'])[0]);
+        
+                        $file = Utilities::get_root_dir_path() . ltrim($url, '/');
+
+                        //make sure local file exists
+                        if(file_exists($file)) {
+
+                            //get used css from stylesheet
+                            $used_css = self::clean_stylesheet($atts_array['href'], @file_get_contents($file));
+
+                            //add used stylesheet css to total used
+                            $used_css_string.= $used_css;
+                        }
+                        else {
+                            $skip = true;
+                        }
+                    }
+
+                    if(!$skip) {
+                
+                        //delay stylesheets
+                        if(empty(Config::$options['assets']['rucss_stylesheet_behavior'])) {
+                            $atts_array_new['data-pmdelayedstyle'] = $atts_array_new['href'];
+                            unset($atts_array_new['href']);
+                        }
+                        //async stylesheets
+                        elseif(Config::$options['assets']['rucss_stylesheet_behavior'] == 'async') {
+                            $atts_array_new['media'] = 'print';
+                            $atts_array_new['onload'] = 'this.media=\'all\';this.onload=null;';
+                        }
+                        //remove stylesheets
+                        elseif(Config::$options['assets']['rucss_stylesheet_behavior'] == 'remove') {
+                            $html = str_replace($stylesheet[0], '', $html);
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            //replace stylesheet
+            if($atts_array_new !== $atts_array) {
+                $new_atts_string = Utilities::get_atts_string($atts_array_new);
+                $new_link = sprintf('<link %1$s>', $new_atts_string) . '</link>';
+                $html = str_replace($stylesheet[0], $new_link, $html);
+            }
+        }
+
+        //post loop
+        if(self::$run['rucss']) {
 
             //store used css file
             if(!empty($used_css_string)) {
@@ -166,49 +232,57 @@ class CSS
 
                     $time = get_option('perfmatters_used_css_time', array());
 
-                    $time[$type] = time();
+                    $time[self::$url_type] = time();
 
                     //update stored timestamp
-                    update_option('perfmatters_used_css_time', $time);
+                    update_option('perfmatters_used_css_time', $time, false);
                 }
             }
 
-            //print used css inline after first title tag
-            $pos = strpos($html, '</title>');
-            if($pos !== false) {
+            //print used css
+            if(file_exists($used_css_path)) {
+                $tag = !apply_filters('perfmatters_used_css_below', false) ? '</title>' : '</head>';
+                $pos = strpos($html, $tag);
+                if($pos !== false) {
 
-                //print file
-                if(!empty(Config::$options['assets']['rucss_method']) && Config::$options['assets']['rucss_method'] == 'file') {
-                    //grab stored timestamp for query string
-                    $time = get_option('perfmatters_used_css_time', array());
-                    if(!empty($time[$type])) {
-                        $used_css_url = add_query_arg('ver', $time[$type], $used_css_url);
+                    //print file
+                    if(!empty(Config::$options['assets']['rucss_method']) && Config::$options['assets']['rucss_method'] == 'file') {
+                        //grab stored timestamp for query string
+                        $time = get_option('perfmatters_used_css_time', array());
+                        if(!empty($time[self::$url_type])) {
+                            $used_css_url = add_query_arg('ver', $time[self::$url_type], $used_css_url);
+                        }
+                        $used_css_output = "<link rel='preload' href='" . $used_css_url . "' as='style' onload=\"this.rel='stylesheet';this.removeAttribute('onload');\">";
+                        $used_css_output.= '<link rel="stylesheet" id="perfmatters-used-css" href="' . $used_css_url . '" media="all" />';
                     }
-                    $used_css_output = "<link rel='preload' href='" . $used_css_url . "' as='style' onload=\"this.rel='stylesheet';this.removeAttribute('onload');\">";
-                    $used_css_output.= '<link rel="stylesheet" id="perfmatters-used-css" href="' . $used_css_url . '" media="all" />';
+                    //print inline
+                    else {
+                        $used_css_output = '<style id="perfmatters-used-css">' . file_get_contents($used_css_path) . '</style>';
+                    }
+
+                    if($tag == '</title>') {
+                        $html = substr_replace($html, '</title>' . $used_css_output, $pos, 8);
+                    }
+                    else {
+                        $html = str_replace('</head>', $used_css_output . '</head>', $html);
+                    }
                 }
-                //print inline
-                else {
-                    $used_css_output = '<style id="perfmatters-used-css">' . file_get_contents($used_css_path) . '</style>';
-                }
-                
-                $html = substr_replace($html, '</title>' . $used_css_output, $pos, 8);
-            }
 
-            //delay stylesheet script
-            if(empty(Config::$options['assets']['rucss_stylesheet_behavior'])) {
+                //delay stylesheet script
+                if(empty(Config::$options['assets']['rucss_stylesheet_behavior'])) {
 
-                $delay_check = !empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js']))) && !Utilities::get_post_meta('perfmatters_exclude_delay_js');
+                    $delay_check = !empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js']))) && !Utilities::get_post_meta('perfmatters_exclude_delay_js');
 
-                if(!$delay_check || empty(Config::$options['assets']['delay_js_behavior']) || isset($_GET['perfmattersjsoff'])) {
-                    $script = '<script type="text/javascript" id="perfmatters-delayed-styles-js">!function(){const e=["keydown","mousemove","wheel","touchmove","touchstart","touchend"];function t(){document.querySelectorAll("link[data-pmdelayedstyle]").forEach(function(e){e.setAttribute("href",e.getAttribute("data-pmdelayedstyle"))}),e.forEach(function(e){window.removeEventListener(e,t,{passive:!0})})}e.forEach(function(e){window.addEventListener(e,t,{passive:!0})})}();</script>';
-                    $html = str_replace('</body>', $script . '</body>', $html);
+                    if(!$delay_check || isset($_GET['perfmattersjsoff'])) {
+                        $script = '<script type="text/javascript" id="perfmatters-delayed-styles-js">!function(){const e=["keydown","mousemove","wheel","touchmove","touchstart","touchend"];function t(){document.querySelectorAll("link[data-pmdelayedstyle]").forEach(function(e){e.setAttribute("href",e.getAttribute("data-pmdelayedstyle"))}),e.forEach(function(e){window.removeEventListener(e,t,{passive:!0})})}e.forEach(function(e){window.addEventListener(e,t,{passive:!0})})}();</script>';
+                        $html = str_replace('</body>', $script . '</body>', $html);
+                    }
                 }
             }
         }
 
         return $html;
-    } 
+    }
 
     //get url type
     private static function get_url_type()
@@ -218,7 +292,7 @@ class CSS
         $type = '';
 
         if($wp_query->is_page) {
-            $type = is_front_page() ? 'front' : 'page-' . $wp_query->post->ID;
+            $type = is_front_page() ? 'front' : (!empty($wp_query->post) ? 'page-' . $wp_query->post->ID : 'page');
         }
         elseif($wp_query->is_home) {
             $type = 'home';
@@ -236,7 +310,7 @@ class CSS
             $type = 'tax';
         }
         elseif($wp_query->is_archive) {
-            $type = $wp_query->is_day ? 'day' : ($wp_query->is_month ? 'month' : ($wp_query->is_year ? 'year' : ($wp_query->is_author ? 'author' : 'archive')));
+            $type = $wp_query->is_post_type_archive() ? 'archive-' . get_post_type() : ($wp_query->is_day ? 'day' : ($wp_query->is_month ? 'month' : ($wp_query->is_year ? 'year' : ($wp_query->is_author ? 'author' : 'archive'))));
         } 
         elseif($wp_query->is_search) {
             $type = 'search';
@@ -263,7 +337,6 @@ class CSS
         libxml_use_internal_errors($libxml_previous);
 
         if($result) {
-            $dom->xpath = new \DOMXPath($dom);
 
             //setup used selectors array
             self::$used_selectors = array('tags' => array(), 'ids' => array(), 'classes' => array());
@@ -298,18 +371,47 @@ class CSS
 
     //get excluded selectors
     private static function get_excluded_selectors() {
+        
+        //dynamic selectors added by js
         self::$excluded_selectors = array(
-            '.wp-embed-responsive', //core
-            '.wp-block-embed',
-            '.wp-block-embed__wrapper',
-            '.wp-caption',
-            '#elementor-device-mode', //elementor
-            '.elementor-nav-menu',
-            '.elementor-has-item-ratio',
             '.ast-header-break-point', //astra
-            '.dropdown-nav-special-toggle', //kadence
+            '.elementor-popup-modal', //elementor
+            '.elementor-has-item-ratio',
+            '#elementor-device-mode',
+            '.elementor-sticky--active',
+            '.dialog-type-lightbox',
+            '.dialog-widget-content',
+            '.lazyloaded',
+            '.elementor-nav-menu',
+            '.elementor-motion-effects-container',
+            '.elementor-motion-effects-layer',
+            '.animated',
+            '.elementor-animated-content',
+            '.splide-initialized', //splide
+            '.splide',
+            '.splide-slider',
+            '.kb-splide', //kadence
+            '.dropdown-nav-special-toggle',
             'rs-fw-forcer' //rev slider
         );
+
+        //shared type selectors
+        if(!self::$url_type == 'front' && !self::$url_type == 'home' && strpos(self::$url_type, 'page-') === false) {
+            self::$excluded_selectors = array_merge(self::$excluded_selectors, array(
+                '.wp-embed-responsive', //core
+                '.wp-block-embed',
+                '.wp-block-embed__wrapper',
+                '.wp-caption'
+            ));
+        }
+
+        //product selectors
+        if(self::$url_type == 'product') {
+            self::$excluded_selectors = array_merge(self::$excluded_selectors, array(
+                'div.product' //woocommerce
+            ));
+        }
+
         if(!empty(Config::$options['assets']['rucss_excluded_selectors'])) {
             self::$excluded_selectors = array_merge(self::$excluded_selectors, Config::$options['assets']['rucss_excluded_selectors']);
         }
@@ -552,9 +654,16 @@ class CSS
     }
 
     //delete all files in the css cache directory
-    public static function clear_used_css()
+    public static function clear_used_css($site = null)
     {      
-        $files = glob(PERFMATTERS_CACHE_DIR . 'css/*');
+        $path = '';
+
+        //add site path if specified
+        if(is_object($site) && !empty($site->path)) {
+           $path = ltrim($site->path, '/');
+        }
+
+        $files = glob(PERFMATTERS_CACHE_DIR . $path . 'css/*');
         foreach($files as $file) {
             if(is_file($file)) {
                 unlink($file);
@@ -653,5 +762,29 @@ class CSS
         //go back to url where button was pressed
         wp_safe_redirect(esc_url_raw(wp_get_referer()));
         exit;
+    }
+
+    //clear used css ajax action
+    public static function clear_used_css_ajax() {
+
+        Ajax::security_check();
+
+        self::clear_used_css();
+
+        wp_send_json_success(array(
+            'message' => __('Used CSS cleared.', 'perfmatters'), 
+        ));
+    }
+
+    //clear minified css ajax action
+    public static function clear_minified_css_ajax() {
+
+        Ajax::security_check();
+
+        Minify::clear_minified('css');
+
+        wp_send_json_success(array(
+            'message' => __('Minified CSS cleared.', 'perfmatters'), 
+        ));
     }
 }

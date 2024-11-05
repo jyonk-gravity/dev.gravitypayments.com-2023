@@ -26,21 +26,21 @@
     ?>
 </div>
 <div class="item">
+	<?php
+	$o = new wpdreamsYesNo("frontend_terms_parent_child_assignment", __('Filtering by parent terms should also include the results from children?', 'ajax-search-pro'), $sd['frontend_terms_parent_child_assignment']);
+	$params[$o->getName()] = $o->getData();
+	?>
+    <p class="descMsg">
+		<?php echo __('If a post from child category is not directly assigned to the parent category as well, this will force the filter to still apply if the parent category is selected.', 'ajax-search-pro'); ?>
+    </p>
+</div>
+<div class="item">
     <?php
     $o = new wpdreamsYesNo("frontend_terms_hide_empty", __('Hide empty terms?', 'ajax-search-pro'), $sd['frontend_terms_hide_empty']);
     $params[$o->getName()] = $o->getData();
     ?>
     <p class="descMsg">
         <?php echo __('Automatically hides terms, that have no posts or any CPT assigned to them.', 'ajax-search-pro'); ?>
-    </p>
-</div>
-<div class="item">
-    <?php
-    $o = new wpdreamsYesNo("frontend_terms_hide_children", __('Hide child terms, where the parent checkbox is unchecked?', 'ajax-search-pro'), $sd['frontend_terms_hide_children']);
-    $params[$o->getName()] = $o->getData();
-    ?>
-    <p class="descMsg">
-        <?php echo __('Automatically hides the checkbox options, where the parent terms are unchecked.', 'ajax-search-pro'); ?>
     </p>
 </div>
 <div class="item">

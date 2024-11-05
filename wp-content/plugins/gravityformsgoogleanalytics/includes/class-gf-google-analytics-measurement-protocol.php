@@ -21,7 +21,8 @@ class GF_Google_Analytics_Measurement_Protocol {
 	 * @since 1.0.0
 	 * @var string $endpoint The Measurement Protocol endpoint.
 	 */
-	private $endpoint = 'https://www.google-analytics.com/collect';
+	//private $endpoint = 'https://www.google-analytics.com/debug/mp/collect?'; // Debug endpoint.
+	private $endpoint = 'https://www.google-analytics.com/mp/collect?';
 
 	/**
 	 * The Client ID for the Measurement Protocol
@@ -32,60 +33,12 @@ class GF_Google_Analytics_Measurement_Protocol {
 	private $cid = '';
 
 	/**
-	 * The Tracking ID for the Measurement Protocol
-	 *
-	 * @since 1.0.0
-	 * @var string $tid Tracking ID (UA-XXXX-YY).
-	 */
-	private $tid = '';
-
-	/**
-	 * The Measurement Protocol version
-	 *
-	 * @since 1.0.0
-	 * @var string $v Protocol version.
-	 */
-	private $v = 1;
-
-	/**
 	 * The Measurement Protocol hit type
 	 *
 	 * @since 1.0.0
 	 * @var string $t Hit Type.
 	 */
 	private $t = 'event';
-
-	/**
-	 * The event category
-	 *
-	 * @since 1.0.0
-	 * @var string $ec Event category.
-	 */
-	private $ec = '';
-
-	/**
-	 * The event action
-	 *
-	 * @since 1.0.0
-	 * @var string $ea Event action.
-	 */
-	private $ea = '';
-
-	/**
-	 * The event label
-	 *
-	 * @since 1.0.0
-	 * @var string $el Event label.
-	 */
-	private $el = '';
-
-	/**
-	 * The event value
-	 *
-	 * @since 1.0.0
-	 * @var string $ev Event value.
-	 */
-	private $ev = '';
 
 	/**
 	 * The document path
@@ -128,12 +81,60 @@ class GF_Google_Analytics_Measurement_Protocol {
 	private $uip = '';
 
 	/**
+	 * The API secret for sending events.
+	 *
+	 * @since 1.0.0
+	 * @var string $api_secret The API secret
+	 */
+	private $api_secret = '';
+
+	/**
+	 * The Submission Parameters for the feed.
+	 *
+	 * @since 2.0.0
+	 * @var array $parameters The submission parameters
+	 */
+	private $parameters = array();
+
+	/**
+	 * The name for the event.
+	 *
+	 * @since 2.0.0
+	 * @var bool $event_name The event name to be sent to Google Analytics.
+	 */
+	private $event_name = '';
+
+	/**
 	 * Init function. Attempts to get the client's CID
 	 *
 	 * @since 1.0.0
 	 */
-	public function init() {
-		$this->cid = $this->create_client_id();
+	public function init( $api_secret, $event_name = 'gform_submission' ) {
+		$this->cid        = $this->create_client_id();
+		$this->api_secret = $api_secret;
+		$this->event_name = $event_name;
+	}
+
+	/**
+	 * Sets the custom event parameters
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $parameters The user's IP address.
+	 */
+	public function set_params( $parameters ) {
+		$this->parameters = $parameters;
+	}
+
+	/**
+	 * Gets the custom event parameters.
+	 *
+	 * @since 2.3
+	 *
+	 * @return array Returns the custom event parameters.
+	 */
+	public function get_params() {
+		return $this->parameters;
 	}
 
 	/**
@@ -145,50 +146,6 @@ class GF_Google_Analytics_Measurement_Protocol {
 	 */
 	public function set_user_ip_address( $user_ip ) {
 		$this->uip = $user_ip;
-	}
-
-	/**
-	 * Sets the event category
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $event_category The event category for conversions.
-	 */
-	public function set_event_category( $event_category ) {
-		$this->ec = $event_category;
-	}
-
-	/**
-	 * Sets the event action
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $event_action The event action for conversions.
-	 */
-	public function set_event_action( $event_action ) {
-		$this->ea = $event_action;
-	}
-
-	/**
-	 * Sets the event label
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $event_label The event label for conversions.
-	 */
-	public function set_event_label( $event_label ) {
-		$this->el = $event_label;
-	}
-
-	/**
-	 * Sets the event value
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $event_value The event value for conversions.
-	 */
-	public function set_event_value( $event_value ) {
-		$this->ev = $event_value;
 	}
 
 	/**
@@ -240,41 +197,47 @@ class GF_Google_Analytics_Measurement_Protocol {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $ua_code The UA code to send the event to.
+	 * @param string $ua_code    The UA code to send the event to.
+	 * @param string $event_name The event name to be used.
 	 */
-	public function send( $ua_code ) {
+	public function send( $google_analytics_code ) {
 
 		// Get variables in wp_remote_post body format.
-		$mp_vars = array(
-			'cid',
-			'v',
-			't',
-			'ec',
-			'ea',
-			'el',
-			'ev',
-			'dp',
-			'dl',
-			'dt',
-			'dh',
-			'uip',
-		);
-		$mp_body = array(
-			'tid' => $ua_code,
-		);
-		foreach ( $mp_vars as $index => $mp_var ) {
-			if ( empty( $this->{$mp_vars[ $index ]} ) ) {
+		$user_properties_vars = array( 'dp', 'dl', 'dt', 'dh', 'uip' );
+		$user_properties      = array();
+		foreach ( $user_properties_vars as $key => $user_properties_var ) {
+			if ( empty( $this->{ $user_properties_vars[ $key ] } ) ) {
 				// Empty params cause the payload to fail in testing.
 				continue;
 			}
-			$mp_body[ $mp_var ] = $this->{$mp_vars[ $index ]};
+			$user_properties[ $user_properties_var ] = $this->{$user_properties_vars[ $key ]};
 		}
-		// Add Payload.
-		$payload = add_query_arg( $mp_body, $this->endpoint );
+
+		$session_id = $this->get_browser_session_id( $google_analytics_code );
+
+		if ( $session_id ) {
+			$this->parameters['session_id'] = $session_id;
+		}
+
+		$url = $this->endpoint . 'measurement_id=' . $google_analytics_code . '&api_secret=' . $this->api_secret;
+
+		$body = array(
+			'client_id' => $this->cid,
+			'events'    => array(
+				'name'   => $this->event_name,
+				'params' => $this->parameters,
+			),
+		);
+
+		gf_google_analytics()->log_debug( __METHOD__ . '(): Sending data to Google Analytics Measurement Protocol. URL (last 4 of api_secret only): ' . substr( $url, 0, strpos( $url, 'api_secret=' ) + 11 ) . 'XXXXXXX' . substr( $url, -4 ) . ' - Body: ' . print_r( $body, true ) );
 
 		// Perform the POST.
-		$response = wp_remote_get( esc_url_raw( $payload ) );
-
+		return wp_remote_post(
+			$url,
+			array(
+				'body' => wp_json_encode( $body ),
+			)
+		);
 	}
 
 
@@ -308,6 +271,25 @@ class GF_Google_Analytics_Measurement_Protocol {
 
 		// nothing found - return random uuid client id.
 		return GFFormsModel::get_uuid();
+	}
+
+	/**
+	 * Get the session id
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param string $measurement_id The measurement id.
+	 *
+	 * @return int The session id.
+	 */
+	private function get_browser_session_id( $measurement_id ) {
+		// Cookie name example: '_ga_1YS1VWHG3V'.
+		$cookie_name = '_ga_' . str_replace( 'G-', '', $measurement_id );
+		if ( isset( $_COOKIE[ $cookie_name ] ) ) {
+			$parts = explode( '.', sanitize_text_field( wp_unslash( $_COOKIE[ $cookie_name ] ) ) );
+
+			return $parts[2];
+		}
 	}
 
 	/**

@@ -208,6 +208,23 @@ class GFFormSettings {
 						),
 					),
 					array(
+						'name'          => 'validationPlacement',
+						'type'          => 'select',
+						'label'         => esc_html__( 'Validation Message Placement', 'gravityforms' ),
+						'default_value' => 'below',
+						'tooltip'       => gform_tooltip( 'form_validation_placement', '', true ),
+						'choices'       => array(
+							array(
+								'label' => __( 'Below inputs', 'gravityforms' ),
+								'value' => 'below',
+							),
+							array(
+								'label' => __( 'Above inputs', 'gravityforms' ),
+								'value' => 'above',
+							),
+						),
+					),
+					array(
 						'name'    => 'subLabelPlacement',
 						'type'    => 'select',
 						'label'   => esc_html__( 'Sub-Label Placement', 'gravityforms' ),
@@ -529,16 +546,20 @@ class GFFormSettings {
 						'label'   => __( 'Animated transitions', 'gravityforms' ),
 						'tooltip' => gform_tooltip( 'form_animation', '', true ),
 					),
-					array(
-						'name'          => 'markupVersion',
-						'type'          => 'toggle',
-						'label'         => __( 'Enable legacy markup', 'gravityforms' ),
-						'default_value' => rgar( $form, 'markupVersion' ) ? $form['markupVersion'] : 1,
-						'tooltip'       => gform_tooltip( 'form_legacy_markup', '', true ),
-					),
 				),
 			),
 		);
+
+		if ( self::show_legacy_markup_setting() ) {
+			$fields['form_options']['fields'][] = array(
+				'name'          => 'markupVersion',
+				'type'          => 'toggle',
+				'label'         => __( 'Enable legacy markup', 'gravityforms' ),
+				'description'   => self::legacy_markup_warning(),
+				'default_value' => rgar( $form, 'markupVersion' ) ? $form['markupVersion'] : 1,
+				'tooltip'       => gform_tooltip( 'form_legacy_markup', '', true ),
+			);
+		}
 
 		/**
 		 * Filters the form settings before they are displayed.
@@ -598,7 +619,74 @@ class GFFormSettings {
 
 	}
 
+	/**
+	 * Determine whether to show the legacy markup setting.
+	 *
+	 * @since 2.7.15
+	 *
+	 * @return bool
+	 */
+	public static function show_legacy_markup_setting() {
+		$show_legacy_setting = true;
 
+		if ( version_compare( get_option( 'rg_form_original_version', '1.0' ), '2.7.14.2', '>=' ) && ! self::legacy_is_in_use() ) {
+			$show_legacy_setting = false;
+		}
+		// if this is a new install, and if there are no forms with legacy markup enabled, do not show the legacy markup setting
+		return apply_filters( 'gform_show_legacy_markup_setting', $show_legacy_setting );
+	}
+
+	/**
+	 * Check whether any forms on this site use legacy markup.
+	 *
+	 * @since 2.7.15
+	 *
+	 * @return bool
+	 */
+	public static function legacy_is_in_use() {
+		$legacy_is_in_use = GFCache::get( 'legacy_is_in_use' );
+		if ( empty( $legacy_is_in_use ) ) {
+			$legacy_is_in_use = false;
+			$forms            = GFAPI::get_forms( null, false, 'date_created', 'ASC' );
+			foreach ( $forms as $form ) {
+				if ( rgar( $form, 'markupVersion' ) && $form['markupVersion'] == 1 ) {
+					$legacy_is_in_use = true;
+					break;
+				}
+			}
+
+			GFCache::set( 'legacy_is_in_use', $legacy_is_in_use, true, 2 * WEEK_IN_SECONDS );
+		}
+
+		return $legacy_is_in_use;
+	}
+
+	/**
+	 * Get the warning for the legacy markup field.
+	 *
+	 * @since 2.7.15
+	 *
+	 * @return string
+	 */
+	public static function legacy_markup_warning() {
+		return '<div class="gform-alert" data-js="gform-alert" role="status">
+		    <span
+		        class="gform-alert__icon gform-icon gform-icon--campaign"
+		        aria-hidden="true"
+		    ></span>
+		    <div class="gform-alert__message-wrap">
+		        <p class="gform-alert__message">' . esc_html__( 'Legacy markup is incompatible with many new features, including the Orbital Theme.', 'gravityforms' ) . '</p>
+			    <a
+		            class="gform-alert__cta gform-button gform-button--white gform-button--size-xs"
+			        href="https://docs.gravityforms.com/about-legacy-markup"
+			        target="_blank"
+			        aria-label="' . esc_html__( 'Learn more about form legacy markup', 'gravityforms' ) . '"
+			    >'
+			        . esc_html__( 'Learn More', 'gravityforms' ) .
+			    '</a>
+		    </div>
+		</div>';
+	}
 
 
 
@@ -641,6 +729,7 @@ class GFFormSettings {
 					// Form Layout
 					$form['labelPlacement']          = GFCommon::whitelist( rgar( $values, 'labelPlacement' ), array( 'top_label', 'left_label', 'right_label' ) );
 					$form['descriptionPlacement']    = GFCommon::whitelist( rgar( $values, 'descriptionPlacement' ), array( 'below', 'above' ) );
+					$form['validationPlacement']     = GFCommon::whitelist( rgar( $values, 'validationPlacement' ), array( 'below', 'above' ) );
 					$form['subLabelPlacement']       = GFCommon::whitelist( rgar( $values, 'subLabelPlacement' ), array( 'below', 'above' ) );
 					$form['validationSummary']       = rgar( $values, 'validationSummary', false );
 					$form['requiredIndicator']       = GFCommon::whitelist( rgar( $values, 'requiredIndicator' ), array( 'text', 'asterisk', 'custom' ) );
@@ -919,6 +1008,11 @@ class GFFormSettings {
 		$current_tab  = rgempty( 'subview', $_GET ) ? 'settings' : rgget( 'subview' );
 		$setting_tabs = GFFormSettings::get_tabs( $form['id'] );
 
+		// If theme_layer is set in $_GET, we're on a theme layer and should use it as the current tab slug
+		if ( ! rgempty( 'theme_layer', $_GET ) ) {
+			$current_tab = rgget( 'theme_layer' );
+		}
+
 		// Kind of boring having to pass the title, optionally get it from the settings tab
 		if ( ! $title ) {
 			foreach ( $setting_tabs as $tab ) {
@@ -948,7 +1042,8 @@ class GFFormSettings {
 
 				<nav class="gform-settings__navigation">
 				<?php
-					foreach ( $setting_tabs as $tab ) {
+
+				    foreach ( $setting_tabs as $tab ) {
 
 						if ( rgar( $tab, 'capabilities' ) && ! GFCommon::current_user_can_any( $tab['capabilities'] ) ) {
 							continue;
@@ -1052,9 +1147,48 @@ class GFFormSettings {
 		 * @param int   $form_id      The ID of the form being accessed.
 		 */
 		$setting_tabs = apply_filters( 'gform_form_settings_menu', $setting_tabs, $form_id );
-		ksort( $setting_tabs, SORT_NUMERIC );
 
-		return $setting_tabs;
+		$primary_settings_tab_keys = array(
+			'confirmation',
+			'notification',
+			'personal-data',
+			'settings',
+		);
+
+		return self::sorting_tabs_alphabetical( $setting_tabs, $primary_settings_tab_keys );
+	}
+
+	/**
+	 * Orders tabs array into alphabetical order
+	 *
+	 * @return array
+	 *
+	 * @since  2.7.4
+	 * @access public
+	 *
+	 * @used-by GFFormSettings::get_tabs()
+	 */
+	public static function sorting_tabs_alphabetical( array $settings_tab, array $primary_settings_tab_keys ) {
+		usort( $settings_tab, function( $a, $b ) use ( $primary_settings_tab_keys ) {
+			if ( $a['name'] === 'settings' ) {
+				return -1;
+			} elseif ( $b['name'] === 'settings' ) {
+				return 1;
+			}
+
+			$key_a = in_array( $a['name'], $primary_settings_tab_keys );
+			$key_b = in_array( $b['name'], $primary_settings_tab_keys );
+
+			if ( $key_a !== false && $key_b === false ) {
+				return -1;
+			} elseif ( $key_a === false && $key_b !== false ) {
+				return 1;
+			} else {
+				return strcasecmp( $a['label'], $b['label'] );
+			}
+		});
+
+		return $settings_tab;
 	}
 
 	/**

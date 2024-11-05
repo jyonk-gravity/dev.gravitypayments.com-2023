@@ -107,8 +107,6 @@
                     
                     
                     //allow the thumbnail image to be changed through a filter
-                    //Deprecated filter, do not rely on this anymore
-                    $image_html = apply_filters( 'apto_reorder_item_thumbnail', $image_html, $post_data->ID );
                     $image_html = apply_filters( 'apto/reorder_item_thumbnail', $image_html, $post_data->ID );
                     
                     $noNestingClass = '';
@@ -145,13 +143,10 @@
                     $item_output .= '<div class="options">';
                     
                     $option_items                   = array();
-                    $option_items['move_top']       = '<span class="option move_top" title="'. __( "Move to Top", 'apto' ) .'">&nbsp;</span>';
-                    $option_items['move_bottom']    = '<span class="option move_bottom" title="'.__( "Move to Bottom", 'apto' ).'">&nbsp;</span>';
-                    $option_items['sticky']         = '<span class="option sticky" title="'.__( "Make Sticky", 'apto' ).'">&nbsp;</span>';
-                    $option_items['edit']           = '<span class="option edit" title="'.__( "Edit", 'apto' ).'" onClick="window.location = \''. get_bloginfo('wpurl') .'/wp-admin/post.php?post='.$post_data->ID.'&action=edit\'">&nbsp;</span>';
-                    
-                    //Deprecated filter, do not rely on this anymore
-                    $option_items                   = apply_filters('apto_reorder_item_additional_options', $option_items, $post_data );
+                    $option_items['move_top']       = '<span class="option move_top dashicons dashicons-arrow-up-alt2" title="'. __( "Move to Top", 'apto' ) .'"></span>';
+                    $option_items['move_bottom']       = '<span class="option move_bottom dashicons dashicons-arrow-down-alt2" title="'. __( "Move to Bottom", 'apto' ) .'"></span>';
+                    $option_items['sticky']       = '<span class="option sticky dashicons dashicons-admin-post" title="'. __( "Make Sticky", 'apto' ) .'"></span>';
+                    $option_items['edit']       = '<a target="_blank" href="' . admin_url( 'post.php?post='.$post_data->ID.'&action=edit' ) .'"><span class="option sticky dashicons dashicons-edit" title="'. __( "Edit", 'apto' ) .'"></span></a>';
                     
                     $option_items                   = apply_filters('apto/reorder_item_additional_options', $option_items, $post_data );
                     
@@ -164,8 +159,6 @@
                     
                     $additiona_details  =   apply_filters( 'the_title', $post_data->post_title, $post_data->ID )    .   ' ('.$post_data->ID.')';
                     
-                    //Deprecated filter, do not rely on this anymore
-                    $additiona_details  = apply_filters('apto_reorder_item_additional_details', $additiona_details, $post_data);
                     $additiona_details  = apply_filters('apto/reorder_item_additional_details', $additiona_details, $post_data);
                     
                     $item_output        .= $additiona_details;

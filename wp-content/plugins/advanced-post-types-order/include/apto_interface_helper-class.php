@@ -143,8 +143,12 @@
                     die();
                 }
             
-            
-            function general_interface_update($sortID)
+            /**
+            * General interface updates
+            * 
+            * @param mixed $sortID
+            */
+            function general_interface_update( $sortID )
                 {
                     
                     global $APTO;
@@ -309,7 +313,7 @@
                                 { 
                                     $reset_sort_view_ID =   intval($_POST['sort_view_ID']);
                                     
-                                     global $wpdb;
+                                    global $wpdb;
                                                         
                                     $query = "DELETE FROM `". $wpdb->prefix ."apto_sort_list`
                                                     WHERE `sort_view_id`    =   ". $reset_sort_view_ID;
@@ -334,6 +338,8 @@
                                                 }
                                                 
                                         }
+                                        
+                                    apply_filters('apto/order_reset', $reset_sort_view_ID );
                                     
                                     echo '<div id="message" class="updated"><p>' . __('Sort order reset successfully', 'apto') . '</p></div>';
                                 }
@@ -467,17 +473,7 @@
                             //check for empty titles
                             if($option == '_title' && $value == '')
                                 $value = 'Sort #' . $sort_id;
-                            
-                            
-                            //No pagination for hierarhical post types to avoid issues
-                            if($option == '_pagination' && $this->get_is_hierarhical_by_settings($sort_id)   === TRUE)
-                                {
-                                    $value  =   'no';
-                                    
-                                    $overwrite_options['_pagination_posts_per_page']    =   '';
-                                    $overwrite_options['_pagination_offset_posts']      =   '';
-                                }
-                            
+                                         
                             if(empty($value)    && isset($default_options_values[$option]))
                                 {
                                     $value =    $default_options_values[$option];   
@@ -751,29 +747,33 @@
                     if(!isset($_POST['apto_sort_form_order_update']))
                         return FALSE;        
                     
+                    $sort_id        =   preg_replace( '/[^a-zA-Z0-9_\-]/', '', $_POST['sort_id'] );
+                    $sort_view_id   =   preg_replace( '/[^a-zA-Z0-9_\-]/', '', $_POST['sort_view_ID'] );
+                    
                     //check for order migrate to manual
                     if( isset($_POST['automatic_order_send_to_manual']))
                         {
-                            $this->automatic_order_send_to_manual();
+                            $this->automatic_order_send_to_manual( $sort_view_id );
                             return FALSE;
                         }
                     
                     global $APTO;
                                             
-                    $sort_id        =   $_POST['sort_id'];
-                    $sort_view_id   =   $_POST['sort_view_ID'];
-                    
                     $order_by               =   array_values($_POST['auto_order_by']);
+                    $taxonomy_name          =   isset ( $_POST['auto_taxonomy_name'] )  ?   array_values($_POST['auto_taxonomy_name'])  :   array();
                     $custom_field_name      =   array_values($_POST['auto_custom_field_name']);
                     $custom_field_type      =   array_values($_POST['auto_custom_field_type']);
                     $custom_function_name   =   array_values($_POST['auto_custom_function_name']);
                     $order                  =   array_values($_POST['auto_order']);
+                    $apply_sticky_posts     =   preg_replace( '/[^a-z]/', '', $_POST['apply_sticky_posts'] );
                     
-                    update_post_meta($sort_view_id, '_auto_order_by', $order_by); 
-                    update_post_meta($sort_view_id, '_auto_custom_field_name', $custom_field_name);
-                    update_post_meta($sort_view_id, '_auto_custom_field_type', $custom_field_type); 
-                    update_post_meta($sort_view_id, '_auto_custom_function_name', $custom_function_name);
+                    update_post_meta($sort_view_id, '_auto_order_by',               $order_by); 
+                    update_post_meta($sort_view_id, '_auto_taxonomy_name',          $taxonomy_name);
+                    update_post_meta($sort_view_id, '_auto_custom_field_name',      $custom_field_name);
+                    update_post_meta($sort_view_id, '_auto_custom_field_type',      $custom_field_type); 
+                    update_post_meta($sort_view_id, '_auto_custom_function_name',   $custom_function_name);
                     update_post_meta($sort_view_id, '_auto_order', $order);
+                    update_post_meta($sort_view_id, '_auto_apply_sticky_posts', $apply_sticky_posts);
                     
                     //delete the cache
                     $APTO->cache_delete_key( 'sort_view_settings/' .  $sort_view_id );
@@ -814,6 +814,7 @@
                                     if($batch_sort_view_id > 0)
                                         {
                                             update_post_meta($batch_sort_view_id, '_auto_order_by',             $order_by); 
+                                            update_post_meta($batch_sort_view_id, '_auto_taxonomy_name',        $taxonomy_name); 
                                             update_post_meta($batch_sort_view_id, '_auto_custom_field_name',    $custom_field_name);
                                             update_post_meta($batch_sort_view_id, '_auto_custom_field_type',    $custom_field_type); 
                                             update_post_meta($batch_sort_view_id, '_auto_custom_function_name', $custom_function_name);
@@ -833,6 +834,7 @@
                                                                     '_term_id'                      =>  $batch_term_id,
                                                                     '_view_language'                =>  $this->functions->get_blog_language(),
                                                                     '_auto_order_by'                =>  $order_by,
+                                                                    '_auto_taxonomy_name'           =>  $taxonomy_name,
                                                                     '_auto_custom_field_name'       =>  $custom_field_name,
                                                                     '_auto_custom_field_type'       =>  $custom_field_type,
                                                                     '_auto_custom_function_name'    =>  $custom_function_name,
@@ -841,7 +843,9 @@
                                     $batch_sort_view_id =   $this->create_view($sort_id, $sort_view_meta);                                    
                                     
                                 }
-                        } 
+                        }
+                        
+                    do_action('apto/reorder-interface/automatic/order_update_complete', $sort_view_id); 
 
                 }
             
@@ -851,10 +855,8 @@
             * Check for automatic order send to manual
             * 
             */
-            function automatic_order_send_to_manual()
+            function automatic_order_send_to_manual( $sort_view_id )
                 {
-                    
-                    $sort_view_id   =   $_POST['sort_view_ID'];    
                     
                     $args   =   $this->functions->query_arguments_from_sort_settings( $sort_view_id );
                     
@@ -912,7 +914,7 @@
                             $results            =   $wpdb->get_var($mysql_query);
                         } 
                          
-                    do_action('apto_order_update_complete', $sort_view_id);        
+                    do_action('apto/reorder-interface/automatic/send-to-manual/order_update_complete', $sort_view_id);        
                     
                 }
                 
@@ -1717,7 +1719,7 @@
                     // Parse incoming $args into an array and merge it with $defaults
                     $options = wp_parse_args( $options, $defaults );   
                     
-                    $html_data  =    $this->html_automatic_add_falback_order($options);
+                    $html_data  =    $this->html_automatic_add_falback_order ( $options, $this->current_sort_view_ID, TRUE );
                     
                     $this->response['html']             =   $html_data;
                     $this->response['group_id']         =   $options['group_id'];
@@ -1727,7 +1729,7 @@
                 }
                 
                 
-            function html_automatic_add_falback_order($options = array())
+            function html_automatic_add_falback_order( $options, $sort_view_ID, $partial = FALSE )
                 {
                     $defaults = array (
                                              'default'              =>  FALSE,
@@ -1742,6 +1744,7 @@
                         {
                             $options['data_set']    =   array(
                                                                     'order_by'              =>  '_default_',
+                                                                    'taxonomy_name'         =>  '',
                                                                     'custom_field_name'     =>  '',
                                                                     'custom_field_type'     =>  '',
                                                                     'custom_function_name'  =>  '',
@@ -1789,60 +1792,82 @@
                                 <input type="radio" id="auto_order_by_random_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_random_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_random_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
                                 <label for="auto_order_by_random_<?php echo $options['group_id'] ?>"><?php _e( "Random", 'apto' ) ?></label><br><br>
                                 
-                                <input type="radio" id="auto_order_by_custom_field_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_custom_field_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_custom_field_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
-                                <label for="auto_order_by_custom_field_<?php echo $options['group_id'] ?>"><?php _e( "Custom Field", 'apto' ) ?></label><br>
-                                <div id="apto_custom_field_area_<?php echo $options['group_id'] ?>" <?php
-                                    if ($options['data_set']['order_by'] != '_custom_field_')
-                                        echo 'style="display: none"';
-                                ?> class="toggle_area">
-                                    <table class="apto_input inner_table widefat">
-                                        <tbody>
-                                            <tr class="alt"><td>
-                                                <h4><?php _e( "Field Name", 'apto' ) ?></h4>
-                                                <p class="description"><?php _e( "The name of custom field", 'apto' ) ?></p>
-                                                <input id="auto_custom_field_name_<?php echo $options['group_id'] ?>" type="text" class="regular-text custom-field-text" value="<?php echo $options['data_set']['custom_field_name'] ?>" name="auto_custom_field_name[<?php echo $options['group_id'] ?>]">
-                                            </td></tr>
-                                            
-                                            <tr class="alt"><td>
-                                                <h4><?php _e( "Field Type", 'apto' ) ?></h4>
-                                                <p class="description"><?php _e( "MySql Type of field, more details at", 'apto' ) ?> <a href="http://dev.mysql.com/doc/refman/5.0/en/cast-functions.html" target="_blank"><?php _e( "Cast Functions and Operators", 'apto' ) ?></a></p>
-                                                
-                                                <input type="radio" id="custom_field_type_none_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'none' || $options['data_set']['custom_field_type'] == '') {echo 'checked="checked"'; } ?> value="none" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_none_<?php echo $options['group_id'] ?>"><?php _e( "None / Default", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'SIGNED') {echo 'checked="checked"'; } ?> value="SIGNED" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Signed (Integer)", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'UNSIGNED') {echo 'checked="checked"'; } ?> value="UNSIGNED" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Unsigned (Integer)", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'float') {echo 'checked="checked"'; } ?> value="float" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Float (Decimal)", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_date_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'DATE') {echo 'checked="checked"'; } ?> value="DATE" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_date_<?php echo $options['group_id'] ?>"><?php _e( "Date", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_datetime_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'DATETIME') {echo 'checked="checked"'; } ?> value="DATETIME" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_datetime_<?php echo $options['group_id'] ?>"><?php _e( "Datetime", 'apto' ) ?></label><br>
-                                                
-                                                <input type="radio" id="custom_field_type_time_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'TIME') {echo 'checked="checked"'; } ?> value="TIME" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
-                                                <label for="custom_field_type_time_<?php echo $options['group_id'] ?>"><?php _e( "Time", 'apto' ) ?></label><br>
-                                                
-                                            </td></tr>
-                                    
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <?php
                                 
-                                <input type="radio" id="auto_order_by_custom_function_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_custom_function_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_custom_function_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
-                                <label for="auto_order_by_custom_function_<?php echo $options['group_id'] ?>"><?php _e( "Custom Function", 'apto' ) ?></label><br><br>
-                                <div id="apto_custom_function_area_<?php echo $options['group_id'] ?>" <?php
-                                    if ($options['data_set']['order_by'] != '_custom_function_')
-                                        echo 'style="display: none"';
-                                ?> class="toggle_area">
-                                    <input id="auto_custom_function_name_<?php echo $options['group_id'] ?>" type="text" class="regular-text custom-field-text" value="<?php echo $options['data_set']['custom_function_name'] ?>" name="auto_custom_function_name[<?php echo $options['group_id'] ?>]">
-                                </div>    
-
+                                if ( ! $partial )
+                                    {
+                                
+                                        $view_selection   =   get_post_meta( $sort_view_ID,  '_view_selection', TRUE);
+                                        if ( $view_selection    ==   'archive' )
+                                            {
+                                            ?>
+                                                <input type="radio" id="auto_order_by_taxonomy_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_taxonomy_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_taxonomy_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
+                                                <label for="auto_order_by_taxonomy_<?php echo $options['group_id'] ?>"><?php _e( "Taxonomy", 'apto' ) ?></label><br><br>
+                                                <div id="apto_taxonomy_area_<?php echo $options['group_id'] ?>" <?php
+                                                    if ($options['data_set']['order_by'] != '_taxonomy_')
+                                                        echo 'style="display: none"';
+                                                ?> class="toggle_area">
+                                                    <input id="auto_taxonomy_name_<?php echo $options['group_id'] ?>" type="text" placeholder="Taxonomy Slug" class="regular-text custom-field-text" value="<?php echo $options['data_set']['taxonomy_name'] ?>" name="auto_taxonomy_name[<?php echo $options['group_id'] ?>]"><br /><br />
+                                                </div> 
+                                            <?php
+                                            }
+                                        
+                                        ?>
+                                        
+                                        <input type="radio" id="auto_order_by_custom_field_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_custom_field_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_custom_field_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
+                                        <label for="auto_order_by_custom_field_<?php echo $options['group_id'] ?>"><?php _e( "Custom Field", 'apto' ) ?></label><br>
+                                        <div id="apto_custom_field_area_<?php echo $options['group_id'] ?>" <?php
+                                            if ($options['data_set']['order_by'] != '_custom_field_')
+                                                echo 'style="display: none"';
+                                        ?> class="toggle_area">
+                                            <table class="apto_input inner_table widefat">
+                                                <tbody>
+                                                    <tr class="alt"><td>
+                                                        <h4><?php _e( "Field Name", 'apto' ) ?></h4>
+                                                        <p class="description"><?php _e( "The name of custom field", 'apto' ) ?></p>
+                                                        <input id="auto_custom_field_name_<?php echo $options['group_id'] ?>" type="text" class="regular-text custom-field-text" value="<?php echo $options['data_set']['custom_field_name'] ?>" name="auto_custom_field_name[<?php echo $options['group_id'] ?>]">
+                                                    </td></tr>
+                                                    
+                                                    <tr class="alt"><td>
+                                                        <h4><?php _e( "Field Type", 'apto' ) ?></h4>
+                                                        <p class="description"><?php _e( "MySql Type of field, more details at", 'apto' ) ?> <a href="http://dev.mysql.com/doc/refman/5.0/en/cast-functions.html" target="_blank"><?php _e( "Cast Functions and Operators", 'apto' ) ?></a></p>
+                                                        
+                                                        <input type="radio" id="custom_field_type_none_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'none' || $options['data_set']['custom_field_type'] == '') {echo 'checked="checked"'; } ?> value="none" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_none_<?php echo $options['group_id'] ?>"><?php _e( "None / Default", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'SIGNED') {echo 'checked="checked"'; } ?> value="SIGNED" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Signed (Integer)", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'UNSIGNED') {echo 'checked="checked"'; } ?> value="UNSIGNED" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Unsigned (Integer)", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_signed_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'float') {echo 'checked="checked"'; } ?> value="float" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_signed_<?php echo $options['group_id'] ?>"><?php _e( "Float (Decimal)", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_date_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'DATE') {echo 'checked="checked"'; } ?> value="DATE" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_date_<?php echo $options['group_id'] ?>"><?php _e( "Date", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_datetime_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'DATETIME') {echo 'checked="checked"'; } ?> value="DATETIME" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_datetime_<?php echo $options['group_id'] ?>"><?php _e( "Datetime", 'apto' ) ?></label><br>
+                                                        
+                                                        <input type="radio" id="custom_field_type_time_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['custom_field_type'] == 'TIME') {echo 'checked="checked"'; } ?> value="TIME" name="auto_custom_field_type[<?php echo $options['group_id'] ?>]" />
+                                                        <label for="custom_field_type_time_<?php echo $options['group_id'] ?>"><?php _e( "Time", 'apto' ) ?></label><br>
+                                                        
+                                                    </td></tr>
+                                            
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                        <input type="radio" id="auto_order_by_custom_function_<?php echo $options['group_id'] ?>" <?php if ($options['data_set']['order_by'] == '_custom_function_') {echo 'checked="checked"'; } ?> onchange="APTO.apto_autosort_orderby_field_change(this)" value="_custom_function_" name="auto_order_by[<?php echo $options['group_id'] ?>]" />
+                                        <label for="auto_order_by_custom_function_<?php echo $options['group_id'] ?>"><?php _e( "Custom Function", 'apto' ) ?></label><br><br>
+                                        <div id="apto_custom_function_area_<?php echo $options['group_id'] ?>" <?php
+                                            if ($options['data_set']['order_by'] != '_custom_function_')
+                                                echo 'style="display: none"';
+                                        ?> class="toggle_area">
+                                            <input id="auto_custom_function_name_<?php echo $options['group_id'] ?>" type="text" class="regular-text custom-field-text" value="<?php echo $options['data_set']['custom_function_name'] ?>" name="auto_custom_function_name[<?php echo $options['group_id'] ?>]">
+                                        </div>    
+                                <?php } ?>
                             </td>
                             
                             <td class="buttons">
@@ -2426,7 +2451,7 @@
                     if(count($sort_rules['post_type']) > 1)
                         return FALSE;
                         
-                    if(isset($sort_rules['taxonomy']) && is_array($sort_rules['taxonomy']) && count($sort_rules['taxonomy']) > 1)
+                    if(isset($sort_rules['taxonomy']) && is_array($sort_rules['taxonomy']) && count($sort_rules['taxonomy']) > 0 )
                         return FALSE;
                     
                     reset($sort_rules['post_type']);
@@ -2591,7 +2616,7 @@
                             $found_posts = $custom_query->posts;
                                             
                             //exclude all object ids whcih are found in the $data_parsed
-                            foreach($found_posts    as  $key    =>  $object_id)
+                            foreach($found_posts    as  $key    =>  $object_id )
                                 {
                                     if  ( is_object( $object_id )) 
                                         $object_id  =   $object_id->ID;
@@ -2605,12 +2630,21 @@
                                 }
                             
                             $_data_list  =   array();
-                            foreach($found_posts    as  $key    =>  $object_id)
+                            foreach( $found_posts    as  $key    =>  $object_data ) 
                                 {
-                                    if  ( is_object( $object_id )) 
-                                        $object_id  =   $object_id->ID;
+                                    $parent     =   "null";
                                     
-                                    $_data_list[$object_id]  =   "null";
+                                    if  ( is_object( $object_data )) 
+                                        {
+                                            $object_id  =   $object_data->ID;
+                                            $parent     =   $object_data->post_parent;
+                                        }
+                                        else
+                                        $object_id  =   $object_data;
+                                    
+                                    //if ( $object_data->post_parent  >  0 )
+                                        //$parent     =   $object_data->post_parent;
+                                    $_data_list[ $object_id ]  =   $parent;
                                 }    
                             
                             $insert_list =  $data_parsed['offset_top']  +   $data_parsed['list']  +   $data_parsed['offset_bottom'];
@@ -2718,11 +2752,8 @@
                         }
                         
                     if($_USE_PAGED_AJAX === FALSE   ||  $ajax_total_pages   ==  $ajax_page)
-                        {
-                            /**
-                            * Deprecated, do not rely on this anymore
-                            */
-                            do_action('apto_order_update_complete', $sort_view_id); 
+                        {                            
+                            $this->functions->site_cache_clear();
                             
                             do_action('apto/reorder-interface/order_update_complete', $sort_view_id);   
                         }
@@ -2829,9 +2860,6 @@
                                         {
                                             $mysql_query_apto_sort_list .=  ", ('".$reference_sort_view_id."', '".$post_id."')";   
                                         }
-                        
-                                    //deprecated since 2.6  Do not rely on this anymore
-                                    do_action('apto_order_update_hierarchical', array('post_id' =>  $post_id, 'position' =>  $current_item_menu_order, 'page_parent'    =>  $post_parent));
                                     
                                     do_action('apto_object_order_update', array('post_id' =>  $post_id, 'position' =>  $current_item_menu_order, 'page_parent'    =>  $post_parent, 'sort_view_id'  =>  $sort_view_id));
 
@@ -2863,10 +2891,6 @@
                                 {
                                     $mysql_query_apto_sort_list .=  ", ('".$reference_sort_view_id."', '".$post_id."')";   
                                 }
-               
-                            
-                            //deprecated since 2.6  Do not rely on this anymore
-                            do_action('apto_order_update', array('post_id' => $post_id, 'position' => $current_item_menu_order));
                             
                             do_action('apto_object_order_update', array('post_id' =>  $post_id, 'position' =>  $current_item_menu_order, 'sort_view_id'  =>  $sort_view_id));
                             
@@ -2881,16 +2905,20 @@
                             
                     if  ( ! empty ( $mysql_query_menu_order ) )
                         $mysql_query_menu_order .=  " END WHERE ID  in ( ". implode( ', ' , $list_objects_ID )   ." )";
-                        
+                    
                     if  ( ! empty ( $mysql_query_post_parent ) )
                         $mysql_query_post_parent .=  " END WHERE ID  in ( ". implode( ', ' , $list_objects_ID )   ." )";
-                                            
+                        
+                    //don't update the parent when simple view
+                    if ( $sort_settings['_view_type']   ==  'simple' )
+                        $mysql_query_post_parent    =   '';    
+                                                                    
                     //process the queries
                     $this->run_queries( $mysql_query_menu_order, $mysql_query_post_parent, $mysql_query_apto_sort_list );
                     
                         
                     //reorder grouped if any
-                    if ( $is_woocommerce_archive    === TRUE   &&  count ( $args['woocommerce_grouped_childs'])    >   0 )
+                    if ( $is_woocommerce_archive    === TRUE   &&  count ( $args['woocommerce_grouped_childs'] )    >   0 )
                         {
                             foreach ( $args['woocommerce_grouped_childs']   as  $parent_id  =>  $childs)
                                 {
@@ -2932,10 +2960,34 @@
             function multilingual_syncronize ( $data_list, $args, $_data_sticky_parsed, &$_JSON_response )
                 {
                     
+                    if ( defined('ICL_LANGUAGE_CODE') && defined('ICL_SITEPRESS_VERSION') )
+                        {
+                            $this->wpml_synchronize( $data_list, $args, $_data_sticky_parsed, $_JSON_response );
+                            return;
+                        }
+                        
+                    if ( defined('POLYLANG_VERSION') )
+                        {
+                            $this->wpml_synchronize( $data_list, $args, $_data_sticky_parsed, $_JSON_response );
+                            return;
+                        }                    
+                }
+                
+                
+            /**
+            * Synchronyze the list for WPML, for other languages
+            *     
+            * @param mixed $data_list
+            * @param mixed $args
+            * @param mixed $_data_sticky_parsed
+            * @param mixed $_JSON_response
+            */
+            function wpml_synchronize( $data_list, $args, $_data_sticky_parsed, &$_JSON_response )
+                {
                     extract($args);
-                       
+                    
                     //prccess the ored items for WPML if syncronized settings 
-                    if(count($data_list) > 0 && $this->get_sort_meta($sortID, '_wpml_synchronize') ==  'yes' &&  $_USE_PAGED_AJAX    === FALSE  &&  defined('ICL_LANGUAGE_CODE') && defined('ICL_SITEPRESS_VERSION')    &&  $is_hierarhical === FALSE)
+                    if ( count($data_list) > 0 && $this->get_sort_meta($sortID, '_wpml_synchronize') ==  'yes' &&  $_USE_PAGED_AJAX    === FALSE  &&  $is_hierarhical === FALSE )
                         {
                             global $sitepress;
                             
@@ -2975,7 +3027,7 @@
                                     $translated_objects =   APTO_WPML_utils::translate_objects_to_language($data_list, $wpml_language['code']);
                                 
                                     //if false there's been an error, either no all objects are syncronized, or theres a difference.
-                                    if($translated_objects  === FALSE)
+                                    if ( apply_filters( 'apto/multilingual_syncronize/count_objects', TRUE ) &&  ( $translated_objects  === FALSE || count ( $translated_objects ) !== count ( $data_list )  ) )
                                         {
                                             //add the error
                                             $_JSON_response['errors'][] =   __( "A synchronization could not be completed", 'apto' ) . ' ' . __( "for", 'apto' ) . ' ' . strtoupper($wpml_language['code']) . ' ' . __( "language", 'apto' ). ' ' . __( "as it contains a different number of objects.", 'apto' );
@@ -3046,15 +3098,13 @@
                                     $sitepress->switch_lang($current_language);
                                     
                                     //if count does not match then continue
-                                    if(count($found_posts)  !=  count($data_list))
+                                    if ( apply_filters( 'apto/multilingual_syncronize/count_objects', TRUE ) && count($found_posts)  !=  count( $data_list ) )
                                         {
                                             //add the error
                                             $_JSON_response['errors'][] =   __( "A synchronization could not be completed", 'apto' ) . ' ' . __( "for", 'apto' ) . ' ' . strtoupper($wpml_language['code']) . ' ' . __( "language", 'apto' ) . ' ' . __( "as it contains a different number of objects.", 'apto' );
                                             continue;
                                         }
-                                    
-                                    //++++
-                                    //to compare the $found_posts with $translated_objects if they are the same???
+
                                     
                                     $sort_view_settings         =   $this->functions->get_sort_view_settings($lang_sort_view_ID);    
                                     $reference_sort_view_id     =   $lang_sort_view_ID;
@@ -3071,7 +3121,8 @@
                                                         'is_hierarhical'        =>  $is_hierarhical,
                                                         'reference_sort_view_id'    =>  $reference_sort_view_id
                                                             );
-                                    
+                                    $args['woocommerce_grouped_childs'] =   array();
+                        
                                     $this->AjaxProcessSortList($translated_objects, $args);
                                     
                                     
@@ -3082,11 +3133,26 @@
                                     
                                 }
                             
-                        }
-                       
+                        }    
+                }
+                
+            
+            
+            
+            /**
+            * Synchronize the list for Polylang
+            * 
+            * @param mixed $data_list
+            * @param mixed $args
+            * @param mixed $_data_sticky_parsed
+            * @param mixed $_JSON_response
+            */
+            function polylang_synchronize( $data_list, $args, $_data_sticky_parsed, &$_JSON_response )
+                {
+                    extract($args);
                     
-                    //prccess the ored items for Polylang if syncronized settings 
-                    if(count($data_list) > 0 && $this->get_sort_meta($sortID, '_polylang_synchronize') ==  'yes' &&  $_USE_PAGED_AJAX    === FALSE  &&  defined('POLYLANG_VERSION') &&  $is_hierarhical === FALSE)
+                    //prccess the sorted items for Polylang if syncronized settings 
+                    if(count($data_list) > 0 && $this->get_sort_meta($sortID, '_polylang_synchronize') ==  'yes' &&  $_USE_PAGED_AJAX    === FALSE  &&  $is_hierarhical === FALSE)
                         {
                             global $sitepress;
                             
@@ -3126,7 +3192,7 @@
                                     $translated_objects =   APTO_Polylang::translate_objects_to_language($data_list, $_language);
                                 
                                     //if false there's been an error, either no all objects are syncronized, or theres a difference.
-                                    if($translated_objects  === FALSE)
+                                    if ( ! apply_filters( 'apto/synchronize/polylang/ignore_objects_count', FALSE ) &&  ( $translated_objects  === FALSE || count ( $translated_objects ) !== count ( $data_list )  ) )
                                         {
                                             //add the error
                                             $_JSON_response['errors'][] =   __( "A synchronization could not be completed", 'apto' ) . ' ' . __( "for", 'apto' ) . ' ' . strtoupper($_language) . ' ' . __( "language", 'apto' ). ' ' . __( "as it contains a different number of objects.", 'apto' );
@@ -3194,7 +3260,7 @@
                                     $found_posts        =   $custom_query->posts;
                                                                                                
                                     //if count does not match then continue
-                                    if(count($found_posts)  !=  count($data_list))
+                                    if ( ! apply_filters( 'apto/synchronize/polylang/ignore_objects_count', FALSE )  &&  count( $found_posts )  !=  count( $data_list ) )
                                         {
                                             //add the error
                                             $_JSON_response['errors'][] =   __( "A synchronization could not be completed", 'apto' ) . ' ' . __( "for", 'apto' ) . ' ' . strtoupper($_language) . ' ' . __( "language", 'apto' ) . ' ' . __( "as it contains a different number of objects.", 'apto' );
@@ -3232,9 +3298,7 @@
                             
                         }
                     
-                    
                 }
-                
              
         }
 

@@ -63,8 +63,8 @@ class Plugin_Settings {
 			);
 		}
 
-		if ( $this->is_new_connection() ) {
-			return $this->get_connection_mode_fields();
+		if ( $this->is_manual_configuration() ) {
+			return array( $this->manual_connection_settings() );
 		}
 
 		if ( $this->is_unconfigured_connection() ) {
@@ -72,18 +72,30 @@ class Plugin_Settings {
 		}
 
 		return $this->get_connection_mode_fields();
-
 	}
 
 	/**
-	 * Determine if this is a new connection
+	 * Display the settings updated notice
 	 *
-	 * @since 1.0
+	 * @since 2.0.0
+	 */
+	public function maybe_display_settings_updated() {
+		if ( rgget( 'updated' ) ) {
+			printf(
+				'<div class="alert gforms_note_success" role="alert">%s</div>',
+				esc_html__( 'Settings Updated.', 'gravityformsgoogleanalytics' )
+			);
+		}
+	}
+	/**
+	 * Determine if this is connection mode selected was manual configuration.
+	 *
+	 * @since 2.0
 	 *
 	 * @return bool
 	 */
-	private function is_new_connection() {
-		return empty( $this->addon->get_options( 'mode' ) ) && ! $this->addon->initialize_api();
+	private function is_manual_configuration() {
+		return $this->addon->get_options( 'is_manual' );
 	}
 
 	/**
@@ -97,7 +109,7 @@ class Plugin_Settings {
 	 * @return bool
 	 */
 	private function is_unconfigured_connection() {
-		return empty( $this->addon->get_options( 'mode' ) ) && $this->addon->initialize_api() && rgget( 'action' );
+		return empty( $this->addon->get_options( 'mode' ) ) && rgget( 'action' ) && $this->addon->initialize_api();
 	}
 
 
@@ -133,13 +145,56 @@ class Plugin_Settings {
 	}
 
 	/**
-	 * Get the connection mode fields. These are the fields that let the user choose between the three connection methods.
+	 * Get the connection mode fields. These are the fields that let the user choose between the three connection types.
 	 *
 	 * @since 1.0
 	 *
 	 * @return array
 	 */
 	private function get_connection_mode_fields() {
+
+		$card_choices = array(
+			array(
+				'label'       => esc_html__( 'Measurement Protocol', 'gravityformsgoogleanalytics' ),
+				'value'       => 'gmp',
+				'icon'        => $this->addon->get_base_url() . '/img/google.svg',
+				'tag'         => esc_html__( 'Recommended', 'gravityformsgoogleanalytics' ),
+				'color'       => 'orange',
+				'title'       => esc_html__( 'Google Measurement Protocol', 'gravityformsgoogleanalytics' ),
+				'description' => esc_html__( 'The Measurement Protocol is a server-to-server connection with Google Analytics.  It is the most reliable mechanism for event tracking, but it does not include data such as AdWords, Remarketing, or tracking variables.', 'gravityformsgoogleanalytics' ),
+			),
+			array(
+				'label'       => esc_html__( 'Google Analytics', 'gravityformsgoogleanalytics' ),
+				'value'       => 'ga',
+				'icon'        => $this->addon->get_base_url() . '/img/analytics.svg',
+				'tag'         => esc_html__( 'Flexible', 'gravityformsgoogleanalytics' ),
+				'color'       => 'blue-ribbon',
+				'title'       => esc_html__( 'Google Analytics', 'gravityformsgoogleanalytics' ),
+				'description' => esc_html__( 'Google Analytics mode will send data such as Source/Medium (e.g., the page leading to a conversion).  Additionally, Google Analytics mode will send information about your user such as location, language, browser information, and AdWords/Remarketing information.', 'gravityformsgoogleanalytics' ),
+			),
+			array(
+				'label'       => esc_html__( 'Tag Manager', 'gravityformsgoogleanalytics' ),
+				'value'       => 'gtm',
+				'icon'        => $this->addon->get_base_url() . '/img/gtm.svg',
+				'tag'         => esc_html__( 'Advanced', 'gravityformsgoogleanalytics' ),
+				'color'       => 'orange',
+				'title'       => esc_html__( 'Google Tag Manager', 'gravityformsgoogleanalytics' ),
+				'description' => esc_html__( 'If you need more control after a form has been submitted, such as setting up a remarketing tag, then Google Tag Manager may be the best option.', 'gravityformsgoogleanalytics' ),
+			),
+		);
+
+		if ( $this->display_manual_connection_mode() ) {
+			$card_choices[] = array(
+				'label'       => esc_html__( 'Manual Configuration', 'gravityformsgoogleanalytics' ),
+				'value'       => 'manual',
+				'icon'        => $this->addon->get_base_url() . '/img/manual.svg',
+				'tag'         => esc_html__( 'Advanced', 'gravityformsgoogleanalytics' ),
+				'color'       => 'orange',
+				'title'       => esc_html__( 'Manual Configuration', 'gravityformsgoogleanalytics' ),
+				'description' => esc_html__( 'Use this option if you are an advanced user and would like to manually enter your Google Analytics information.', 'gravityformsgoogleanalytics' ),
+			);
+		}
+
 		return array(
 			array(
 				'title'       => esc_html__( 'Select Tracking Connection Type', 'gravityformsgoogleanalytics' ),
@@ -159,9 +214,10 @@ class Plugin_Settings {
 					),
 					array(
 						'type'  => 'save',
-						'value' => esc_html__( 'Connect to Google &rarr;', 'gravityformsgoogleanalytics' ),
+						'value' => esc_html__( 'Continue &rarr;', 'gravityformsgoogleanalytics' ),
 						'id'    => 'ga-connect',
 					),
+
 				),
 			),
 			array(
@@ -169,39 +225,23 @@ class Plugin_Settings {
 					array(
 						'name'    => 'mode',
 						'type'    => 'card',
-						'choices' => array(
-							array(
-								'label'       => esc_html__( 'Measurement Protocol', 'gravityformsgoogleanalytics' ),
-								'value'       => 'gmp',
-								'icon'        => $this->addon->get_base_url() . '/img/google.svg',
-								'tag'         => esc_html__( 'Recommended', 'gravityformsgoogleanalytics' ),
-								'color'       => 'orange',
-								'title'       => esc_html__( 'Google Measurement Protocol', 'gravityformsgoogleanalytics' ),
-								'description' => esc_html__( 'The Measurement Protocol is a server-to-server connection with Google Analytics.  It is the most reliable mechanism for event tracking, but it does not include data such as AdWords, Remarketing, or tracking variables.', 'gravityformsgoogleanalytics' ),
-							),
-							array(
-								'label'       => esc_html__( 'Google Analytics', 'gravityformsgoogleanalytics' ),
-								'value'       => 'ga',
-								'icon'        => $this->addon->get_base_url() . '/img/analytics.svg',
-								'tag'         => esc_html__( 'Flexible', 'gravityformsgoogleanalytics' ),
-								'color'       => 'blue-ribbon',
-								'title'       => esc_html__( 'Google Analytics', 'gravityformsgoogleanalytics' ),
-								'description' => esc_html__( 'Google Analytics mode will send data such as Source/Medium (e.g., the page leading to a conversion).  Additionally, Google Analytics mode will send information about your user such as location, language, browser information, and AdWords/Remarketing information.', 'gravityformsgoogleanalytics' ),
-							),
-							array(
-								'label'       => esc_html__( 'Tag Manager', 'gravityformsgoogleanalytics' ),
-								'value'       => 'gtm',
-								'icon'        => $this->addon->get_base_url() . '/img/gtm.svg',
-								'tag'         => esc_html__( 'Advanced', 'gravityformsgoogleanalytics' ),
-								'color'       => 'orange',
-								'title'       => esc_html__( 'Google Tag Manager', 'gravityformsgoogleanalytics' ),
-								'description' => esc_html__( 'If you need more control after a form has been submitted, such as setting up a remarketing tag, then Google Tag Manager may be the best option.', 'gravityformsgoogleanalytics' ),
-							),
-						),
+						'choices' => $card_choices,
 					),
 				),
 			),
 		);
+	}
+
+	/**
+	 * Determines if the manual connection mode options should be displayed.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return bool Returns true if the manual connection mode options should be displayed. Returns false otherwise.
+	 */
+	private function display_manual_connection_mode() {
+		$version_info = GFCommon::get_version_info();
+		return apply_filters( 'gform_googleanalytics_allow_manual_configuration', $version_info['is_valid_key'] );
 	}
 
 	/**
@@ -214,59 +254,16 @@ class Plugin_Settings {
 	private function google_analytics_connection_settings() {
 		return array(
 			array(
-				'description' => $this->get_ga4_message(),
-				'id'          => 'google-analytics-settings',
-				'fields'      => array(
+				'id'     => 'google-analytics-settings',
+				'fields' => array(
 					array(
 						'name'  => 'gafields',
-						'type'  => 'ga_select',
+						'type'  => 'ga_select_account',
 						'label' => esc_html__( 'Select a Google Analytics Account', 'gravityformsgoogleanalytics' ),
 					),
 					array(
-						'name'   => 'manual_instructions',
-						'type'   => 'html',
-						'html'   => sprintf(
-								// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
-								__( 'If you’d prefer to manually provide your credentials, you can enter them below. Need help finding your account details? Check out the official %sGoogle Analytics settings documentation%s.', 'gravityformsgoogleanalytics' ),
-								'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/" target="_blank">',
-								'</a>'
-							),
-						'hidden' => true,
-					),
-					array(
-						'name'   => 'ga_ua_code',
-						'type'   => 'text',
-						'label'  => esc_html__( 'UA Code', 'gravityformsgoogleanalytics' ),
-						'hidden' => true,
-					),
-					array(
-						'name'   => 'ga_account_id',
-						'type'   => 'text',
-						'label'  => esc_html__( 'Account ID', 'gravityformsgoogleanalytics' ),
-						'hidden' => true,
-					),
-					array(
-						'name'   => 'ga_account_name',
-						'type'   => 'text',
-						'label'  => esc_html__( 'Account Name (optional)', 'gravityformsgoogleanalytics' ),
-						'hidden' => true,
-					),
-					array(
-						'name'   => 'ga_view',
-						'type'   => 'text',
-						'label'  => esc_html__( 'View', 'gravityformsgoogleanalytics' ),
-						'hidden' => true,
-					),
-					array(
-						'name'   => 'ga_view_name',
-						'type'   => 'text',
-						'label'  => esc_html__( 'View Name (optional)', 'gravityformsgoogleanalytics' ),
-						'hidden' => true,
-					),
-					array(
-						'name'     => 'nonce',
-						'type'     => 'nonce_connect',
-						'readonly' => true,
+						'name' => 'nonce',
+						'type' => 'nonce_connect',
 					),
 					array(
 						'name' => 'action',
@@ -282,29 +279,6 @@ class Plugin_Settings {
 		);
 	}
 
-	public function get_ga4_message() {
-		ob_start();
-		?>
-		<div class="gform-alert gform-alert--notice" data-js="gform-alert">
-            <span class="gform-alert__icon gform-icon gform-icon--circle-notice" aria-hidden="true"></span>
-			<div class="gform-alert__message-wrap">
-				<p class="gform-alert__message">
-					<?php
-					printf(
-					'%1$s <a target="_blank" href="%2$s">%3$s</a>',
-						__( 'Not seeing your properties? The Google Analytics connection method only supports UA (Universal Analytics) properties. If you need to interact with Google Analytics v4 properties, use the Tag Manager connection instead. ', 'gravityformsgoogleanalytics' ),
-						'https://docs.gravityforms.com/how-to-use-google-analytics-4-with-the-gravity-forms-google-analytics-add-on/',
-						__( 'Learn more about property types and connection methods here.', 'gravityformsgoogleanalytics' )
-					);
-					?>
-				</p>
-			</div>
-		</div>
-		<?php
-
-		return ob_get_clean();
-	}
-
 	/**
 	 * Get the connection specific settings for Google Tag Manager.
 	 *
@@ -318,62 +292,9 @@ class Plugin_Settings {
 				'id'     => 'google-analytics-settings',
 				'fields' => array(
 					array(
-						'name'  => 'gafields',
-						'type'  => 'ga_select',
-						'label' => esc_html__( 'Select a Google Analytics Account', 'gravityformsgoogleanalytics' ),
-					),
-					array(
 						'name'  => 'gtmfields',
 						'type'  => 'gtm_select',
 						'label' => esc_html__( 'Select a Google Tag Manager Account', 'gravityformsgoogleanalytics' ),
-					),
-					array(
-						'name'        => 'container',
-						'type'        => 'text',
-						'hidden'      => true,
-						'label'       => esc_html__( 'GTM Container', 'gravityformsgoogleanalytics' ),
-						'description' => sprintf(
-							// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
-							__( 'We were unable to retrieve the list of GTM containers from your account. Please enter the container name manually. (Expected format: GTM-*****). %sLearn more about finding your container name%s.', 'gravityformsgoogleanalytics' ),
-							'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/" target="_blank">',
-							'</a>'
-						),
-					),
-					array(
-						'name'        => 'container_id',
-						'type'        => 'text',
-						'hidden'      => true,
-						'label'       => esc_html__( 'GTM Container ID', 'gravityformsgoogleanalytics' ),
-						'description' => sprintf(
-						// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
-							__( 'We were unable to retrieve the list of GTM container IDs from your account. Please enter the container ID manually. %sLearn more about finding your container ID%s.', 'gravityformsgoogleanalytics' ),
-							'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/" target="_blank">',
-							'</a>'
-						),
-					),
-					array(
-						'name'        => 'workspace',
-						'type'        => 'text',
-						'hidden'      => true,
-						'label'       => esc_html__( 'GTM Workspace', 'gravityformsgoogleanalytics' ),
-						'description' => sprintf(
-						// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
-							__( 'We were unable to retrieve the list of GTM workspaces from your account. Please enter the workspace name manually. %sLearn more about finding your Workspaces%s.', 'gravityformsgoogleanalytics' ),
-							'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/" target="_blank">',
-							'</a>'
-						),
-					),
-					array(
-						'name'          => 'gtm_auto_create',
-						'type'          => 'checkbox',
-						'choices'       => array(
-							array(
-								'name'  => 'gtm_auto_create',
-								'label' => esc_html__( 'Create Tag Manager, Tags, Triggers, and Variables (Recommended)', 'gravityformsgoogleanalytics' ),
-							),
-						),
-						'default_value' => 1,
-						'label'         => esc_html__( 'We will automatically create and publish the necessary tags, triggers, and variables upon connecting.', 'gravityformsgoogleanalytics' ),
 					),
 					array(
 						'name'     => 'nonce',
@@ -395,6 +316,145 @@ class Plugin_Settings {
 	}
 
 	/**
+	 * Get the manual connection settings.
+	 *
+	 * @since 2.0
+	 *
+	 * @return array
+	 */
+	private function manual_connection_settings() {
+		$options = $this->addon->get_options();
+
+		return array(
+			'id'     => 'google-analytics-settings',
+			'fields' => array(
+				array(
+					'name'  => 'connection_mode',
+					'type'  => 'connection_method',
+					'label' => esc_html__( 'Connection Mode', 'gravityformsgoogleanalytics' ),
+				),
+				array(
+					'name'    => 'ga_connection_type',
+					'type'    => 'select',
+					'label'   => esc_html__( 'Connection Type', 'gravityformsgoogleanalytics' ),
+					'value'   => rgar( $options, 'mode' ),
+					'choices' => array(
+						array(
+							'label' => esc_html__( 'Select a connection type', 'gravityformsgoogleanalytics' ),
+							'value' => '',
+						),
+						array(
+							'label' => esc_html__( 'Google Analytics', 'gravityformsgoogleanalytics' ),
+							'value' => 'ga',
+						),
+						array(
+							'label' => esc_html__( 'Measurement Protocol', 'gravityformsgoogleanalytics' ),
+							'value' => 'gmp',
+						),
+						array(
+							'label' => esc_html__( 'Tag Manager', 'gravityformsgoogleanalytics' ),
+							'value' => 'gtm',
+						),
+					),
+				),
+				array(
+					'name'        => 'ga_measurement_id',
+					'type'        => 'text',
+					'label'       => esc_html__( 'Analytics Measurement ID', 'gravityformsgoogleanalytics' ),
+					'value'       => rgars( $options, 'ga4_account/measurement_id' ),
+					'dependency'  => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => 'ga_connection_type',
+								'values' => array( 'ga', 'gmp' ),
+							),
+						),
+					),
+					'description' => sprintf(
+					// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
+						__( 'Please enter the measurement ID (format: G-XXXXXX). %sLearn more about finding your measurement ID%s.', 'gravityformsgoogleanalytics' ),
+						'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-measurement-protocol" target="_blank">',
+						'</a>'
+					),
+				),
+				array(
+					'name'        => 'gmp_api_secret',
+					'type'        => 'text',
+					'input_type'  => 'password',
+					'label'       => esc_html__( 'Measurement Protocol API Secret', 'gravityformsgoogleanalytics' ),
+					'value'       => rgars( $options, 'ga4_account/gmp_api_secret' ),
+					'dependency'  => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => 'ga_connection_type',
+								'values' => array( 'gmp' ),
+							),
+						),
+					),
+					'description' => sprintf(
+					// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
+						__( 'Please enter your API secret. %1$sLearn more about finding your API secret%2$s.', 'gravityformsgoogleanalytics' ),
+						'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-measurement-protocol" target="_blank">',
+						'</a>'
+					),
+				),
+				array(
+					'name'        => 'gtm_container_id',
+					'type'        => 'text',
+					'label'       => esc_html__( 'Tag Manager Container ID', 'gravityformsgoogleanalytics' ),
+					'value'       => rgars( $options, 'ga4_account/gtm_container_id' ),
+					'description' => sprintf(
+					// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
+						__( 'Please enter the container ID (format: GTM-XXXXXX). %1$sLearn more about finding your container ID%2$s.', 'gravityformsgoogleanalytics' ),
+						'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-tag-manager" target="_blank">',
+						'</a>'
+					),
+					'dependency'  => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => 'ga_connection_type',
+								'values' => array( 'gtm' ),
+							),
+						),
+					),
+				),
+				array(
+					'name'        => 'gtm_workspace_id',
+					'type'        => 'text',
+					'label'       => esc_html__( 'Tag Manager Workspace ID', 'gravityformsgoogleanalytics' ),
+					'value'       => rgars( $options, 'ga4_account/gtm_workspace_id' ),
+					'description' => sprintf(
+					// Translators: 1. Opening anchor tag with link to Gravity Forms documentation.  2. Closing anchor tag.
+						__( 'Please enter the workspace name Id. %1$sLearn more about finding your Workspaces%2$s.', 'gravityformsgoogleanalytics' ),
+						'<a href="https://docs.gravityforms.com/google-analytics-add-on-setup/#h-tag-manager" target="_blank">',
+						'</a>'
+					),
+					'dependency'  => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => 'ga_connection_type',
+								'values' => array( 'gtm' ),
+							),
+						),
+					),
+				),
+				array(
+					'name' => 'manual_action',
+					'type' => 'manual_action',
+				),
+				array(
+					'name' => 'nonce',
+					'type' => 'nonce_connect',
+				),
+			),
+		);
+	}
+
+	/**
 	 * Get the advanced settings fields.
 	 *
 	 * @since 1.0
@@ -409,26 +469,6 @@ class Plugin_Settings {
 			return array(
 				'title'  => esc_html__( 'Advanced', 'gravityformsgoogleanalytics' ),
 				'fields' => array(
-					array(
-						'type'          => 'radio',
-						'name'          => 'utm',
-						'horizontal'    => false,
-						'label'         => esc_html__( 'Track UTM Variables', 'gravityformsgoogleanalytics' ),
-						'default_value' => 'off',
-						'tooltip' => '<strong>' . esc_html__( 'Track UTM Variables', 'gravityformsgoogleanalytics' ) . '</strong>' . esc_html__( 'Turn this on to track UTM variables on the front-end of your site.', 'gravityformsgoogleanalytics' ),
-						'choices'       => array(
-							array(
-								'name'    => 'utm_off',
-								'label'   => esc_html__( 'Turn Tracking Off', 'gravityformsgoogleanalytics' ),
-								'value'   => 'off',
-							),
-							array(
-								'name'    => 'utm_on',
-								'label'   => esc_html__( 'Turn Tracking On', 'gravityformsgoogleanalytics' ),
-								'value'   => 'on',
-							),
-						),
-					),
 					array(
 						'type'          => 'radio',
 						'name'          => 'install_gtm',
@@ -501,33 +541,36 @@ class Plugin_Settings {
 	 * @return array
 	 */
 	private function get_connection_display() {
+		$options = $this->addon->get_options();
+		$mode    = $options['mode'];
 		return array(
 			'title'  => esc_html__( 'Google Analytics Settings', 'gravityformsgoogleanalytics' ),
 			'fields' => array(
 				array(
-					'name'    => 'connected',
-					'tooltip' => '<strong>' . esc_html__( 'Connection Method', 'gravityformsgoogleanalytics' ) . '</strong>' . esc_html__( 'Displays the current connection method. To change this, disconnect and reconnect using another method.', 'gravityformsgoogleanalytics' ),
-					'label'   => esc_html__( 'Connection method', 'gravityformsgoogleanalytics' ),
-					'type'    => 'connected_label',
+					'name'    => 'connection_method',
+					'tooltip' => '<strong>' . esc_html__( 'Connection Type', 'gravityformsgoogleanalytics' ) . '</strong>' . esc_html__( 'Displays the current connection type. To change this, disconnect and reconnect using another type.', 'gravityformsgoogleanalytics' ),
+					'label'   => esc_html__( 'Connection Type', 'gravityformsgoogleanalytics' ),
+					'type'    => 'connection_method',
 				),
 				array(
-					'name'    => 'ua',
-					'tooltip' => '<strong>' . esc_html__( 'Analytics Tracking ID', 'gravityformsgoogleanalytics' ) . '</strong>' . esc_html__( 'This is the account which will receive the conversion events.', 'gravityformsgoogleanalytics' ),
-					'label'   => esc_html__( 'Analytics Tracking ID', 'gravityformsgoogleanalytics' ),
-					'type'    => 'uatext',
-					'class'   => 'small',
+					'name'    => 'analytics_account',
+					'tooltip' => '<strong>' . esc_html__( 'Analytics Account', 'gravityformsgoogleanalytics' ) . '</strong>' . esc_html__( 'The Google Analytics Data Stream which will receive the conversion events.', 'gravityformsgoogleanalytics' ),
+					'label'   => esc_html__( 'Analytics Account', 'gravityformsgoogleanalytics' ),
+					'type'    => 'analytics_account',
+					'hidden'  => $mode == 'gtm',
 				),
 				array(
-					'name'    => 'uaview',
-					'tooltip' => '<strong>' . esc_html__( 'Analytics View', 'gravityformsgoogleanalytics' ) . '</strong>' . esc_html__( 'This is the view which will receive the conversion events.', 'gravityformsgoogleanalytics' ),
-					'label'   => esc_html__( 'Analytics View', 'gravityformsgoogleanalytics' ),
-					'type'    => 'uaview',
-					'class'   => 'small',
+					'name'    => 'measurement_id',
+					'tooltip' => '<strong>' . esc_html__( 'Analytics Measurement ID', 'gravityformsgoogleanalytics' ) . '</strong>' . esc_html__( 'The measurement ID identifies the Google Analytics Data Stream which will receive the conversion events.', 'gravityformsgoogleanalytics' ),
+					'label'   => esc_html__( 'Analytics Measurement ID', 'gravityformsgoogleanalytics' ),
+					'type'    => 'measurement_id',
+					'hidden'  => $mode == 'gtm',
 				),
 				array(
-					'type'     => 'uamode',
-					'name'     => 'uamode',
-					'readonly' => true,
+					'name'   => 'tag_manager_account',
+					'label'  => esc_html__( 'Tag Manager Account', 'gravityformsgoogleanalytics' ),
+					'type'   => 'tag_manager_account',
+					'hidden' => $mode != 'gtm',
 				),
 				array(
 					'type'     => 'nonce_connect',
@@ -590,7 +633,7 @@ class Plugin_Settings {
 	 *
 	 * @since 1.0
 	 *
-	 * @param array $payload
+	 * @param array $payload The payload received from Gravity API.
 	 *
 	 * @return array
 	 */

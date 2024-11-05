@@ -80,6 +80,15 @@ class Token_Verifier {
 	private $recaptcha_result;
 
 	/**
+	 * The reCAPTCHA action.
+	 *
+	 * @since 1.4 Previously a dynamic property.
+	 *
+	 * @var string
+	 */
+	private $action;
+
+	/**
 	 * Token_Verifier constructor.
 	 *
 	 * @since 1.0
@@ -168,10 +177,19 @@ class Token_Verifier {
 	 * @return bool
 	 */
 	public function verify_submission( $token ) {
-		$this->addon->log_debug( __METHOD__ . '(): verifying reCAPTCHA submission.' );
+
+		$data = \GFCache::get( 'recaptcha_' . $token, $found );
+		if ( $found ) {
+			$this->addon->log_debug( __METHOD__ . '(): Using cached reCAPTCHA result: ' . print_r( $data, true ) );
+			$this->recaptcha_result = $data;
+
+			return true;
+		}
+
+		$this->addon->log_debug( __METHOD__ . '(): Verifying reCAPTCHA submission.' );
 
 		if ( empty( $token ) ) {
-			$this->addon->log_debug( __METHOD__ . '() could not verify the submission because no token was found.' . PHP_EOL );
+			$this->addon->log_debug( __METHOD__ . '(): Could not verify the submission because no token was found.' . PHP_EOL );
 			return false;
 		}
 
@@ -191,7 +209,7 @@ class Token_Verifier {
 
 		if ( ! $this->validate_response_data( $data ) ) {
 			$this->addon->log_debug(
-				__METHOD__ . '() could not validate the token request from the reCAPTCHA service. ' . PHP_EOL
+				__METHOD__ . '(): Could not validate the token request from the reCAPTCHA service. ' . PHP_EOL
 				. "token: {$token}" . PHP_EOL
 				. "response: " . print_r( $data, true ) . PHP_EOL // @codingStandardsIgnoreLine
 			);
@@ -199,8 +217,11 @@ class Token_Verifier {
 		}
 
 		// @codingStandardsIgnoreLine
-		$this->addon->log_debug( __METHOD__ . '() validated reCAPTCHA: ' . print_r( $data, true ) );
+		$this->addon->log_debug( __METHOD__ . '(): Validated reCAPTCHA: ' . print_r( $data, true ) );
 		$this->recaptcha_result = $data;
+
+		// Caching result for 1 hour.
+		\GFCache::set( 'recaptcha_' . $token, $data, true, 60 * 60 );
 
 		return true;
 	}
@@ -273,7 +294,7 @@ class Token_Verifier {
 	 * @return bool
 	 */
 	private function verify_action( $action ) {
-		$this->addon->log_debug( __METHOD__ . '(): verifying action from reCAPTCHA response.' );
+		$this->addon->log_debug( __METHOD__ . '(): Verifying action from reCAPTCHA response.' );
 
 		return $this->action === $action;
 	}
@@ -288,7 +309,7 @@ class Token_Verifier {
 	 * @return bool
 	 */
 	private function verify_score( $score ) {
-		$this->addon->log_debug( __METHOD__ . '(): verifying score from reCAPTCHA response.' );
+		$this->addon->log_debug( __METHOD__ . '(): Verifying score from reCAPTCHA response.' );
 
 		return is_float( $score ) && $score >= 0.0 && $score <= 1.0;
 	}
@@ -307,7 +328,7 @@ class Token_Verifier {
 	 * @return bool
 	 */
 	private function verify_timestamp( $challenge_ts ) {
-		$this->addon->log_debug( __METHOD__ . '(): verifying timestamp from reCAPTCHA response.' );
+		$this->addon->log_debug( __METHOD__ . '(): Verifying timestamp from reCAPTCHA response.' );
 
 		return ( gmdate( time() ) - strtotime( $challenge_ts ) ) <= 24 * HOUR_IN_SECONDS;
 	}

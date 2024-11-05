@@ -643,6 +643,8 @@ function LoadFieldSettings(){
     field = GetSelectedField();
     var inputType = GetInputType(field);
 
+	// Set the field sidebar message.
+	setSidebarFieldMessage();
 	// Reset accessibility warnings
 	resetAllFieldAccessibilityWarnings();
 	// Reset errors
@@ -2088,9 +2090,11 @@ function DeleteField( element ) {
 
 	// Get field ID from element.
 	var fieldId = jQuery( element )[0].id.split( '_' )[2];
+	var field = GetFieldById( fieldId );
+	var confirmDeleteMessage = field.displayOnly ? gf_vars.confirmationDeleteDisplayField : gf_vars.confirmationDeleteField;
 
 	// Confirm that user is aware about entry data being deleted.
-	if ( ! HasConditionalLogicDependency( fieldId ) && ! confirm( gf_vars.confirmationDeleteField ) ) {
+	if ( ! HasConditionalLogicDependency( fieldId ) && ! confirm( confirmDeleteMessage ) ) {
 		return;
 	}
 
@@ -2403,6 +2407,9 @@ function EndDuplicateField(field, fieldString, sourceFieldId) {
 
 	gform.doAction( 'gform_field_duplicated', form, field, jQuery( fieldString ), sourceFieldId );
 
+	var nativeEvent = new Event('gform/form_editor/field-duplicated-native');
+	document.dispatchEvent(nativeEvent);
+
 }
 
 function GetFieldsByType(types){
@@ -2692,7 +2699,10 @@ function ShowSettings( element ) {
 		//hide field and form pagination setting fields
 		jQuery( '.field_setting' ).hide();
 		jQuery( '.pagination_setting' ).hide();
+		jQuery("#gfield_post_category_initial_item_container").hide();
+		jQuery("#gfield_min_strength_container").hide();
 		// Show last pagination setting fields
+		fieldObject = GetSelectedField();
 		jQuery( '.last_pagination_setting' ).show();
 		var label = jQuery( '#gform_last_page_settings' ).data( 'title' );
 		var description = jQuery( '#gform_last_page_settings' ).data( 'description' );
@@ -2735,6 +2745,7 @@ function ShowSettings( element ) {
 		var icon_img = $button_icon.find( 'img' );
 		var icon_classes = $button_icon.children().attr( 'class' );
 	}
+
 	// Show field icon and description in sidebar
 	jQuery( '#nothing_selected' ).hide();
 	jQuery( '#sidebar_field_label' )
@@ -2949,7 +2960,12 @@ function SelectCustomChoice( name ){
 }
 
 function SelectPredefinedChoice(name){
-    jQuery('#gfield_bulk_add_input').val(gform_predefined_choices[name].join('\n'));
+	var list = gform_predefined_choices[name];
+	// Countries can also be an object if the gform_countries filter is used, so convert to array with just the values.
+	if( name == "Countries" && Array.isArray( list ) !== true ) {
+		list = Object.values( list );
+	}
+    jQuery('#gfield_bulk_add_input').val(list.join('\n'));
     gform_selected_custom_choice = "";
     InitBulkCustomPanel();
 }
@@ -3300,7 +3316,6 @@ function GetSelectedField() {
 		return false;
 	}
     var id = $field[0].id.substr( 6 );
-
     return GetFieldById( id );
 }
 
@@ -3538,10 +3553,25 @@ function SetFeaturedImage() {
 }
 
 function SetFieldProperty(name, value){
-    if(value == undefined)
-        value = "";
+	if (value == undefined)
+		value = "";
 
-    GetSelectedField()[name] = value;
+	var field = GetSelectedField();
+	var previousValue = rgar( field, name );
+
+	field[name] = value;
+
+	/**
+	 * Enables custom actions to be performed when a field property is set.
+	 *
+	 * @since 2.7.16
+	 *
+	 * @param {string}                        name          The name of the property that was set.
+	 * @param {object}                        field         The field object that was updated.
+	 * @param {(string|number|boolean|array)} value         The current value of the specified property.
+	 * @param {(string|number|boolean|array)} previousValue The previous value of the specified property.
+	 */
+	window.gform.doAction( 'gform_post_set_field_property', name, field, value, previousValue );
 }
 
 function SetInputName(value, inputId){
@@ -3729,8 +3759,11 @@ function SetSelectedCategories(){
 
 function SetFieldLabel(label){
     var requiredElement = jQuery(".field_selected .gfield_required")[0];
-    jQuery(".field_selected .gfield_label, .field_selected .gsection_title").text(label).append(requiredElement);
-    SetFieldProperty("label", label);
+    jQuery(".field_selected label.gfield_label, .field_selected .gsection_title, .field_selected legend.gfield_label > span").text(label).append(requiredElement);
+	SetFieldProperty("label", label);
+
+	var nativeEvent = new Event('gform/form_editor/set_field_label');
+	document.dispatchEvent(nativeEvent);
 }
 
 /**
@@ -4023,8 +4056,8 @@ function SetFieldRequired( isRequired ) {
 	}
 
 	if ( appendRequired ) {
-		var labelSelector = field.type === 'consent' && field.labelPlacement === 'hidden_label' ? '.gfield_consent_label' : '.gfield_label';
-		jQuery( '.field_selected ' + labelSelector ).append( '<span class="gfield_required">' + required + '</span>' );
+		var labelSelector = field.type === 'consent' && field.labelPlacement === 'hidden_label' ? '.field_selected .gfield_consent_label' : '.field_selected legend.gfield_label span, .field_selected label.gfield_label';
+		jQuery( labelSelector ).append( '<span class="gfield_required">' + required + '</span>' );
 	}
 
 	SetFieldProperty( 'isRequired', isRequired );
@@ -4105,6 +4138,11 @@ function ToggleCalculationOptions(isEnabled, field) {
     }
 
     SetFieldProperty('enableCalculation', isEnabled);
+
+	if ( field.type === 'number' ) {
+		var nativeEvent = new Event('gform/form_editor/toggle_calculation_options');
+		document.dispatchEvent(nativeEvent);
+	}
 }
 
 function FormulaContentCallback() {
@@ -4400,15 +4438,14 @@ function clearInput( element ) {
 /**
  * Reset Field Accordions.
  *
- * Resets the collapsed state of Field Accordions so that only the first one is open.
+ * Resets the collapsed state of Field Accordions so all of them are open.
  *
  * @since 2.5
  *
  * @return void
  */
 function ResetFieldAccordions() {
-	jQuery( '#add_fields_menu .panel-block-tabs__wrapper' ).accordion( 'option', { active: false } );
-	jQuery( '#add_fields_menu .panel-block-tabs__wrapper' ).first().accordion( 'option', { active: 0 } );
+	jQuery( '#add_fields_menu .panel-block-tabs__wrapper' ).accordion( 'option', { active: 0 } );
 }
 
 /**
@@ -4560,7 +4597,7 @@ function ResetFieldNotice( fieldSetting ) {
  */
 function resetAllFieldNotices() {
 	if ( jQuery('.editor-sidebar').find('.gform-alert--notice').length ) {
-		jQuery('.editor-sidebar').find('.gform-alert--notice').remove();
+		jQuery('.editor-sidebar').find('.gform-alert--notice:not(.gform-visible-notice)').remove();
 	}
 }
 
@@ -4571,9 +4608,7 @@ function resetAllFieldNotices() {
  */
 function ResetFieldAccessibilityWarning( fieldSetting ) {
 	if ( typeof fieldSetting !== 'undefined' ) {
-		jQuery( '.' + fieldSetting )
-			.nextAll( '.gform-alert--accessibility' ).remove()
-			.prevAll( '.gform-alert--accessibility' ).remove();
+		jQuery( '.gform-alert--accessibility[data-field-setting="' + fieldSetting + '"]' ).remove()
 	}
 }
 
@@ -4587,6 +4622,62 @@ function resetAllFieldAccessibilityWarnings() {
 		jQuery('.editor-sidebar').find('.gform-alert--accessibility').remove();
 	}
 }
+
+/**
+ * Displays the first message of the field sidebar messages, if any.
+ *
+ * @since 2.8
+ */
+function setSidebarFieldMessage() {
+
+	let types = [
+		{ type: 'warning', iconClasses: ['gform-icon--exclamation-simple', 'gform-icon-preset--status-error'] },
+		{ type: 'error', iconClasses: ['gform-icon--exclamation-simple', 'gform-icon-preset--status-error'] },
+		{ type: 'info', iconClasses: ['gform-icon--information-simple', 'gform-icon-preset--status-info'] },
+		{ type: 'notice', iconClasses: ['gform-icon--information-simple', 'gform-icon-preset--status-info'] },
+		{ type: 'success', iconClasses: ['gform-icon--checkmark-simple', 'gform-icon-preset--status-correct'] },
+	];
+
+	/**
+	 * Allow the sidebar messages types to be filtered.
+	 *
+	 * @since 2.8.0
+	 *
+	 * @param Object types The types of sidebar messages, each with a type and iconClasses property.
+	 */
+	types = gform.applyFilters( 'gform_field_sidebar_messages_types', types );
+
+	let showSidebarMessage = false;
+	types.forEach(
+		( { type, iconClasses } ) => {
+			$container = jQuery( '.field_selected .field-' + type + '-message-content' );
+			messageMarkup = $container && $container.length ? gform_strip_scripts( $container.html() ) : '';
+			if ( messageMarkup ) {
+				jQuery( '#sidebar_field_message_container .gform-alert__message' ).html( messageMarkup );
+				jQuery( '#sidebar_field_message_container .gform-alert' ).addClass( 'gform-alert--' + ( type === 'warning' ? 'error' : type ) );
+				iconClasses.forEach(
+					( className ) => {
+						jQuery( '#sidebar_field_message_container .gform-icon' ).addClass( className );
+					}
+				);
+				// Add class to force this notice visible, as all field notices are reset when a field is selected.
+				if ( type === 'notice' ) {
+					jQuery( '#sidebar_field_message_container .gform-alert' ).addClass( 'gform-visible-notice' );
+				}
+				showSidebarMessage = true;
+				wp.a11y.speak( messageMarkup );
+			} else {
+				jQuery( '#sidebar_field_message_container' ).hide();
+			}
+		}
+	);
+
+	if ( showSidebarMessage ) {
+		jQuery( '#sidebar_field_message_container' ).show();
+		jQuery( '#sidebar_field_message_container .gform-alert' ).show();
+	}
+}
+
 
 /**
  * Set the field error for a field settings.
@@ -4638,20 +4729,19 @@ function setFieldError( fieldSetting, position, message ) {
 		message = getFieldErrorMessage( fieldSetting );
 	}
 
-	var errorDiv = '<div class="gform-alert gform-alert--error gform-alert--inline">';
+	var errorDiv = '<div class="gform-alert gform-alert--error gform-alert--inline" data-field-setting="' + fieldSetting + '">';
 		errorDiv += '<span class="gform-alert__icon gform-icon gform-icon--circle-error-fine" aria-hidden="true"></span>';
 		errorDiv += '<div class="gform-alert__message-wrap">' + message + '</div>';
 		errorDiv += '</div>';
 
 	// Display the error message.
-	var fieldSetting = jQuery( '.' + fieldSetting );
-	fieldSetting.addClass( 'error' );
+	var fieldSettingContainer = jQuery( '.' + fieldSetting );
+	fieldSettingContainer.addClass( 'error' );
+	jQuery( '.gform-alert--error[data-field-setting="' + fieldSetting + '"]' ).remove();
 	if ( position === 'above' ) {
-		fieldSetting.prevAll( '.gform-alert--error' ).remove();
-		fieldSetting.before( errorDiv );
+		fieldSettingContainer.before( errorDiv );
 	} else {
-		fieldSetting.nextAll( '.gform-alert--error' ).remove();
-		fieldSetting.after( errorDiv );
+		fieldSettingContainer.after( errorDiv );
 	}
 }
 
@@ -4667,10 +4757,8 @@ function resetFieldError( fieldSetting ) {
 	var errorProperties = field.hasOwnProperty( 'errors' ) ? field.errors : [];
 
 	if ( typeof fieldSetting !== 'undefined' ) {
-		jQuery( '.' + fieldSetting )
-			.nextAll( '.gform-alert--error' ).remove()
-			.prevAll( '.gform-alert--error' ).remove();
 
+		jQuery( '.gform-alert--error[data-field-setting="' + fieldSetting + '"]' ).remove()
 		jQuery( '.' + fieldSetting ).removeClass( 'error' );
 
 		var index = errorProperties.indexOf( fieldSetting );

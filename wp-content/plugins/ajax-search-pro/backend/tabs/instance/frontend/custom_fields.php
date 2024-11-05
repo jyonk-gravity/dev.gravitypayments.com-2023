@@ -815,7 +815,7 @@ sample_value3||Sample Label 3**</textarea>
 
     <input type="hidden" name="custom_field_items" value="<?php
         if (isset($_POST['custom_field_items']))
-            echo $_POST['custom_field_items'];
+            echo esc_attr($_POST['custom_field_items']);
         else
             echo $sd['custom_field_items'];
 

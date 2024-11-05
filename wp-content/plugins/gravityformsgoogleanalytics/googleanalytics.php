@@ -3,15 +3,15 @@
 Plugin Name: Gravity Forms Google Analytics Add-On
 Plugin URI: http://gravityforms.com
 Description: Integrates Gravity Forms with Google Analytics and Tag Manager
-Version: 1.2
+Version: 2.3.0
 Author: Gravity Forms
-Author URI: http://gravityforms.com
+Author URI: https://gravityforms.com
 License: GPL-3.0+
 Text Domain: gravityformsgoogleanalytics
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2019-2022 Rocketgenius Inc.
+Copyright 2019-2024 Rocketgenius Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || die();
 use Gravity_Forms\Gravity_Forms_Google_Analytics\GF_Google_Analytics;
 
 // Defines the current version of the Gravity Forms Google Analytics Add-On.
-define( 'GF_GOOGLE_ANALYTICS_VERSION', '1.2' );
+define( 'GF_GOOGLE_ANALYTICS_VERSION', '2.3.0' );
 
 // Defines the minimum version of Gravity Forms required to run Gravity Forms Google Analytics.
 define( 'GF_GOOGLE_ANALYTICS_MIN_GF_VERSION', '2.5.7' );

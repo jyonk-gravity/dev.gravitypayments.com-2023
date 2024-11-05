@@ -126,6 +126,8 @@ class GFExport {
 			$markup_version = 2;
 		}
 
+		GFCache::delete( 'legacy_is_in_use' );
+
 		unset( $forms['version'] );
 
 		$clean_forms = array();
@@ -1187,8 +1189,6 @@ class GFExport {
 				);
 			}
 		}
-
-
 
 		$setting_tabs = apply_filters( 'gform_export_menu', $setting_tabs );
 		ksort( $setting_tabs, SORT_NUMERIC );

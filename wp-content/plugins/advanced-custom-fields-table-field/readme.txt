@@ -2,8 +2,8 @@
 Contributors: jonua
 Tags: acf table
 Requires at least: 5.3
-Tested up to: 6.1.1
-Stable tag: 1.3.20
+Tested up to: 6.6.2
+Stable tag: 1.3.24
 Requires PHP: 7.3
 License: GPLv2 or later
 
@@ -351,11 +351,48 @@ However, only when activated as a plugin will updates be available.
 
 *Note:* Please [contribute your language](https://translate.wordpress.org/projects/wp-plugins/advanced-custom-fields-table-field) to the plugin to make it even more useful.
 
+== PRO ==
+
+The Advanced Custom Fields Table Field plugin is also available in a <a href="https://www.acf-table-field.com">professional version</a> which includes more functionality and more flexibility. The additional Pro features are:
+
+* Setup custom default table
+* Setup minimum and maximum amount of rows and columns
+* Setup style choice for the table and parts of the table
+* Restrict table editing functionalities
+* Configurable optional WordPress editor for cell content editing
+* Table head and foot rows
+* Stub column
+* Rowspan and colspan
+* Better way for moving rows and columns
+* Support for REST-API
+* Support for third-party plugins
+
+The Pro version runs completely independend beside the free version and comes with its own field type.
+You can change an existing field with field type "Table" (free version) to field type "Table Pro".
+
+<a href="https://www.acf-table-field.com">To Pro Website</a>
 
 == Upgrade Notice ==
 
 
 == Changelog ==
+
+= 1.3.26 =
+* Adds auto repair table. Fixes table data when loading from database and on editing table.
+
+= 1.3.24 =
+* Fixes Rest API scheme
+
+= 1.3.23 =
+* Adds Rest API scheme
+
+= 1.3.22 =
+* Fixes an issue where the trigger changed was executed to the field without any actual change to the field.
+* Fixes an issue where changes to the order of rows and columns and new rows and columns were not saved.
+
+= 1.3.21 =
+* Adds update_field() support for option pages
+* Fixes missing "use_header" property on get_field()
 
 = 1.3.20 =
 * Fixes multiple registering events on Gutenberg

@@ -5,6 +5,8 @@
 namespace EnableMediaReplace;
 
 use EnableMediaReplace\ShortPixelLogger\ShortPixelLogger as Log;
+use EnableMediaReplace\Controller\ReplaceController as ReplaceController;
+
 
 use Exception;
 use stdClass;
@@ -56,6 +58,8 @@ class Api {
 		$compression_level = 0; //  intval($posted_data['compression_level']); // off for now.
 
 		$attachment_id = isset($_POST['attachment_id']) ? intval($_POST['attachment_id']) : null;
+		$attachment = get_post($attachment_id);
+
 
 		if (is_null($attachment_id))
 		{
@@ -65,8 +69,15 @@ class Api {
 			 return $result;
 		}
 
-		$replacer = new Replacer($attachment_id);
-		$url = $replacer->getSourceUrl();
+  	if (! emr()->checkImagePermission($attachment)) {
+			$result = $this->getResponseObject();
+			$result->success = false;
+			$result->message = __('No permission for user', 'enable-media-replace');
+			return $result;
+	  }
+
+		$replaceController = new ReplaceController($attachment_id);
+		$url = $replaceController->getSourceUrl();
 
 		$settings = get_option('enable_media_replace', array()); // save settings and show last loaded.
 		$settings['bg_type'] = isset($_POST['background']['type']) ? sanitize_text_field($_POST['background']['type']) : false;

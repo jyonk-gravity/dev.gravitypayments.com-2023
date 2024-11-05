@@ -47,6 +47,12 @@ function cptui_settings() {
 	?>
 	<div class="wrap about-wrap">
 		<?php
+		/**
+		 * Fires immediately after wrap div started on all of the cptui admin pages.
+		 *
+		 * @since 1.14.0
+		 */
+		do_action( 'cptui_inside_wrap' );
 
 		/**
 		 * Fires inside and at the top of the wrapper for the main plugin landing page.
@@ -93,14 +99,10 @@ function cptui_settings() {
 		<div class="changelog about-integrations">
 			<div class="cptui-feature feature-section col three-col">
 				<div class="col">
-					<h2><?php esc_html_e( 'Post type descriptions', 'custom-post-type-ui' ); ?></h2>
-					<p><?php esc_html_e( 'We have updated a number of details around the post type description field. First we addressed issues with the Tools area when descriptions included quotes. Second we fixed an issue around stripping HTML from the field from previous security updates.', 'custom-post-type-ui' ); ?></p>
-					<h2><?php esc_html_e( 'Miscellaneous code cleanup and separation.', 'custom-post-type-ui' ); ?></h2>
-					<p><?php esc_html_e( 'Largely under the hood, but we have done some separation of our code and done more to help ensure code quality.', 'custom-post-type-ui' ); ?></p>
-					<h2><?php esc_html_e( 'Branding.', 'custom-post-type-ui' ); ?></h2>
-					<p><?php esc_html_e( 'We updated our branding for the plugin. Both within our UI but also on WordPress.org', 'custom-post-type-ui' ); ?></p>
-					<h2><?php esc_html_e( 'Miscellaneous.', 'custom-post-type-ui' ); ?></h2>
-					<p><?php esc_html_e( 'Added notes about some post type features also needing theme support declared for them to work. Fixed a pluralization issue with our UI and forms.', 'custom-post-type-ui' ); ?></p>
+					<h2><?php esc_html_e( 'Post type migration support', 'custom-post-type-ui' ); ?></h2>
+					<p><?php esc_html_e( 'If you are trying to move post types into CPTUI, you can now mark as such to prevent slug conflicts notices.', 'custom-post-type-ui' ); ?></p>
+					<h2><?php esc_html_e( 'Moved to minimum of WordPress 6.3.', 'custom-post-type-ui' ); ?></h2>
+					<p><?php esc_html_e( 'The move to require WordPress 6.3 allowed for adding "item_trashed" label support.', 'custom-post-type-ui' ); ?></p>
 				</div>
 			</div>
 		</div>

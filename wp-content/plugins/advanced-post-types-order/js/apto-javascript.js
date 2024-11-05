@@ -427,7 +427,7 @@
                     $sortable_li.detach().hide().appendTo($sortable_list).slideDown(100);
                 },
                 
-            interface_id_order :   function(order_type)
+            interface_id_order :   function( order_type )
                 {
                     //keep the height to prevent browser scroll
                     jQuery("#sortable").css('min-height', 'inherit');
@@ -468,6 +468,47 @@
                     });
 
                     $sortable_li.detach().hide().appendTo($sortable_list).slideDown(100);
+                },
+                
+            interface_random_order  :   function ()
+                {
+                    jQuery("#sortable").css('min-height', 'inherit');
+                    jQuery("#sortable").css('min-height', jQuery("#sortable").height() + 'px');
+                            
+                    var $sortable_list = jQuery('#sortable'),
+                        $sortable_li = jQuery('#sortable > li');
+
+                        
+                    const shuffleArray = this.shuffle( $sortable_li );
+
+                        
+                    $sortable_li.sort(function(a,b){
+                        var an = jQuery(a).find('.i_description').html().toLowerCase(),
+                            bn = jQuery(b).find('.i_description').html().toLowerCase();
+
+                        const min = parseInt( -1 );
+                        const max = parseInt( 1 );
+
+                        // generating a random number
+                        a = Math.floor(Math.random() * (max - min + 1)) + min;
+                        
+                        return a;
+                        
+                    });
+
+                    $sortable_li.detach().hide().appendTo($sortable_list).slideDown(100);   
+
+                },
+                
+                
+            shuffle :   function( a )
+                {
+                    for (let i = a.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [a[i], a[j]] = [a[j], a[i]];
+                    }
+                    return a;   
+
                 },
                     
             sticky_toggle: function(element)
@@ -514,6 +555,8 @@
                     //hide send to manual order list buttton
                     jQuery('#send_to_manual').slideUp();
                     
+                    jQuery ( '#automatic_insert_mark' ).css( 'display', 'none' );
+                    
 
                 },
             RemoveAutomaticOrderFallback: function (element)
@@ -524,15 +567,36 @@
                     jQuery('#apto_form_order .automatic_order_by[data-id="' + group_id  +'"]').remove();
                     jQuery('#apto_form_order .automatic_order[data-id="' + group_id  +'"]').remove();
                     
+                    jQuery ( '#automatic_insert_mark' ).css( 'display', 'table-row' );
+                    
                 },
                 
             apto_autosort_orderby_field_change: function (element)
                 {
+                    group_id = jQuery('#apto_form_order').find(element).closest('tr').attr('data-id');
+                    if ( group_id > 1 )
+                        return;
+                    
                     var element_value = jQuery(element).val();
                     var group_id = jQuery(element).closest('tr').attr('data-id'); 
                     
                     //close all toggle_area
                     jQuery(element).closest('td').find(' > .toggle_area').hide('fast');
+                    
+                    jQuery('#apto_settings #automatic_insert_mark').hide('fast');
+                    
+                    if(element_value == '_taxonomy_')
+                        {
+                            jQuery(element).closest('tr').find('#apto_taxonomy_area_' + group_id).stop().show('fast');
+                            jQuery('#apto_settings #automatic_insert_mark').show('fast');
+                        }
+                        else
+                        {
+                            inner_group_id = 2;
+                    
+                            jQuery('#apto_form_order .automatic_order_by[data-id="' + inner_group_id  +'"]').remove();
+                            jQuery('#apto_form_order .automatic_order[data-id="' + inner_group_id  +'"]').remove();
+                        }
                     
                     if(element_value == '_custom_field_')
                         jQuery(element).closest('tr').find('#apto_custom_field_area_' + group_id).stop().show('fast');
@@ -795,7 +859,7 @@
         jQuery('.sortable-list .options').on('click', '.option.move_bottom', function() {
                         apto_move_element(jQuery(this).closest('li'), 'bottom');
                     })
-        jQuery('.sortable-list .options').on('click', '.option.sticky', function() {
+        jQuery('.sortable-list .options').on('click', '.option.sticky', function() { 
                         APTO.sticky_toggle(jQuery(this).closest('li'));
                     })
         

@@ -27,7 +27,7 @@ class Utilities
     public static function clean_html($html) {
 
         //remove existing script tags
-        $html = preg_replace('/<script\b(?:[^>]*)>(?:.+)?<\/script>/Umsi', '', $html);
+        $html = preg_replace('/<script\b(?:[^>]*)>.*?<\/script>/msi', '', $html);
 
         //remove existing noscript tags
         $html = preg_replace('#<noscript>(?:.+)</noscript>#Umsi', '', $html);
@@ -74,11 +74,35 @@ class Utilities
         return false;
     }
 
+    //check for string match inside array
+    public static function match_in_array($string, $array) {
+        
+        if(!empty($array)) {
+            foreach((array) $array as $item) {
+                if(stripos($string, $item) !== false) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+
     //check for specific woocommerce pages
     public static function is_woocommerce() {
-        if(class_exists('WooCommerce') && (is_cart() || is_checkout() || is_account_page())) {
-            return true;
+        return apply_filters('perfmatters_is_woocommerce', class_exists('WooCommerce') && (is_cart() || is_checkout() || is_account_page()));
+    }
+
+    //return root directory path
+    public static function get_root_dir_path() {
+        $wp_content_relative_path = str_replace(array(trailingslashit(home_url()), trailingslashit(site_url())), '', content_url());
+        $pos = strrpos(WP_CONTENT_DIR, $wp_content_relative_path);
+        if($pos !== false) {
+            $root_dir_path = substr_replace(WP_CONTENT_DIR, '', $pos, strlen($wp_content_relative_path));
         }
-        return false;
+        else {
+            $root_dir_path = WP_CONTENT_DIR;
+        }
+        return trailingslashit($root_dir_path);
     }
 }

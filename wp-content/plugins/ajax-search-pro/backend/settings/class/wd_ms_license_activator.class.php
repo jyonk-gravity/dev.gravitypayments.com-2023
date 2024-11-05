@@ -44,6 +44,7 @@ if (!class_exists("wd_MSLicenseActivator")) {
 						?></span>
 					</div>
 				<?php endif; ?>
+				<input type="hidden" id="asp_mediaservice_request_nonce" value="<?php echo wp_create_nonce( 'asp_mediaservice_request_nonce' ); ?>">
 				<input type="hidden" name="ms_license_active" value="<?php echo $this->data['active'] ? 1 : 0; ?>">
 			</div>
 			<?php

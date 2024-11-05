@@ -38,6 +38,24 @@ class Textarea extends Base {
 	public $use_editor = false;
 
 	/**
+	 * Number of rows.
+	 *
+	 * @since 2.5
+	 *
+	 * @var int
+	 */
+	public $rows;
+
+	/**
+	 * Editor height.
+	 *
+	 * @since 2.5
+	 *
+	 * @var int
+	 */
+	public $editor_height;
+
+	/**
 	 * Initialize Textarea field.
 	 *
 	 * @since 2.5
@@ -80,6 +98,10 @@ class Textarea extends Base {
 		// Get value.
 		$value = $this->get_value();
 
+		if ($value === null) {
+			$value = '';
+		}
+
 		// Initialize rich text editor.
 		if ( $this->use_editor ) {
 
@@ -116,6 +138,8 @@ class Textarea extends Base {
 
 		} else {
 
+			$escaped_value = $value !== null ? esc_textarea( $value ) : '';
+
 			// Prepare markup.
 			// Display description.
 			$html = $this->get_description();
@@ -127,7 +151,7 @@ class Textarea extends Base {
 				esc_attr( $this->name ),
 				$this->get_describer() ? sprintf( 'aria-describedby="%s"', $this->get_describer() ) : '',
 				implode( ' ', $this->get_attributes() ),
-				esc_textarea( $value ),
+				$escaped_value,
 				// If field failed validation, add error icon.
 				$this->get_error_icon()
 			);

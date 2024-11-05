@@ -145,7 +145,7 @@
     </div>
     <p class='infoMsg'>
         <?php echo __('Example: <b>{titlefield} - {_price}</b> will show the title and price for a woocommerce product.', 'ajax-search-pro'); ?>&nbsp;
-        <?php echo sprintf( __('For more info and more advanced uses please <a href="%s" target="_blank">check this documentation chapter</a>.', 'ajax-search-pro'), 'https://wp-dreams.com/go/?to=asp-doc-advanced-title-content' ); ?>
+        <?php echo sprintf( __('For more info and more advanced uses please <a href="%s" target="_blank">check this documentation chapter</a>.', 'ajax-search-pro'), 'https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields' ); ?>
     </p>
     <div class="item">
         <?php
@@ -154,7 +154,7 @@
         ?>
         <p class="descMsg">
             <?php echo __('HTML is supported! Use {custom_field_name} format to have custom field values.', 'ajax-search-pro'); ?>&nbsp;
-            <a href="https://wp-dreams.com/go/?to=asp-doc-advanced-title-content" target="_blank">
+            <a href="https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields" target="_blank">
                 <?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?>
             </a>
         </p>
@@ -166,7 +166,7 @@
         ?>
         <p class="descMsg">
             <?php echo __('HTML is supported! Use {custom_field_name} format to have custom field values.', 'ajax-search-pro'); ?>&nbsp;
-            <a href="https://wp-dreams.com/go/?to=asp-doc-advanced-title-content" target="_blank">
+            <a href="https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields" target="_blank">
                 <?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?>
             </a>
         </p>
@@ -211,7 +211,7 @@
         ?>
         <p class="descMsg">
             <?php echo __('Variable {titlefield} will be replaced with the Title field value. Use the format {meta_field} to get user meta.', 'ajax-search-pro'); ?><br>
-            <a href="https://wp-dreams.com/go/?to=asp-doc-advanced-title-content" target="_blank"><?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?></a>
+            <a href="https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields/user-search-advanced-title-and-content-fields" target="_blank"><?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?></a>
         </p>
     </div>
     <div class="item">
@@ -222,7 +222,7 @@
         ?>
         <p class="descMsg">
             <?php echo __('Variable {descriptionfield} will be replaced with the Description field value. Use the format {meta_field} to get user meta.', 'ajax-search-pro'); ?><br>
-            <a href="https://wp-dreams.com/go/?to=asp-doc-advanced-title-content" target="_blank"><?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?></a>
+            <a href="https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields/user-search-advanced-title-and-content-fields" target="_blank"><?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?></a>
         </p>
     </div>
     <div class="item">
