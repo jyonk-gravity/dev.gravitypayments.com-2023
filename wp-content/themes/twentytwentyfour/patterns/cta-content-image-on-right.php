@@ -4,7 +4,6 @@
  * Slug: twentytwentyfour/cta-content-image-on-right
  * Categories: call-to-action, banner
  * Viewport width: 1400
- * Description: A title, paragraph, two CTA buttons, and an image for a general CTA section.
  */
 ?>
 

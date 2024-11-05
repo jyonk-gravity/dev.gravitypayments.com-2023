@@ -826,10 +826,6 @@ if (!function_exists("wpdreams_box_shadow_css")) {
 
 if (!function_exists("wpdreams_gradient_css")) {
 	function wpd_gradient_get_color_only( $data ) {
-		if ( preg_match('/rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*0\s*\)/', $data) ) {
-			return 'transparent';
-		}
-
 		preg_match('/.*\-(.*?)$/', $data, $matches);
 		if ( isset($matches[1]) ) {
 			return wpdreams_admin_hex2rgb($matches[1]);

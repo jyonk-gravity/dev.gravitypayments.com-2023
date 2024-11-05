@@ -21,7 +21,7 @@ class jh_acf_field_table extends acf_field {
 		*  settings (array) Array of settings
 		*/
 		$this->settings = array(
-			'version' => '1.3.26',
+			'version' => '1.3.24',
 			'dir_url' => plugins_url( '', __FILE__ ) . '/',
 		);
 
@@ -823,10 +823,7 @@ class jh_acf_field_table extends acf_field {
 
 		} else {
 
-			if ( null !== $value ) {
-
-				$value = addslashes( $value );
-			}
+			$value = addslashes( $value );
 		}
 
 		return $value;

@@ -100,42 +100,27 @@ use WPDRMS\ASP\Utils\Css;defined('ABSPATH') or die("You can't access this file d
   <?php echo $style['boxshadow']; ?>
 }
 
-<?php ob_start(); ?>
 <?php if ( $style['box_width'] != $style['box_width_tablet'] ): ?>
-.asp_w_container_<?php echo $id; ?> {
-	width: <?php echo w_isset_def($style['box_width_tablet'], '100%'); ?>;
-}
-div.asp_main_container.asp_w+[id*=asp-try-<?php echo $id; ?>] {
-	width: <?php echo w_isset_def($style['box_width_tablet'], '100%'); ?>;
+@media only screen and (min-width: 641px) and (max-width: 1024px) {
+	.asp_w_container_<?php echo $id; ?> {
+		width: <?php echo w_isset_def($style['box_width_tablet'], '100%'); ?>;
+	}
+    div.asp_main_container.asp_w+[id*=asp-try-<?php echo $id; ?>] {
+        width: <?php echo w_isset_def($style['box_width_tablet'], '100%'); ?>;
+    }
 }
 <?php endif; ?>
-<?php $css_for_tablet = ob_get_clean(); ?>
-<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
-		$css_for_tablet,
-		'tablet',
-		$style['media_query_mobile_max_width']+1,
-		$style['media_query_tablet_max_width'],
-		$preview ?? false
-); ?>
 
-
-<?php ob_start(); ?>
 <?php if ( $style['box_width'] != $style['box_width_phone'] ): ?>
-.asp_w_container_<?php echo $id; ?> {
-	width: <?php echo w_isset_def($style['box_width_phone'], '100%'); ?>;
-}
-div.asp_main_container.asp_w+[id*=asp-try-<?php echo $id; ?>] {
-    width: <?php echo w_isset_def($style['box_width_phone'], '100%'); ?>;
+@media only screen and (max-width: 640px) {
+	.asp_w_container_<?php echo $id; ?> {
+		width: <?php echo w_isset_def($style['box_width_phone'], '100%'); ?>;
+	}
+    div.asp_main_container.asp_w+[id*=asp-try-<?php echo $id; ?>] {
+        width: <?php echo w_isset_def($style['box_width_phone'], '100%'); ?>;
+    }
 }
 <?php endif; ?>
-<?php $css_for_phone = ob_get_clean(); ?>
-<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
-		$css_for_phone,
-		'phone',
-		0,
-		$style['media_query_mobile_max_width'],
-		$preview ?? false
-); ?>
 
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_div_ids1; ?> .probox,
@@ -639,28 +624,19 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
     width: <?php echo $style['results_width']; ?>;
     margin: <?php echo $style['results_margin']; ?>;
 }
-
-<?php ob_start(); ?>
 <?php if ( $style['results_width'] != $style['results_width_tablet'] ): ?>
-   <?php if ($use_compatibility == true): ?>
+@media only screen and (min-width: 641px) and (max-width: 1024px) {
+    <?php if ($use_compatibility == true): ?>
         <?php echo $asp_res_ids1; ?>,
         <?php echo $asp_res_ids2; ?>,
     <?php endif; ?>
     <?php echo $asp_res_ids; ?> {
         width: <?php echo $style['results_width_tablet']; ?>;
     }
+}
 <?php endif; ?>
-<?php $css_for_tablet = ob_get_clean(); ?>
-<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
-		$css_for_tablet,
-		'tablet',
-		$style['media_query_mobile_max_width']+1,
-		$style['media_query_tablet_max_width'],
-		$preview ?? false
-); ?>
-
-<?php ob_start(); ?>
 <?php if ( $style['results_width'] != $style['results_width_phone'] ): ?>
+@media only screen and (max-width: 640px) {
     <?php if ($use_compatibility == true): ?>
         <?php echo $asp_res_ids1; ?>,
         <?php echo $asp_res_ids2; ?>,
@@ -668,15 +644,8 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
     <?php echo $asp_res_ids; ?> {
         width: <?php echo $style['results_width_phone']; ?>;
     }
+}
 <?php endif; ?>
-<?php $css_for_phone = ob_get_clean(); ?>
-<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
-		$css_for_phone,
-		'phone',
-		0,
-		$style['media_query_mobile_max_width'],
-		$preview ?? false
-); ?>
 
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_res_ids1; ?> .asp_nores,
@@ -768,6 +737,11 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
    background-size: <?php echo w_isset_def($style['image_display_mode'], "cover"); ?>;
    background-repeat: no-repeat;
 }
+
+<?php
+  $_vimagew = wpdreams_width_from_px($style['hreswidth']);
+  $_vimageh = wpdreams_width_from_px($style['hor_img_height']);
+?>
 
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_res_ids1; ?> .results .item .asp_content,

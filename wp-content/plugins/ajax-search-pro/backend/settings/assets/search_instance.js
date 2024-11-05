@@ -33,7 +33,6 @@ jQuery(function($){
     WPD.Conditionals.init('div[tabid=304]');
     WPD.Conditionals.init('div[tabid=404]');
     WPD.Conditionals.init('div[tabid=405]');
-    WPD.Conditionals.init('div[tabid=608]');
 
     // --- Safety check on max_input_vars
     if ( $('#asp_options_serialized').length > 0 ) {
@@ -326,7 +325,7 @@ jQuery(function($){
         }
     });
     $('select[name="orderby_primary"]').trigger('change');
-    $('select[name="orderby_secondary"]').on('change', function(){
+    $('select[name="orderby"]').on('change', function(){
         if ($(this).val().indexOf('customf') == -1) {
             $('input[name="orderby_secondary_cf"]').parent().addClass('hiddend');
             $('select[name="orderby_secondary_cf_type"]').parent().addClass('hiddend');
@@ -335,7 +334,7 @@ jQuery(function($){
             $('select[name="orderby_secondary_cf_type"]').parent().removeClass('hiddend');
         }
     });
-    $('select[name="orderby_secondary"]').trigger('change');
+    $('select[name="orderby"]').trigger('change');
 
     $('input[name="override_default_results"]').on('change', function(){
         if ($(this).val() == 0)
@@ -1286,63 +1285,6 @@ jQuery(function($){
     $("select[id^=wpdreamsThemeChooser]").on('change', function() {
         $("#asp_preview_window input[name=refresh]").trigger('click');
     });
-
-    const getTabletSize = () => {
-        return parseInt( $('input[name=media_query_tablet_max_width]').val() );
-    }
-    const getPhoneSize = () => {
-        return parseInt( $('input[name=media_query_mobile_max_width]').val() );
-    }
-    const setPreviewDevice = ( device ) => {
-        $("#asp_preview_window").attr('class', '');
-        $("body").removeClass((i, arr)=> {
-            for ( const c of arr.split(' ') ) {
-                if ( c.startsWith('wpd-preview-') ) {
-                    return c;
-                }
-            }
-            return '';
-        });
-        $("body").addClass('wpd-preview-' + device);
-    }
-    const setPreviewWidth = ( device ) => {
-        let width = getTabletSize() + 20;
-        if ( device === 'tablet' ) {
-            width = ( getTabletSize() + getPhoneSize() ) / 2;
-        } else if ( device === 'phone' ) {
-            width = getPhoneSize() - 20;
-        }
-        $("#asp_preview_window").css('width', width);
-        window.dispatchEvent(new Event('resize'));
-    }
-    $("#asp_preview_window .wpd-txt-small-icon").on('click', function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        setPreviewWidth( $(this).data('device') );
-        setPreviewDevice( $(this).data('device') );
-        $(this).parent().find('.wpd-txt-small-icon_active').removeClass("wpd-txt-small-icon_active");
-        $(this).addClass("wpd-txt-small-icon_active");
-    });
-
-    $("#asp_preview_window").resizable({
-        handles: "w",
-        stop: function(e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-        },
-        resize: function( e, ui ) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            if ( ui.size.width <= getPhoneSize() ) {
-                setPreviewDevice('phone');
-            } else if ( ui.size.width <= getTabletSize() ) {
-                setPreviewDevice('tablet');
-            } else {
-                setPreviewDevice('desktop');
-            }
-            window.dispatchEvent(new Event('resize'));
-        },
-    });
     $("#asp_preview_window .refresh").on('click', function(e) {
         e.preventDefault();
         var $this = $(this).parent();
@@ -1371,34 +1313,22 @@ jQuery(function($){
         });
     });
 
-    let previewLoaded = false;
     $("#asp_preview_window .maximise").on('click', function(e) {
         e.preventDefault();
         $this = $(this.parentNode);
-        if ( !previewLoaded ) {
-            previewLoaded = true;
-            // Set the desktop resolution initially
-            $("#asp_preview_window .wpd-txt-small-icon").first().trigger('click');
-        }
         if ($(this).html() == "Show") {
             $this.animate({
                 bottom: "-2px",
-                height: "90%",
-                overflow: "scroll",
-            }, 400, ()=>{
-                $this.css("overflow", "scroll");
+                height: "90%"
             });
             $(this).html('Hide');
             $("#asp_preview_window a.refresh").trigger('click');
         } else {
             $this.animate({
                 bottom: "-2px",
-                height: "40px",
-            }, 400, ()=>{
-                $this.css("overflow", "hidden");
+                height: "40px"
             });
             $(this).html('Show');
-            ASP.instances.destroy();
         }
     });
 

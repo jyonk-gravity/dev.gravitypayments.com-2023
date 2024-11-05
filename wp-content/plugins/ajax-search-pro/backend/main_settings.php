@@ -9,14 +9,6 @@ if (isset($_GET) && isset($_GET['asp_sid'])) {
     include('search.php');
     return;
 }
-$metadata = require_once ASP_PATH . 'build/js/timed-modal.asset.php';
-wp_enqueue_script(
-		'wpd-timed-modal',
-		ASP_URL_NP . 'build/js/timed-modal.js',
-		$metadata['dependencies'],
-		$metadata['version'],
-		array('in_footer'=>true)
-);
 ?>
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__) . 'settings/assets/sidebar.css?v='.ASP_CURR_VER; ?>" />
 <div id='wpdreams' style="display: flex; justify-content: start; align-items: flex-start; gap: 0;"
@@ -131,7 +123,7 @@ wp_enqueue_script(
         ) {
             $_POST['delete'] = $_POST['delete'] + 0;
             wd_asp()->instances->delete( $_POST['delete'] );
-			FileManager::instance()->delFile( wd_asp()->cache_path . "search" . $_POST['delete'] . ".css");
+			FileManager::_o()->delFile( wd_asp()->cache_path . "search" . $_POST['delete'] . ".css");
             wd_asp()->css_manager->generator->generate();
         }
         if ( isset($_POST['asp_st_override']) ) {

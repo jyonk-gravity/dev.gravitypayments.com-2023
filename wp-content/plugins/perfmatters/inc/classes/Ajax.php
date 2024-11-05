@@ -112,7 +112,7 @@ class Ajax
 	//close cta ajax action
 	public static function close_cta() {
 		self::security_check();
-		if(update_option('perfmatters_close_cta', 1, false)) {
+		if(update_option('perfmatters_close_cta', 1)) {
 			wp_send_json_success();
 		}
 	}

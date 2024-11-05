@@ -7,6 +7,7 @@ use WPSEO_Replace_Vars;
 use Yoast\WP\SEO\Conditionals\Front_End_Conditional;
 use Yoast\WP\SEO\Context\Meta_Tags_Context;
 use Yoast\WP\SEO\Helpers\Options_Helper;
+use Yoast\WP\SEO\Helpers\Request_Helper;
 use Yoast\WP\SEO\Memoizers\Meta_Tags_Context_Memoizer;
 use Yoast\WP\SEO\Presenters\Abstract_Indexable_Presenter;
 use Yoast\WP\SEO\Presenters\Debug\Marker_Close_Presenter;
@@ -40,6 +41,13 @@ class Front_End_Integration implements Integration_Interface {
 	 * @var Options_Helper
 	 */
 	protected $options;
+
+	/**
+	 * Represents the request helper.
+	 *
+	 * @var Request_Helper
+	 */
+	protected $request;
 
 	/**
 	 * The helpers surface.
@@ -199,6 +207,7 @@ class Front_End_Integration implements Integration_Interface {
 	 * @param Meta_Tags_Context_Memoizer $context_memoizer  The meta tags context memoizer.
 	 * @param ContainerInterface         $service_container The DI container.
 	 * @param Options_Helper             $options           The options helper.
+	 * @param Request_Helper             $request           The request helper.
 	 * @param Helpers_Surface            $helpers           The helpers surface.
 	 * @param WPSEO_Replace_Vars         $replace_vars      The replace vars helper.
 	 */
@@ -206,12 +215,14 @@ class Front_End_Integration implements Integration_Interface {
 		Meta_Tags_Context_Memoizer $context_memoizer,
 		ContainerInterface $service_container,
 		Options_Helper $options,
+		Request_Helper $request,
 		Helpers_Surface $helpers,
 		WPSEO_Replace_Vars $replace_vars
 	) {
 		$this->container        = $service_container;
 		$this->context_memoizer = $context_memoizer;
 		$this->options          = $options;
+		$this->request          = $request;
 		$this->helpers          = $helpers;
 		$this->replace_vars     = $replace_vars;
 	}
@@ -342,7 +353,7 @@ class Front_End_Integration implements Integration_Interface {
 			return $presenters;
 		}
 
-		if ( \wp_is_serving_rest_request() ) {
+		if ( $this->request->is_rest_request() ) {
 			return $presenters;
 		}
 
@@ -548,7 +559,7 @@ class Front_End_Integration implements Integration_Interface {
 	 */
 	private function maybe_remove_title_presenter( $presenters ) {
 		// Do not remove the title if we're on a REST request.
-		if ( \wp_is_serving_rest_request() ) {
+		if ( $this->request->is_rest_request() ) {
 			return $presenters;
 		}
 

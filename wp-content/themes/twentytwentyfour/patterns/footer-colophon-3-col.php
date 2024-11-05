@@ -4,7 +4,6 @@
  * Slug: twentytwentyfour/footer-colophon-3-col
  * Categories: footer
  * Block Types: core/template-part/footer
- * Description: A footer section with a colophon and 3 columns.
  */
 ?>
 

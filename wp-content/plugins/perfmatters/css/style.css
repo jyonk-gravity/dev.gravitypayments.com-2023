@@ -142,7 +142,7 @@
   margin-right: 8px;
   color: #fff;
 }
-#perfmatters-admin .perfmatters-settings-section:last-of-type, .pm-hide-advanced .perfmatters-settings-section:has(+ .pm-advanced-option) {
+#perfmatters-admin .perfmatters-settings-section:last-of-type {
   border-bottom: none;
   padding-bottom: 0px;
   margin-bottom: 0px;
@@ -174,8 +174,7 @@
   padding: 5px;
   vertical-align: middle;
   font-size: 10px;
-  margin-left: 5px;
-  border-radius: 3px;
+  margin-left: 3px;
 }
 #pm-version {
   position: absolute;
@@ -462,19 +461,16 @@ a.perfmatters-add-input-row span.dashicons {
   align-items: center;
 }
 .perfmatters-inline-label-input span {
+  position: absolute;
+  left: 1px;
   background: #F0F0F1;
-  border: .5px solid #ccc;
-  border-right: 0px;
+  border-right: .5px solid #ccc;
   color: #8c8f94;
-  height: 29px;
+  height: 28px;
   padding: 0px 10px;
   display: inline-flex;
   align-items: center;
   border-radius: 3px 0px 0px 3px;
-}
-#perfmatters-admin .perfmatters-inline-label-input input {
-  min-width: auto;
-  border-radius: 0px 3px 3px 0px;
 }
 .perfmatters-input-row-hero {
   display: flex;

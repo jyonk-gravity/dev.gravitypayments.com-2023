@@ -2,33 +2,33 @@
     "packages": [
         {
             "name": "automattic/jetpack-assets",
-            "version": "v2.3.10",
-            "version_normalized": "2.3.10.0",
+            "version": "v2.1.13",
+            "version_normalized": "2.1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Automattic/jetpack-assets.git",
-                "reference": "8e6e9e0980ba6a4d4820ebb311c993adff4ed961"
+                "reference": "be2738e899ca46648999a6e1a7744b4da5001533"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Automattic/jetpack-assets/zipball/8e6e9e0980ba6a4d4820ebb311c993adff4ed961",
-                "reference": "8e6e9e0980ba6a4d4820ebb311c993adff4ed961",
+                "url": "https://api.github.com/repos/Automattic/jetpack-assets/zipball/be2738e899ca46648999a6e1a7744b4da5001533",
+                "reference": "be2738e899ca46648999a6e1a7744b4da5001533",
                 "shasum": ""
             },
             "require": {
-                "automattic/jetpack-constants": "^2.0.4",
+                "automattic/jetpack-constants": "^2.0.3",
                 "php": ">=7.0"
             },
             "require-dev": {
-                "automattic/jetpack-changelogger": "^4.2.6",
+                "automattic/jetpack-changelogger": "^4.2.5",
                 "brain/monkey": "2.6.1",
                 "wikimedia/testing-access-wrapper": "^1.0 || ^2.0 || ^3.0",
-                "yoast/phpunit-polyfills": "^1.1.1"
+                "yoast/phpunit-polyfills": "1.1.0"
             },
             "suggest": {
                 "automattic/jetpack-autoloader": "Allow for better interoperability with other plugins that use this package."
             },
-            "time": "2024-10-10T11:53:53+00:00",
+            "time": "2024-07-03T11:21:33+00:00",
             "type": "jetpack-library",
             "extra": {
                 "autotagger": true,
@@ -38,7 +38,7 @@
                     "link-template": "https://github.com/Automattic/jetpack-assets/compare/v${old}...v${new}"
                 },
                 "branch-alias": {
-                    "dev-trunk": "2.3.x-dev"
+                    "dev-trunk": "2.1.x-dev"
                 }
             },
             "installation-source": "dist",
@@ -56,23 +56,23 @@
             ],
             "description": "Asset management utilities for Jetpack ecosystem packages",
             "support": {
-                "source": "https://github.com/Automattic/jetpack-assets/tree/v2.3.10"
+                "source": "https://github.com/Automattic/jetpack-assets/tree/v2.1.13"
             },
             "install-path": "../../jetpack_vendor/automattic/jetpack-assets"
         },
         {
             "name": "automattic/jetpack-composer-plugin",
-            "version": "v2.0.3",
-            "version_normalized": "2.0.3.0",
+            "version": "v2.0.2",
+            "version_normalized": "2.0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Automattic/jetpack-composer-plugin.git",
-                "reference": "67d11838aa00ef9922a8a3b439b1fa25adb1feef"
+                "reference": "7f991850af6cdb10b5bf493cea9e09e5c8feae72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Automattic/jetpack-composer-plugin/zipball/67d11838aa00ef9922a8a3b439b1fa25adb1feef",
-                "reference": "67d11838aa00ef9922a8a3b439b1fa25adb1feef",
+                "url": "https://api.github.com/repos/Automattic/jetpack-composer-plugin/zipball/7f991850af6cdb10b5bf493cea9e09e5c8feae72",
+                "reference": "7f991850af6cdb10b5bf493cea9e09e5c8feae72",
                 "shasum": ""
             },
             "require": {
@@ -80,11 +80,11 @@
                 "php": ">=7.0"
             },
             "require-dev": {
-                "automattic/jetpack-changelogger": "^4.2.6",
+                "automattic/jetpack-changelogger": "^4.2.4",
                 "composer/composer": "^2.2 || ^2.4",
-                "yoast/phpunit-polyfills": "^1.1.1"
+                "yoast/phpunit-polyfills": "1.1.0"
             },
-            "time": "2024-08-26T14:48:44+00:00",
+            "time": "2024-06-03T14:01:14+00:00",
             "type": "composer-plugin",
             "extra": {
                 "plugin-modifies-install-path": true,
@@ -116,37 +116,37 @@
                 "plugin"
             ],
             "support": {
-                "source": "https://github.com/Automattic/jetpack-composer-plugin/tree/v2.0.3"
+                "source": "https://github.com/Automattic/jetpack-composer-plugin/tree/v2.0.2"
             },
             "install-path": "../automattic/jetpack-composer-plugin"
         },
         {
             "name": "automattic/jetpack-constants",
-            "version": "v2.0.4",
-            "version_normalized": "2.0.4.0",
+            "version": "v2.0.3",
+            "version_normalized": "2.0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Automattic/jetpack-constants.git",
-                "reference": "f6958c313a34c5e92171c45a57d9dc978e5975ed"
+                "reference": "f5da87d3b7f80411b77aa58a7355733ea72295aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Automattic/jetpack-constants/zipball/f6958c313a34c5e92171c45a57d9dc978e5975ed",
-                "reference": "f6958c313a34c5e92171c45a57d9dc978e5975ed",
+                "url": "https://api.github.com/repos/Automattic/jetpack-constants/zipball/f5da87d3b7f80411b77aa58a7355733ea72295aa",
+                "reference": "f5da87d3b7f80411b77aa58a7355733ea72295aa",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0"
             },
             "require-dev": {
-                "automattic/jetpack-changelogger": "^4.2.6",
+                "automattic/jetpack-changelogger": "^4.2.4",
                 "brain/monkey": "2.6.1",
-                "yoast/phpunit-polyfills": "^1.1.1"
+                "yoast/phpunit-polyfills": "1.1.0"
             },
             "suggest": {
                 "automattic/jetpack-autoloader": "Allow for better interoperability with other plugins that use this package."
             },
-            "time": "2024-08-23T14:28:14+00:00",
+            "time": "2024-05-29T09:44:58+00:00",
             "type": "jetpack-library",
             "extra": {
                 "autotagger": true,
@@ -170,72 +170,9 @@
             ],
             "description": "A wrapper for defining constants in a more testable way.",
             "support": {
-                "source": "https://github.com/Automattic/jetpack-constants/tree/v2.0.4"
+                "source": "https://github.com/Automattic/jetpack-constants/tree/v2.0.3"
             },
             "install-path": "../../jetpack_vendor/automattic/jetpack-constants"
-        },
-        {
-            "name": "franmastromarino/wp-orm",
-            "version": "dev-main",
-            "version_normalized": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/franmastromarino/wp-options-orm.git",
-                "reference": "dfec8095b65a507e19ff377d976c596ba13e4f27"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/franmastromarino/wp-options-orm/zipball/dfec8095b65a507e19ff377d976c596ba13e4f27",
-                "reference": "dfec8095b65a507e19ff377d976c596ba13e4f27",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1.0"
-            },
-            "require-dev": {
-                "10up/wp_mock": "^0.5.0",
-                "brain/monkey": "^2.6",
-                "composer/composer": "^2.1",
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-                "mockery/mockery": "^1.5",
-                "phpcompatibility/phpcompatibility-wp": "^2.1.0",
-                "phpunit/phpunit": "^9.6",
-                "squizlabs/php_codesniffer": "*",
-                "wp-coding-standards/wpcs": "^2.3.0"
-            },
-            "time": "2024-09-18T14:23:52+00:00",
-            "default-branch": true,
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "src/V2/helpers.php"
-                ],
-                "psr-4": {
-                    "QuadLayers\\WP_Orm\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "QuadLayers",
-                    "email": "noreply@quadlayers.com"
-                }
-            ],
-            "description": "A package to help developers create custom WordPress entities in their own plugins.",
-            "homepage": "https://quadlayers.com/",
-            "keywords": [
-                "autoload",
-                "wordpress"
-            ],
-            "support": {
-                "issues": "https://github.com/franmastromarino/wp-options-orm/issues",
-                "source": "https://github.com/franmastromarino/wp-options-orm/tree/dev1.2.0"
-            },
-            "install-path": "../franmastromarino/wp-orm"
         },
         {
             "name": "quadlayers/wp-dashboard-widget-news",
@@ -296,17 +233,17 @@
         },
         {
             "name": "quadlayers/wp-notice-plugin-promote",
-            "version": "1.1.5",
-            "version_normalized": "1.1.5.0",
+            "version": "1.1.4",
+            "version_normalized": "1.1.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/franmastromarino/wp-notice-plugin-promote.git",
-                "reference": "cea8e5409b2a088618c1f51c94da1d3ab6f057b2"
+                "url": "https://github.com/quadlayers/wp-notice-plugin-promote.git",
+                "reference": "f52240f7972d59a88bca17c061277b7ed12bdf17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/franmastromarino/wp-notice-plugin-promote/zipball/cea8e5409b2a088618c1f51c94da1d3ab6f057b2",
-                "reference": "cea8e5409b2a088618c1f51c94da1d3ab6f057b2",
+                "url": "https://api.github.com/repos/quadlayers/wp-notice-plugin-promote/zipball/f52240f7972d59a88bca17c061277b7ed12bdf17",
+                "reference": "f52240f7972d59a88bca17c061277b7ed12bdf17",
                 "shasum": ""
             },
             "require": {
@@ -317,7 +254,7 @@
                 "phpcompatibility/phpcompatibility-wp": "^2.1.0",
                 "wp-coding-standards/wpcs": "^2.3.0"
             },
-            "time": "2024-08-07T18:58:37+00:00",
+            "time": "2023-12-31T10:47:45+00:00",
             "type": "jetpack-library",
             "extra": {
                 "textdomain": "wp-notice-plugin-promote"
@@ -346,8 +283,8 @@
                 "wordpress"
             ],
             "support": {
-                "issues": "https://github.com/franmastromarino/wp-notice-plugin-promote/issues",
-                "source": "https://github.com/franmastromarino/wp-notice-plugin-promote/tree/1.1.5"
+                "issues": "https://github.com/quadlayers/wp-notice-plugin-promote/issues",
+                "source": "https://github.com/quadlayers/wp-notice-plugin-promote/tree/1.1.4"
             },
             "install-path": "../../jetpack_vendor/quadlayers/wp-notice-plugin-promote"
         },

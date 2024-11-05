@@ -90,11 +90,7 @@ class Website extends Abstract_Schema_Piece {
 				'@type'       => 'EntryPoint',
 				'urlTemplate' => $search_url,
 			],
-			'query-input' => [
-				'@type'          => 'PropertyValueSpecification',
-				'valueRequired'  => true,
-				'valueName'      => 'search_term_string',
-			],
+			'query-input' => 'required name=search_term_string',
 		];
 
 		return $data;

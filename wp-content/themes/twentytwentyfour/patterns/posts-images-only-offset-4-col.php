@@ -3,7 +3,6 @@
  * Title: Offset posts with featured images only, 4 columns
  * Slug: twentytwentyfour/posts-images-only-offset-4-col
  * Categories: posts
- * Description: A list of posts with featured images only, 4 columns.
  */
 ?>
 

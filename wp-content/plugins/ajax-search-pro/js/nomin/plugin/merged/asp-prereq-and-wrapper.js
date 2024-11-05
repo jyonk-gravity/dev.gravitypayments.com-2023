@@ -627,7 +627,8 @@ var __webpack_exports__ = {};
 // EXTERNAL MODULE: ./node_modules/domini/dist/domini.js
 var domini = __webpack_require__(993);
 var domini_default = /*#__PURE__*/__webpack_require__.n(domini);
-;// CONCATENATED MODULE: ./src/client/external/helpers/base64.js
+;// CONCATENATED MODULE: ./js/src/external/helpers/base64.js
+
 const Base64 = {
   // private property
   _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -684,7 +685,8 @@ const Base64 = {
 };
 /* harmony default export */ var base64 = (Base64);
 
-;// CONCATENATED MODULE: ./src/client/external/helpers/hooks-filters.js
+;// CONCATENATED MODULE: ./js/src/external/helpers/hooks-filters.js
+
 const Hooks = {
   filters: {},
   /**
@@ -742,7 +744,8 @@ const Hooks = {
 };
 /* harmony default export */ var hooks_filters = (Hooks);
 
-;// CONCATENATED MODULE: ./src/client/external/helpers/interval-until-execute.js
+;// CONCATENATED MODULE: ./js/src/external/helpers/interval-until-execute.js
+
 function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
   let t, tries = 0, res = typeof criteria === "function" ? criteria() : criteria;
   if (res === false) {
@@ -764,7 +767,8 @@ function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
 }
 ;
 
-;// CONCATENATED MODULE: ./src/client/external/helpers/swiped.js
+;// CONCATENATED MODULE: ./js/src/external/helpers/swiped.js
+
 /**
  * swiped-events.js - v@version@
  * Pure JavaScript swipe events
@@ -858,7 +862,8 @@ function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
   }
 })(window, document);
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-prereq.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-prereq.js
+
 
 
 
@@ -873,7 +878,8 @@ window.WPD.Base64 = window.WPD.Base64 || base64;
 window.WPD.Hooks = window.WPD.Hooks || hooks_filters;
 window.WPD.intervalUntilExecute = window.WPD.intervalUntilExecute || intervalUntilExecute;
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/instances.js
+;// CONCATENATED MODULE: ./js/src/plugin/wrapper/instances.js
+
 
 window._asp_instances_storage = window._asp_instances_storage || [];
 const instances = {
@@ -959,7 +965,8 @@ const instances = {
 };
 /* harmony default export */ var wrapper_instances = (instances);
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/api.ts
+;// CONCATENATED MODULE: ./js/src/plugin/wrapper/api.ts
+
 
 function api() {
   "use strict";
@@ -1005,7 +1012,8 @@ function api() {
   }
 }
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/asp.ts
+;// CONCATENATED MODULE: ./js/src/plugin/wrapper/asp.ts
+
 
 
 
@@ -1028,10 +1036,9 @@ const ASP_EXTENDED = {
       });
     });
   },
-  initializeSearchByID: function(id, instance = 0) {
+  initializeSearchByID: function(id) {
     const data = this.getInstance(id);
-    const selector = instance === 0 ? ".asp_m_" + id : ".asp_m_" + id + "_" + instance;
-    domini_default().fn._(selector).forEach(function(el) {
+    domini_default().fn._(".asp_m_" + id).forEach(function(el) {
       if (typeof el.hasAsp != "undefined") {
         return true;
       }
@@ -1062,28 +1069,23 @@ const ASP_EXTENDED = {
       return false;
     }
     if (ASP.script_async_load || ASP.init_only_in_viewport) {
-      const searches = document.querySelectorAll(".asp_w_container");
+      const searches = document.querySelectorAll(".asp_w_container, .asp_m");
       if (searches.length) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              const id2 = parseInt(entry.target.dataset.id ?? "0");
-              const instance = parseInt(entry.target.dataset.instance ?? "0");
-              this.initializeSearchByID(id2, instance);
+              const id2 = parseInt(entry.target.dataset.id || "");
+              this.initializeSearchByID(id2);
               observer.unobserve(entry.target);
             }
           });
         });
         searches.forEach(function(search) {
-          if (typeof search._is_observed !== "undefined") {
-            return;
-          }
-          search._is_observed = true;
           observer.observe(search);
         });
       }
       this.getInstances().forEach((inst, id2) => {
-        if (inst.compact.enabled) {
+        if (inst.compact.enabled && inst.compact.position === "fixed") {
           this.initializeSearchByID(id2);
         }
       });
@@ -1199,19 +1201,10 @@ const ASP_EXTENDED = {
     }
   },
   ready: function() {
-    const documentReady = () => document.readyState === "complete" || document.readyState === "interactive" || document.readyState === "loaded";
-    if (documentReady()) {
+    if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") {
       this.initialize();
     } else {
-      window.addEventListener("DOMContentLoaded", () => {
-        this.initialize();
-      });
-      document.addEventListener("readystatechange", () => {
-        ;
-        if (documentReady()) {
-          this.initialize();
-        }
-      });
+      window.addEventListener("DOMContentLoaded", () => this.initialize());
     }
   },
   init: function() {
@@ -1226,7 +1219,8 @@ const ASP_EXTENDED = {
 };
 /* harmony default export */ var asp = (ASP_EXTENDED);
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/wrapper.js
+;// CONCATENATED MODULE: ./js/src/plugin/wrapper/wrapper.js
+
 
 
 
@@ -1240,7 +1234,8 @@ function load() {
   });
 }
 
-;// CONCATENATED MODULE: ./src/client/bundle/merged/asp-prereq-and-wrapper.js
+;// CONCATENATED MODULE: ./js/src/bundle/merged/asp-prereq-and-wrapper.js
+
 
 
 (function() {

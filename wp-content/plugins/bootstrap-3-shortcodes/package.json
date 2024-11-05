@@ -1,7 +1,0 @@
-{
-  "name": "bootstrap-3-shortcodes",
-  "devDependencies": {
-    "grunt": "~0.4.4",
-    "grunt-markdown": "latest"
-  }
-}

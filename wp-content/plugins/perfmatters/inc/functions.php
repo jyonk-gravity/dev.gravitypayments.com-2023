@@ -1395,8 +1395,7 @@ function perfmatters_is_page_builder() {
     	'breakdance_iframe',
     	'givewp-route', //givewp
     	'gb-template-viewer', //generateblocks
-    	'trp-edit-translation', //translatepress
-    	'td_action' //tagdiv
+    	'trp-edit-translation' //translatepress
 	));
 
 	if(!empty($page_builders)) {
@@ -1499,7 +1498,7 @@ function perfmatters_activate_license($network = false) {
 				return true;
 			}
 			else {
-				update_option('perfmatters_edd_license_status', $license_data->license, false);
+				update_option('perfmatters_edd_license_status', $license_data->license);
 				return true;
 			}
 		}
@@ -1580,7 +1579,7 @@ function perfmatters_check_license($network = false) {
 			update_site_option('perfmatters_edd_license_status', $license_data->license);
 		}
 		else {
-			update_option('perfmatters_edd_license_status', $license_data->license, false);
+			update_option('perfmatters_edd_license_status', $license_data->license);
 		}
 		
 		//return license data for use

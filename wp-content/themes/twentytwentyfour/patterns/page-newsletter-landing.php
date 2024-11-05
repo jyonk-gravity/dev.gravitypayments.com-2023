@@ -2,12 +2,11 @@
 /**
  * Title: Newsletter landing
  * Slug: twentytwentyfour/page-newsletter-landing
- * Categories: call-to-action, twentytwentyfour_page, featured
+ * Categories: call-to-action, page, featured
  * Keywords: starter
  * Block Types: core/post-content
  * Post Types: page, wp_template
  * Viewport width: 1100
- * Description: A block with a newsletter subscription CTA for a landing page.
  */
 ?>
 

@@ -366,8 +366,7 @@ class Image_Helper {
 	}
 
 	/**
-	 * Based on and image ID return array with the best variation of that image. If it's not saved to the DB,  save it
-	 * to an option.
+	 * Based on and image ID return array with the best variation of that image. If it's not saved to the DB,  save it to an option.
 	 *
 	 * @param string $setting The setting name. Should be company or person.
 	 *

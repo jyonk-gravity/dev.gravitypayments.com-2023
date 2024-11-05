@@ -4,8 +4,8 @@ Donate link: https://perfmatters.io
 Tags: perfmatters
 Requires at least: 5.5
 Requires PHP: 7.0
-Tested up to: 6.6.2
-Stable tag: 2.3.4
+Tested up to: 6.6.1
+Stable tag: 2.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,6 @@ Perfmatters is a lightweight performance plugin developed to speed up your WordP
 * Disable scripts and plugins on a per post/page or sitewide basis with the Script Manager. 
 * Defer and delay JavaScript, including third-party scripts.
 * Automatically remove unused CSS.
-* Minify JavaScript and CSS.
 * Preload resources, critical images, and prefetch links for quicker load times.
 * Lazy load images and enable click-to-play thumbnails on videos.
 * Host Google Analytics and Google Fonts locally.
@@ -35,35 +34,6 @@ Perfmatters is a lightweight performance plugin developed to speed up your WordP
 Check out our [documentation](https://perfmatters.io/docs/) for more information on how to use Perfmatters.
 
 == Changelog ==
-
-= 2.3.4 - 10.10.2024 =
-* Added new perfmatters_lazy_elements filter.
-* Added new perfmatters_is_woocommerce filter.
-* Added additional built-in stylesheet and selector exclusions for better compatibility with Elementor animations.
-* Added WP Rocket filter to disable lazy render when lazy elements feature is active to prevent conflicts.
-* Added additional parameter to excluded page builders array for tagDiv Composer.
-* Added built-in delay JS exclusion for lazy elements inline script.
-* Moved plugin settings logo SVG back to inline to prevent file_get_contents errors in certain environments.
-* Adjusted built-in CSS dynamic selector exclusions to fix some minor visual issues with a few page builders.
-* Fixed a JavaScript error that would sometimes show up in the console when using Delay JS with click delay enabled.
-* Fixed an issue where a used stylesheet path would still attempt to load even if no used styles had been picked up for the URL.
-* Fixed an issue where browser-specific stylesheets inside HTML comments were getting parsed by our used CSS library.
-* Fixed a MU Mode issue where exceptions would not be applied correctly if a query string was present on the home URL if set to show the latest posts.
-* Fixed an issue where preloading a JS file by the handle was not loading the minified version when necessary.
-
-= 2.3.3 - 08.28.2024 =
-* Added new lazy loading advanced beta options to manage Lazy Elements which will allow for element chains in the DOM to be lazy loaded until they enter the viewport.
-* Separated out built-in CSS selector exclusions by URL type for increased performance on single and front pages.
-* Optimized plugin logo and other SVG image files.
-* Added fetchpriority high attribute automatically on critically preloaded image links.
-* Added support for delaying script modules.
-* Added additional jQuery sticky JavaScript file to Elementor quick exclusion.
-* Added new Delay JS quick exclusions for Fluent Forms and Fluent Forms Pro.
-* Integrated get_atts_array utility function into lazyload class to prevent redundancy.
-* Fixed an issue where smaller size files were sometimes not being replaced with the minified version for increased performance.
-* Fixed an issue where the preload location label was overlapping the input field for certain languages.
-* Made adjustments to option management to prevent autoloading of certain options going forward where it is not needed.
-* Removed various manual preload types that are no longer supported by most major browsers.
 
 = 2.3.2 - 07.30.2024 =
 * Updated CSS parsing library to the latest version (8.6.0) which should help with correctly parsing mathematical operations inside CSS property values.

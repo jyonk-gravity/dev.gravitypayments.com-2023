@@ -5,7 +5,7 @@
 * Description: Order Post Types Objects using a Drag and Drop Sortable javascript capability
 * Author: Nsp Code
 * Author URI: http://www.nsp-code.com 
-* Version: 5.5.2
+* Version: 5.3.5
 * Requires PHP: 5.2
 * Requires at least: 4.1
 * PHP tested up to: 8.2.4
@@ -16,7 +16,7 @@
     define('APTO_URL_PROTOCOL',     plugins_url('', __FILE__));
     define('APTO_URL',              str_replace(array('https:', 'http:'), "", APTO_URL_PROTOCOL));
 
-    define('APTO_VERSION',          '5.5.2');
+    define('APTO_VERSION',          '5.3.5');
     define('APTO_DB_VERSION',       '1.1');
     define('APTO_APP_API_URL',      'https://api.nsp-code.com/index.php'); 
     
@@ -30,19 +30,7 @@
     add_action( 'plugins_loaded', 'apto_load_textdomain'); 
     function apto_load_textdomain() 
         {
-            $locale             =   get_locale();
-            $plugin_textdomain  =   'apto';
-
-            // Check if the specific translation file exists
-            if (file_exists( APTO_PATH . "/languages/$plugin_textdomain-$locale.mo")) {
-                load_textdomain( $plugin_textdomain, APTO_PATH . "/languages/$plugin_textdomain-$locale.mo" );
-            } else {
-                $general_locale = substr($locale, 0, 2);
-                $general_mofile = APTO_PATH . "/languages/$plugin_textdomain-$general_locale.mo";
-                
-                if (file_exists($general_mofile))
-                    load_textdomain( $plugin_textdomain, $general_mofile );
-            }
+            load_plugin_textdomain('apto', FALSE, dirname( plugin_basename( __FILE__ ) ) . '/lang');
         }
 
     

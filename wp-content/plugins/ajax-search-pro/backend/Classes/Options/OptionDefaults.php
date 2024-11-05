@@ -799,6 +799,7 @@ class OptionDefaults {
 
         'hreswidth' => '150px',
         'h_res_show_scrollbar' => 1,
+        'hor_img_height' => '150px',
         'horizontal_res_height' => 'auto',
         'hressidemargin' => '8px',
         'hrespadding' => '7px',

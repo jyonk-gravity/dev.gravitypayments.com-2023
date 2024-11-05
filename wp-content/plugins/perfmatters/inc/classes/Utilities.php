@@ -90,7 +90,10 @@ class Utilities
 
     //check for specific woocommerce pages
     public static function is_woocommerce() {
-        return apply_filters('perfmatters_is_woocommerce', class_exists('WooCommerce') && (is_cart() || is_checkout() || is_account_page()));
+        if(class_exists('WooCommerce') && (is_cart() || is_checkout() || is_account_page())) {
+            return true;
+        }
+        return false;
     }
 
     //return root directory path

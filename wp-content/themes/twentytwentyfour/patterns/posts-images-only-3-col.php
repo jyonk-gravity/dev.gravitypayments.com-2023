@@ -4,7 +4,6 @@
  * Slug: twentytwentyfour/posts-images-only-3-col
  * Categories: query
  * Block Types: core/query
- * Description: A list of posts with featured images only, 3 columns.
  */
 ?>
 

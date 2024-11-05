@@ -33,7 +33,8 @@ __webpack_require__.d(__webpack_exports__, {
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
 ;// CONCATENATED MODULE: external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_vertical.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/results_vertical.js
+
 
 
 "use strict";
@@ -122,7 +123,8 @@ external_AjaxSearchPro_namespaceObject.plugin.showVerticalResults = function() {
 };
 /* harmony default export */ var results_vertical = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-vertical.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-results-vertical.js
+
 
 
 /* harmony default export */ var asp_results_vertical = (external_AjaxSearchPro_namespaceObject);

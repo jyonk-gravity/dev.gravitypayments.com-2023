@@ -33,7 +33,8 @@ __webpack_require__.d(__webpack_exports__, {
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
 ;// CONCATENATED MODULE: external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/isotopic.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/isotopic.js
+
 
 
 "use strict";
@@ -92,7 +93,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initIsotopicPagination = function(
 };
 /* harmony default export */ var isotopic = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_isotopic.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/results_isotopic.js
+
 
 
 "use strict";
@@ -326,7 +328,8 @@ external_AjaxSearchPro_namespaceObject.plugin.calculateIsotopeRows = function() 
 };
 /* harmony default export */ var results_isotopic = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-isotopic.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-results-isotopic.js
+
 
 
 

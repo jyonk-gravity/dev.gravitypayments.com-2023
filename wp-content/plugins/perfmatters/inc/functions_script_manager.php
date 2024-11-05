@@ -1208,7 +1208,7 @@ function perfmatters_script_manager_update() {
 		//clean up the options array before saving
 		perfmatters_script_manager_filter_options($options);
 
-		if(update_option('perfmatters_script_manager', $options, false)) {
+		if(update_option('perfmatters_script_manager', $options)) {
 			echo 'update_success';
 		}
 		elseif($options == $options_old) {

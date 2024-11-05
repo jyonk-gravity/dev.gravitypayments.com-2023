@@ -259,13 +259,11 @@ ob_start();
 ?>
 <?php $css_for_tablet = ob_get_clean(); ?>
 <?php $css_for_tablet = trim( preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $css_for_tablet) ); ?>
-<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
-		$css_for_tablet,
-		'tablet',
-		$style['media_query_mobile_max_width']+1,
-		$style['media_query_tablet_max_width'],
-		$preview ?? false
-); ?>
+<?php if ( $css_for_tablet != '' ): ?>
+@media only screen and (min-width: 641px) and (max-width: 1024px) {
+    <?php echo $css_for_tablet; ?>
+}
+<?php endif; ?>
 
 <?php
 // ----------------------------------------- PHONE SPECIFIC STYLES -----------------------------------------------------
@@ -293,10 +291,9 @@ ob_start();
 // ---------------------------------------------------------------------------------------------------------------------
 ?>
 <?php $css_for_phone = ob_get_clean(); ?>
-<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
-		$css_for_phone,
-		'phone',
-		0,
-		$style['media_query_mobile_max_width'],
-		$preview ?? false
-); ?>
+<?php $css_for_phone = trim( preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $css_for_phone) ); ?>
+<?php if ( $css_for_phone != '' ): ?>
+@media only screen and (max-width: 640px) {
+    <?php echo $css_for_phone; ?>
+}
+<?php endif; ?>

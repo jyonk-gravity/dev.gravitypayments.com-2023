@@ -293,13 +293,8 @@ function pmPreloadDelayedScripts() {
         if(src) {
             var link = document.createElement("link");
             link.href = src;
-            if(script.getAttribute("data-perfmatters-type") == "module") {
-                link.rel = "modulepreload";
-            }
-            else {
-                link.rel = "preload";
-                link.as = "script";
-            }
+            link.rel = "preload";
+            link.as = "script";
             preloadFragment.appendChild(link);
         }
     });
@@ -341,7 +336,7 @@ async function pmReplaceScript(script) {
             if(attributeName !== "type") {
 
                 //swap data-type if needed
-                if(attributeName === "data-perfmatters-type") {
+                if(attributeName === "data-type") {
                     attributeName = "type";
                 }
 
@@ -429,7 +424,7 @@ function pmWaitForPendingClicks() {
         window.pmIsClickPending ? (pmPendingClickFinished = t) : t();
     });
 }
-function pmPendingClickStarted() {
+function pmPndingClickStarted() {
     window.pmIsClickPending = true;
 }
 function pmPendingClickFinished() {

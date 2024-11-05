@@ -408,12 +408,8 @@
 .about__container h2,
 .about__container h3,
 .about__container h4 {
-	text-wrap: pretty;
-	color: inherit;
-}
-
-.about__container :is(h1, h2, h3, h4):lang(en) {
 	text-wrap: balance;
+	color: inherit;
 }
 
 .about__container p {

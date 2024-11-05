@@ -736,8 +736,6 @@ function acf_block_render_template( $block, $content, $is_preview, $post_id, $wp
 	// Include template.
 	if ( file_exists( $path ) ) {
 		include $path;
-	} elseif ( $is_preview ) {
-		echo acf_esc_html( apply_filters( 'acf/blocks/template_not_found_message', '<p>' . __( 'The render template for this ACF Block was not found', 'acf' ) . '</p>' ) );
 	}
 }
 
@@ -817,7 +815,7 @@ function acf_enqueue_block_assets() {
 	);
 
 	// Enqueue script.
-	$min = defined( 'ACF_DEVELOPMENT_MODE' ) && ACF_DEVELOPMENT_MODE ? '' : '.min';
+	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 	$blocks_js_path = acf_get_url( "assets/build/js/pro/acf-pro-blocks{$min}.js" );
 

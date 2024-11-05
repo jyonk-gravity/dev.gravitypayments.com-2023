@@ -33,7 +33,8 @@ __webpack_require__.d(__webpack_exports__, {
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
 ;// CONCATENATED MODULE: external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/addons/divi.js
+;// CONCATENATED MODULE: ./js/src/addons/divi.js
+
 
 
 const helpers = external_AjaxSearchPro_namespaceObject.helpers;
@@ -58,7 +59,8 @@ class DiviAddon {
 external_AjaxSearchPro_namespaceObject.addons.add(new DiviAddon());
 /* harmony default export */ var divi = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-addons-divi.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-addons-divi.js
+
 
 
 /* harmony default export */ var asp_addons_divi = (external_AjaxSearchPro_namespaceObject);

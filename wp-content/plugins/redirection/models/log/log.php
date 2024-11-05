@@ -366,13 +366,7 @@ abstract class Red_Log {
 		}
 
 		if ( isset( $filter['agent'] ) ) {
-			$agent = trim( $filter['agent'] );
-
-			if ( empty( $agent ) ) {
-				$where[] = $wpdb->prepare( 'agent = %s', $agent );
-			} else {
-				$where[] = $wpdb->prepare( 'agent LIKE %s', '%' . $wpdb->esc_like( $agent ) . '%' );
-			}
+			$where[] = $wpdb->prepare( 'agent LIKE %s', '%' . $wpdb->esc_like( trim( $filter['agent'] ) ) . '%' );
 		}
 
 		if ( isset( $filter['http'] ) ) {

@@ -109,10 +109,6 @@
                     if (isset($_GET['author']))
                         return false;
                     
-                    //Provide a way to disable the drag & drop in certain scenarios
-                    if ( ! apply_filters( 'apto/default_interface_sort/allow', TRUE, $matched_sort_id ) )
-                        return;
-                    
                     
                     global $wp_query;
                     

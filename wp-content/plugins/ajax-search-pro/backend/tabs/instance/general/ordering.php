@@ -26,8 +26,6 @@
 		    array('option' => __('ID ascending', 'ajax-search-pro'), 'value' => 'id ASC'),
 		    array('option' => __('Menu order descending', 'ajax-search-pro'), 'value' => 'menu_order DESC'),
 		    array('option' => __('Menu order ascending', 'ajax-search-pro'), 'value' => 'menu_order ASC'),
-		    array('option' => __('Author descending', 'ajax-search-pro'), 'value' => 'author DESC'),
-		    array('option' => __('Author ascending', 'ajax-search-pro'), 'value' => 'author ASC'),
 		    array('option' => __('Random', 'ajax-search-pro'), 'value' => 'RAND()'),
 	    );
         $o = new wpdreamsCustomSelect("orderby_primary", __('Primary ordering', 'ajax-search-pro'),
@@ -55,13 +53,13 @@
         ?>
     </div>
     <div class="item wd-secondary-order item-flex-nogrow item-flex-wrap"><?php
-        $o = new wpdreamsCustomSelect("orderby_secondary", __('Secondary ordering', 'ajax-search-pro'),
+        $o = new wpdreamsCustomSelect("orderby", __('Secondary ordering', 'ajax-search-pro'),
             array(
 	            'selects' => array_merge($common_orders, array(
 		            array('option' => __('Custom Field descending', 'ajax-search-pro'), 'value' => 'customfs DESC'),
 		            array('option' => __('Custom Field  ascending', 'ajax-search-pro'), 'value' => 'customfs ASC')
 	            )),
-                'value' => $sd['orderby_secondary']
+                'value' => $sd['orderby']
             ));
         $params[$o->getName()] = $o->getData();
 

@@ -135,9 +135,6 @@ class Walker {
 			return;
 		}
 
-		$max_depth = (int) $max_depth;
-		$depth     = (int) $depth;
-
 		$id_field = $this->db_fields['id'];
 		$id       = $element->$id_field;
 
@@ -193,8 +190,6 @@ class Walker {
 	 */
 	public function walk( $elements, $max_depth, ...$args ) {
 		$output = '';
-
-		$max_depth = (int) $max_depth;
 
 		// Invalid parameter or nothing to walk.
 		if ( $max_depth < -1 || empty( $elements ) ) {
@@ -290,13 +285,11 @@ class Walker {
 	 * @return string XHTML of the specified page of elements.
 	 */
 	public function paged_walk( $elements, $max_depth, $page_num, $per_page, ...$args ) {
-		$output = '';
-
-		$max_depth = (int) $max_depth;
-
 		if ( empty( $elements ) || $max_depth < -1 ) {
-			return $output;
+			return '';
 		}
+
+		$output = '';
 
 		$parent_field = $this->db_fields['parent'];
 

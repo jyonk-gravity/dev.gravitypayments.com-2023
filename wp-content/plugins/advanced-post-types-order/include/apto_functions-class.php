@@ -5,8 +5,6 @@
             var $conditional_rules  = '';
             
             var $is_woocommerce;
-            
-            var $auto_apply_sticky  =   FALSE;
                
             function __construct()
                 {
@@ -236,9 +234,7 @@
                                             '_auto_custom_field_name'       =>  '',
                                             '_auto_custom_field_type'       =>  '',
                                             '_auto_custom_function_name'    =>  '',
-                                            '_auto_order'                   =>  'DESC',
-                                            
-                                            '_auto_apply_sticky_posts'      =>  'no'
+                                            '_auto_order'                   =>  'DESC'
                                         );
                     $settings          = wp_parse_args( $settings, $defaults );
                     
@@ -403,8 +399,6 @@
             
             function query_get_orderby( $orderBy, $query, $sorts_match_filter = array() )
                 {
-                    $this->auto_apply_sticky    =   FALSE;
-                    
                     //filter the query for unnecesarelly data;  i.e. empty taxonomy rules
                     $query          =   $this->query_filter_valid_data($query);
 
@@ -441,18 +435,6 @@
                             $new_orderBy    =   apply_filters('apto_get_orderby', $new_orderBy, $orderBy, $query);
                             
                             $new_orderBy    =   apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query, FALSE);
-                            
-                            //check if apply the sticky
-                            if ( $sort_view_settings['_auto_apply_sticky_posts']    === 'yes' )
-                                {
-                                    $sticky_list = get_post_meta( $sort_view_id , '_sticky_data', TRUE );
-                                    if ( is_array ( $sticky_list )    &&  count ( $sticky_list ) > 0 )
-                                        {
-                                            $this->auto_apply_sticky    =   md5 ( json_encode( $query->query ) );
-                                            $this->auto_apply_sticky_sort_view_id   =   $sort_view_id;
-                                            add_filter ( 'posts_request', array ( $this, 'auto_sticky_posts_request' ), 999, 2 );
-                                        }
-                                }
                             
                             return $new_orderBy;
 
@@ -1309,85 +1291,8 @@
                     return $orderBy;
                 }
                     
-                        
-            
-            function auto_sticky_posts_request( $request, $object )
-                {
-                    if ( $this->auto_apply_sticky   === FALSE )
-                        return $request_data;
-                        
-                    remove_filter( 'posts_request', array ( $this, 'auto_sticky_posts_request'), 999 );
-                    
-                    $check_query_md5  =   $this->auto_apply_sticky;
-                    
-                    if ( $check_query_md5 !=    md5 ( json_encode ( $object->query ) ) )    
-                        return $pieces;
-                        
-                    $this->auto_apply_sticky    =   FALSE;
-                    
-                    global $wpdb;
-                    
-                    $edit_query =   preg_replace( '/SELECT\s+.*?\s+FROM/i', 'SELECT ' . $wpdb->posts . '.ID FROM ', $request );
-                    
-                    $sticky_list = get_post_meta( $this->auto_apply_sticky_sort_view_id , '_sticky_data', TRUE );
-                    end( $sticky_list );
-                    $edit_query =   preg_replace( '/\bLIMIT\s+\d+\s*(,\s*\d+)?/i', 'LIMIT ' . key ( $sticky_list ), $edit_query );
-                    
-                    if ( empty ( $edit_query ) )
-                        return $request;
-                        
-                    try {
-                        $query_posts = $wpdb->get_results( $edit_query );
-                    } catch (Exception $e) {
-                        return $request;
-                    }
-                    
-                    $insert_Order_By    =   '  CASE
-                                            ';
-                    
-                    $query_post_ids =   array();                          
-                    foreach ( $query_posts as    $query_post )
-                        {
-                            $query_post_ids[]   =   $query_post->ID;      
-                        }
-                        
-                    foreach ( $sticky_list  as  $key    =>  $post_id )
-                        {
-                            $already_exists    =   array_search ( $post_id, $query_post_ids );
-                            if ( $already_exists !==    FALSE )
-                                {
-                                    unset ( $query_post_ids[ $already_exists ] );
-                                    $query_post_ids =   array_values ( $query_post_ids );
-                                }
-                                
-                            array_splice( $query_post_ids, $key - 1, 0, $post_id);
-                        }
-                    
-                    foreach ( $query_post_ids   as  $key    =>  $post_id )
-                        {
-                            $insert_Order_By    .=   'WHEN ID = '. $post_id .' THEN '. $key .' ';
-                        }
-                                              
-                    $insert_Order_By    .=   '  ELSE 9999  
-                                              END,';
-                                              
-                    $edit_query               = preg_replace ( '/\bORDER\s+BY\s+([^\s;]+(?:\s+[^\s;]+)*)(?=\s+(?:LIMIT|OFFSET|GROUP\s+BY|HAVING|UNION|$))/i' , 'ORDER BY ' . $insert_Order_By . ' $1', $request );
-                    
-                    if ( ! empty ( $edit_query ) )
-                        return $edit_query;
-                    
-                    return $request;    
-                }
-            
-            
-            
-            /**
-            * Return a sort by specified arguments
-            *     
-            * @param mixed $sort_filters
-            * @param mixed $post_column_filters
-            */
-            static function get_sorts_by_filters ( $sort_filters = array(), $post_column_filters = array() )
+                
+            static function get_sorts_by_filters($sort_filters = array(), $post_column_filters = array())
                 {
                     $defaults   = array (
                                             'post_parent'               =>  '0',
@@ -2176,13 +2081,7 @@
                     return  $query_pieces;   
                 }
                 
-            
-            /**
-            * Return a Sort View list of sorted objects
-            * 
-            * @param mixed $sort_view_id
-            */
-            static public function get_order_list( $sort_view_id )
+            function get_order_list( $sort_view_id )
                 {
                     if ( empty ( $sort_view_id ) )
                         return FALSE;
@@ -2324,7 +2223,7 @@
             * @param mixed $sortID      This is the main sort ID holder
             * @param mixed $attr
             */
-            static public function get_sort_view_id_by_attributes( $sortID, $attr )
+            static function get_sort_view_id_by_attributes($sortID, $attr)
                 {
                     $defaults   = array (
                                             '_view_selection'          =>  'archive'
@@ -2469,7 +2368,7 @@
                 }
                 
                             
-            static public function get_blog_language()
+            static function get_blog_language()
                 {
                     $language   =   '';
                     
@@ -2625,7 +2524,7 @@
                     return $language;   
                 }
             
-            static public function delete_sort_list_from_table($sort_view_id)
+            function delete_sort_list_from_table($sort_view_id)
                 {
                     global  $wpdb;
                     
@@ -3588,7 +3487,7 @@
                             @unlink(FLYING_PRESS_CACHE_DIR . '/preload.txt');
 
                             // Delete all files and subdirectories
-                            FlyingPress\Purge::purge_everything();
+                            $this->rrmdir( FLYING_PRESS_CACHE_DIR );
 
                             @mkdir(FLYING_PRESS_CACHE_DIR, 0755, true);
 

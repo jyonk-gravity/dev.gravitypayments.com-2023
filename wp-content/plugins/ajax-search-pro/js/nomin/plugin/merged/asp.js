@@ -627,7 +627,8 @@ var __webpack_exports__ = {};
 // EXTERNAL MODULE: ./node_modules/domini/dist/domini.js
 var domini = __webpack_require__(993);
 var domini_default = /*#__PURE__*/__webpack_require__.n(domini);
-;// CONCATENATED MODULE: ./src/client/external/helpers/base64.js
+;// CONCATENATED MODULE: ./js/src/external/helpers/base64.js
+
 const Base64 = {
   // private property
   _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -684,7 +685,8 @@ const Base64 = {
 };
 /* harmony default export */ var base64 = (Base64);
 
-;// CONCATENATED MODULE: ./src/client/external/helpers/hooks-filters.js
+;// CONCATENATED MODULE: ./js/src/external/helpers/hooks-filters.js
+
 const Hooks = {
   filters: {},
   /**
@@ -742,7 +744,8 @@ const Hooks = {
 };
 /* harmony default export */ var hooks_filters = (Hooks);
 
-;// CONCATENATED MODULE: ./src/client/external/helpers/interval-until-execute.js
+;// CONCATENATED MODULE: ./js/src/external/helpers/interval-until-execute.js
+
 function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
   let t, tries = 0, res = typeof criteria === "function" ? criteria() : criteria;
   if (res === false) {
@@ -764,7 +767,8 @@ function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
 }
 ;
 
-;// CONCATENATED MODULE: ./src/client/external/helpers/swiped.js
+;// CONCATENATED MODULE: ./js/src/external/helpers/swiped.js
+
 /**
  * swiped-events.js - v@version@
  * Pure JavaScript swipe events
@@ -858,7 +862,8 @@ function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
   }
 })(window, document);
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-prereq.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-prereq.js
+
 
 
 
@@ -873,7 +878,8 @@ window.WPD.Base64 = window.WPD.Base64 || base64;
 window.WPD.Hooks = window.WPD.Hooks || hooks_filters;
 window.WPD.intervalUntilExecute = window.WPD.intervalUntilExecute || intervalUntilExecute;
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/base.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/base.js
+
 const base_AjaxSearchPro = new function() {
   this.helpers = {};
   this.plugin = {};
@@ -901,7 +907,8 @@ const base_AjaxSearchPro = new function() {
 }();
 /* harmony default export */ var base = (base_AjaxSearchPro);
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/etc/helpers.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/etc/helpers.js
+
 
 
 "use strict";
@@ -1105,7 +1112,8 @@ base.helpers.isScrolledToLeft = function(el) {
 };
 /* harmony default export */ var helpers = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/animation.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/animation.js
+
 
 
 "use strict";
@@ -1144,7 +1152,8 @@ base.plugin.removeAnimation = function() {
 };
 /* harmony default export */ var animation = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/filters.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/filters.js
+
 
 
 "use strict";
@@ -1199,7 +1208,8 @@ base.plugin.resetNoUISliderFilters = function() {
 };
 /* harmony default export */ var filters = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/loader.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/loader.js
+
 
 
 "use strict";
@@ -1244,7 +1254,8 @@ base.plugin.hideLoader = function() {
 };
 /* harmony default export */ var loader = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/other.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/other.js
+
 
 
 "use strict";
@@ -1341,7 +1352,8 @@ base.plugin.destroy = function() {
 };
 /* harmony default export */ var other = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/redirect.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/redirect.js
+
 
 
 "use strict";
@@ -1508,7 +1520,8 @@ base.plugin.parseCustomRedirectURL = function(url, phrase) {
 };
 /* harmony default export */ var redirect = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/results.js
+
 
 
 "use strict";
@@ -1733,7 +1746,8 @@ base.plugin.updateInfoHeader = function(totalCount) {
   }
 };
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/scroll.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/scroll.js
+
 
 
 "use strict";
@@ -1782,7 +1796,8 @@ base.plugin.checkAndTriggerInfiniteScroll = function(caller) {
   }
 };
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/search.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/search.js
+
 
 
 "use strict";
@@ -2065,7 +2080,8 @@ base.plugin.search = function(count, order, recall, apiCall, supressInvalidMsg) 
 };
 /* harmony default export */ var search = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/etc/api.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/etc/api.js
+
 
 
 "use strict";
@@ -2146,7 +2162,8 @@ base.plugin.filtersChanged = function() {
 };
 /* harmony default export */ var api = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/etc/position.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/etc/position.js
+
 
 
 "use strict";
@@ -2292,7 +2309,8 @@ base.plugin.hideOnInvisibleBox = function() {
 };
 /* harmony default export */ var position = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/button.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/button.js
+
 
 
 "use strict";
@@ -2373,7 +2391,8 @@ base.plugin.initButtonEvents = function() {
 };
 /* harmony default export */ var events_button = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/input.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/input.js
+
 
 
 "use strict";
@@ -2514,7 +2533,8 @@ base.plugin._initFormEvent = function() {
 };
 /* harmony default export */ var input = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/navigation.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/navigation.js
+
 
 
 "use strict";
@@ -2569,7 +2589,8 @@ base.plugin.initNavigationEvents = function() {
 };
 /* harmony default export */ var navigation = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/other.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/other.js
+
 
 
 "use strict";
@@ -2746,7 +2767,8 @@ base.plugin.initSelect2 = function() {
 };
 /* harmony default export */ var events_other = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/results.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/results.js
+
 
 
 "use strict";
@@ -2807,7 +2829,8 @@ base.plugin.initResultsEvents = function() {
 };
 /* harmony default export */ var results = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/touch.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/touch.js
+
 
 
 "use strict";
@@ -2822,7 +2845,8 @@ base.plugin.monitorTouchMove = function() {
 };
 /* harmony default export */ var touch = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/autopopulate.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/autopopulate.js
+
 
 "use strict";
 base.plugin.initAutop = function() {
@@ -2851,7 +2875,8 @@ base.plugin.initAutop = function() {
 };
 /* harmony default export */ var autopopulate = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/etc.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/etc.js
+
 
 
 "use strict";
@@ -2919,7 +2944,8 @@ base.plugin.hooks = function() {
 };
 /* harmony default export */ var etc = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/init.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/init.js
+
 
 
 "use strict";
@@ -3120,7 +3146,8 @@ base.plugin.initEvents = function() {
 };
 /* harmony default export */ var init = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/results.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/results.js
+
 
 
 "use strict";
@@ -3216,7 +3243,8 @@ base.plugin.initResultsAnimations = function() {
 };
 /* harmony default export */ var init_results = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/widgets/widgets.js
+;// CONCATENATED MODULE: ./js/src/plugin/widgets/widgets.js
+
 
 "use strict";
 domini(function() {
@@ -3245,7 +3273,8 @@ domini(function() {
   });
 });
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-core.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-core.js
+
 
 
 
@@ -3271,7 +3300,8 @@ domini(function() {
 
 /* harmony default export */ var asp_core = (base);
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/autocomplete.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/autocomplete.js
+
 
 
 "use strict";
@@ -3351,7 +3381,8 @@ base.plugin.fixAutocompleteScrollLeft = function() {
 };
 /* harmony default export */ var autocomplete = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/autocomplete.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/autocomplete.js
+
 
 
 "use strict";
@@ -3392,13 +3423,15 @@ base.plugin.initAutocompleteEvent = function() {
 };
 /* harmony default export */ var events_autocomplete = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-autocomplete.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-autocomplete.js
+
 
 
 
 /* harmony default export */ var asp_autocomplete = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/compact.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/compact.js
+
 
 
 "use strict";
@@ -3428,7 +3461,8 @@ base.plugin.initCompact = function() {
 };
 /* harmony default export */ var compact = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/compact.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/compact.js
+
 
 
 "use strict";
@@ -3543,7 +3577,8 @@ base.plugin.closeCompact = function() {
 };
 /* harmony default export */ var actions_compact = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/compact.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/compact.js
+
 
 
 "use strict";
@@ -3567,14 +3602,16 @@ base.plugin.initCompactEvents = function() {
 };
 /* harmony default export */ var events_compact = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-compact.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-compact.js
+
 
 
 
 
 /* harmony default export */ var asp_compact = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/ga_events.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/ga_events.js
+
 
 
 "use strict";
@@ -3651,12 +3688,14 @@ base.plugin.gaGetTrackingID = function() {
 };
 /* harmony default export */ var ga_events = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-ga.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-ga.js
+
 
 
 /* harmony default export */ var asp_ga = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/live.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/live.js
+
 
 
 "use strict";
@@ -3790,45 +3829,9 @@ base.plugin.liveLoad = function(origSelector, url, updateLocation, forceAjax, ca
     }
   }
 };
-base.plugin.getLiveLoadAltSelectors = function() {
-  return [
-    ".search-content",
-    "#content #posts-container",
-    "#content",
-    "#Content",
-    "div[role=main]",
-    "main[role=main]",
-    "div.theme-content",
-    "div.td-ss-main-content",
-    "main#page-content",
-    "main.l-content",
-    "#primary",
-    "#main-content",
-    ".main-content",
-    ".search section .bde-post-loop",
-    // breakdance posts loop section search archive
-    ".archive section .bde-post-loop",
-    // breakdance posts loop section general archive
-    ".search section .bde-post-list",
-    // breakdance posts list section search archive
-    ".archive section .bde-post-list"
-    // breakdance posts list section general archive
-  ];
-};
 base.plugin.usingLiveLoader = function() {
-  const $this = this;
-  if ($this._usingLiveLoader !== void 0) return $this._usingLiveLoader;
-  const o = $this.o;
-  const idClass = "asp_es_" + o.id;
-  const altSelectors = this.getLiveLoadAltSelectors().join(",");
-  if (document.getElementsByClassName(idClass).length) {
-    return $this._usingLiveLoader = true;
-  }
-  const options = ["resPage", "wooShop", "cptArchive", "taxArchive"];
-  $this._usingLiveLoader = options.some((key) => {
-    const opt = o[key];
-    return opt.useAjax && (document.querySelector(opt.selector) || altSelectors && document.querySelector(altSelectors));
-  });
+  let $this = this;
+  $this._usingLiveLoader = typeof $this._usingLiveLoader == "undefined" ? domini(".asp_es_" + $this.o.id).length > 0 || $this.o.resPage.useAjax && domini($this.o.resPage.selector).length > 0 || $this.o.wooShop.useAjax && domini($this.o.wooShop.selector).length > 0 || $this.o.cptArchive.useAjax && domini($this.o.cptArchive.selector).length > 0 || $this.o.taxArchive.useAjax && domini($this.o.taxArchive.selector).length > 0 : $this._usingLiveLoader;
   return $this._usingLiveLoader;
 };
 base.plugin.getLiveURLbyBaseLocation = function(location) {
@@ -3842,11 +3845,8 @@ base.plugin.getLiveURLbyBaseLocation = function(location) {
   return final;
 };
 base.plugin.getCurrentLiveURL = function() {
-  const $this = this;
-  const url = new URL(window.location.href);
-  let location;
-  url.hash = "";
-  location = url.href;
+  let $this = this;
+  let location = window.location.href;
   location = location.indexOf("asp_ls=") > -1 ? location.slice(0, location.indexOf("asp_ls=")) : location;
   location = location.indexOf("asp_ls&") > -1 ? location.slice(0, location.indexOf("asp_ls&")) : location;
   location = location.indexOf("p_asid=") > -1 ? location.slice(0, location.indexOf("p_asid=")) : location;
@@ -3902,12 +3902,14 @@ base.plugin.getLiveLoadCache = function() {
 };
 /* harmony default export */ var live = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-live.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-live.js
+
 
 
 /* harmony default export */ var asp_live = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_horizontal.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/results_horizontal.js
+
 
 
 "use strict";
@@ -3962,12 +3964,14 @@ base.plugin.showHorizontalResults = function() {
 };
 /* harmony default export */ var results_horizontal = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-horizontal.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-results-horizontal.js
+
 
 
 /* harmony default export */ var asp_results_horizontal = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/isotopic.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/isotopic.js
+
 
 
 "use strict";
@@ -4026,7 +4030,8 @@ base.plugin.initIsotopicPagination = function() {
 };
 /* harmony default export */ var isotopic = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_isotopic.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/results_isotopic.js
+
 
 
 "use strict";
@@ -4260,13 +4265,15 @@ base.plugin.calculateIsotopeRows = function() {
 };
 /* harmony default export */ var results_isotopic = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-isotopic.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-results-isotopic.js
+
 
 
 
 /* harmony default export */ var asp_results_isotopic = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_polaroid.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/results_polaroid.js
+
 
 
 "use strict";
@@ -4352,12 +4359,14 @@ base.plugin.initPolaroidEvents = function(figures) {
 };
 /* harmony default export */ var results_polaroid = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-polaroid.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-results-polaroid.js
+
 
 
 /* harmony default export */ var asp_results_polaroid = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_vertical.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/results_vertical.js
+
 
 
 "use strict";
@@ -4446,12 +4455,14 @@ base.plugin.showVerticalResults = function() {
 };
 /* harmony default export */ var results_vertical = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-vertical.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-results-vertical.js
+
 
 
 /* harmony default export */ var asp_results_vertical = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/settings.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/settings.js
+
 
 
 "use strict";
@@ -4663,7 +4674,8 @@ base.plugin.settingsCheckboxToggle = function($node, checkState) {
 };
 /* harmony default export */ var settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/datepicker.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/datepicker.js
+
 
 
 
@@ -4739,7 +4751,8 @@ base.plugin.initDatePicker = function() {
 };
 /* harmony default export */ var datepicker = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/facet.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/facet.js
+
 
 
 "use strict";
@@ -4859,7 +4872,8 @@ base.plugin.initFacetEvents = function() {
 };
 /* harmony default export */ var facet = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/noui.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/noui.js
+
 
 
 "use strict";
@@ -4927,7 +4941,8 @@ base.plugin.initNoUIEvents = function() {
 };
 /* harmony default export */ var noui = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/settings.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/settings.js
+
 
 
 "use strict";
@@ -5052,7 +5067,8 @@ base.plugin.initSettingsEvents = function() {
 };
 /* harmony default export */ var events_settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/settings.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/settings.js
+
 
 
 "use strict";
@@ -5169,7 +5185,8 @@ base.plugin.initSettingsAnimations = function() {
 };
 /* harmony default export */ var init_settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-settings.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-settings.js
+
 
 
 
@@ -5179,7 +5196,8 @@ base.plugin.initSettingsAnimations = function() {
 
 /* harmony default export */ var asp_settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/addons/divi.js
+;// CONCATENATED MODULE: ./js/src/addons/divi.js
+
 
 
 const divi_helpers = base.helpers;
@@ -5204,44 +5222,50 @@ class DiviAddon {
 base.addons.add(new DiviAddon());
 /* harmony default export */ var divi = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-addons-divi.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-addons-divi.js
+
 
 
 /* harmony default export */ var asp_addons_divi = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/addons/elementor.ts
+;// CONCATENATED MODULE: ./js/src/addons/elementor.js
+
 
 
 const elementor_helpers = base.helpers;
 class ElementorAddon {
   name = "Elementor Widget Fixes";
   init() {
-    const { Hooks } = elementor_helpers;
-    Hooks.addFilter("asp/init/etc", this.fixElementorPostPagination.bind(this), 10, this);
-    Hooks.addFilter("asp/live_load/selector", this.fixSelector.bind(this), 10, this);
-    Hooks.addFilter("asp/live_load/start", this.start.bind(this), 10, this);
-    Hooks.addFilter("asp/live_load/finished", this.finished.bind(this), 10, this);
+    elementor_helpers.Hooks.addFilter("asp/init/etc", this.fixElementorPostPagination, 10, this);
+    elementor_helpers.Hooks.addFilter("asp/live_load/selector", this.fixSelector, 10, this);
+    elementor_helpers.Hooks.addFilter("asp/live_load/url", this.url, 10, this);
+    elementor_helpers.Hooks.addFilter("asp/live_load/start", this.start, 10, this);
+    elementor_helpers.Hooks.addFilter("asp/live_load/replacement_node", this.fixElementorLoadMoreResults, 10, this);
+    elementor_helpers.Hooks.addFilter("asp/live_load/finished", this.finished, 10, this);
   }
   fixSelector(selector) {
-    if (selector.includes("asp_es_")) {
+    if (selector.indexOf("asp_es_") > -1) {
       selector += " .elementor-widget-container";
     }
     return selector;
   }
-  start(url, obj, selector, widget) {
-    const searchSettingsSerialized = obj.n("searchsettings").find("form").serialize();
-    const textValue = obj.n("text").val().trim();
-    const isNewSearch = searchSettingsSerialized + textValue !== obj.lastSuccesfulSearch;
-    if (!isNewSearch && domini_default()(widget).find(".e-load-more-spinner").length > 0) {
-      domini_default()(widget).css("opacity", "1");
+  url(url, obj, selector, widget) {
+    if (url.indexOf("asp_force_reset_pagination=1") >= 0) {
+      url = url.replace(/\?product\-page\=[0-9]+\&/, "?");
     }
-    domini_default()(selector).parent().removeClass("e-load-more-pagination-end");
+    return url;
+  }
+  start(url, obj, selector, widget) {
+    let isNewSearch = domini("form", obj.n("searchsettings")).serialize() + obj.n("text").val().trim() != obj.lastSuccesfulSearch;
+    if (!isNewSearch && domini(widget).find(".e-load-more-spinner").length > 0) {
+      domini(widget).css("opacity", 1);
+    }
   }
   finished(url, obj, selector, widget) {
-    const $el = domini_default()(widget);
-    if (selector.includes("asp_es_") && typeof elementorFrontend !== "undefined" && typeof elementorFrontend.init !== "undefined" && $el.find(".asp_elementor_nores").length === 0) {
-      const widgetType = $el.parent().data("widget_type") || "";
-      if (widgetType !== "" && typeof jQuery !== "undefined") {
+    let $el = domini(widget);
+    if (selector.indexOf("asp_es_") !== false && typeof elementorFrontend != "undefined" && typeof elementorFrontend.init != "undefined" && $el.find(".asp_elementor_nores").length == 0) {
+      let widgetType = $el.parent().data("widget_type");
+      if (widgetType != "" && typeof jQuery != "undefined") {
         elementorFrontend.hooks.doAction("frontend/element_ready/" + widgetType, jQuery($el.parent().get(0)));
       }
       this.fixElementorPostPagination(obj, url);
@@ -5252,73 +5276,138 @@ class ElementorAddon {
     }
   }
   scrollToResultsIfNeeded($el) {
-    const $first = $el.find(".elementor-post, .product").first();
-    if ($first.length && !$first.isInViewport(40)) {
+    let $first = $el.find(".elementor-post, .product").first();
+    if ($first.length && !$first.inViewPort(40)) {
       $first.get(0).scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
     }
   }
   fixElementorPostPagination(obj, url) {
-    const $es = domini_default()(".asp_es_" + obj.o.id);
-    url = url || location.href;
-    if (!$es.length) {
-      return obj;
-    }
-    const urlObj = new URL(url);
-    if (!urlObj.searchParams.size) {
-      return obj;
-    }
-    this.elementorHideSpinner($es.get(0));
-    urlObj.searchParams.delete("asp_force_reset_pagination");
-    const $loadMoreAnchor = $es.find(".e-load-more-anchor");
-    const paginationLinks = $es.find(".elementor-pagination a, .elementor-widget-container .woocommerce-pagination a");
-    if ($loadMoreAnchor.length > 0 && !paginationLinks.length) {
-      const $widgetContainer = $es.find(".elementor-widget-container").get(0);
-      const fixAnchor = () => {
-        const pageData = $loadMoreAnchor.data("page");
-        const page = pageData ? parseInt(pageData, 10) + 1 : 2;
-        urlObj.searchParams.set("page", page.toString());
-        $loadMoreAnchor.data("next-page", urlObj.href);
-        $loadMoreAnchor.next(".elementor-button-wrapper").find("a").attr("href", urlObj.href);
-      };
-      if ($widgetContainer) {
-        const observer = new MutationObserver(() => {
-          fixAnchor();
-          console.log("Mutation observed: fixing anchor.");
-        });
-        observer.observe($widgetContainer, {
-          childList: true,
-          subtree: true
-        });
-      }
-      fixAnchor();
-    } else {
-      paginationLinks.each(function() {
-        const $link = domini_default()(this);
-        const href = $link.attr("href") || "";
-        const itemUrlObj = new URL(href, window.location.origin);
-        if (!itemUrlObj.searchParams.has("asp_ls")) {
-          urlObj.searchParams.forEach((value, key) => itemUrlObj.searchParams.set(key, value));
-        } else {
-          itemUrlObj.searchParams.delete("asp_force_reset_pagination");
+    let $this = obj, _this = this, $es = domini(".asp_es_" + $this.o.id);
+    url = typeof url == "undefined" ? location.href : url;
+    if ($es.length > 0) {
+      _this.elementorHideSpinner($es.get(0));
+      let i = url.indexOf("?");
+      if (i >= 0) {
+        let queryString = url.substring(i + 1);
+        if (queryString) {
+          queryString = queryString.replace(/&asp_force_reset_pagination=1/gmi, "");
+          if ($es.find(".e-load-more-anchor").length > 0 && $es.find(".elementor-pagination a").length == 0) {
+            let handler = function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!obj.searching) {
+                let page = $es.data("page") == "" ? 2 : parseInt($es.data("page")) + 1;
+                let newQS = queryString.split("&page=");
+                $es.data("page", page);
+                $this.showLoader();
+                _this.elementorShowSpinner($es.get(0));
+                $this.liveLoad(
+                  ".asp_es_" + $this.o.id,
+                  url.split("?")[0] + "?" + newQS[0] + "&page=" + page,
+                  false,
+                  true
+                );
+              }
+            };
+            $es.find(".e-load-more-anchor").next(".elementor-button-wrapper").find("a").attr("href", "");
+            $es.find(".e-load-more-anchor").next(".elementor-button-wrapper").offForced().on("click", handler);
+            $es.find(".asp_e_load_more_anchor").on("asp_e_load_more", handler);
+          } else {
+            $es.find(".elementor-pagination a, .elementor-widget-container .woocommerce-pagination a").each(function() {
+              let a = domini(this).attr("href");
+              if (a.indexOf("asp_ls=") < 0 && a.indexOf("asp_ls&") < 0) {
+                if (a.indexOf("?") < 0) {
+                  domini(this).attr("href", a + "?" + queryString);
+                } else {
+                  domini(this).attr("href", a + "&" + queryString);
+                }
+              } else {
+                domini(this).attr("href", domini(this).attr("href").replace(/&asp_force_reset_pagination=1/gmi, ""));
+              }
+            });
+            $es.find(".elementor-pagination a, .elementor-widget-container .woocommerce-pagination a").on("click", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+              $this.showLoader();
+              $this.liveLoad(".asp_es_" + $this.o.id, domini(this).attr("href"), false, true);
+            });
+          }
         }
-        $link.attr("href", itemUrlObj.href);
-      });
+      }
     }
-    return obj;
+    return $this;
+  }
+  fixElementorLoadMoreResults(replacementNode, obj, originalNode, data) {
+    let settings = domini(originalNode).closest("div[data-settings]").data("settings"), $aspLoadMoreAnchor = domini(originalNode).find(".asp_e_load_more_anchor");
+    if (settings != null && settings != "") {
+      settings = JSON.parse(settings);
+      if (settings.pagination_type == "load_more_infinite_scroll" && $aspLoadMoreAnchor.length == 0) {
+        domini(".e-load-more-anchor").css("display", "none");
+        domini(originalNode).append('<div class="asp_e_load_more_anchor"></div>');
+        $aspLoadMoreAnchor = domini(originalNode).find(".asp_e_load_more_anchor");
+        let handler = function() {
+          if ($aspLoadMoreAnchor.inViewPort(50)) {
+            $aspLoadMoreAnchor.trigger("asp_e_load_more");
+            $aspLoadMoreAnchor.remove();
+          }
+        };
+        obj.documentEventHandlers.push({
+          "node": window,
+          "event": "scroll",
+          "handler": handler
+        });
+        domini(window).on("scroll", handler);
+      }
+      if (domini(replacementNode).find(".e-load-more-spinner").length > 0) {
+        domini(originalNode).removeClass("e-load-more-pagination-loading");
+        let isNewSearch = domini("form", obj.n("searchsettings")).serialize() + obj.n("text").val().trim() != obj.lastSuccesfulSearch, $loadMoreButton = domini(originalNode).find(".e-load-more-anchor").next(".elementor-button-wrapper"), $loadMoreMessage = domini(originalNode).find(".e-load-more-message"), $article = domini(replacementNode).find("article");
+        if ($article.length > 0 && $article.parent().length > 0 && domini(originalNode).find("article").parent().length > 0) {
+          let newData = $article.get(0).innerHTML, previousData = domini(originalNode).data("asp-previous-data");
+          if (previousData == "" || isNewSearch) {
+            domini(originalNode).find("article").parent().get(0).innerHTML = newData;
+            domini(originalNode).data("asp-previous-data", newData);
+            $loadMoreButton.css("display", "block");
+            $loadMoreMessage.css("display", "none");
+          } else if (previousData == newData) {
+            $loadMoreButton.css("display", "none");
+            $loadMoreMessage.css("display", "block");
+            $aspLoadMoreAnchor.remove();
+          } else {
+            domini(originalNode).find("article").parent().get(0).innerHTML += newData;
+            domini(originalNode).data("asp-previous-data", newData);
+          }
+        } else {
+          $loadMoreButton.css("display", "none");
+          $loadMoreMessage.css("display", "block");
+          $aspLoadMoreAnchor.remove();
+        }
+        return null;
+      }
+    }
+    return replacementNode;
+  }
+  elementorShowSpinner(widget) {
+    domini(widget).addClass("e-load-more-pagination-loading");
+    domini(widget).find(".e-load-more-spinner>*").addClass("eicon-animation-spin");
+    domini(widget).css("opacity", 1);
   }
   elementorHideSpinner(widget) {
-    domini_default()(widget).removeClass("e-load-more-pagination-loading").find(".eicon-animation-spin").removeClass("eicon-animation-spin");
+    domini(widget).removeClass("e-load-more-pagination-loading");
+    domini(widget).find(".eicon-animation-spin").removeClass("eicon-animation-spin");
   }
 }
 base.addons.add(new ElementorAddon());
 /* harmony default export */ var elementor = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-addons-elementor.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-addons-elementor.js
+
 
 
 /* harmony default export */ var asp_addons_elementor = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/instances.js
+;// CONCATENATED MODULE: ./js/src/plugin/wrapper/instances.js
+
 
 window._asp_instances_storage = window._asp_instances_storage || [];
 const instances = {
@@ -5404,7 +5493,8 @@ const instances = {
 };
 /* harmony default export */ var wrapper_instances = (instances);
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/api.ts
+;// CONCATENATED MODULE: ./js/src/plugin/wrapper/api.ts
+
 
 function api_api() {
   "use strict";
@@ -5450,7 +5540,8 @@ function api_api() {
   }
 }
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/asp.ts
+;// CONCATENATED MODULE: ./js/src/plugin/wrapper/asp.ts
+
 
 
 
@@ -5473,10 +5564,9 @@ const ASP_EXTENDED = {
       });
     });
   },
-  initializeSearchByID: function(id, instance = 0) {
+  initializeSearchByID: function(id) {
     const data = this.getInstance(id);
-    const selector = instance === 0 ? ".asp_m_" + id : ".asp_m_" + id + "_" + instance;
-    domini_default().fn._(selector).forEach(function(el) {
+    domini_default().fn._(".asp_m_" + id).forEach(function(el) {
       if (typeof el.hasAsp != "undefined") {
         return true;
       }
@@ -5507,28 +5597,23 @@ const ASP_EXTENDED = {
       return false;
     }
     if (asp_ASP.script_async_load || asp_ASP.init_only_in_viewport) {
-      const searches = document.querySelectorAll(".asp_w_container");
+      const searches = document.querySelectorAll(".asp_w_container, .asp_m");
       if (searches.length) {
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              const id2 = parseInt(entry.target.dataset.id ?? "0");
-              const instance = parseInt(entry.target.dataset.instance ?? "0");
-              this.initializeSearchByID(id2, instance);
+              const id2 = parseInt(entry.target.dataset.id || "");
+              this.initializeSearchByID(id2);
               observer.unobserve(entry.target);
             }
           });
         });
         searches.forEach(function(search) {
-          if (typeof search._is_observed !== "undefined") {
-            return;
-          }
-          search._is_observed = true;
           observer.observe(search);
         });
       }
       this.getInstances().forEach((inst, id2) => {
-        if (inst.compact.enabled) {
+        if (inst.compact.enabled && inst.compact.position === "fixed") {
           this.initializeSearchByID(id2);
         }
       });
@@ -5644,19 +5729,10 @@ const ASP_EXTENDED = {
     }
   },
   ready: function() {
-    const documentReady = () => document.readyState === "complete" || document.readyState === "interactive" || document.readyState === "loaded";
-    if (documentReady()) {
+    if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") {
       this.initialize();
     } else {
-      window.addEventListener("DOMContentLoaded", () => {
-        this.initialize();
-      });
-      document.addEventListener("readystatechange", () => {
-        ;
-        if (documentReady()) {
-          this.initialize();
-        }
-      });
+      window.addEventListener("DOMContentLoaded", () => this.initialize());
     }
   },
   init: function() {
@@ -5671,7 +5747,8 @@ const ASP_EXTENDED = {
 };
 /* harmony default export */ var asp = (ASP_EXTENDED);
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/wrapper.js
+;// CONCATENATED MODULE: ./js/src/plugin/wrapper/wrapper.js
+
 
 
 
@@ -5685,7 +5762,8 @@ function load() {
   });
 }
 
-;// CONCATENATED MODULE: ./src/client/bundle/merged/asp.js
+;// CONCATENATED MODULE: ./js/src/bundle/merged/asp.js
+
 
 
 

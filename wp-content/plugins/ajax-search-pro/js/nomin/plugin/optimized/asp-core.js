@@ -29,7 +29,8 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_core; }
 });
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/base.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/base.js
+
 const base_AjaxSearchPro = new function() {
   this.helpers = {};
   this.plugin = {};
@@ -59,7 +60,8 @@ const base_AjaxSearchPro = new function() {
 
 ;// CONCATENATED MODULE: external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/etc/helpers.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/etc/helpers.js
+
 
 
 "use strict";
@@ -263,7 +265,8 @@ base.helpers.isScrolledToLeft = function(el) {
 };
 /* harmony default export */ var helpers = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/animation.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/animation.js
+
 
 
 "use strict";
@@ -302,7 +305,8 @@ base.plugin.removeAnimation = function() {
 };
 /* harmony default export */ var animation = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/filters.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/filters.js
+
 
 
 "use strict";
@@ -357,7 +361,8 @@ base.plugin.resetNoUISliderFilters = function() {
 };
 /* harmony default export */ var filters = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/loader.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/loader.js
+
 
 
 "use strict";
@@ -402,7 +407,8 @@ base.plugin.hideLoader = function() {
 };
 /* harmony default export */ var loader = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/other.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/other.js
+
 
 
 "use strict";
@@ -499,7 +505,8 @@ base.plugin.destroy = function() {
 };
 /* harmony default export */ var other = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/redirect.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/redirect.js
+
 
 
 "use strict";
@@ -666,7 +673,8 @@ base.plugin.parseCustomRedirectURL = function(url, phrase) {
 };
 /* harmony default export */ var redirect = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/results.js
+
 
 
 "use strict";
@@ -891,7 +899,8 @@ base.plugin.updateInfoHeader = function(totalCount) {
   }
 };
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/scroll.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/scroll.js
+
 
 
 "use strict";
@@ -940,7 +949,8 @@ base.plugin.checkAndTriggerInfiniteScroll = function(caller) {
   }
 };
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/search.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/actions/search.js
+
 
 
 "use strict";
@@ -1223,7 +1233,8 @@ base.plugin.search = function(count, order, recall, apiCall, supressInvalidMsg) 
 };
 /* harmony default export */ var search = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/etc/api.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/etc/api.js
+
 
 
 "use strict";
@@ -1304,7 +1315,8 @@ base.plugin.filtersChanged = function() {
 };
 /* harmony default export */ var api = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/etc/position.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/etc/position.js
+
 
 
 "use strict";
@@ -1450,7 +1462,8 @@ base.plugin.hideOnInvisibleBox = function() {
 };
 /* harmony default export */ var position = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/button.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/button.js
+
 
 
 "use strict";
@@ -1531,7 +1544,8 @@ base.plugin.initButtonEvents = function() {
 };
 /* harmony default export */ var events_button = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/input.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/input.js
+
 
 
 "use strict";
@@ -1672,7 +1686,8 @@ base.plugin._initFormEvent = function() {
 };
 /* harmony default export */ var input = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/navigation.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/navigation.js
+
 
 
 "use strict";
@@ -1727,7 +1742,8 @@ base.plugin.initNavigationEvents = function() {
 };
 /* harmony default export */ var navigation = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/other.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/other.js
+
 
 
 "use strict";
@@ -1904,7 +1920,8 @@ base.plugin.initSelect2 = function() {
 };
 /* harmony default export */ var events_other = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/results.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/results.js
+
 
 
 "use strict";
@@ -1965,7 +1982,8 @@ base.plugin.initResultsEvents = function() {
 };
 /* harmony default export */ var results = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/touch.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/events/touch.js
+
 
 
 "use strict";
@@ -1980,7 +1998,8 @@ base.plugin.monitorTouchMove = function() {
 };
 /* harmony default export */ var touch = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/autopopulate.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/autopopulate.js
+
 
 "use strict";
 base.plugin.initAutop = function() {
@@ -2009,7 +2028,8 @@ base.plugin.initAutop = function() {
 };
 /* harmony default export */ var autopopulate = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/etc.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/etc.js
+
 
 
 "use strict";
@@ -2077,7 +2097,8 @@ base.plugin.hooks = function() {
 };
 /* harmony default export */ var etc = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/init.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/init.js
+
 
 
 "use strict";
@@ -2278,7 +2299,8 @@ base.plugin.initEvents = function() {
 };
 /* harmony default export */ var init = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/results.js
+;// CONCATENATED MODULE: ./js/src/plugin/core/init/results.js
+
 
 
 "use strict";
@@ -2374,7 +2396,8 @@ base.plugin.initResultsAnimations = function() {
 };
 /* harmony default export */ var init_results = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/widgets/widgets.js
+;// CONCATENATED MODULE: ./js/src/plugin/widgets/widgets.js
+
 
 "use strict";
 external_DoMini_namespaceObject(function() {
@@ -2403,7 +2426,8 @@ external_DoMini_namespaceObject(function() {
   });
 });
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-core.js
+;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-core.js
+
 
 
 

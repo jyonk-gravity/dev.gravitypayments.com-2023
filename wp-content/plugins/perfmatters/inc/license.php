@@ -7,7 +7,7 @@ if(isset($_POST['perfmatters_save_license']) && isset($_POST['perfmatters_edd_li
 		update_site_option('perfmatters_edd_license_key', trim($_POST['perfmatters_edd_license_key']));
 	}
 	else {
-		update_option('perfmatters_edd_license_key', trim($_POST['perfmatters_edd_license_key']), false);
+		update_option('perfmatters_edd_license_key', trim($_POST['perfmatters_edd_license_key']));
 	}
 
 	if(is_multisite()) {

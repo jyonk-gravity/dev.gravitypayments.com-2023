@@ -70,7 +70,7 @@ if ( ! class_exists( 'acf_field_taxonomy' ) ) :
 				$key   = '';
 			}
 
-			if ( ! acf_verify_ajax( $nonce, $key, ! $conditional_logic ) ) {
+			if ( ! acf_verify_ajax( $nonce, $key ) ) {
 				die();
 			}
 
@@ -470,8 +470,6 @@ if ( ! class_exists( 'acf_field_taxonomy' ) ) :
 			// force value to array
 			$field['value'] = acf_get_array( $field['value'] );
 
-			$nonce = wp_create_nonce( 'acf_field_' . $this->name . '_' . $field['key'] );
-
 			// vars
 			$div = array(
 				'class'           => 'acf-taxonomy-field',
@@ -479,7 +477,7 @@ if ( ! class_exists( 'acf_field_taxonomy' ) ) :
 				'data-ftype'      => $field['field_type'],
 				'data-taxonomy'   => $field['taxonomy'],
 				'data-allow_null' => $field['allow_null'],
-				'data-nonce'      => $nonce,
+				'data-nonce'      => wp_create_nonce( $field['key'] ),
 			);
 			// get taxonomy
 			$taxonomy = get_taxonomy( $field['taxonomy'] );
@@ -501,11 +499,11 @@ if ( ! class_exists( 'acf_field_taxonomy' ) ) :
 			if ( $field['field_type'] == 'select' ) {
 				$field['multiple'] = 0;
 
-				$this->render_field_select( $field, $nonce );
+				$this->render_field_select( $field );
 			} elseif ( $field['field_type'] == 'multi_select' ) {
 				$field['multiple'] = 1;
 
-				$this->render_field_select( $field, $nonce );
+				$this->render_field_select( $field );
 			} elseif ( $field['field_type'] == 'radio' ) {
 				$this->render_field_checkbox( $field );
 			} elseif ( $field['field_type'] == 'checkbox' ) {
@@ -526,13 +524,12 @@ if ( ! class_exists( 'acf_field_taxonomy' ) ) :
 		 *
 		 * @param   $field - an array holding all the field's data
 		 */
-		function render_field_select( $field, $nonce ) {
+		function render_field_select( $field ) {
 
 			// Change Field into a select
 			$field['type']    = 'select';
 			$field['ui']      = 1;
 			$field['ajax']    = 1;
-			$field['nonce']   = $nonce;
 			$field['choices'] = array();
 
 			// value
@@ -769,7 +766,7 @@ if ( ! class_exists( 'acf_field_taxonomy' ) ) :
 				)
 			);
 
-			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true ) ) {
+			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'] ) ) {
 				die();
 			}
 
