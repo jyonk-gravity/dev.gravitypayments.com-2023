@@ -78,6 +78,16 @@ if ( empty($search) ) {
     <?php
     return;
 }
+
+$metadata = require_once ASP_PATH . 'build/js/timed-modal.asset.php';
+wp_enqueue_script(
+	'wpd-timed-modal',
+	ASP_URL_NP . 'build/js/timed-modal.js',
+	$metadata['dependencies'],
+	$metadata['version'],
+	array('in_footer'=>true)
+);
+
 /**
  * The search data does not have unset option values as the
  * $asp_globals->instances has it already merged with default options
@@ -100,8 +110,14 @@ $sd = &$search['data'];
     <div style="text-align: center;
         margin: 11px 0 17px;
         font-size: 12px;
-        color: #aaa;"><?php echo __('Please note, that some functions may not work in preview mode.<br>The first loading can take up to 15 seconds!', 'ajax-search-pro'); ?>
+        color: #aaa;">
+	    <?php echo __('Please note, that some functions may not work in preview mode.<br>The first loading can take up to 15 seconds!', 'ajax-search-pro'); ?>
     </div>
+	<div style="display: flex; justify-content: center; flex-wrap: nowrap; gap: 12px;">
+		<div style="cursor: pointer;" class="wpd-txt-small-icon wpd-txt-small-icon-desktop" data-device="desktop"></div>
+		<div style="cursor: pointer;" class="wpd-txt-small-icon wpd-txt-small-icon-tablet" data-device="tablet"></div>
+		<div style="cursor: pointer;" class="wpd-txt-small-icon wpd-txt-small-icon-phone" data-device="phone"></div>
+	</div>
     <div class='big-loading hidden'></div>
     <div class="data hidden asp_preview_data"></div>
 </div>

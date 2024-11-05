@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Ajax Search Pro package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Pro 4.26.14\n"
+"Project-Id-Version: Ajax Search Pro 4.26.16\n"
 "Report-Msgid-Bugs-To: WPDreams\n"
-"POT-Creation-Date: 2024-08-05 09:35:23+00:00\n"
+"POT-Creation-Date: 2024-10-22 16:22:38+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -89,7 +89,7 @@ msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:223
 #: backend/settings/default_options.php:358
-#: backend/tabs/priorities/priority_groups.php:119
+#: backend/tabs/priorities/priority_groups.php:123
 msgid "Custom field"
 msgstr ""
 
@@ -670,23 +670,23 @@ msgstr ""
 msgid "Are you sure you want to import settings to that search instance?"
 msgstr ""
 
-#: backend/index_table.php:35 backend/main_settings.php:35
+#: backend/index_table.php:35 backend/main_settings.php:43
 msgid "One or more plugin tables are appear to be missing from the database."
 msgstr ""
 
-#: backend/index_table.php:36 backend/main_settings.php:36
+#: backend/index_table.php:36 backend/main_settings.php:44
 msgid ""
 "Please check <a href=\"%s\" target=\"_blank\">this article</a> to resolve "
 "the issue."
 msgstr ""
 
-#: backend/index_table.php:40 backend/main_settings.php:40
+#: backend/index_table.php:40 backend/main_settings.php:48
 msgid ""
 "Please be <strong>very careful</strong>, before making any changes to your "
 "database. Make sure to have a full database back-up, just in case!"
 msgstr ""
 
-#: backend/index_table.php:44 backend/main_settings.php:44
+#: backend/index_table.php:44 backend/main_settings.php:52
 msgid "Copy this SQL code in your database editor tool to create them manually"
 msgstr ""
 
@@ -1337,117 +1337,117 @@ msgstr ""
 msgid "Initializing, please wait."
 msgstr ""
 
-#: backend/main_settings.php:25
+#: backend/main_settings.php:33
 msgid ""
 "Warning: Please deactivate the Ajax Search Lite to assure every PRO feature "
 "works properly."
 msgstr ""
 
-#: backend/main_settings.php:55
+#: backend/main_settings.php:63
 msgid "Create a new search instance"
 msgstr ""
 
-#: backend/main_settings.php:57
+#: backend/main_settings.php:65
 msgid "Search form name:"
 msgstr ""
 
-#: backend/main_settings.php:59
+#: backend/main_settings.php:67
 msgid "Add"
 msgstr ""
 
-#: backend/main_settings.php:61
+#: backend/main_settings.php:69
 msgid "Import from Ajax Search Lite"
 msgstr ""
 
-#: backend/main_settings.php:70 backend/main_settings.php:90
+#: backend/main_settings.php:78 backend/main_settings.php:98
 msgid "Failure. Nonce invalid, please reload the page and try again."
 msgstr ""
 
-#: backend/main_settings.php:80
+#: backend/main_settings.php:88
 msgid "Search Form Successfuly added!"
 msgstr ""
 
-#: backend/main_settings.php:82
+#: backend/main_settings.php:90
 msgid "The search form was not created. Please contact support."
 msgstr ""
 
-#: backend/main_settings.php:96
+#: backend/main_settings.php:104
 msgid "Form name changed!"
 msgstr ""
 
-#: backend/main_settings.php:98
+#: backend/main_settings.php:106
 msgid "Failure. Search could not be renamed."
 msgstr ""
 
-#: backend/main_settings.php:100
+#: backend/main_settings.php:108
 msgid "Failure. Form name must be at least 1 character long"
 msgstr ""
 
-#: backend/main_settings.php:108
+#: backend/main_settings.php:116
 msgid "Form duplicated!"
 msgstr ""
 
-#: backend/main_settings.php:110
+#: backend/main_settings.php:118
 msgid "Failure. Search form could not be duplicated."
 msgstr ""
 
-#: backend/main_settings.php:113
+#: backend/main_settings.php:121
 msgid "Failure :("
 msgstr ""
 
-#: backend/main_settings.php:159
+#: backend/main_settings.php:167
 msgid "Theme search bar replace"
 msgstr ""
 
-#: backend/main_settings.php:160
+#: backend/main_settings.php:168
 msgid "Replace the default theme search with:"
 msgstr ""
 
-#: backend/main_settings.php:162 backend/main_settings.php:173
+#: backend/main_settings.php:170 backend/main_settings.php:181
 #: backend/tabs/instance/theme/magn_load.php:107
 msgid "None"
 msgstr ""
 
-#: backend/main_settings.php:171
+#: backend/main_settings.php:179
 msgid "and the <strong>WooCommerce</strong> search with:"
 msgstr ""
 
-#: backend/main_settings.php:194
+#: backend/main_settings.php:202
 msgid ""
 "This might not work with all themes. If the default theme search bar is "
 "still visible after selection, then the only way is to replace the search "
 "within the theme code."
 msgstr ""
 
-#: backend/main_settings.php:196
+#: backend/main_settings.php:204
 msgid "Save"
 msgstr ""
 
-#: backend/main_settings.php:261
+#: backend/main_settings.php:269
 msgid "Click here to rename this form!"
 msgstr ""
 
-#: backend/main_settings.php:272
+#: backend/main_settings.php:280
 msgid "Click here to duplicate this form!"
 msgstr ""
 
-#: backend/main_settings.php:296
+#: backend/main_settings.php:304
 msgid "Click here to change the owner of this form!"
 msgstr ""
 
-#: backend/main_settings.php:301
+#: backend/main_settings.php:309
 msgid "Quick shortcode:"
 msgstr ""
 
-#: backend/main_settings.php:324
+#: backend/main_settings.php:332
 msgid "Do you want to change the name of this form?"
 msgstr ""
 
-#: backend/main_settings.php:328
+#: backend/main_settings.php:336
 msgid "Do you want to change the owner of this form?"
 msgstr ""
 
-#: backend/main_settings.php:332
+#: backend/main_settings.php:340
 msgid "Do you want to duplicate this form?"
 msgstr ""
 
@@ -1799,224 +1799,224 @@ msgstr ""
 msgid "This search instance (id=%s) does not exists."
 msgstr ""
 
-#: backend/search.php:91 backend/search.php:346
+#: backend/search.php:101 backend/search.php:362
 msgid "Loading..."
 msgstr ""
 
-#: backend/search.php:94
+#: backend/search.php:104
 msgid "Preview"
 msgstr ""
 
-#: backend/search.php:95
+#: backend/search.php:105
 msgid "Refresh"
 msgstr ""
 
-#: backend/search.php:96
+#: backend/search.php:106
 msgid "Show"
 msgstr ""
 
-#: backend/search.php:98
+#: backend/search.php:108
 msgid "Background:"
 msgstr ""
 
-#: backend/search.php:103
+#: backend/search.php:114
 msgid ""
 "Please note, that some functions may not work in preview mode.<br>The first "
 "loading can take up to 15 seconds!"
 msgstr ""
 
-#: backend/search.php:113 backend/search.php:179
+#: backend/search.php:129 backend/search.php:195
 msgid "Shortcode generator"
 msgstr ""
 
-#: backend/search.php:116
+#: backend/search.php:132
 msgid ""
 "This tool is to help you generate a Column/Row based layout for the plugin. "
 "For more info on shortcodes, <a href=\"%s\" target=\"_blank\">check this "
 "video</a> tutorial."
 msgstr ""
 
-#: backend/search.php:118
+#: backend/search.php:134
 msgid "Search box"
 msgstr ""
 
-#: backend/search.php:118 backend/search.php:119 backend/search.php:120
+#: backend/search.php:134 backend/search.php:135 backend/search.php:136
 msgid "Ratio:"
 msgstr ""
 
-#: backend/search.php:119
+#: backend/search.php:135
 msgid "Settings box"
 msgstr ""
 
-#: backend/search.php:120
+#: backend/search.php:136
 msgid "Results box"
 msgstr ""
 
-#: backend/search.php:126
+#: backend/search.php:142
 msgid "Pre-defined variations"
 msgstr ""
 
-#: backend/search.php:127
+#: backend/search.php:143
 msgid "Search/Results 50/50"
 msgstr ""
 
-#: backend/search.php:128
+#: backend/search.php:144
 msgid "Search/Settings 50/50"
 msgstr ""
 
-#: backend/search.php:129
+#: backend/search.php:145
 msgid "Search/Settings/Results in columns"
 msgstr ""
 
-#: backend/search.php:130
+#: backend/search.php:146
 msgid "Search/Settings/Results in 100/50/50"
 msgstr ""
 
-#: backend/search.php:131
+#: backend/search.php:147
 msgid "Search/Settings/Results in 50/50/100"
 msgstr ""
 
-#: backend/search.php:133
+#: backend/search.php:149
 msgid "Add the search box"
 msgstr ""
 
-#: backend/search.php:134
+#: backend/search.php:150
 msgid "Add the settings box"
 msgstr ""
 
-#: backend/search.php:135
+#: backend/search.php:151
 msgid "Add the results box"
 msgstr ""
 
-#: backend/search.php:136
+#: backend/search.php:152
 msgid "<b>Copy</b> the shorcode generated:"
 msgstr ""
 
-#: backend/search.php:147
+#: backend/search.php:163
 msgid "Debug mode is on!"
 msgstr ""
 
-#: backend/search.php:152
+#: backend/search.php:168
 msgid ""
 "NOTICE: The custom ajax handler is enabled. In case you experience issues, "
 "please <a href=\"%s\">turn it off.</a>"
 msgstr ""
 
-#: backend/search.php:159
+#: backend/search.php:175
 msgid "Back to the search list"
 msgstr ""
 
-#: backend/search.php:161 includes/classes/Core/Menu.php:52
+#: backend/search.php:177 src/server/Core/Menu.php:52
 msgid "Search Statistics"
 msgstr ""
 
-#: backend/search.php:163
+#: backend/search.php:179
 msgid "Compatibility checking"
 msgstr ""
 
-#: backend/search.php:165
+#: backend/search.php:181
 msgid "Caching options"
 msgstr ""
 
-#: backend/search.php:170
+#: backend/search.php:186
 msgid ""
 "Warning:  <strong>Ajax Search Lite</strong> is still activated, please "
 "deactivate it to assure every PRO feature works properly."
 msgstr ""
 
-#: backend/search.php:178
+#: backend/search.php:194
 msgid "Toggle shortcodes for"
 msgstr ""
 
-#: backend/search.php:182
+#: backend/search.php:198
 msgid "Simple shortcodes"
 msgstr ""
 
-#: backend/search.php:183
+#: backend/search.php:199
 msgid "Search shortcode:"
 msgstr ""
 
-#: backend/search.php:186
+#: backend/search.php:202
 msgid "Search shortcode for templates:"
 msgstr ""
 
-#: backend/search.php:192
+#: backend/search.php:208
 msgid "Result shortcodes"
 msgstr ""
 
-#: backend/search.php:194
+#: backend/search.php:210
 msgid ""
 "Shortcodes for placing the result box elsewhere. (only works if the result "
 "layout position is <b>block</b> - see in layout options tab)"
 msgstr ""
 
-#: backend/search.php:196
+#: backend/search.php:212
 msgid "Result box shortcode:"
 msgstr ""
 
-#: backend/search.php:200
+#: backend/search.php:216
 msgid "Result shortcode for templates:"
 msgstr ""
 
-#: backend/search.php:206
+#: backend/search.php:222
 msgid "Settings shortcodes"
 msgstr ""
 
-#: backend/search.php:208
+#: backend/search.php:224
 msgid "Shortcodes for placing the settings box elsewhere."
 msgstr ""
 
-#: backend/search.php:210
+#: backend/search.php:226
 msgid "Settings box shortcode:"
 msgstr ""
 
-#: backend/search.php:214
+#: backend/search.php:230
 msgid "Shortcode for templates:"
 msgstr ""
 
-#: backend/search.php:220
+#: backend/search.php:236
 msgid "Two Column Shortcode"
 msgstr ""
 
-#: backend/search.php:222
+#: backend/search.php:238
 msgid ""
 "Will place a search box (left) and a result box (right) next to each other, "
 "like the one on the demo front page."
 msgstr ""
 
-#: backend/search.php:224
+#: backend/search.php:240
 msgid "TC shortcode:"
 msgstr ""
 
-#: backend/search.php:228
+#: backend/search.php:244
 msgid "TC shortcode for templates:"
 msgstr ""
 
-#: backend/search.php:232
+#: backend/search.php:248
 msgid "Extra Parameters"
 msgstr ""
 
-#: backend/search.php:234
+#: backend/search.php:250
 msgid "search_width - {integer} the search bar width (in %, not px)"
 msgstr ""
 
-#: backend/search.php:235
+#: backend/search.php:251
 msgid "results_width - {integer} the results box width (in %, not px)"
 msgstr ""
 
-#: backend/search.php:236
+#: backend/search.php:252
 msgid ""
 "invert - {0 or 1} inverts the search and results box position from left to "
 "right"
 msgstr ""
 
-#: backend/search.php:240
+#: backend/search.php:256
 #: backend/tabs/instance/search_options/archive_pages.php:88
 #: backend/tabs/instance/search_options/magnifier_click.php:117
 msgid "Elementor Posts Widget Live Filter"
 msgstr ""
 
-#: backend/search.php:243
+#: backend/search.php:259
 #: backend/tabs/instance/search_options/archive_pages.php:97
 #: backend/tabs/instance/search_options/magnifier_click.php:126
 msgid ""
@@ -2024,7 +2024,7 @@ msgid ""
 "widget"
 msgstr ""
 
-#: backend/search.php:248
+#: backend/search.php:264
 #: backend/tabs/instance/search_options/archive_pages.php:102
 #: backend/tabs/instance/search_options/magnifier_click.php:131
 msgid ""
@@ -2032,55 +2032,55 @@ msgid ""
 "documentation</a> for more details"
 msgstr ""
 
-#: backend/search.php:271 backend/search.php:283
+#: backend/search.php:287 backend/search.php:299
 msgid "Search Sources"
 msgstr ""
 
-#: backend/search.php:272
+#: backend/search.php:288
 msgid "Search Behavior"
 msgstr ""
 
-#: backend/search.php:273
+#: backend/search.php:289
 msgid "Frontend Search Settings"
 msgstr ""
 
-#: backend/search.php:274
+#: backend/search.php:290
 msgid "Layout options"
 msgstr ""
 
-#: backend/search.php:275 backend/search.php:315
+#: backend/search.php:291 backend/search.php:331
 msgid "Autocomplete & Suggestions"
 msgstr ""
 
-#: backend/search.php:276
+#: backend/search.php:292
 msgid "Theme & Styling"
 msgstr ""
 
-#: backend/search.php:277 backend/search.php:331
+#: backend/search.php:293 backend/search.php:347
 msgid "Multisite Options"
 msgstr ""
 
-#: backend/search.php:278
+#: backend/search.php:294
 msgid "Advanced options"
 msgstr ""
 
-#: backend/search.php:291
+#: backend/search.php:307
 msgid "Search Behavior Options"
 msgstr ""
 
-#: backend/search.php:299
+#: backend/search.php:315
 msgid "Frontend Search Settings options"
 msgstr ""
 
-#: backend/search.php:307
+#: backend/search.php:323
 msgid "Layout Options"
 msgstr ""
 
-#: backend/search.php:323
+#: backend/search.php:339
 msgid "Theme & Styling Options"
 msgstr ""
 
-#: backend/search.php:339
+#: backend/search.php:355
 msgid "Advanced Options"
 msgstr ""
 
@@ -2343,6 +2343,7 @@ msgstr ""
 #: backend/tabs/instance/layout/compact_box_layout.php:112
 #: backend/tabs/instance/layout/results_layout.php:80
 #: backend/tabs/instance/layout/search_box_layout.php:24
+#: backend/tabs/instance/theme/horizontal_res.php:105
 #: backend/tabs/instance/theme/keyword_suggestions.php:34
 #: backend/tabs/instance/theme/keyword_suggestions.php:46
 #: backend/tabs/instance/theme/magn_load.php:6
@@ -2362,6 +2363,7 @@ msgstr ""
 #: backend/tabs/instance/layout/compact_box_layout.php:111
 #: backend/tabs/instance/layout/results_layout.php:82
 #: backend/tabs/instance/layout/search_box_layout.php:23
+#: backend/tabs/instance/theme/horizontal_res.php:104
 #: backend/tabs/instance/theme/keyword_suggestions.php:36
 #: backend/tabs/instance/theme/keyword_suggestions.php:48
 #: backend/tabs/instance/theme/magn_load.php:5
@@ -2691,7 +2693,7 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:16
 #: backend/tabs/instance/frontend/custom_fields.php:398
 #: backend/tabs/instance/frontend/custom_fields.php:627
-#: backend/tabs/priorities/priority_groups.php:198
+#: backend/tabs/priorities/priority_groups.php:202
 msgid "Text"
 msgstr ""
 
@@ -2730,8 +2732,8 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:33
 #: backend/tabs/instance/frontend/custom_fields.php:566
 #: backend/tabs/instance/frontend/custom_fields.php:782
-#: backend/tabs/priorities/priority_groups.php:124
-#: backend/tabs/priorities/priority_groups.php:188
+#: backend/tabs/priorities/priority_groups.php:128
+#: backend/tabs/priorities/priority_groups.php:192
 msgid "Operator"
 msgstr ""
 
@@ -3004,12 +3006,11 @@ msgid "FREE License tier"
 msgstr ""
 
 #: backend/settings/class/wd_ms_license_activator.class.php:20
-#: backend/updates_help.php:61
 msgid "Deactivate"
 msgstr ""
 
 #: backend/settings/class/wd_ms_license_activator.class.php:28
-#: backend/updates_help.php:53
+#: backend/updates_help.php:87
 msgid "Activate"
 msgstr ""
 
@@ -4807,7 +4808,6 @@ msgstr ""
 #: backend/tabs/instance/layout/results_layout.php:68
 #: backend/tabs/instance/layout/results_layout.php:90
 #: backend/tabs/instance/layout/search_box_layout.php:45
-#: backend/tabs/instance/theme/horizontal_res.php:44
 #: backend/tabs/instance/theme/isotopic_res.php:52
 #: backend/tabs/instance/theme/isotopic_res.php:78
 #: backend/tabs/instance/theme/overall_box.php:30
@@ -4994,6 +4994,7 @@ msgstr ""
 #: backend/tabs/instance/frontend/reset_button.php:50
 #: backend/tabs/instance/frontend/search_button.php:72
 #: backend/tabs/instance/layout/search_box_layout.php:22
+#: backend/tabs/instance/theme/horizontal_res.php:103
 msgid "Center"
 msgstr ""
 
@@ -5606,84 +5607,92 @@ msgid "Menu order ascending"
 msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:29
+msgid "Author descending"
+msgstr ""
+
+#: backend/tabs/instance/general/ordering.php:30
+msgid "Author ascending"
+msgstr ""
+
+#: backend/tabs/instance/general/ordering.php:31
 #: backend/tabs/instance/general/user_search.php:62
 #: backend/tabs/instance/general/user_search.php:101
 msgid "Random"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:31
+#: backend/tabs/instance/general/ordering.php:33
 #: backend/tabs/instance/general/user_search.php:52
 msgid "Primary ordering"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:34
-#: backend/tabs/instance/general/ordering.php:59
+#: backend/tabs/instance/general/ordering.php:36
+#: backend/tabs/instance/general/ordering.php:61
 #: backend/tabs/instance/general/user_search.php:63
 #: backend/tabs/instance/general/user_search.php:102
 msgid "Custom Field descending"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:35
-#: backend/tabs/instance/general/ordering.php:60
+#: backend/tabs/instance/general/ordering.php:37
+#: backend/tabs/instance/general/ordering.php:62
 #: backend/tabs/instance/general/user_search.php:64
 msgid "Custom Field  ascending"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:41
-#: backend/tabs/instance/general/ordering.php:66
+#: backend/tabs/instance/general/ordering.php:43
+#: backend/tabs/instance/general/ordering.php:68
 #: backend/tabs/instance/general/user_search.php:72
 #: backend/tabs/instance/general/user_search.php:111
 msgid "Field name"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:44
-#: backend/tabs/instance/general/ordering.php:69
+#: backend/tabs/instance/general/ordering.php:46
+#: backend/tabs/instance/general/ordering.php:71
 #: backend/tabs/instance/general/user_search.php:78
 #: backend/tabs/instance/general/user_search.php:117
 msgid "Field type"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:47
-#: backend/tabs/instance/general/ordering.php:72
+#: backend/tabs/instance/general/ordering.php:49
+#: backend/tabs/instance/general/ordering.php:74
 #: backend/tabs/instance/general/user_search.php:81
 #: backend/tabs/instance/general/user_search.php:120
 msgid "numeric"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:48
-#: backend/tabs/instance/general/ordering.php:73
+#: backend/tabs/instance/general/ordering.php:50
+#: backend/tabs/instance/general/ordering.php:75
 #: backend/tabs/instance/general/user_search.php:82
 #: backend/tabs/instance/general/user_search.php:121
 msgid "string or date"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:56
+#: backend/tabs/instance/general/ordering.php:58
 msgid "Secondary ordering"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:80
+#: backend/tabs/instance/general/ordering.php:82
 #: backend/tabs/instance/general/user_search.php:129
 msgid ""
 "If two elements match the primary ordering criteria, the <b>Secondary "
 "ordering</b> is used."
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:85
+#: backend/tabs/instance/general/ordering.php:87
 msgid ""
 "Separate ordering options are available for <strong>User results</strong>, "
 "under the <a class=\"asp_to_tab\" href=\"#108\" tabid=\"108\" "
 "data-asp-os-highlight=\"user_orderby_primary\">User Search panel</a>."
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:90
+#: backend/tabs/instance/general/ordering.php:92
 msgid "Use separate ordering for each post type group?"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:96
+#: backend/tabs/instance/general/ordering.php:98
 msgid "Post type results ordering"
 msgstr ""
 
-#: backend/tabs/instance/general/ordering.php:107
+#: backend/tabs/instance/general/ordering.php:109
 msgid "Mixed results order"
 msgstr ""
 
@@ -7267,7 +7276,6 @@ msgid "This css will be added into the site header as embedded CSS"
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:7
-#: backend/tabs/instance/theme_options.php:15
 msgid "Custom CSS"
 msgstr ""
 
@@ -7289,6 +7297,37 @@ msgstr ""
 msgid ""
 "In case you have some other elements floating above/below the settings "
 "drop-down, you can adjust it's position with the z-index."
+msgstr ""
+
+#: backend/tabs/instance/theme/custom_css.php:39
+msgid "Media Query Options"
+msgstr ""
+
+#: backend/tabs/instance/theme/custom_css.php:41
+msgid ""
+"These options adjust the media query breakpoints. These are applied for "
+"certain options where you can set device specific values - such as the "
+"search width."
+msgstr ""
+
+#: backend/tabs/instance/theme/custom_css.php:45
+msgid "Mobile device max-width"
+msgstr ""
+
+#: backend/tabs/instance/theme/custom_css.php:49
+msgid ""
+"If a device max resolution width does not reach this width, it is "
+"considered as mobile device."
+msgstr ""
+
+#: backend/tabs/instance/theme/custom_css.php:54
+msgid "Tablet device max-width"
+msgstr ""
+
+#: backend/tabs/instance/theme/custom_css.php:58
+msgid ""
+"If a device max resolution is bigger than the mobile, but does not reach "
+"this resolution, it is considered as tablet device."
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:2
@@ -7329,89 +7368,135 @@ msgid ""
 "horizontal scroll."
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:22
+#: backend/tabs/instance/theme/horizontal_res.php:23
+msgid "Horizontal result sizes"
+msgstr ""
+
+#: backend/tabs/instance/theme/horizontal_res.php:26
+msgid ""
+"For witdh % (percentage) values only work if the <strong>Display the "
+"results scrollbar</strong> option is <strong>turned OFF</strong> above."
+msgstr ""
+
+#: backend/tabs/instance/theme/horizontal_res.php:29
 #: backend/tabs/instance/theme/isotopic_res.php:34
 #: backend/tabs/instance/theme/polaroid_res.php:32
 msgid "Result width"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:29
-msgid "Result image height"
+#: backend/tabs/instance/theme/horizontal_res.php:46
+msgid "Default: <strong>150px</strong>"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:35
-msgid "The image width is calcualted from the Result width option."
+#: backend/tabs/instance/theme/horizontal_res.php:48
+msgid ""
+"Use with <a href=\"%s\" target=\"_blank\">CSS units</a> (like %s or %s or "
+"%s ..)"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:39
+#: backend/tabs/instance/theme/horizontal_res.php:55
 #: backend/tabs/instance/theme/isotopic_res.php:60
 msgid "Result height"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:50
+#: backend/tabs/instance/theme/horizontal_res.php:72
+msgid "Default: <strong>auto</strong>"
+msgstr ""
+
+#: backend/tabs/instance/theme/horizontal_res.php:73
+msgid "Use values in pixels or auto only, ex: 200px, auto. % values will not work."
+msgstr ""
+
+#: backend/tabs/instance/theme/horizontal_res.php:78
+msgid "Image height"
+msgstr ""
+
+#: backend/tabs/instance/theme/horizontal_res.php:95
+msgid ""
+"Default: <strong>150px</strong>. Only <strong>auto</strong> or "
+"<strong>px</strong> values are accepted."
+msgstr ""
+
+#: backend/tabs/instance/theme/horizontal_res.php:100
+msgid "Result item alignment"
+msgstr ""
+
+#: backend/tabs/instance/theme/horizontal_res.php:112
+msgid ""
+"Default: <strong>Center</strong>. Sets where each results is aligned in the "
+"results container."
+msgstr ""
+
+#: backend/tabs/instance/theme/horizontal_res.php:113
+msgid ""
+"Applies only when the <strong>Display the results scrollbar?</strong> "
+"option is turned OFF above."
+msgstr ""
+
+#: backend/tabs/instance/theme/horizontal_res.php:119
 msgid "Result side margin"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:57
+#: backend/tabs/instance/theme/horizontal_res.php:126
 #: backend/tabs/instance/theme/polaroid_res.php:46
 msgid "Result padding"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:64
+#: backend/tabs/instance/theme/horizontal_res.php:133
 msgid "Result container background color"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:70
+#: backend/tabs/instance/theme/horizontal_res.php:139
 msgid "Results container border"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:75
+#: backend/tabs/instance/theme/horizontal_res.php:144
 #: backend/tabs/instance/theme/sett_dropdown.php:70
 #: backend/tabs/instance/theme/vertical_res.php:63
 msgid "Custom scrollbar"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:78
+#: backend/tabs/instance/theme/horizontal_res.php:147
 #: backend/tabs/instance/theme/sett_dropdown.php:73
 #: backend/tabs/instance/theme/vertical_res.php:66
 msgid "Auto hide the scrollbar?"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:81
+#: backend/tabs/instance/theme/horizontal_res.php:150
 #: backend/tabs/instance/theme/sett_dropdown.php:76
 #: backend/tabs/instance/theme/vertical_res.php:69
 msgid "Scrollbar color"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:88
+#: backend/tabs/instance/theme/horizontal_res.php:157
 msgid "Results container box shadow"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:93
+#: backend/tabs/instance/theme/horizontal_res.php:162
 msgid "Result item incoming animation"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:98
+#: backend/tabs/instance/theme/horizontal_res.php:167
 msgid "Result item background color"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:103
+#: backend/tabs/instance/theme/horizontal_res.php:172
 msgid "Result item mouse hover background color"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:109
+#: backend/tabs/instance/theme/horizontal_res.php:178
 msgid "Results item border"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:115
+#: backend/tabs/instance/theme/horizontal_res.php:184
 msgid "Results item box shadow"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:121
+#: backend/tabs/instance/theme/horizontal_res.php:190
 msgid "Results image border"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:127
+#: backend/tabs/instance/theme/horizontal_res.php:196
 msgid "Results image box shadow"
 msgstr ""
 
@@ -7987,6 +8072,10 @@ msgstr ""
 msgid "Typography"
 msgstr ""
 
+#: backend/tabs/instance/theme_options.php:15
+msgid "Custom CSS & Media"
+msgstr ""
+
 #: backend/tabs/priorities/priorities_individual.php:2
 msgid "Post type"
 msgstr ""
@@ -8028,25 +8117,25 @@ msgstr ""
 msgid "Click the filter to load results!"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:11
+#: backend/tabs/priorities/priority_groups.php:13
 msgid ""
 "There are no priority groups yet. Click the <strong>Add New</strong> button "
 "to create one!"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:14
+#: backend/tabs/priorities/priority_groups.php:16
 msgid "Click on this icon for rule group settings!"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:17
+#: backend/tabs/priorities/priority_groups.php:19
 msgid "Click here if you want to delete this rule group!"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:20
+#: backend/tabs/priorities/priority_groups.php:22
 msgid "Rule Group #1"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:25
+#: backend/tabs/priorities/priority_groups.php:27
 msgid ""
 "If you don't know what priority groups are, check the <a href=\"%s\" "
 "target=\"_blank\">Priority</a> and the\n"
@@ -8054,189 +8143,189 @@ msgid ""
 "first."
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:32
+#: backend/tabs/priorities/priority_groups.php:34
 msgid ""
 "PLEASE NOTE: Always create <strong>as few rules as possible</strong>, as "
 "they may affect the search performance negatively."
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:36
+#: backend/tabs/priorities/priority_groups.php:38
 msgid "Remove all"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:37
+#: backend/tabs/priorities/priority_groups.php:39
 msgid "Add new!"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:38
+#: backend/tabs/priorities/priority_groups.php:40
 msgid "Save Groups"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:49
+#: backend/tabs/priorities/priority_groups.php:53
 msgid "Ruleset name"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:55
+#: backend/tabs/priorities/priority_groups.php:59
 msgid "Set results priority matching the rules to"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:61
+#: backend/tabs/priorities/priority_groups.php:65
 msgid "Apply to"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:64
+#: backend/tabs/priorities/priority_groups.php:68
 msgid "Every search instance"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:71
+#: backend/tabs/priorities/priority_groups.php:75
 msgid "Apply on"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:73
+#: backend/tabs/priorities/priority_groups.php:77
 msgid "any search phrase"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:74
+#: backend/tabs/priorities/priority_groups.php:78
 msgid "phrase matching anywhere"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:75
+#: backend/tabs/priorities/priority_groups.php:79
 msgid "phrase matching exactly"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:76
+#: backend/tabs/priorities/priority_groups.php:80
 msgid "phrase starting with"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:77
+#: backend/tabs/priorities/priority_groups.php:81
 msgid "phrase ending with"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:80
+#: backend/tabs/priorities/priority_groups.php:84
 msgid "Enter search phrase.."
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:83
+#: backend/tabs/priorities/priority_groups.php:87
 msgid "Apply if"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:85
+#: backend/tabs/priorities/priority_groups.php:89
 msgid "all rules match"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:86
+#: backend/tabs/priorities/priority_groups.php:90
 msgid "any of the rules match"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:96
+#: backend/tabs/priorities/priority_groups.php:100
 msgid "Click on this icon for rule settings!"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:99
+#: backend/tabs/priorities/priority_groups.php:103
 msgid "Click here if you want to delete this rule!"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:106
+#: backend/tabs/priorities/priority_groups.php:110
 msgid "Rule #1"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:109
-#: backend/tabs/priorities/priority_groups.php:111
+#: backend/tabs/priorities/priority_groups.php:113
+#: backend/tabs/priorities/priority_groups.php:115
 msgid "Rule name"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:115
+#: backend/tabs/priorities/priority_groups.php:119
 msgid "Rule type"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:118
+#: backend/tabs/priorities/priority_groups.php:122
 msgid "Taxonomy term"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:126
+#: backend/tabs/priorities/priority_groups.php:130
 msgid "IN"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:127
+#: backend/tabs/priorities/priority_groups.php:131
 msgid "NOT IN"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:133
+#: backend/tabs/priorities/priority_groups.php:137
 msgid "Select taxonomy terms"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:147
+#: backend/tabs/priorities/priority_groups.php:151
 msgid "Choose custom field"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:160
+#: backend/tabs/priorities/priority_groups.php:164
 msgid "Operator:"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:164
-#: backend/tabs/priorities/priority_groups.php:191
+#: backend/tabs/priorities/priority_groups.php:168
+#: backend/tabs/priorities/priority_groups.php:195
 msgid "CONTAINS"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:165
-#: backend/tabs/priorities/priority_groups.php:192
+#: backend/tabs/priorities/priority_groups.php:169
+#: backend/tabs/priorities/priority_groups.php:196
 msgid "DOES NOT CONTAIN"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:166
-#: backend/tabs/priorities/priority_groups.php:193
+#: backend/tabs/priorities/priority_groups.php:170
+#: backend/tabs/priorities/priority_groups.php:197
 msgid "IS EXACTLY"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:175
+#: backend/tabs/priorities/priority_groups.php:179
 msgid "Between"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:181
+#: backend/tabs/priorities/priority_groups.php:185
 msgid "Value(s)"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:183
+#: backend/tabs/priorities/priority_groups.php:187
 msgid "Enter value here.."
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:184
+#: backend/tabs/priorities/priority_groups.php:188
 msgid "Enter value 2 here.."
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:200
+#: backend/tabs/priorities/priority_groups.php:204
 msgid "Keyword.."
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:203
+#: backend/tabs/priorities/priority_groups.php:207
 msgid "Save rule"
 msgstr ""
 
-#: backend/tabs/priorities/priority_groups.php:204
+#: backend/tabs/priorities/priority_groups.php:208
 msgid "Delete rule"
 msgstr ""
 
-#: backend/updates_help.php:23
+#: backend/updates_help.php:28
 msgid "Version status"
 msgstr ""
 
-#: backend/updates_help.php:25
+#: backend/updates_help.php:30
 msgid "Installed version:"
 msgstr ""
 
-#: backend/updates_help.php:26
+#: backend/updates_help.php:31
 msgid "Newest version: "
 msgstr ""
 
-#: backend/updates_help.php:27
+#: backend/updates_help.php:32
 msgid "Last update: "
 msgstr ""
 
-#: backend/updates_help.php:29
+#: backend/updates_help.php:34
 msgid "Support"
 msgstr ""
 
-#: backend/updates_help.php:31
+#: backend/updates_help.php:38
 msgid ""
 "If you can't find the answer in the documentation or knowledge base, or if "
 "you are having other issues,\n"
@@ -8244,55 +8333,101 @@ msgid ""
 "support ticket</a>."
 msgstr ""
 
-#: backend/updates_help.php:34
+#: backend/updates_help.php:47
 msgid "Useful Resources"
 msgstr ""
 
-#: backend/updates_help.php:37
+#: backend/updates_help.php:50
 msgid "Onlie Documentation"
 msgstr ""
 
-#: backend/updates_help.php:38
+#: backend/updates_help.php:51
 msgid "Knowledge base"
 msgstr ""
 
-#: backend/updates_help.php:39 includes/classes/Updates/Manager.php:116
+#: backend/updates_help.php:52 src/server/Updates/Manager.php:115
 msgid "Changelog"
 msgstr ""
 
-#: backend/updates_help.php:40
+#: backend/updates_help.php:53
 msgid "How to manual update?"
 msgstr ""
 
-#: backend/updates_help.php:46
-msgid "Automatic Updates"
+#: backend/updates_help.php:59
+msgid "License activation & Automatic updates"
 msgstr ""
 
-#: backend/updates_help.php:49
+#: backend/updates_help.php:64
 msgid ""
-"To activate Automatic Updates, please activate your purchase code with this "
+"Looks like this license was deactivated remotely or activated on a "
+"different site."
+msgstr ""
+
+#: backend/updates_help.php:65
+msgid ""
+"<strong>No worries!</strong> You can keep it that way, but this one will "
+"not recieve automatic updates, only stays verified."
+msgstr ""
+
+#: backend/updates_help.php:68
+msgid "To activate Automatic Updates, you can re-activate your license."
+msgstr ""
+
+#: backend/updates_help.php:72
+msgid ""
+"To activate Automatic Updates, please activate your license code with this "
 "site."
 msgstr ""
 
-#: backend/updates_help.php:50
-msgid "Purchase code"
-msgstr ""
-
-#: backend/updates_help.php:55
+#: backend/updates_help.php:77
 msgid ""
-"<p>If you activated the plugin <b>with this site before</b>, and you see "
-"this activation form, just enter the purchase code again to re-activate.</p>"
+"Check <a href=\"%s\" target=\"_blank\">this documentation</a> to see where "
+"you can find your license key."
 msgstr ""
 
-#: backend/updates_help.php:59
-msgid "Auto updates are activated for this site with purchase code:"
+#: backend/updates_help.php:83
+msgid "License key"
 msgstr ""
 
-#: backend/updates_help.php:63
+#: backend/updates_help.php:91
 msgid ""
-"<b>NOTICE:</b> After deactivation there is a <b>30 minute</b> wait time "
-"until you can re-activate the same purchase code to prevent malicious "
-"activity."
+"If you activated the plugin <b>with this site before</b>, and you see this "
+"activation form, just enter the purchase code again to re-activate."
+msgstr ""
+
+#: backend/updates_help.php:99
+msgid "License verified & auto-updates are activated for this site, with key: "
+msgstr ""
+
+#: backend/updates_help.php:102
+msgid "A license is verified locally on current site."
+msgstr ""
+
+#: backend/updates_help.php:106
+msgid "Remove"
+msgstr ""
+
+#: backend/updates_help.php:108
+msgid ""
+"<b>NOTICE:</b> After removal there is a <b>30 minute</b> wait time until "
+"you can re-activate the same purchase code to prevent malicious activity."
+msgstr ""
+
+#: backend/updates_help.php:113
+msgid "License Management"
+msgstr ""
+
+#: backend/updates_help.php:117
+msgid ""
+"To see more details about your licenses, you can <a href=\"%s\" "
+"target=\"_blank\">login</a> to our support site."
+msgstr ""
+
+#: backend/updates_help.php:125
+msgid ""
+"If you don't have an account yet, just create one and <a href='%s' "
+"target='_blank'>add</a> your existing licenses. They will be bound to that "
+"account."
 msgstr ""
 
 #. Plugin Name of the plugin/theme
@@ -8340,169 +8475,176 @@ msgstr ""
 msgid "Layout"
 msgstr ""
 
-#: includes/classes/Api/Rest0/Rest.php:71
+#: src/server/Api/Rest0/Rest.php:71
 msgid "Not Authorized"
 msgstr ""
 
-#: includes/classes/Api/Rest0/Rest.php:82
+#: src/server/Api/Rest0/Rest.php:82
 msgid "Route error"
 msgstr ""
 
-#: includes/classes/Cache/BFI_Thumb_1_3.php:173
+#: src/server/Cache/BFI_Thumb_1_3.php:173
 msgid "Image rotate failed."
 msgstr ""
 
-#: includes/classes/Cache/BFI_Thumb_1_3.php:196
+#: src/server/Cache/BFI_Thumb_1_3.php:196
 msgid "Image opacity change failed."
 msgstr ""
 
-#: includes/classes/Cache/BFI_Thumb_1_3.php:283
+#: src/server/Cache/BFI_Thumb_1_3.php:283
 msgid "Image color change failed."
 msgstr ""
 
-#: includes/classes/Cache/BFI_Thumb_1_3.php:300
+#: src/server/Cache/BFI_Thumb_1_3.php:300
 msgid "Image grayscale failed."
 msgstr ""
 
-#: includes/classes/Cache/BFI_Thumb_1_3.php:317
+#: src/server/Cache/BFI_Thumb_1_3.php:317
 msgid "Image negate failed."
 msgstr ""
 
-#: includes/classes/Core/Instances.php:546
+#: src/server/Core/Instances.php:546
 msgid "Invalid data"
 msgstr ""
 
-#: includes/classes/Core/Instances.php:550
+#: src/server/Core/Instances.php:550
 msgid "Invalid JSON data"
 msgstr ""
 
-#: includes/classes/Core/Manager.php:127
+#: src/server/Core/Manager.php:140
 msgid "Every 2 Minutes"
 msgstr ""
 
-#: includes/classes/Core/Manager.php:131
+#: src/server/Core/Manager.php:144
 msgid "Every 3 Minutes"
 msgstr ""
 
-#: includes/classes/Core/Manager.php:135
+#: src/server/Core/Manager.php:148
 msgid "Every 5 Minutes"
 msgstr ""
 
-#: includes/classes/Core/Manager.php:139
+#: src/server/Core/Manager.php:152
 msgid "Every 15 Minutes"
 msgstr ""
 
-#: includes/classes/Core/Manager.php:143
+#: src/server/Core/Manager.php:156
 msgid "Every 30 Minutes"
 msgstr ""
 
-#: includes/classes/Core/Manager.php:318
+#: src/server/Core/Manager.php:332
 msgid ""
 "<b>Ajax Search Pro notice: </b> The Index Table options have been modified, "
 "please re-create the index table!"
 msgstr ""
 
-#: includes/classes/Core/Manager.php:319
+#: src/server/Core/Manager.php:333
 msgid "Let's do it!"
 msgstr ""
 
-#: includes/classes/Core/Manager.php:320
+#: src/server/Core/Manager.php:334
 msgid "Hide this message"
 msgstr ""
 
-#: includes/classes/Core/Menu.php:42
+#: src/server/Core/Menu.php:42
 msgid "Index Table"
 msgstr ""
 
-#: includes/classes/Core/Menu.php:47
+#: src/server/Core/Menu.php:47
 msgid "Priorities"
 msgstr ""
 
-#: includes/classes/Core/Menu.php:57
+#: src/server/Core/Menu.php:57
 msgid "Analytics Integration"
 msgstr ""
 
-#: includes/classes/Core/Menu.php:62
+#: src/server/Core/Menu.php:62
 msgid "Cache Settings"
 msgstr ""
 
-#: includes/classes/Core/Menu.php:67
+#: src/server/Core/Menu.php:67
 msgid "Performance tracking"
 msgstr ""
 
-#: includes/classes/Core/Menu.php:72
+#: src/server/Core/Menu.php:72
 msgid "Compatibility & Other Settings"
 msgstr ""
 
-#: includes/classes/Core/Menu.php:77
+#: src/server/Core/Menu.php:77
 msgid "Export/Import"
 msgstr ""
 
-#: includes/classes/Core/Menu.php:82
+#: src/server/Core/Menu.php:82
 msgid "Maintenance"
 msgstr ""
 
-#: includes/classes/Core/Menu.php:87
+#: src/server/Core/Menu.php:87
 msgid "Help & Updates"
 msgstr ""
 
-#: includes/classes/Core/NavMenuMetaBox.php:90
-#: includes/classes/NavMenu/View.php:122
+#: src/server/Core/NavMenuMetaBox.php:90 src/server/NavMenu/View.php:122
 msgid "Prevent custom script events"
 msgstr ""
 
-#: includes/classes/Hooks/Filters/MediaScreen.php:14
+#: src/server/Hooks/Filters/MediaScreen.php:14
 msgid "Content (not editable)"
 msgstr ""
 
-#: includes/classes/Hooks/Filters/MediaScreen.php:15
+#: src/server/Hooks/Filters/MediaScreen.php:15
 msgid "Parsed content by Ajax Search Pro Media Parser service"
 msgstr ""
 
-#: includes/classes/Media/RemoteService/License.php:91
+#: src/server/Media/RemoteService/License.php:123
 msgid ""
 "Invalid license key length or missing characters. Please make sure to copy "
 "the 36 character license key here."
 msgstr ""
 
-#: includes/classes/NavMenu/View.php:100
+#: src/server/NavMenu/View.php:100
 msgid "Search"
 msgstr ""
 
-#: includes/classes/Updates/Manager.php:112
+#: src/server/Rest/AbstractRest.php:21
+msgid "Only logged in users can access this resource."
+msgstr ""
+
+#: src/server/Rest/AbstractRest.php:33
+msgid "Only administrators can access this resource."
+msgstr ""
+
+#: src/server/Updates/Manager.php:111
 #. translators: %s: Plugin name - Elementor Pro.
 msgid "More information about %s"
 msgstr ""
 
-#: includes/classes/Updates/Manager.php:114
+#: src/server/Updates/Manager.php:113
 msgid "View details"
 msgstr ""
 
-#: includes/classes/Updates/Manager.php:116
+#: src/server/Updates/Manager.php:115
 msgid "View Ajax Search Pro Pro Changelog"
 msgstr ""
 
-#: includes/classes/Updates/Manager.php:174
+#: src/server/Updates/Manager.php:173
 msgid "Activate your license"
 msgstr ""
 
-#: includes/classes/Updates/Manager.php:174
+#: src/server/Updates/Manager.php:173
 msgid "for automatic updates or"
 msgstr ""
 
-#: includes/classes/Updates/Manager.php:174
+#: src/server/Updates/Manager.php:173
 msgid "download new version from CodeCanyon."
 msgstr ""
 
-#: includes/classes/Updates/Manager.php:176
+#: src/server/Updates/Manager.php:175
 msgid "Update Ajax Search Pro now."
 msgstr ""
 
-#: includes/classes/Updates/Remote.php:134
+#: src/server/Updates/Remote.php:134
 msgid "Ajax Search Pro version <strong>%s</strong> is available."
 msgstr ""
 
-#: includes/classes/Updates/Remote.php:139
+#: src/server/Updates/Remote.php:139
 msgid "How to update?"
 msgstr ""
 

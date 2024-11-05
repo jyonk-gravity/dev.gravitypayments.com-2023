@@ -337,7 +337,7 @@ function asp_do_init_options() {
         'secondary_kw_logic' => 'none',
 
         'orderby_primary' => 'relevance DESC',
-        'orderby' => 'post_date DESC',
+        'orderby_secondary' => 'post_date DESC',
         'orderby_primary_cf' => '',
         'orderby_secondary_cf' => '',
         'orderby_primary_cf_type' => 'numeric',
@@ -923,10 +923,20 @@ function asp_do_init_options() {
 
         'blogtitleorderby' => 'desc',
 
-        'hreswidth' => '150px',
+        'h_item_width' => '150px',
+        'h_item_width_tablet' => '150px',
+        'h_item_width_phone' => '150px',
+        'h_item_alignment' => 'center',
+
         'h_res_show_scrollbar' => 1,
-        'hor_img_height' => '150px',
-        'horizontal_res_height' => 'auto',
+
+        'h_image_height' => '150px',
+        'h_image_height_tablet' => '150px',
+        'h_image_height_phone' => '150px',
+
+        'h_item_height' => 'auto',
+        'h_item_height_tablet' => 'auto',
+        'h_item_height_phone' => 'auto',
         'hressidemargin' => '8px',
         'hrespadding' => '7px',
         'hresultinanim' => 'bounceIn',
@@ -997,6 +1007,8 @@ function asp_do_init_options() {
         'custom_css_h' => '',
         'res_z_index' => 11000,
         'sett_z_index' => 11001,
+		'media_query_mobile_max_width' => 640,
+		'media_query_tablet_max_width' => 1024,
 
 //Relevance options
         'userelevance' => 1,

@@ -47,6 +47,22 @@ return array(
 				'cookie-law-info-js-extra'
     		)
     	),
+    	'fluentform' => array(
+    		'id' => 'fluentform/fluentform.php',
+    		'title' => 'Fluent Forms',
+    		'exclusions' => array(
+    			'fluentform',
+    			'turnstile'
+    		)
+    	),
+    	'fluentformpro' => array(
+    		'id' => 'fluentformpro/fluentformpro.php',
+    		'title' => 'Fluent Forms Pro',
+    		'exclusions' => array(
+    			'fluentform',
+    			'turnstile'
+    		)
+    	),
     	'gdpr-cookie-compliance' => array(
     		'id' => 'gdpr-cookie-compliance/moove-gdpr.php',
     		'title' => 'GDPR Cookie Compliance',
@@ -237,6 +253,7 @@ return array(
             'exclusions' => array(
                 'jquery.min.js',
                 'jquery.smartmenus.min.js',
+                'jquery.sticky.min.js',
                 'webpack.runtime.min.js',
                 'webpack-pro.runtime.min.js',
 				'/elementor/assets/js/frontend.min.js',

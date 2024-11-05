@@ -17,7 +17,7 @@ $extra_class .= $style['box_compact_layout'] == 1 ? ' asp_compact' : ' asp_non_c
 $extra_class .= $style['box_sett_hide_box'] == 1 ? ' hiddend' : '';
 $extra_attrs = $style['box_compact_layout'] == 1 ? ' data-asp-compact="closed"' : '';
 ?>
-<div class="asp_w_container asp_w_container_<?php echo $real_id; ?> asp_w_container_<?php echo $id; ?><?php echo $extra_container_class; ?>" data-id="<?php echo $real_id; ?>">
+<div class="asp_w_container asp_w_container_<?php echo $real_id; ?> asp_w_container_<?php echo $id; ?><?php echo $extra_container_class; ?>" data-id="<?php echo $real_id; ?>" data-instance="<?php echo self::$perInstanceCount[$real_id]; ?>">
 	<div class='asp_w asp_m asp_m_<?php echo $real_id; ?> asp_m_<?php echo $id; ?> wpdreams_asp_sc wpdreams_asp_sc-<?php echo $real_id; ?> ajaxsearchpro asp_main_container <?php echo $extra_class; ?>'
 		 data-id="<?php echo $real_id; ?>"
 		 data-name="<?php echo esc_attr($search['name']); ?>"

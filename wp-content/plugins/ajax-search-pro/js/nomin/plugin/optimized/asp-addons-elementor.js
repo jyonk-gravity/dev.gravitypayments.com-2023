@@ -4,6 +4,18 @@
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
@@ -31,46 +43,43 @@ __webpack_require__.d(__webpack_exports__, {
 
 ;// CONCATENATED MODULE: external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
+var external_AjaxSearchPro_default = /*#__PURE__*/__webpack_require__.n(external_AjaxSearchPro_namespaceObject);
 ;// CONCATENATED MODULE: external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./js/src/addons/elementor.js
+var external_DoMini_default = /*#__PURE__*/__webpack_require__.n(external_DoMini_namespaceObject);
+;// CONCATENATED MODULE: ./src/client/addons/elementor.ts
 
 
-
-const helpers = external_AjaxSearchPro_namespaceObject.helpers;
+const helpers = (external_AjaxSearchPro_default()).helpers;
 class ElementorAddon {
   name = "Elementor Widget Fixes";
   init() {
-    helpers.Hooks.addFilter("asp/init/etc", this.fixElementorPostPagination, 10, this);
-    helpers.Hooks.addFilter("asp/live_load/selector", this.fixSelector, 10, this);
-    helpers.Hooks.addFilter("asp/live_load/url", this.url, 10, this);
-    helpers.Hooks.addFilter("asp/live_load/start", this.start, 10, this);
-    helpers.Hooks.addFilter("asp/live_load/replacement_node", this.fixElementorLoadMoreResults, 10, this);
-    helpers.Hooks.addFilter("asp/live_load/finished", this.finished, 10, this);
+    const { Hooks } = helpers;
+    Hooks.addFilter("asp/init/etc", this.fixElementorPostPagination.bind(this), 10, this);
+    Hooks.addFilter("asp/live_load/selector", this.fixSelector.bind(this), 10, this);
+    Hooks.addFilter("asp/live_load/start", this.start.bind(this), 10, this);
+    Hooks.addFilter("asp/live_load/finished", this.finished.bind(this), 10, this);
   }
   fixSelector(selector) {
-    if (selector.indexOf("asp_es_") > -1) {
+    if (selector.includes("asp_es_")) {
       selector += " .elementor-widget-container";
     }
     return selector;
   }
-  url(url, obj, selector, widget) {
-    if (url.indexOf("asp_force_reset_pagination=1") >= 0) {
-      url = url.replace(/\?product\-page\=[0-9]+\&/, "?");
-    }
-    return url;
-  }
   start(url, obj, selector, widget) {
-    let isNewSearch = external_DoMini_namespaceObject("form", obj.n("searchsettings")).serialize() + obj.n("text").val().trim() != obj.lastSuccesfulSearch;
-    if (!isNewSearch && external_DoMini_namespaceObject(widget).find(".e-load-more-spinner").length > 0) {
-      external_DoMini_namespaceObject(widget).css("opacity", 1);
+    const searchSettingsSerialized = obj.n("searchsettings").find("form").serialize();
+    const textValue = obj.n("text").val().trim();
+    const isNewSearch = searchSettingsSerialized + textValue !== obj.lastSuccesfulSearch;
+    if (!isNewSearch && external_DoMini_default()(widget).find(".e-load-more-spinner").length > 0) {
+      external_DoMini_default()(widget).css("opacity", "1");
     }
+    external_DoMini_default()(selector).parent().removeClass("e-load-more-pagination-end");
   }
   finished(url, obj, selector, widget) {
-    let $el = external_DoMini_namespaceObject(widget);
-    if (selector.indexOf("asp_es_") !== false && typeof elementorFrontend != "undefined" && typeof elementorFrontend.init != "undefined" && $el.find(".asp_elementor_nores").length == 0) {
-      let widgetType = $el.parent().data("widget_type");
-      if (widgetType != "" && typeof jQuery != "undefined") {
+    const $el = external_DoMini_default()(widget);
+    if (selector.includes("asp_es_") && typeof elementorFrontend !== "undefined" && typeof elementorFrontend.init !== "undefined" && $el.find(".asp_elementor_nores").length === 0) {
+      const widgetType = $el.parent().data("widget_type") || "";
+      if (widgetType !== "" && typeof jQuery !== "undefined") {
         elementorFrontend.hooks.doAction("frontend/element_ready/" + widgetType, jQuery($el.parent().get(0)));
       }
       this.fixElementorPostPagination(obj, url);
@@ -81,132 +90,68 @@ class ElementorAddon {
     }
   }
   scrollToResultsIfNeeded($el) {
-    let $first = $el.find(".elementor-post, .product").first();
-    if ($first.length && !$first.inViewPort(40)) {
+    const $first = $el.find(".elementor-post, .product").first();
+    if ($first.length && !$first.isInViewport(40)) {
       $first.get(0).scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
     }
   }
   fixElementorPostPagination(obj, url) {
-    let $this = obj, _this = this, $es = external_DoMini_namespaceObject(".asp_es_" + $this.o.id);
-    url = typeof url == "undefined" ? location.href : url;
-    if ($es.length > 0) {
-      _this.elementorHideSpinner($es.get(0));
-      let i = url.indexOf("?");
-      if (i >= 0) {
-        let queryString = url.substring(i + 1);
-        if (queryString) {
-          queryString = queryString.replace(/&asp_force_reset_pagination=1/gmi, "");
-          if ($es.find(".e-load-more-anchor").length > 0 && $es.find(".elementor-pagination a").length == 0) {
-            let handler = function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              if (!obj.searching) {
-                let page = $es.data("page") == "" ? 2 : parseInt($es.data("page")) + 1;
-                let newQS = queryString.split("&page=");
-                $es.data("page", page);
-                $this.showLoader();
-                _this.elementorShowSpinner($es.get(0));
-                $this.liveLoad(
-                  ".asp_es_" + $this.o.id,
-                  url.split("?")[0] + "?" + newQS[0] + "&page=" + page,
-                  false,
-                  true
-                );
-              }
-            };
-            $es.find(".e-load-more-anchor").next(".elementor-button-wrapper").find("a").attr("href", "");
-            $es.find(".e-load-more-anchor").next(".elementor-button-wrapper").offForced().on("click", handler);
-            $es.find(".asp_e_load_more_anchor").on("asp_e_load_more", handler);
-          } else {
-            $es.find(".elementor-pagination a, .elementor-widget-container .woocommerce-pagination a").each(function() {
-              let a = external_DoMini_namespaceObject(this).attr("href");
-              if (a.indexOf("asp_ls=") < 0 && a.indexOf("asp_ls&") < 0) {
-                if (a.indexOf("?") < 0) {
-                  external_DoMini_namespaceObject(this).attr("href", a + "?" + queryString);
-                } else {
-                  external_DoMini_namespaceObject(this).attr("href", a + "&" + queryString);
-                }
-              } else {
-                external_DoMini_namespaceObject(this).attr("href", external_DoMini_namespaceObject(this).attr("href").replace(/&asp_force_reset_pagination=1/gmi, ""));
-              }
-            });
-            $es.find(".elementor-pagination a, .elementor-widget-container .woocommerce-pagination a").on("click", function(e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              e.stopPropagation();
-              $this.showLoader();
-              $this.liveLoad(".asp_es_" + $this.o.id, external_DoMini_namespaceObject(this).attr("href"), false, true);
-            });
-          }
-        }
-      }
+    const $es = external_DoMini_default()(".asp_es_" + obj.o.id);
+    url = url || location.href;
+    if (!$es.length) {
+      return obj;
     }
-    return $this;
-  }
-  fixElementorLoadMoreResults(replacementNode, obj, originalNode, data) {
-    let settings = external_DoMini_namespaceObject(originalNode).closest("div[data-settings]").data("settings"), $aspLoadMoreAnchor = external_DoMini_namespaceObject(originalNode).find(".asp_e_load_more_anchor");
-    if (settings != null && settings != "") {
-      settings = JSON.parse(settings);
-      if (settings.pagination_type == "load_more_infinite_scroll" && $aspLoadMoreAnchor.length == 0) {
-        external_DoMini_namespaceObject(".e-load-more-anchor").css("display", "none");
-        external_DoMini_namespaceObject(originalNode).append('<div class="asp_e_load_more_anchor"></div>');
-        $aspLoadMoreAnchor = external_DoMini_namespaceObject(originalNode).find(".asp_e_load_more_anchor");
-        let handler = function() {
-          if ($aspLoadMoreAnchor.inViewPort(50)) {
-            $aspLoadMoreAnchor.trigger("asp_e_load_more");
-            $aspLoadMoreAnchor.remove();
-          }
-        };
-        obj.documentEventHandlers.push({
-          "node": window,
-          "event": "scroll",
-          "handler": handler
+    const urlObj = new URL(url);
+    if (!urlObj.searchParams.size) {
+      return obj;
+    }
+    this.elementorHideSpinner($es.get(0));
+    urlObj.searchParams.delete("asp_force_reset_pagination");
+    const $loadMoreAnchor = $es.find(".e-load-more-anchor");
+    const paginationLinks = $es.find(".elementor-pagination a, .elementor-widget-container .woocommerce-pagination a");
+    if ($loadMoreAnchor.length > 0 && !paginationLinks.length) {
+      const $widgetContainer = $es.find(".elementor-widget-container").get(0);
+      const fixAnchor = () => {
+        const pageData = $loadMoreAnchor.data("page");
+        const page = pageData ? parseInt(pageData, 10) + 1 : 2;
+        urlObj.searchParams.set("page", page.toString());
+        $loadMoreAnchor.data("next-page", urlObj.href);
+        $loadMoreAnchor.next(".elementor-button-wrapper").find("a").attr("href", urlObj.href);
+      };
+      if ($widgetContainer) {
+        const observer = new MutationObserver(() => {
+          fixAnchor();
+          console.log("Mutation observed: fixing anchor.");
         });
-        external_DoMini_namespaceObject(window).on("scroll", handler);
+        observer.observe($widgetContainer, {
+          childList: true,
+          subtree: true
+        });
       }
-      if (external_DoMini_namespaceObject(replacementNode).find(".e-load-more-spinner").length > 0) {
-        external_DoMini_namespaceObject(originalNode).removeClass("e-load-more-pagination-loading");
-        let isNewSearch = external_DoMini_namespaceObject("form", obj.n("searchsettings")).serialize() + obj.n("text").val().trim() != obj.lastSuccesfulSearch, $loadMoreButton = external_DoMini_namespaceObject(originalNode).find(".e-load-more-anchor").next(".elementor-button-wrapper"), $loadMoreMessage = external_DoMini_namespaceObject(originalNode).find(".e-load-more-message"), $article = external_DoMini_namespaceObject(replacementNode).find("article");
-        if ($article.length > 0 && $article.parent().length > 0 && external_DoMini_namespaceObject(originalNode).find("article").parent().length > 0) {
-          let newData = $article.get(0).innerHTML, previousData = external_DoMini_namespaceObject(originalNode).data("asp-previous-data");
-          if (previousData == "" || isNewSearch) {
-            external_DoMini_namespaceObject(originalNode).find("article").parent().get(0).innerHTML = newData;
-            external_DoMini_namespaceObject(originalNode).data("asp-previous-data", newData);
-            $loadMoreButton.css("display", "block");
-            $loadMoreMessage.css("display", "none");
-          } else if (previousData == newData) {
-            $loadMoreButton.css("display", "none");
-            $loadMoreMessage.css("display", "block");
-            $aspLoadMoreAnchor.remove();
-          } else {
-            external_DoMini_namespaceObject(originalNode).find("article").parent().get(0).innerHTML += newData;
-            external_DoMini_namespaceObject(originalNode).data("asp-previous-data", newData);
-          }
+      fixAnchor();
+    } else {
+      paginationLinks.each(function() {
+        const $link = external_DoMini_default()(this);
+        const href = $link.attr("href") || "";
+        const itemUrlObj = new URL(href, window.location.origin);
+        if (!itemUrlObj.searchParams.has("asp_ls")) {
+          urlObj.searchParams.forEach((value, key) => itemUrlObj.searchParams.set(key, value));
         } else {
-          $loadMoreButton.css("display", "none");
-          $loadMoreMessage.css("display", "block");
-          $aspLoadMoreAnchor.remove();
+          itemUrlObj.searchParams.delete("asp_force_reset_pagination");
         }
-        return null;
-      }
+        $link.attr("href", itemUrlObj.href);
+      });
     }
-    return replacementNode;
-  }
-  elementorShowSpinner(widget) {
-    external_DoMini_namespaceObject(widget).addClass("e-load-more-pagination-loading");
-    external_DoMini_namespaceObject(widget).find(".e-load-more-spinner>*").addClass("eicon-animation-spin");
-    external_DoMini_namespaceObject(widget).css("opacity", 1);
+    return obj;
   }
   elementorHideSpinner(widget) {
-    external_DoMini_namespaceObject(widget).removeClass("e-load-more-pagination-loading");
-    external_DoMini_namespaceObject(widget).find(".eicon-animation-spin").removeClass("eicon-animation-spin");
+    external_DoMini_default()(widget).removeClass("e-load-more-pagination-loading").find(".eicon-animation-spin").removeClass("eicon-animation-spin");
   }
 }
-external_AjaxSearchPro_namespaceObject.addons.add(new ElementorAddon());
+external_AjaxSearchPro_default().addons.add(new ElementorAddon());
 /* harmony default export */ var elementor = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-addons-elementor.js
-
+;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-addons-elementor.js
 
 
 /* harmony default export */ var asp_addons_elementor = (external_AjaxSearchPro_namespaceObject);

@@ -33,8 +33,7 @@ __webpack_require__.d(__webpack_exports__, {
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
 ;// CONCATENATED MODULE: external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./js/src/plugin/core/actions/autocomplete.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/actions/autocomplete.js
 
 
 "use strict";
@@ -114,8 +113,7 @@ external_AjaxSearchPro_namespaceObject.plugin.fixAutocompleteScrollLeft = functi
 };
 /* harmony default export */ var autocomplete = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/plugin/core/events/autocomplete.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/events/autocomplete.js
 
 
 "use strict";
@@ -156,8 +154,7 @@ external_AjaxSearchPro_namespaceObject.plugin.initAutocompleteEvent = function()
 };
 /* harmony default export */ var events_autocomplete = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-autocomplete.js
-
+;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-autocomplete.js
 
 
 

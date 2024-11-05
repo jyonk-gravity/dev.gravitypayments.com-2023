@@ -2,7 +2,7 @@
 /**
 * Plugin Name: WP Gravity Forms Salesforce
 * Description: Integrates Gravity Forms with Salesforce allowing form submissions to be automatically sent to your Salesforce account 
-* Version: 1.4.4
+* Version: 1.4.5
 * Requires at least: 4.7
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/gravity-forms-plugins/gravity-forms-salesforce-plugin/
@@ -24,7 +24,7 @@ class vxg_salesforce {
   public  $crm_name = 'salesforce';
   public  $id = 'vxg_salesforce';
   public  $domain = 'vxg-sales';
-  public  $version = "1.4.4";
+  public  $version = "1.4.5";
   public  $update_id = '30001';
   public  $min_gravityforms_version = '1.3.9';
   public $type = 'vxg_salesforce_pro';
@@ -54,6 +54,7 @@ class vxg_salesforce {
   public static $gf_status_msg='';
    public static $is_pr=true;
   public static $api_timeout;      
+  public static $del_files=array();      
     
 
  public function instance(){
@@ -95,6 +96,23 @@ include_once($pro_file);
        
 require_once(self::$path . "includes/crmperks-gf.php");
 require_once(self::$path . "includes/plugin-pages.php");  
+
+    if ( class_exists( 'GPDFAPIxx' ) ) {
+
+        /* Get the individual PDF config */
+       // $pdf  = GPDFAPI::get_pdf( 1, '5fba18c9c0304' );
+      // $pdfs = GPDFAPI::get_entry_pdfs( 789 );
+           $pdfs  = GPDFAPI::get_form_pdfs( 1 );
+      //$pdf_path = GPDFAPI::create_pdf( 789, '5fba18c9c0304');
+       // var_dump($pdfs); die();
+
+        if( true === $pdf['active'] ) {
+            //Do something if PDF is active
+        } else {
+            //Do something else if PDF is inactive
+        }
+    }
+    
 
   }
    /**
@@ -610,6 +628,18 @@ return $result;
    $val=true;
     }else if($gf_field_id=="form_title"){
   $value=$form['title'];
+  $val=true;
+  }else if(strpos($gf_field_id,'gravitypdf:') === 0){
+          if ( class_exists( 'GPDFAPI' ) ) {
+              $pdf_id=explode(":",$gf_field_id);
+              if(!empty($pdf_id[1])){
+      $value = GPDFAPI::create_pdf( $entry['id'], $pdf_id[1]);
+      if ( is_wp_error( $value ) || !is_file( $value ) ) {
+      $value='';    
+      }else{ self::$del_files[]=$value; }
+      
+              }
+          }
   $val=true;
   }else{
    $field = RGFormsModel::get_field($form, $gf_field_id);
@@ -1802,6 +1832,13 @@ $this->send_error_email($info_data,$entry,$form);
   }
   }
 
+  if(!empty(self::$del_files)){
+   foreach(self::$del_files as $k=>$v){
+   if(!empty($v) && file_exists($v)){
+       unlink($v); unset(self::$del_files[$k]);
+   }    
+   } 
+}
   return array("msg"=>$notice,"class"=>$screen_msg_class);
   }
 public function process_tags($entry,$form,$value,$crm_field_id='',$custom=''){

@@ -21,7 +21,7 @@ class CLI {
 		$network = is_multisite() && empty(WP_CLI::get_config()['url']);
 
 		if(!empty($args[0])) {
-			$network ? update_site_option('perfmatters_edd_license_key', trim($args[0])) : update_option('perfmatters_edd_license_key', trim($args[0]));
+			$network ? update_site_option('perfmatters_edd_license_key', trim($args[0])) : update_option('perfmatters_edd_license_key', trim($args[0]), false);
 		}
 
 		if(is_multisite()) {

@@ -30,15 +30,30 @@ defined('ABSPATH') or die("You can't access this file directly.");
 	overflow-x: auto;
 }
 
+<?php if (
+		$style['resultsposition'] !== 'hover' &&
+		str_contains(wpd_gradient_get_color_only($style['hboxbg']), 'transparent')
+): ?>
+	<?php if ($use_compatibility == true): ?>
+	<?php echo $asp_res_ids1; ?>.horizontal,
+	<?php echo $asp_res_ids2; ?>.horizontal,
+	<?php endif; ?>
+	<?php echo $asp_res_ids; ?>.horizontal {
+		margin-left: -<?php echo intval($style['hressidemargin']) ?>px;
+		margin-right: -<?php echo intval($style['hressidemargin']) ?>px;
+	}
+<?php endif; ?>
+
 
 <?php if ( $style['h_res_show_scrollbar'] == 0 ): ?>
+
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_res_ids1; ?>.horizontal .results .resdrg,
     <?php echo $asp_res_ids2; ?>.horizontal .results .resdrg,
 <?php endif; ?>
 <?php echo $asp_res_ids; ?>.horizontal .results .resdrg {
     display: flex;
-    justify-content: center;
+    justify-content: <?php echo $style['h_item_alignment']; ?>;
     flex-wrap: wrap;
 }
 <?php else: ?>
@@ -103,19 +118,20 @@ defined('ABSPATH') or die("You can't access this file directly.");
     <?php echo $asp_res_ids2; ?>.horizontal .results .item,
 <?php endif; ?>
 <?php echo $asp_res_ids; ?>.horizontal .results .item {
-    height: <?php echo w_isset_def($style['horizontal_res_height'], 'auto'); ?>;
-    width: <?php echo $style['hreswidth']; ?>;
-    margin: 10px <?php echo $style['hressidemargin']; ?>;
-    padding: <?php echo $style['hrespadding']; ?>;
+    height: <?php echo $style['h_item_height'] === 'auto' ? 'auto' : intval($style['h_item_height']) . 'px'; ?>;
+    width: <?php echo $style['h_item_width']; ?>;
+    margin: 10px <?php echo intval($style['hressidemargin']); ?>px;
+    padding: <?php echo intval($style['hrespadding']); ?>px;
     float: left;
     <?php wpdreams_gradient_css($style['hresultbg']); ?>
     <?php echo $style['hresultborder']; ?>
     <?php wpdreams_box_shadow_css($style['hresultshadow']); ?>
     <?php if ( $style['h_res_show_scrollbar'] == 0 ): ?>
-        flex-shrink: 0;
-        flex-grow: 0;
+	    flex: 0 0 calc(<?php echo $style['h_item_width']; ?> - <?php echo 2*(intval($style['hressidemargin']) + intval($style['hrespadding'])); ?>px);
     <?php endif; ?>
 }
+
+
 
 <?php if ($use_compatibility == true): ?>
     <?php echo $asp_res_ids1; ?>.horizontal .results .item:hover,
@@ -139,8 +155,8 @@ defined('ABSPATH') or die("You can't access this file directly.");
     <?php echo $asp_res_ids2; ?>.horizontal .results .item .asp_image,
 <?php endif; ?>
 <?php echo $asp_res_ids; ?>.horizontal .results .item .asp_image {
-    width: <?php echo $_vimagew ?>px;
-    height: <?php echo $_vimageh; ?>px;
+    width: 100%;
+    height: <?php echo $style['h_image_height'] === 'auto' ? 'auto' : intval($style['h_image_height']) . 'px'; ?>;;
     <?php echo $style['hresultimageborder']; ?>
     float: none;
     margin: 0 auto 6px;
@@ -161,3 +177,97 @@ defined('ABSPATH') or die("You can't access this file directly.");
 	left: 0;
 	<?php echo $style['hresultimageshadow']; ?>
 }
+
+<?php if ($use_compatibility == true): ?>
+	<?php echo $asp_res_ids1; ?>.horizontal .results .item .asp_image img,
+	<?php echo $asp_res_ids2; ?>.horizontal .results .item .asp_image img,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?>.horizontal .results .item .asp_image img {
+	display: block;
+}
+
+<?php
+// ----------------------------------------- TABLET SPECIFIC STYLES ----------------------------------------------------
+ob_start();
+?>
+<?php if (
+		$style['h_item_width'] !== $style['h_item_width_tablet'] ||
+		$style['h_item_height'] !== $style['h_item_height_tablet']
+): ?>
+<?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?>.horizontal .results .item,
+    <?php echo $asp_res_ids2; ?>.horizontal .results .item,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?>.horizontal .results .item {
+    height: <?php echo $style['h_item_height_tablet'] === 'auto' ? 'auto' : intval($style['h_item_height_tablet']) . 'px'; ?>;
+    width: <?php echo $style['h_item_width_tablet']; ?>;
+    <?php if ( $style['h_res_show_scrollbar'] == 0 ): ?>
+	    flex: 0 0 calc(<?php echo $style['h_item_width_tablet']; ?> - <?php echo 2*(intval($style['hressidemargin']) + intval($style['hrespadding'])); ?>px);
+    <?php endif; ?>
+}
+<?php endif; ?>
+<?php if (
+		$style['h_image_height'] !== $style['h_image_height_tablet']
+): ?>
+<?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?>.horizontal .results .item .asp_image,
+    <?php echo $asp_res_ids2; ?>.horizontal .results .item .asp_image,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?>.horizontal .results .item .asp_image {
+    height: <?php echo $style['h_image_height_tablet'] === 'auto' ? 'auto' : intval($style['h_image_height_tablet']) . 'px'; ?>;;
+}
+<?php endif; ?>
+<?php
+// ---------------------------------------------------------------------------------------------------------------------
+?>
+<?php $css_for_tablet = ob_get_clean(); ?>
+<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
+		$css_for_tablet,
+		'tablet',
+		$style['media_query_mobile_max_width']+1,
+		$style['media_query_tablet_max_width'],
+		$preview ?? false
+); ?>
+
+<?php
+// ----------------------------------------- PHONE SPECIFIC STYLES -----------------------------------------------------
+ob_start();
+?>
+<?php if (
+		$style['h_item_width'] !== $style['h_item_width_phone'] ||
+		$style['h_item_height'] !== $style['h_item_height_phone']
+): ?>
+<?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?>.horizontal .results .item,
+    <?php echo $asp_res_ids2; ?>.horizontal .results .item,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?>.horizontal .results .item {
+    height: <?php echo $style['h_item_height_phone'] === 'auto' ? 'auto' : intval($style['h_item_height_phone']) . 'px'; ?>;
+    width: <?php echo $style['h_item_width_phone']; ?>;
+    <?php if ( $style['h_res_show_scrollbar'] == 0 ): ?>
+	    flex: 0 0 calc(<?php echo $style['h_item_width_phone']; ?> - <?php echo 2*(intval($style['hressidemargin']) + intval($style['hrespadding'])); ?>px);
+    <?php endif; ?>
+}
+<?php endif; ?>
+<?php if (
+		$style['h_image_height'] !== $style['h_image_height_phone']
+): ?>
+<?php if ($use_compatibility == true): ?>
+    <?php echo $asp_res_ids1; ?>.horizontal .results .item .asp_image,
+    <?php echo $asp_res_ids2; ?>.horizontal .results .item .asp_image,
+<?php endif; ?>
+<?php echo $asp_res_ids; ?>.horizontal .results .item .asp_image {
+    height: <?php echo $style['h_image_height_phone'] === 'auto' ? 'auto' : intval($style['h_image_height_phone']) . 'px'; ?>;;
+}
+<?php endif; ?>
+<?php
+// ---------------------------------------------------------------------------------------------------------------------
+?>
+<?php $css_for_phone = ob_get_clean(); ?>
+<?php echo WPDRMS\ASP\Utils\Css::getCssForScreen(
+		$css_for_phone,
+		'phone',
+		0,
+		$style['media_query_mobile_max_width'],
+		$preview ?? false
+); ?>

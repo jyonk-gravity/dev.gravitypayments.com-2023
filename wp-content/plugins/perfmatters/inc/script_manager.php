@@ -37,7 +37,7 @@ if(isset($_POST['pmsm_save_settings'])) {
 	else {
 
 		//update settings
-		update_option('perfmatters_script_manager_settings', (!empty($_POST['perfmatters_script_manager_settings']) ? $_POST['perfmatters_script_manager_settings'] : ''));
+		update_option('perfmatters_script_manager_settings', (!empty($_POST['perfmatters_script_manager_settings']) ? $_POST['perfmatters_script_manager_settings'] : ''), false);
 	}
 }
 
@@ -49,7 +49,7 @@ if(isset($_POST['pmsm_disclaimer_close'])) {
 			$settings = array();
 		}
 		$settings['hide_disclaimer'] = 1;
-		update_option('perfmatters_script_manager_settings', $settings);
+		update_option('perfmatters_script_manager_settings', $settings, false);
 	}
 }
 
@@ -79,7 +79,7 @@ if(isset($_POST['pmsm_global_trash']) && wp_verify_nonce($_POST['pmsm_global_non
 		//clean up the options array before saving
 		perfmatters_script_manager_filter_options($options);
 
-		update_option('perfmatters_script_manager', $options);
+		update_option('perfmatters_script_manager', $options, false);
 	}
 }
 
@@ -104,7 +104,7 @@ if(isset($_POST['pmsm_global_refresh']) && wp_verify_nonce($_POST['pmsm_global_n
 		//clean up the options array before saving
 		perfmatters_script_manager_filter_options($options);
 
-		update_option('perfmatters_script_manager', $options);
+		update_option('perfmatters_script_manager', $options, false);
 	}
 }
 
@@ -159,7 +159,7 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 			echo "<span id='pmsm-menu-toggle'><span class='dashicons dashicons-menu'></span></span>";
 
 			//logo
-			echo "<img src='" . plugins_url('img/logo.svg', dirname(__FILE__)) . "' title='Perfmatters' id='perfmatters-logo' />";
+			echo "<img src='" . plugins_url('img/logo-light.svg', dirname(__FILE__)) . "' title='Perfmatters' id='perfmatters-logo' />";
 
 		echo "</div>";
 	

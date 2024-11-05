@@ -89,6 +89,19 @@
                             //clean the terms as essential-grid bulk serialize all...
                             add_action ( 'pre_get_posts',                               array ( $this, 'essential_grid_pre_get_posts' ), 999 );
                         }
+                        
+                    
+                    if ( is_plugin_active( 'admin-columns-pro/admin-columns-pro.php' ) )
+                        {
+                            add_action ( 'apto/default_interface_sort/allow',                               array ( $this, 'acp_apto_default_interface_sort_allow' ), 999, 2 );
+                            add_filter ( 'apto/default_interface_sort/taxonomy',                            array ( $this, 'acp_apto_default_interface_sort_taxonomy' ) );
+                            add_filter ( 'apto/default_interface_sort/term_id',                             array ( $this, 'acp_apto_default_interface_sort_term_id' ) );
+                        }
+                        
+                    if ( is_plugin_active( 'product-extras-for-woocommerce/product-extras-for-woocommerce.php' ) )
+                        {
+                            add_action ( 'pewc_global_group_order',                               array ( $this, 'pewc_global_group_order' ) );
+                        }
                     
                 }
     
@@ -281,6 +294,9 @@
                     
                     foreach($tax_data   as  $key    =>  $item_tax_data)
                         {
+                            if ( ! is_array ( $item_tax_data )  ||  ! isset ( $item_tax_data['taxonomy'] ) )
+                                continue;
+                                
                             if(isset($search_for_taxonomies[ $item_tax_data['taxonomy'] ]))
                                 {
                                     $expected_terms =   $search_for_taxonomies[ $item_tax_data['taxonomy'] ];
@@ -792,6 +808,135 @@
                         }
                     
                     return $object;
+                }
+                
+                
+            function acp_apto_default_interface_sort_allow( $allow, $sort_id )
+                {
+                    if ( ! isset ( $_GET['ac-rules'] )  ||   empty ( $_GET['ac-rules'] ) )
+                        return $allow;
+                    
+                    if ( ! isset ( $_GET['layout'] ) ||  empty ( $_GET['layout']  ) )
+                        return $allow;
+                        
+                    $_acp_layout    =   $_GET['layout'];
+                    $_acp_rules     =   @json_decode ( @stripslashes ( $_GET['ac-rules'] ) );
+                    
+                    if ( ! is_object( $_acp_rules ) )
+                        return $allow;
+                    
+                    if ( count ( $_acp_rules->rules ) !== 1 )
+                        return $allow;
+                        
+                    reset ( $_acp_rules->rules );
+                    $_acp_rule =    current ( $_acp_rules->rules );
+                    
+                    if ( $_acp_rule->operator   !== 'equal' )
+                        return false;
+                    
+                    $_acp_rule_id   =   $_acp_rule->id;
+                    
+                    global $wpdb;
+                    
+                    $mysql_query        =   "SELECT * FROM " . $wpdb->prefix . "admin_columns   WHERE list_id  = '" .  $_acp_layout ."'";
+                    $_acp_layout_data   =   $wpdb->get_row( $mysql_query );
+                    
+                    if ( ! is_object ( $_acp_layout_data ) )
+                        return $allow;
+                        
+                    $_acp_columns   =   @unserialize ( $_acp_layout_data->columns );
+                    
+                    if ( ! isset ( $_acp_columns[ $_acp_rule_id ] ) )
+                        return $allow;
+                    
+                    $_acp_column_setting    =   $_acp_columns[ $_acp_rule_id ];
+                    if ( strpos( $_acp_column_setting['type'], 'field_' )  !== 0 )
+                        return $allow;
+                        
+                    $_acp_filed_id  =   $_acp_column_setting['type'];
+                    
+                    $mysql_query        =   "SELECT * FROM " . $wpdb->prefix . "posts   WHERE post_name  = '" .  $_acp_filed_id ."' AND post_type = 'acf-field'";
+                    $_acp_acf_field_data   =   $wpdb->get_row( $mysql_query );
+                    
+                    $_acp_acf_field_settings    =   @unserialize ( $_acp_acf_field_data->post_content );
+                    if ( $_acp_acf_field_settings['type'] !==   'taxonomy' )
+                        return $allow;
+                    
+                    global $_apto_acp_compatibility;
+                        
+                    $taxnomy_name   =   $_acp_acf_field_settings['taxonomy'];
+                    $term_id        =   $_acp_rule->value;
+                    
+                    $_apto_acp_compatibility    =   array();
+                    $_apto_acp_compatibility['taxonomy']    =   $taxnomy_name;
+                    $_apto_acp_compatibility['term_id']     =   $term_id;
+                        
+                    return $allow;
+                }
+                
+            function acp_apto_default_interface_sort_taxonomy ( $taxonomy )
+                {
+                    global $_apto_acp_compatibility;
+                    
+                    if ( is_array ( $_apto_acp_compatibility )  &&  isset ( $_apto_acp_compatibility['taxonomy'] ) )
+                    
+                    return $_apto_acp_compatibility['taxonomy'];   
+                }
+                
+                
+            function acp_apto_default_interface_sort_term_id ( $term_id )
+                {
+                    global $_apto_acp_compatibility;
+                    
+                    if ( is_array ( $_apto_acp_compatibility )  &&  isset ( $_apto_acp_compatibility['term_id'] ) )
+                    
+                    return $_apto_acp_compatibility['term_id'];   
+                }
+                
+                
+            /**
+            * WooCommerce Product Add-Ons Ultimate 
+            * Return the objects in the customised order, if set. 
+            * 
+            * @param mixed $global_order
+            */
+            function pewc_global_group_order( $global_order )
+                {
+                    $args   =   array(
+                                        '_autosort' =>  array('yes'),
+                                        '_view_type' =>  array('multiple')
+                                        );
+                    $available_sorts    =   APTO_functions::get_sorts_by_filters( $args );
+                    
+                    if ( count ( $available_sorts ) < 1 )
+                        return $global_order;
+                        
+                    reset ( $available_sorts );
+                    $sortID =   current ( $available_sorts )->ID;
+                    
+                    $attr = array(
+                                    '_view_selection'   =>  'archive',
+                                    '_view_language'    =>  APTO_functions::get_blog_language()
+                                    );
+
+                    $sort_view_id   =   APTO_functions::get_sort_view_id_by_attributes( $sortID, $attr );
+                    
+                    if ( empty ( $sort_view_id ) )
+                        return $global_order;
+                    
+                    $order_list  = APTO_functions::get_order_list( $sort_view_id );
+                    
+                    $unsorted_objects   =   explode ( "," , $global_order );
+                    
+                    $common = array_intersect( $order_list, $unsorted_objects );
+    
+                    $diff = array_diff( $unsorted_objects, $order_list );
+
+                    $unsorted_objects   =   array_merge( $common, $diff );
+                    
+                    $global_order   =   implode ( ",", $unsorted_objects );
+                        
+                    return $global_order;    
                 }
                 
         }

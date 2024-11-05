@@ -146,8 +146,8 @@
                             $translated_post_id =   pll_get_post( $post_id, $lang_code );
                             
                             //check if translated
-                            if( ! apply_filters( 'apto/synchronize/polylang/ignore_objects_count', FALSE )   &&  $translated_post_id < 1 )
-                                return FALSE;
+                            if( $translated_post_id < 1 )
+                                continue;
                             
                             $translate_list[$translated_post_id]    =   "null";
                         }

@@ -59,10 +59,10 @@ class LazyLoad
 				$iframe_atts = Utilities::get_atts_array($iframe[1]);
 
 				//dont check excluded if forced attribute was found
-				if(!self::lazyload_excluded($iframe[1], self::lazyload_forced_atts())) {
+				if(!Utilities::match_in_array($iframe[1], self::lazyload_forced_atts())) {
 
 					//skip if exluded attribute was found
-					if(self::lazyload_excluded($iframe[1], self::lazyload_excluded_atts())) {
+					if(Utilities::match_in_array($iframe[1], self::lazyload_excluded_atts())) {
 						continue;
 					}
 
@@ -198,10 +198,10 @@ class LazyLoad
 				$video_atts = Utilities::get_atts_array($video[1]);
 
 				//dont check excluded if forced attribute was found
-				if(!self::lazyload_excluded($video[1], self::lazyload_forced_atts())) {
+				if(!Utilities::match_in_array($video[1], self::lazyload_forced_atts())) {
 
 					//skip if exluded attribute was found
-					if(self::lazyload_excluded($video[1], self::lazyload_excluded_atts())) {
+					if(Utilities::match_in_array($video[1], self::lazyload_excluded_atts())) {
 						continue;
 					}
 
@@ -375,7 +375,7 @@ class LazyLoad
 		$output.= 'window.addEventListener("LazyLoad::Initialized",function(e){var lazyLoadInstance=e.detail.instance;';
 
 			//dom monitoring
-			if(!empty(Config::$options['lazyload']['lazy_loading_dom_monitoring'])) { 
+			if(!empty(Config::$options['lazyload']['lazy_loading_dom_monitoring']) || !empty(Config::$options['lazyload']['elements'])) { 
 				$output.= 'var target=document.querySelector("body");var observer=new MutationObserver(function(mutations){lazyLoadInstance.update()});var config={childList:!0,subtree:!0};observer.observe(target,config);';
 			}
 
@@ -455,10 +455,10 @@ class LazyLoad
 				$picture_atts = Utilities::get_atts_array($picture[1]);
 
 				//dont check excluded if forced attribute was found
-				if(!self::lazyload_excluded($picture[1], self::lazyload_forced_atts())) {
+				if(!Utilities::match_in_array($picture[1], self::lazyload_forced_atts())) {
 
 					//skip if no-lazy class is found
-					if((!empty($picture_atts['class']) && strpos($picture_atts['class'], 'no-lazy') !== false) || self::lazyload_excluded($picture[0], self::lazyload_excluded_atts())) {
+					if((!empty($picture_atts['class']) && strpos($picture_atts['class'], 'no-lazy') !== false) || Utilities::match_in_array($picture[0], self::lazyload_excluded_atts())) {
 
 						//mark image for exclusion later
 						preg_match('#<img([^>]+?)\/?>#is', $picture[0], $image);
@@ -483,7 +483,7 @@ class LazyLoad
 		            foreach($sources as $source) {
 
 		            	//skip if exluded attribute was found
-						if(self::lazyload_excluded($source[1], self::lazyload_excluded_atts())) {
+						if(Utilities::match_in_array($source[1], self::lazyload_excluded_atts())) {
 							continue;
 						}
 
@@ -521,7 +521,7 @@ class LazyLoad
 				$element_atts = Utilities::get_atts_array($element[2]);
 
 				//dont check excluded if forced attribute was found
-				if(!self::lazyload_excluded($element[2], self::lazyload_forced_atts())) {
+				if(!Utilities::match_in_array($element[2], self::lazyload_forced_atts())) {
 
 					//skip if no-lazy class is found
 					if(!empty($element_atts['class']) && strpos($element_atts['class'], 'no-lazy') !== false) {
@@ -529,7 +529,7 @@ class LazyLoad
 					}
 
 					//skip if exluded attribute was found
-					if(self::lazyload_excluded($element[2], self::lazyload_excluded_atts())) {
+					if(Utilities::match_in_array($element[2], self::lazyload_excluded_atts())) {
 						continue;
 					}
 				}
@@ -588,7 +588,7 @@ class LazyLoad
 		$image_atts = Utilities::get_atts_array($image[1]);
 
 		//get new attributes
-		if(empty($image_atts['src']) || (!self::lazyload_excluded($image[1], self::lazyload_forced_atts()) && ((!empty($image_atts['class']) && strpos($image_atts['class'], 'no-lazy') !== false) || self::lazyload_excluded($image[1], self::lazyload_excluded_atts()) || (!empty($image_atts['fetchpriority']) && $image_atts['fetchpriority'] == 'high')))) {
+		if(empty($image_atts['src']) || (!Utilities::match_in_array($image[1], self::lazyload_forced_atts()) && ((!empty($image_atts['class']) && strpos($image_atts['class'], 'no-lazy') !== false) || Utilities::match_in_array($image[1], self::lazyload_excluded_atts()) || (!empty($image_atts['fetchpriority']) && $image_atts['fetchpriority'] == 'high')))) {
 			return $image[0];
 		}
 		else {
@@ -663,6 +663,85 @@ class LazyLoad
 					unset($selector_lazyload);
 				}
 			}
+		}
+
+		return $html;
+	}
+
+	//initialize lazy loading elements
+	public static function init_elements()
+	{
+		add_action('perfmatters_queue', array('Perfmatters\LazyLoad', 'queue_elements'));
+	}
+
+	//queue element functions
+	public static function queue_elements()
+	{
+		//check filters
+		if(empty(apply_filters('perfmatters_lazyload', !empty(Config::$options['lazyload']['elements'])))) {
+			return;
+		}
+
+		if(empty(apply_filters('perfmatters_lazy_elements', !empty(Config::$options['lazyload']['elements'])))) {
+			return;
+		}
+
+		//skip woocommerce
+		if(Utilities::is_woocommerce()) {
+			return;
+		}
+
+		//check post meta
+		if(Utilities::get_post_meta('perfmatters_exclude_lazy_loading')) {
+			return;
+		}
+
+		//actions + filters
+		add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\LazyLoad', 'lazyload_elements'));
+
+		//disable wp rocket lazy render for compatibility
+		add_filter('rocket_lrc_optimization', '__return_false', 999);
+	}
+
+	//lazy load elements
+	public static function lazyload_elements($html) {
+
+		if(!empty(Config::$options['lazyload']['elements'])) {
+
+			$selectors = array(
+				'perfmatters-lazy-element',
+			);
+
+			//get exclusions added from settings
+			if(!empty(Config::$options['lazyload']['element_selectors']) && is_array(Config::$options['lazyload']['element_selectors'])) {
+				$selectors = array_unique(array_merge($selectors, Config::$options['lazyload']['element_selectors']));
+			}
+			
+			//filter final exclusions array
+			$selectors = apply_filters('perfmatters_lazy_element_selectors', $selectors);
+
+		    foreach($selectors as $selector) {
+
+		        //get all elements with the selector
+		        $elements = HTML::get_selector_elements($html, $selector);
+
+		        if(!empty($elements)) {
+		        	foreach($elements as $element) {
+			        	if(strpos($element, 'data-perfmatters-lazy-element') === false) {
+                            $lazy_element = '<div data-perfmatters-lazy-element style="height:1000px; width:100%;"><noscript>' . str_replace('noscript', 'pmnoscript', $element) . '</noscript></div>';
+			        		$html = str_replace($element, $lazy_element, $html);
+                        }
+			   		}
+		        }
+		    }
+
+		    if(!empty($lazy_element)) {
+
+			    $script = '<script id="perfmatters-lazy-elements-js" defer>!function(){var e=document.querySelectorAll("div[data-perfmatters-lazy-element]");if(e.length){var t=new IntersectionObserver((function(e,t){e.forEach((function(e){if(e.isIntersecting){var r=e.target.querySelector("noscript");if(r){var n,o=(new DOMParser).parseFromString(r.textContent.replaceAll("pmnoscript","noscript"),"text/html");(n=e.target).replaceWith.apply(n,o.body.childNodes)}t.unobserve(e.target)}}))}),{root:null,rootMargin:"300px 0px"});e.forEach((function(e){return t.observe(e)}))}}();</script>';
+
+				//add inline script to body tag
+				$html = str_replace('</body>', $script . '</body>', $html);
+		    }
 		}
 
 		return $html;
@@ -791,24 +870,5 @@ class LazyLoad
 		}
 
 	    return apply_filters('perfmatters_lazyload_excluded_attributes', $attributes);
-	}
-
-	//check for excluded attributes in attributes string
-	private static function lazyload_excluded($string, $excluded) {
-	    if(!is_array($excluded)) {
-	        (array) $excluded;
-	    }
-
-	    if(empty($excluded)) {
-	        return false;
-	    }
-
-	    foreach($excluded as $exclude) {
-	        if(strpos($string, $exclude) !== false) {
-	            return true;
-	        }
-	    }
-
-	    return false;
 	}
 }

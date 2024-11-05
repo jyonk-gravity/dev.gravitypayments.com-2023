@@ -765,6 +765,7 @@
                     $custom_field_type      =   array_values($_POST['auto_custom_field_type']);
                     $custom_function_name   =   array_values($_POST['auto_custom_function_name']);
                     $order                  =   array_values($_POST['auto_order']);
+                    $apply_sticky_posts     =   preg_replace( '/[^a-z]/', '', $_POST['apply_sticky_posts'] );
                     
                     update_post_meta($sort_view_id, '_auto_order_by',               $order_by); 
                     update_post_meta($sort_view_id, '_auto_taxonomy_name',          $taxonomy_name);
@@ -772,6 +773,7 @@
                     update_post_meta($sort_view_id, '_auto_custom_field_type',      $custom_field_type); 
                     update_post_meta($sort_view_id, '_auto_custom_function_name',   $custom_function_name);
                     update_post_meta($sort_view_id, '_auto_order', $order);
+                    update_post_meta($sort_view_id, '_auto_apply_sticky_posts', $apply_sticky_posts);
                     
                     //delete the cache
                     $APTO->cache_delete_key( 'sort_view_settings/' .  $sort_view_id );
@@ -2958,10 +2960,34 @@
             function multilingual_syncronize ( $data_list, $args, $_data_sticky_parsed, &$_JSON_response )
                 {
                     
+                    if ( defined('ICL_LANGUAGE_CODE') && defined('ICL_SITEPRESS_VERSION') )
+                        {
+                            $this->wpml_synchronize( $data_list, $args, $_data_sticky_parsed, $_JSON_response );
+                            return;
+                        }
+                        
+                    if ( defined('POLYLANG_VERSION') )
+                        {
+                            $this->wpml_synchronize( $data_list, $args, $_data_sticky_parsed, $_JSON_response );
+                            return;
+                        }                    
+                }
+                
+                
+            /**
+            * Synchronyze the list for WPML, for other languages
+            *     
+            * @param mixed $data_list
+            * @param mixed $args
+            * @param mixed $_data_sticky_parsed
+            * @param mixed $_JSON_response
+            */
+            function wpml_synchronize( $data_list, $args, $_data_sticky_parsed, &$_JSON_response )
+                {
                     extract($args);
-                       
+                    
                     //prccess the ored items for WPML if syncronized settings 
-                    if(count($data_list) > 0 && $this->get_sort_meta($sortID, '_wpml_synchronize') ==  'yes' &&  $_USE_PAGED_AJAX    === FALSE  &&  defined('ICL_LANGUAGE_CODE') && defined('ICL_SITEPRESS_VERSION')    &&  $is_hierarhical === FALSE)
+                    if ( count($data_list) > 0 && $this->get_sort_meta($sortID, '_wpml_synchronize') ==  'yes' &&  $_USE_PAGED_AJAX    === FALSE  &&  $is_hierarhical === FALSE )
                         {
                             global $sitepress;
                             
@@ -3001,7 +3027,7 @@
                                     $translated_objects =   APTO_WPML_utils::translate_objects_to_language($data_list, $wpml_language['code']);
                                 
                                     //if false there's been an error, either no all objects are syncronized, or theres a difference.
-                                    if($translated_objects  === FALSE)
+                                    if ( apply_filters( 'apto/multilingual_syncronize/count_objects', TRUE ) &&  ( $translated_objects  === FALSE || count ( $translated_objects ) !== count ( $data_list )  ) )
                                         {
                                             //add the error
                                             $_JSON_response['errors'][] =   __( "A synchronization could not be completed", 'apto' ) . ' ' . __( "for", 'apto' ) . ' ' . strtoupper($wpml_language['code']) . ' ' . __( "language", 'apto' ). ' ' . __( "as it contains a different number of objects.", 'apto' );
@@ -3072,15 +3098,13 @@
                                     $sitepress->switch_lang($current_language);
                                     
                                     //if count does not match then continue
-                                    if(count($found_posts)  !=  count($data_list))
+                                    if ( apply_filters( 'apto/multilingual_syncronize/count_objects', TRUE ) && count($found_posts)  !=  count( $data_list ) )
                                         {
                                             //add the error
                                             $_JSON_response['errors'][] =   __( "A synchronization could not be completed", 'apto' ) . ' ' . __( "for", 'apto' ) . ' ' . strtoupper($wpml_language['code']) . ' ' . __( "language", 'apto' ) . ' ' . __( "as it contains a different number of objects.", 'apto' );
                                             continue;
                                         }
-                                    
-                                    //++++
-                                    //to compare the $found_posts with $translated_objects if they are the same???
+
                                     
                                     $sort_view_settings         =   $this->functions->get_sort_view_settings($lang_sort_view_ID);    
                                     $reference_sort_view_id     =   $lang_sort_view_ID;
@@ -3109,11 +3133,26 @@
                                     
                                 }
                             
-                        }
-                       
+                        }    
+                }
+                
+            
+            
+            
+            /**
+            * Synchronize the list for Polylang
+            * 
+            * @param mixed $data_list
+            * @param mixed $args
+            * @param mixed $_data_sticky_parsed
+            * @param mixed $_JSON_response
+            */
+            function polylang_synchronize( $data_list, $args, $_data_sticky_parsed, &$_JSON_response )
+                {
+                    extract($args);
                     
-                    //prccess the ored items for Polylang if syncronized settings 
-                    if(count($data_list) > 0 && $this->get_sort_meta($sortID, '_polylang_synchronize') ==  'yes' &&  $_USE_PAGED_AJAX    === FALSE  &&  defined('POLYLANG_VERSION') &&  $is_hierarhical === FALSE)
+                    //prccess the sorted items for Polylang if syncronized settings 
+                    if(count($data_list) > 0 && $this->get_sort_meta($sortID, '_polylang_synchronize') ==  'yes' &&  $_USE_PAGED_AJAX    === FALSE  &&  $is_hierarhical === FALSE)
                         {
                             global $sitepress;
                             
@@ -3153,7 +3192,7 @@
                                     $translated_objects =   APTO_Polylang::translate_objects_to_language($data_list, $_language);
                                 
                                     //if false there's been an error, either no all objects are syncronized, or theres a difference.
-                                    if($translated_objects  === FALSE)
+                                    if ( ! apply_filters( 'apto/synchronize/polylang/ignore_objects_count', FALSE ) &&  ( $translated_objects  === FALSE || count ( $translated_objects ) !== count ( $data_list )  ) )
                                         {
                                             //add the error
                                             $_JSON_response['errors'][] =   __( "A synchronization could not be completed", 'apto' ) . ' ' . __( "for", 'apto' ) . ' ' . strtoupper($_language) . ' ' . __( "language", 'apto' ). ' ' . __( "as it contains a different number of objects.", 'apto' );
@@ -3259,9 +3298,7 @@
                             
                         }
                     
-                    
                 }
-                
              
         }
 

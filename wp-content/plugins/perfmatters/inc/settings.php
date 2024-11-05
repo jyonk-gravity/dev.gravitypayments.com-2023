@@ -1330,6 +1330,42 @@ function perfmatters_settings() {
         )
     );
 
+    //lazy elements
+    add_settings_section('lazyload_elements', __('Lazy Elements', 'perfmatters'), '__return_false', 'perfmatters_options');
+
+    //elements
+    add_settings_field(
+        'elements', 
+        perfmatters_title(__('Elements', 'perfmatters') . '<span class="perfmatters-beta">BETA</span>', 'elements', 'https://perfmatters.io/docs/lazy-load-elements/'), 
+        'perfmatters_print_input', 
+        'perfmatters_options', 
+        'lazyload_elements', 
+        array(
+            'section' => 'lazyload',
+            'id' => 'elements',
+            'tooltip' => __('Allow lazy loading of elements in the DOM.', 'perfmatters'),
+            'class' => 'perfmatters-input-controller'
+        )
+    );
+
+    //element selectors
+    add_settings_field(
+        'element_selectors', 
+        perfmatters_title(__('Element Selectors', 'perfmatters'), 'element_selectors', 'https://perfmatters.io/docs/lazy-load-elements/'), 
+        'perfmatters_print_input', 
+        'perfmatters_options', 
+        'lazyload_elements', 
+        array(
+            'section' => 'lazyload',
+            'id' => 'element_selectors',
+            'input' => 'textarea',
+            'textareatype' => 'oneperline',
+            'placeholder' => 'div-background-class',
+            'tooltip' => __('Lazy load specific elements and their descendants by adding any unique portion of an attribute string (class="example") from a parent container. Format: one per line', 'perfmatters'),
+            'class' => 'lazyload-elements' . (empty($perfmatters_options['lazyload']['elements']) ? ' hidden' : '')
+        )
+    );
+
     /* fonts section
     /**********************************************************/
     add_settings_section('perfmatters_fonts', '', '__return_false', 'perfmatters_options');
@@ -2296,18 +2332,12 @@ function perfmatters_print_preload_row($rowCount = 0, $line = array()) {
             echo '<input type="text" id="preload-' . $rowCount . '-url" name="perfmatters_options[preload][preload][' . $rowCount . '][url]" value="' . (isset($line['url']) ? $line['url'] : '') . '" placeholder="https://example.com/font.woff2" />';
 
             $types = array(
-                'audio'    => 'Audio',
-                'document' => 'Document',
-                'embed'    => 'Embed',
-                'fetch'    => 'Fetch',
-                'font'     => 'Font',
-                'image'    => 'Image',
-                'object'   => 'Object',
-                'script'   => 'Script',
-                'style'    => 'Style',
-                'track'    => 'Track',
-                'worker'   => 'Worker',
-                'video'    => 'Video'
+                'fetch'  => 'Fetch',
+                'font'   => 'Font',
+                'image'  => 'Image',
+                'script' => 'Script',
+                'style'  => 'Style',
+                'track'  => 'Track'
             );
 
             echo '<select id="preload-' . $rowCount . '-as" name="perfmatters_options[preload][preload][' . $rowCount . '][as]" style="margin-left: 5px;">';
@@ -2330,7 +2360,7 @@ function perfmatters_print_preload_row($rowCount = 0, $line = array()) {
             echo '</select>';
 
             echo '<label class="perfmatters-inline-label-input"><span>' . __('Location', 'perfmatters') . '</span>';
-                echo '<input type="text" id="preload-' . $rowCount . '-locations" name="perfmatters_options[preload][preload][' . $rowCount . '][locations]" value="' . (isset($line['locations']) ? $line['locations'] : '') . '" placeholder="23,19,blog" style="min-width: auto; padding-left: 74px;" />';
+                echo '<input type="text" id="preload-' . $rowCount . '-locations" name="perfmatters_options[preload][preload][' . $rowCount . '][locations]" value="' . (isset($line['locations']) ? $line['locations'] : '') . '" placeholder="23,19,blog" />';
             echo '</label>';
 
             echo '<label for="preload-' . $rowCount . '-crossorigin">';
@@ -2465,7 +2495,8 @@ function perfmatters_sanitize_options($values) {
         'lazyload' => array(
             'lazy_loading_exclusions',
             'lazy_loading_parent_exclusions',
-            'css_background_selectors'
+            'css_background_selectors',
+            'element_selectors'
         ),
         'assets' => array(
             'js_exclusions',

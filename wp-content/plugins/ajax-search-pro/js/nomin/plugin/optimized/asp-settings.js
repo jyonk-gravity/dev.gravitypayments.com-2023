@@ -33,8 +33,7 @@ __webpack_require__.d(__webpack_exports__, {
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
 ;// CONCATENATED MODULE: external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./js/src/plugin/core/actions/settings.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/actions/settings.js
 
 
 "use strict";
@@ -248,8 +247,7 @@ external_AjaxSearchPro_namespaceObject.plugin.settingsCheckboxToggle = function(
 
 ;// CONCATENATED MODULE: external "intervalUntilExecute"
 var external_intervalUntilExecute_namespaceObject = Object(window.WPD)["intervalUntilExecute"];
-;// CONCATENATED MODULE: ./js/src/plugin/core/events/datepicker.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/events/datepicker.js
 
 
 
@@ -325,8 +323,7 @@ external_AjaxSearchPro_namespaceObject.plugin.initDatePicker = function() {
 };
 /* harmony default export */ var datepicker = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/plugin/core/events/facet.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/events/facet.js
 
 
 "use strict";
@@ -446,8 +443,7 @@ external_AjaxSearchPro_namespaceObject.plugin.initFacetEvents = function() {
 };
 /* harmony default export */ var facet = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/plugin/core/events/noui.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/events/noui.js
 
 
 "use strict";
@@ -515,8 +511,7 @@ external_AjaxSearchPro_namespaceObject.plugin.initNoUIEvents = function() {
 };
 /* harmony default export */ var noui = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/plugin/core/events/settings.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/events/settings.js
 
 
 "use strict";
@@ -641,8 +636,7 @@ external_AjaxSearchPro_namespaceObject.plugin.initSettingsEvents = function() {
 };
 /* harmony default export */ var events_settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/plugin/core/init/settings.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/init/settings.js
 
 
 "use strict";
@@ -759,8 +753,7 @@ external_AjaxSearchPro_namespaceObject.plugin.initSettingsAnimations = function(
 };
 /* harmony default export */ var init_settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-settings.js
-
+;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-settings.js
 
 
 

@@ -33,8 +33,7 @@ __webpack_require__.d(__webpack_exports__, {
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
 ;// CONCATENATED MODULE: external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./js/src/plugin/core/actions/live.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/actions/live.js
 
 
 "use strict";
@@ -168,9 +167,45 @@ external_AjaxSearchPro_namespaceObject.plugin.liveLoad = function(origSelector, 
     }
   }
 };
+external_AjaxSearchPro_namespaceObject.plugin.getLiveLoadAltSelectors = function() {
+  return [
+    ".search-content",
+    "#content #posts-container",
+    "#content",
+    "#Content",
+    "div[role=main]",
+    "main[role=main]",
+    "div.theme-content",
+    "div.td-ss-main-content",
+    "main#page-content",
+    "main.l-content",
+    "#primary",
+    "#main-content",
+    ".main-content",
+    ".search section .bde-post-loop",
+    // breakdance posts loop section search archive
+    ".archive section .bde-post-loop",
+    // breakdance posts loop section general archive
+    ".search section .bde-post-list",
+    // breakdance posts list section search archive
+    ".archive section .bde-post-list"
+    // breakdance posts list section general archive
+  ];
+};
 external_AjaxSearchPro_namespaceObject.plugin.usingLiveLoader = function() {
-  let $this = this;
-  $this._usingLiveLoader = typeof $this._usingLiveLoader == "undefined" ? external_DoMini_namespaceObject(".asp_es_" + $this.o.id).length > 0 || $this.o.resPage.useAjax && external_DoMini_namespaceObject($this.o.resPage.selector).length > 0 || $this.o.wooShop.useAjax && external_DoMini_namespaceObject($this.o.wooShop.selector).length > 0 || $this.o.cptArchive.useAjax && external_DoMini_namespaceObject($this.o.cptArchive.selector).length > 0 || $this.o.taxArchive.useAjax && external_DoMini_namespaceObject($this.o.taxArchive.selector).length > 0 : $this._usingLiveLoader;
+  const $this = this;
+  if ($this._usingLiveLoader !== void 0) return $this._usingLiveLoader;
+  const o = $this.o;
+  const idClass = "asp_es_" + o.id;
+  const altSelectors = this.getLiveLoadAltSelectors().join(",");
+  if (document.getElementsByClassName(idClass).length) {
+    return $this._usingLiveLoader = true;
+  }
+  const options = ["resPage", "wooShop", "cptArchive", "taxArchive"];
+  $this._usingLiveLoader = options.some((key) => {
+    const opt = o[key];
+    return opt.useAjax && (document.querySelector(opt.selector) || altSelectors && document.querySelector(altSelectors));
+  });
   return $this._usingLiveLoader;
 };
 external_AjaxSearchPro_namespaceObject.plugin.getLiveURLbyBaseLocation = function(location) {
@@ -184,8 +219,11 @@ external_AjaxSearchPro_namespaceObject.plugin.getLiveURLbyBaseLocation = functio
   return final;
 };
 external_AjaxSearchPro_namespaceObject.plugin.getCurrentLiveURL = function() {
-  let $this = this;
-  let location = window.location.href;
+  const $this = this;
+  const url = new URL(window.location.href);
+  let location;
+  url.hash = "";
+  location = url.href;
   location = location.indexOf("asp_ls=") > -1 ? location.slice(0, location.indexOf("asp_ls=")) : location;
   location = location.indexOf("asp_ls&") > -1 ? location.slice(0, location.indexOf("asp_ls&")) : location;
   location = location.indexOf("p_asid=") > -1 ? location.slice(0, location.indexOf("p_asid=")) : location;
@@ -241,8 +279,7 @@ external_AjaxSearchPro_namespaceObject.plugin.getLiveLoadCache = function() {
 };
 /* harmony default export */ var live = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-live.js
-
+;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-live.js
 
 
 /* harmony default export */ var asp_live = (external_AjaxSearchPro_namespaceObject);

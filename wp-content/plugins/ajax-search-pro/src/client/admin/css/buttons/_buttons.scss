@@ -1,0 +1,59 @@
+@import "../shared/variables";
+
+#wpdreams .wpd-btn,
+#wpd_modal .wpd-btn {
+	font-family: $font-family;
+	font-size: 16px;
+	color: $btn-secondary-color;
+	display: inline-block;
+	padding: 12px 16px;
+	border-radius: 4px;
+	border: 1px solid $btn-secondary-color;
+	overflow: hidden;
+	position: relative;
+	cursor: pointer;
+	transition: all 400ms cubic-bezier(0.19, 1, 0.22, 1);
+
+	&-okay {
+		background: $btn-okay-color;
+	}
+
+	&-cancel {
+		background: $btn-cancel-color;
+
+		&:hover {
+			background: white;
+			border: 1px solid $btn-cancel-color;
+			color: $btn-cancel-color;
+		}
+	}
+
+	&-okay,
+	&-cancel {
+		border: 1px solid transparent;
+		color: white;
+	}
+
+	&-okay {
+		&:after {
+			background: #fff;
+			content: "";
+			height: 155px;
+			left: -75px;
+			opacity: .2;
+			position: absolute;
+			top: -50px;
+			transform: rotate(35deg);
+			transition: all 0ms cubic-bezier(0.19, 1, 0.22, 1);
+			width: 50px;
+			z-index: 20;
+		}
+
+		&:hover {
+			&:after {
+				left: 120%;
+				transition: all 450ms cubic-bezier(0.19, 1, 0.22, 1);
+			}
+		}
+	}
+}

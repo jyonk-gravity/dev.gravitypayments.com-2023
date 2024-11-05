@@ -1357,6 +1357,13 @@ include_once(self::$path . "templates/feed-account.php");
   }
   }
   }
+      if ( class_exists( 'GPDFAPI' )  && method_exists('GPDFAPI','create_pdf')) {
+
+           $pdfs  = GPDFAPI::get_form_pdfs( $form_id );
+           foreach($pdfs as $k=>$pdf){
+        $fields[] =  array('gravitypdf:'.$k, 'Pdf - '.$pdf['name']);       
+           }
+      }
   $fields[]=array('id',__('Entry ID','gravity-forms-salesforce-crm'));
   $fields[]=array('form_id',__('Form ID','gravity-forms-salesforce-crm'));
   $fields[]=array('entry_url',__('Entry URL','gravity-forms-salesforce-crm'));

@@ -3206,6 +3206,22 @@ jQuery(function($){
         }
     });
 
+    /**
+     * The event "beforeunload" will automatically display a confirm message
+     * when something is returned - it's likely a jQuery thing.
+     */
+    const initialFormData = $('.wd-main-options-form').serialize();
+    const showConfirm = function(e) {
+        if ( initialFormData !== $('.wd-main-options-form').serialize() ) {
+            // No need to trigger a confirm(), jQuery does it.
+            return 'Are you sure?';
+        }
+    };
+    $(window).on('beforeunload', showConfirm);
+    $('.wd-main-options-form').on('submit', ()=>{
+        $(window).off('beforeunload', showConfirm);
+    });
+
     // ----------------------- COOKIES ---------------------
     function createCookie(name,value,days) {
         var expires = "";

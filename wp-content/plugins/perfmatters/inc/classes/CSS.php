@@ -68,8 +68,11 @@ class CSS
     //optimize css
     public static function optimize($html)
     {
+        //strip comments before search
+        $html_no_comments = preg_replace('/<!--(.*)-->/Uis', '', $html);
+        
         //match all stylesheets
-        preg_match_all('#<link(\s[^>]*?href=[\'"]([^\'"]+?\.css.*?)[\'"][^>]*?)\/?>#i', $html, $stylesheets, PREG_SET_ORDER);
+        preg_match_all('#<link(\s[^>]*?href=[\'"]([^\'"]+?\.css.*?)[\'"][^>]*?)\/?>#i', $html_no_comments, $stylesheets, PREG_SET_ORDER);
 
         //no stylesheets found
         if(empty($stylesheets)) {
@@ -102,6 +105,7 @@ class CSS
                 'dashicons.min.css', //core
                 '/uploads/elementor/css/post-', //elementor
                 'animations.min.css',
+                '/animations/',
                 'woocommerce-mobile', //woocommerce
                 'woocommerce-smallscreen',
                 '/uploads/oxygen/css/', //oxygen
@@ -231,46 +235,48 @@ class CSS
                     $time[self::$url_type] = time();
 
                     //update stored timestamp
-                    update_option('perfmatters_used_css_time', $time);
+                    update_option('perfmatters_used_css_time', $time, false);
                 }
             }
 
             //print used css
-            $tag = !apply_filters('perfmatters_used_css_below', false) ? '</title>' : '</head>';
-            $pos = strpos($html, $tag);
-            if($pos !== false) {
+            if(file_exists($used_css_path)) {
+                $tag = !apply_filters('perfmatters_used_css_below', false) ? '</title>' : '</head>';
+                $pos = strpos($html, $tag);
+                if($pos !== false) {
 
-                //print file
-                if(!empty(Config::$options['assets']['rucss_method']) && Config::$options['assets']['rucss_method'] == 'file') {
-                    //grab stored timestamp for query string
-                    $time = get_option('perfmatters_used_css_time', array());
-                    if(!empty($time[self::$url_type])) {
-                        $used_css_url = add_query_arg('ver', $time[self::$url_type], $used_css_url);
+                    //print file
+                    if(!empty(Config::$options['assets']['rucss_method']) && Config::$options['assets']['rucss_method'] == 'file') {
+                        //grab stored timestamp for query string
+                        $time = get_option('perfmatters_used_css_time', array());
+                        if(!empty($time[self::$url_type])) {
+                            $used_css_url = add_query_arg('ver', $time[self::$url_type], $used_css_url);
+                        }
+                        $used_css_output = "<link rel='preload' href='" . $used_css_url . "' as='style' onload=\"this.rel='stylesheet';this.removeAttribute('onload');\">";
+                        $used_css_output.= '<link rel="stylesheet" id="perfmatters-used-css" href="' . $used_css_url . '" media="all" />';
                     }
-                    $used_css_output = "<link rel='preload' href='" . $used_css_url . "' as='style' onload=\"this.rel='stylesheet';this.removeAttribute('onload');\">";
-                    $used_css_output.= '<link rel="stylesheet" id="perfmatters-used-css" href="' . $used_css_url . '" media="all" />';
-                }
-                //print inline
-                else {
-                    $used_css_output = '<style id="perfmatters-used-css">' . file_get_contents($used_css_path) . '</style>';
+                    //print inline
+                    else {
+                        $used_css_output = '<style id="perfmatters-used-css">' . file_get_contents($used_css_path) . '</style>';
+                    }
+
+                    if($tag == '</title>') {
+                        $html = substr_replace($html, '</title>' . $used_css_output, $pos, 8);
+                    }
+                    else {
+                        $html = str_replace('</head>', $used_css_output . '</head>', $html);
+                    }
                 }
 
-                if($tag == '</title>') {
-                    $html = substr_replace($html, '</title>' . $used_css_output, $pos, 8);
-                }
-                else {
-                    $html = str_replace('</head>', $used_css_output . '</head>', $html);
-                }
-            }
+                //delay stylesheet script
+                if(empty(Config::$options['assets']['rucss_stylesheet_behavior'])) {
 
-            //delay stylesheet script
-            if(empty(Config::$options['assets']['rucss_stylesheet_behavior'])) {
+                    $delay_check = !empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js']))) && !Utilities::get_post_meta('perfmatters_exclude_delay_js');
 
-                $delay_check = !empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js']))) && !Utilities::get_post_meta('perfmatters_exclude_delay_js');
-
-                if(!$delay_check || isset($_GET['perfmattersjsoff'])) {
-                    $script = '<script type="text/javascript" id="perfmatters-delayed-styles-js">!function(){const e=["keydown","mousemove","wheel","touchmove","touchstart","touchend"];function t(){document.querySelectorAll("link[data-pmdelayedstyle]").forEach(function(e){e.setAttribute("href",e.getAttribute("data-pmdelayedstyle"))}),e.forEach(function(e){window.removeEventListener(e,t,{passive:!0})})}e.forEach(function(e){window.addEventListener(e,t,{passive:!0})})}();</script>';
-                    $html = str_replace('</body>', $script . '</body>', $html);
+                    if(!$delay_check || isset($_GET['perfmattersjsoff'])) {
+                        $script = '<script type="text/javascript" id="perfmatters-delayed-styles-js">!function(){const e=["keydown","mousemove","wheel","touchmove","touchstart","touchend"];function t(){document.querySelectorAll("link[data-pmdelayedstyle]").forEach(function(e){e.setAttribute("href",e.getAttribute("data-pmdelayedstyle"))}),e.forEach(function(e){window.removeEventListener(e,t,{passive:!0})})}e.forEach(function(e){window.addEventListener(e,t,{passive:!0})})}();</script>';
+                        $html = str_replace('</body>', $script . '</body>', $html);
+                    }
                 }
             }
         }
@@ -365,30 +371,47 @@ class CSS
 
     //get excluded selectors
     private static function get_excluded_selectors() {
+        
+        //dynamic selectors added by js
         self::$excluded_selectors = array(
-            '.wp-embed-responsive', //core
-            '.wp-block-embed',
-            '.wp-block-embed__wrapper',
-            '.wp-caption',
-            '#elementor-device-mode', //elementor
-            '.elementor-nav-menu',
+            '.ast-header-break-point', //astra
+            '.elementor-popup-modal', //elementor
             '.elementor-has-item-ratio',
-            '.elementor-popup-modal',
+            '#elementor-device-mode',
             '.elementor-sticky--active',
             '.dialog-type-lightbox',
             '.dialog-widget-content',
             '.lazyloaded',
+            '.elementor-nav-menu',
             '.elementor-motion-effects-container',
             '.elementor-motion-effects-layer',
-            '.ast-header-break-point', //astra
-            '.dropdown-nav-special-toggle', //kadence
-            '.kb-splide',
+            '.animated',
+            '.elementor-animated-content',
+            '.splide-initialized', //splide
             '.splide',
-            '.splide-initialized',
             '.splide-slider',
-            'rs-fw-forcer', //rev slider
-            'div.product' //woocommerce
+            '.kb-splide', //kadence
+            '.dropdown-nav-special-toggle',
+            'rs-fw-forcer' //rev slider
         );
+
+        //shared type selectors
+        if(!self::$url_type == 'front' && !self::$url_type == 'home' && strpos(self::$url_type, 'page-') === false) {
+            self::$excluded_selectors = array_merge(self::$excluded_selectors, array(
+                '.wp-embed-responsive', //core
+                '.wp-block-embed',
+                '.wp-block-embed__wrapper',
+                '.wp-caption'
+            ));
+        }
+
+        //product selectors
+        if(self::$url_type == 'product') {
+            self::$excluded_selectors = array_merge(self::$excluded_selectors, array(
+                'div.product' //woocommerce
+            ));
+        }
+
         if(!empty(Config::$options['assets']['rucss_excluded_selectors'])) {
             self::$excluded_selectors = array_merge(self::$excluded_selectors, Config::$options['assets']['rucss_excluded_selectors']);
         }

@@ -72,8 +72,10 @@ class Minify
 		$bytes_wasted = $file_size - $file_size_min;
 		$percent_wasted = ($bytes_wasted / $file_size) * 100;
 
+		//return '    ' . $file_size . '   ' . $file_size_min;
+
 		//still point to original file
-		if($bytes_wasted < 1024 || $percent_wasted < 5) {
+		if($percent_wasted < 10) {
 		    return;
 		}
 

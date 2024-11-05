@@ -1534,6 +1534,29 @@ class APTO_interface
                                             </td>    
                                         </tr>
                                         
+                                        <?php  
+                                            
+                                            $apply_sticky_posts =   $this->current_sort_view_settings['_auto_apply_sticky_posts'];
+                                            
+                                        ?>
+                                        <tr>
+                                            <td class="label">
+                                                <label for=""><?php _e( "Apply Sticky Posts", 'apto' ) ?></label>
+                                                <p class="description"><?php _e( "Ensure that the sticky posts from the Manual Order are retained and remain prominently displayed. This will help preserve important information and maintain visibility for key updates or messages within the system regardless of the Automatic Order selection.", 'apto' ) ?></p>
+                                            </td>
+                                            <td>
+                                                <input type="radio" checked="checked" value="no" name="apply_sticky_posts" <?php checked ( "no", $apply_sticky_posts ); ?> />
+                                                <label for="blog-public"><?php _e( "No", 'apto' ) ?></label><br>
+
+                                                <input type="radio" value="yes" name="apply_sticky_posts" <?php checked ( "yes", $apply_sticky_posts ); ?> />
+                                                <label for="blog-public"><?php _e( "Yes", 'apto' ) ?></label><br>  
+
+                                            </td> 
+                                            <td>
+                                                &nbsp;
+                                            </td>  
+                                        </tr>
+                                        
                                         <?php 
                             
                                             $view_type  =    $this->interface_helper->get_sort_view_type($this->sortID);
@@ -1552,10 +1575,10 @@ class APTO_interface
                                             </td>    
                                         </tr>
                                         
-                                        <tr>
+                                        <tr class="dark">
                                             <td class="label">
                                                 <label for=""><?php _e( "Batch Terms Automatic Update", 'apto' ) ?></label>
-                                                <p class="description"><?php _e( "<b>WARNING!</b></i> using this option all existing childs terms of the current", 'apto' ) ?> <?php 
+                                                <p class="description"><?php _e( "<b>WARNING!</b></i> Using this option will update all existing child terms of the current", 'apto' ) ?> <?php 
                                                     
                                                     $term_data  =   get_term ( $this->current_sort_view_settings['_term_id'], $this->current_sort_view_settings['_taxonomy'] );
                                                     echo '<b>' . ucfirst ( $term_data->name ) . '</b> ';
@@ -1563,7 +1586,7 @@ class APTO_interface
                                                     $current_taxonomy_info = get_taxonomy( $this->current_sort_view_settings['_taxonomy'] );
                                                     echo $current_taxonomy_info->labels->singular_name;
 
-                                                    ?> <?php _e( "will update to Automatic Order and change for current settings.", 'apto' ) ?> <?php _e( "Existing manual/custom sort lists will be kept, but the order type will be switched to Automatic Order.", 'apto' ) ?></p>
+                                                    ?> <?php _e( "to Automatic Order, replacing the current settings. Manual sort lists will be preserved, but their order type will be changed to Automatic Order.", 'apto' ) ?></p>
                                             </td>
                                             <td>
                                                 <input type="radio" checked="checked" value="no" name="batch_order_update" />
@@ -1612,7 +1635,7 @@ class APTO_interface
                 $filter_date        = isset($_POST['filter_date']) ? $_POST['filter_date'] : 0;
                 $search             = isset($_POST['search']) ? sanitize_text_field(stripslashes($_POST['search'])) : '';
                 
-                $hierarhical_sortable           =   TRUE;
+                $hierarhical_sortable           =   FALSE;
                 $is_woocommerce_archive_list    =   FALSE;
                                 
                 if (  $is_hierarchical === TRUE  )
@@ -1895,11 +1918,10 @@ class APTO_interface
                             var APTO_AJAX_Current_Page  =   1;
                             var APTO_AJAX_Query_String  =   {};
                             
-                            jQuery(document).ready(function() {
+                            document.addEventListener('DOMContentLoaded', function() {
                                  
                                 jQuery('#sortable, #sortable_top, #sortable_bottom').nestedSortable({
                                         handle:             'div',
-                                        keepInSameLevel:    true,
                                                 
                                         tabSize:            30,
                                         listType:           '<?php echo $html_list_type ?>',
@@ -1917,7 +1939,6 @@ class APTO_interface
                                         
                                         isTree: true,
                                         
-                                        //disableNesting:     'no-nesting',
                                         connectWith: ".sortable-list"
                                         
                     

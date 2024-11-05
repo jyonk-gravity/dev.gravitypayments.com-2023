@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '3773ef3f09c37da5478d578e32b03a4b' => $baseDir . '/jetpack_vendor/automattic/jetpack-assets/actions.php',
+    'eed58ea21003214096fa69247fda8497' => $vendorDir . '/franmastromarino/wp-orm/src/V2/helpers.php',
 );

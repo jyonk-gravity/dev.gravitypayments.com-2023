@@ -33,8 +33,7 @@ __webpack_require__.d(__webpack_exports__, {
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
 ;// CONCATENATED MODULE: external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./js/src/plugin/core/actions/ga_events.js
-
+;// CONCATENATED MODULE: ./src/client/plugin/core/actions/ga_events.js
 
 
 "use strict";
@@ -111,8 +110,7 @@ external_AjaxSearchPro_namespaceObject.plugin.gaGetTrackingID = function() {
 };
 /* harmony default export */ var ga_events = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./js/src/bundle/optimized/asp-ga.js
-
+;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-ga.js
 
 
 /* harmony default export */ var asp_ga = (external_AjaxSearchPro_namespaceObject);

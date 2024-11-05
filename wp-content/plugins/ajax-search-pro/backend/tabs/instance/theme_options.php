@@ -12,7 +12,7 @@
     <li><a tabid="608" class='subtheme subtheme-rlayout subtheme-horizontal'><?php echo __('Horizontal Results', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="609" class='subtheme subtheme-rlayout subtheme-polaroid'><?php echo __('Polaroid Results', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="610" class='subtheme'><?php echo __('Typography', 'ajax-search-pro'); ?></a></li>
-    <li><a tabid="611" class='subtheme'><?php echo __('Custom CSS', 'ajax-search-pro'); ?></a></li>
+    <li><a tabid="611" class='subtheme'><?php echo __('Custom CSS & Media', 'ajax-search-pro'); ?></a></li>
 </ul>
 <div class='tabscontent'>
 

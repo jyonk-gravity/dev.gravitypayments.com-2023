@@ -46,10 +46,9 @@ class Images
 
                 if(!empty($src)) {
 
-                    foreach($image_exclusions as $exclude) {
-                        if(strpos($image[1], $exclude) !== false) {
-                            continue 2;
-                        }
+                    //check exclusions
+                    if(Utilities::match_in_array($image[1], $image_exclusions)) {
+                        continue;
                     }
 
                     //get image dimensions

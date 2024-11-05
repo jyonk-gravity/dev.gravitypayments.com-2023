@@ -83,10 +83,8 @@ class CDN
         $html = preg_replace_callback($regEx, function($url) use ($siteURL, $cdnURL, $exclusions) {
 
             //check for exclusions
-            foreach($exclusions as $exclusion) {
-                if(!empty($exclusion) && stristr($url[0], $exclusion) != false) {
-                    return $url[0];
-                }
+            if(Utilities::match_in_array($url[0], $exclusions)) {
+                return $url[0];
             }
 
             //replace url with no scheme
