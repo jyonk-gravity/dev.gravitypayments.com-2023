@@ -1,0 +1,664 @@
+= 2.1.6 =
+Release date: March 19th, 2021
+* Fix: getting image sizes from the file was broken by the previous release;
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.1.5 =
+Release date: March 17th, 2021
+* New: added an option to check or not the postmeta table for image sizes. Deactivating this option will reduce the pressure on MySQL for sites with huge postmeta tables;
+* Compat: added an integration for WP Grid Builder which has a combination of HTML and JSON, which wasn't properly parsed;
+* Compat: updated the integration with WP Rocket's "no defer" option after the latest updates;
+* Compat: added an integration with the Blocksy theme;
+* Compat: removed the integration with Visual Product Configurator because it was causing issues with the add to cart functionality;
+* Fix: in some cases, the Front Checker tool was hanging, which should now be fixed;
+* Fix: if an ajax returns pure HTML, the affected tags weren't properly recorded and were lost;
+* Fix: `IMG` tags that have `srcset` but it's a blank string, weren't properly treated;
+* Fix: an error was thrown when a CSS style block contained an inline encoded SVG+XML image that wasn't a ShortPixel placeholder;
+* Language: 3 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.1.4 =
+Release date: February 4th, 2021
+* Fix: in some special cases, the image replacement wasn't done when using ACF;
+* Fix: a fatal error was thrown when the interface `Psr\Cache\CacheException` was defined by other plugins;
+* Fix: added the `li` element to the list of elements checked for background;
+* Fix: one of the minified CSS files used by the plugin in the wp-admin had validation errors;
+* Fix: minor fixes for wording and links to the ShortPixel Dashboard;
+* Language: 1 new string added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.1.3 =
+Release date: January 14th, 2021
+* New: option to alter or not the width and height of `IMG` tags;
+* Fix: the front checker tool should not remain stuck anymore due to CORS errors;
+* Fix: some images containing sizes in the file name were seen as thumbs;
+* Fix: exclude text/template scripts from replacing when JS replacing is active;
+* Fix: when MailPoet is active, the plugin activation won't crash anymore;
+* Fix: on some jQuery versions the exclusions addded were not visible;
+* Fix: various PHP Warnings, including on PHP 5.6;
+* Language: 3 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.1.2 =
+Release date: December 23rd, 2020
+* Tweak: the integration with Lity now works when `data-lity` is added directly inside an `IMG` tag;
+* Compat: adjust the integration of SPAI with WP Rocket 3.8+, where Safe Mode for deferred JS was removed;
+* Fix: various PHP warnings and notices are gone in this version;
+* Fix: background images URL's with html_entity_escaped single quotes `'` are now correctly replaced;
+* Fix: deactivation feedback wasn't correctly sent to us since version 2.1.0;
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.1.1 =
+Release date: December 12th, 2020
+* Fix: the API calls to fetch domain status could cause wp-admin slowness in certain cases;
+* Language: 0 new strings added, 3 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.1.0 =
+Release date: December 9th, 2020
+* New: Low Quality Image Placeholder (LQIP) support;
+* New: option to stop the plugin functionality for logged-in users;
+* New: various refactorings of the plugin code, mainly regarding the calls to our API;
+* New: the threshold for the plugin's lazy load can now be adjusted from the settings;
+* New: added 2 WP-CLI commands to clear the CSS cache and the LQIP cache;
+* New: added new attributes that can be used for exclusions: `data-spai-excluded`, `data-spai-eager` and `data-spai-noresize`.
+* Tweak: the Image Checker Tool now has a scroll bar when more images are piled together (useful for galleries);
+* Compat: added support for the Lity library;
+* Compat: added support for LiteSpeed Cache plugin;
+* Compat: improved the integration with the Modula plugin;
+* Fix: certain pages from NextGen Gallery were refreshing automatically due to a JS conflict;
+* Fix: the Image Checker Tool is now i18n compatible and ready for translations;
+* Fix: in certain cases, the exclusions weren't working for background images loaded via inline CSS;
+* Fix: some notifications weren't going away when updating conflicting settings;
+* Fix: error in replacing back attribute that contains '>' when there are more than 10 attributes;
+* Fix: do not add `noscript` when the tag is not `IMG`;
+* Fix: WooCommerce product variations issue;
+* Language: 63 new strings added, 11 updated, 0 fuzzed, and 24 obsoleted.
+
+= 2.0.10 =
+Release date: November 2nd 2020
+* Fix division by zero issue;
+* Fix error of lazy-loaded relative image paths in .CSS files;
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.0.9 =
+Release date: October 22nd 2020
+* Fix: the integration with W3 Total Cache wasn't properly working;
+* Fix: in certain cases an image was cropped in a smaller size after being present in a not cropped larger size;
+* Fix: workaround for Swift Performance's bug that was making changes in JSON variables thus breaking SPAI's JS code;
+* Fix: certain images were being displayed twice on devices with JS deactivated;
+* Fix: a division by zero notice was sometimes thrown, which is now gone;
+* Fix: in certain situations the plugin was trying to calculate the image size for css files;
+* Fix: when NextGen Gallery was active, some of its admin screens were reloading because of a JS library clash;
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.0.8 =
+Release date: October 8th 2020
+* Fix: there was a typo in the ai.js file;
+* Fix: the fatal error for declaring `Psr\Cache\CacheException` is now fixed for good;
+* Fix: Modula Creative Gallery now works with SPAI's lazy loading;
+* Fix: for the NextGen lightbox sizing problem, also cache the `get_image_size` calls;
+* Fix: the integration with WP Fastest Cache works correctly now;
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.0.7 =
+Release date: October 6th 2020
+* New: option to force crop an image using a custom property `data-spai-crop`;
+* New: added JS events `spai-body-handled`, `spai-element-handled` and `spai-block-handled`;
+* Tweak: also parse input type image;
+* Compat: added `rs-bg-elem` for slider-revolution;
+* Compat: integrate Divi's custom attribute `data-et-multi-view`;
+* Fix: URLs from IMG `src` are now correctly parsed, even if there's an extra space at the end;
+* Fix: sometimes a fatal error was thrown when one of the plugin dependencies was declared by another plugin;
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.0.6 =
+Release date: September 15th 2020
+* New: Added a filter for the original url: 'shortpixel/ai/originalUrl';
+* New: Integrated with The Grid plugin;
+* Fix: parse tags attributes that have spaces around the '=' sign;
+* Fix: parse correctly cases when data-thumb is a HTML;
+* Fix: displaying the associated domain in multisite installations;
+* Fix: comma seprated excluding selectors are properly added via JS too in the plugin settings;
+* Tweak: hide login button and account e-mail for sub-accounts;
+* Language: 0 new strings added, 6 updated, 0 fuzzied, and 0 obsoleted.
+
+= 2.0.5 =
+Release date: August 20th 2020
+* Fix: a better method to parse the html tags' attributes in order to avoid potential errors;
+* Fix: removed HelpScout and Quriobot in order to comply with the directory plugins guidelines; added Support and FAQ links instead;
+* Fix: excluding selectors can now be added comma separated in the plugin settings;
+* Fix: only HTML and JSON will be parsed from now on, other types or malformatted content will be ignored;
+* Fix: updated the user capability needed to access the settings, from `install_plugins` to `manage_options`;
+* Fix: compatibility with Oxygen Builder;
+* Fix: missing Lity library on some pages;
+* Fix: conflict with WooCommerce Variation Swatches plugin;
+* Fix: some unminified 3rd party JS files were throwing console errors in wp-admin;
+* Fix: the login link in the plugin settings now logs the user directly on the ShortPixel site;
+* Fix: minor fixes for certain notifications and hooks used by the plugin;
+* Compat: deactivate the default lazy loading introduced in WordPress 5.5 when the plugin JS lazy loading is active;
+* Compat: added notification for WP Optimize's CSS Merge functionality, which can break the CSS in some cases;
+* Language: 28 new strings added, 14 updated, 0 fuzzied, and 3 obsoleted.
+
+= 2.0.4 =
+Release date: July 30th 2020
+* Fix: A notice is now displayed when the Combine JS option is activated in LiteSpeed plugin, until a proper integration will be ready;
+* Fix: A fatal error was thrown in certain situations when Elementor Pro plugin was active;
+* Fix: Compatibility with Slider Revolution;
+* Fix: Front-checker tool didn't properly work in case the user name had special chars;
+* Fix: Added a notification that blocks the on-boarding wizard in case WebP delivery is active on ShortPixel Image Optimizer, as it was causing conflcts;
+* Fix: `background:url` links will now be replaced even if they have a space after the opening bracket;
+* Tweak: CSS files with `<link rel=prefetch>` links will also be replaced;
+* Tweak: The Image Checker Tool strings can now be translated as well;
+* Tweak: Minor CSS improvements in the notifications;
+* Language: 79 new strings added, 0 updated, 0 fuzzied, and 3 obsoleted.
+
+= 2.0.3 =
+Release date: July 17th 2020
+* Fix: certain exclusions were not kept when upgrading from 1.x to 2.x;
+* Fix: some PHP warnings & errors that were showing up in some very specific cases;
+* Fix: minor refactoring in some parts of the code;
+* Language: 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+
+= 2.0.2 =
+Release date: July 14th 2020
+* Fix: Various situations when the plugin wasn't properly working with Elementor Pro;
+* Fix: For the on-boarding message regarding available credits;
+* Fix: WooCommerce product images were no longer displayed when looged in, in certain situations;
+* Fix: In certain viewport settings the optimized images weren't visible;
+* Language: 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+
+= 2.0.1 =
+Release date: July 9th 2020
+* Fix: on certain PHP 7.0.x versions there was a fatal error that is now fixed;
+* Fix: the integration with WP Fastest Cache will now check if all methods used are properly defined;
+* Fix: the deactivation pop-up wasn't working properly in some cases;
+* Fix: width/height attributes being larger on real 1x1 images;
+* Fix: SVG files can now be properly excluded with the Image Checker Tool;
+* Language: 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+
+= 2.0.0 =
+Release date: July 8th 2020
+* New: Onboarding wizard, which guides the user through the plugin settings and features, including before and after GTMetrix test, in order to check the performance imprrovement;
+* New: Front-end tool to detect what are the best settings for the given site, as part of the onboarding wizard;
+* New: Settings are now reorganized and with a new layout. All settings are now stored in one serialized option inside the DB;
+* New: Account status box on the settings page;
+* New: Browser native lazy-loading support;
+* New: Option to add NOSCRIPT fallback for the image tags, when using the SRC replace method;
+* New: ImageChecker tool on the front-end (while logged in), to exclude images from optimization, lazy-loading or resizing and also to refresh an image on the CDN;
+* New: Handle image swapping on hover; Until now, the image displayed on hovering another image wasn't handled by the plugin;
+* New: Option to serve SVG files from ShortPixel's CDN;
+* New: Option to replace images from JS blocks with optimized and properly scaled ones, served from the CDN;
+* New: Added integrations with caching plugins: W3 Total Cache, Swift Performance Pro, WP Fastest Cache; The image URL's are now replaced directly in the minified CSS files handled by these plugins;
+* New: Added a deactivation pop-up that includes the possibility to downgrade the settings to the 1.x.x version;
+* Tweak: Improved the integration with Elementor plugin (Simple Image Lightbox);
+* Tweak: You can now select the image types for which WebP will be delivered to supporting browsers;
+* Tweak: Improved ShortPixel support integration, which now allows easy searching inside the plugin documentation, straight from the settings page;
+* Fix: Issues related to indexing of the images by Google and other bots;
+* Language: 305 new strings added, 0 updated, 1 fuzzied, and 122 obsoleted
+
+= 1.8.9 =
+Release date: June 9th 2020
+* Fix JSON not properly replaced background-image, when the only background images are from JSON (MyListings theme);
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+
+= 1.8.8 =
+Release date: May 28th 2020
+* Fix some roundings when calculating image size;
+* Fix PHP Warning: Invalid argument supplied for foreach() in url-tools.class.php line 284;
+* Added update notices functionality in order to announce the upcoming discontinuation of support for PHP < 5.6;
+* Language – 6 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+
+= 1.8.7 =
+Release date: 27th April 2020
+* Fix for smooth lazy loading (fade-in);
+* Fix for srcsets with different aspect ratio images;
+* Fix: remove jQuery's Deferred() from WebP check, as it was generating JS errors in certain situations with WP Rocket enabled;
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.8.6 =
+Release date: 20th April 2020
+* Fix slow query based on GUID on wp_posts
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.8.5 =
+Release date: 13th April 2020
+* Fix wrong replace of srcset in some cases after the metadata changes
+* Fix integration with Oxygen builder when using code blocks
+* Support Elementor's data-settings in &lt;header&gt; tag
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.8.4 =
+Release date: 16th March 2020
+* Fix background-images with white space before the closing paranthesis
+* Fix isFullPseudoSrc
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.8.3 =
+Release date: 12th March 2020
+* Fix replacing images when NextGen active
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.8.2 =
+Release date: 5th March 2020
+* Fix images having URLs without protocol (//mysite.com)
+* Handle multiple background-image's in the same style attribute
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.8.1 =
+Release date: 3rd March 2020
+* W3C compliant inline image placeholders
+* Integrate with the Content Views plugin.
+* Fix wrong absolute URL calculation for relative image URLs and page URLs not ending in /
+* More precise size determination for fractional width and height, using getComputedStyle instead of jQuery.
+* Remove the obsolete setting External meta because now the inline image placeholders are W3C compliant.
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 2 obsoleted
+
+= 1.8.0 =
+Release date: 11th February 2020
+* Integrate with WP Rocket's CSS cache in order to replace the image URLs there.
+* Add preconnect header.
+* Integrate with Lovely 2 theme.
+* Integrate with My Listings theme.
+* Parse divs data-thumbnail and data-options too.
+* Fixed: 'path' not defined notice when validating some URLs
+* Fixed: parsing encoded HTML inside JSON blocks inside HTML.
+* Fixed: warning meta['file'] undefined in some circumstances.
+* Fixed: replacing the generated stats graph of JetPack.
+* Language – 2 new strings added, 1 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.7.5 =
+Release date: 2nd January 2020
+* Don't replace lazily inside structured data
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.7.4 =
+Release date: 30th December 2019
+* Fix PHP Warning: preg_match() on JSON AJAX in some circumstances
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.7.3 =
+Release date: 22nd December 2019
+* Replace inside application/json scripts
+* Fixed: style blocks extracting based on regex failing on specific large blocks
+* Fixed: AJAX calls returning a primitive which is valid JSON
+* Fixed: exclude properly from srcset based on URL
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.7.2 =
+Release date: 17th December 2019
+* Fix handling lazy URLs on HTML tags that are present only on JSON data.
+* Properly exclude by path URLs from srcset
+* Fix wrong handling of non-image URLs in JSON AJAX in some situations ( video src )
+* Language – 3 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.7.1 =
+Release date: 13th December 2019
+* Fix JS typo.
+
+= 1.7.0 =
+Release date: 12th December 2019
+* Add a JS callback that is called after each tag is changed
+* Better handling of HTML properties inside JSON calls.
+* Fixed: not matching URLs having three bytes characters in JSON objects.
+* Fixed: srcset replacement when the first item doesn't have the size indicator.
+
+= 1.6.1 =
+
+Release date: 27th November 2019
+* Fixed: wrong URLs on srcset with excluded image in some circumstances.
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.6.0 =
+
+Release date: 25th November 2019
+* Add option to replace lazily in JSON AJAX calls.
+* Compatibility with CROWD 2 theme.
+* Compatibility with Gravity Forms.
+* Compatibility with Stack theme.
+* Fixed: srcset not being parsed and integrated properly on SRC method when the URL is from Media Library.
+* Fixed: use the same type of quote for SPAI's own attributes as the one of the URL - some JSON encoded content doesn't escape both types.
+* Fixed: if the srcset is already parsed, don't try to parse again.
+* Fixed: content coming later in AJAX doesn't have the tags on record to be parsed. Send next time.
+* Fixed: PHP warning when specifying a selector without tag before the #id.
+* Language – 1 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.5.2 =
+
+Release date: 12th November 2019
+* Fixed: calculating the image size when there are several paddings involved - another case.
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.5.1 =
+
+Release date: 11th November 2019
+* Integrate with WP Grid Builder.
+* Integrate with Smart Slider 3.
+* Rescale all lazy-loaded backgrounds.
+* Don't add size parameters to SVGs.
+* Fixed: handling of the WooCommerce product variations.
+* Fixed: catch JS exceptions caused by wrong regexes configured by users in settings.
+* Fixed: iPhone page reloaded caused by the CSS files parsing by JS.
+* Fixed: calculating the image size when there are several paddings involved.
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.5.0 =
+
+Release date: 5th November 2019
+* Button to clear the .css cache in Advanced settings.
+* Update width and height attributes of the img tag when modifying the src
+* Replace eagerly in style blocks
+* Integrate with Jupiter theme's slider that uses JSON-encoded image attributes.
+* Integrate with galleries that use the media-gallery-link attribute.
+* Add index.html with noindex in each folder for sites which don't implement proper access rules to the plugin folder.
+* More explicit errors when the plugin can't connect to ShortPixel to check credits.
+* Fix broken retina @2x shortpixel logo on notices
+* Language – 6 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.4.1 =
+
+Release date: 25th October 2019
+* Make the external metadata optional with default in-placeholder
+* Fixed: broken regex which was not catching some backgrounds.
+* Language – 3 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.4.0 =
+
+Release date: 23rd October 2019
+* Replace image URLs inside CSS files too, minify the CSS files and serve them from CDN.
+* Add JSON parsing support option.
+* Use eager URLs when replacing inside &lt;noscript&gt; tags.
+* Serve SVG files from CDN too.
+* Integrate with WP Bakery's data-ultimate-bg attribute.
+* Integrate with Slider Revolution's lazyload in slider.
+* Compatibility with Oxygen Builder's a hrefs.
+* Fix srcset's images heights on BOTH mode.
+* Notify conflict with Divi Toolbox version < 1.4.2.
+* Fix replacing background images for some sliders: Revolution Slider, Glow Pro's Swiper slider and Optimizer PRO's frontpage slider.
+* Fix bug on iPhone: delays in rendering the inline placeholders delay the initial parsing and conflicts with mutations.
+* Settings advanced tab now remains active after save if previously selected.
+* Language – 7 new strings added, 2 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.3.6 =
+
+Release date: 30th September 2019
+* Fix replacing background images when delimited by &quot;
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.3.5 =
+
+Release date: 23rd September 2019
+* For `<img>`'s, take the largest image from src and srcset if srcset is present
+* Compatibility with Slider Revolution
+* Compatibility with Oxygen Builder
+* Notify incompatibility with Divi Toolbox's "Custom Post Meta" option.
+* Fixed: images not loaded on first page load on some iPhones due to the fact that DOMLoaded event is triggered before the `<img>`'s inline src's are parsed.
+* Fixed: not replacing divs data-thumbs in some circumstances
+* Language – 7 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.3.4 =
+
+Release date: 14th September 2019
+* fix replacing images in `<img data-src>` tags
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.3.3 =
+
+Release date: 12th September 2019
+* Fix SRCSET parsing
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.3.2 =
+
+Release date: 11th September 2019
+* Fix IE problem and DOM syntax errors due to the non-standard data:image
+* If an image is resized to a specific size and later on in the same page the same image needs a smaller size, use again the previously resized image.
+* Fix CSS backgrounds regex in some cases
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.3.1 =
+
+Release date: 10th September 2019
+* Better integration with Modula
+* Fixed: background regex in some cases
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.3.0 =
+
+Release date: 9th September 2019
+* Add option to cap backgrounds to a max width
+* Add option to lazy-load backgrounds and limit their width to device width
+* Improve performance of front-end JS by parsing only tags that were affected on back-end.
+* Better handling for cropped images if crop option set.
+* Keep EXIF option.
+* Fixed: wrong API url on multisites
+* Fixed: catastrophic backtracking on pages with huge ( > 1M ) CDATA blocks
+* Fixed: background images in inline style not caught properly in some cases
+* Language – 15 new strings added, 1 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.2.6 =
+
+Release date: 28th August 2019
+
+* Improve the main image regex in order to catch some malformed cases
+* Replace also link rel="icon" in the header
+* Fix warning strpos needle is empty
+* Be able to find file on disk based on urlencoded name from URL, for images with spaces in the name (try with urldecode too).
+* Language – 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted
+
+= 1.2.5 =
+
+Release date: 17th July 2019
+
+* improve the load time of images displayed on DOM changes (as menus for instance)
+* code refactoring in preparation of DOM Parser
+* Fix JS error settings not an object
+* Fix some replacing issues when URLs contain encoded characters.
+* Fix replacing urls when pages under edit in some builders (Thrive Architect, Avia among them)
+
+= 1.2.4 =
+
+Release date: 3rd July 2019
+
+* Fix bug in span background-image
+* Compatibility with Ginger – EU Cookie Law plugin
+* Parse also `<section>`'s backgrounds
+* Fix bug when parsing some background-images containing spaces
+
+= 1.2.3 =
+
+Release date: 20th June 2019
+
+* Add help links and Support beacon
+* Compatibility with Thrive Architect and Avia Layout Builder
+* Fix problem with sites having the WP install in a subfolder (site_url vs. home_url)
+* Fix notice on sites with older Autoptimize versions
+* Skip the `<a>` tags when determining the size of an element recursively, based on parent size
+* Fix: background images of spans
+* Refactoring in preparation for DOM Parse
+
+= 1.2.2 =
+
+Release date: 7th June 2019
+
+* Fix for image URLs containing &'s
+* fix for eagerly loaded background-image URLs not containing the protocol (//some.site/img.jpg)
+
+= 1.2.1 =
+
+Release date: 6th June 2019
+
+* Fix JS not triggering when DOMContentLoaded was fired before the JS load
+
+= 1.2.0 =
+
+Release date: 4th June 2019
+
+* Integrate with Viba Portfolio
+* Integrate with the Elementor paralax section
+* Work around random jQuery not loaded error due to jQuery bug (https://github.com/jquery/jquery/issues/3271)
+* Don't lazy-load the images set on backgrounds in `<style>` blocks.
+* Move ai.min.js to footer
+* Fix exclude pattern matching when class defined without quotes (`<div class=myclass>`)
+
+= 1.1.3 =
+
+Release date: 30th May 2019
+
+* Fix JS issues on iPhone 6s
+* Make Elementor External CSS warning dismissable
+* Fix exclude regexes added on Windows and having \r\n at the end.
+* Fix replacing images that are not in Media Library but directly in wp_content
+
+= 1.1.2 =
+
+Release date: 29th May 2019
+
+* Thrive Architect preview compatibility
+* Parse also the `<amp-img>` tag
+* Fix not parsing AJAX in some circumstances
+* Fix compatibility with Safari in some cases when ai.min.js is loaded later (async)
+* Fix translations by adding load_plugin_textdomain
+
+= 1.1.1 =
+
+Release date: 27th May 2019
+
+* Retina displays - properly take into account pixel ratio when resizing images.
+* Fix feed-back loop on MutationObserver caused by some jQuery versions which set id as a hack to implement qSA thus trigger a mutation
+* Parse also the .css files in browser - in order to catch some optimization plugins (like Swift Performance) which extract the inline CSS to external .css resources
+* Notify if Elementor has the option to use External File for CSS Print Method because it conflicts with replacing background-image's
+
+= 1.1.0 =
+
+Release date: 23rd May 2019
+
+* option to exclude images based on URL parts or patterns
+* option to either do or do not the fade-in effect when lazy-loading
+* fix for urls starting with '//'
+* fix for urls starting with '../' even if the page is in the root of the site ( https://example.com/../pictures/pic1.jpg )
+
+= 1.0.3 =
+
+Release date: 20th May 2019
+
+* fix replacing background image on elements not initially visible
+* MSIE fixes: String.startsWith polyfill, fix IntersectionExplorer polyfill, handle cases when element.parentNode.children is undefined ( IE magic:) )
+* Fix compatibility with WooCommerce's magnifier lens when using the fade-in effect of the lazy-loaded images.
+
+= 1.0.2 =
+
+Release date: 16th May 2019
+
+* integrate Avada - notify to deactivate the lazy-loading of Avada
+
+= 1.0.1 =
+
+Release date: 10th May 2019
+
+* better handling of the excludes by tag ID
+* do not replace the images src if plugin's JS script was dequeued (like on logins or coming soon pages).
+* check if the URL has host before, in order to prevent some warnings.
+
+= 1.0.0 =
+
+Release date: 8th May 2019
+
+* alert when quota is low or exhausted.
+* fade-in effect for lazy-loaded images
+* replace also the background CSS shorthand
+* do not replace the unsupported image types (like SVG) in backgrounds either
+
+= 0.9.6 =
+
+Release date: 25th April 2019
+
+* updates of the verification of Autoptimize's setting for image optimization after changes in version 2.5.0.
+
+= 0.9.5 =
+
+Release date: 25th April 2019
+
+* fix JS error on Firefox
+
+= 0.9.4 =
+
+Release date: 23rd April 2019
+
+* Parse the CSS `<style>` blocks for background-image rules and replace them
+* Smarter replace for background-image rules - cover cases when there is also a gradient
+* Alert for double compression when ShortPixel Image Optimization is present has the same lossy setting
+* Alert for conflict when Autoptimize has the option to deliver images using ShortPixel's service.
+* Make sure it doesn't replace the URL of any image type (by extension) which is not supported
+* Exclude the AMP endpoints from replacing
+* fix bug for the Elementor gallery which was replacing other links having common CSS class
+
+= 0.9.3 =
+
+Release date: 4th March 2019
+
+* Integrate galleries: Foo Gallery, Envira, Modula, Elementor, Essential add-ons for Elementor, Everest, default WordPress gallery
+* Integrate with WP Bakery's Testimonial widget
+* activate the integrations only if the respective plugins are active (also for existing NextGen integration)
+* use the '+' separator for optimization params, which integrates better with some plugins which parse the srcset and get puzzled by the comma.
+* display a notice about conflicts with other lazy-loading plugins.
+
+= 0.9.2 =
+
+Release date: 13th February 2019
+
+* exclude from parsing the `<script>` and `<![CDATA[` sections
+* honour the GET parameter PageSpeed=off used by some third parties as the Divi Builder
+* add settings link in the plugins list
+* lazy-load the images referred by inline background-image CSS
+* Fixed: image src's without quotes followed immediately by >, URLs containing non-encoded UTF8, inline background-image URL with &quot; etc
+
+= 0.9.1 =
+
+Release date: 30th January 2019
+
+* handle `<div data-src="...">`
+* handle &nbsp;'s, &quot;'s in background-image CSS
+* handle images with empty href
+* handle more cases of hrefs without quotes
+
+= 0.9.0 =
+
+Release date: 23rd January 2019
+
+* Use the Babel generated replacement for the async/await WebP code
+* parse the background-image inline style
+* check also if the element is :visible
+* add to settings a list of excludes which leaves the URL as it is
+* use svg instead of gif for the inline image replacement, for better compatibility with Safari
+* use minified javascript for front-end
+* fixed: IntersectionObserver on Safari
+
+= 0.8.0 =
+
+Release date: 9th December 2018
+
+* WebP support
+
+= 0.7.2 =
+
+Release date: 28th October 2018
+
+* add MutationObserver polyfill
+* add alert that plugin is in beta
+
+= 0.7.1 =
+
+Release date: 7th October 2018
+
+* Fix performance problems when page has many modifications by JS.
+
+= 0.7.0 =
+
+Release date: 3rd November 2018
+
+* added lazy loading of images.
+
+= 0.6.4 =
+
+Release date: 7th October 2018
+
+* add the SRCSET and BOTH (both src and srcset) option
+* urlencode the URLS before base64 to circumveit incompatibility with atob on some characters like (R)
+
