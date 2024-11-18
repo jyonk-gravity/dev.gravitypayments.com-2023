@@ -640,10 +640,15 @@ $page_path = substr($req_uri,0,strrpos($req_uri,'/'));
 
                 @while ( have_rows('steps') )
                   @php the_row(); @endphp
-                  <div class="row align-items-lg-center pb-5">
+                  <style>
+                    .doc-block__timeline h2:before {
+                      top: 15px;
+                    }
+                  </style>
+                  <div class="row align-items-lg-start pb-5">
                     <div class="col-lg-6">
-                      <h2><span class="step-counter">{{ $step_counter }}</span> {!! get_sub_field('step_heading') !!}</h2>
-                      <div class="step__content">
+                      <h2 class="d-flex" style="gap: 8px;"><span class="step-counter d-flex flex-shrink-0" style="position:relative; top: 8px;">{{ $step_counter }}</span> {!! get_sub_field('step_heading') !!}</h2>
+                      <div class="step__content" style="padding-left: 32px;">
                         {!! get_sub_field('step_content') !!}
                       </div>
                     </div>
