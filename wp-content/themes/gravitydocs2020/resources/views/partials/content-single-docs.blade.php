@@ -641,7 +641,7 @@ $page_path = substr($req_uri,0,strrpos($req_uri,'/'));
                 @while ( have_rows('steps') )
                   @php the_row(); @endphp
                   <div class="row align-items-lg-center pb-5">
-                    <div class="col-lg-5">
+                    <div class="col-lg-6">
                       <h2><span class="step-counter">{{ $step_counter }}</span> {!! get_sub_field('step_heading') !!}</h2>
                       <div class="step__content">
                         {!! get_sub_field('step_content') !!}
@@ -652,7 +652,7 @@ $page_path = substr($req_uri,0,strrpos($req_uri,'/'));
                     $image_id = get_sub_field('step_image')['ID'];
                     $image_alt = get_sub_field('image')['alt'];
                     @endphp
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                       <img class="img-fluid" {{ awesome_acf_responsive_image( $image_id,'large','960px' ) }} alt="{{ esc_attr($image_alt) }}">
                     </div>
                     @endif
