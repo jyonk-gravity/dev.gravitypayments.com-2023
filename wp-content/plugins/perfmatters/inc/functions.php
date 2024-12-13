@@ -200,7 +200,7 @@ function perfmatters_disable_google_maps() {
 		if(is_singular()) {
 			global $post;
 
-			if(in_array($post->ID, $trimmed)) {
+			if(!empty($post->ID) && in_array($post->ID, $trimmed)) {
 				return;
 			}
 		}
@@ -1358,7 +1358,7 @@ function perfmatters_pre_update_option_perfmatters_options($new_value, $old_valu
 	}
 
 	//clear local fonts
-	if((empty($new_value['fonts']['display_swap']) !== empty($old_value['fonts']['display_swap'])) || (isset($new_value['fonts']['cdn_url']) && isset($old_value['fonts']['cdn_url']) && $new_value['fonts']['cdn_url'] !== $old_value['fonts']['cdn_url'])) {
+	if((empty($new_value['fonts']['display_swap']) !== empty($old_value['fonts']['display_swap'])) || (isset($new_value['fonts']['cdn_url']) && isset($old_value['fonts']['cdn_url']) && $new_value['fonts']['cdn_url'] !== $old_value['fonts']['cdn_url']) || (($new_value['fonts']['subsets'] ?? '') !== ($old_value['fonts']['subsets'] ?? ''))) {
 		Perfmatters\Fonts::clear_local_fonts();
 	}
 

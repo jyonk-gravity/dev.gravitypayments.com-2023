@@ -218,7 +218,7 @@ class CSS
             //replace stylesheet
             if($atts_array_new !== $atts_array) {
                 $new_atts_string = Utilities::get_atts_string($atts_array_new);
-                $new_link = sprintf('<link %1$s>', $new_atts_string) . '</link>';
+                $new_link = sprintf('<link %1$s>', $new_atts_string);
                 $html = str_replace($stylesheet[0], $new_link, $html);
             }
         }

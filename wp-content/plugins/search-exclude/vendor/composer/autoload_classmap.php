@@ -26,6 +26,7 @@ return array(
     'QuadLayers\\QLSE\\Helpers' => $baseDir . '/lib/class-helpers.php',
     'QuadLayers\\QLSE\\Models\\Settings' => $baseDir . '/lib/models/class-settings.php',
     'QuadLayers\\QLSE\\Plugin' => $baseDir . '/lib/class-plugin.php',
+    'QuadLayers\\QLSE\\Services\\Entity_Options' => $baseDir . '/lib/services/class-entity-options.php',
     'QuadLayers\\WP_Dashboard_Widget_News\\Load' => $baseDir . '/jetpack_vendor/quadlayers/wp-dashboard-widget-news/src/Load.php',
     'QuadLayers\\WP_Notice_Plugin_Promote\\Load' => $baseDir . '/jetpack_vendor/quadlayers/wp-notice-plugin-promote/src/Load.php',
     'QuadLayers\\WP_Notice_Plugin_Promote\\PluginByFile' => $baseDir . '/jetpack_vendor/quadlayers/wp-notice-plugin-promote/src/PluginByFile.php',

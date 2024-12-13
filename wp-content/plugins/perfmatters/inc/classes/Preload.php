@@ -154,6 +154,11 @@ class Preload
 
             foreach(self::$preloads as $line) {
 
+                //type check
+                if(empty($line['as'])) {
+                    continue;
+                }
+
                 //device type check
                 if(!empty($line['device'])) {
                     $device_type = wp_is_mobile() ? 'mobile' : 'desktop';
@@ -164,21 +169,21 @@ class Preload
 
                 //location check
                 if(!empty($line['locations'])) {
-
                     if(!self::location_check($line['locations'])) {
                         continue;
                     }
                 }
 
-                $mime_type = "";
+                $mime_type = '';
+                $crossorigin = false;
 
-                if(!empty($line['as']) && $line['as'] == 'font') {
+                if($line['as'] == 'font') {
                     $path_info = pathinfo($line['url']);
                     $mime_type = !empty($path_info['extension']) && isset($mime_types[$path_info['extension']]) ? $mime_types[$path_info['extension']] : "";
+                    $crossorigin = true;
                 }
-
                 //print script/style handle as preload
-                if(!empty($line['as']) && in_array($line['as'], array('script', 'style'))) {
+                elseif(in_array($line['as'], array('script', 'style'))) {
                     if(strpos($line['url'], '.') === false) {
 
                         global $wp_scripts;
@@ -220,8 +225,11 @@ class Preload
                         }
                     }
                 }
+                elseif($line['as'] == 'fetch') {
+                    $crossorigin = true;
+                }
 
-                $preload = "<link rel='preload' href='" . trim($line['url']) . "'" . (!empty($line['as']) ? " as='" . $line['as'] . "'" : "") . (!empty($mime_type) ? " type='" . $mime_type . "'" : "") . (!empty($line['crossorigin']) ? " crossorigin" : "") . (!empty($line['as']) && $line['as'] == 'style' ? " onload=\"this.rel='stylesheet';this.removeAttribute('onload');\"" : "") . ">";
+                $preload = '<link rel="preload" href="' . trim($line['url']) . '" as="' . $line['as'] . '"' . (!empty($mime_type) ? ' type="' . $mime_type . '"' : '') . ($crossorigin ? ' crossorigin' : '') . ($line['as'] == 'style' ? ' onload="this.rel=\'stylesheet\';this.removeAttribute(\'onload\');"' : '') . (!empty($line['priority']) ? ' fetchpriority="' . $line['priority'] . '"' : '') . '>';
 
                 if($line['as'] == 'image') {
                     array_unshift(self::$preloads_ready, $preload);
@@ -233,7 +241,7 @@ class Preload
         }
 
         if(!empty(self::$preloads_ready)) {
-            $preloads_string = "";
+            $preloads_string = '';
             foreach(apply_filters('perfmatters_preloads_ready', self::$preloads_ready) as $preload) {
                 $preloads_string.= $preload;
             }

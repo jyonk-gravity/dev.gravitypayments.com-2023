@@ -3,8 +3,8 @@
  * Plugin Name:       Safe SVG
  * Plugin URI:        https://wordpress.org/plugins/safe-svg/
  * Description:       Enable SVG uploads and sanitize them to stop XML/SVG vulnerabilities in your WordPress website
- * Version:           2.2.6
- * Requires at least: 6.4
+ * Version:           2.3.1
+ * Requires at least: 6.5
  * Requires PHP:      7.4
  * Author:            10up
  * Author URI:        https://10up.com
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'SAFE_SVG_VERSION', '2.2.6' );
+define( 'SAFE_SVG_VERSION', '2.3.1' );
 define( 'SAFE_SVG_PLUGIN_DIR', __DIR__ );
 define( 'SAFE_SVG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -128,11 +128,16 @@ if ( ! class_exists( 'SafeSvg\\safe_svg' ) ) {
 			$this->sanitizer = new Sanitizer();
 			$this->sanitizer->minify( true );
 
+			// Allow SVG uploads from specific contexts.
+			add_action( 'load-upload.php', array( $this, 'allow_svg_from_upload' ) );
+			add_action( 'load-post-new.php', array( $this, 'allow_svg_from_upload' ) );
+			add_action( 'load-post.php', array( $this, 'allow_svg_from_upload' ) );
+			add_action( 'load-site-editor.php', array( $this, 'allow_svg_from_upload' ) );
+
+			// Init all the things.
 			add_action( 'init', array( $this, 'setup_blocks' ) );
-			add_filter( 'upload_mimes', array( $this, 'allow_svg' ) );
 			add_filter( 'wp_handle_sideload_prefilter', array( $this, 'check_for_svg' ) );
 			add_filter( 'wp_handle_upload_prefilter', array( $this, 'check_for_svg' ) );
-			add_filter( 'wp_check_filetype_and_ext', array( $this, 'fix_mime_type_svg' ), 75, 4 );
 			add_filter( 'wp_prepare_attachment_for_js', array( $this, 'fix_admin_preview' ), 10, 3 );
 			add_filter( 'wp_get_attachment_image_src', array( $this, 'one_pixel_fix' ), 10, 4 );
 			add_filter( 'admin_post_thumbnail_html', array( $this, 'featured_image_fix' ), 10, 3 );
@@ -143,6 +148,16 @@ if ( ! class_exists( 'SafeSvg\\safe_svg' ) ) {
 			add_filter( 'wp_calculate_image_srcset_meta', array( $this, 'disable_srcset' ), 10, 4 );
 
 			new safe_svg_settings();
+		}
+
+		/**
+		 * Allow SVG uploads from the wp-admin/upload.php screen. Without this, you cannot upload SVGs from the media grid view.
+		 *
+		 * @return void
+		 */
+		public function allow_svg_from_upload() {
+			add_filter( 'upload_mimes', array( $this, 'allow_svg' ) );
+			add_filter( 'wp_check_filetype_and_ext', array( $this, 'fix_mime_type_svg' ), 75, 4 );
 		}
 
 		/**
@@ -241,9 +256,20 @@ if ( ! class_exists( 'SafeSvg\\safe_svg' ) ) {
 				return $file;
 			}
 
-			$file_name   = isset( $file['name'] ) ? $file['name'] : '';
+			$file_name = isset( $file['name'] ) ? $file['name'] : '';
+
+			// Allow SVGs to be uploaded when this function runs.
+			add_filter( 'upload_mimes', array( $this, 'allow_svg' ) );
+			add_filter( 'wp_check_filetype_and_ext', array( $this, 'fix_mime_type_svg' ), 75, 4 );
+
 			$wp_filetype = wp_check_filetype_and_ext( $file['tmp_name'], $file_name );
-			$type        = ! empty( $wp_filetype['type'] ) ? $wp_filetype['type'] : '';
+
+			// Remove the SVG mime type after we've sanitized the file.
+			// We need to utilize the pre_move_uploaded_file filter to ensure we can remove the filters after the file has been full-processed.
+			// This is because wp_check_filetype_and_ext() is called multiple times during the upload process.
+			add_filter( 'pre_move_uploaded_file', array( $this, 'pre_move_uploaded_file' ) );
+
+			$type = ! empty( $wp_filetype['type'] ) ? $wp_filetype['type'] : '';
 
 			if ( 'image/svg+xml' === $type ) {
 				if ( ! $this->current_user_can_upload_svg() ) {
@@ -267,6 +293,23 @@ if ( ! class_exists( 'SafeSvg\\safe_svg' ) ) {
 		}
 
 		/**
+		 * Remove the filters after the file has been processed.
+		 *
+		 * We need to utilize the pre_move_uploaded_file filter to ensure we can remove the filters after the file has been full-processed.
+		 * This is because wp_check_filetype_and_ext() is called multiple times during the upload process.
+		 *
+		 * @param string $move_new_file The new file path. We don't touch this, just return it.
+		 *
+		 * @return string
+		 */
+		public function pre_move_uploaded_file( $move_new_file ) {
+			remove_filter( 'wp_check_filetype_and_ext', array( $this, 'fix_mime_type_svg' ), 75 );
+			remove_filter( 'upload_mimes', array( $this, 'allow_svg' ) );
+
+			return $move_new_file;
+		}
+
+		/**
 		 * Sanitize the SVG
 		 *
 		 * @param string $file Temp file path.
@@ -285,6 +328,11 @@ if ( ! class_exists( 'SafeSvg\\safe_svg' ) ) {
 				if ( false === $dirty ) {
 					return false;
 				}
+			}
+
+			// Allow large SVGs if the setting is on.
+			if ( get_option( 'safe_svg_large_svg' ) ) {
+				$this->sanitizer->setAllowHugeFiles( true );
 			}
 
 			/**
@@ -396,7 +444,7 @@ if ( ! class_exists( 'SafeSvg\\safe_svg' ) ) {
 		 */
 		public function one_pixel_fix( $image, $attachment_id, $size, $icon ) {
 			if ( get_post_mime_type( $attachment_id ) === 'image/svg+xml' ) {
-				$dimensions = $this->svg_dimensions( $attachment_id );
+				$dimensions = $this->svg_dimensions( $attachment_id, $size );
 
 				if ( $dimensions ) {
 					$image[1] = $dimensions['width'];
@@ -456,8 +504,7 @@ if ( ! class_exists( 'SafeSvg\\safe_svg' ) ) {
 				if ( is_array( $size ) ) {
 					$width  = $size[0];
 					$height = $size[1];
-				// phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found, Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure
-				} elseif ( 'full' === $size && $dimensions = $this->svg_dimensions( $id ) ) {
+				} elseif ( 'full' === $size && $dimensions = $this->svg_dimensions( $id ) ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.Found, Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure
 					$width  = $dimensions['width'];
 					$height = $dimensions['height'];
 				} else {
@@ -728,7 +775,6 @@ if ( ! class_exists( 'SafeSvg\\safe_svg' ) ) {
 			$len = strlen( $needle );
 			return 0 === substr_compare( $haystack, $needle, -$len, $len );
 		}
-
 	}
 }
 

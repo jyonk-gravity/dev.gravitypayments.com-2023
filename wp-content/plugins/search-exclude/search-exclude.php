@@ -4,14 +4,14 @@
  * Plugin Name:             Search Exclude
  * Plugin URI:              https://wordpress.org/plugins/search-exclude
  * Description:             Hide any page or post from the WordPress search results by checking off the checkbox.
- * Version:                 2.1.7
+ * Version:                 2.2.0
  * Text Domain:             search-exclude
  * Author:                  QuadLayers
  * Author URI:              https://quadlayers.com
  * License:                 GPLv3
  * Domain Path:             /languages
  * Request at least:        4.7
- * Tested up to:            6.6
+ * Tested up to:            6.7
  * Requires PHP:            5.6
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 */
 
 define( 'QLSE_PLUGIN_NAME', 'Search Exclude' );
-define( 'QLSE_PLUGIN_VERSION', '2.1.7' );
+define( 'QLSE_PLUGIN_VERSION', '2.2.0' );
 define( 'QLSE_PLUGIN_FILE', __FILE__ );
 define( 'QLSE_PLUGIN_DIR', __DIR__ . DIRECTORY_SEPARATOR );
 define( 'QLSE_DOMAIN', 'qlse' );
@@ -38,6 +38,7 @@ define( 'QLSE_DOCUMENTATION_URL', 'https://quadlayers.com/documentation/search-e
 define( 'QLSE_DOCUMENTATION_API_URL', 'https://quadlayers.com/documentation/search-exclude/api/?utm_source=qlse_admin' );
 define( 'QLSE_DOCUMENTATION_ACCOUNT_URL', 'https://quadlayers.com/documentation/search-exclude/account/?utm_source=qlse_admin' );
 define( 'QLSE_GROUP_URL', 'https://www.facebook.com/groups/quadlayers' );
+define( 'QLSE_PREMIUM_SELL_URL', '' );
 define( 'QLSE_DEVELOPER', false );
 /**
  * Load composer autoload

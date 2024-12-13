@@ -472,9 +472,11 @@ a.perfmatters-add-input-row span.dashicons {
   align-items: center;
   border-radius: 3px 0px 0px 3px;
 }
-#perfmatters-admin .perfmatters-inline-label-input input {
+#perfmatters-admin .perfmatters-inline-label-input input, #perfmatters-admin .perfmatters-inline-label-input select {
   min-width: auto;
   border-radius: 0px 3px 3px 0px;
+  flex-grow: 1;
+  max-width: unset;
 }
 .perfmatters-input-row-hero {
   display: flex;
@@ -483,6 +485,8 @@ a.perfmatters-add-input-row span.dashicons {
 }
 .perfmatters-input-row-extra {
   display: none;
+}
+#perfmatters-admin .perfmatters-input-row-extra>* {
   margin-top: 5px;
 }
 .perfmatters-input-row.perfmatters-opened .perfmatters-input-row-extra {
@@ -531,6 +535,13 @@ a.perfmatters-add-input-row span.dashicons {
 }
 .perfmatters-quick-exclusion.perfmatters-opened .perfmatters-quick-exclusion-items {
   display: block;
+}
+
+/* subsets */
+#perfmatters-subsets > label {
+  min-width: 160px;
+  display: inline-block;
+  font-size: 12px;
 }
 
 /* action buttons */
@@ -607,6 +618,9 @@ a.perfmatters-add-input-row span.dashicons {
   }
   #perfmatters-admin textarea {
     min-width:  0px;
+  }
+  .perfmatters-inline-label-input span {
+    height: 39px;
   }
 }
 

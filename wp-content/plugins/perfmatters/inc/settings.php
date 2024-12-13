@@ -3,7 +3,7 @@
 function perfmatters_settings() {
 
 	if(get_option('perfmatters_options') == false) {	
-		add_option('perfmatters_options', apply_filters('perfmatters_default_options', perfmatters_default_options()));
+		add_option('perfmatters_options', perfmatters_default_options());
 	}
 
     $perfmatters_options = get_option('perfmatters_options');
@@ -1400,6 +1400,56 @@ function perfmatters_settings() {
         )
     );
 
+    //method
+    add_settings_field(
+        'method', 
+        perfmatters_title(__('Print Method', 'perfmatters'), 'method', 'https://perfmatters.io/docs/host-google-fonts-locally/#print-method'), 
+        'perfmatters_print_input', 
+        'perfmatters_options', 
+        'perfmatters_fonts', 
+        array(
+            'section' => 'fonts',
+            'id' => 'method',
+            'class' => 'fonts-disable_google_fonts fonts-local_google_fonts' . (!empty($perfmatters_options['fonts']['disable_google_fonts']) || empty($perfmatters_options['fonts']['local_google_fonts']) ? ' hidden' : ''),
+            'input' => 'select',
+            'options' => array(
+                '' => __('File', 'perfmatters') . ' (' . __('Default', 'perfmatters') . ')',
+                'inline' => __('Inline', 'perfmatters')
+            ),
+            'tooltip' => __('Choose how the local font stylesheet will be included.', 'perfmatters')
+        )
+    );
+
+    //limit subsets
+    add_settings_field(
+        'limit_subsets', 
+        perfmatters_title(__('Limit Subsets', 'perfmatters'), 'limit_subsets', 'https://perfmatters.io/docs/limit-google-fonts-subsets/'), 
+        'perfmatters_print_input', 
+        'perfmatters_options', 
+        'perfmatters_fonts', 
+        array(
+            'section' => 'fonts',
+            'id' => 'limit_subsets',
+            'class' => 'perfmatters-input-controller fonts-disable_google_fonts fonts-local_google_fonts' . (!empty($perfmatters_options['fonts']['disable_google_fonts']) || empty($perfmatters_options['fonts']['local_google_fonts']) ? ' hidden' : ''),
+            'tooltip' => __('Limit subsets that are downloaded and included in the stylesheet.', 'perfmatters')
+        )
+    );
+
+    //subsets
+    add_settings_field(
+        'subsets', 
+        perfmatters_title(__('Allowed Subsets', 'perfmatters'), 'subsets', 'https://perfmatters.io/docs/limit-google-fonts-subsets/'), 
+        'perfmatters_print_subsets', 
+        'perfmatters_options', 
+        'perfmatters_fonts', 
+        array(
+            'section' => 'fonts',
+            'id' => 'subsets',
+            'class' => 'fonts-disable_google_fonts fonts-local_google_fonts fonts-limit_subsets' . (!empty($perfmatters_options['fonts']['disable_google_fonts']) || empty($perfmatters_options['fonts']['local_google_fonts']) || empty($perfmatters_options['fonts']['limit_subsets']) ? ' hidden' : ''),
+            'tooltip' => __('Choose which subsets to download locally.', 'perfmatters')
+        )
+    );
+
     //cdn url
     add_settings_field(
         'cdn_url', 
@@ -1432,21 +1482,6 @@ function perfmatters_settings() {
             'title' => __('Clear Local Fonts', 'perfmatters'),
             'class' => 'fonts-disable_google_fonts fonts-local_google_fonts' . (!empty($perfmatters_options['fonts']['disable_google_fonts']) || empty($perfmatters_options['fonts']['local_google_fonts']) ? ' hidden' : ''),
             'tooltip' => __('Remove all existing local Google Font files and stylesheets.', 'perfmatters')
-        )
-    );
-
-    //async
-    add_settings_field(
-        'async', 
-        perfmatters_title(__('Load Asynchronously', 'perfmatters'), 'async', 'https://perfmatters.io/docs/host-google-fonts-locally/#async'), 
-        'perfmatters_print_input', 
-        'perfmatters_options', 
-        'perfmatters_fonts', 
-        array(
-            'section' => 'fonts',
-            'id' => 'async',
-            'class' => 'fonts-disable_google_fonts fonts-local_google_fonts' . (!empty($perfmatters_options['fonts']['disable_google_fonts']) || empty($perfmatters_options['fonts']['local_google_fonts']) ? ' hidden' : '') . ' pm-advanced-option',
-            'tooltip' => __('Load local font stylesheets asynchronously. Preloading individual font files is recommended when this option is enabled.', 'perfmatters')
         )
     );
 
@@ -1999,32 +2034,9 @@ add_action('admin_init', 'perfmatters_settings');
 //options default values
 function perfmatters_default_options() {
 	$defaults = array(
-		'disable_emojis' => "0",
-		'disable_embeds' => "0",
-		'disable_xmlrpc' => "0",
-		'remove_jquery_migrate' => "0",
-		'hide_wp_version' => "0",
-		'remove_rsd_link' => "0",
-		'remove_shortlink' => "0",
-		'disable_rss_feeds' => "0",
-		'remove_feed_links' => "0",
-		'disable_self_pingbacks' => "0",
-		'disable_rest_api' => "",
-		'remove_rest_api_links' => "0",
-        'disable_dashicons' => "0",
-        'disable_google_maps' => "0",
-        'disable_password_strength_meter' => "0",
-        'disable_comments' => "0",
-        'remove_comment_urls' => "0",
-		'disable_heartbeat' => "",
-		'heartbeat_frequency' => "",
-		'limit_post_revisions' => "",
-		'autosave_interval' => "",
-        'login_url' => "",
-        'disable_woocommerce_scripts' => "0",
-        'disable_woocommerce_cart_fragmentation' => "0",
-        'disable_woocommerce_status' => "0",
-        'disable_woocommerce_widgets' => "0",
+        'fonts' => array(
+            'subsets' => array('latin')
+        ),
         'cdn' => array(
             'cdn_directories' => 'wp-content,wp-includes',
             'cdn_exclusions' => '.php'
@@ -2363,8 +2375,13 @@ function perfmatters_print_preload_row($rowCount = 0, $line = array()) {
                 echo '<input type="text" id="preload-' . $rowCount . '-locations" name="perfmatters_options[preload][preload][' . $rowCount . '][locations]" value="' . (isset($line['locations']) ? $line['locations'] : '') . '" placeholder="23,19,blog" />';
             echo '</label>';
 
-            echo '<label for="preload-' . $rowCount . '-crossorigin">';
-                echo '<input type="checkbox" id="preload-' . $rowCount . '-crossorigin" name="perfmatters_options[preload][preload][' . $rowCount . '][crossorigin]"' . (!empty($line['crossorigin']) ? ' checked' : '') . ' value="1" /> CrossOrigin';
+            echo '<label class="perfmatters-inline-label-input"><span>' . __('Priority', 'perfmatters') . '</span>';
+                echo '<select id="preload-' . $rowCount . '-priority" name="perfmatters_options[preload][preload][' . $rowCount . '][priority]" />';
+                    echo '<option value="">' . __('Auto', 'perfmatters') . '</option>';
+                    echo '<option value="high"' . (isset($line['priority']) && $line['priority'] == 'high' ? ' selected="selected"' : '') . '>' . __('High', 'perfmatters') . '</option>';
+                    echo '<option value="low"' . (isset($line['priority']) && $line['priority'] == 'low' ? ' selected="selected"' : '') . '>' . __('Low', 'perfmatters') . '</option>';
+
+                echo '</select>';
             echo '</label>';
 
         echo '</div>';
@@ -2443,6 +2460,60 @@ function perfmatters_print_preconnect_row($rowCount = 0, $line = '') {
             echo '</label>';
         echo '</div>';
     echo '</div>';
+}
+
+//print subset options
+function perfmatters_print_subsets($args) {
+
+    $perfmatters = get_option('perfmatters_options');
+
+    $subset_options = array(
+        'arabic'              => 'Arabic',
+        'bengali'             => 'Bengali',
+        'chinese-hongkong'    => 'Chinese (Hong Kong)',
+        'chinese-simplified'  => 'Chinese (Simplified)',
+        'chinese-traditional' => 'Chinese (Traditional)',
+        'cyrillic'            => 'Cyrillic',
+        'cyrillic-ext'        => 'Cyrillic Extended',
+        'devanagari'          => 'Devanagari',
+        'greek'               => 'Greek',
+        'greek-ext'           => 'Greek Extended',
+        'gujarati'            => 'Gujarati',
+        'gurmukhi'            => 'Gurmukhi',
+        'hebrew'              => 'Hebrew',
+        'japanese'            => 'Japanese',
+        'kannada'             => 'Kannada',
+        'khmer'               => 'Khmer',
+        'korean'              => 'Korean',
+        'latin'               => 'Latin (' . __('Default', 'perfmatters') . ')',
+        'latin-ext'           => 'Latin Extended',
+        'malayalam'           => 'Malayalam',
+        'math'                => 'Math',
+        'myanmar'             => 'Myanmar',
+        'oriya'               => 'Oriya',
+        'sinhala'             => 'Sinhala',
+        'symbols'             => 'Symbols',
+        'tamil'               => 'Tamil',
+        'telugu'              => 'Telugu',
+        'thai'                => 'Thai',
+        'tibetan'             => 'Tibetan',
+        'vietnamese'          => 'Vietnamese'
+    );
+
+    //checkboxes
+    echo '<div id="perfmatters-subsets">';
+        foreach($subset_options as $key => $name) {
+            echo '<label for="perfmatters-purge-meta-' . $key . '" style="margin-right: 10px; text-wrap: nowrap;">';
+                echo '<input type="checkbox" name="perfmatters_options[fonts][subsets][]" id="perfmatters-subsets-' . $key . '" value="' . $key . '"' . (!empty($perfmatters['fonts']['subsets']) && in_array($key, $perfmatters['fonts']['subsets']) ? ' checked' : '') . ' />';
+                echo $name;
+            echo '</label>';
+        }
+    echo '</div>';
+
+    //tooltip
+    if(!empty($args['tooltip'])) {
+        perfmatters_tooltip($args['tooltip']);
+    }
 }
 
 //print purge meta options

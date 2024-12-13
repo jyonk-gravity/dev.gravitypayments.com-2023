@@ -16,29 +16,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="<?php echo esc_attr( $notices_class ); ?> notice notice-info is-dismissible" data-notice_index="<?php echo esc_attr( $notice_index ); ?>">
 	<div class="notice-container" style="padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: left; align-items: center;">
 		<div class="notice-image">
-			<img style="border-radius:50%;max-width: 90px;" src="<?php echo esc_url( $notice_logo ); ?>">
+			<img style="border-radius:5px;max-width: 90px;" src="<?php echo esc_url( $notice_logo ); ?>">
 		</div>
 		<div class="notice-content" style="margin-left: 15px;">
 			<p>
 				<?php if ( ! empty( $notice_title ) ) : ?>
 					<?php echo wp_kses_post( $notice_title ); ?>
+					<br/>
 				<?php endif; ?>
-				<br/>
 				<?php if ( ! empty( $notice_description ) ) : ?>
 					<?php echo wp_kses_post( $notice_description ); ?>
 				<?php endif; ?>
 			</p>
 			<div style="display:flex;gap: 1em;align-items: center;" >
-				<?php if ( ! empty( $action_link ) ) : ?>
-					<a href="<?php echo esc_url( $action_link ); ?>" class="button-primary">
-						<?php echo esc_html( $action ); ?>
-					</a>
-				<?php endif; ?>
-				<?php if ( ! empty( $notice_link ) && ! empty( $notice_link_label ) ) : ?>
-					<a href="<?php echo esc_url( $notice_link ); ?>" class="button-primary" target="_blank">
-						<?php echo esc_html( $notice_link_label ); ?>
-					</a>
-				<?php endif; ?>
+				<a href="#" title="<?php echo esc_html__( 'I would not, close this alert.', 'wp-notice-plugin-promote' ); ?>" class="button-secondary link-dismiss" data-notice_index="<?php echo esc_attr( $notice_index ); ?>">
+					<?php echo esc_html__( 'I would not', 'wp-notice-plugin-promote' ); ?>
+				</a>
 				<?php
 				if ( ! empty( $notice_more_link ) && ! empty( $notice_more_label ) ) :
 					?>
@@ -46,7 +39,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php echo esc_html( $notice_more_label ); ?>
 					</a>
 				<?php endif; ?>
-				<a href="#" title="<?php echo esc_html__( 'No, close this alert...', 'wp-notice-plugin-promote' ); ?>" class="link-dismiss" style="text-decoration: none;" data-notice_index="<?php echo esc_attr( $notice_index ); ?>"><?php echo esc_html__( 'No, close this alert...', 'wp-notice-plugin-promote' ); ?></a>
+				<?php if ( ! empty( $notice_link ) && ! empty( $notice_link_label ) ) : ?>
+					<a href="<?php echo esc_url( $notice_link ); ?>" class="button-primary" target="_blank" style="background: linear-gradient(125deg, #019cff 0, #008bff 140%) !important;border-color: #019cff;!important">
+						<?php echo esc_html( $notice_link_label ); ?>
+					</a>
+				<?php endif; ?>
+				<?php if ( ! empty( $action_link ) ) : ?>
+					<a href="<?php echo esc_url( $action_link ); ?>" class="button-primary" style="background: linear-gradient(125deg, #019cff 0, #008bff 140%) !important;border-color: #019cff;!important">
+						<?php echo esc_html( $action ); ?>
+					</a>
+				<?php endif; ?>
 			</div>
 		</div>			
 	</div>

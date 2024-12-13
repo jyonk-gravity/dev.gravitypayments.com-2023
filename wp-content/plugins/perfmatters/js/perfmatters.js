@@ -374,7 +374,7 @@ jQuery(function($) {
 			clearTimeout(pmActionButtonTimeouts[action]);
 			pmActionButtonTimeouts[action] = setTimeout(function() {
 				message.fadeOut();
-			}, 2500);
+			}, 10000);
 
 			//re-enable button
 			button.attr('disabled', false);

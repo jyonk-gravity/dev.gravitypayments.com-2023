@@ -76,6 +76,7 @@ class ComposerStaticInitb69d5dec586431dd144fc6805079e199
         'QuadLayers\\QLSE\\Helpers' => __DIR__ . '/../..' . '/lib/class-helpers.php',
         'QuadLayers\\QLSE\\Models\\Settings' => __DIR__ . '/../..' . '/lib/models/class-settings.php',
         'QuadLayers\\QLSE\\Plugin' => __DIR__ . '/../..' . '/lib/class-plugin.php',
+        'QuadLayers\\QLSE\\Services\\Entity_Options' => __DIR__ . '/../..' . '/lib/services/class-entity-options.php',
         'QuadLayers\\WP_Dashboard_Widget_News\\Load' => __DIR__ . '/../..' . '/jetpack_vendor/quadlayers/wp-dashboard-widget-news/src/Load.php',
         'QuadLayers\\WP_Notice_Plugin_Promote\\Load' => __DIR__ . '/../..' . '/jetpack_vendor/quadlayers/wp-notice-plugin-promote/src/Load.php',
         'QuadLayers\\WP_Notice_Plugin_Promote\\PluginByFile' => __DIR__ . '/../..' . '/jetpack_vendor/quadlayers/wp-notice-plugin-promote/src/PluginByFile.php',
