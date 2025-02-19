@@ -14,8 +14,7 @@ class JqueryJsLoader extends JsLoader {
 
     public function enqueue() {
         $testFE = false;
-        if ( !!$this->ctrl->options->tests_frontEnd_enqueued ) {
-            $testFE = true;
+        if ( current_user_can( 'manage_options' ) && !!$this->ctrl->options->tests_frontEnd_enqueued ) {
             $this->ctrl->register_js('spai-tests', 'ai.tests', true, false, true, [], true);
         }
 
@@ -30,7 +29,7 @@ class JqueryJsLoader extends JsLoader {
         $this->ctrl->register_js('spai-scripts', 'ai-' . \ShortPixelAI::AI_JS_VERSION, false, false, false, ['jquery']);
         $nextgen = (!!$this->settings->compression->webp || !!$this->settings->compression->avif);
         wp_localize_script( 'spai-scripts', 'spai_settings', [
-            'api_domain'            =>  parse_url($this->settings->behaviour->api_url, PHP_URL_HOST),
+            'api_domain'            =>  parse_url($this->ctrl->get_cdn_url(), PHP_URL_HOST),
             'api_url'               => $this->ctrl->get_api_url(false, '%WIDTH%', '%HEIGHT%', 'noauto'), //the noauto type gets rid of the to_auto - the jQuery JS handles it based on extensions_to_nextgenimg
             'api_short_url'         => $this->ctrl->get_api_url(false, false, false, 'svg' ),
             'method'                => $this->settings->behaviour->replace_method,

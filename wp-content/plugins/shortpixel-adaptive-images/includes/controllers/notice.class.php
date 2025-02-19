@@ -2,7 +2,8 @@
 
 	namespace ShortPixel\AI;
 
-	use ShortPixelAI;
+	use ShortPixel\AI\Notice\Actions;
+    use ShortPixelAI;
 	use ShortPixel\AI\Notice\Constants;
 	use ShortPixel\AI\Options\Option;
 
@@ -186,7 +187,7 @@
         public static function getDismissed() {
             $dismissed = Options::_()->get( 'dismissed', 'notices', Option::_() );
 
-            return $dismissed instanceof Option ? $dismissed->getData() : new stdClass();
+            return $dismissed instanceof Option ? $dismissed->getData() : new \stdClass();
         }
 
 		/**
@@ -692,6 +693,7 @@
 			add_action( 'admin_notices', [ $this, 'renderNotices' ] );
 			add_action( 'admin_footer', [ $this, 'enqueueAdminScripts' ] );
 			add_action( 'wp_ajax_shortpixel_ai_handle_notice_action', [ 'ShortPixel\AI\Notice\Actions', 'handle' ] );
+            add_action('admin_notices', [ $this, 'display_remote_notices' ] );
 		}
 
         /**
@@ -716,4 +718,122 @@
                 ],
             ]);
         }
+
+        /**
+         *  Set to get remote notices from API and store them both in the object cache and as a transient
+         * @return notices
+         */
+        private function get_remote_notices()
+        {
+            //delete_transient('spai_remote_notice'); //this is only for dev purpose, so it gets new transient value much faster for testing
+            $transient_name = 'spai_remote_notice';
+            //$transient_duration = 10; //10seconds is temporary for development, to be commented
+            $transient_duration = HOUR_IN_SECONDS; // wp constant that means 1 hour
+
+            $spai_key = Options::_()->settings_general_apiKey;
+
+            $notices = wp_cache_get($transient_name);
+            if ($notices === false) {
+                $notices = get_transient($transient_name);
+            }
+
+            $url = ShortPixelAI::REMOTE_MESSAGE_ENDPOINT;
+            $url = add_query_arg(array(
+                'version' => SHORTPIXEL_AI_VERSION,
+                'target' => 2,
+                'key' => $spai_key,
+            ), $url);
+
+            if ( $notices === false ) {
+                $notices_response = wp_safe_remote_request( $url );
+                if (! is_wp_error( $notices_response ) ) {
+                    $notices = json_decode($notices_response['body']);
+                    if (! is_array($notices)) {
+                        $notices = false;
+                    }
+                    /**so, here there are several ways of dealing with these notices in cache to avoid cache delay
+                     * if the server has an object caching system  (like Memcached, Redis, etc.),
+                     * WordPress transients may be stored in that object cache.
+                     * wordpress transients are designed to use the DB as a fallback, but if object caching is available,
+                     * the transients will be stored in memory via wp_cache. if you don;t have object cache, it will use
+                     * transients only in traditional way.
+                     * */
+                    wp_cache_set($transient_name, $notices, '', $transient_duration);
+                    set_transient($transient_name, $notices, $transient_duration);
+
+                } else {
+                     // store false in cache for the duration time to avoid repeated requests
+                    wp_cache_set($transient_name, false, '', $transient_duration);
+                    set_transient($transient_name, false, $transient_duration);
+                }
+            }
+
+            return $notices;
+        }
+
+
+        /**
+         *  Set to display remote notices from API
+         *
+         */
+        public function display_remote_notices()
+        {
+            $notices = $this->get_remote_notices();
+
+            if ($notices === false || empty($notices)) {
+                return;
+            }
+            $dismissed = Notice::getDismissed();
+
+
+            foreach ($notices as $remoteNotice) {
+                if (!isset($remoteNotice->id) || !isset($remoteNotice->message)) {
+                    continue;
+                }
+
+
+                $causer = str_replace(' ', '_', 'remote info notice___') . strtolower($remoteNotice->id);
+                    if (isset($dismissed->{$causer})) {
+                        continue;
+                    }
+
+                $message = wp_kses_post($remoteNotice->message);// sets the notice message
+
+                switch ($remoteNotice->type) {
+                    case 'info':
+                        $notice_type = 'info';
+                        $notice_icon = 'happy';
+                        $notice_title = 'Information Notice';
+                        break;
+                    case 'notice':
+                        $notice_type = 'success';
+                        $notice_icon = 'notes';
+                        $notice_title = 'Notice';
+                        break;
+                    case 'alert':
+                        $notice_type = 'error';
+                        $notice_icon = 'scared';
+                        $notice_title = 'Alert Notice';
+                        break;
+                    default:
+                        $notice_type = 'info';
+                        $notice_icon = 'happy';
+                        $notice_title = 'Information Notice';
+                        break;
+                }
+
+                $this->render($causer , [
+                    'notice' => [
+                        'type' => $notice_type,
+                        'icon' => $notice_icon,
+                        'dismissible' => true,
+                    ],
+                    'message' => [
+                        'title' => $notice_title,
+                        'body' => [$message],
+                    ],
+                ]);
+            }
+        }
+
     }

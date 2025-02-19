@@ -34,12 +34,13 @@ class TagRules
         }
 
         $frontEndItems = array();
-        $regexItems = array(
+        $regexItems = array_merge( [
             new TagRule('img|div', 'data-src', false, false, false, false, false, 'url', false, false, true), //CHANGED ORDER for images which have both src and data-src - TODO better solution
-//            new TagRule('img', 'data-srcset', false, false, false, false, true,
-//                'srcset', 'replace_custom_srcset'),
-
-            $imgTagRule,
+            new TagRule('img', 'data-srcset', false, false, false, false, true,
+                'srcset', 'replace_custom_srcset'),
+        ],
+        (isset($imgTagRule) ? [$imgTagRule] : []),
+        [
             new TagRule('img', 'data-large-image'),
             new TagRule('a', 'href', 'media-gallery-link'), //this one seems generally related to sliders, see HS 972394549
             new TagRule('link', 'href', false, 'rel', 'icon', false, true),
@@ -53,7 +54,7 @@ class TagRules
                 'srcset', 'replace_custom_srcset'),
             new TagRule('div|figure|li', 'data-thumb(?:nail|)', false, false, false, false, false,
                 'data-thumb', 'replace_wc_gallery_thumbs')
-        );
+        ] );
         if ($integrations['nextgen']) {
             //add |a to the img|div rule
             foreach($regexItems as $item) {
@@ -303,6 +304,14 @@ class TagRules
 
     protected static function applyFilterAndVerify($items, $filter) {
         $filteredItems = apply_filters( $filter, $items);
+        if($filteredItems instanceof TagRule) {
+            $items[] = $filteredItems;
+            return $items;
+        }
+        if(!is_array($filteredItems)) {
+            return $items;
+        }
+
         $validatedItems = [];
         foreach($filteredItems as $extItem)
         {
@@ -314,6 +323,7 @@ class TagRules
                 $validatedItems[] = new TagRule($extItem[0], $extItem[1], isset($extItem[2]) ? $extItem[2] : false, isset($extItem[3]) ? $extItem[3] : false,
                     isset($extItem[5]) ? $extItem[5] : false, false, isset($extItem[6]) ? $extItem[6] : true);
             }
+            else return $items;
         }
         return $validatedItems;
     }

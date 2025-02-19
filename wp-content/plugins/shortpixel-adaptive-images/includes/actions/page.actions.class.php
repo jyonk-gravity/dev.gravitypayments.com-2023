@@ -156,7 +156,66 @@
 				$response[ 'success' ] = !!Options::_()->delete( 'api_key', [ 'settings', 'general' ] );
 				$response[ 'reload' ]  = true;
 			}
-			else if ( $action === 'disable advanced' ) {
+
+            else if ($action === 'purge_cdn_cache') {
+                $api_response = \ShortPixelDomainTools::purge_cdn_cache();//call the purge function()
+                $response['success'] = $api_response['success'];
+
+                if ($api_response['success']) {
+                    /** here, we get from API an array of 3 messages(for now). first 2 are from local storage
+                     * from which only the first message we will extract in order to get number of files purged.
+                     * the other 3-rd message is from CDN, and will give us message also (completed or errors:)
+                     * $firstMessage is for the message we will get from the api, which says how many files were purged
+                     * $generalMessage is the general success mesage we set as an info string
+                     * $cdnMessage or $cdnErrorMessage are those transmitted by CDN directly.
+                     */
+                    $firstMessage = '';
+                    $cdnMessage = '';
+                    $cdnErrorMessage =  '';
+                    $messageData = $api_response['message']['Message'] ?? [];
+                    //getting the array of messages
+                    if (!empty($messageData['0']['Message']) || !empty($messageData['CDN']['Message']) || !empty($messageData['CDN']['Error']) ) {
+                            $firstMessage = $messageData['0']['Message'] ?? '';
+                            $cdnMessage = $messageData['CDN']['Message'] ?? '';
+                            $cdnErrorMessage = $messageData['CDN']['Error'] ?? '';
+
+                    }
+
+                    // concatenate the first message with CDN message
+                    $fullMessage = trim(implode(' ', array_filter([$firstMessage, $cdnMessage, $cdnErrorMessage])));
+                    // now get and display the wp_notice with & fullMessage if success or custom string  if not
+                    $response['notice'] = Notice::get(null, [
+                        'notice' => [
+                            'type' => 'success',
+                            'dismissible' => true,
+                        ],
+                        'message' => [
+                            'body' => [
+                                $fullMessage,
+                            ],
+                        ],
+                    ]);
+                } else {
+
+                    $errorMessage = isset($api_response['message']) ? $api_response['message'] : __('An error occurred while purging the CDN cache.', 'shortpixel-adaptive-images');
+
+                    $response['notice'] = Notice::get(null, [
+                        'notice' => [
+                            'type' => 'error',
+                            'dismissible' => true,
+                        ],
+                        'message' => [
+                            'body' => [
+                                $errorMessage,
+                            ],
+                        ],
+                    ]);
+                }
+
+                wp_send_json($response);
+            }
+
+            else if ( $action === 'disable advanced' ) {
 				ShortPixelAI::_()->setSimpleDefaultOptions();
 				$response[ 'success' ] = !!Options::_()->set( 0, 'advanced', ['flags', 'all'] );
 				$response[ 'reload' ] = true;

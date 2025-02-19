@@ -27,7 +27,7 @@ class Buffer
         if(has_filter('perfmatters_output_buffer_template_redirect')) {
 
             //exclude certain requests
-            if(is_embed() || is_feed() || is_preview() || is_customize_preview()) {
+            if(is_embed() || is_feed() || is_preview() || is_customize_preview() || is_singular(array('bricks_template'))) {
                 return;
             }
 

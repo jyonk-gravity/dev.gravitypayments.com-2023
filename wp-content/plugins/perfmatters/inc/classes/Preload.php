@@ -6,6 +6,7 @@ class Preload
     private static $fetch_priority;
     private static $preloads;
     private static $critical_images;
+    private static $preloads_array = array();
     private static $preloads_ready = array();
     private static $used_srcs = array();
 
@@ -18,22 +19,28 @@ class Preload
     //queue functions
     public static function queue() 
     {
-        //fetch priority
+        self::$fetch_priority = apply_filters('perfmatters_fetch_priority', Config::$options['preload']['fetch_priority'] ?? array());
+        self::$preloads = apply_filters('perfmatters_preloads', Config::$options['preload']['preload'] ?? array());
+        self::$critical_images = apply_filters('perfmatters_preload_critical_images', Config::$options['preload']['critical_images'] ?? 0);
+
+        //disable core fetch
         if(!empty(Config::$options['preload']['disable_core_fetch'])) {
             add_filter('wp_get_loading_optimization_attributes', array('Perfmatters\Preload', 'disable_core_fetch'));
         }
-       
-        self::$fetch_priority = apply_filters('perfmatters_fetch_priority', Config::$options['preload']['fetch_priority'] ?? array());
+        
+        //fetch priority
         if(!empty(self::$fetch_priority)) {
             add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\Preload', 'add_fetch_priority'));
         }
 
         //preloads
-        self::$preloads = apply_filters('perfmatters_preloads', Config::$options['preload']['preload'] ?? array());
-        self::$critical_images = apply_filters('perfmatters_preload_critical_images', Config::$options['preload']['critical_images'] ?? 0);
-
         if(!empty(self::$preloads) || !empty(self::$critical_images)) {
             add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\Preload', 'add_preloads'));
+        }
+
+        //compatibility
+        if(!empty(self::$critical_images)) {
+            add_filter('rocket_above_the_fold_optimization', '__return_false', 999);
         }
     }
 
@@ -237,10 +244,17 @@ class Preload
                 else {
                     self::$preloads_ready[] = $preload;
                 }
+
+                //add to preloads array
+                self::$preloads_array[] = $line;
             }
         }
 
         if(!empty(self::$preloads_ready)) {
+
+            //filter preloads array
+            apply_filters('perfmatters_preloads_array', self::$preloads_array);
+
             $preloads_string = '';
             foreach(apply_filters('perfmatters_preloads_ready', self::$preloads_ready) as $preload) {
                 $preloads_string.= $preload;
@@ -383,6 +397,9 @@ class Preload
 
             //generate preload
             self::$preloads_ready[] = '<link rel="preload" href="' . $src . '" as="image"' . (!empty($atts['srcset']) ? ' imagesrcset="' . $atts['srcset'] . '"' : '') . (!empty($atts['sizes']) ? ' imagesizes="' . $atts['sizes'] . '"' : '') . ' fetchpriority="high" />';
+
+            //update preloads array
+            self::$preloads_array[] = array('url' => $src, 'as' => 'image', 'srcset' => $atts['srcset'] ?? '', 'sizes' => $atts['sizes'] ?? '');
 
             //mark src used and return
             if(!empty($src)) {

@@ -15,7 +15,7 @@ class VanillaJsLoader extends JsLoader {
     public function enqueue()
     {
         add_action( 'wp_head', function() {
-            $apiUrlParts = explode('/', rtrim($this->settings->behaviour->api_url, '/'));
+            $apiUrlParts = explode('/', rtrim($this->ctrl->get_cdn_url(), '/'));
             $convert = 'none';
             if(!!$this->settings->compression->webp || !!$this->settings->compression->avif) {
                 if (!$this->ctrl->varyCacheSupport) {
@@ -30,7 +30,7 @@ class VanillaJsLoader extends JsLoader {
             }
             $dbg = (SHORTPIXEL_AI_DEBUG || isset($_GET['SPAI_VJS']));
             $vjsVer = isset($_GET['SPAI_VJS']) && preg_match('/^[\.0-9a-zA-Z]+$/', $_GET['SPAI_VJS']) ? esc_js($_GET['SPAI_VJS']) : SHORTPIXEL_AI_VANILLAJS_VER;
-            $spaiDomain = parse_url($this->settings->behaviour->api_url, PHP_URL_HOST);
+            $spaiDomain = parse_url($this->ctrl->get_cdn_url(), PHP_URL_HOST); // this one changes the picture's URL when filtered
             $scriptDomain = ($dbg ? 'dev.shortpixel.ai' : $spaiDomain);
             ?>
             <script type="text/javascript" id="spai_js" data-cfasync="false">
@@ -84,7 +84,7 @@ class VanillaJsLoader extends JsLoader {
         if(\ShortPixelAI::userCan( 'manage_options' )) {
             wp_register_script( 'spai-snip-action', '', [], '', true );
             wp_localize_script( 'spai-snip-action', 'spai_settings', [
-                'api_domain'            =>  parse_url($this->settings->behaviour->api_url, PHP_URL_HOST),
+                'api_domain'            =>  parse_url($this->ctrl->get_cdn_url(), PHP_URL_HOST),
                 'ajax_url'              => admin_url( 'admin-ajax.php' ),
                 'excluded_selectors'    => $this->ctrl->splitSelectors( $this->settings->exclusions->excluded_selectors, ',' ),
                 'eager_selectors'       => $this->ctrl->splitSelectors( $this->settings->exclusions->eager_selectors, ',' ),

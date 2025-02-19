@@ -38,3 +38,8 @@ function spaiCssCacheClear(obj, nonce) {
     obj.closest('li').classList.add("shortpixel_ai_processing");
     spaiSendXHRCommand('clear css cache', obj, nonce);
 }
+
+function spaiCdnCachePurge(obj, nonce) {
+    obj.closest('li').classList.add("shortpixel_ai_processing");
+    spaiSendXHRCommand('purge_cdn_cache', obj, nonce);
+}

@@ -941,7 +941,7 @@ $log_id=$this->post('id');
 $log=$this->data->get_log_by_id($log_id); 
   $data=json_decode($log['data'],true); 
   $response=json_decode($log['response'],true);
-    $triggers=array('manual'=>'Submitted Manually','submit'=>'Form Submission','paid'=>'Payment Completed','update'=>'Entry Update'
+    $triggers=array('manual'=>'Submitted Manually','submit'=>'Form Submission','after_submit'=>'After Form Submission','paid'=>'Payment Completed','update'=>'Entry Update'
   ,'delete'=>'Entry Deletion','add_note'=>'Entry Note Created','delete_note'=>'Entry Note Deleted','restore'=>'Entry Restored');
   $event= empty($log['event']) ? 'manual' : $log['event'];
   $extra=array('Object'=>$log['object']);

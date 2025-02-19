@@ -88,7 +88,7 @@ function LQIP() {
 
 		var formData = new FormData(),
 			xhr      = new XMLHttpRequest(),
-			url      = typeof spai_settings === 'undefined' ? 'wp-admin/admin-ajax.php' : spai_settings.ajax_url;
+			url      = typeof lqipConstants === 'undefined' ? '/wp-admin/admin-ajax.php' : lqipConstants.ajax_url;
 
 		formData.append( 'action', typeof window.lqipConstants === 'object' && ( typeof window.lqipConstants.action === 'string' && window.lqipConstants.action !== '' ) ? window.lqipConstants.action : 'shortpixel_ai_handle_lqip_action' );
 		formData.append( 'data[action]', 'collect' );

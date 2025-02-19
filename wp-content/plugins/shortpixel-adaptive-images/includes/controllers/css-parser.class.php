@@ -184,20 +184,12 @@ class ShortPixelCssParser {
             return (object)array('text' => $text, 'replaced' => false);
         }
         $tag = trim($matches[1]);
-        $attr = $matches[3]; //this mostly is background-image or background
-        $extra = $matches[4]; //what lies between the type and url()
-        $type = $matches[5];
         $eager = false;
-        $changed = preg_replace_callback(self::REGEX_URL, function($matches) use ($text, $type, $lazy, $ignoreLazyNotice, &$replaced, &$eager) {
+        $changed = preg_replace_callback(self::REGEX_URL, function($matches) use ($text, $lazy, $ignoreLazyNotice, &$replaced, &$eager) {
             $unchanged = $matches[0];
             $url = trim($matches[4]);
             $q = isset($matches[5]) ? $matches[5] : '';
 
-            if($type !== 'url') {
-                //it's gradient
-                $this->logger->log("REPLACE BG - GRADIENT");
-                return $unchanged;
-            }
             $pristineUrl = $url;
             //WP is encoding some characters, like & ( to &#038; )
             $url = trim(html_entity_decode($url, ENT_QUOTES));

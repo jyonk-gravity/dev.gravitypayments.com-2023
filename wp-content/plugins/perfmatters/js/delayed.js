@@ -4,7 +4,6 @@ const pmUserInteractions =["keydown","mousedown","mousemove","wheel","touchmove"
 const pmDelayedScripts = {normal: [], defer: [], async: []};
 const jQueriesArray = [];
 const pmInterceptedClicks = [];
-//const pmTrash = [];
 var pmDOMLoaded = false;
 var pmClickTarget = '';
 window.pmIsClickPending = false;
@@ -61,7 +60,6 @@ async function pmTriggerDelayedScripts() {
     //prep
     pmDelayEventListeners();
     pmDelayJQueryReady();
-    pmProcessDocumentWrite();
     pmSortDelayedScripts();
     pmPreloadDelayedScripts();
 
@@ -80,11 +78,9 @@ async function pmTriggerDelayedScripts() {
 
     //start click replay event
     window.dispatchEvent(new Event("perfmatters-allScriptsLoaded")), 
-        pmWaitForPendingClicks().then(() => {
-            pmReplayClicks();
-        });
-        //pmEmptyTrash();
-    //pmReplayClicks();    
+    pmWaitForPendingClicks().then(() => {
+        pmReplayClicks();
+    });
 }
 
 //delay original page event listeners
@@ -235,36 +231,6 @@ function pmDelayJQueryReady() {
     });
 }
 
-//print document write values directly after their parent script
-function pmProcessDocumentWrite() {
-
-    //create map to store scripts
-    const map = new Map();
-
-    //modify document.write functions
-    document.write = document.writeln = function(value) {
-
-        //prep
-        var script = document.currentScript;
-        var range = document.createRange();
-
-        //make sure script isn't in map yet
-        let mapScript = map.get(script);
-        if(mapScript === void 0) {
-
-            //add script's next sibling to map
-            mapScript = script.nextSibling;
-            map.set(script, mapScript);
-        }
-        
-        //insert value before script's next sibling
-        var fragment = document.createDocumentFragment();
-        range.setStart(fragment, 0);
-        fragment.appendChild(range.createContextualFragment(value));
-        script.parentElement.insertBefore(fragment, mapScript);
-    };
-}
-
 //find all delayed scripts and sort them by load order
 function pmSortDelayedScripts() {
     document.querySelectorAll("script[type=pmdelayedscript]").forEach(function(event) {
@@ -410,10 +376,6 @@ async function pmNextFrame() {
     });   
 }
 
-/*function pmEmptyTrash() {
-    window.pmTrash.forEach((t) => t.remove());
-}*/
-
 function pmReplayClicks() {
     window.removeEventListener("touchstart", pmTouchStartHandler, {passive: true});
     window.removeEventListener("mousedown", pmTouchStartHandler);
@@ -446,7 +408,6 @@ function pmClickHandler(e) {
 }
 
 function pmTouchStartHandler(e) {
-    
     if(e.target.tagName !== "HTML") {
         if(!pmClickTarget) {
             pmClickTarget = e.target.outerHTML;

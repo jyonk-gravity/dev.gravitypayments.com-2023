@@ -709,7 +709,9 @@ div.spai-modal-title {
     white-space     : nowrap;
     outline         : none;
 }
-
+.spai_top_actions:hover {
+    background:#0fa9b4;
+}
 .clearcss-icon {
     background: transparent url(../img/clearcss-white.svg) top left no-repeat;
     background-size: auto;
@@ -751,6 +753,7 @@ div.spai-modal-title {
     border-left        : 1px solid #b4b4b4;
     border-right       : 1px solid #b4b4b4;
     font-size          : 14px;
+    font-weight        : bold;
     margin             : 0 -1px;
     -webkit-transition : all 0.2s ease-in;
     -o-transition      : all 0.2s ease-in;
@@ -765,6 +768,13 @@ div.spai-modal-title {
     border-right       : 1px solid #1fbec9;
     position           : relative;
 }
+.shortpixel_radio_btns label:hover {
+    background: #bbb;
+}
+.shortpixel_radio_btns input:checked + label:hover {
+    background: #0fa9b4;
+}
+
 
 .shortpixel-settings-tabs input[type="text"],
 .shortpixel-settings-tabs textarea {
@@ -1698,6 +1708,9 @@ div.shortpixel-settings-wrap .tgl {
     box-shadow         : 0 1px 2px rgba(0, 0, 0, 0.31);
     top                : -6px;
 }
+.tgl:hover + .tgl-btn span:after {
+    background : #bbb;
+}
 
 .tgl + .tgl-btn span:hover:after {
     will-change : padding;
@@ -1721,6 +1734,10 @@ div.shortpixel-settings-wrap .tgl {
 .tgl:checked + .tgl-btn span:after {
     background : #1fbec9;
 }
+.tgl:checked:hover + .tgl-btn span:after {
+    background : #0fa9b4;
+}
+
 
 .spai_top_actions .tgl:checked + .tgl-btn span:after {
     background : #72edf5;
@@ -1853,17 +1870,23 @@ div.shortpixel-settings-wrap .tgl {
     background-image    : url(../img/clearcss.svg) !important;
     height: 20px;
 }
+#wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_purge_cdn_cache .ab-item:before {
+    background-image    : url(../img/update.svg) !important;
+    height: 20px;
+}
 #wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_clear_lqip_cache .ab-item:before {
     background-image    : url(../img/robo-blurry.png) !important;
 }
 
 #wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_clear_css_cache.shortpixel_ai_processing .ab-item:before,
+#wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_purge_cdn_cache.shortpixel_ai_processing .ab-item:before,
 #wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_clear_lqip_cache.shortpixel_ai_processing .ab-item:before{
     background-image    : url(../img/spinner2.gif) !important;
     height: 20px;
 }
 
 #wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_clear_css_cache.shortpixel_ai_success .ab-item:before,
+#wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_purge_cdn_cache.shortpixel_ai_success .ab-item:before,
 #wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_clear_lqip_cache.shortpixel_ai_success .ab-item:before{
     background-image    : none !important;
     content: '\2713';
@@ -1875,6 +1898,7 @@ div.shortpixel-settings-wrap .tgl {
 }
 
 #wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_clear_css_cache.shortpixel_ai_error .ab-item:before,
+#wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_purge_cdn_cache.shortpixel_ai_error .ab-item:before,
 #wpadminbar #wp-toolbar li#wp-admin-bar-shortpixel_ai_topmenu .ab-submenu .spai_clear_lqip_cache.shortpixel_ai_error .ab-item:before{
     background-image    : none !important;
     content: '\203C';

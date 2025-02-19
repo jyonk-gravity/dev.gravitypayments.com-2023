@@ -2,9 +2,9 @@
 Contributors: ShortPixel
 Tags: image optimization, convert, webp, lazy load, avif
 Requires at least: 4.7
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 5.6.40
-Stable tag: 3.9.4
+Stable tag: 3.10.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -167,6 +167,20 @@ To change the original URL of the image that is detected by ShortPixel, use this
 
     add_filter('shortpixel/ai/originalUrl', 'my_function');
 
+To return your own custom URL for each language domain for the same website (single plugin installation), use this filter:
+add_filter('shortpixel/ai/cdnUrl', function($cdn_url) {
+	switch($_SERVER['HTTP_HOST']) { //this is the domain name without protocol
+		case 'mydomain.com': //that's your main domain
+			return "https://images.mydomain.com/spai";
+
+		case 'mydomain.fr': //that's your french language domain
+			return "https://images.mydomain.fr/spai";
+
+		default:
+			return $cdn_url;
+	}
+});
+
 Sometimes when the option to crop images is enabled, SPAI thinks it is not safe to crop an image, but you want to crop it anyway. Please add this attribute to force cropping:
 
     <img data-spai-crop="true" ....
@@ -183,21 +197,21 @@ For adding custom replacement rules use:
 
     add_filter('shortpixel/ai/customRules', 'my_function');
 
-The function is given an array and should append to that array elements with the following structure: ['tagName', 'attrToBeChecked', 'classFilter', 'attributeFilter', false(reserved), 'attributeValueFilter', isEager(bool)]. As of version 3.0, you can also append ShortPixel\AI\TagRule instances, something like this.
+The function is given an array and should append ShortPixel\AI\TagRule instances to the given array , as in the example below.
 A real-world example of custom image attributes, a custom srcset, and a custom JSON data attribute:
 
 `add_filter('shortpixel/ai/customRules', 'spai_to_iconic');
-function spai_to_iconic($regexItems) {
+function spai_to_iconic($tagRules) {
     //lazy-loaded data-iconic-woothumbs-src attribute
-    $regexItems[] = new ShortPixel\AI\TagRule('img', 'data-iconic-woothumbs-src');
+    $tagRules[] = new ShortPixel\AI\TagRule('img', 'data-iconic-woothumbs-src');
     //eager attribute
-    $regexItems[] = new ShortPixel\AI\TagRule('img', 'data-large_image', false, false, false, false, true);
+    $tagRules[] = new ShortPixel\AI\TagRule('img', 'data-large_image', false, false, false, false, true);
     //lazy srcset style attribute.
-    $regexItems[] = new ShortPixel\AI\TagRule('img', 'srcset', false, false, false, false, false,
+    $tagRules[] = new ShortPixel\AI\TagRule('img', 'srcset', false, false, false, false, false,
                     'srcset', 'replace_custom_srcset');
-    $regexItems[] = new ShortPixel\AI\TagRule('div', 'data-default', 'iconic-woothumbs-all-images-wrap', false, false, false, false,
+    $tagRules[] = new ShortPixel\AI\TagRule('div', 'data-default', 'iconic-woothumbs-all-images-wrap', false, false, false, false,
                         'srcset', 'replace_custom_json_attr');
-    return $regexItems;
+    return $tagRules;
 }`
 
 The parameters of the rule are, in this order:
@@ -234,6 +248,23 @@ This rule will only be applied by the New JS Engine (so you need to have the opt
 6. Advanced settings page
 
 == Changelog ==
+
+= 3.10.0 =
+Release date: December 17, 2024
+* New: An option has been added to clear the CDN cache for the entire domain/site;
+* New: Added a filter for the CDN URL that can be used in multi-domain environments;
+* New: Urls within `data-srcset` are replaced correctly if they stand alone (without `data-src`);
+* New: The plugin handles the attributes `data-no-optimize` and `data-no-minify` correctly;
+* New: A system for remote notifications has been added;
+* Compat: Added integration for the Breakdance builder to make its functions work;
+* Fix: The plugin textdomain is loaded correctly to avoid a deprecation warning;
+* Fix: A typo caused an error in some notifications;
+* Fix: The API key from the settings was not loaded correctly in some cases
+* Fix: In some cases a PHP warning was displayed in the settings
+* Fix: Excluded selectors also work for srcset;
+* Fix: Lazy loading now works and the correct CDN url is also set if multiple attributes are present;
+* Fix: The `lqip.js` file became independent of the `spai_settings` variable when using jQuery JS;
+* Language: 10 new strings added, 0 updated, 0 fuzzed and 0 deprecated.
 
 = 3.9.4 =
 Release date: October 1, 2024

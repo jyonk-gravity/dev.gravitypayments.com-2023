@@ -1983,24 +1983,47 @@ function perfmatters_settings() {
         )
     );
 
-    //optimize database
-    add_settings_field(
-        'optimize_database', 
-        perfmatters_title(__('Optimize Database', 'perfmatters'), 'optimize_database', 'https://perfmatters.io/docs/optimize-wordpress-database/'), 
-        'perfmatters_print_input',
-        'perfmatters_tools', 
-        'database', 
-        array(
-            'id' => 'optimize_database',
-            'input' => 'button',
-            'action' => 'optimize_database',
-            'title' => __('Optimize Now', 'perfmatters'),
-            'option' => 'perfmatters_tools',
-            'section' => 'database',
-            'confirmation' => __('This will make permanent changes that cannot be reverted! Are you sure you want to proceed with optimization?', 'perfmatters'),
-            'tooltip' => __('Run a one-time optimization of your WordPress database based on the selected options above. This process runs in the background.', 'perfmatters')
-        )
-    );
+    if(!get_transient('perfmatters_database_optimization_process')) {
+
+        //optimize database
+        add_settings_field(
+            'optimize_database', 
+            perfmatters_title(__('Optimize Database', 'perfmatters'), 'optimize_database', 'https://perfmatters.io/docs/optimize-wordpress-database/'), 
+            'perfmatters_print_input',
+            'perfmatters_tools', 
+            'database', 
+            array(
+                'id' => 'optimize_database',
+                'input' => 'button',
+                'action' => 'optimize_database',
+                'title' => __('Optimize Now', 'perfmatters'),
+                'option' => 'perfmatters_tools',
+                'section' => 'database',
+                'confirmation' => __('This will make permanent changes that cannot be reverted! Are you sure you want to proceed with optimization?', 'perfmatters'),
+                'tooltip' => __('Run a one-time optimization of your WordPress database based on the selected options above. This process runs in the background.', 'perfmatters')
+            )
+        );
+    }
+    else {
+
+        //cancel optimization
+        add_settings_field(
+            'cancel_optimization', 
+            perfmatters_title(__('Cancel Optimization', 'perfmatters'), 'cancel_optimization', 'https://perfmatters.io/docs/optimize-wordpress-database/'), 
+            'perfmatters_print_input',
+            'perfmatters_tools', 
+            'database', 
+            array(
+                'id' => 'cancel_optimization',
+                'input' => 'button',
+                'action' => 'cancel_optimization',
+                'title' => __('Cancel Current Optimization', 'perfmatters'),
+                'option' => 'perfmatters_tools',
+                'section' => 'database',
+                'tooltip' => __('Cancel the current database optimization process.', 'perfmatters')
+            )
+        );
+    }
 
     //Scheduled Optimization
     add_settings_field(

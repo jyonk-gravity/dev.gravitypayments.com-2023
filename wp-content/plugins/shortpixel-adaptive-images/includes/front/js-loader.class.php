@@ -78,7 +78,7 @@ abstract class JsLoader {
                 $this->ctrl->register_js( 'spai-front-worker', 'front.worker', false);
 
                 wp_localize_script( 'spai-front-worker', 'SPAIFrontConstants', [
-                    'apiUrl'     => $this->settings->behaviour->api_url,
+                    'apiUrl'     => $this->ctrl->get_cdn_url(),
                     'folderUrls' => [
                         'plugins'  => str_replace( [ WP_CONTENT_URL, '/' ], '', WP_PLUGIN_URL ) . '/',
                         'content'  => str_replace( [ site_url(), '/' ], '', WP_CONTENT_URL ) . '/',

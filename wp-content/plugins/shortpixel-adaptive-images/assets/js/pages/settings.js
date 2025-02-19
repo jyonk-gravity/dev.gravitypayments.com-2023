@@ -843,6 +843,9 @@
 
 		$document.on( 'click', '#clear_css_cache', function(event) { Settings.topAction($( this ), 'clear css cache')} );
 
+		// purge CDN cache notices
+		$document.on( 'click', '#purge_cdn_cache', function(event) { Settings.topAction($(this), 'purge_cdn_cache')} );
+
 		$document.on( 'click', '#export_settings, .export-settings', function(event) {
 			var spainonce = $( '#import_spainonce' ).val();
 			window.location.href = 'admin.php?page=shortpixel-ai-export-settings&spainonce=' + spainonce + '&noheader=true';

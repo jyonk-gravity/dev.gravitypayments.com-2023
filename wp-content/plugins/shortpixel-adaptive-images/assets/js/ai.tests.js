@@ -83,14 +83,15 @@
 
 	SPAITests.prototype.init = function() {
 		var instance = new SPAITests();
-
 		instance.hasJQ();
 	}
 
-	if(document.readyState === 'loading') {
-		document.addEventListener("DOMContentLoaded", function() {
-			SPAITests.prototype.init();
-		});
+	if(document.readyState !== 'complete') {
+		document.onreadystatechange = function() {
+			if(document.readyState === 'complete') {
+				SPAITests.prototype.init();
+			}
+		}
 	} else {
 		SPAITests.prototype.init();
 	}

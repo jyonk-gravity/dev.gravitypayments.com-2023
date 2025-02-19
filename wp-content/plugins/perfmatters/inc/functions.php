@@ -151,7 +151,8 @@ function perfmatters_rest_authentication_errors($result) {
 			'ws-form',
 			'litespeed',
 			'wp-recipe-maker',
-			'iawp'
+			'iawp',
+			'sureforms'
 		));
 		foreach($exceptions as $exception) {
 			if(strpos($rest_route, $exception) !== false) {
@@ -797,13 +798,48 @@ function perfmatters_network_site_url($url, $path, $scheme) {
 }
 
 function perfmatters_wp_redirect($location, $status) {
+
+	//prevent logged out auth redirect from going to hidden slug
+	if(!is_user_logged_in()) {
+
+		$parsed_url = wp_parse_url($location);
+
+		if(trim((string)wp_parse_url($location, PHP_URL_PATH ), '/') === perfmatters_login_slug()) {
+			$parsed_query = array();
+			if(isset($parsed_url['query'])) {
+				wp_parse_str($parsed_url['query'], $parsed_query);
+
+				//reauth redirect
+				if(!empty($parsed_query['redirect_to']) && !empty($parsed_query['reauth'])) {
+
+					$redirect_url = wp_parse_url($parsed_query['redirect_to']);
+					$redirect_query = array();
+					if(!empty($redirect_url['query'])) {
+						wp_parse_str($redirect_url['query'], $redirect_query);
+					}
+
+					//allow certain queries through
+					if(!empty($redirect_query)) {
+						foreach(array('newuseremail') as $key) {
+							if(isset($redirect_query[$key])) {
+								return perfmatters_filter_wp_login($location);
+							}
+						}
+					}
+
+					perfmatters_disable_login_url();
+				}
+			}
+		}
+	}
+
 	return perfmatters_filter_wp_login($location);
 }
 
 function perfmatters_filter_wp_login($url, $scheme = null) {
 
 	//wp-login.php Being Requested
-	if(strpos($url, 'wp-login.php') !== false) {
+	if(is_string($url) && strpos($url, 'wp-login.php') !== false) {
 
 		//Set HTTPS Scheme if SSL
 		if(is_ssl()) {

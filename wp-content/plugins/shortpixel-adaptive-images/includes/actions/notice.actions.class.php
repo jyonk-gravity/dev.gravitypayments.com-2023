@@ -16,11 +16,18 @@
 		public static function handle() {
 			$ctrl   = \ShortPixelAI::_();
 			$data   = $_POST[ 'data' ];
-			$causer = $_POST[ 'causer' ];
+			$causer = explode("___",$_POST[ 'causer' ]);
+            if(isset($causer[1]) ) {
+                $data['causerId'] = $causer[1];
+            }
+            $causer = $causer[0];
 
-			if ( !empty( $causer ) && !empty( $data ) ) {
-                $response = call_user_func( [ Actions::class, 'handle' . Converter::toTitleCase( $causer ) ], $data, $ctrl );
-			}
+            if (!empty($causer) && !empty($data)) {
+                $method = 'handle' . Converter::toTitleCase($causer);
+                if (method_exists(self::class, $method)) {
+                    $response = call_user_func([self::class, $method], $data, $ctrl);
+                }
+            }
 
 			if ( empty( $response ) ) {
 				$response = [];
@@ -42,6 +49,21 @@
 			echo json_encode( $response );
 			die;
 		}
+
+        private static function handleRemoteInfoNotice ($data){
+            $action = isset($data['action']) ? $data['action'] : null;
+            $causerId = $data['causerId'];
+
+            if ($action === 'dismiss') {
+
+                $causer = 'remote info notice___' . $causerId;
+                return [
+                    'success' => Notice::dismiss($causer)
+                ];
+
+            }
+            return null;
+        }
 
 		private static function handleAo( $data ) {
 			// action which should be handled

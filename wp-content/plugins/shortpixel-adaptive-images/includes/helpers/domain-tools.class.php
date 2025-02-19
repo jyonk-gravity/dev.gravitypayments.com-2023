@@ -1,4 +1,5 @@
 <?php
+use ShortPixel\AI\Options;
 /**
  * User: simon
  * Date: 13.10.2020
@@ -86,7 +87,7 @@ class ShortPixelDomainTools {
         }
 
         if ( empty( $key ) ) {
-            $key = get_option( 'wp-short-pixel-apiKey', false );
+            $key = Options::_()->settings_general_apiKey;
         }
 
         if ( !is_string( $key ) || empty( $key ) ) {
@@ -425,7 +426,7 @@ class ShortPixelDomainTools {
         }
 
         //deactivate SPAI until the status gets back to 2
-        ShortPixelAI::_()->options->flags_all_credits = !( self::$domainStatus->Status == -1 );
+        if(self::$domainStatus) ShortPixelAI::_()->options->flags_all_credits = !( self::$domainStatus->Status == -1 );
 
         return self::$domainStatus;
     }
@@ -490,4 +491,48 @@ class ShortPixelDomainTools {
         die( $proposal['body'] );
 
     }
+
+
+    static function purge_cdn_cache() {
+        if (!isset($_POST['spainonce']) || !wp_verify_nonce($_POST['spainonce'], 'shortpixel-ai-settings')) {
+            return ['success' => false, 'message' => __('Invalid nonce.', 'shortpixel-adaptive-images')];
+        }
+
+        $domain = ShortPixelDomainTools::get_site_domain();
+        /** get_site_domain() fetches the site_domain as it is set in wp admin->settings->general->Site Address (URL),
+         * which is not the best way for present situation, since on the SPAI api, domain must be stripped of www.,
+         * so we search for the prefix and eliminate it
+         */
+        if ( $domain && strpos( $domain, 'www.' ) === 0 ) {
+                $domain = substr( $domain, 4 ); // strip 'www.' if it's present
+            }
+
+        $api_key = Options::_()->settings_general_apiKey;
+        /** //$api_key = get_option('wp-short-pixel-apiKey'); was wrong, here imported the spio instead of spai apikey.
+         * because: what happens if you do not have spio...??*/
+        if (empty($api_key) || empty($domain)) {
+            return ['success' => false, 'message' => __('API Key missing or domain not associated.', 'shortpixel-adaptive-images')];
+        }
+        //construct purge url just like the call in the browser
+        $purge_url = ShortPixelAI::PURGE_CDN_CACHE_ENDPOINT . $api_key . '/' . $domain;
+        $response = wp_safe_remote_get($purge_url);
+
+        if (is_wp_error($response)) {
+            return ['success' => false, 'message' => __('Error occurred: ' . $response->get_error_message(), 'shortpixel-adaptive-images')];
+        }
+        // decode the json response, (true for associative arrary)
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+
+        // check status returned from the API
+        if (isset($data['Status'])) {
+            if ($data['Status'] == 1 && isset($data['Message']) && strpos($data['Message'], 'Not the right API Key') !== false) {
+                return ['success' => false, 'message' => __('Invalid API key.', 'shortpixel-adaptive-images')];
+            } elseif ($data['Status'] == 2 && isset($data['Message'])) {
+                return ['success' => true, 'message' => $data];
+            }
+        }
+        return ['success' => false, 'message' => __('Unknown error during the purge process.', 'shortpixel-adaptive-images')];
+    }
+
 }

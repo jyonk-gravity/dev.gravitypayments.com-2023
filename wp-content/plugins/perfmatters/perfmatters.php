@@ -3,7 +3,7 @@
 Plugin Name: Perfmatters
 Plugin URI: https://perfmatters.io/
 Description: Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.
-Version: 2.3.6
+Version: 2.3.9
 Author: forgemedia
 Author URI: https://forgemedia.io/
 License: GPLv2 or later
@@ -18,7 +18,7 @@ Domain Path: /languages
 define('PERFMATTERS_STORE_URL', 'https://perfmatters.io/');
 define('PERFMATTERS_ITEM_ID', 696);
 define('PERFMATTERS_ITEM_NAME', 'perfmatters');
-define('PERFMATTERS_VERSION', '2.3.6');
+define('PERFMATTERS_VERSION', '2.3.9');
 define('PERFMATTERS_PATH', plugin_dir_path(__FILE__ ));
 
 //plugins loaded
@@ -193,7 +193,7 @@ function perfmatters_plugin_update_message() {
 	$license_status = is_multisite() ? get_site_option('perfmatters_edd_license_status') : get_option('perfmatters_edd_license_status');
 
 	if(empty($license_status) || $license_status !== 'valid') {
-		echo ' <strong><a href="' . esc_url(admin_url('options-general.php?page=perfmatters&tab=license')) . '">' . __('Enter valid license key for automatic updates.', 'perfmatters') . '</a></strong>';
+		echo ' <strong><a href="' . esc_url(admin_url('options-general.php?page=perfmatters#license')) . '">' . __('Enter valid license key for automatic updates.', 'perfmatters') . '</a></strong>';
 	}
 }
 add_action('in_plugin_update_message-perfmatters/perfmatters.php', 'perfmatters_plugin_update_message', 10, 2);

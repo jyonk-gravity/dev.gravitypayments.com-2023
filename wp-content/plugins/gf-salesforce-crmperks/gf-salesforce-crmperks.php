@@ -2,7 +2,7 @@
 /**
 * Plugin Name: WP Gravity Forms Salesforce
 * Description: Integrates Gravity Forms with Salesforce allowing form submissions to be automatically sent to your Salesforce account 
-* Version: 1.4.5
+* Version: 1.4.7
 * Requires at least: 4.7
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/gravity-forms-plugins/gravity-forms-salesforce-plugin/
@@ -24,7 +24,7 @@ class vxg_salesforce {
   public  $crm_name = 'salesforce';
   public  $id = 'vxg_salesforce';
   public  $domain = 'vxg-sales';
-  public  $version = "1.4.5";
+  public  $version = "1.4.7";
   public  $update_id = '30001';
   public  $min_gravityforms_version = '1.3.9';
   public $type = 'vxg_salesforce_pro';
@@ -120,7 +120,7 @@ require_once(self::$path . "includes/plugin-pages.php");
   * 
   */
   public function setup_main(){
-  
+
   include_once(self::$path. "includes/edit-form.php");
  
         //handling post submission.  gform_after_submission runs after gform_replace_merge_tags
@@ -1706,11 +1706,12 @@ if(!empty($data['note_val'])){
     $entry_note=$data['note_val'];
            $pos=strpos($entry_note,'?');
                if($pos > 0){ 
-              $entry_note=substr($entry_note,$pos+1);     
+              $entry_note=trim(substr($entry_note,$pos+1));     
                }else{    
             $pos=20;  
            } 
-           $entry_note_title=substr($entry_note,0,$pos);
+           
+           $entry_note_title=trim(substr($data['note_val'],0,$pos)); 
            $entry_note_title=$this->process_tags($entry,$form,$entry_note_title);
            $entry_note=$this->process_tags($entry,$form,$entry_note);
           if(!empty($entry_note)){

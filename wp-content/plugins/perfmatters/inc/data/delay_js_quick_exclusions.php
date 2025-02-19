@@ -262,7 +262,8 @@ return array(
                 'elements-handlers.min.js',
                 'elementorFrontendConfig',
                 'ElementorProFrontendConfig',
-                'imagesloaded.min.js'
+                'imagesloaded.min.js',
+                'swiper.min.js'
             )   
         ),
         'elementor-search' => array(

@@ -14,6 +14,8 @@ class ShortPixelAI {
     const DEFAULT_STATUS_AI = 'https://cdn.shortpixel.ai';
     const DEFAULT_API_AI_PATH = '/spai';
     const SP_API = 'https://api.shortpixel.com/';
+    const REMOTE_MESSAGE_ENDPOINT = 'https://api.shortpixel.com/v2/notices.php';
+    const PURGE_CDN_CACHE_ENDPOINT = 'https://no-cdn.shortpixel.ai/purge-cdn-cache-bulk/';
     const AI_JS_VERSION = '2.0';
     const ONE_CREDIT_IN_TRAFFIC = 5242880;
     const SEP = '+'; //can be + or ,
@@ -119,7 +121,7 @@ class ShortPixelAI {
 	}
 
     private function __construct() {
-        load_plugin_textdomain('shortpixel-adaptive-images', false, plugin_basename(dirname(SHORTPIXEL_AI_PLUGIN_FILE)) . '/lang');
+        add_action( 'after_setup_theme', [ $this, 'load_textdomain' ] );
 
         $this->logger = ShortPixelAILogger::instance();
         $this->options = Options::_();
@@ -140,6 +142,10 @@ class ShortPixelAI {
 		$this->setup_globals();
 		$this->include_libs();
         $this->setup_hooks();
+    }
+
+    public function load_textdomain() {
+        load_plugin_textdomain('shortpixel-adaptive-images', false, plugin_basename(dirname(SHORTPIXEL_AI_PLUGIN_FILE)) . '/lang');
     }
 
     public function init_ob() {
@@ -786,7 +792,7 @@ class ShortPixelAI {
 
         $args = array(
             'id'    => 'shortpixel_ai_sniper',
-            'title' => '<div id="shortpixel_ai_sniper" onclick="spaiSniperClick();return false;" title="' . __('Click here and then use the mouse to select an image to check, clear the CDN cache for it, or exclude','shortpixel-adaptive-images') . '" data-spai-exclude="true">
+            'title' => '<div id="shortpixel_ai_sniper" onclick="spaiSniperClick();return false;" title="' . __('Click here and then use the mouse to select an image to check, clear the CDN cache for it, or exclude','shortpixel-adaptive-images') . '" data-spai-excluded="true">
                        <div id="spai-smps">
                             <div id="spai-smp-multiple" class="spai-smp" style="display:none;">
                                 <button class="spai-smp-options-button-cancel spai-smp-options-button-cancel-top">Cancel</button>
@@ -836,7 +842,7 @@ class ShortPixelAI {
     public function toolbar_sniper_scripts() {
         $this->enqueue_style('spai-bar-style', 'style-bar', false, true);
 
-        wp_register_script( 'spai-sniper', 'https://' . (SHORTPIXEL_AI_DEBUG ? 'dev.shortpixel.ai' : parse_url($this->settings->behaviour->api_url, PHP_URL_HOST)) . '/assets/js/snip-3.1.min.js', [], SPAI_SNIP_VERSION, true );
+        wp_register_script( 'spai-sniper', 'https://' . (SHORTPIXEL_AI_DEBUG ? 'dev.shortpixel.ai' : parse_url($this->get_cdn_url(), PHP_URL_HOST)) . '/assets/js/snip-3.1.min.js', [], SPAI_SNIP_VERSION, true );
 
         wp_localize_script( 'spai-sniper', 'sniperLocalization', [
             'sizes'    => (object) [
@@ -995,6 +1001,18 @@ class ShortPixelAI {
 					]
 				) );
 			}
+            if ( !!Options::_()->pages_onBoarding_hasBeenPassed) {
+                $wp_admin_bar->add_menu( array(
+                    'id'     => 'spai_top_menu_purge_cdn_cache',
+                    'title'  => __( 'Purge CDN Cache', 'shortpixel-adaptive-images' ),
+                    'href'   => '#',
+                    'parent' => 'shortpixel_ai_topmenu',
+                    'meta'   => [
+                        'class'   => 'spai_purge_cdn_cache',
+                        'onclick' => 'spaiCdnCachePurge(this, "' . Page::_($this)->getNonce(). '");return false;'
+                    ]
+                ) );
+            }
 			if ( Options::_()->settings_behaviour_lqip && !!Options::_()->pages_onBoarding_hasBeenPassed) {
 				$wp_admin_bar->add_menu( array(
 					'id'     => 'spai_top_menu_clear_lqip_cache',
@@ -1120,8 +1138,8 @@ class ShortPixelAI {
                     $name = 'URL';
                     $delimiter = "\n";
 
-                    if(strpos($selector, $this->settings->behaviour->api_url) === 0) {
-                        $selector = substr($selector, strlen($this->settings->behaviour->api_url));
+                    if(strpos($selector, $this->get_cdn_url()) === 0) {
+                        $selector = substr($selector, strlen($this->get_cdn_url()));
                     }
 
                     $selectorArr = explode('/http', $selector);
@@ -1558,7 +1576,7 @@ class ShortPixelAI {
             $args[] = [ 'v' => $cacheVer ];
         }
 
-		$api_url = $this->settings->behaviour->api_url;
+		$api_url = $this->get_cdn_url();
 
         if ( !$api_url ) {
 			$api_url = self::DEFAULT_API_AI . self::DEFAULT_API_AI_PATH;
@@ -1670,8 +1688,8 @@ class ShortPixelAI {
 
     public function maybe_cleanup($content)
     {
-        $this->logger->log('CLEANUP: ' . preg_quote($this->settings->behaviour->api_url, '/'));
-        return preg_replace_callback('/' . preg_quote($this->settings->behaviour->api_url, '/') . '.*?\/(https?):\/\//is',
+        $this->logger->log('CLEANUP: ' . preg_quote($this->get_cdn_url(), '/'));
+        return preg_replace_callback('/' . preg_quote($this->get_cdn_url(), '/') . '.*?\/(https?):\/\//is',
             array($this, 'replace_api_url'), $content);
     }
     public function replace_api_url($matches) {
@@ -1774,7 +1792,7 @@ class ShortPixelAI {
 
 	public function urlIsApi( $url ) {
 		$parsed    = parse_url( $url );
-		$parsedApi = parse_url( $this->settings->behaviour->api_url );
+		$parsedApi = parse_url( $this->get_cdn_url() );
 
 		return isset( $parsed[ 'host' ] ) && $parsed[ 'host' ] === $parsedApi[ 'host' ];
 	}
@@ -1878,6 +1896,22 @@ class ShortPixelAI {
 		return false;
 	}
 
+    /**
+     *  checks if page is admin generated with Breakdance Page Builder
+     * @return bool True - if it is Breakdance builder - False otherwise
+     *
+     */
+    private function isBreakdanceBuilder() {
+        $bdAjaxCondition = isset($_GET['_breakdance_doing_ajax']) && $_GET['_breakdance_doing_ajax'] == 'yes';
+        $bdIframeCondition = isset($_GET['breakdance_iframe']) && $_GET['breakdance_iframe'] == 'true';
+        $bdBuilderCondition = isset($_GET['breakdance']) && $_GET['breakdance'] == 'builder';
+        if ($bdAjaxCondition || $bdIframeCondition || $bdBuilderCondition) {
+            $this->logger->log('NOT WELCOME. Breakdance Page Builder excluded page.');
+        }
+        return $bdAjaxCondition || $bdIframeCondition || $bdBuilderCondition;
+    }
+
+
 
     /**
      * @return bool true if SPAI is welcome ( not welcome for example if it's an AMP page, CLI, is admin page or PageSpeed is off )
@@ -1916,6 +1950,11 @@ class ShortPixelAI {
 				return false;
 			}
 		}
+
+        if ($this->isBreakdanceBuilder()) {
+            $this->logger->log('NOT WELCOME. Breakdance Page Builder Detected.');
+            return false;
+        }
 
 		SHORTPIXEL_AI_DEBUG && $this->logger->log("IS WELCOME? "
              . (is_feed() ? ' - IS FEED. ' : '')
@@ -2082,5 +2121,17 @@ class ShortPixelAI {
             && $settings->compression->png_to_webp === $settings->compression->gif_to_webp
             && $settings->compression->avif === 0
             && $settings->compression->remove_exif === 1;
+    }
+
+    /**
+     * Wraps $this->settings->behaviour->api_url into a variable that gets filtered
+     * so anyone using the filter can return his own custom cdn
+     * (one example is for returning different cdn url's for separate language domains - SEO wise?)
+     * @return mixed
+     */
+    public function get_cdn_url() {
+
+        $cdn_url = $this->settings->behaviour->api_url;
+        return apply_filters('shortpixel/ai/cdnUrl', $cdn_url);
     }
 }

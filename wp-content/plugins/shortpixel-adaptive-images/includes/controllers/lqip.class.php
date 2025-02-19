@@ -961,6 +961,7 @@
 				wp_register_script( 'spai-lqip', $this->ctrl->plugin_url . $file, $this->ctrl->options->settings_behaviour_nojquery <= 0 ? [ 'spai-scripts' ] : [], $version, true );
 				wp_localize_script( 'spai-lqip', 'lqipConstants', [
 					'action'       => 'shortpixel_ai_handle_lqip_action',
+                    'ajax_url'      => admin_url( 'admin-ajax.php' ),
 					'processWay'   => $this->process_way,
 					'localStorage' => $this->ctrl->options->settings_behaviour_localStorage,
 				] );

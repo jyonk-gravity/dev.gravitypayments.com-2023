@@ -343,7 +343,7 @@ $controller = $this->ctrl;
                         <a class="nav-tab" id="areas-tab" href="#top#areas"><?= __( 'Areas', 'shortpixel-adaptive-images' ); ?></a>
                         <a class="nav-tab" id="exclusions-tab" href="#top#exclusions"><?= __( 'Exclusions', 'shortpixel-adaptive-images' ); ?></a>
 					<?php } ?>
-                    <span class="spai_top_actions" style=" height: 24px;">
+                    <span class="spai_top_actions" style=" height: 24px;"  title="<?= __( 'Switch to advanced settings mode', 'shortpixel-adaptive-images' ); ?>">
                         <span class="spai_settings_advanced_popup hidden">
                             <div>
                                 <p style="margin-bottom: 30px; font-size:140%"><?= __( 'Are you sure you want to disable the Advanced mode? Some of the settings will no longer be visible and will be reverted to their defaults.', 'shortpixel-adaptive-images' ); ?></p>
@@ -374,6 +374,13 @@ $controller = $this->ctrl;
                         <span class="clearcss-icon"></span>
                     </button>
                     <?php endif; ?>
+
+                    <!-- button for CDN purge cache -->
+                    <button id="purge_cdn_cache" class="spai_top_actions" data-action="purge_cdn_cache" title="<?= __( 'Purge CDN Cache', 'shortpixel-adaptive-images' ); ?>">
+                        <span class="dashicons dashicons-update" style="height: 20px;padding-top: 4px;"></span>
+                        <input type="hidden" name="spainonce" value="<?= $this->getNonce() ?>">
+                    </button>
+
                     <button id="export_settings" class="spai_top_actions" data-pressed-text="..." title="<?= __( 'Export settings', 'shortpixel-adaptive-images' ); ?>">
                         <span class="dashicons dashicons-download" style="height: 20px;padding-top: 4px;"></span>
                     </button>

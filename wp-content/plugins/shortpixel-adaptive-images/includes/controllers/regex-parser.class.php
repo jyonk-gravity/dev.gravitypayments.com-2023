@@ -26,6 +26,7 @@ class ShortPixelRegexParser {
     private $forceEager = false;
     private $isTemplate = false;
 
+
     private $regexes = [
         //this one is used for attributes having regular URL inside (img src, etc)
         'url'      => '/\<({{TAG}})(?:\s|\s[^\<\>]*?\s)({{ATTR}})\s*\=\s*(?:(\"|\')([^\>\'\"]+)(?:\'|\")|([^\>\'\"\s]+))(?:.*?)\>/s',
@@ -35,7 +36,7 @@ class ShortPixelRegexParser {
         //this one is used for any tag that has a specific attribute with css background format
         'bg-attr'  => '/\<([\w]+)(?:[^\<\>]*?)\b({{ATTR}})(=(?:"|\'|)[^"\']*?)(url|[\w-]+-gradient)\((?:\'|")?([^\'"\)]*)(\'|")?\s*\)/s',
         //elements with style="background ...."
-        'bg-style' => '/\<({{TAG}})([^\<\>]*?)\b({{ATTR}})(\s*:(?:[^;]*?[,\s]|\s*))(url|[\w-]+-gradient)\((?:\'|")?([^\'"\)]*)(\'|")?\s*\)(.*?)\>/s',
+        'bg-style' => '/\<({{TAG}})([^\<\>]*?)\b({{ATTR}})(\s*:(?:[^;]*?[,\s]|\s*))(url|[\w-]+-gradient)\((?:\'|")?([^\'"\)]*)(\'|")?\s*\)(.*?)\>/s', //original
         //used for NextGen
         'ahref' => '/\<a[^\<\>]*?\shref\=(\"|\'?)(.+?)(?:\"|\')(?:.+?)\>/s',
     ];
@@ -46,6 +47,54 @@ class ShortPixelRegexParser {
         $this->ctrl = $ctrl;
         $this->logger = ShortPixelAILogger::instance();
         $this->cssParser = new ShortPixelCssParser($ctrl);
+    }
+
+    /**
+     * Generates a regular expression to identify HTML tags that should be skipped during processing
+     * based on specific attributes and their values.
+     * @param bool $includeModuleType Optional. Determines whether to include the `type="module"` attribute in the regex.
+     * @return string $skipRegex the constructed regular expression pattern.
+     *
+     * */
+    private static function skipAttributesRegex($includeModuleType = false) {
+
+        $skipAttributesPattern =
+            // qttributes that cause skipping when present, optionally with value 'true', '1', 'yes', or empty
+            '(\bdata-no-optimize\b|\bdata-noptimize\b|\bdata-no-ptimize\b|\bdata-no-minify\b|\bdata-spai-excluded\b)'
+            . '(?:\s*=\s*["\']?(true|1|yes)?["\']?)?'
+            // attributes that cause skipping when value is 'false', '0', or 'no'
+            . '|\b(?:data-optimized|data-cfasync)\b\s*=\s*["\']?(false|0|no)["\']?';
+
+        $skipModulePattern = '|type\s*=\s*["\']module["\']';
+        // the common regex pattern
+        $skipRegex = '/^<[^>]*(' . $skipAttributesPattern;
+        //  regex for type="module"
+        if ($includeModuleType) {
+            $skipRegex .= $skipModulePattern;
+        }
+        $skipRegex .= ')/i';
+        return $skipRegex;
+    }
+
+    /**
+     * Checks if the tag should be excluded and, if applicable, inserts the attribute data-spai-excluded="true".
+     *
+     * @param string &$tagText The HTML tag that needs to be checked and potentially modified.
+     * @param bool $includeModuleType Indicates whether to include the check for type="module".
+     * @return bool Returns true if the tag is excluded, false otherwise.
+     */
+    private function addSpaiExcludedIfNotPresent(&$tagText, $includeModuleType): bool {
+        if (preg_match($this->skipAttributesRegex($includeModuleType), $tagText)) {
+            if (!preg_match('/data-spai-excluded\s*=\s*["\']true["\']/', $tagText)) {
+                $tagText = preg_replace(
+                    '/<(\w+)([^>]*)>/i',
+                    '<$1$2 data-spai-excluded="true">',
+                    $tagText,1
+                );
+            }
+            return true; // tag excluded, we continue with next step
+        }
+        return false; // tag is not excluded
     }
 
     public function parse($content) {
@@ -152,18 +201,21 @@ class ShortPixelRegexParser {
         for ($i = 0; $i < count($this->styles); $i++) {
             $style = $this->styles[$i];
             //$this->logger->log("STYLE $i: $style");
-            //replace all the background-images
-            $style = $this->cssParser->replace_inline_style_backgrounds($style);
-			//replace inline fonts
-	        $style = $this->cssParser->replace_inline_style_fonts($style);
 
-            SHORTPIXEL_AI_DEBUG && $this->logger->log("STYLE $i REPLACED:  Content len: " . strlen($content));
-            (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_CSS)
-            && $this->logger->log("STYLE: " . $style);
+            // this must skip replacing css with data-no-optimize or data-no-minify code in it
+            if (!$this->addSpaiExcludedIfNotPresent($style, false)) {
+                //replace all the background-images
+                $style = $this->cssParser->replace_inline_style_backgrounds($style);
+                //replace inline fonts
+                $style = $this->cssParser->replace_inline_style_fonts($style);
 
+                SHORTPIXEL_AI_DEBUG && $this->logger->log("STYLE $i REPLACED:  Content len: " . strlen($content));
+                (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_CSS)
+                && $this->logger->log("STYLE: " . $style);
+
+            }
             $content = str_replace("<style>__sp_style_plAc3h0ldR_$i</style>", $style, $content);
         }
-
         //handle the noscripts in a simpler (only <img>) and eager way.
         for ($i = 0; $i < count($this->noscripts); $i++) {
             $noscript = $this->noscripts[$i];
@@ -188,94 +240,96 @@ class ShortPixelRegexParser {
             SHORTPIXEL_AI_DEBUG && $this->logger->log("SCRIPT $i Content len: " . strlen($content));
             $script = $this->scripts[$i];
 
-            if ( $this->ctrl->settings->areas->js2cdn ) {
-                //the URL if it's not an inline script
-                $regex = str_replace(array('{{TAG}}', '{{ATTR}}'), array('script', 'src'), $this->regexes['url']);
-                if(preg_match($regex, $script,$matches)) {
-                    (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS EXT JS:", $matches);
-                    $url = isset( $matches[ 5 ] ) ? $matches[ 5 ] : $matches[ 4 ];
-                    if(   strpos($url, parse_url($this->ctrl->settings->behaviour->api_url, PHP_URL_HOST)) === false
-                        && strpos($url, ShortPixelAI::DEFAULT_API_AI) === false
-                        && parse_url($url, PHP_URL_HOST) === ShortPixelDomainTools::get_site_domain()) {
-                        //we set any CSS or JS to ret_wait because of the many CORS issues we've seen with these.
-                        $absoluteUrl = ShortPixelUrlTools::absoluteUrl($url);
-                        $cdnUrl = $this->ctrl->get_api_url( $absoluteUrl,false, false, $this->ctrl->get_extension( $url ), false,  true, $this->ctrl->cssCacheVer);
-                        SHORTPIXEL_AI_DEBUG && $this->logger->log("API URL: " . $this->ctrl->settings->behaviour->api_url . "JS URL: " . $url . " Replacing with: " . $cdnUrl);
-                        $script = str_replace($url, $cdnUrl, $script);
+            // must skip from replacing when scripts use data-no-optimize, data-no-minify, type="module"
+            if (!$this->addSpaiExcludedIfNotPresent($script, true)) {
+
+
+                if ($this->ctrl->settings->areas->js2cdn) {
+                    //the URL if it's not an inline script
+                    $regex = str_replace(array('{{TAG}}', '{{ATTR}}'), array('script', 'src'), $this->regexes['url']);
+                    if (preg_match($regex, $script, $matches)) {
+                        (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS EXT JS:", $matches);
+                        $url = isset($matches[5]) ? $matches[5] : $matches[4];
+                        if (strpos($url, parse_url($this->ctrl->settings->behaviour->api_url, PHP_URL_HOST)) === false
+                            && strpos($url, ShortPixelAI::DEFAULT_API_AI) === false
+                            && parse_url($url, PHP_URL_HOST) === ShortPixelDomainTools::get_site_domain()) {
+                            //we set any CSS or JS to ret_wait because of the many CORS issues we've seen with these.
+                            $absoluteUrl = ShortPixelUrlTools::absoluteUrl($url);
+                            $cdnUrl = $this->ctrl->get_api_url($absoluteUrl, false, false, $this->ctrl->get_extension($url), false, true, $this->ctrl->cssCacheVer);
+                            SHORTPIXEL_AI_DEBUG && $this->logger->log("API URL: " . $this->ctrl->settings->behaviour->api_url . "JS URL: " . $url . " Replacing with: " . $cdnUrl);
+                            $script = str_replace($url, $cdnUrl, $script);
+                        }
+                    }
+                }
+                //now the content, if it's an inline script
+                if ($this->ctrl->settings->areas->parse_json && preg_match('/^(\<script[^>]*(?:\btype=(?:"|\')application\/(?:ld\+|)json(?:"|\'))[^>]*\>)/sU', $script)) {
+                    (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS APP LD JSON.");
+                    $script = preg_replace_callback('/^(\<script[^>]*(?:\btype=(?:"|\')application\/(?:ld\+|)json(?:"|\'))[^>]*\>)(.*)\<\/script\>/sU',
+                        array($this, 'replace_application_json_script'),
+                        $script
+                    );
+                }
+                else if ($this->ctrl->settings->areas->parse_js) {
+                    if (strpos($script, '__sp_cdata_plAc3h0ldR_')) {
+                        (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS JS CDATA PLACEHOLDER.", $script);
+                        $script = preg_replace_callback('/__sp_cdata_plAc3h0ldR_([0-9]+)/s',
+                            array($this, 'replace_cdata_js'),
+                            $script
+                        );
+                    } else {
+                        $script = trim($script);
+                        $openingTagEnd = strpos($script, '>') + 1;
+                        $openingTag = substr($script, 0, $openingTagEnd);
+                        if (preg_match('/\btype=["\'](application|text)\/javascript/', $openingTag) || !preg_match('/\btype=/', $openingTag)) { // either it's type text/javascript or type not defined. Outstanding example that should not be parsed as JS:  type=text/template (HS#51163)
+                            (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS app/text JS: ", $script);
+                            $jsParser = new ShortPixelJsParser($this->ctrl);
+
+                            $parsed_script = $jsParser->parse($script);
+
+                            $script = empty($parsed_script) ? $script : $parsed_script;
+                        }
+                        else if (preg_match('/\btype=["\']text\/template/', $openingTag)) {
+                            (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS TEXT/TEMPLATE: ", $script);
+                            $endTagStart = strrpos($script, "</script");
+                            if ($endTagStart > $openingTagEnd) {
+                                $tpl = trim(substr($script, $openingTagEnd, $endTagStart - $openingTagEnd));
+                                (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("ZE TEMPLATE: " . $tpl);
+                                $parser = new ShortPixelRegexParser($this->ctrl);
+                                $tplDec = json_decode($tpl);
+                                if ($tplDec === NULL) {
+                                    //IF the template is not a json, in most cases it's html_entity_encoded, so we decode it.
+                                    $isEncoded = preg_match('/^\s*&lt;/', $tpl);
+                                    $tpl = $isEncoded ? html_entity_decode($tpl) : $tpl;
+                                    (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("DECODED TEMPLATE: " . $tpl);
+                                    $parsed_script = $parser->parse($tpl);
+                                    (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("PARSED TEMPLATE: " . $parsed_script);
+                                    $parsed_script = $isEncoded ? htmlentities($parsed_script) : $parsed_script;
+                                } elseif (is_array($tplDec) || is_object($tplDec)) {
+                                    $parserJson = new ShortPixelJsonParser($this->ctrl);
+                                    $parsed_script = json_encode($parserJson->parse($tplDec));
+                                } else {
+                                    $parsed_script = json_encode($parser->parse($tplDec));
+                                }
+                                (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("TEXT TEMPLATE BY REGEX: " . $parsed_script);
+                                $script = empty($parsed_script) ? $script : $openingTag . $parsed_script . '</script>';
+                            }
+                        }
+                        else if (preg_match('/\btype=["\']text\/x-jsrender/', $openingTag)) {
+                            (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("TEXT X-JSRENDER TEMPLATE: " . $openingTag);
+                            $endTagStart = strrpos($script, "</script");
+                            if ($endTagStart > $openingTagEnd) {
+                                $tpl = trim(substr($script, $openingTagEnd, $endTagStart - $openingTagEnd));
+                                $parser = new ShortPixelRegexParser($this->ctrl);
+                                $parser->isTemplate = true;
+                                $parser->forceEager = true;
+                                $parsed_script = $parser->parse($tpl);
+                                (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("TEXT X-JSRENDER TEMPLATE BY REGEX: " . $parsed_script);
+                                $script = empty($parsed_script) ? $script : $openingTag . $parsed_script . '</script>';
+                            }
+                        }
                     }
                 }
             }
-            //now the content, if it's an inline script
-            if($this->ctrl->settings->areas->parse_json && preg_match('/^(\<script[^>]*(?:\btype=(?:"|\')application\/(?:ld\+|)json(?:"|\'))[^>]*\>)/sU', $script)) {
-                (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS APP LD JSON.");
-                $script = preg_replace_callback('/^(\<script[^>]*(?:\btype=(?:"|\')application\/(?:ld\+|)json(?:"|\'))[^>]*\>)(.*)\<\/script\>/sU',
-                    array($this, 'replace_application_json_script'),
-                    $script
-                );
-            }
-            else if ( $this->ctrl->settings->areas->parse_js ) {
-				if ( strpos( $script, '__sp_cdata_plAc3h0ldR_' ) ) {
-                    (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS JS CDATA PLACEHOLDER.", $script);
-					$script = preg_replace_callback( '/__sp_cdata_plAc3h0ldR_([0-9]+)/s',
-						array( $this, 'replace_cdata_js' ),
-						$script
-					);
-				}
-				else {
-                    $script = trim($script);
-				    $openingTagEnd = strpos($script, '>') + 1;
-				    $openingTag = substr($script, 0, $openingTagEnd);
-				    if(preg_match('/\btype=["\'](application|text)\/javascript/', $openingTag) || !preg_match('/\btype=/', $openingTag))
-				    { // either it's type text/javascript or type not defined. Outstanding example that should not be parsed as JS:  type=text/template (HS#51163)
-                        (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS app/text JS: ", $script);
-                        $jsParser = new ShortPixelJsParser( $this->ctrl );
-
-                        $parsed_script = $jsParser->parse( $script );
-
-                        $script = empty( $parsed_script ) ? $script : $parsed_script;
-                    }
-                    else if(preg_match('/\btype=["\']text\/template/', $openingTag)) {
-                        (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("IS TEXT/TEMPLATE: ", $script);
-                        $endTagStart = strrpos($script, "</script");
-                        if($endTagStart > $openingTagEnd) {
-                            $tpl = trim(substr($script, $openingTagEnd, $endTagStart - $openingTagEnd));
-                            (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("ZE TEMPLATE: " . $tpl);
-                            $parser = new ShortPixelRegexParser($this->ctrl);
-                            $tplDec = json_decode($tpl);
-                            if($tplDec === NULL) {
-                                //IF the template is not a json, in most cases it's html_entity_encoded, so we decode it.
-                                $isEncoded = preg_match('/^\s*&lt;/', $tpl);
-                                $tpl = $isEncoded ? html_entity_decode($tpl) : $tpl;
-                                (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("DECODED TEMPLATE: " . $tpl);
-                                $parsed_script = $parser->parse($tpl);
-                                (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("PARSED TEMPLATE: " . $parsed_script);
-                                $parsed_script = $isEncoded ? htmlentities($parsed_script) : $parsed_script;
-                            } elseif(is_array($tplDec) || is_object($tplDec)) {
-                                $parserJson = new ShortPixelJsonParser($this->ctrl);
-                                $parsed_script = json_encode($parserJson->parse($tplDec));
-                            } else {
-                                $parsed_script = json_encode($parser->parse($tplDec));
-                            }
-                            (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("TEXT TEMPLATE BY REGEX: " . $parsed_script);
-                            $script = empty( $parsed_script ) ? $script : $openingTag . $parsed_script . '</script>';
-                        }
-                    }
-                    else if(preg_match('/\btype=["\']text\/x-jsrender/', $openingTag)) {
-                        (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("TEXT X-JSRENDER TEMPLATE: " . $openingTag);
-                        $endTagStart = strrpos($script, "</script");
-                        if($endTagStart > $openingTagEnd) {
-                            $tpl = trim(substr($script, $openingTagEnd, $endTagStart - $openingTagEnd));
-                            $parser = new ShortPixelRegexParser($this->ctrl);
-                            $parser->isTemplate = true;
-                            $parser->forceEager = true;
-                            $parsed_script = $parser->parse($tpl);
-                            (SHORTPIXEL_AI_DEBUG & ShortPixelAILogger::DEBUG_AREA_JSON) && $this->logger->log("TEXT X-JSRENDER TEMPLATE BY REGEX: " . $parsed_script);
-                            $script = empty( $parsed_script ) ? $script : $openingTag . $parsed_script . '</script>';
-                        }
-                    }
-				}
-			}
-
             $content = str_replace("<script>__sp_script_plAc3h0ldR_$i</script>", $script, $content);
         }
 
@@ -588,6 +642,13 @@ class ShortPixelRegexParser {
         SHORTPIXEL_AI_DEBUG && $this->logger->log("******** REPLACE IMAGE IN $tag ATTRIBUTE $attr: '" . $url . "'"
             . ($this->tagRule->mergeAttr ? ' AND MERGE ' . $this->tagRule->mergeAttr : ''));
 
+
+        // looking for 'data-no-optimize', 'data-no-minify', or 'type="module"' attributes to avoid replacing urls
+        $includeModuleType = ($tag === 'script');
+        if ($this->addSpaiExcludedIfNotPresent($text, $includeModuleType)) {
+            return $text;
+        }
+
 	    if (
 		    !$this->ctrl->lazyNoticeThrown && substr( $url, 0, 10 ) == 'data:image'
 		    && ( strpos( $text, 'data-lazy-src=' ) !== false
@@ -776,7 +837,7 @@ class ShortPixelRegexParser {
     }
 
     /**
-     * for data-envira-srcset currently
+     * for data-envira-srcset currently + EXCLUDED selectors for all themes with figure / srcset
      * @param $matches
      * @return null|string|string[]
      */
@@ -790,13 +851,26 @@ class ShortPixelRegexParser {
         $qm = strlen($matches[3]) ? $matches[3] : '"';
         $text = $matches[0];
         if(strlen(trim($matches[4])) == 0) return $text; //it's an empty srcset attribute: srcset=" " - this is used by SPAI too for woocommerce variations JS in some cases, that would break otherwise
+
+        $srcset_urls = explode(',', $matches[4]);
+        $image_src = isset($srcset_urls[0]) ? trim(explode(' ', $srcset_urls[0])[0]) : '';
+
+        if ($this->ctrl->tagIs('excluded', $text) || $this->ctrl->urlIsExcluded($image_src)) {
+            $this->logger->log("IMAGE WITH SRC {$image_src} IS EXCLUDED. NO SRCSET REPLACED.");
+            return $text;
+        }
+
         $pattern = $matches[2] . '=' . $matches[3] . $matches[4] . $matches[3];
-        $replacement = ' ' . $matches[2] . '=' . $qm . $this->replace_srcset($matches[4]) . $qm;
+        $replacement_srcset = $this->replace_srcset($matches[4]);
+        $replacement = ' ' . $matches[2] . '=' . $qm . $replacement_srcset . $qm;
+
         if($this->ctrl->settings->behaviour->replace_method === 'src'
             && strpos($text, 'loading=') === false
-            && !$this->isEager && !$this->ctrl->tagIs('eager', $text)) {
+            && !$this->isEager && !$this->ctrl->tagIs('eager', $text)
+            && !$this->ctrl->tagIs('eager', $text)) {
             $replacement .= ' loading="lazy"';
         }
+
         $pos = strpos($text, $pattern);
         if($pos === false) return $text;
         $str = substr($text, 0, $pos) . $replacement . substr($text, $pos + strlen($pattern));

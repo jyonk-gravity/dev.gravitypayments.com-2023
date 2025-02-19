@@ -140,7 +140,7 @@ class CSS
 
             //minify
             if(self::$run['minify']) {
-                if(!empty($atts_array['href']) && $minified_src = Minify::minify($atts_array['href'])) {
+                if(!empty($atts_array['href']) && !Utilities::match_in_array($stylesheet[1], Minify::get_exclusions('css')) && $minified_src = Minify::minify($atts_array['href'])) {
                     $atts_array_new['href'] = $minified_src;
 
                     //update registered src
@@ -252,7 +252,7 @@ class CSS
                         if(!empty($time[self::$url_type])) {
                             $used_css_url = add_query_arg('ver', $time[self::$url_type], $used_css_url);
                         }
-                        $used_css_output = "<link rel='preload' href='" . $used_css_url . "' as='style' onload=\"this.rel='stylesheet';this.removeAttribute('onload');\">";
+                        $used_css_output = '<link rel="preload" href="' . $used_css_url . '" as="style" />';
                         $used_css_output.= '<link rel="stylesheet" id="perfmatters-used-css" href="' . $used_css_url . '" media="all" />';
                     }
                     //print inline
@@ -392,7 +392,8 @@ class CSS
             '.splide-slider',
             '.kb-splide', //kadence
             '.dropdown-nav-special-toggle',
-            'rs-fw-forcer' //rev slider
+            'rs-fw-forcer', //rev slider
+            '#altEmail_container' //wp armour
         );
 
         //shared type selectors
@@ -699,29 +700,41 @@ class CSS
         exit;
     }
 
-    //add admin bar menu item
+    //add admin bar menu items
     public static function admin_bar_menu(WP_Admin_Bar $wp_admin_bar) {
 
         if(!current_user_can('manage_options') || !perfmatters_network_access()) {
             return;
         }
 
-        $type = !is_admin() ? self::get_url_type() : '';
-
-        $menu_item = array(
+        //clear all used css
+        $wp_admin_bar->add_menu(array(
             'parent' => 'perfmatters',
             'id'     => 'perfmatters-clear-used-css',
-            'title'  => __('Clear Used CSS', 'perfmatters') . ' (' . (!empty($type) ? __('Current', 'perfmatters') : __('All', 'perfmatters')) . ')',
+            'title'  => __('Clear Used CSS', 'perfmatters') . ' (' . __('All', 'perfmatters') . ')',
             'href'   => add_query_arg(array(
                 'action'           => 'perfmatters_clear_used_css',
                 '_wp_http_referer' => rawurlencode($_SERVER['REQUEST_URI']),
-                '_wpnonce'         => wp_create_nonce('perfmatters_clear_used_css'),
-                'type'             => $type
+                '_wpnonce'         => wp_create_nonce('perfmatters_clear_used_css')
             ), 
             admin_url('admin-post.php'))
-        );
+        ));
 
-        $wp_admin_bar->add_menu($menu_item);
+        //clear current used css
+        if(!is_admin() && !empty($type = self::get_url_type())) {
+            $wp_admin_bar->add_menu(array(
+                'parent' => 'perfmatters',
+                'id'     => 'perfmatters-clear-used-css-current',
+                'title'  => __('Clear Used CSS', 'perfmatters') . ' (' . __('Current', 'perfmatters') . ')',
+                'href'   => add_query_arg(array(
+                    'action'           => 'perfmatters_clear_used_css',
+                    '_wp_http_referer' => rawurlencode($_SERVER['REQUEST_URI']),
+                    '_wpnonce'         => wp_create_nonce('perfmatters_clear_used_css'),
+                    'type'             => $type
+                ), 
+                admin_url('admin-post.php'))
+            ));
+        }
     }
 
     //display admin notices
