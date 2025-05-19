@@ -9,13 +9,13 @@ class WooCommerce {
 	 *
 	 * @param $id - Product or variation ID
 	 * @param $field - Field label
-	 * @param $args - Search arguments
+	 * @param $currency - Currency
 	 */
-	public static function formattedPriceWithCurrency($id, $field, $args) {
+	public static function formattedPriceWithCurrency($id, $field, ?string $currency = null) {
 		global $woocommerce_wpml;
 		global $sitepress;
 
-		$currency = $args['woo_currency'] ?? (function_exists('get_woocommerce_currency') ?
+		$currency = $currency ?? (function_exists('get_woocommerce_currency') ?
 				get_woocommerce_currency() : '');
 
 		$p = wc_get_product( $id );
@@ -77,11 +77,16 @@ class WooCommerce {
 						$price = $p->get_price();
 						break;
 				}
-				if ( $field != '_price_html' && $price != '' ) {
-					if ($currency != '')
-						$price = wc_price($price, array('currency' => $currency));
-					else
-						$price = wc_price($price);
+				if ( $price != '' ) {
+					if ( $field != '_price_html' ) {
+						if ($currency != '')
+							$price = wc_price($price, array('currency' => $currency));
+						else
+							$price = wc_price($price);
+					}
+					if ( $field === '_price_html' ) {
+						$price = "<span class='price'>$price</span>";
+					}
 				}
 			}
 		}

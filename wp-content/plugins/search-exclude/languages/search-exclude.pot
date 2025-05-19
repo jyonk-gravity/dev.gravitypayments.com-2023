@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Search Exclude 2.4.3\n"
+"Project-Id-Version: Search Exclude 2.5.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-search-exclude\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-02-12T14:17:15+00:00\n"
+"POT-Creation-Date: 2025-05-05T10:59:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: search-exclude\n"
@@ -31,7 +31,7 @@ msgstr ""
 
 #. Author of the plugin
 #: search-exclude.php
-#: vendor_packages/wp-plugin-table-links.php:13
+#: vendor_packages/wp-plugin-table-links.php:14
 msgid "QuadLayers"
 msgstr ""
 
@@ -84,32 +84,32 @@ msgstr ""
 msgid "Exclude from Search Results"
 msgstr ""
 
-#: vendor_packages/wp-notice-plugin-promote.php:17
+#: vendor_packages/wp-notice-plugin-promote.php:18
 msgid "Boost your productivity in WordPress content creation with AI-driven tools, automated content generation, and enhanced editor utilities."
 msgstr ""
 
-#: vendor_packages/wp-notice-plugin-promote.php:25
+#: vendor_packages/wp-notice-plugin-promote.php:26
 msgid "Social Chat allows your users to start a conversation from your website directly to your WhatsApp phone number with one click."
 msgstr ""
 
-#: vendor_packages/wp-notice-plugin-promote.php:37
+#: vendor_packages/wp-notice-plugin-promote.php:38
 msgid "Hello! %2$s We've spent countless hours developing this free plugin for you and would really appreciate it if you could drop us a quick rating. Your feedback is extremely valuable to us. %3$s It helps us to get better. Thanks for using %1$s."
 msgstr ""
 
-#: vendor_packages/wp-notice-plugin-promote.php:44
+#: vendor_packages/wp-notice-plugin-promote.php:45
 msgid "Report a bug"
 msgstr ""
 
-#: vendor_packages/wp-notice-plugin-promote.php:54
-#: vendor_packages/wp-notice-plugin-promote.php:68
+#: vendor_packages/wp-notice-plugin-promote.php:55
+#: vendor_packages/wp-notice-plugin-promote.php:69
 msgid "Hello! We want to invite you to try our %s plugin!"
 msgstr ""
 
-#: vendor_packages/wp-plugin-table-links.php:8
+#: vendor_packages/wp-plugin-table-links.php:9
 msgid "Settings"
 msgstr ""
 
-#: vendor_packages/wp-plugin-table-links.php:18
+#: vendor_packages/wp-plugin-table-links.php:21
 msgid "Support"
 msgstr ""
 

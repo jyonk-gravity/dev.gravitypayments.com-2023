@@ -12,7 +12,7 @@ class DeleteKeyword extends AbstractAjax {
 		if ( 
 			isset($_POST['asp_statistics_request_nonce']) &&
 			wp_verify_nonce( $_POST['asp_statistics_request_nonce'], 'asp_statistics_request_nonce' ) &&
-			current_user_can( 'administrator' )
+			current_user_can( 'manage_options' )
 		) {
 			if (isset($_POST['keywordid'])) {
 				echo Statistics::deleteKw($_POST['keywordid'] + 0);

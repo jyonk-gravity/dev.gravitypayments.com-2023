@@ -51,7 +51,7 @@
         },
         initElements: function() {
             if ( $('#wpd_modal').length < 1 ) {
-                $('body').append('<div id="wpd_modal" class="wpd-modal-type-'+$this.o.type+'"><div id="wpd_modal_head"></div><div id="wpd_modal_inner"></div><div id="wpd_modal_buttons"></div></div>');
+                $('body').append('<div id="wpd_modal" class="wdo wpd-modal-type-'+$this.o.type+'"><div id="wpd_modal_head"></div><div id="wpd_modal_inner"></div><div id="wpd_modal_buttons"></div></div>');
             } else {
                 $('#wpd_modal').removeClass();
                 $('#wpd_modal').addClass('wpd-modal-type-'+$this.o.type);

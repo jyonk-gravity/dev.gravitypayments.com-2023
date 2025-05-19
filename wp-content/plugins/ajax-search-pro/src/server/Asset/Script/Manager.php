@@ -106,7 +106,11 @@ class Manager extends AssetManager implements ManagerInterface {
 			'wd-asp-ajaxsearchpro-addon-divi' => array(
 				'src' => 'js/{js_source}/plugin/optimized/asp-addons-divi.js',
 				'prereq' => true, // TRUE => previously loaded script
-			)
+			),
+			'wd-asp-ajaxsearchpro-addon-woocommerce' => array(
+				'src' => 'js/{js_source}/plugin/optimized/asp-addons-woocommerce.js',
+				'prereq' => true, // TRUE => previously loaded script
+			),
 		)
 	);
 
@@ -302,10 +306,10 @@ class Manager extends AssetManager implements ManagerInterface {
 		// Search results page && keyword highlighter
 
 		if (
-			isset($_GET['asp_highlight'], $_GET['p_asid']) && intval($_GET['p_asid']) > 0 &&
+			isset($_GET['p_asid']) && intval($_GET['p_asid']) > 0 &&
 			wd_asp()->instances->exists($_GET['p_asid'])
 		) {
-			$phrase = $_GET['s'] ?? $_GET['asp_highlight'];
+			$phrase = $_GET['s'] ?? $_GET['asp_highlight'] ?? '';
 			if ( $phrase != '' ) {
 				$search = wd_asp()->instances->get(intval($_GET['p_asid']));
 				if ( $search['data']['single_highlight'] == 1 || $search['data']['result_page_highlight'] == 1 ) {

@@ -1534,7 +1534,7 @@ function perfmatters_script_manager_mu_notice() {
 			echo "<div class='notice notice-warning'>";
 				echo "<p>";
 					echo "<strong>" . __('Perfmatters Warning', 'perfmatters') . ":</strong> ";
-					echo __('MU plugin version mismatch.', 'perfmatters') . " <a href='https://perfmatters.io/docs/mu-mode/' target='_blank'>" . __('View Documentation', 'perfmatters') . "</a>";
+					echo __('MU plugin version mismatch.', 'perfmatters') . " <a href='https://perfmatters.io/docs/mu-mode/#mu-plugin-version-mismatch' target='_blank'>" . __('View Documentation', 'perfmatters') . "</a>";
 				echo "</p>";
 			echo "</div>";
 		}
@@ -1542,7 +1542,7 @@ function perfmatters_script_manager_mu_notice() {
 			echo "<div class='notice notice-error'>";
 				echo "<p>";
 					echo "<strong>" . __('Perfmatters Warning', 'perfmatters') . ":</strong> ";
-					echo __('MU plugin file not found.', 'perfmatters') . " <a href='https://perfmatters.io/docs/mu-mode/' target='_blank'>" . __('View Documentation', 'perfmatters') . "</a>";
+					echo __('MU plugin file not found.', 'perfmatters') . " <a href='https://perfmatters.io/docs/mu-mode/#mu-plugin-file-not-found' target='_blank'>" . __('View Documentation', 'perfmatters') . "</a>";
 				echo "</p>";
 			echo "</div>";
 		}

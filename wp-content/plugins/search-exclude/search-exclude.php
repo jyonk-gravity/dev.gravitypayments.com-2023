@@ -4,14 +4,14 @@
  * Plugin Name:             Search Exclude
  * Plugin URI:              https://wordpress.org/plugins/search-exclude
  * Description:             Hide any page or post from the WordPress search results by checking off the checkbox.
- * Version:                 2.4.3
+ * Version:                 2.5.1
  * Text Domain:             search-exclude
  * Author:                  QuadLayers
  * Author URI:              https://quadlayers.com
  * License:                 GPLv3
  * Domain Path:             /languages
  * Request at least:        4.7
- * Tested up to:            6.7
+ * Tested up to:            6.8
  * Requires PHP:            5.6
  */
 
@@ -22,9 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
 *   Definition globals variables
 */
-
 define( 'QLSE_PLUGIN_NAME', 'Search Exclude' );
-define( 'QLSE_PLUGIN_VERSION', '2.4.3' );
+define( 'QLSE_PLUGIN_VERSION', '2.5.1' );
 define( 'QLSE_PLUGIN_FILE', __FILE__ );
 define( 'QLSE_PLUGIN_DIR', __DIR__ . DIRECTORY_SEPARATOR );
 define( 'QLSE_DOMAIN', 'qlse' );
@@ -34,7 +33,7 @@ define( 'QLSE_REVIEW_URL', 'https://wordpress.org/support/plugin/search-exclude/
 // define( 'QLSE_DEMO_URL', 'https://quadlayers.com/demo/search-exclude/?utm_source=qlse_admin' );
 define( 'QLSE_PURCHASE_URL', 'https://quadlayers.com/?utm_source=qlse_admin' );
 define( 'QLSE_SUPPORT_URL', 'https://quadlayers.com/account/support/?utm_source=qlse_admin' );
-define( 'QLSE_DOCUMENTATION_URL', 'https://quadlayers.com/documentation/search-exclude/features/' );
+define( 'QLSE_DOCUMENTATION_URL', 'https://quadlayers.com/documentation/search-exclude/' );
 define( 'QLSE_GROUP_URL', 'https://www.facebook.com/groups/quadlayers' );
 define( 'QLSE_PREMIUM_SELL_URL', '' );
 define( 'QLSE_DEVELOPER', false );
@@ -54,6 +53,7 @@ require_once __DIR__ . '/vendor_packages/wp-dashboard-widget-news.php';
 require_once __DIR__ . '/vendor_packages/wp-plugin-table-links.php';
 require_once __DIR__ . '/vendor_packages/wp-plugin-install-tab.php';
 require_once __DIR__ . '/vendor_packages/wp-notice-plugin-promote.php';
+require_once __DIR__ . '/vendor_packages/wp-plugin-feedback.php';
 /**
  * Load plugin classes
  */

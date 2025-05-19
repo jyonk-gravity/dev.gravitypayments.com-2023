@@ -70,6 +70,11 @@ if ( !class_exists(__NAMESPACE__ . '\Database') ) {
 				$wpdb->query( $sql );
 				$return[] = $sql;
 			}
+			if ( !in_array( 'doc', $existing_indices ) ) {
+				$sql = "CREATE INDEX `doc` ON $this->table_name (`doc`)";
+				$wpdb->query( $sql );
+				$return[] = $sql;
+			}
 
 			return $return;
 		}

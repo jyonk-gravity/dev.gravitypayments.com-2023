@@ -1,44 +1,47 @@
 <?php
-
 namespace WPDRMS\ASP\Hooks\Filters;
 
 use WP_Query;
 use WPDRMS\ASP\Models\SearchQueryArgs;
-use WPDRMS\ASP\Utils\WPQueryUtils;
+use WPDRMS\ASP\Utils\Search;
 
 if ( !defined('ABSPATH') ) {
 	die('-1');
 }
 
-/**
- * Advanced Custom Fields related Hooks
- */
-class Divi {
-	private ?WP_Query $wp_query;
 
-	public function __construct( ?WP_Query $wp_query ) {
-		$this->wp_query = $wp_query;
-	}
+class Divi extends AbstractFilter {
+	public function handle() {}
 
 	/**
-	 * Fixes ordering and other query arguments on Divi Filter Grid
+	 * Handles override for Divi built-in blogs module
 	 *
-	 * Hook: asp_query_args
-	 *
-	 * @param SearchQueryArgs $args
-	 * @return SearchQueryArgs
+	 * @param WP_Query             $wp_query
+	 * @param array<string, mixed> $atts
+	 * @return WP_Query
 	 */
-	public function filterGridQueryArgs( SearchQueryArgs $args ): SearchQueryArgs {
-		$wp_query = $this->wp_query;
-		if ( !isset($wp_query, $wp_query->query_vars['dfg_context'], $wp_query->query_vars['asp_override']) ) {
-			return $args;
+	public function blog( WP_Query $wp_query, array $atts = array() ): WP_Query {
+		$id = Search::overrideSearchId();
+		if ( !isset($atts['module_class']) || !str_contains('asp_es_' . $id, $atts['module_class']) ) {
+			return $wp_query;
 		}
 
-		if ( isset($_POST['module_data']['query_var']['s']) ) {
-			$args->s = $_POST['module_data']['query_var']['s']; // @phpcs:ignore
-		}
+		add_filter(
+			'asp_query_args',
+			function ( SearchQueryArgs $args ) use ( $wp_query ) {
+				$args->search_type         = array( 'cpt' );
+				$args->_sd['shortcode_op'] = 'remove';
+				$args->posts_per_page      = $wp_query->query_vars['posts_per_page'] ?? $args->posts_per_page;
+				return $args;
+			},
+			100,
+			1
+		);
 
-		$args = WPQueryUtils::toASPQueryOrdering($wp_query, $args);
-		return WPQueryUtils::toASPQueryTaxFilters($wp_query, $args);
+		$wp_query->query_vars['asp_override']    = true;
+		$wp_query->query_vars['asp_not_archive'] = true;
+		$wp_query->is_home                       = false; // This will prevent archive detection
+		$new_query                               = SearchOverride::instance()->override(array(), $wp_query, 'wp_query');
+		return $new_query;
 	}
 }

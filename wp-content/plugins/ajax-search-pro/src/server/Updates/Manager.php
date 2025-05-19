@@ -156,7 +156,7 @@ class Manager {
 				'high' => 'https://ajaxsearchpro.com/assets/banner-1544x500-min.png',
 				'low' => 'https://ajaxsearchpro.com/assets/banner-1544x500-min.png',
 			];
-			$information->download_link = 'https://codecanyon.net/downloads/';
+			$information->download_link = 'https://wp-dreams.com/products/';
 
 			return $information;
 		}
@@ -170,7 +170,7 @@ class Manager {
 	public function addUpgradeMessageLink() {
 		echo '<style media="all">tr#ajax-search-pro + tr.plugin-update-tr a.thickbox + em { display: none; }</style>';
 		if ( PluginLicense::isActivated() === false )
-			echo ' <a href="'.get_admin_url() .'admin.php?page=asp_updates_help">' . __( 'Activate your license', 'ajax-search-pro') . '</a> ' . __( 'for automatic updates or', 'ajax-search-pro') . ' <a target="_blank" href="http://codecanyon.net/downloads/">' . __( 'download new version from CodeCanyon.', 'ajax-search-pro' ) . '</a>';
+			echo ' <a href="'.get_admin_url() .'admin.php?page=asp_updates_help">' . __( 'Activate your license', 'ajax-search-pro') . '</a> ' . __( 'for automatic updates or', 'ajax-search-pro') . ' <a target="_blank" href="https://wp-dreams.com/products/">' . __( 'download the latest version.', 'ajax-search-pro' ) . '</a>';
 		else
 			echo ' or <a href="' . wp_nonce_url( admin_url( 'update.php?action=upgrade-plugin&plugin=' . ASP_PLUGIN_NAME ), 'upgrade-plugin_' . ASP_PLUGIN_NAME ) . '">' . __( 'Update Ajax Search Pro now.', 'ajax-search-pro' ) . '</a>';
 	}

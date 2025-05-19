@@ -237,7 +237,7 @@ class Str {
 		}
 
 		// Step 1: Remove all backslashes
-		$stripped = str_replace('\\', ' ', $cleaned);
+		$stripped = str_replace('\\', '', $cleaned);
 
 		// Step 3: Trim leading and trailing whitespace
 		$trimmed = trim($stripped);

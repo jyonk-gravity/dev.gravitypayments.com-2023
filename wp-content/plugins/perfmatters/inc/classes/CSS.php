@@ -31,7 +31,7 @@ class CSS
         add_action('perfmatters_queue', array('Perfmatters\CSS', 'queue'));
 
         if(!empty(Config::$options['assets']['remove_unused_css'])) {
-            add_action('wp_ajax_perfmatters_clear_post_used_css', array('Perfmatters\CSS', 'clear_post_used_css'));
+            add_action('wp_ajax_perfmatters_clear_post_used_css', array('Perfmatters\CSS', 'clear_post_used_css_ajax'));
             add_action('admin_bar_menu', array('Perfmatters\CSS', 'admin_bar_menu'));
             add_action('admin_notices', array('Perfmatters\CSS', 'admin_notices'));
             add_action('admin_post_perfmatters_clear_used_css', array('Perfmatters\CSS', 'admin_bar_clear_used_css'));
@@ -61,7 +61,7 @@ class CSS
         if(array_filter(self::$run)) {
 
             //add to buffer
-            add_filter('perfmatters_output_buffer_template_redirect', array('Perfmatters\CSS', 'optimize'));
+            add_filter('perfmatters_output_buffer', array('Perfmatters\CSS', 'optimize'));
         }
     }
 
@@ -106,20 +106,26 @@ class CSS
                 '/uploads/elementor/css/post-', //elementor
                 'animations.min.css',
                 '/animations/',
-                'woocommerce-mobile', //woocommerce
-                'woocommerce-smallscreen',
                 '/uploads/oxygen/css/', //oxygen
                 '/uploads/bb-plugin/cache/', //beaver builder
                 '/uploads/generateblocks/', //generateblocks
                 '/et-cache/', //divi
                 '/widget-google-reviews/assets/css/public-main.css', //plugin for google reviews
                 '.google-fonts.', //google fonts
-                '//fonts.googleapis.com/css'
+                '//fonts.googleapis.com/css',
+                '/wp-content/uploads/bricks/css/post-' //bricks
             );
             if(!empty(Config::$options['assets']['rucss_excluded_stylesheets'])) {
                 self::$data['rucss']['exclusions']['stylesheet'] = array_merge(self::$data['rucss']['exclusions']['stylesheet'], Config::$options['assets']['rucss_excluded_stylesheets']);
             }
             self::$data['rucss']['exclusions']['stylesheet'] = apply_filters('perfmatters_rucss_excluded_stylesheets', self::$data['rucss']['exclusions']['stylesheet']);
+
+            //async stylesheets
+            self::$data['rucss']['async'] = apply_filters('perfmatters_rucss_async_stylesheets', array(
+                'dashicons.min.css',
+                'animations.min.css',
+                '/animations/'
+            ));
 
             $used_css_string = '';
         }
@@ -186,12 +192,18 @@ class CSS
                             //get used css from stylesheet
                             $used_css = self::clean_stylesheet($atts_array['href'], @file_get_contents($file));
 
+                            //wrap in media query if needed
+                            if(!empty($atts_array['media']) && $atts_array['media'] != 'all') {
+                                $used_css = '@media ' . $atts_array['media'] . '{' . $used_css . '}';
+                            }
+
                             //add used stylesheet css to total used
                             $used_css_string.= $used_css;
                         }
                         else {
                             $skip = true;
                         }
+                        
                     }
 
                     if(!$skip) {
@@ -211,6 +223,12 @@ class CSS
                             $html = str_replace($stylesheet[0], '', $html);
                             continue;
                         }
+                    }
+                }
+                else {
+                    if(Utilities::match_in_array($stylesheet[0], self::$data['rucss']['async'])) {
+                        $atts_array_new['media'] = 'print';
+                        $atts_array_new['onload'] = 'this.media=\'all\';this.onload=null;';
                     }
                 }
             }
@@ -285,38 +303,50 @@ class CSS
     }
 
     //get url type
-    private static function get_url_type()
+    private static function get_url_type($post_id = '')
     {
-        global $wp_query;
-
         $type = '';
 
-        if($wp_query->is_page) {
-            $type = is_front_page() ? 'front' : (!empty($wp_query->post) ? 'page-' . $wp_query->post->ID : 'page');
+        if(!empty($post_id)) {
+            $post_id_type = get_post_type($post_id);
+            if($post_id_type == 'page') {
+                $type = get_option('page_on_front') == $post_id ? 'front' : (get_option('page_for_posts') == $post_id ? 'home' : 'page-' . $post_id);
+            }
+            else {
+                $type = $post_id_type !== false ? $post_id_type : 'single';
+            }
         }
-        elseif($wp_query->is_home) {
-            $type = 'home';
-        }
-        elseif($wp_query->is_single) {
-            $type = get_post_type() !== false ? get_post_type() : 'single';
-        }
-        elseif($wp_query->is_category) {
-            $type = 'category';
-        }
-        elseif($wp_query->is_tag) {
-            $type = 'tag';
-        } 
-        elseif($wp_query->is_tax) {
-            $type = 'tax';
-        }
-        elseif($wp_query->is_archive) {
-            $type = $wp_query->is_post_type_archive() ? 'archive-' . get_post_type() : ($wp_query->is_day ? 'day' : ($wp_query->is_month ? 'month' : ($wp_query->is_year ? 'year' : ($wp_query->is_author ? 'author' : 'archive'))));
-        } 
-        elseif($wp_query->is_search) {
-            $type = 'search';
-        }
-        elseif($wp_query->is_404) {
-            $type = '404';
+        else {
+
+            global $wp_query;
+
+            if($wp_query->is_page) {
+                $type = is_front_page() ? 'front' : (!empty($wp_query->post) ? 'page-' . $wp_query->post->ID : 'page');
+            }
+            elseif($wp_query->is_home) {
+                $type = 'home';
+            }
+            elseif($wp_query->is_single) {
+                $type = get_post_type() !== false ? get_post_type() : 'single';
+            }
+            elseif($wp_query->is_category) {
+                $type = 'category';
+            }
+            elseif($wp_query->is_tag) {
+                $type = 'tag';
+            } 
+            elseif($wp_query->is_tax) {
+                $type = 'tax';
+            }
+            elseif($wp_query->is_archive) {
+                $type = $wp_query->is_post_type_archive() ? 'archive-' . get_post_type() : ($wp_query->is_day ? 'day' : ($wp_query->is_month ? 'month' : ($wp_query->is_year ? 'year' : ($wp_query->is_author ? 'author' : 'archive'))));
+            } 
+            elseif($wp_query->is_search) {
+                $type = 'search';
+            }
+            elseif($wp_query->is_404) {
+                $type = '404';
+            }
         }
 
         return $type;
@@ -673,8 +703,8 @@ class CSS
         delete_option('perfmatters_used_css_time');
     }
 
-    //clear used css file for specific post or post type
-    public static function clear_post_used_css() {
+    //clear post used css ajax action
+    public static function clear_post_used_css_ajax() {
         if(empty($_POST['action']) || empty($_POST['nonce']) || empty($_POST['post_id'])) {
             return;
         }
@@ -688,16 +718,24 @@ class CSS
         }
 
         $post_id = (int)$_POST['post_id'];
-        $post_type = get_post_type($post_id);
-        $path = $post_type == 'page' ? 'page-' . $post_id : $post_type;
 
-        $file = PERFMATTERS_CACHE_DIR . 'css/' . $path . '.used.css';
-        if(is_file($file)) {
-            unlink($file);
-        }
+        self::clear_post_used_css($post_id);
 
         wp_send_json_success();
         exit;
+    }
+
+    //clear used css file for specific post or post type
+    public static function clear_post_used_css($post_id) {
+
+        $type = self::get_url_type($post_id);
+
+        if(!empty($type)) {
+            $file = PERFMATTERS_CACHE_DIR . 'css/' . $type . '.used.css';
+            if(is_file($file)) {
+                unlink($file);
+            }
+        }
     }
 
     //add admin bar menu items

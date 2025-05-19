@@ -4,8 +4,8 @@ Donate link: https://perfmatters.io
 Tags: perfmatters
 Requires at least: 5.5
 Requires PHP: 7.0
-Tested up to: 6.7.1
-Stable tag: 2.3.9
+Tested up to: 6.8.1
+Stable tag: 2.4.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,7 +22,7 @@ Perfmatters is a lightweight performance plugin developed to speed up your WordP
 * Defer and delay JavaScript, including third-party scripts.
 * Automatically remove unused CSS.
 * Minify JavaScript and CSS.
-* Preload resources, critical images, and prefetch links for quicker load times.
+* Preload resources, critical images, and prerender links for quicker load times.
 * Lazy load images and enable click-to-play thumbnails on videos.
 * Host Google Analytics and Google Fonts locally.
 * Change your WordPress login URL. 
@@ -35,6 +35,62 @@ Perfmatters is a lightweight performance plugin developed to speed up your WordP
 Check out our [documentation](https://perfmatters.io/docs/) for more information on how to use Perfmatters.
 
 == Changelog ==
+
+= 2.4.5 - 05.16.2025 =
+* Added some compatibility logic to fix an issue with specific caching plugins that were not working correctly with Perfmatters output buffer functions.
+* Fixed a PHP translation warning that was coming from some post meta UI functions running too early.
+* Translation updates.
+
+= 2.4.4 - 05.08.2025 =
+* Added new Exclude Leading option for CSS background images.
+* Added new perfmatters_lazyload_parent_exclusions filter.
+* Added new perfmatters_css_background_selectors filter.
+* Added new speculative loading mode option to disable the feature entirely.
+* Refactored lazy element method to be more efficient when searching for multiple element selectors.
+* Reworked the perfmatters_critical_image_parent_exclusions and perfmatters_leading_image_parent_exclusions filters to no longer need to process the page HTML through DOMDocument for better stability, faster parsing, and 30% less code.
+* Fixed an issue with parent selector matching for fetch priority and lazy loading where only the first image tag would match if it was inside a nested container element.
+* Fixed an issue where the CSS Background class would get added to child elements as well if they also contained a matching selector.
+* Fixed a compatibility issue when using Perfmatters preloads alongside WP Rocket.
+* Fixed a spacing issue with input row checkboxes in the plugin UI.
+* Translation updates.
+
+= 2.4.3 - 04.15.2025 =
+* Added new preload options to control Speculative Loading mode and eagerness settings for sites running WordPress 6.8+.
+* Deprecated Instant Page option throughout the plugin for sites running WordPress 6.8+.
+* Added a REST API exception for Slider Revolution.
+* Updated delay JS quick exclusions for ShortPixel Adaptive Images and Slider Revolution to be more compatible.
+
+= 2.4.2 - 04.02.2025 =
+* Fixed an issue where mobile event handlers were sometimes preventing the delayed click from firing.
+* Translation updates.
+
+= 2.4.1 - 03.26.2025 =
+* Refactored delay JS inline script, removed pageshow event listener, and uglified final code, reducing the script size by over 15%.
+* Added built-in JS deferral exclusion for Cloudflare Turnstile.
+* Added new delay JS quick exclusion for Plausible Analytics.
+* Updated delay JS quick exclusions for Fluent Forms and Kadence Blocks to be more compatible.
+* Adjusted document.write built-in delay exclusion to prevent false positives.
+* Adjusted MU Mode documentation links in the Script Manager to go to specific anchor link sections.
+* Fixed an issue where encoded data attribute values weren't being preserved correctly when converting an elements attribute string to an array.
+* Fixed a multisite issue where the root directory path was not determined correctly when using a custom content directory setup.
+* Deployed a secondary API that can be used when the client has issues communicating with our licensing server (usually due to firewalls).
+* Removed deprecated SVG duotone filter removal actions from global styles toggle and updated tooltip to reflect changes.
+* Translation updates.
+
+= 2.4.0 - 02.26.2025 =
+* Added new perfmatters_rucss_async_stylesheets filter which allows you to async any stylesheet already excluded from used CSS.
+* Dashicons and Elementor animation stylesheets are now loaded via async for better performance when Removed Unused CSS is turned on.
+* Added additional logic to better handle stylesheets with media query attributes when including them in used CSS for increased performance. WooCommerce users may need to clear their used CSS if mobile-specific stylesheets are being loaded as they have been removed from our built-in exclusions.
+* Added new built-in stylesheet exclusion for Bricks post-specific CSS.
+* Added new Delay JS quick exclusion for WPBakery.
+* Added a REST API exception for SureCart.
+* Added additional compatibility styles to the Script Manager.
+* Made some changes to be able to start our main output buffer a bit earlier in the load for better compatibility with other plugins that modify the HTML document.
+* Updated clean uninstall function with current post meta options.
+* Fixed an issue where the Clear Used CSS meta button was not working correctly for certain URL types.
+* Fixed a PHP warning coming from certain rewrite rule formats when MU Mode was turned on.
+* Removed BETA tag from preload lazy elements option.
+* Updated our staging site license key exception list with additional formats.
 
 = 2.3.9 - 02.06.2025 =
 * Added new perfmatters_preloads_array filter.

@@ -1,6 +1,8 @@
 <?php
 namespace WPDRMS\ASP\Search;
 
+use WPDRMS\ASP\Utils\WPMU;
+
 defined('ABSPATH') || die("You can't access this file directly.");
 
 class SearchBlogs extends AbstractSearch {
@@ -31,7 +33,7 @@ class SearchBlogs extends AbstractSearch {
 
 		$blogresults = array();
 
-		$blog_list = wpdreams_get_blog_list(0, 'all');
+		$blog_list = WPMU::getBlogList();
 		foreach ( $blog_list as $bk => $blog ) {
 			if ( in_array($blog['blog_id'], $args['blog_exclude']) ) { // @phpcs:ignore
 				unset($blog_list[ $bk ]);

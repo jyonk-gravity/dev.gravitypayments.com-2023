@@ -3,6 +3,7 @@
 
 use WPDRMS\ASP\Hooks\Ajax\DeleteCache;
 use WPDRMS\ASP\Misc\Themes;
+use WPDRMS\ASP\Utils\Script;
 
 defined('ABSPATH') or die("You can't access this file directly.");
 
@@ -395,3 +396,12 @@ wp_set_script_translations( 'wpd-backend-instance', 'ajax-search-pro' );
 wp_enqueue_script('wpd-backend-options-search', plugin_dir_url(__FILE__) . 'settings/assets/option_search.js', array(
     'jquery', 'wp-i18n'
 ), $media_query, true);
+
+$metadata = require_once ASP_PATH . 'build/js/search-instance.asset.php';
+wp_enqueue_script(
+	'wpd-asp-search-instance',
+	ASP_URL_NP . 'build/js/search-instance.js',
+	$metadata['dependencies'],
+	$metadata['version'],
+	array( 'in_footer' =>true ),
+);

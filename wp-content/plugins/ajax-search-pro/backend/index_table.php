@@ -3,6 +3,7 @@
 
 use WPDRMS\ASP\Index\Manager;
 use WPDRMS\ASP\Utils\Script;
+use Doctrine\Inflector\Language;
 
 defined('ABSPATH') or die("You can't access this file directly.");
 
@@ -67,7 +68,6 @@ $asp_cron_data = get_option("asp_it_cron", array(
 
             <?php ob_start(); ?>
 
-            <!-- TODO Relevanssi table detection -->
             <div tabid="1">
                 <div class="item">
                     <?php $o = new wpdreamsYesNo("it_index_title", __('Index titles?', 'ajax-search-pro'),
@@ -144,7 +144,7 @@ $asp_cron_data = get_option("asp_it_cron", array(
                         </div>
                     </div>
 
-                    <div class="item item-flex-nogrow  item-flex-wrap item-conditional"  wd-show-on="multi_attachment_mime_types_5:pdf">
+                    <div class="item item-flex-nogrow  item-flex-wrap item-conditional" wd-show-on="multi_attachment_mime_types_5:pdf">
                         <?php $o = new wpdreamsYesNo("it_index_pdf_content", __('Index PDF file contents?', 'ajax-search-pro'),
                             $it_options['it_index_pdf_content']
                         );
@@ -252,11 +252,43 @@ $asp_cron_data = get_option("asp_it_cron", array(
                 </div>
             </div>
             <div tabid="2">
-                <div class="item"><?php
+                <div class="item<?php echo is_multisite() ? '' : ' hiddend' ?>"><?php
                     $o = new wpdreamsBlogselect("it_blog_ids", __('Blogs to index posts from', 'ajax-search-pro'),
                         $it_options['it_blog_ids']
                     ); ?>
                 </div>
+	            <div class="item item-flex-nogrow  item-flex-wrap" id="it_inflections">
+		            <?php
+		            $o = new wpdreamsYesNo("it_inflections", __('Enable automated singularization/pluralization?', 'ajax-search-pro'),
+			            $it_options['it_inflections']
+		            );
+					?>
+		            <div wd-enable-on="it_inflections:1">
+		            <?php
+		            $o = new wpdreamsCustomSelect("it_language", __('Main language', 'ajax-search-pro'),
+			            array(
+				            'selects' => array(
+					            array("option" => "English", "value" => Language::ENGLISH),
+					            array("option" => "French", "value" => Language::FRENCH),
+					            array("option" => "Norwegian", "value" => Language::NORWEGIAN_BOKMAL),
+					            array("option" => "Portuguese", "value" => Language::PORTUGUESE),
+					            array("option" => "Spanish", "value" => Language::SPANISH),
+					            array("option" => "Turkish", "value" => Language::TURKISH),
+				            ),
+				            'value' => $it_options['it_language']
+			            )
+		            );
+					?>
+		            </div>
+		            <p class="descMsg item-flex-grow item-flex-100">
+			            <?php echo __('Automatically singularize/pluralize all keywords for better matches via an Inflections library. Warning: this will increase the index size GREATLY.', 'ajax-search-pro'); ?>
+		            </p>
+		            <?php if ( defined('ICL_LANGUAGE_CODE') || function_exists('pll_default_language') ): ?>
+		            <p class="descMsg item-flex-grow item-flex-100">
+			            <?php echo __('The post language is automatically detected when using Polylang or WPML.', 'ajax-search-pro'); ?>
+		            </p>
+					<?php endif; ?>
+	            </div>
                 <div class="item">
                     <?php $o = new wpdreamsTextSmall("it_limit", __('Post limit per iteration', 'ajax-search-pro'),
                         $it_options['it_limit']
@@ -366,9 +398,15 @@ $asp_cron_data = get_option("asp_it_cron", array(
                     </p>
                 </div>
 				<div class="item">
+
                     <?php $o = new wpdreamsYesNo("it_index_on_update_post_meta", __("Refresh the index, whenever post meta (custom fields) are added or updated?", 'ajax-search-pro'),
                         $it_options['it_index_on_update_post_meta']
                     ); ?>
+					<p class="errorMsg">
+						<strong><?php echo __('CAUTION:', 'ajax-search-pro'); ?></strong>
+						<?php echo __('Under normal cases this option should not be used and may cause major slowdown when saving posts.', 'ajax-search-pro');
+						?>
+					</p>
                     <p class="descMsg">
                         <?php echo __('(Default: OFF) May help when posts are imported and if you notice missing results for metadata keywords.', 'ajax-search-pro'); ?>
                     </p>
@@ -452,6 +490,8 @@ $asp_cron_data = get_option("asp_it_cron", array(
                     'it_index_author_name' => $_POST['it_index_author_name'],
                     'it_index_author_bio' => $_POST['it_index_author_bio'],
                     'it_blog_ids' => $_POST['it_blog_ids'],
+                    'it_inflections' => $_POST['it_inflections'],
+                    'it_language' => $_POST['it_language'],
                     'it_limit' => $_POST['it_limit'],
                     'it_use_stopwords' => $_POST['it_use_stopwords'],
                     'it_stopwords' => $_POST['it_stopwords'],

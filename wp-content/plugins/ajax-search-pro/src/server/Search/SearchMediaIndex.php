@@ -2,6 +2,7 @@
 
 namespace WPDRMS\ASP\Search;
 
+use WPDRMS\ASP\Utils\AdvancedField\AdvancedFieldParser;
 use WPDRMS\ASP\Utils\Html;
 use WPDRMS\ASP\Utils\MB;
 use WPDRMS\ASP\Utils\Pdf;
@@ -42,15 +43,7 @@ class SearchMediaIndex extends SearchIndex {
 
 			$r->title = get_the_title($r->id);
 			if ( !empty($sd['advtitlefield']) ) {
-				$r->title = $this->advField(
-					array(
-						'main_field_slug'  => 'titlefield',
-						'main_field_value' => $r->title,
-						'r'                => $r,
-						'field_pattern'    => stripslashes( $sd['advtitlefield'] ),
-					),
-					$com_options['use_acf_getfield']
-				);
+				$r->title = AdvancedFieldParser::instance()->parse($sd['advtitlefield'], $r);
 			}
 
 			$image_settings = $sd['image_options'];
@@ -127,36 +120,32 @@ class SearchMediaIndex extends SearchIndex {
 					$_content = wd_substr_at_word($_content, $sd['descriptionlength']);
 				}
 			}
-
+			$r->content         = $_content;
+			$description_length = $sd['descriptionlength'];
 			if ( !empty($sd['advdescriptionfield']) ) {
-				$description_length = $sd['descriptionlength'];
 				$cb = function ( $value, $field, $results, $field_args ) use ( $description_length, $sd, $s, $_s ) {
+					if ( strpos($field, 'html') !== false || ( isset($field_args['html']) && $field_args['html'] ) ) {
+						return $value;
+					}
 					$value      = Post::dealWithShortcodes($value, $sd['shortcode_op'] === 'remove');
 					$strip_tags = $field_args['strip_tags'] ?? 1;
-					if ( strpos($field, 'html') === false && $strip_tags ) {
-						$value = Html::stripTags($value, $sd['striptagsexclude']);
-						if ( $sd['description_context'] && count( $_s ) > 0 && $s !== '' ) {
-							$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
-						} elseif ( $value !== '' && ( MB::strlen( $value ) > $description_length ) ) {
-							$value = wd_substr_at_word($value, $description_length);
-						}
+					if ( !$strip_tags ) {
+						return $value;
+					}
+					$value = Html::stripTags($value, $sd['striptagsexclude']);
+					if ( $sd['description_context'] && count( $_s ) > 0 && $s !== '' ) {
+						$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
+					} elseif ( $value !== '' && ( MB::strlen( $value ) > $description_length ) ) {
+						$value = wd_substr_at_word($value, $description_length);
 					}
 					return $value;
 				};
 				add_filter('asp_cpt_advanced_field_value', $cb, 10, 4);
-				$_content = $this->advField(
-					array(
-						'main_field_slug'  => 'descriptionfield',
-						'main_field_value' => $_content,
-						'r'                => $r,
-						'field_pattern'    => stripslashes( $sd['advdescriptionfield'] ),
-					),
-					$com_options['use_acf_getfield']
-				);
+				$r->content = AdvancedFieldParser::instance()->parse($sd['advdescriptionfield'], $r);
 				remove_filter('asp_cpt_advanced_field_value', $cb);
 			}
 
-			$r->content = Str::fixSSLURLs(wd_closetags($_content));
+			$r->content = Str::fixSSLURLs(wd_closetags($r->content));
 
 			// --------------------------------- DATE -----------------------------------
 			if ( isset($sd['showdate']) && $sd['showdate'] ) {

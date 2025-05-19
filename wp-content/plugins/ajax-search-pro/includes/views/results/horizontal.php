@@ -26,14 +26,15 @@ defined('ABSPATH') or die("You can't access this file directly.");
  * @since: 4.0
  */
 ?>
-<div id="asp-res-<?php echo $r->id; ?>" class='item<?php echo apply_filters('asp_result_css_class', $asp_res_css_class, $r->id, $r); ?>'>
+<div id="asp-res-<?php echo esc_attr($r->id); ?>"
+     class='item<?php echo esc_attr(apply_filters('asp_result_css_class', $asp_res_css_class, $r->id, $r)); ?>'>
 
     <?php do_action('asp_res_horizontal_begin_item'); ?>
 
     <?php if (!empty($r->image)): ?>
-        <a class='asp_res_image_url' href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
+        <a class='asp_res_image_url' href='<?php echo esc_attr($r->link); ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
             <div class='asp_image<?php echo $s_options['image_display_mode'] == "contain" ? " asp_image_auto" : ""; ?>'>
-	            <img loading="lazy" alt="<?php echo esc_attr($r->title); ?>" src="<?php echo $r->image; ?>" />
+	            <img loading="lazy" alt="<?php echo esc_attr($r->title); ?>" src="<?php echo esc_attr($r->image); ?>" />
                 <div class="void"></div>
             </div>
         </a>
@@ -43,7 +44,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
     <div class='asp_content'>
 
-        <h3><a class="asp_res_url" href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>><?php echo $r->title; ?>
+        <h3><a class="asp_res_url" href='<?php echo esc_attr($r->link); ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>><?php echo wp_kses_post($r->title); ?>
             <?php if ($s_options['resultareaclickable'] == 1): ?>
             <span class='overlap'></span>
             <?php endif; ?>
@@ -52,11 +53,11 @@ defined('ABSPATH') or die("You can't access this file directly.");
         <div class='etc'>
 
             <?php if ($s_options['showauthor'] == 1): ?>
-                <span class='asp_author'><?php echo $r->author; ?></span>
+                <span class='asp_author'><?php echo esc_html($r->author); ?></span>
             <?php endif; ?>
 
             <?php if ($s_options['showdate'] == 1): ?>
-                <span class='asp_date'><?php echo $r->date; ?></span>
+                <span class='asp_date'><?php echo esc_html($r->date); ?></span>
             <?php endif; ?>
 
         </div>
@@ -64,7 +65,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
         <?php if ($show_description == 1): ?>
 			<?php if ( empty($r->image) || $s_options['hhidedesc'] == 0 ): ?>
             <div class="asp_res_text">
-            <?php echo $r->content; ?>
+            <?php echo asp_kses_content($r->content); ?>
             </div>
             <?php endif; ?>
         <?php endif; ?>

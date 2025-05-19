@@ -196,6 +196,8 @@ class Search extends AbstractShortcode {
 		// Finally make preview changes after option changes
 		if ( $preview || $include_styles == 1 ) {
 			ob_start();
+			echo file_get_contents(ASP_CSS_PATH . "/global/woocommerce.css");
+			echo file_get_contents(ASP_CSS_PATH . "/global/advanced-result-fields.css");
 			include(ASP_PATH . "/css/style.basic.css.php");
 			include(ASP_PATH . "/css/style.css.php");
 			$out = ob_get_clean();

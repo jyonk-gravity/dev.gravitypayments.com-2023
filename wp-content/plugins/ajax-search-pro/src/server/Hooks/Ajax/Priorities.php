@@ -11,7 +11,7 @@ class Priorities extends AbstractAjax {
 		if ( 
 			isset($_POST['asp_priorities_request_nonce']) &&
 			wp_verify_nonce( $_POST['asp_priorities_request_nonce'], 'asp_priorities_request_nonce' ) &&
-			current_user_can( 'administrator' )
+			current_user_can( 'manage_options' )
 		) {
 			if ( !empty($_POST['ptask']) ) {
 				Ajax::prepareHeaders();

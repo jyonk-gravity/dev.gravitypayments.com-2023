@@ -1,7 +1,9 @@
 <?php
 namespace WPDRMS\ASP\Core;
 
-if (!defined('ABSPATH')) die('-1');
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
 
 
 class Shortcodes {
@@ -13,17 +15,19 @@ class Shortcodes {
 	 * @var array
 	 */
 	private static $shortcodes = array(
-		"wpdreams_ajaxsearchpro" => "Search",
-		"wd_asp" => "SearchBox",
-		"wpdreams_ajaxsearchpro_results" => "Results",
-		"wd_asp_results" => "Results",
-		"asp_results" => "Results",
-		"wpdreams_asp_settings" => "Settings",
-		"wd_asp_settings" => "Settings",
-		"asp_settings" => "Settings",
-		"wpdreams_ajaxsearchpro_two_column" => "TwoColumn",
-		"wd_asp_two_column" => "TwoColumn",
-		"asp_two_column" => "TwoColumn"
+		'wpdreams_ajaxsearchpro'            => 'Search',
+		'wd_asp'                            => 'SearchBox',
+		'wpdreams_ajaxsearchpro_results'    => 'Results',
+		'wd_asp_results'                    => 'Results',
+		'asp_results'                       => 'Results',
+		'wpdreams_asp_settings'             => 'Settings',
+		'wd_asp_settings'                   => 'Settings',
+		'asp_settings'                      => 'Settings',
+		'wpdreams_ajaxsearchpro_two_column' => 'TwoColumn',
+		'wd_asp_two_column'                 => 'TwoColumn',
+		'asp_two_column'                    => 'TwoColumn',
+		'wpdreams_ajaxsearchlite'           => 'AjaxSearchLite',
+		'wd_asl'                            => 'AjaxSearchLite',
 	);
 
 	/**
@@ -38,9 +42,9 @@ class Shortcodes {
 	 */
 	public static function registerAll() {
 
-		foreach (self::$shortcodes as $shortcode => $handler)
+		foreach ( self::$shortcodes as $shortcode => $handler ) {
 			self::register($shortcode, $handler);
-
+		}
 	}
 
 	/**
@@ -48,7 +52,7 @@ class Shortcodes {
 	 *
 	 * @return array
 	 */
-	public static function getAll( ) {
+	public static function getAll() {
 		return array_keys(self::$shortcodes);
 	}
 
@@ -71,16 +75,21 @@ class Shortcodes {
 	public static function register( $shortcode, $handler ) {
 
 		if ( is_array($handler) ) {
-			$class = self::NAMESPACE . $handler[0];
+			$class  = self::NAMESPACE . $handler[0];
 			$handle = $handler[1];
 		} else {
-			$class = self::NAMESPACE . $handler;
-			$handle = "handle";
+			$class  = self::NAMESPACE . $handler;
+			$handle = 'handle';
 		}
 
-		if ( !class_exists($class) ) return false;
+		if ( !class_exists($class) ) {
+			return false;
+		}
 
-		add_shortcode($shortcode, array(call_user_func(array($class, 'getInstance')), $handle));
+		if ( !shortcode_exists($shortcode) ) {
+			add_shortcode($shortcode, array( call_user_func(array( $class, 'getInstance' )), $handle ));
+		}
+
 
 		self::$registered[] = $shortcode;
 
@@ -96,13 +105,12 @@ class Shortcodes {
 	public static function deregister( $shortcode ) {
 
 		// Check if it is already registered
-		if ( isset(self::$registered[$shortcode]) )
+		if ( isset(self::$registered[ $shortcode ]) ) {
 			remove_shortcode( $shortcode );
-		else if ( isset(self::$shortcodes[$shortcode]) )
-			unset(self::$shortcodes[$shortcode]);
+		} elseif ( isset(self::$shortcodes[ $shortcode ]) ) {
+			unset(self::$shortcodes[ $shortcode ]);
+		}
 
 		return true;
-
 	}
-
 }

@@ -29,11 +29,12 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_compact; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/compact.js
+;// ./src/client/plugin/core/init/compact.js
+
 
 
 "use strict";
@@ -63,7 +64,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initCompact = function() {
 };
 /* harmony default export */ var compact = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/compact.js
+;// ./src/client/plugin/core/actions/compact.js
+
 
 
 "use strict";
@@ -178,7 +180,8 @@ external_AjaxSearchPro_namespaceObject.plugin.closeCompact = function() {
 };
 /* harmony default export */ var actions_compact = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/compact.js
+;// ./src/client/plugin/core/events/compact.js
+
 
 
 "use strict";
@@ -202,7 +205,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initCompactEvents = function() {
 };
 /* harmony default export */ var events_compact = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-compact.js
+;// ./src/client/bundle/optimized/asp-compact.js
+
 
 
 

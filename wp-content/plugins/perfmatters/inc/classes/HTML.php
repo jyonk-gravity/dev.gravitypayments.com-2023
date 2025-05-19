@@ -4,12 +4,17 @@ namespace Perfmatters;
 
 class HTML
 {
-    private static $offsets = array();
+    private static $offsets = [];
 
-    public static function get_selector_elements($html, $selector)
+    public static function get_selector_elements($html, $selectors)
     {
+        //convert selector array to regex string
+        if(is_array($selectors)) {
+            $selectors = implode('|', $selectors);
+        }
+
         //find tags with selector
-        if(!preg_match_all("/<(?:div|section|figure|footer)[^>]*{$selector}[^>]*>/s", $html, $selector_tags, PREG_OFFSET_CAPTURE)) {
+        if(!preg_match_all("/<(?:div|section|figure|footer)([^>]*({$selectors})[^>]*)>/s", $html, $selector_tags, PREG_OFFSET_CAPTURE)) {
             return;
         }
 
@@ -19,7 +24,7 @@ class HTML
         preg_match_all('/<[^>]*>/', $html, $dom_tags, PREG_OFFSET_CAPTURE);
 
         //loop through selector tags
-        foreach($selector_tags[0] as $selector_tag) {
+        foreach($selector_tags[0] as $key => $selector_tag) {
 
             //skip if selector tag is inside an element we already matched
             if(!empty(self::$offsets)) {
@@ -63,8 +68,13 @@ class HTML
                     //get the length of the entire element we need
                     $length = $dom_tag[1] - $selector_tag[1] + strlen($dom_tag[0]);
 
-                    //save element string
-                    $elements[] = substr($html, $selector_tag[1], $length);
+                    //add element details to array
+                    $elements[] = [
+                        'html' => substr($html, $selector_tag[1], $length),
+                        'selector' => $selector_tags[2][$key][0],
+                        'selector_tag' => $selector_tag[0],
+                        'selector_tag_atts' => $selector_tags[1][$key][0]
+                    ];
 
                     //save the start and end positions of the element
                     self::$offsets[] = array($selector_tag[1], $selector_tag[1] + $length);
@@ -73,6 +83,9 @@ class HTML
                 }
             }
         }
+
+        //empty stored offsets
+        self::$offsets = [];
 
         return $elements;
     }

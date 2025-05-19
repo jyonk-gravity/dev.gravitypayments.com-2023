@@ -7,6 +7,7 @@
 namespace WPDRMS\ASP\Hooks\Filters;
 
 use WPDRMS\ASP\NavMenu\Controller;
+use WPDRMS\ASP\Utils\Html;
 
 if ( !defined('ABSPATH') ) {
 	die('-1');
@@ -52,6 +53,7 @@ class EtcFixes extends AbstractFilter {
 		foreach ( $menu_items as $menu_item ) {
 			if (
 				strpos($menu_item->title, '[wd_asp') !== false ||
+				strpos($menu_item->title, '[wd_asl') !== false ||
 				strpos($menu_item->title, '[wpdreams_') !== false
 			) {
 				$menu_item->title = do_shortcode($menu_item->title);
@@ -121,17 +123,7 @@ class EtcFixes extends AbstractFilter {
 	 * Remove extra line breaks from within HTML tags
 	 */
 	function optimizeHTML( $output ) {
-		$search  = array(
-			'/>\s+</s',         // whitespaces between tags
-			'/\r|\n|\r\n/s',    // Any remaining line breaks
-			'/\s+/s',           // Any double spaces
-		);
-		$replace = array(
-			'><',
-			'',
-			' ',
-		);
-		return preg_replace($search, $replace, $output);
+		return Html::optimize($output);
 	}
 
 	/**

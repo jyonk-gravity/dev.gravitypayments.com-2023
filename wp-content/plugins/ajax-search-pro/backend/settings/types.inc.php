@@ -237,6 +237,14 @@ if ( !function_exists('admin_stylesV05') ) {
 //		wp_register_style('wpd-modal', ASP_URL_NP . 'backend/settings/assets/wpd-modal/wpd-modal.css');
 //		wp_enqueue_style('wpd-modal');
 
+		$metadata = require_once ASP_PATH . 'build/css/components.asset.php';
+		wp_enqueue_style(
+			'wdo-components',
+			ASP_URL_NP . 'build/css/components.css',
+			$metadata['dependencies'],
+			$metadata['version'],
+		);
+
 		$metadata = require_once ASP_PATH . 'build/css/modal.asset.php';
 		wp_enqueue_style(
 			'wpd-modal',
@@ -246,56 +254,5 @@ if ( !function_exists('admin_stylesV05') ) {
 		);
 
 		wp_enqueue_style('wpdreams_animations', ASP_URL_NP . 'css/animations.css', array(), $media_query);
-	}
-}
-
-/* Extra Functions */
-if ( !function_exists('wd_isEmpty') ) {
-	function wd_isEmpty( $v ) {
-		if ( trim($v) != '' ) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-}
-
-if ( !function_exists('wd_in_array_r') ) {
-	function wd_in_array_r( $needle, $haystack, $strict = false ) {
-		foreach ( $haystack as $item ) {
-			if ( ( $strict ? $item === $needle : $item == $needle ) || ( is_array($item) && wd_in_array_r($needle, $item, $strict) ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-}
-
-if ( !function_exists('wpdreams_get_blog_list') ) {
-	function wpdreams_get_blog_list( $start = 0, $num = 10, $deprecated = '' ) {
-
-		global $wpdb;
-		if ( !isset($wpdb->blogs) ) {
-			return array();
-		}
-		$blogs = $wpdb->get_results($wpdb->prepare("SELECT blog_id, domain, path FROM $wpdb->blogs WHERE site_id = %d AND public = '1' AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' ORDER BY registered DESC", $wpdb->siteid), ARRAY_A);
-
-		foreach ( (array) $blogs as $details ) {
-			$blog_list[ $details['blog_id'] ]              = $details;
-			$blog_list[ $details['blog_id'] ]['postcount'] = $wpdb->get_var('SELECT COUNT(ID) FROM ' . $wpdb->get_blog_prefix($details['blog_id']) . "posts WHERE post_status='publish' AND post_type='post'");
-		}
-		unset($blogs);
-		$blogs = $blog_list;
-
-		if ( false == is_array($blogs) ) {
-			return array();
-		}
-
-		if ( $num == 'all' ) {
-			return array_slice($blogs, $start, count($blogs));
-		} else {
-			return array_slice($blogs, $start, $num);
-		}
 	}
 }

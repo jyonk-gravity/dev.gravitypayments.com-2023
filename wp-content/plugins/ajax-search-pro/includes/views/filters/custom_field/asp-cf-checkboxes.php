@@ -1,5 +1,8 @@
 <?php foreach($filter->get() as $k => $checkbox): ?>
-    <div class="asp_option asp_option_cff" tabindex="0">
+    <div class="asp_option asp_option_cff asp_option_cff_<?php echo esc_attr($field_name_nws); ?>"
+         role="checkbox"
+         aria-checked="<?php echo $checkbox->selected ? 'true' : 'false'; ?>"
+         tabindex="0">
         <div class="asp_option_inner">
             <input type="checkbox" value="<?php echo esc_attr($checkbox->value); ?>"
                    id="aspf<?php echo $fieldset_id; ?>[<?php echo $field_name; ?>][<?php echo $k; ?>]"

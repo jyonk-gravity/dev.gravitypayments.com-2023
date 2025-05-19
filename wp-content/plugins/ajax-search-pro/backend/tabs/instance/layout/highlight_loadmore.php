@@ -141,7 +141,7 @@
 			</div>
 		</div>
 		<div class="item"><?php
-			$o = new wpdreamsText("single_highlight_selector", __('Result page content jQuery element selector', 'ajax-search-pro'), $sd['single_highlight_selector']);
+			$o = new wpdreamsText("single_highlight_selector", __('Results container DOM element selector', 'ajax-search-pro'), $sd['single_highlight_selector']);
 			$params[$o->getName()] = $o->getData();
 			?>
 			<div class="descMsg item-flex-grow item-flex-100">

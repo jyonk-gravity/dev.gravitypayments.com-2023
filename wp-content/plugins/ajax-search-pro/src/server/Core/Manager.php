@@ -3,6 +3,7 @@ namespace WPDRMS\ASP\Core;
 
 use WPDRMS\ASP\Api\Rest0\Rest;
 use WPDRMS\ASP\Asset;
+use WPDRMS\ASP\BlockEditor\BlockInterface;
 use WPDRMS\ASP\Hooks\ActionsManager;
 use WPDRMS\ASP\Hooks\AjaxManager;
 use WPDRMS\ASP\Hooks\FiltersManager;
@@ -11,7 +12,6 @@ use WPDRMS\ASP\Patterns\SingletonTrait;
 use WPDRMS\ASP\Rest\RestInterface;
 use WPDRMS\ASP\Modal\Services\TimedModalService;
 use WPDRMS\ASP\Updates\Remote as UpdatesRemote;
-use WPDRMS\Backend\Blocks\SearchBlocks;
 
 if ( !defined('ABSPATH') ) {
 	die('-1');
@@ -69,6 +69,10 @@ class Manager {
 		if ( $this->stopLoading() ) {
 			return;
 		}
+		do_action('wd_asp_loading_start');
+
+		// After 6.7 this must be executed in the "init" hook
+		load_plugin_textdomain( 'ajax-search-pro', false, ASP_DIR . '/languages' );
 
 		$this->getContext();
 		/**
@@ -287,10 +291,6 @@ class Manager {
 			require_once ASP_PATH . '/backend/metaboxes/default.php';
 		}
 
-		// FSE & Gutenberg
-		require_once ASP_PATH . '/backend/Blocks/SearchBlocks.php';
-		SearchBlocks::instance();
-
 		wd_asp()->css_manager = Asset\Css\Manager::getInstance();
 
 		// Lifting some weight off from ajax requests
@@ -356,6 +356,16 @@ class Manager {
 		}
 
 		if ( $this->context !== 'ajax' ) {
+			$factory = Factory::instance();
+			foreach ( $factory->get(Asset\AssetInterface::class) as $asset ) {
+				$asset->register();
+			}
+
+			// Editor blocks
+			foreach ( $factory->get( BlockInterface::class ) as $block ) {
+				$block->register();
+			}
+
 			if ( $this->context === 'backend' ) {
 				ActionsManager::register('admin_init', 'Compatibility');
 				TimedModalService::instance(new ModalFactory())->init();

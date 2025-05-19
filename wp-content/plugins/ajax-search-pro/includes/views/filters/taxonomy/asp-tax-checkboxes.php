@@ -1,6 +1,9 @@
 <?php foreach ($filter->get() as $kk => $term): ?>
     <?php if ($term->id == 0): ?>
-        <div class="asp_option_cat asp_option asp_option asp_option_cat_level-0 asp_option_selectall" tabindex="0">
+        <div class="asp_option_cat asp_option asp_option asp_option_cat_level-0 asp_option_selectall"
+             role="checkbox"
+             aria-checked="<?php echo $term->selected ? 'true' : 'false'; ?>"
+             tabindex="0">
             <div class="asp_option_inner">
                 <input id="asp_<?php echo $ch_class; ?>_all<?php echo $id; ?>"
                        aria-label="<?php echo asp_icl_t("Select all text [" . $taxonomy . "]" . " ($real_id)", $term->label, true); ?>"
@@ -15,6 +18,8 @@
     <?php else: ?>
         <div class="asp_option_cat asp_option asp_option asp_option_cat_level-<?php echo $term->level; ?>"
              data-lvl="<?php echo $term->level; ?>"
+             role="checkbox"
+             aria-checked="<?php echo $term->selected ? 'true' : 'false'; ?>"
              asp_cat_parent="<?php echo $term->parent; ?>" tabindex="0">
             <div class="asp_option_inner">
                 <input type="checkbox" value="<?php echo $term->id; ?>" class="asp_<?php echo $ch_class; ?>_checkbox"

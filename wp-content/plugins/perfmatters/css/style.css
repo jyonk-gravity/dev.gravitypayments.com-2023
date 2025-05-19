@@ -425,12 +425,15 @@
   flex-grow: 1;
 }
 .perfmatters-input-row label {
+  min-height: 30px;
   margin: 0px 0px 0px 5px;
   font-size: 12px;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
 }
 .perfmatters-input-row input[type="checkbox"] {
-  margin-right: 0px;
+  margin: 0px 4px 0px 0px;
 }
 #perfmatters-admin .perfmatters-input-row select {
   min-width: auto;

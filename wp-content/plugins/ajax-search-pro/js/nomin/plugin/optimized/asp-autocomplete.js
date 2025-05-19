@@ -29,11 +29,12 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_autocomplete; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/autocomplete.js
+;// ./src/client/plugin/core/actions/autocomplete.js
+
 
 
 "use strict";
@@ -113,7 +114,8 @@ external_AjaxSearchPro_namespaceObject.plugin.fixAutocompleteScrollLeft = functi
 };
 /* harmony default export */ var autocomplete = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/autocomplete.js
+;// ./src/client/plugin/core/events/autocomplete.js
+
 
 
 "use strict";
@@ -121,13 +123,20 @@ let helpers = external_AjaxSearchPro_namespaceObject.helpers;
 external_AjaxSearchPro_namespaceObject.plugin.initAutocompleteEvent = function() {
   let $this = this, tt;
   if ($this.o.autocomplete.enabled && !helpers.isMobile() || $this.o.autocomplete.mobile && helpers.isMobile()) {
+    $this.n("text").on("keydown", function(e) {
+      const keyCode = e.keyCode || e.which;
+      if (keyCode === 9 && $this.n("textAutocomplete").val() !== "" && $this.n("textAutocomplete").val() !== external_DoMini_namespaceObject(this).val()) {
+        e.preventDefault();
+      }
+    });
     $this.n("text").on("keyup", function(e) {
       $this.keycode = e.keyCode || e.which;
       $this.ktype = e.type;
       let thekey = 39;
-      if (external_DoMini_namespaceObject("body").hasClass("rtl"))
+      if (external_DoMini_namespaceObject("body").hasClass("rtl")) {
         thekey = 37;
-      if ($this.keycode === thekey && $this.n("textAutocomplete").val() !== "") {
+      }
+      if (($this.keycode === thekey || $this.keycode === 9) && $this.n("textAutocomplete").val() !== "") {
         e.preventDefault();
         $this.n("text").val($this.n("textAutocomplete").val());
         if ($this.o.trigger.type) {
@@ -154,7 +163,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initAutocompleteEvent = function()
 };
 /* harmony default export */ var events_autocomplete = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-autocomplete.js
+;// ./src/client/bundle/optimized/asp-autocomplete.js
+
 
 
 

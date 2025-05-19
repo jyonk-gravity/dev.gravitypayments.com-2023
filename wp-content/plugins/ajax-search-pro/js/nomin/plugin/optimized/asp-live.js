@@ -29,11 +29,12 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_live; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/live.js
+;// ./src/client/plugin/core/actions/live.js
+
 
 
 "use strict";
@@ -80,6 +81,12 @@ external_AjaxSearchPro_namespaceObject.plugin.liveLoad = function(origSelector, 
           external_DoMini_namespaceObject(this).closest("form").get(0).submit();
         }
       });
+      if ($this.o.highlight) {
+        $el.highlight(
+          $this.n("text").val().replace(/["']/g, "").split(" "),
+          { element: "span", className: "asp_single_highlighted_" + $this.o.id, wordsOnly: !!$this.o.highlightWholewords }
+        );
+      }
       $this.addHighlightString(external_DoMini_namespaceObject(selector).find("a"));
       helpers.Hooks.applyFilters("asp/live_load/finished", url, $this, selector, $el.get(0));
       ASP.initialize();
@@ -100,26 +107,16 @@ external_AjaxSearchPro_namespaceObject.plugin.liveLoad = function(origSelector, 
   }
   updateLocation = typeof updateLocation == "undefined" ? true : updateLocation;
   forceAjax = typeof forceAjax == "undefined" ? false : forceAjax;
-  let altSel = [
-    ".search-content",
-    "#content",
-    "#Content",
-    "div[role=main]",
-    "main[role=main]",
-    "div.theme-content",
-    "div.td-ss-main-content",
-    "main.l-content",
-    "#primary"
-  ];
+  let altSel = $this.getLiveLoadAltSelectors();
   if (selector !== "#main")
     altSel.unshift("#main");
   if (external_DoMini_namespaceObject(selector).length < 1) {
-    altSel.forEach(function(s) {
+    for (const s of altSel) {
       if (external_DoMini_namespaceObject(s).length > 0) {
         selector = s;
-        return false;
+        break;
       }
-    });
+    }
     if (external_DoMini_namespaceObject(selector).length < 1) {
       console.log("Ajax Search Pro: The live search selector does not exist on the page.");
       return false;
@@ -188,8 +185,12 @@ external_AjaxSearchPro_namespaceObject.plugin.getLiveLoadAltSelectors = function
     // breakdance posts loop section general archive
     ".search section .bde-post-list",
     // breakdance posts list section search archive
-    ".archive section .bde-post-list"
+    ".archive section .bde-post-list",
     // breakdance posts list section general archive
+    "main .wp-block-query",
+    // block themes
+    "main"
+    // fallback
   ];
 };
 external_AjaxSearchPro_namespaceObject.plugin.usingLiveLoader = function() {
@@ -224,6 +225,7 @@ external_AjaxSearchPro_namespaceObject.plugin.getCurrentLiveURL = function() {
   let location;
   url.hash = "";
   location = url.href;
+  location = location.replace(/([?&])query-\w+-page=\d+/, "$1");
   location = location.indexOf("asp_ls=") > -1 ? location.slice(0, location.indexOf("asp_ls=")) : location;
   location = location.indexOf("asp_ls&") > -1 ? location.slice(0, location.indexOf("asp_ls&")) : location;
   location = location.indexOf("p_asid=") > -1 ? location.slice(0, location.indexOf("p_asid=")) : location;
@@ -279,7 +281,8 @@ external_AjaxSearchPro_namespaceObject.plugin.getLiveLoadCache = function() {
 };
 /* harmony default export */ var live = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-live.js
+;// ./src/client/bundle/optimized/asp-live.js
+
 
 
 /* harmony default export */ var asp_live = (external_AjaxSearchPro_namespaceObject);

@@ -28,7 +28,7 @@ class LazyLoad
 			return;
 		}
 
-		add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\LazyLoad', 'iframes_buffer'));
+		add_action('perfmatters_output_buffer', array('Perfmatters\LazyLoad', 'iframes_buffer'));
 	}
 
 	//process iframe buffer
@@ -275,7 +275,7 @@ class LazyLoad
 		add_filter('wp_lazy_loading_enabled', '__return_false');
 
 		//actions + filters
-		add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\LazyLoad', 'lazyload_buffer'));
+		add_action('perfmatters_output_buffer', array('Perfmatters\LazyLoad', 'lazyload_buffer'));
 		add_action('wp_enqueue_scripts', array('Perfmatters\LazyLoad', 'enqueue_scripts'));
 		add_filter('script_loader_tag', array('Perfmatters\LazyLoad', 'async_script'), 10, 2);
 		add_action('wp_head', array('Perfmatters\LazyLoad', 'lazyload_css'), PHP_INT_MAX);
@@ -634,35 +634,53 @@ class LazyLoad
 	}
 
 	//lazy load css background images
-	private static function lazyload_css_background_images($html, $buffer) {
+	private static function lazyload_css_background_images($html) {
 
-		if(!empty(Config::$options['lazyload']['css_background_selectors'])) {
+		$selectors = [];
 
-			//match all selectors
-			preg_match_all('#<(?>div|section|figure|footer)(\s[^>]*?(' . implode('|', Config::$options['lazyload']['css_background_selectors']) . ').*?)>#i', $buffer, $selectors, PREG_SET_ORDER);
+		//add selectors
+		if(!empty(Config::$options['lazyload']['css_background_selectors']) && is_array(Config::$options['lazyload']['css_background_selectors'])) {
+			$selectors = array_unique(array_merge($selectors, Config::$options['lazyload']['css_background_selectors']));
+		}
 
-			if(!empty($selectors)) {
+		//filter selectors
+		$selectors = apply_filters('perfmatters_css_background_selectors', $selectors);
 
-				foreach($selectors as $selector) {
+		if(!empty($selectors)) {
 
-					$selector_atts = Utilities::get_atts_array($selector[1]);
+	        //get all elements with the selector
+	        $elements = HTML::get_selector_elements($html, $selectors);
 
-					//skip if no-lazy class is found
-					if(!empty($selector_atts['class']) && strpos($selector_atts['class'], 'no-lazy') !== false) {
+	        if(!empty($elements)) {
+
+	        	//exclude leading
+				if(!empty(Config::$options['lazyload']['css_background_exclude_leading'])) {
+					$elements = array_slice($elements, Config::$options['lazyload']['css_background_exclude_leading']);
+				}
+
+	        	foreach($elements as $element) {
+
+        			//get attributes array
+        			$selector_tag_atts = Utilities::get_atts_array($element['selector_tag_atts']);
+
+        			//skip no-lazy
+					if(!empty($selector_tag_atts['class']) && strpos($selector_tag_atts['class'], 'no-lazy') !== false) {
 						continue;
 					}
 
-					$selector_atts['class'] = !empty($selector_atts['class']) ? $selector_atts['class'] . ' ' . 'perfmatters-lazy-css-bg' : 'perfmatters-lazy-css-bg';
+					//add lazy class
+		        	$selector_tag_atts['class'] = !empty($selector_tag_atts['class']) ? $selector_tag_atts['class'] . ' ' . 'perfmatters-lazy-css-bg' : 'perfmatters-lazy-css-bg';
 
-					//replace video attributes string
-					$selector_lazyload  = str_replace($selector[1], ' ' . Utilities::get_atts_string($selector_atts), $selector[0]);
+		            //replace attributes string in selector tag
+					$new_selector_tag = str_replace($element['selector_tag_atts'], ' ' . Utilities::get_atts_string($selector_tag_atts), $element['selector_tag']);
 
-					//replace video with placeholder
-					$html = str_replace($selector[0], $selector_lazyload, $html);
+					//replace selector tag in element
+					$new_element = str_replace($element['selector_tag'], $new_selector_tag, $element['html']);
 
-					unset($selector_lazyload);
-				}
-			}
+					//replace element in html
+					$html = str_replace($element['html'], $new_element, $html);
+		   		}
+	        }
 		}
 
 		return $html;
@@ -697,7 +715,7 @@ class LazyLoad
 		}
 
 		//actions + filters
-		add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\LazyLoad', 'lazyload_elements'));
+		add_action('perfmatters_output_buffer', array('Perfmatters\LazyLoad', 'lazyload_elements'));
 
 		//disable wp rocket lazy render for compatibility
 		add_filter('rocket_lrc_optimization', '__return_false', 999);
@@ -720,20 +738,17 @@ class LazyLoad
 			//filter final exclusions array
 			$selectors = apply_filters('perfmatters_lazy_element_selectors', $selectors);
 
-		    foreach($selectors as $selector) {
+	        //get all elements with the selector
+	        $elements = HTML::get_selector_elements($html, $selectors);
 
-		        //get all elements with the selector
-		        $elements = HTML::get_selector_elements($html, $selector);
+	        if(!empty($elements)) {
+	        	foreach($elements as $element) {
 
-		        if(!empty($elements)) {
-		        	foreach($elements as $element) {
-			        	if(strpos($element, 'data-perfmatters-lazy-element') === false) {
-                            $lazy_element = '<div data-perfmatters-lazy-element style="height:1000px; width:100%;"><noscript>' . str_replace('noscript', 'pmnoscript', $element) . '</noscript></div>';
-			        		$html = str_replace($element, $lazy_element, $html);
-                        }
-			   		}
-		        }
-		    }
+	        		//swap lazy element in content
+	                $lazy_element = '<div data-perfmatters-lazy-element style="height:1000px; width:100%;"><noscript>' . str_replace('noscript', 'pmnoscript', $element['html']) . '</noscript></div>';
+	        		$html = str_replace($element['html'], $lazy_element, $html);
+		   		}
+	        }
 
 		    if(!empty($lazy_element)) {
 
@@ -753,51 +768,36 @@ class LazyLoad
 		$parent_exclusions = apply_filters('perfmatters_leading_image_parent_exclusions', array());
         if(!empty($parent_exclusions)) {
 
-        	//clean html doc
-            $clean_dom = new \DOMDocument();
-            $clean_dom->loadHTML($buffer, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
-            $xpath = new \DOMXpath($clean_dom);
+        	//get elements with selector
+            $elements = HTML::get_selector_elements($buffer, $parent_exclusions);
 
-            //search for excluded parents
-            array_walk($parent_exclusions, function(&$exclusion) {
-                $exclusion = 'contains(@*, "' . $exclusion . '")';
-            });
-            $exclusion_string = implode(' or ', $parent_exclusions);
-            $elements = $xpath->query("//div[" . $exclusion_string . "]|//section[" . $exclusion_string . "]|//figure[" . $exclusion_string . "]");
-
-            if(!is_null($elements)) {
-
-            	//create main html DOMDocument to match and update in parallel
-            	$dom = new \DOMDocument();
-                $dom->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
-                $html_new = '<!DOCTYPE html>' . $dom->saveHTML($dom->documentElement);
-
-                $image_excluded = false;
-
-                //search for images inside parents
+            if(!empty($elements)) {
                 foreach($elements as $element) {
-                    $images = $element->getElementsByTagName('img');
-                    if(!empty($images)) {
-                        for($i = $images->length; --$i >= 0;) {
 
-                        	//add skip attribute to image in both documents
-                            $image = $images->item($i);
-                            $image_html_prev = $clean_dom->saveHTML($image);
-                            $image->setAttribute('data-perfmatters-leading-skip', 1);
-                            $image_html_new = $clean_dom->saveHTML($image);
-                            $html_new = str_replace($image_html_prev, $image_html_new, $html_new);
-                        }
-                        $image_excluded = true;
-                    }
+                	//match all img tags
+					preg_match_all('#<img([^>]+?)\/?>#is', $element['html'], $images, PREG_SET_ORDER);
+
+					if(!empty($images)) {
+
+						//remove any duplicate images
+						$images = array_unique($images, SORT_REGULAR);
+
+						//loop through images
+				        foreach($images as $image) {
+
+				        	$image_atts = Utilities::get_atts_array($image[1]);
+
+				        	$image_atts['data-perfmatters-leading-skip'] = 1;
+
+				            //replace attributes string
+							$new_image = str_replace($image[1], ' ' . Utilities::get_atts_string($image_atts), $image[0]);
+
+							//replace image
+							$buffer = str_replace($image[0], $new_image, $buffer);
+							$html = str_replace($image[0], $new_image, $html);
+				        }
+					}
                 }
-            }
-
-            //have excluded images
-            if($image_excluded) {
-
-            	//save both html copies
-            	$html = $html_new;
-                $buffer = $clean_dom->saveHTML();
             }
         }
 
@@ -807,17 +807,26 @@ class LazyLoad
 	//mark images inside parent exclusions as no-lazy
 	private static function lazyload_parent_exclusions($html, &$buffer) {
 
-        if(!empty(Config::$options['lazyload']['lazy_loading_parent_exclusions'])) {
+		$parent_exclusions = [];
 
-			//match all selectors
-			preg_match_all('#<(div|section|figure)(\s[^>]*?(' . implode('|', Config::$options['lazyload']['lazy_loading_parent_exclusions']) . ').*?)>.*?<img.*?<\/\g1>#is', $buffer, $selectors, PREG_SET_ORDER);
+		//add exclusions
+		if(!empty(Config::$options['lazyload']['lazy_loading_parent_exclusions']) && is_array(Config::$options['lazyload']['lazy_loading_parent_exclusions'])) {
+			$parent_exclusions = array_unique(array_merge($parent_exclusions, Config::$options['lazyload']['lazy_loading_parent_exclusions']));
+		}
 
-			if(!empty($selectors)) {
+		//filter exclusions
+		$parent_exclusions = apply_filters('perfmatters_lazyload_parent_exclusions', $parent_exclusions);
 
-				foreach($selectors as $selector) {
+        if(!empty($parent_exclusions)) {
 
-					//match all img tags
-					preg_match_all('#<img([^>]+?)\/?>#is', $selector[0], $images, PREG_SET_ORDER);
+        	//get elements with selector
+            $elements = HTML::get_selector_elements($buffer, $parent_exclusions);
+
+            if(!empty($elements)) {
+                foreach($elements as $element) {
+
+                	//match all img tags
+					preg_match_all('#<img([^>]+?)\/?>#is', $element['html'], $images, PREG_SET_ORDER);
 
 					if(!empty($images)) {
 
@@ -831,17 +840,16 @@ class LazyLoad
 
 				        	$image_atts['class'] = !empty($image_atts['class']) ? $image_atts['class'] . ' ' . 'no-lazy' : 'no-lazy';
 
-				            //replace video attributes string
+				            //replace attributes string
 							$new_image = str_replace($image[1], ' ' . Utilities::get_atts_string($image_atts), $image[0]);
 
-							//replace video with placeholder
+							//replace image
+							$buffer = str_replace($image[0], $new_image, $buffer);
 							$html = str_replace($image[0], $new_image, $html);
-
-							unset($new_image);
 				        }
 					}
-				}
-			}
+                }
+            }
 		}
 
 		return $html;

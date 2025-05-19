@@ -99,7 +99,7 @@ if (!class_exists("wd_UserSelect")) {
         public static function searchUsers() {
             if ( 
                 isset($_POST['wd_phrase'], $_POST['wd_user_select_nonce']) &&
-                ( current_user_can('administrator') || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
+                ( current_user_can( 'manage_options' ) || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
                 wp_verify_nonce( $_POST["wd_user_select_nonce"], 'wd_user_select_nonce' ) 
             ) {
                 $phrase = trim($_POST['wd_phrase']);

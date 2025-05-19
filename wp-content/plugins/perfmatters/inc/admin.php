@@ -120,12 +120,17 @@ echo '<div id="perfmatters-admin" class="wrap">';
 						    echo '<section id="options-preload" class="section-content">';
 						    	perfmatters_settings_header(__('Preloading', 'perfmatters'), 'dashicons-clock');
 						    	perfmatters_settings_section('perfmatters_options', 'preload');
+						    	if(version_compare(get_bloginfo('version'), '6.8' , '>=')) {
+							    	perfmatters_settings_section('perfmatters_options', 'preload_speculative');
+							    }
+						    	perfmatters_settings_section('perfmatters_options', 'preload_connection');
 						    echo '</section>';
 
 						    //lazyload
 						    echo '<section id="options-lazyload" class="section-content">';
 						    	perfmatters_settings_header(__('Lazy Loading', 'perfmatters'), 'dashicons-images-alt2');
 						    	perfmatters_settings_section('perfmatters_options', 'lazyload');
+						    	perfmatters_settings_section('perfmatters_options', 'lazyload_css_background_images');
 						    	echo '<div class="pm-advanced-option">';
 						    		perfmatters_settings_section('perfmatters_options', 'lazyload_elements');
 						    	echo '</div>';

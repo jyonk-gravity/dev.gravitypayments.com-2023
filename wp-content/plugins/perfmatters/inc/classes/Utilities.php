@@ -43,7 +43,7 @@ class Utilities
                 function(array $attribute) {
                     return $attribute['value'];
                 },
-                wp_kses_hair($atts_string, wp_allowed_protocols())
+                wp_kses_hair($atts_string, self::wp_allowed_protocols())
             );
 
             return $atts_array;
@@ -74,6 +74,14 @@ class Utilities
         return false;
     }
 
+    //add protocols to allowed list for internal use
+    public static function wp_allowed_protocols()
+    {
+        $protocols = wp_allowed_protocols();
+        $protocols[] = 'data';
+        return $protocols;
+    }
+
     //check for string match inside array
     public static function match_in_array($string, $array) {
         
@@ -95,7 +103,14 @@ class Utilities
 
     //return root directory path
     public static function get_root_dir_path() {
-        $wp_content_relative_path = str_replace(array(trailingslashit(home_url()), trailingslashit(site_url())), '', content_url());
+        $wp_content_relative_path = str_replace(array(trailingslashit(home_url()), trailingslashit(site_url())), '', content_url(), $count);
+
+        //try pathless home url if nothing matched so far
+        if(empty($count)) {
+            $parsed_url = trailingslashit(str_replace(parse_url(home_url())['path'], '', home_url()));
+            $wp_content_relative_path = str_replace($parsed_url, '', content_url());
+        }
+
         $pos = strrpos(WP_CONTENT_DIR, $wp_content_relative_path);
         if($pos !== false) {
             $root_dir_path = substr_replace(WP_CONTENT_DIR, '', $pos, strlen($wp_content_relative_path));

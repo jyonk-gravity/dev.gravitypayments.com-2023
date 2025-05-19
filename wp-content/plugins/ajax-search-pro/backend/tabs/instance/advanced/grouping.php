@@ -45,6 +45,13 @@
 </div>
 <div class="item wd_groupby_op">
 	<?php
+	$o = new wpdreamsYesNo("group_make_header_clickable", __('Make group header clickable?', 'ajax-search-pro'), $sd['group_make_header_clickable']);
+	$params[$o->getName()] = $o->getData();
+	?>
+	<p class="descMsg"><?php echo __('Makes the group header clickable links to the corresponding archive pages.', 'ajax-search-pro'); ?></p>
+</div>
+<div class="item wd_groupby_op">
+	<?php
 	$o = new wpdreamsText("group_header_prefix", __('Group header prefix text', 'ajax-search-pro'), $sd['group_header_prefix']);
 	$params[$o->getName()] = $o->getData();
 	?>

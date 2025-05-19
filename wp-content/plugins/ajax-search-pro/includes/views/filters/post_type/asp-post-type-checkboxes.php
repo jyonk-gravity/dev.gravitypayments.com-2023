@@ -1,6 +1,9 @@
 <?php foreach ( $filter->get() as $ck => $cpt_field ): ?>
     <?php if ( $cpt_field->value == -1 ): ?>
-    <div class="asp_option asp_option_cat asp_option_selectall" tabindex="0">
+    <div class="asp_option asp_option_cat asp_option_selectall"
+         role="checkbox"
+         aria-checked="true"
+         tabindex="0">
         <div class="asp_option_inner">
             <input type="checkbox" id="<?php echo $id; ?>customset_selectall"
                    aria-label="<?php echo esc_attr($cpt_field->label); ?>"
@@ -12,7 +15,10 @@
         </div>
     </div>
     <?php else: ?>
-    <div class="asp_option" tabindex="0">
+    <div class="asp_option asp_option_post_type asp_option_post_type_<?php echo esc_attr($cpt_field->value); ?>"
+         role="checkbox"
+         aria-checked="<?php echo $cpt_field->selected ? 'true' : 'false'; ?>"
+         tabindex="0">
         <div class="asp_option_inner">
             <input type="checkbox" value="<?php echo esc_attr($cpt_field->value); ?>" id="<?php echo $id; ?>customset_<?php echo $id . $ck; ?>"
                    aria-label="<?php echo esc_attr($cpt_field->label); ?>"

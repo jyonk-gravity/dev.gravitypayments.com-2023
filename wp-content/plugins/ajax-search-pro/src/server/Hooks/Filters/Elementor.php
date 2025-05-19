@@ -12,28 +12,8 @@ if ( !defined('ABSPATH') ) {
 class Elementor extends AbstractFilter {
 	function handle() {}
 
-	private function overrideSearchId(): int {
-		if ( !isset($_GET['asp_ls']) ) {
-			return 0;
-		}
-		if ( isset($_GET['p_asid']) ) {
-			$id = intval( $_GET['p_asid'] );
-		} elseif ( isset($_POST['p_asid']) ) {
-			$id = intval( $_POST['p_asid'] );
-		} elseif ( get_option('asp_st_override', -1) > 0 ) {
-			$id = intval(get_option('asp_st_override', -1));
-		} else {
-			return 0;
-		}
-		if ( wd_asp()->instances->exists( $id ) ) {
-			return $id;
-		}
-
-		return 0;
-	}
-
 	public function jetListingGridQuery( $args, $obj, $settings ) {
-		$id = $this->overrideSearchId();
+		$id = Search::overrideSearchId();
 		if (
 			$id > 0 &&
 			isset($settings['_css_classes']) &&
@@ -58,7 +38,7 @@ class Elementor extends AbstractFilter {
 	 */
 	public function posts( $args = array(), $widget = array() ) {
 
-		$id   = $this->overrideSearchId();
+		$id   = Search::overrideSearchId();
 		$data = $widget->get_data();
 		if (
 			$id > 0 &&
@@ -76,14 +56,15 @@ class Elementor extends AbstractFilter {
 	}
 
 	public function posts_archive( $args = array() ) {
-		$id = $this->overrideSearchId();
+		$id = Search::overrideSearchId();
 
 		if ( $id > 0 ) {
 			if ( isset($_GET['asp_force_reset_pagination']) ) {
 				// For the correct pagination highlight
 				$args['paged'] = 1;
 			}
-			$args['post_type'] = 'asp_override';
+			$args['post_type'] = is_array($args['post_type']) ? $args['post_type'] : array($args['post_type']);
+			$args['post_type'][] = 'asp_override';
 		}
 
 		return $args;
@@ -91,7 +72,7 @@ class Elementor extends AbstractFilter {
 
 	/** @noinspection PhpUnusedParameterInspection */
 	public function products( $args = array(), $atts = array(), $type = '' ) {
-		$id = $this->overrideSearchId();
+		$id = Search::overrideSearchId();
 
 		if ( $id > 0 ) {
 			$instance = wd_asp()->instances->get($id);

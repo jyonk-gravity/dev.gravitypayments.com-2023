@@ -102,11 +102,14 @@ class Manager {
 
 		// Search results page && keyword highlighter
 		if (
-			isset($_GET['asp_highlight'], $_GET['p_asid']) && intval($_GET['p_asid']) > 0 &&
+			isset($_GET['p_asid']) && intval($_GET['p_asid']) > 0 &&
 			wd_asp()->instances->exists($_GET['p_asid'])
 		) {
 			$instance = wd_asp()->instances->get(intval($_GET['p_asid']));
-			if ( $instance['data']['single_highlight'] == 1 ) {
+			if (
+				( $instance['data']['single_highlight'] && isset($_GET['asp_highlight']) ) ||
+				( $instance['data']['result_page_highlight'] && isset($_GET['s']) )
+			) {
 				$this->instances[] = $instance['id'];
 			}
 		}

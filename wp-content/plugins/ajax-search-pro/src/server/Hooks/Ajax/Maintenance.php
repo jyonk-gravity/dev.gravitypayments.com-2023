@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) die('-1');
 class Maintenance extends AbstractAjax {
 	public function handle() {
 		if ( 
-			current_user_can( 'administrator' )
+			current_user_can( 'manage_options' )
 		) {
 			if (ASP_DEMO) {
 				print "Maintenance !!!ASP_MAINT_START!!!";

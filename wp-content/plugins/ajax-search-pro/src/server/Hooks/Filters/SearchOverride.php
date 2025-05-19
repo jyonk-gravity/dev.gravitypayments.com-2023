@@ -1,10 +1,10 @@
 <?php
-/** @noinspection PhpUnnecessaryCurlyVarSyntaxInspection */
 /** @noinspection PhpMissingReturnTypeInspection */
 /** @noinspection RegExpSingleCharAlternation */
 
 namespace WPDRMS\ASP\Hooks\Filters;
 
+use WP_Post;
 use WP_Query;
 use WPDRMS\ASP\Query\SearchQuery;
 use WPDRMS\ASP\Utils\Archive;
@@ -17,6 +17,7 @@ if ( !defined('ABSPATH') ) {
 
 
 class SearchOverride extends AbstractFilter {
+
 	public static $overrideCount = 0;
 
 	public function handle() {}
@@ -40,10 +41,12 @@ class SearchOverride extends AbstractFilter {
 	/**
 	 * Overrides the $posts object array with the results from Ajax Search Pro
 	 *
-	 * @param mixed         $posts - array of posts
-	 * @param null|WP_Query $wp_query - The instance of WP_Query() for this query
+	 * @param mixed              $posts array of posts
+	 * @param null|WP_Query      $wp_query The instance of WP_Query() for this query
+	 * @param 'posts'|'wp_query' $return_as to return the $posts or the modified $wp_query
+	 * @return ($return_as is 'posts' ? WP_Post[] : WP_Query)
 	 */
-	public function override( $posts, ?WP_Query $wp_query ) {
+	public function override( $posts, ?WP_Query $wp_query, string $return_as = 'posts' ) {
 		$check_override = $this->checkSearchOverride(false, $wp_query);
 		if ( $check_override === false ) {
 			return $posts;
@@ -71,14 +74,14 @@ class SearchOverride extends AbstractFilter {
 		$instance = wd_asp()->instances->get($_p_id);
 		$sd       = $instance['data'];
 		// First check the asp_ls, as s might be set already
-		$phrase = $_GET['asp_ls'] ?? $_GET['s'] ?? '';
+		$phrase = $_GET['asp_ls'] ?? $_GET['s'] ?? $wp_query->query_vars['s'] ?? '';
 
 		$paged = $paged <= 0 ? 1 : $paged;
 
 		// Elementor related
 		if (
 			isset($wp_query->query_vars, $wp_query->query_vars['posts_per_page']) &&
-			$wp_query->query_vars['post_type'] === 'asp_override'
+			$this->queryVarsHasAspOverridePostType($wp_query)
 		) {
 			$posts_per_page = $wp_query->query_vars['posts_per_page'];
 		} else {
@@ -110,16 +113,16 @@ class SearchOverride extends AbstractFilter {
 
 		// $args = self::getAdditionalArgs($args);
 		add_filter('asp_query_args', array( $this, 'getAdditionalArgs' ));
-		add_filter('asp_query_args', array( new Divi($wp_query), 'filterGridQueryArgs' ), 99, 1);
+		add_filter('asp_query_args', array( new DiviFilterGrid($wp_query), 'filterGridQueryArgs' ), 99, 1);
 
 		if ( count($s_data) === 0 ) {
 			$asp_query = new SearchQuery($args, $_p_id);
 		} else {
+
 			$asp_query = new SearchQuery($args, $_p_id, $s_data);
 		}
 
 		$res = $asp_query->posts;
-
 		if ( $sd['result_suggestions_results_page'] && count($res) === 0 ) {
 			$asp_query->resultsSuggestions();
 			$res = $asp_query->posts;
@@ -151,9 +154,17 @@ class SearchOverride extends AbstractFilter {
 			$wp_query->query_vars['orderby']  = 'post__in';
 		}
 
-		// Elementor override fix
-		if ( defined('ELEMENTOR_VERSION') && isset($wp_query->posts) ) {
+		if ( isset($wp_query->posts) ) {
 			$wp_query->posts = $res;
+		}
+		$wp_query->post_count = count($res);
+
+		/**
+		 * Reset post type
+		 * Very important. Some archive posts modules fail because asp_override is non-existent.
+		 **/
+		if ( empty($wp_query->query_vars['post_type']) || $this->queryVarsHasAspOverridePostType( $wp_query ) ) {
+			$wp_query->query_vars['post_type'] = $asp_query->args->post_type;
 		}
 
 		$wp_query->found_posts = $asp_query->found_posts;
@@ -165,7 +176,11 @@ class SearchOverride extends AbstractFilter {
 
 		++self::$overrideCount;
 
-		return $res;
+		if ( $return_as === 'posts' ) {
+			return $res;
+		} else {
+			return $wp_query;
+		}
 	}
 
 	/**
@@ -298,7 +313,7 @@ class SearchOverride extends AbstractFilter {
 		}
 
 		// Archive pages
-		if ( isset($_GET['asp_ls']) ) {
+		if ( isset($_GET['asp_ls']) && !isset($wp_query->query_vars['asp_not_archive']) ) {
 			if ( WooCommerce::isShop() ) {
 				$args['search_type'] = array( 'cpt' );
 				// Only allow product or product variations if selected
@@ -428,7 +443,11 @@ class SearchOverride extends AbstractFilter {
 
 	public function isSearch( ?WP_Query $wp_query ): bool {
 		$is_search  = true;
-		$soft_check = defined('ELEMENTOR_VERSION') || wd_asp()->o['asp_compatibility']['query_soft_check'];
+		$soft_check =
+			defined('ELEMENTOR_VERSION') || // Elementor
+			defined( 'ET_CORE' ) || // Divi
+			wd_asp()->o['asp_compatibility']['query_soft_check'];
+
 		// This can't be a search query if none of this is set
 		if ( !isset($wp_query, $wp_query->query_vars, $_GET['s']) ) {
 			$is_search = false;
@@ -455,7 +474,7 @@ class SearchOverride extends AbstractFilter {
 		// Elementor or other forced override
 		// Only allow override once in this case, otherwise duplicates will appear
 		// @ticket: https://wp-dreams.com/forums/topic/filtered-results-show-duplicate-posts/
-		if ( isset($wp_query->query_vars) && $wp_query->query_vars['post_type'] === 'asp_override' && self::$overrideCount === 0 ) {
+		if ( $this->queryVarsHasAspOverridePostType($wp_query) && self::$overrideCount === 0 ) {
 			$is_search = true;
 		}
 
@@ -531,5 +550,15 @@ class SearchOverride extends AbstractFilter {
 		}
 
 		return $output;
+	}
+
+	private function queryVarsHasAspOverridePostType( ?WP_Query $wp_query ): bool {
+		if ( $wp_query === null || !isset($wp_query->query_vars['post_type']) ) return false;
+
+		if ( is_array($wp_query->query_vars['post_type']) ) {
+			return in_array('asp_override', $wp_query->query_vars['post_type']);
+		} else {
+			return $wp_query->query_vars['post_type'] === 'asp_override';
+		}
 	}
 }

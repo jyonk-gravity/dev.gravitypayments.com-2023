@@ -121,7 +121,8 @@ class ShortPixelAI {
 	}
 
     private function __construct() {
-        add_action( 'after_setup_theme', [ $this, 'load_textdomain' ] );
+        add_action( 'init', [ $this, 'load_textdomain' ] );
+
 
         $this->logger = ShortPixelAILogger::instance();
         $this->options = Options::_();
@@ -1494,7 +1495,14 @@ class ShortPixelAI {
                 return $this->conflict;
             }
         }
-
+        if (function_exists('is_plugin_active') && is_plugin_active('sg-cachepress/sg-cachepress.php')) {
+            $speedoptimizer = get_option('siteground_optimizer_combine_javascript', false);
+            //var_dump($speedoptimizer);
+            if ($speedoptimizer === '1') {
+                $this->conflict = 'speedoptimizer';
+                return $this->conflict;
+            }
+        }
         $theme = wp_get_theme();
         if (strpos($theme->Name, 'Avada') !== false) {
             $avadaOptions = get_option('fusion_options', array());

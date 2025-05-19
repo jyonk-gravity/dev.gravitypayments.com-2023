@@ -4,9 +4,9 @@ Donate link: https://yoa.st/1up
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Content analysis, Readability, Schema
-Tested up to: 6.7
-Stable tag: 24.5
-Requires PHP: 7.2.5
+Tested up to: 6.8
+Stable tag: 25.1
+Requires PHP: 7.4
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
 
@@ -274,37 +274,35 @@ Your question has most likely been answered on our help center: [yoast.com/help/
 
 == Changelog ==
 
-= 24.5 =
+= 25.1 =
 
-Release date: 2025-02-18
+Release date: 2025-05-13
 
-Yoast SEO 24.5 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
+Yoast SEO 25.1 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
 
 #### Enhancements
 
-* Issues a warning message when the image automatically selected for a post social preview is in the unsupported AVIF format.
+* Adds more phrases regarding disability to the _inclusive language assessment_.
+* Improves the feedback for \"lame\" in the _inclusive language assessment_.
+* Makes the following SEO assessments available in the analysis by default, even when no content has been added: _keyphrase in introduction_, _keyphrase in meta description_, _keyphrase in SEO title_, _keyphrase in slug_ and _previously used keyphrase_.
+* Optimizes the function used to fetch post IDs which share the same focus keyphrase. Props to [dilipbheda](https://github.com/dilipbheda).
 
-#### Bugfixes
+= 25.0 =
 
-* Fixes a bug where the canonical presenter would throw a deprecation notice when the environments run PHP >= 8.1. Props to [aanduque](https://github.com/aanduque).
+Release date: 2025-04-29
+
+Yoast SEO 25.0 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
+
+#### Enhancements
+
+* Optimizes the `wp yoast cleanup` CLI command  `update_indexables_author_to_reassigned` step, which can become very slow for very large data sets. Props to [eddiesshop](https://github.com/eddiesshop).
+* Improves the feedback texts for the _passive voice_ and _consecutive sentences_ assessments in case there is nothing to report.
+* Makes the _images_, _internal links_, and _external links_ assessments available when no content has been added.
 
 #### Other
 
-* Simplifies calculating the `date` replacement variable before displaying it in the frontend. Props to [apermo](https://github.com/apermo).
-* Updates the Yoast WooCommerce SEO integration cards with the latest Woo logo.
-
-= 24.4 =
-
-Release date: 2025-02-04
-
-Yoast SEO 24.4 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
-
-#### Bugfixes
-
-* Fixes a bug where editing a link in the block editor would have unexpected consequences when using undo.
-* Fixes a bug where the `article:modified_time` meta tag would show an earlier time than the `article:published_time` meta tag for scheduled posts.
-* Fixes a bug where the Schema type of the product would not be locked when Yoast WooCommerce SEO is enabled.
-* Fixes a bug where using hyphens at the start or end of a sentence would cripple the content analysis when editing a post.
+* Drops compatibility with PHP 7.2 and 7.3.
+* Improves the translatability of feedback strings for the keyphrase length assessment.
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/yoast-seo-changelog).

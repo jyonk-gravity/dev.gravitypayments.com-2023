@@ -6,50 +6,56 @@ class Buffer
     //initialize buffer class
     public static function init()
     {
-        add_action('perfmatters_queue', array('Perfmatters\Buffer', 'queue'));
-    }
-
-    //queue functions
-    public static function queue() 
-    {
-        //buffer is allowed
-        if(!apply_filters('perfmatters_allow_buffer', true)) {
+        if(is_admin()) {
             return;
         }
 
+        $buffer_action = self::get_buffer_action();
+
         //add buffer action
-        add_action('template_redirect', array('Perfmatters\Buffer', 'start'), -9999);
+        add_action($buffer_action, array('Perfmatters\Buffer', 'start'), 1);
     }
 
     //start buffer
     public static function start()
     {
-        if(has_filter('perfmatters_output_buffer_template_redirect')) {
+        //open the output buffer
+        ob_start(array('Perfmatters\Buffer', 'process'));
+    }
 
-            //exclude certain requests
-            if(is_embed() || is_feed() || is_preview() || is_customize_preview() || is_singular(array('bricks_template'))) {
-                return;
-            }
-
-            //don't buffer amp
-            if(function_exists('is_amp_endpoint') && is_amp_endpoint()) {
-                return;
-            }
-
-            ob_start(function($html) {
-
-                //check for valid buffer
-                if(!self::is_valid_buffer($html)) {
-                    return $html;
-                }
-
-                //run buffer filters
-                $html = (string) apply_filters('perfmatters_output_buffer_template_redirect', $html);
-
-                //return processed html
-                return $html;
-            });
+    //process buffer html
+    public static function process($html)
+    {
+        //buffer is allowed
+        if(!apply_filters('perfmatters_allow_buffer', true)) {
+            return $html;
         }
+        
+        //do we have any filters to apply?
+        if(!has_filter('perfmatters_output_buffer')) {
+            return $html;   
+        }
+            
+        //exclude certain requests
+        if(is_embed() || is_feed() || is_preview() || is_customize_preview() || is_singular(array('bricks_template'))) {
+            return $html;
+        }
+
+        //don't buffer amp
+        if(function_exists('is_amp_endpoint') && is_amp_endpoint()) {
+            return $html;
+        }
+            
+        //check for valid buffer
+        if(!self::is_valid_buffer($html)) {
+            return $html;
+        }
+
+        //run buffer filters
+        $html = (string) apply_filters('perfmatters_output_buffer', $html);
+
+        //return processed html
+        return $html;
     }
 
     //make sure buffer content is valid
@@ -70,5 +76,18 @@ class Buffer
         }
 
         return true;
+    }
+
+    //return action hook for buffer start
+    public static function get_buffer_action()
+    {
+        //siteground optimizer
+        //hummingbird
+        if(defined('SiteGround_Optimizer\VERSION') || defined('WPHB_VERSION')) {
+            return 'template_redirect';
+        }
+        
+        //default
+        return 'after_setup_theme';
     }
 }

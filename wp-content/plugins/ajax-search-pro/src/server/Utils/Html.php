@@ -74,5 +74,25 @@ if ( !class_exists(__NAMESPACE__ . '\Html') ) {
 			}
 			return '';
 		}
+
+		/**
+		 * Optimizes HTML by removing empty spaces
+		 *
+		 * @param string $output
+		 * @return string
+		 */
+		public static function optimize( string $output ): string {
+			$search  = array(
+				'/>\s+</s',         // whitespaces between tags
+				'/\r|\n|\r\n/s',    // Any remaining line breaks
+				'/\s+/s',           // Any double spaces
+			);
+			$replace = array(
+				'><',
+				'',
+				' ',
+			);
+			return preg_replace($search, $replace, $output) ?? '';
+		}
 	}
 }

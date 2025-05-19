@@ -5,6 +5,7 @@ namespace WPDRMS\ASP\Query;
 use WPDRMS\ASP\Index\Manager;
 use WPDRMS\ASP\Models\SearchQueryArgs;
 use WPDRMS\ASP\Utils\Str;
+use WPDRMS\ASP\Utils\WPMU;
 
 defined('ABSPATH') || die("You can't access this file directly.");
 
@@ -214,7 +215,7 @@ class QueryArgs {
 
 		/*----------------------- Gather Types --------------------------*/
 		$args['post_type'] = $sd['customtypes'];
-		if ( is_array($o) ) {
+		if ( isset($o['customset']) ) {
 			$frontend_custom_post_types = array();
 			foreach ( wd_asp()->front_filters->get('position', 'post_type') as $filter ) { // @phpstan-ignore-line
 				foreach ( $filter->get() as $item ) {
@@ -323,7 +324,7 @@ class QueryArgs {
 				$args['_wpml_lang'] = $o['wpml_lang'];
 			} elseif (
 				defined('ICL_LANGUAGE_CODE')
-				&& ICL_LANGUAGE_CODE !== ''
+				&& !empty(ICL_LANGUAGE_CODE) // It can be null, so better be safe
 				&& defined('ICL_SITEPRESS_VERSION')
 			) {
 				$args['_wpml_lang'] = ICL_LANGUAGE_CODE;
@@ -378,7 +379,7 @@ class QueryArgs {
 		$sd['selected-blogs'] = w_isset_def($sd['selected-blogs'], array( 0 => get_current_blog_id() ));
 		if ( $sd['selected-blogs'] === 'all' ) {
 			if ( is_multisite() ) {
-				$args['_selected_blogs'] = wpdreams_get_blog_list(0, 'all', true);
+				$args['_selected_blogs'] = WPMU::getBlogList(true);
 			} else {
 				$args['_selected_blogs'] = array( 0 => get_current_blog_id() );
 			}
@@ -502,7 +503,7 @@ class QueryArgs {
 				}
 			}
 			if ( $sd['user_search_exclude_users']['op_type'] === 'exclude' ) {
-				$args['user_search_exclude_id'] = $sd['user_search_exclude_users']['users'];
+				$args['user_search_exclude_ids'] = $sd['user_search_exclude_users']['users'];
 			} else {
 				$args['user_search_include_ids'] = $sd['user_search_exclude_users']['users'];
 			}
@@ -632,7 +633,7 @@ class QueryArgs {
 		// ----------------------------------------------------------------
 		$args['_show_more_results'] = $sd['showmoreresults'];
 		$args['woo_currency']       = $o['woo_currency'] ?? ( function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '' );
-		$args['_page_id']           = $o['current_page_id'] ?? ( $args['_page_id'] ?? 0 );
+		$args['_page_id']           = intval($o['current_page_id'] ?? ( $args['_page_id'] ?? 0 ));
 		$args['_is_autopopulate']   = isset($_POST['autop']); // phpcs:ignore
 
 		$default_query_arr = array(

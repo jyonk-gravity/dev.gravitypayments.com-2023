@@ -55,6 +55,42 @@
         <?php echo __('If you have <strong>missing images in results</strong>, try turning ON this option. <strong>Can cause lower performance!</strong>', 'ajax-search-pro'); ?>
     </p>
 </div>
+<?php
+$image_sources =  array(
+	array(
+		'option' => __('Featured image', 'ajax-search-pro'),
+		'value'  => 'featured',
+	),
+	array(
+		'option' => __('Post Content', 'ajax-search-pro'),
+		'value'  => 'content',
+	),
+	array(
+		'option' => __('Post Excerpt', 'ajax-search-pro'),
+		'value'  => 'excerpt',
+	),
+	array(
+		'option' => __('Custom field', 'ajax-search-pro'),
+		'value'  => 'custom',
+	),
+	array(
+		'option' => __('Page Screenshot', 'ajax-search-pro'),
+		'value'  => 'screenshot',
+	),
+	array(
+		'option' => __('Default image', 'ajax-search-pro'),
+		'value'  => 'default',
+	),
+	array(
+		'option' => __('Post format icon', 'ajax-search-pro'),
+		'value'  => 'post_format',
+	),
+	array(
+		'option' => __('Disabled', 'ajax-search-pro'),
+		'value'  => 'disabled',
+	),
+);
+?>
 <fieldset>
     <legend><?php echo __('Post Type image source options', 'ajax-search-pro'); ?></legend>
     <div class="item">
@@ -62,7 +98,7 @@
         $option_name = "image_source1";
         $option_desc = __('Primary image source', 'ajax-search-pro');
         $o = new wpdreamsCustomSelect($option_name, $option_desc, array(
-            'selects'=>$sd['image_sources'],
+            'selects'=>$image_sources,
             'value'=>$sd[$option_name]
         ));
         $params[$o->getName()] = $o->getData();
@@ -73,7 +109,7 @@
         $option_name = "image_source2";
         $option_desc = __('Alternative image source 1', 'ajax-search-pro');
         $o = new wpdreamsCustomSelect($option_name, $option_desc, array(
-            'selects'=>$sd['image_sources'],
+            'selects'=>$image_sources,
             'value'=>$sd[$option_name]
         ));
         $params[$o->getName()] = $o->getData();
@@ -84,7 +120,7 @@
         $option_name = "image_source3";
         $option_desc = __('Alternative image source 2', 'ajax-search-pro');
         $o = new wpdreamsCustomSelect($option_name, $option_desc, array(
-            'selects'=>$sd['image_sources'],
+            'selects'=>$image_sources,
             'value'=>$sd[$option_name]
         ));
         $params[$o->getName()] = $o->getData();
@@ -95,7 +131,7 @@
         $option_name = "image_source4";
         $option_desc = __('Alternative image source 3', 'ajax-search-pro');
         $o = new wpdreamsCustomSelect($option_name, $option_desc, array(
-            'selects'=>$sd['image_sources'],
+            'selects'=>$image_sources,
             'value'=>$sd[$option_name]
         ));
         $params[$o->getName()] = $o->getData();
@@ -106,7 +142,7 @@
         $option_name = "image_source5";
         $option_desc = __('Alternative image source 4', 'ajax-search-pro');
         $o = new wpdreamsCustomSelect($option_name, $option_desc, array(
-            'selects'=>$sd['image_sources'],
+            'selects'=>$image_sources,
             'value'=>$sd[$option_name]
         ));
         $params[$o->getName()] = $o->getData();

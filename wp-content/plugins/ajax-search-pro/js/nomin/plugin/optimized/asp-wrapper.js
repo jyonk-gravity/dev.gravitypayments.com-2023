@@ -35,10 +35,11 @@
 /******/ 	
 /************************************************************************/
 
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = DoMini;
 var external_DoMini_default = /*#__PURE__*/__webpack_require__.n(external_DoMini_namespaceObject);
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/instances.js
+;// ./src/client/plugin/wrapper/instances.js
+
 
 window._asp_instances_storage = window._asp_instances_storage || [];
 const instances = {
@@ -77,10 +78,10 @@ const instances = {
   exist: function(id, instance) {
     this.clean();
     for (let i = 0; i < this.instances.length; i++) {
-      if (parseInt(this.instances[i].o.id) === id) {
+      if (parseInt(this.instances[i].o.id) === parseInt(id)) {
         if (typeof instance === "undefined") {
           return true;
-        } else if (parseInt(this.instances[i].o.iid) === instance) {
+        } else if (parseInt(this.instances[i].o.iid) === parseInt(instance)) {
           return true;
         }
       }
@@ -124,7 +125,8 @@ const instances = {
 };
 /* harmony default export */ var wrapper_instances = (instances);
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/api.ts
+;// ./src/client/plugin/wrapper/api.ts
+
 
 function api() {
   "use strict";
@@ -170,10 +172,11 @@ function api() {
   }
 }
 
-;// CONCATENATED MODULE: external "window.WPD.Base64"
+;// external "window.WPD.Base64"
 var external_window_WPD_Base64_namespaceObject = window.WPD.Base64;
 var external_window_WPD_Base64_default = /*#__PURE__*/__webpack_require__.n(external_window_WPD_Base64_namespaceObject);
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/asp.ts
+;// ./src/client/plugin/wrapper/asp.ts
+
 
 
 
@@ -273,7 +276,7 @@ const ASP_EXTENDED = {
       const data = ASP.highlight.data;
       let selector = data.selector !== "" && external_DoMini_default()(data.selector).length > 0 ? data.selector : "article", $highlighted;
       selector = external_DoMini_default()(selector).length > 0 ? selector : "body";
-      const s = new URLSearchParams(location.search), phrase = s.get("s") || s.get("asp_highlight");
+      const s = new URLSearchParams(location.search), phrase = s.get("s") ?? s.get("asp_highlight") ?? s.get("asp_s") ?? s.get("asp_ls") ?? "";
       external_DoMini_default()(selector).unhighlight({ className: "asp_single_highlighted_" + data.id });
       if (phrase !== null && phrase.trim() !== "") {
         external_DoMini_default()(selector).highlight(phrase.trim().split(" "), {
@@ -394,9 +397,10 @@ const ASP_EXTENDED = {
 };
 /* harmony default export */ var asp = (ASP_EXTENDED);
 
-;// CONCATENATED MODULE: external "window.WPD.intervalUntilExecute"
+;// external "window.WPD.intervalUntilExecute"
 var external_window_WPD_intervalUntilExecute_namespaceObject = window.WPD.intervalUntilExecute;
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/wrapper.js
+;// ./src/client/plugin/wrapper/wrapper.js
+
 
 
 
@@ -410,7 +414,8 @@ function load() {
   });
 }
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-wrapper.js
+;// ./src/client/bundle/optimized/asp-wrapper.js
+
 
 (function() {
   if (navigator.userAgent.indexOf("Chrome-Lighthouse") === -1) {

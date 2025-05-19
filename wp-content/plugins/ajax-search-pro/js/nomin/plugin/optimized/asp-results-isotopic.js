@@ -29,11 +29,12 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_results_isotopic; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/isotopic.js
+;// ./src/client/plugin/core/events/isotopic.js
+
 
 
 "use strict";
@@ -92,7 +93,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initIsotopicPagination = function(
 };
 /* harmony default export */ var isotopic = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_isotopic.js
+;// ./src/client/plugin/core/actions/results_isotopic.js
+
 
 
 "use strict";
@@ -112,7 +114,7 @@ external_AjaxSearchPro_namespaceObject.plugin.showIsotopicResults = function() {
       height: "auto"
     });
     if ($this.o.highlight) {
-      external_DoMini_namespaceObject("div.item", $this.n("resultsDiv")).highlight($this.n("text").val().split(" "), {
+      external_DoMini_namespaceObject("div.item", $this.n("resultsDiv")).highlight($this.n("text").val().replace(/["']/g, "").split(" "), {
         element: "span",
         className: "highlighted",
         wordsOnly: $this.o.highlightWholewords
@@ -326,7 +328,8 @@ external_AjaxSearchPro_namespaceObject.plugin.calculateIsotopeRows = function() 
 };
 /* harmony default export */ var results_isotopic = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-isotopic.js
+;// ./src/client/bundle/optimized/asp-results-isotopic.js
+
 
 
 

@@ -1,9 +1,9 @@
 <?php
 namespace WPDRMS\ASP\Core;
 
-use WPDRMS\ASP\Asset\Script as Script;
+use WPDRMS\ASP\Asset\Script;
 use WPDRMS\ASP\Cache\TextCache;
-use WPDRMS\ASP\Database as Database;
+use WPDRMS\ASP\Database;
 use WPDRMS\ASP\Hooks\Ajax\DeleteCache;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 use WPDRMS\ASP\Utils\FileManager;
@@ -28,8 +28,6 @@ class Init {
 		if ( get_option('_asp_version', false) === false ) {
 			self::$new_install = true;
 		}
-
-		load_plugin_textdomain( 'ajax-search-pro', false, ASP_DIR . '/languages' );
 	}
 
 	/**
@@ -47,7 +45,7 @@ class Init {
 
 		// Was the plugin previously installed, and updated?
 		if ( Plugin::previousVersion(ASP_CURR_VER_STRING, '<') ) {
-			update_option("asp_recently_updated", 1);
+			update_option('asp_recently_updated', 1);
 		}
 
 		set_transient('asp_just_activated', 1);
@@ -68,7 +66,7 @@ class Init {
 			$this->backwards_compatibility_fixes();
 			wd_asp()->css_manager->generator->generate();
 			// Take a note on the recent update
-			update_option("asp_recently_updated", 1);
+			update_option('asp_recently_updated', 1);
 		} else {
 			// Was the plugin just activated, without version change?
 			if ( get_transient('asp_just_activated') !== false ) {
@@ -91,16 +89,16 @@ class Init {
 		if ( !self::$new_install ) {
 			if ( $comp['js_source'] == 'min' || $comp['js_source'] == 'min-scoped' ) {
 				wd_asp()->o['asp_compatibility']['js_source'] = 'jqueryless-min';
-			} else if ( $comp['js_source'] == 'nomin' || $comp['js_source'] == 'nomin-scoped' ) {
+			} elseif ( $comp['js_source'] == 'nomin' || $comp['js_source'] == 'nomin-scoped' ) {
 				wd_asp()->o['asp_compatibility']['js_source'] = 'jqueryless-nomin';
 			}
 			asp_save_option('asp_compatibility');
 		}
 		// Old way of reatining the browser back button to new one
 		if ( isset($comp['js_retain_popstate']) && $comp['js_retain_popstate'] == 1 ) {
-			foreach (wd_asp()->instances->get() as $si) {
-				$id = $si['id'];
-				$sd = $si['data'];
+			foreach ( wd_asp()->instances->get() as $si ) {
+				$id                        = $si['id'];
+				$sd                        = $si['data'];
 				$sd['trigger_update_href'] = 1;
 				wd_asp()->instances->update($id, $sd);
 			}
@@ -119,9 +117,10 @@ class Init {
 		$ito = wd_asp()->o['asp_it_options'];
 		if ( isset($ito['it_post_types']) && !is_array($ito['it_post_types']) ) {
 			$ito['it_post_types'] = explode('|', $ito['it_post_types']);
-			foreach ($ito['it_post_types'] as $ck => $ct) {
-				if ( $ct == '' )
-					unset($ito['it_post_types'][$ck]);
+			foreach ( $ito['it_post_types'] as $ck => $ct ) {
+				if ( $ct == '' ) {
+					unset($ito['it_post_types'][ $ck ]);
+				}
 			}
 			wd_asp()->o['asp_it_options']['it_post_types'] = $ito['it_post_types'];
 			asp_save_option('asp_it_options');
@@ -159,25 +158,25 @@ class Init {
 		 * - Transition to new options based on old ones
 		 * - Save instances
 		 */
-		foreach (wd_asp()->instances->get() as $si) {
+		foreach ( wd_asp()->instances->get() as $si ) {
 			$id = $si['id'];
 			$sd = $si['data'];
 
 			// -------------------------- 4.10 ------------------------------
 			// Primary and secondary fields
-			$values = array('-1', '0', '1', '2', 'c__f');
+			$values     = array( '-1', '0', '1', '2', 'c__f' );
 			$adv_fields = array(
 				'primary_titlefield',
 				'secondary_titlefield',
 				'primary_descriptionfield',
-				'secondary_descriptionfield'
+				'secondary_descriptionfield',
 			);
-			foreach($adv_fields as $field) {
+			foreach ( $adv_fields as $field ) {
 				// Force string conversion for proper comparision
-				if ( !in_array($sd[$field].'', $values) ) {
+				if ( !in_array($sd[ $field ] . '', $values) ) {
 					// Custom field value is selected
-					$sd[$field.'_cf'] = $sd[$field];
-					$sd[$field] = 'c__f';
+					$sd[ $field . '_cf' ] = $sd[ $field ];
+					$sd[ $field ]         = 'c__f';
 				}
 			}
 			// -------------------------- 4.10 ------------------------------
@@ -187,9 +186,9 @@ class Init {
 			if ( isset($sd['autocomplete_mobile']) ) {
 				if ( $sd['autocomplete_mobile'] == 1 && $sd['autocomplete'] == 1 ) {
 					$sd['autocomplete'] = 1;
-				} else if ( $sd['autocomplete_mobile'] == 1 ) {
+				} elseif ( $sd['autocomplete_mobile'] == 1 ) {
 					$sd['autocomplete'] = 3;
-				} else if ( $sd['autocomplete'] == 1 ) {
+				} elseif ( $sd['autocomplete'] == 1 ) {
 					$sd['autocomplete'] = 2;
 				} else {
 					$sd['autocomplete'] = 0;
@@ -200,38 +199,39 @@ class Init {
 
 			// ------------------------- 4.11 -------------------------------
 			// Autocomplete aggreagated to one option only.
-			if ( !isset($sd['frontend_fields']['unselected']) )
+			if ( !isset($sd['frontend_fields']['unselected']) ) {
 				$sd['frontend_fields']['unselected'] = array();
+			}
 			if ( isset($sd['showexactmatches'], $sd['exactmatchestext']) ) {
 				$sd['frontend_fields']['labels']['exact'] = $sd['exactmatchestext'];
-				if ($sd['showexactmatches'] == 0) {
+				if ( $sd['showexactmatches'] == 0 ) {
 					$sd['frontend_fields']['unselected'][] = 'exact';
-					$sd['frontend_fields']['selected'] =
-						array_diff( $sd['frontend_fields']['selected'], array('exact') );
+					$sd['frontend_fields']['selected']     =
+						array_diff( $sd['frontend_fields']['selected'], array( 'exact' ) );
 				}
 			}
 			if ( isset($sd['showsearchintitle'], $sd['searchintitletext']) ) {
 				$sd['frontend_fields']['labels']['title'] = $sd['searchintitletext'];
-				if ($sd['showsearchintitle'] == 0) {
+				if ( $sd['showsearchintitle'] == 0 ) {
 					$sd['frontend_fields']['unselected'][] = 'title';
-					$sd['frontend_fields']['selected'] =
-						array_diff( $sd['frontend_fields']['selected'], array('title') );
+					$sd['frontend_fields']['selected']     =
+						array_diff( $sd['frontend_fields']['selected'], array( 'title' ) );
 				}
 			}
 			if ( isset($sd['showsearchincontent'], $sd['searchincontenttext']) ) {
 				$sd['frontend_fields']['labels']['content'] = $sd['searchincontenttext'];
-				if ($sd['showsearchincontent'] == 0) {
+				if ( $sd['showsearchincontent'] == 0 ) {
 					$sd['frontend_fields']['unselected'][] = 'content';
-					$sd['frontend_fields']['selected'] =
-						array_diff( $sd['frontend_fields']['selected'], array('content') );
+					$sd['frontend_fields']['selected']     =
+						array_diff( $sd['frontend_fields']['selected'], array( 'content' ) );
 				}
 			}
 			if ( isset($sd['showsearchinexcerpt'], $sd['searchinexcerpttext']) ) {
 				$sd['frontend_fields']['labels']['excerpt'] = $sd['searchinexcerpttext'];
-				if ($sd['showsearchinexcerpt'] == 0) {
+				if ( $sd['showsearchinexcerpt'] == 0 ) {
 					$sd['frontend_fields']['unselected'][] = 'excerpt';
-					$sd['frontend_fields']['selected'] =
-						array_diff( $sd['frontend_fields']['selected'], array('excerpt') );
+					$sd['frontend_fields']['selected']     =
+						array_diff( $sd['frontend_fields']['selected'], array( 'excerpt' ) );
 				}
 			}
 			// ------------------------- 4.11 -------------------------------
@@ -240,10 +240,11 @@ class Init {
 			// User meta fields to array
 			if ( isset($sd['user_search_meta_fields']) && !is_array($sd['user_search_meta_fields']) ) {
 				$sd['user_search_meta_fields'] = explode(',', $sd['user_search_meta_fields']);
-				foreach ( $sd['user_search_meta_fields'] as $umk=>$umv ) {
-					$sd['user_search_meta_fields'][$umk] = trim($umv);
-					if( $sd['user_search_meta_fields'][$umk] == '' )
-						unset($sd['user_search_meta_fields'][$umk]);
+				foreach ( $sd['user_search_meta_fields'] as $umk =>$umv ) {
+					$sd['user_search_meta_fields'][ $umk ] = trim($umv);
+					if ( $sd['user_search_meta_fields'][ $umk ] == '' ) {
+						unset($sd['user_search_meta_fields'][ $umk ]);
+					}
 				}
 			}
 			// ------------------------- 4.11.6 -----------------------------
@@ -252,25 +253,27 @@ class Init {
 			// Before, this was a string
 			if ( isset($sd['customtypes']) && !is_array($sd['customtypes']) ) {
 				$sd['customtypes'] = explode('|', $sd['customtypes']);
-				foreach ($sd['customtypes'] as $ck => $ct) {
-					if ( $ct == '' )
-						unset($sd['customtypes'][$ck]);
+				foreach ( $sd['customtypes'] as $ck => $ct ) {
+					if ( $ct == '' ) {
+						unset($sd['customtypes'][ $ck ]);
+					}
 				}
 			}
 			// No longer exists
-			if ( isset($sd['selected-customtypes']) )
+			if ( isset($sd['selected-customtypes']) ) {
 				unset($sd['selected-customtypes']);
+			}
 			// No longer exists
 			if ( isset($sd['searchinpages']) ) {
 				if ( $sd['searchinpages'] == 1 && !in_array('page', $sd['customtypes']) ) {
-					array_unshift($sd['customtypes'] , 'page');
+					array_unshift($sd['customtypes'], 'page');
 				}
 				unset($sd['searchinpages']);
 			}
 			// No longer exists
 			if ( isset($sd['searchinposts']) ) {
 				if ( $sd['searchinposts'] == 1 && !in_array('post', $sd['customtypes']) ) {
-					array_unshift($sd['customtypes'] , 'post');
+					array_unshift($sd['customtypes'], 'post');
 				}
 				unset($sd['searchinposts']);
 			}
@@ -278,22 +281,34 @@ class Init {
 
 			// ------------------------- 4.12 -------------------------------
 			if ( is_numeric($sd['i_item_width']) ) {
-				$sd['i_item_width'] = $sd['i_item_width'].'px';
+				$sd['i_item_width'] = $sd['i_item_width'] . 'px';
 			}
 			// ------------------------- 4.12 -------------------------------
 
 			// ------------------------- 4.13.1 -----------------------------
-			$font_sources = array("inputfont", "descfont", "titlefont",
-				"authorfont", "datefont", "showmorefont", "groupfont",
-				"exsearchincategoriestextfont", "groupbytextfont", "settingsdropfont",
-				"prestitlefont", "presdescfont", "pressubtitlefont", "search_text_font");
+			$font_sources = array(
+				'inputfont',
+				'descfont',
+				'titlefont',
+				'authorfont',
+				'datefont',
+				'showmorefont',
+				'groupfont',
+				'exsearchincategoriestextfont',
+				'groupbytextfont',
+				'settingsdropfont',
+				'prestitlefont',
+				'presdescfont',
+				'pressubtitlefont',
+				'search_text_font',
+			);
 			if ( isset($sd['inputfont']) && strpos($sd['inputfont'], '--g--') !== false ) {
 				/**
 				 * Remove the unneccessary --g-- tags and quotes
 				 */
-				foreach($font_sources as $fk) {
-					if ( isset($sd[$fk]) ) {
-						$sd[$fk] = str_replace(array('--g--', '"', "'"), '', $sd[$fk]);
+				foreach ( $font_sources as $fk ) {
+					if ( isset($sd[ $fk ]) ) {
+						$sd[ $fk ] = str_replace(array( '--g--', '"', "'" ), '', $sd[ $fk ]);
 					}
 				}
 			}
@@ -301,7 +316,7 @@ class Init {
 				$sd['results_order'] .= '|peepso_groups|peepso_activities';
 			}
 			if ( isset($sd['groupby_content_type']) && !isset($sd['groupby_content_type']['peepso_groups']) ) {
-				$sd['groupby_content_type']['peepso_groups'] = 'Peepso Groups';
+				$sd['groupby_content_type']['peepso_groups']     = 'Peepso Groups';
 				$sd['groupby_content_type']['peepso_activities'] = 'Peepso Activities';
 			}
 			// ------------------------- 4.13.1 -----------------------------
@@ -310,46 +325,45 @@ class Init {
 			if ( isset($sd['frontend_fields']['labels']['comments']) ) {
 				unset($sd['frontend_fields']['labels']['comments']);
 			}
-			$sd['frontend_fields']['selected'] = array_diff( $sd['frontend_fields']['selected'], array('comments') );
-			$sd['frontend_fields']['unselected'] = array_diff( $sd['frontend_fields']['unselected'], array('comments') );
-			$sd['frontend_fields']['checked'] = array_diff( $sd['frontend_fields']['checked'], array('comments') );
+			$sd['frontend_fields']['selected']   = array_diff( $sd['frontend_fields']['selected'], array( 'comments' ) );
+			$sd['frontend_fields']['unselected'] = array_diff( $sd['frontend_fields']['unselected'], array( 'comments' ) );
+			$sd['frontend_fields']['checked']    = array_diff( $sd['frontend_fields']['checked'], array( 'comments' ) );
 			// ------------------------- 4.14.4 -----------------------------
 
 			// ------------------------- 4.14.5 -----------------------------
 			// For non-existence checks use the raw_data array
 			if ( !isset($si['raw_data']['i_item_width_tablet']) ) {
 				$sd['i_item_width_tablet'] = $sd['i_item_width'];
-				$sd['i_item_width_phone'] = $sd['i_item_width'];
+				$sd['i_item_width_phone']  = $sd['i_item_width'];
 			}
 			// For non-existence checks use the raw_data array
 			if ( !isset($si['raw_data']['i_item_height_tablet']) ) {
 				$sd['i_item_height_tablet'] = $sd['i_item_height'];
-				$sd['i_item_height_phone'] = $sd['i_item_height'];
+				$sd['i_item_height_phone']  = $sd['i_item_height'];
 			}
 			// For non-existence checks use the raw_data array
 			if ( !isset($si['raw_data']['box_width_tablet']) ) {
 				$sd['box_width_tablet'] = $sd['box_width'];
-				$sd['box_width_phone'] = $sd['box_width'];
+				$sd['box_width_phone']  = $sd['box_width'];
 			}
 			// ------------------------- 4.14.5 -----------------------------
 
 			// ------------------------- 4.15 -------------------------------
 			if ( is_numeric($sd['i_item_height']) ) {
-				$sd['i_item_height'] = $sd['i_item_height'].'px';
+				$sd['i_item_height'] = $sd['i_item_height'] . 'px';
 			}
 			if ( is_numeric($sd['i_item_height_tablet']) ) {
-				$sd['i_item_height_tablet'] = $sd['i_item_height_tablet'].'px';
+				$sd['i_item_height_tablet'] = $sd['i_item_height_tablet'] . 'px';
 			}
 			if ( is_numeric($sd['i_item_height_phone']) ) {
-				$sd['i_item_height_phone'] = $sd['i_item_height_phone'].'px';
+				$sd['i_item_height_phone'] = $sd['i_item_height_phone'] . 'px';
 			}
 			// ------------------------- 4.15 -------------------------------
 
 			// ------------------------- 4.17 -------------------------------
 			if ( !empty($sd['image_default'])
-				&& !isset($si['raw_data']['tax_image_default'], $si['raw_data']['tax_image_default']) )
-			{
-				$sd['tax_image_default'] = $sd['image_default'];
+				&& !isset($si['raw_data']['tax_image_default'], $si['raw_data']['tax_image_default']) ) {
+				$sd['tax_image_default']  = $sd['image_default'];
 				$sd['user_image_default'] = $sd['image_default'];
 			}
 			// ------------------------- 4.17 -------------------------------
@@ -362,9 +376,9 @@ class Init {
 
 			// ------------------------- 4.18.8 -----------------------------
 			if ( !isset($si['raw_data']['tax_res_showdescription']) ) {
-				$sd['tax_res_showdescription'] = $sd['showdescription'];
-				$sd['user_res_showdescription'] = $sd['showdescription'];
-				$sd['tax_res_descriptionlength'] = $sd['descriptionlength'];
+				$sd['tax_res_showdescription']    = $sd['showdescription'];
+				$sd['user_res_showdescription']   = $sd['showdescription'];
+				$sd['tax_res_descriptionlength']  = $sd['descriptionlength'];
 				$sd['user_res_descriptionlength'] = $sd['descriptionlength'];
 			}
 			// ------------------------- 4.18.8 -----------------------------
@@ -384,45 +398,93 @@ class Init {
 				unset($sd['orderby']);
 			}
 			if ( isset($sd['horizontal_res_height']) ) {
-				$sd['h_item_height'] = $sd['horizontal_res_height'];
+				$sd['h_item_height']        = $sd['horizontal_res_height'];
 				$sd['h_item_height_tablet'] = $sd['horizontal_res_height'];
-				$sd['h_item_height_phone'] = $sd['horizontal_res_height'];
+				$sd['h_item_height_phone']  = $sd['horizontal_res_height'];
 				unset($sd['horizontal_res_height']);
 			}
 			if ( isset($sd['hreswidth']) ) {
-				$sd['h_item_width'] = $sd['hreswidth'];
+				$sd['h_item_width']        = $sd['hreswidth'];
 				$sd['h_item_width_tablet'] = $sd['hreswidth'];
-				$sd['h_item_width_phone'] = $sd['hreswidth'];
+				$sd['h_item_width_phone']  = $sd['hreswidth'];
 				unset($sd['hreswidth']);
 			}
 			if ( isset($sd['hor_img_height']) ) {
-				$sd['h_image_height'] = $sd['hor_img_height'];
+				$sd['h_image_height']        = $sd['hor_img_height'];
 				$sd['h_image_height_tablet'] = $sd['hor_img_height'];
-				$sd['h_image_height_phone'] = $sd['hor_img_height'];
+				$sd['h_image_height_phone']  = $sd['hor_img_height'];
 				unset($sd['hor_img_height']);
+			}
+
+			// ---------------------------- 4.27 ----------------------------
+			if ( Plugin::previousVersion('4.26.16') ) {
+				foreach ( array(
+					'advtitlefield',
+					'advdescriptionfield',
+					'user_search_advanced_title_field',
+					'user_search_advanced_description_field',
+				) as $fk
+				) {
+					$sd[ $fk ] = str_replace(
+						array( '{titlefield}', '{descriptionfield}' ),
+						array( "{result_field field_name='title' hash='x'}", "{result_field field_name='content' hash='y'}" ),
+						$sd[ $fk ]
+					);
+				}
 			}
 
 			// ----------------- Unset some unused search data --------------
 			// Leave this here, so it is executed as last
 			$values = array(
 				// from 4.10
-				'magnifierimage_selects', 'settingsimage_selects', 'loadingimage_selects',
-				'i_res_magnifierimage_selects', 'i_pagination_arrow_selects', 'keyword_logic_def',
-				'user_search_title_field_def', 'frontend_search_settings_position_def', 'term_logic_def',
-				'cf_logic_def', 'resultstype_def', 'resultsposition_def', 'box_compact_float_def',
-				'box_compact_position_def', 'keyword_suggestion_source_def', 'bpgroupstitle_def', 'bpgroupstitle',
-				'settingsimagepos_def', 'blogtitleorderby_def', 'i_ifnoimage_def', 'i_pagination_position_def',
-				'weight_def', 'user_search_description_field_def', 'triggeronclick', 'triggeronreturn', 'redirectonclick',
-				'redirect_click_to', 'redirect_on_enter', 'redirect_enter_to', 'mob_trigger_on_click',
+				'magnifierimage_selects',
+				'settingsimage_selects',
+				'loadingimage_selects',
+				'i_res_magnifierimage_selects',
+				'i_pagination_arrow_selects',
+				'keyword_logic_def',
+				'user_search_title_field_def',
+				'frontend_search_settings_position_def',
+				'term_logic_def',
+				'cf_logic_def',
+				'resultstype_def',
+				'resultsposition_def',
+				'box_compact_float_def',
+				'box_compact_position_def',
+				'keyword_suggestion_source_def',
+				'bpgroupstitle_def',
+				'bpgroupstitle',
+				'settingsimagepos_def',
+				'blogtitleorderby_def',
+				'i_ifnoimage_def',
+				'i_pagination_position_def',
+				'weight_def',
+				'user_search_description_field_def',
+				'triggeronclick',
+				'triggeronreturn',
+				'redirectonclick',
+				'redirect_click_to',
+				'redirect_on_enter',
+				'redirect_enter_to',
+				'mob_trigger_on_click',
 				// from 4.11
-				'showexactmatches', 'exactmatchestext', 'showsearchintitle', 'searchintitletext', 'showsearchincontent',
-				'searchincontenttext', 'showsearchincomments', 'searchincommentstext', 'showsearchinexcerpt', 'searchinexcerpttext',
+				'showexactmatches',
+				'exactmatchestext',
+				'showsearchintitle',
+				'searchintitletext',
+				'showsearchincontent',
+				'searchincontenttext',
+				'showsearchincomments',
+				'searchincommentstext',
+				'showsearchinexcerpt',
+				'searchinexcerpttext',
 				// from 4.18.2
-				'jquery_chosen_nores'
+				'jquery_chosen_nores',
 			);
-			foreach ($values as $v) {
-				if ( isset($sd[$v]) )
-					unset($sd[$v]);
+			foreach ( $values as $v ) {
+				if ( isset($sd[ $v ]) ) {
+					unset($sd[ $v ]);
+				}
 			}
 
 			// At the end, update
@@ -458,9 +520,10 @@ class Init {
 			'asp_fonts',
 			'_asp_tables',
 			'_asp_priority_groups',
-			'_asp_it_pool_sizes'
+			'_asp_it_pool_sizes',
+			'asp_license_data',
 		);
-		foreach ($options as $o) {
+		foreach ( $options as $o ) {
 			delete_option($o);
 			delete_site_option($o);
 		}
@@ -469,8 +532,9 @@ class Init {
 
 		Script\Manager::getInstance()->cleanup();
 
-		if ( $triggerActivate )
+		if ( $triggerActivate ) {
 			$this->activate();
+		}
 	}
 
 	public function pluginWipe() {
@@ -481,8 +545,8 @@ class Init {
 		// Meta
 		if ( is_multisite() ) {
 			global $switched;
-			$sites = get_sites(array('fields' => 'ids'));
-			foreach ($sites as $site) {
+			$sites = get_sites(array( 'fields' => 'ids' ));
+			foreach ( $sites as $site ) {
 				switch_to_blog($site);
 				delete_metadata('post', 1, '_asp_additional_tags', '', true);
 				delete_metadata('post', 1, '_asp_metadata', '', true);

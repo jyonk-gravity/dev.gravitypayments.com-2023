@@ -26,20 +26,21 @@ defined('ABSPATH') or die("You can't access this file directly.");
  * @since: 4.0
  */
 ?>
-<figure id="asp-res-<?php echo $r->id; ?>" class='photostack-flip photostack-current<?php echo apply_filters('asp_result_css_class', $asp_res_css_class, $r->id, $r); ?>'>
+<figure id="asp-res-<?php echo esc_attr($r->id); ?>"
+        class='photostack-flip photostack-current<?php echo esc_attr(apply_filters('asp_result_css_class', $asp_res_css_class, $r->id, $r)); ?>'>
 
     <?php if ( isset($r->image) ): ?>
         <a class="asp_res_url" href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
 	        <div class='asp_image' style='background-image: url("<?php echo $r->image; ?>");' data-src="<?php echo esc_attr($r->image); ?>"></div>
         </a>
     <?php elseif ($s_options['pifnoimage'] == 'descinstead'): ?>
-        <a class="asp_res_url" href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>><?php echo $r->content; ?></a>
+        <a class="asp_res_url" href='<?php echo esc_attr($r->link); ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>><?php echo asp_kses_content($r->content); ?></a>
     <?php endif; ?>
 
     <figcaption>
 
-        <h2 class='photostack-title'><a href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
-            <?php echo $r->title; ?>
+        <h2 class='photostack-title'><a href='<?php echo esc_attr($r->link); ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
+            <?php echo wp_kses_post($r->title); ?>
             <?php if ($s_options['resultareaclickable'] == 1): ?>
                 <span class='overlap'></span>
             <?php endif; ?>
@@ -48,17 +49,17 @@ defined('ABSPATH') or die("You can't access this file directly.");
         <div class='etc'>
             <?php if ($s_options['pshowsubtitle']): ?>
                 <?php if ($s_options['showauthor'] == 1): ?>
-                    <span class='asp_author'><?php echo $r->author; ?></span>
+                    <span class='asp_author'><?php echo esc_html($r->author); ?></span>
                 <?php endif; ?>
 
                 <?php if ($s_options['showdate'] == 1): ?>
-                    <span class='asp_date'><?php echo $r->date; ?></span>
+                    <span class='asp_date'><?php echo esc_html($r->date); ?></span>
                 <?php endif; ?>
             <?php endif; ?>
         </div>
 
         <?php if ($s_options['pshowdesc'] && !empty($r->content)): ?>
-            <div class='photostack-back'><?php echo $r->content; ?></div>
+            <div class='photostack-back'><?php echo asp_kses_content($r->content); ?></div>
         <?php endif; ?>
 
     </figcaption>

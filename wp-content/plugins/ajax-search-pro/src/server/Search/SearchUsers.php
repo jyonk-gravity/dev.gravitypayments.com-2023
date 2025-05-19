@@ -7,6 +7,7 @@
 
 namespace WPDRMS\ASP\Search;
 
+use WPDRMS\ASP\Utils\AdvancedField\AdvancedFieldParser;
 use WPDRMS\ASP\Utils\Html;
 use WPDRMS\ASP\Utils\MB;
 use WPDRMS\ASP\Utils\Post;
@@ -722,15 +723,7 @@ class SearchUsers extends SearchPostTypes {
 			/*---------------------------------------------------------------*/
 
 			if ( !empty($sd['user_search_advanced_title_field']) ) {
-				$r->title = $this->advField(
-					array(
-						'main_field_slug'  => 'titlefield',
-						'main_field_value' => $r->title,
-						'r'                => $r,
-						'field_pattern'    => stripslashes( $sd['user_search_advanced_title_field'] ),
-					),
-					$com_options['use_acf_getfield']
-				);
+				$r->title = AdvancedFieldParser::instance()->parse($sd['user_search_advanced_title_field'], $r);
 			}
 
 			/*---------------------- Description ----------------------------*/
@@ -760,35 +753,32 @@ class SearchUsers extends SearchPostTypes {
 			} elseif ( $_content !== '' && ( MB::strlen( $_content ) > $description_length ) ) {
 				$_content = wd_substr_at_word($_content, $description_length);
 			}
+			$r->content = $_content;
 
 			if ( !empty($sd['user_search_advanced_description_field']) ) {
-				$cb = function ( $value, $field, $results, $field_args ) use( $description_length, $sd, $s, $_s ) {
+				$cb = function ( $value, $field, $results, $field_args ) use ( $description_length, $sd, $s, $_s ) {
+					if ( strpos($field, 'html') !== false || ( isset($field_args['html']) && $field_args['html'] ) ) {
+						return $value;
+					}
 					$value      = Post::dealWithShortcodes($value, $sd['shortcode_op'] === 'remove');
 					$strip_tags = $field_args['strip_tags'] ?? 1;
-					if ( strpos($field, 'html') === false && $strip_tags ) {
-						$value = Html::stripTags($value, $sd['striptagsexclude']);
-						if ( $sd['description_context'] && count( $_s ) > 0 && $s !== '' ) {
-							$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
-						} elseif ( $value !== '' && ( MB::strlen( $value ) > $description_length ) ) {
-							$value = wd_substr_at_word($value, $description_length);
-						}
+					if ( !$strip_tags ) {
+						return $value;
+					}
+					$value = Html::stripTags($value, $sd['striptagsexclude']);
+					if ( $sd['description_context'] && count( $_s ) > 0 && $s !== '' ) {
+						$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
+					} elseif ( $value !== '' && ( MB::strlen( $value ) > $description_length ) ) {
+						$value = wd_substr_at_word($value, $description_length);
 					}
 					return $value;
 				};
 				add_filter('asp_user_advanced_field_value', $cb, 10, 4);
-				$_content = $this->advField(
-					array(
-						'main_field_slug'  => 'descriptionfield',
-						'main_field_value' => $_content,
-						'r'                => $r,
-						'field_pattern'    => stripslashes( $sd['user_search_advanced_description_field'] ),
-					),
-					$com_options['use_acf_getfield']
-				);
+				$r->content = AdvancedFieldParser::instance()->parse($sd['user_search_advanced_description_field'], $r);
 				remove_filter('asp_user_advanced_field_value', $cb);
 			}
 
-			$r->content = wd_closetags( $_content );
+			$r->content = wd_closetags( $r->content );
 			/*---------------------------------------------------------------*/
 
 			// --------------------------------- DATE -----------------------------------
@@ -807,105 +797,5 @@ class SearchUsers extends SearchPostTypes {
 		}
 
 		$this->results = $userresults;
-	}
-
-	/**
-	 * Generates the final field, based on the advanced field pattern
-	 *
-	 * @param array<string, mixed> $f_args Field related arguments
-	 * @param bool                 $use_acf If true, uses ACF get_field() function to get the meta
-	 * @param bool                 $empty_on_missing If true, returns an empty string if any of the fields is empty.
-	 * @param integer              $depth Recursion depth
-	 *
-	 * @return string Final post title
-	 */
-	protected function advField( array $f_args, bool $use_acf = false, bool $empty_on_missing = false, int $depth = 0 ): string {
-
-		$f_args  = wp_parse_args(
-			$f_args,
-			array(
-				'main_field_slug'  => 'titlefield',  // The 'slug', aka the original field name
-				'main_field_value' => '',            // The default field value
-				'r'                => null,                        // Result object
-				'field_pattern'    => '{titlefield}',   // The field pattern
-			)
-		);
-		$_f_args = $f_args;
-
-		if ( $f_args['field_pattern'] === '' ) {
-			return $f_args['field_value'];
-		}
-		$field_pattern = $f_args['field_pattern']; // Let's not make changes to arguments, shall we.
-
-		// Handle shortcode patterns
-		if ( $depth === 0 && strpos($field_pattern, '[[') !== false ) {
-			$do_shortcodes = true;
-			$field_pattern = str_replace(
-				array( '[[', ']]' ),
-				array( '____shortcode_start____', '____shortcode_end____' ),
-				$field_pattern
-			);
-		} else {
-			$do_shortcodes = false;
-		}
-
-		// Find conditional patterns, like [prefix {field} suffix}
-		preg_match_all( '/(\[.*?\])/', $field_pattern, $matches );
-		if ( isset( $matches[0] ) && isset( $matches[1] ) && is_array( $matches[1] ) ) {
-			foreach ( $matches[1] as $fieldset ) {
-				// Pass on each section to this function again, the code will never get here
-				$_f_args['field_pattern'] = str_replace(array( '[', ']' ), '', $fieldset);
-				$processed_fieldset       = $this->advField(
-					$_f_args,
-					$use_acf,
-					true,
-					$depth + 1
-				);
-				// Replace the original with the processed version, first occurrence, in case of duplicates
-				$field_pattern = Str::replaceFirst($fieldset, $processed_fieldset, $field_pattern);
-			}
-		}
-
-		preg_match_all( '/{(.*?)}/', $field_pattern, $matches );
-		if ( isset( $matches[0] ) && isset( $matches[1] ) && is_array( $matches[1] ) ) {
-			foreach ( $matches[1] as $complete_field ) {
-				$field_args = shortcode_parse_atts($complete_field);
-				if ( is_array($field_args) && isset($field_args[0]) ) {
-					$field = array_shift($field_args);
-				} else {
-					continue;
-				}
-				if ( $field === $f_args['main_field_slug'] ) {
-					$val = $f_args['main_field_value'];
-					if ( isset($field_args['maxlength']) ) {
-						$val = wd_substr_at_word($val, $field_args['maxlength']);
-					}
-					// value, field name, post object, field arguments
-					$val           = apply_filters('asp_user_advanced_field_value', $val, $field, $f_args['r'], $f_args);
-					$field_pattern = str_replace( '{' . $complete_field . '}', $val, $field_pattern );
-				} else {
-					$val = User::getCFValue($field, $f_args['r'], $use_acf, $field_args);
-					// For the recursive call to break, if any of the fields is empty
-					if ( $empty_on_missing && $val === '' ) {
-						return '';
-					}
-					$val           = Str::fixSSLURLs($val);
-					$val           = apply_filters('asp_user_advanced_field_value', $val, $field, $f_args['r'], $f_args);
-					$field_pattern = str_replace( '{' . $field . '}', $val, $field_pattern );
-				}
-			}
-		}
-
-		// On depth=0 and if tags were found $do_shortcodes is true
-		if ( $do_shortcodes ) {
-			$field_pattern = str_replace(
-				array( '____shortcode_start____', '____shortcode_end____' ),
-				array( '[', ']' ),
-				$field_pattern
-			);
-			$field_pattern = do_shortcode($field_pattern);
-		}
-
-		return $field_pattern;
 	}
 }

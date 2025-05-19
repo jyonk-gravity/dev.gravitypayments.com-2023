@@ -2,20 +2,35 @@
 
 namespace WPDRMS\ASP\Core;
 
+use WPDRMS\ASP\Asset\AssetInterface;
+use WPDRMS\ASP\BlockEditor\ASPBlock;
+use WPDRMS\ASP\BlockEditor\BlockEditorAssets;
+use WPDRMS\ASP\BlockEditor\BlockInterface;
+use WPDRMS\ASP\Options\OptionAssets;
+use WPDRMS\ASP\Options\Routes\SearchOptionsRoute;
+use WPDRMS\ASP\Options\Routes\TaxonomyTermsRoute;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 use WPDRMS\ASP\Rest\RestInterface;
 use WPDRMS\ASP\Rest\TimedModalRoutes;
 
 /**
- * @phpstan-type FactorySupports RestInterface
+ * @phpstan-type FactorySupports RestInterface|AssetInterface|BlockInterface
  * @phpstan-type FactoryResults FactorySupports[]
  */
 class Factory {
 	use SingletonTrait;
 
 	const SUPPORTED_INTERFACES = array(
-		RestInterface::class => array(
+		RestInterface::class  => array(
 			TimedModalRoutes::class,
+			TaxonomyTermsRoute::class,
+			SearchOptionsRoute::class,
+		),
+		AssetInterface::class => array(
+			OptionAssets::class,
+		),
+		BlockInterface::class => array(
+			ASPBlock::class,
 		),
 	);
 

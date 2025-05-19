@@ -13,15 +13,21 @@ class Preload
     //initialize preload functions
     public static function init() 
     {
-       add_action('perfmatters_queue', array('Perfmatters\Preload', 'queue'));
+        self::$preloads = apply_filters('perfmatters_preloads', Config::$options['preload']['preload'] ?? array());
+        self::$critical_images = apply_filters('perfmatters_preload_critical_images', Config::$options['preload']['critical_images'] ?? 0);
+
+        //compatibility
+        if(!empty(self::$preloads) || !empty(self::$critical_images)) {
+            add_filter('rocket_above_the_fold_optimization', '__return_false', 999);
+        }
+
+        add_action('perfmatters_queue', array('Perfmatters\Preload', 'queue'));
     }
 
     //queue functions
     public static function queue() 
     {
         self::$fetch_priority = apply_filters('perfmatters_fetch_priority', Config::$options['preload']['fetch_priority'] ?? array());
-        self::$preloads = apply_filters('perfmatters_preloads', Config::$options['preload']['preload'] ?? array());
-        self::$critical_images = apply_filters('perfmatters_preload_critical_images', Config::$options['preload']['critical_images'] ?? 0);
 
         //disable core fetch
         if(!empty(Config::$options['preload']['disable_core_fetch'])) {
@@ -30,18 +36,16 @@ class Preload
         
         //fetch priority
         if(!empty(self::$fetch_priority)) {
-            add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\Preload', 'add_fetch_priority'));
+            add_action('perfmatters_output_buffer', array('Perfmatters\Preload', 'add_fetch_priority'));
         }
 
         //preloads
         if(!empty(self::$preloads) || !empty(self::$critical_images)) {
-            add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\Preload', 'add_preloads'));
+            add_action('perfmatters_output_buffer', array('Perfmatters\Preload', 'add_preloads'));
         }
 
-        //compatibility
-        if(!empty(self::$critical_images)) {
-            add_filter('rocket_above_the_fold_optimization', '__return_false', 999);
-        }
+        //speculative loading
+        self::speculative_loading();
     }
 
     //add fetch priority
@@ -79,34 +83,27 @@ class Preload
         //parent selectors
         if(!empty($parent_selectors)) {
 
-            //match all selectors
-            preg_match_all('#<(div|section|figure)(\s[^>]*?(' . implode('|', $parent_selectors) . ').*?)>.*?<\/\g1>#is', $html, $parents, PREG_SET_ORDER);
+            $elements = HTML::get_selector_elements($html, $parent_selectors);
 
-            if(!empty($parents)) {
+            if(!empty($elements)) {
+                foreach($elements as $element) {
 
-                foreach($parents as $parent) {
-
-                    //match all tags
-                    preg_match_all('#<(?>link|img|script)(\s[^>]*?)>#is', $parent[0], $tags, PREG_SET_ORDER);
+                    preg_match_all('#<(?>link|img|script)(\s[^>]*?)>#is', $element['html'], $tags, PREG_SET_ORDER);
 
                     if(!empty($tags)) {
 
-                        //loop through images
+                        $key = array_search($element['selector'], array_column(self::$fetch_priority, 'selector'));
+
                         foreach($tags as $tag) {
 
-                            $tag_atts = Utilities::get_atts_array($tag[1]);
-
-                            $key = array_search($parent[3], array_column(self::$fetch_priority, 'selector'));
-
-                            $tag_atts['fetchpriority'] = self::$fetch_priority[$key]['priority'];;
+                            $atts = Utilities::get_atts_array($tag[1]);
+                            $atts['fetchpriority'] = self::$fetch_priority[$key]['priority'];
 
                             //replace video attributes string
-                            $new_tag = str_replace($tag[1], ' ' . Utilities::get_atts_string($tag_atts), $tag[0]);
+                            $new_tag = str_replace($tag[1], ' ' . Utilities::get_atts_string($atts), $tag[0]);
 
                             //replace video with placeholder
                             $html = str_replace($tag[0], $new_tag, $html);
-
-                            unset($new_tag);
                         }
                     }
                 }
@@ -119,13 +116,10 @@ class Preload
             preg_match_all('#<(?>link|img|script)(\s[^>]*?(' . implode('|', $selectors) . ').*?)>#is', $html, $matches, PREG_SET_ORDER);
 
             if(!empty($matches)) {
-
                 foreach($matches as $tag) {
 
                     $atts = Utilities::get_atts_array($tag[1]);
-
                     $key = array_search($tag[2], array_column(self::$fetch_priority, 'selector'));
-
                     $atts['fetchpriority'] = self::$fetch_priority[$key]['priority'];;
 
                     //replace video attributes string
@@ -275,49 +269,15 @@ class Preload
         $parent_exclusions = apply_filters('perfmatters_critical_image_parent_exclusions', array());
         if(!empty($parent_exclusions)) {
 
-            //clean html doc
-            $clean_dom = new \DOMDocument();
-            $clean_dom->encoding = 'utf-8';
-            $clean_dom->loadHTML($clean_html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
-            $xpath = new \DOMXpath($clean_dom);
+            //get elements with selector
+            $elements = HTML::get_selector_elements($clean_html, $parent_exclusions);
 
-            //search for excluded parents
-            array_walk($parent_exclusions, function(&$exclusion) {
-                $exclusion = 'contains(@*, "' . $exclusion . '")';
-            });
-            $exclusion_string = implode(' or ', $parent_exclusions);
-            $elements = $xpath->query("//div[" . $exclusion_string . "]|//section[" . $exclusion_string . "]|//figure[" . $exclusion_string . "]");
-
-            if(!is_null($elements)) {
-
-                $image_excluded = false;
-
-                //search for images inside parents
+            if(!empty($elements)) {
                 foreach($elements as $element) {
-                    $images = $element->getElementsByTagName('img');
-                    if(!empty($images)) {
-                        for($i = $images->length; --$i >= 0;) {
 
-                            //remove images from clean DOMDocument
-                            $image = $images->item($i);
-                            $image->parentNode->removeChild($image);
-                        }
-                        $image_excluded = true;
-                    }
+                    //remove element from clean html
+                    $clean_html = str_replace($element['html'], '', $clean_html);
                 }
-            }
-
-            //have excluded images
-            if($image_excluded) {
-
-                //save main html as DOMDocument to match
-                $dom = new \DOMDocument();
-                $dom->encoding = 'utf-8';
-                $dom->loadHTML($html, LIBXML_SCHEMA_CREATE | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_ERR_NONE);
-                $html = '<!DOCTYPE html>' . $dom->saveHTML($dom->documentElement);
-
-                //save clean html
-                $clean_html = $clean_dom->saveHTML();
             }
         }
 
@@ -442,5 +402,39 @@ class Preload
     public static function disable_core_fetch($loading_attrs) {
         unset($loading_attrs['fetchpriority']);
         return $loading_attrs;
+    }
+
+    //handle speculative loading
+    public static function speculative_loading()
+    {   
+        //wp 6.8+
+        if(version_compare(get_bloginfo('version'), '6.8' , '>=')) {
+
+            //get settings
+            $mode = Config::$options['preload']['speculative_mode'] ?? '';
+            $eagerness = Config::$options['preload']['speculative_eagerness'] ?? '';
+
+            if(!empty($mode) || !empty($eagerness)) {
+                
+                //disable entirely
+                if($mode == 'disabled') {
+                    add_filter('wp_speculation_rules_configuration', '__return_null');
+                    return;
+                }
+                
+                //adjust config
+                add_filter('wp_speculation_rules_configuration', function($config) use($mode, $eagerness) {
+                    if(is_array($config)) {
+                        if(!empty($mode)) {
+                            $config['mode'] = $mode;
+                        }
+                        if(!empty($eagerness)) {
+                            $config['eagerness'] = $eagerness;
+                        }
+                    }
+                    return $config;
+                });
+            }
+        }
     }
 }

@@ -1,5 +1,8 @@
 <?php foreach ( $filter->get() as $fe_field ): ?>
-<div class="asp_option" tabindex="0">
+<div class="asp_option asp_option_generic asp_option_generic_<?php echo esc_attr($fe_field->value); ?>"
+     role="checkbox"
+     aria-checked="<?php echo $fe_field->selected ? 'true' : 'false'; ?>"
+     tabindex="0">
     <div class="asp_option_inner">
         <input type="checkbox" value="<?php echo esc_attr($fe_field->value); ?>" id="set_<?php echo esc_attr($fe_field->value).$id; ?>"
                <?php echo $fe_field->default ? 'data-origvalue="1"' : ''; ?>

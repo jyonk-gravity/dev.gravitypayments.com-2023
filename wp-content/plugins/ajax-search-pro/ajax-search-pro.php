@@ -3,9 +3,9 @@
 Plugin Name: Ajax Search Pro
 Plugin URI: https://ajaxsearchpro.com
 Description: The most powerful live search engine for WordPress.
-Version: 4.26.16
+Version: 4.27.1
 Requires PHP: 7.4
-Requires at least: 4.9
+Requires at least: 6.5
 Author: Ernest Marcinko
 Author URI: https://codecanyon.net/user/wpdreams
 Text Domain: ajax-search-pro
@@ -19,11 +19,11 @@ defined('ABSPATH') or die("You can't access this file directly.");
 define('ASP_FILE', __FILE__);
 define('ASP_PLUGIN_BASE', plugin_basename( ASP_FILE ) );
 define('ASP_PATH', plugin_dir_path(__FILE__));
-define('ASP_CSS_PATH', plugin_dir_path(__FILE__) . '/css/');
-define('ASP_INCLUDES_PATH', plugin_dir_path(__FILE__) . '/includes/');
-define('ASP_CLASSES_PATH', plugin_dir_path(__FILE__) . '/src/server/');
-define('ASP_EXTERNALS_PATH', plugin_dir_path(__FILE__) . '/includes/externals/');
-define('ASP_FUNCTIONS_PATH', plugin_dir_path(__FILE__) . '/includes/functions/');
+define('ASP_CSS_PATH', ASP_PATH . '/css/');
+define('ASP_INCLUDES_PATH', ASP_PATH . '/includes/');
+define('ASP_CLASSES_PATH', ASP_PATH . '/src/server/');
+define('ASP_EXTERNALS_PATH', ASP_PATH . '/includes/externals/');
+define('ASP_FUNCTIONS_PATH', ASP_PATH . '/includes/functions/');
 define('ASP_DIR', 'ajax-search-pro');
 define('ASP_PLUGIN_NAME', 'ajax-search-pro/ajax-search-pro.php');
 define('ASP_SITE_IS_PROBABLY_SSL', strpos(home_url('/'), 'https://') !== false || strpos(plugin_dir_url(__FILE__), 'https://') !== false);
@@ -33,9 +33,9 @@ define(
 	str_replace('http://', 'https://', plugin_dir_url(__FILE__)) : plugin_dir_url(__FILE__)
 );
 define('ASP_URL_NP', str_replace(array( 'http://', 'https://' ), '//', plugin_dir_url(__FILE__)));
-define('ASP_CURR_VER', 5076);
-define('ASP_CURR_VER_STRING', '4.26.16');
-define('ASP_PLUGIN_SLUG', plugin_basename(__FILE__) );
+define('ASP_CURR_VER', 5090);
+define('ASP_CURR_VER_STRING', '4.27.1');
+
 define('ASP_DEBUG', 0);
 if ( !defined('ASP_DEMO') ) {
 	define('ASP_DEMO', false );
@@ -43,6 +43,7 @@ if ( !defined('ASP_DEMO') ) {
 // The one and most important global
 global $wd_asp;
 
+require_once ASP_PATH . '/vendor/autoload.php';
 require_once ASP_CLASSES_PATH . 'Autoloader.php';
 $wd_asp = new Globals();
 

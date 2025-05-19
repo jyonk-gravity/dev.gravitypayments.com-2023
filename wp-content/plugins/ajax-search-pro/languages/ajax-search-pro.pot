@@ -1,27 +1,352 @@
-# Copyright (C) 2024 Ernest Marcinko
-# This file is distributed under the same license as the Ajax Search Pro package.
+# Copyright (C) 2025 Ernest Marcinko
+# This file is distributed under the same license as the Ajax Search Pro plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Pro 4.26.16\n"
-"Report-Msgid-Bugs-To: WPDreams\n"
-"POT-Creation-Date: 2024-10-22 16:22:38+00:00\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"Project-Id-Version: Ajax Search Pro 4.27.1\n"
+"Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-pro-development\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: en\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: United States\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: "
-"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
-"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-Bookmarks: \n"
-"X-Textdomain-Support: yes\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-04-28T07:35:10+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: ajax-search-pro\n"
+
+#. Plugin Name of the plugin
+#: ajax-search-pro.php
+#: build/js/block-editor.js:2576
+#: build/js/block-editor.js:2746
+msgid "Ajax Search Pro"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: ajax-search-pro.php
+msgid "https://ajaxsearchpro.com"
+msgstr ""
+
+#. Description of the plugin
+#: ajax-search-pro.php
+msgid "The most powerful live search engine for WordPress."
+msgstr ""
+
+#. Author of the plugin
+#: ajax-search-pro.php
+msgid "Ernest Marcinko"
+msgstr ""
+
+#. Author URI of the plugin
+#: ajax-search-pro.php
+msgid "https://codecanyon.net/user/wpdreams"
+msgstr ""
+
+#: backend/analytics.php:14
+msgid "Analytics settings were reset to defaults!"
+msgstr ""
+
+#: backend/analytics.php:16
+#: backend/analytics.php:80
+#: backend/search.php:31
+#: backend/search.php:55
+msgid "<strong>ERROR Saving:</strong> Invalid NONCE, please try again!"
+msgstr ""
+
+#: backend/analytics.php:78
+msgid "Analytics settings saved!"
+msgstr ""
+
+#: backend/analytics.php:102
+msgid "Google analytics integration method"
+msgstr ""
+
+#: backend/analytics.php:105
+#: backend/Classes/Options/OptionDefaults.php:227
+#: backend/settings/class/datefilter-post.class.php:30
+#: backend/settings/class/datefilter.class.php:28
+#: backend/settings/class/dateinterval.class.php:31
+#: backend/settings/class/dateinterval.class.php:48
+#: backend/tabs/instance/advanced/content.php:83
+#: backend/tabs/instance/advanced/content.php:127
+#: backend/tabs/instance/general/image_options.php:89
+#: backend/tabs/instance/layout/search_box_layout.php:73
+#: backend/tabs/instance/search_options/keyword_logic.php:31
+#: backend/tabs/instance/suggest/autocomplete.php:5
+#: backend/tabs/instance/suggest/autocomplete.php:36
+msgid "Disabled"
+msgstr ""
+
+#: backend/analytics.php:106
+msgid "Event Tracking (GTAG & GTM)"
+msgstr ""
+
+#: backend/analytics.php:112
+msgid "To understand how this works, please read the <a href=\"%s\">Analytics Integration Documentation</a>"
+msgstr ""
+
+#: backend/analytics.php:119
+msgid "Google analytics Tracking ID (ex.: G-0123456789)"
+msgstr ""
+
+#: backend/analytics.php:121
+msgid "If you are using GTM (Google Tag Manager), then this is not required."
+msgstr ""
+
+#: backend/analytics.php:133
+msgid "Search input focus event tracking"
+msgstr ""
+
+#: backend/analytics.php:136
+#: backend/analytics.php:161
+#: backend/analytics.php:186
+#: backend/analytics.php:211
+#: backend/analytics.php:236
+#: backend/analytics.php:261
+#: backend/analytics.php:286
+#: backend/analytics.php:311
+#: backend/tabs/instance/suggest/autocomplete.php:35
+msgid "Enabled"
+msgstr ""
+
+#: backend/analytics.php:139
+msgid "Triggers, whenever the user clicks on the search input field."
+msgstr ""
+
+#: backend/analytics.php:145
+#: backend/analytics.php:170
+#: backend/analytics.php:195
+#: backend/analytics.php:220
+#: backend/analytics.php:245
+#: backend/analytics.php:270
+#: backend/analytics.php:295
+#: backend/analytics.php:320
+msgid "Usable variables: %s"
+msgstr ""
+
+#: backend/analytics.php:150
+#: backend/analytics.php:175
+#: backend/analytics.php:200
+#: backend/analytics.php:225
+#: backend/analytics.php:250
+#: backend/analytics.php:275
+#: backend/analytics.php:300
+#: backend/analytics.php:325
+msgid "Event action"
+msgstr ""
+
+#: backend/analytics.php:151
+#: backend/analytics.php:176
+#: backend/analytics.php:201
+#: backend/analytics.php:226
+#: backend/analytics.php:251
+#: backend/analytics.php:276
+#: backend/analytics.php:301
+#: backend/analytics.php:326
+msgid "Event category"
+msgstr ""
+
+#: backend/analytics.php:152
+#: backend/analytics.php:177
+#: backend/analytics.php:202
+#: backend/analytics.php:227
+#: backend/analytics.php:252
+#: backend/analytics.php:277
+#: backend/analytics.php:302
+#: backend/analytics.php:327
+msgid "Event label"
+msgstr ""
+
+#: backend/analytics.php:153
+#: backend/analytics.php:178
+#: backend/analytics.php:203
+#: backend/analytics.php:228
+#: backend/analytics.php:253
+#: backend/analytics.php:278
+#: backend/analytics.php:303
+#: backend/analytics.php:328
+msgid "Event value"
+msgstr ""
+
+#: backend/analytics.php:158
+msgid "Live search start event tracking"
+msgstr ""
+
+#: backend/analytics.php:164
+msgid "Triggers, whenever the live search starts."
+msgstr ""
+
+#: backend/analytics.php:183
+msgid "Live search end event tracking"
+msgstr ""
+
+#: backend/analytics.php:189
+msgid "Triggers, whenever the live search ends."
+msgstr ""
+
+#: backend/analytics.php:208
+msgid "Magnifier click event tracking"
+msgstr ""
+
+#: backend/analytics.php:214
+msgid "Triggers, whenever the user clicks the magnifier icon"
+msgstr ""
+
+#: backend/analytics.php:233
+msgid "Return key event tracking"
+msgstr ""
+
+#: backend/analytics.php:239
+msgid "Triggers, whenever the user hits the enter button in the search input field"
+msgstr ""
+
+#: backend/analytics.php:258
+msgid "\"Try this\" keyword clicks"
+msgstr ""
+
+#: backend/analytics.php:264
+msgid "Triggers, whenever the user clicks on any of the \"try this\" keywords"
+msgstr ""
+
+#: backend/analytics.php:283
+msgid "Facet change event tracking"
+msgstr ""
+
+#: backend/analytics.php:289
+#: backend/analytics.php:314
+msgid "Triggers, whenever the user changes any option on the front-end settings"
+msgstr ""
+
+#: backend/analytics.php:308
+msgid "Results click event tracking"
+msgstr ""
+
+#: backend/analytics.php:336
+#: backend/tabs/instance/advanced_options.php:59
+#: backend/tabs/instance/autocomplete_options.php:65
+#: backend/tabs/instance/frontend_options.php:72
+#: backend/tabs/instance/general_options.php:133
+#: backend/tabs/instance/layout_options.php:46
+#: backend/tabs/instance/multisite_options.php:39
+#: backend/tabs/instance/theme_options.php:105
+msgid "Restore defaults"
+msgstr ""
+
+#: backend/analytics.php:337
+#: backend/cache_settings.php:59
+#: backend/compatibility_settings.php:123
+#: backend/index_table.php:610
+msgid "Save options"
+msgstr ""
+
+#: backend/analytics.php:350
+msgid "Analytics options"
+msgstr ""
+
+#: backend/cache_settings.php:25
+msgid "Caching activated"
+msgstr ""
+
+#: backend/cache_settings.php:26
+msgid "Caching method"
+msgstr ""
+
+#: backend/cache_settings.php:30
+#: backend/tabs/compatibility/cssjs_loading.php:54
+msgid "File"
+msgstr ""
+
+#: backend/cache_settings.php:31
+msgid "Database"
+msgstr ""
+
+#: backend/cache_settings.php:38
+#: backend/tabs/instance/advanced/content.php:54
+#: backend/tabs/instance/advanced_options.php:19
+#: backend/tabs/instance/advanced_options.php:32
+#: backend/tabs/instance/autocomplete_options.php:27
+#: backend/tabs/instance/autocomplete_options.php:43
+#: backend/tabs/instance/autocomplete_options.php:56
+#: backend/tabs/instance/frontend/content_type.php:3
+#: backend/tabs/instance/frontend/custom_fields.php:3
+#: backend/tabs/instance/frontend/date.php:3
+#: backend/tabs/instance/frontend/generic.php:3
+#: backend/tabs/instance/frontend/post_and_cpt.php:3
+#: backend/tabs/instance/frontend/search_button.php:3
+#: backend/tabs/instance/frontend/taxonomy_terms.php:3
+#: backend/tabs/instance/general/grouping.php:6
+#: backend/tabs/instance/general/ordering.php:12
+#: backend/tabs/instance/general/relevance.php:6
+#: backend/tabs/instance/general_options.php:59
+#: backend/tabs/instance/general_options.php:78
+#: backend/tabs/instance/layout/highlight_loadmore.php:6
+#: backend/tabs/instance/layout/highlight_loadmore.php:75
+#: backend/tabs/instance/layout/highlight_loadmore.php:102
+#: backend/tabs/instance/layout/results_layout.php:6
+#: backend/tabs/instance/layout/results_layout.php:101
+#: backend/tabs/instance/layout/results_layout.php:136
+#: backend/tabs/instance/layout/results_layout.php:207
+#: backend/tabs/instance/layout/results_layout.php:229
+#: backend/tabs/instance/layout/search_box_layout.php:64
+#: backend/tabs/instance/layout_options.php:21
+#: backend/tabs/instance/layout_options.php:34
+#: backend/tabs/instance/relevance/index_table.php:6
+#: backend/tabs/instance/relevance_options.php:14
+#: backend/tabs/instance/search_options.php:18
+#: backend/tabs/instance/search_options/archive_pages.php:6
+#: backend/tabs/instance/search_options/archive_pages.php:91
+#: backend/tabs/instance/search_options/keyword_logic.php:6
+#: backend/tabs/instance/search_options/magnifier_click.php:7
+#: backend/tabs/instance/search_options/magnifier_click.php:120
+msgid "Documentation"
+msgstr ""
+
+#: backend/cache_settings.php:40
+msgid "Not recommended, unless you have many search queries per minute."
+msgstr ""
+
+#: backend/cache_settings.php:41
+msgid "This will enable search results to be cached into files in the cache directory/options database to bypass the search database query. Useful if you experience many repetitive queries."
+msgstr ""
+
+#: backend/cache_settings.php:46
+msgid "Turn this OFF if you are experiencing performance issues."
+msgstr ""
+
+#: backend/cache_settings.php:48
+msgid "Crop images for caching?"
+msgstr ""
+
+#: backend/cache_settings.php:50
+msgid "This disables the thumbnail generator, and the full sized images are used as cover. Not much difference visually, but saves a lot of CPU."
+msgstr ""
+
+#: backend/cache_settings.php:54
+msgid "Caching interval (in minutes, default 43200, aka. 30 days)"
+msgstr ""
+
+#: backend/cache_settings.php:93
+msgid "Search caching settings successfuly updated!"
+msgstr ""
+
+#: backend/cache_settings.php:98
+msgid "Caching Options"
+msgstr ""
+
+#: backend/cache_settings.php:109
+msgid "Will clear all the images and precached search phrases."
+msgstr ""
+
+#: backend/cache_settings.php:111
+msgid "Clear the cache!"
+msgstr ""
+
+#: backend/cache_settings.php:131
+msgid "Do you really want to clear the cache?"
+msgstr ""
+
+#: backend/cache_settings.php:154
+msgid "%s record(s) deleted at %s"
+msgstr ""
 
 #: backend/Classes/Options/CustomField.php:50
 #: backend/settings/class/customfields.class.php:44
@@ -67,60 +392,47 @@ msgid ">> Enter manually <<"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:220
-#: backend/settings/default_options.php:355
+#: backend/tabs/instance/general/image_options.php:61
 msgid "Featured image"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:221
-#: backend/settings/default_options.php:356
 #: backend/tabs/instance/advanced/content.php:105
 #: backend/tabs/instance/advanced/content.php:128
+#: backend/tabs/instance/general/image_options.php:65
 msgid "Post Content"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:222
-#: backend/settings/default_options.php:357
 #: backend/tabs/instance/advanced/content.php:63
 #: backend/tabs/instance/advanced/content.php:85
 #: backend/tabs/instance/advanced/content.php:106
 #: backend/tabs/instance/advanced/content.php:129
+#: backend/tabs/instance/general/image_options.php:69
 msgid "Post Excerpt"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:223
-#: backend/settings/default_options.php:358
+#: backend/tabs/instance/general/image_options.php:73
 #: backend/tabs/priorities/priority_groups.php:123
+#: build/js/dev.js:25131
+#: build/js/search-instance.js:25131
 msgid "Custom field"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:224
-#: backend/settings/default_options.php:359
+#: backend/tabs/instance/general/image_options.php:77
 msgid "Page Screenshot"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:225
-#: backend/settings/default_options.php:360
+#: backend/tabs/instance/general/image_options.php:81
 msgid "Default image"
 msgstr ""
 
 #: backend/Classes/Options/OptionDefaults.php:226
-#: backend/settings/default_options.php:361
+#: backend/tabs/instance/general/image_options.php:85
 msgid "Post format icon"
-msgstr ""
-
-#: backend/Classes/Options/OptionDefaults.php:227 backend/analytics.php:105
-#: backend/settings/class/datefilter-post.class.php:30
-#: backend/settings/class/datefilter.class.php:28
-#: backend/settings/class/dateinterval.class.php:31
-#: backend/settings/class/dateinterval.class.php:48
-#: backend/settings/default_options.php:362
-#: backend/tabs/instance/advanced/content.php:83
-#: backend/tabs/instance/advanced/content.php:127
-#: backend/tabs/instance/layout/search_box_layout.php:73
-#: backend/tabs/instance/search_options/keyword_logic.php:31
-#: backend/tabs/instance/suggest/autocomplete.php:5
-#: backend/tabs/instance/suggest/autocomplete.php:36
-msgid "Disabled"
 msgstr ""
 
 #: backend/Classes/Options/PostType.php:70
@@ -188,7 +500,6 @@ msgid "Operation:"
 msgstr ""
 
 #: backend/Classes/Options/UserSelect.php:52
-#: backend/Options/node_modules/node-wp-i18n/test/fixtures/makepot/nested-theme/include/include.php:2
 #: backend/settings/class/dateinterval.class.php:26
 #: backend/settings/class/wd_user_select.class.php:39
 msgid "Include"
@@ -258,281 +569,6 @@ msgstr ""
 msgid "Drag here the fields you want to search!"
 msgstr ""
 
-#: backend/Options/node_modules/node-wp-i18n/test/fixtures/makepot/nested-theme/subdir/index.php:2
-msgid "Index"
-msgstr ""
-
-#: backend/analytics.php:14
-msgid "Analytics settings were reset to defaults!"
-msgstr ""
-
-#: backend/analytics.php:16 backend/analytics.php:80 backend/search.php:30
-#: backend/search.php:54
-msgid "<strong>ERROR Saving:</strong> Invalid NONCE, please try again!"
-msgstr ""
-
-#: backend/analytics.php:78
-msgid "Analytics settings saved!"
-msgstr ""
-
-#: backend/analytics.php:102
-msgid "Google analytics integration method"
-msgstr ""
-
-#: backend/analytics.php:106
-msgid "Event Tracking (GTAG & GTM)"
-msgstr ""
-
-#: backend/analytics.php:112
-msgid ""
-"To understand how this works, please read the <a href=\"%s\">Analytics "
-"Integration Documentation</a>"
-msgstr ""
-
-#: backend/analytics.php:119
-msgid "Google analytics Tracking ID (ex.: G-0123456789)"
-msgstr ""
-
-#: backend/analytics.php:121
-msgid "If you are using GTM (Google Tag Manager), then this is not required."
-msgstr ""
-
-#: backend/analytics.php:133
-msgid "Search input focus event tracking"
-msgstr ""
-
-#: backend/analytics.php:136 backend/analytics.php:161
-#: backend/analytics.php:186 backend/analytics.php:211
-#: backend/analytics.php:236 backend/analytics.php:261
-#: backend/analytics.php:286 backend/analytics.php:311
-#: backend/tabs/instance/suggest/autocomplete.php:35
-msgid "Enabled"
-msgstr ""
-
-#: backend/analytics.php:139
-msgid "Triggers, whenever the user clicks on the search input field."
-msgstr ""
-
-#: backend/analytics.php:145 backend/analytics.php:170
-#: backend/analytics.php:195 backend/analytics.php:220
-#: backend/analytics.php:245 backend/analytics.php:270
-#: backend/analytics.php:295 backend/analytics.php:320
-msgid "Usable variables: %s"
-msgstr ""
-
-#: backend/analytics.php:150 backend/analytics.php:175
-#: backend/analytics.php:200 backend/analytics.php:225
-#: backend/analytics.php:250 backend/analytics.php:275
-#: backend/analytics.php:300 backend/analytics.php:325
-msgid "Event action"
-msgstr ""
-
-#: backend/analytics.php:151 backend/analytics.php:176
-#: backend/analytics.php:201 backend/analytics.php:226
-#: backend/analytics.php:251 backend/analytics.php:276
-#: backend/analytics.php:301 backend/analytics.php:326
-msgid "Event category"
-msgstr ""
-
-#: backend/analytics.php:152 backend/analytics.php:177
-#: backend/analytics.php:202 backend/analytics.php:227
-#: backend/analytics.php:252 backend/analytics.php:277
-#: backend/analytics.php:302 backend/analytics.php:327
-msgid "Event label"
-msgstr ""
-
-#: backend/analytics.php:153 backend/analytics.php:178
-#: backend/analytics.php:203 backend/analytics.php:228
-#: backend/analytics.php:253 backend/analytics.php:278
-#: backend/analytics.php:303 backend/analytics.php:328
-msgid "Event value"
-msgstr ""
-
-#: backend/analytics.php:158
-msgid "Live search start event tracking"
-msgstr ""
-
-#: backend/analytics.php:164
-msgid "Triggers, whenever the live search starts."
-msgstr ""
-
-#: backend/analytics.php:183
-msgid "Live search end event tracking"
-msgstr ""
-
-#: backend/analytics.php:189
-msgid "Triggers, whenever the live search ends."
-msgstr ""
-
-#: backend/analytics.php:208
-msgid "Magnifier click event tracking"
-msgstr ""
-
-#: backend/analytics.php:214
-msgid "Triggers, whenever the user clicks the magnifier icon"
-msgstr ""
-
-#: backend/analytics.php:233
-msgid "Return key event tracking"
-msgstr ""
-
-#: backend/analytics.php:239
-msgid "Triggers, whenever the user hits the enter button in the search input field"
-msgstr ""
-
-#: backend/analytics.php:258
-msgid "\"Try this\" keyword clicks"
-msgstr ""
-
-#: backend/analytics.php:264
-msgid "Triggers, whenever the user clicks on any of the \"try this\" keywords"
-msgstr ""
-
-#: backend/analytics.php:283
-msgid "Facet change event tracking"
-msgstr ""
-
-#: backend/analytics.php:289 backend/analytics.php:314
-msgid "Triggers, whenever the user changes any option on the front-end settings"
-msgstr ""
-
-#: backend/analytics.php:308
-msgid "Results click event tracking"
-msgstr ""
-
-#: backend/analytics.php:336 backend/tabs/instance/advanced_options.php:59
-#: backend/tabs/instance/autocomplete_options.php:65
-#: backend/tabs/instance/frontend_options.php:72
-#: backend/tabs/instance/general_options.php:133
-#: backend/tabs/instance/layout_options.php:46
-#: backend/tabs/instance/multisite_options.php:39
-#: backend/tabs/instance/theme_options.php:105
-msgid "Restore defaults"
-msgstr ""
-
-#: backend/analytics.php:337 backend/cache_settings.php:59
-#: backend/compatibility_settings.php:123 backend/index_table.php:570
-msgid "Save options"
-msgstr ""
-
-#: backend/analytics.php:350
-msgid "Analytics options"
-msgstr ""
-
-#: backend/cache_settings.php:25
-msgid "Caching activated"
-msgstr ""
-
-#: backend/cache_settings.php:26
-msgid "Caching method"
-msgstr ""
-
-#: backend/cache_settings.php:30
-#: backend/tabs/compatibility/cssjs_loading.php:54
-msgid "File"
-msgstr ""
-
-#: backend/cache_settings.php:31
-msgid "Database"
-msgstr ""
-
-#: backend/cache_settings.php:38 backend/tabs/instance/advanced/content.php:54
-#: backend/tabs/instance/advanced_options.php:19
-#: backend/tabs/instance/advanced_options.php:32
-#: backend/tabs/instance/autocomplete_options.php:27
-#: backend/tabs/instance/autocomplete_options.php:43
-#: backend/tabs/instance/autocomplete_options.php:56
-#: backend/tabs/instance/frontend/content_type.php:3
-#: backend/tabs/instance/frontend/custom_fields.php:3
-#: backend/tabs/instance/frontend/date.php:3
-#: backend/tabs/instance/frontend/generic.php:3
-#: backend/tabs/instance/frontend/post_and_cpt.php:3
-#: backend/tabs/instance/frontend/search_button.php:3
-#: backend/tabs/instance/frontend/taxonomy_terms.php:3
-#: backend/tabs/instance/general/grouping.php:6
-#: backend/tabs/instance/general/ordering.php:12
-#: backend/tabs/instance/general/relevance.php:6
-#: backend/tabs/instance/general_options.php:59
-#: backend/tabs/instance/general_options.php:78
-#: backend/tabs/instance/layout/highlight_loadmore.php:6
-#: backend/tabs/instance/layout/highlight_loadmore.php:75
-#: backend/tabs/instance/layout/highlight_loadmore.php:102
-#: backend/tabs/instance/layout/results_layout.php:6
-#: backend/tabs/instance/layout/results_layout.php:101
-#: backend/tabs/instance/layout/results_layout.php:136
-#: backend/tabs/instance/layout/results_layout.php:207
-#: backend/tabs/instance/layout/results_layout.php:229
-#: backend/tabs/instance/layout/search_box_layout.php:64
-#: backend/tabs/instance/layout_options.php:21
-#: backend/tabs/instance/layout_options.php:34
-#: backend/tabs/instance/relevance/index_table.php:6
-#: backend/tabs/instance/relevance_options.php:14
-#: backend/tabs/instance/search_options/archive_pages.php:6
-#: backend/tabs/instance/search_options/archive_pages.php:91
-#: backend/tabs/instance/search_options/keyword_logic.php:6
-#: backend/tabs/instance/search_options/magnifier_click.php:7
-#: backend/tabs/instance/search_options/magnifier_click.php:120
-#: backend/tabs/instance/search_options.php:18
-msgid "Documentation"
-msgstr ""
-
-#: backend/cache_settings.php:40
-msgid "Not recommended, unless you have many search queries per minute."
-msgstr ""
-
-#: backend/cache_settings.php:41
-msgid ""
-"This will enable search results to be cached into files in the cache "
-"directory/options database to bypass the search database query. Useful if "
-"you experience many repetitive queries."
-msgstr ""
-
-#: backend/cache_settings.php:46
-msgid "Turn this OFF if you are experiencing performance issues."
-msgstr ""
-
-#: backend/cache_settings.php:48
-msgid "Crop images for caching?"
-msgstr ""
-
-#: backend/cache_settings.php:50
-msgid ""
-"This disables the thumbnail generator, and the full sized images are used "
-"as cover. Not much difference visually, but saves a lot of CPU."
-msgstr ""
-
-#: backend/cache_settings.php:54
-msgid "Caching interval (in minutes, default 43200, aka. 30 days)"
-msgstr ""
-
-#: backend/cache_settings.php:93
-msgid "Search caching settings successfuly updated!"
-msgstr ""
-
-#: backend/cache_settings.php:98
-msgid "Caching Options"
-msgstr ""
-
-#: backend/cache_settings.php:107
-msgid "Clear Cache"
-msgstr ""
-
-#: backend/cache_settings.php:109
-msgid "Will clear all the images and precached search phrases."
-msgstr ""
-
-#: backend/cache_settings.php:111
-msgid "Clear the cache!"
-msgstr ""
-
-#: backend/cache_settings.php:131
-msgid "Do you really want to clear the cache?"
-msgstr ""
-
-#: backend/cache_settings.php:154
-msgid "%s record(s) deleted at %s"
-msgstr ""
-
 #: backend/compatibility_settings.php:26
 msgid "CSS and JS compatibility"
 msgstr ""
@@ -570,7 +606,8 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: backend/export_import.php:14 backend/export_import.php:35
+#: backend/export_import.php:14
+#: backend/export_import.php:35
 msgid "Import data is empty."
 msgstr ""
 
@@ -578,7 +615,8 @@ msgstr ""
 msgid "Import data error."
 msgstr ""
 
-#: backend/export_import.php:28 backend/export_import.php:46
+#: backend/export_import.php:28
+#: backend/export_import.php:46
 msgid "Error importing: invalid NONCE, please try again"
 msgstr ""
 
@@ -603,10 +641,7 @@ msgid "Settings Only"
 msgstr ""
 
 #: backend/export_import.php:88
-msgid ""
-"On this tab you can import complete search instances. If you prefer to "
-"import settings only, click on the Settings Only button on the top of this "
-"page."
+msgid "On this tab you can import complete search instances. If you prefer to import settings only, click on the Settings Only button on the top of this page."
 msgstr ""
 
 #: backend/export_import.php:91
@@ -617,7 +652,8 @@ msgstr ""
 msgid "Select the search instances to export"
 msgstr ""
 
-#: backend/export_import.php:93 backend/export_import.php:126
+#: backend/export_import.php:93
+#: backend/export_import.php:126
 msgid "Copy and save the text appearing in this box"
 msgstr ""
 
@@ -626,10 +662,7 @@ msgid "Import Search instances"
 msgstr ""
 
 #: backend/export_import.php:107
-msgid ""
-"Please note that the search IDs may differ from the exported instances. The "
-"imported instance names will have the \"Imported\" string appended after "
-"their names."
+msgid "Please note that the search IDs may differ from the exported instances. The imported instance names will have the \"Imported\" string appended after their names."
 msgstr ""
 
 #: backend/export_import.php:110
@@ -641,9 +674,7 @@ msgid "Settings only"
 msgstr ""
 
 #: backend/export_import.php:121
-msgid ""
-"On this page you can import settings to existing search instances. The "
-"import process will overwrite your current search options!"
+msgid "On this page you can import settings to existing search instances. The import process will overwrite your current search options!"
 msgstr ""
 
 #: backend/export_import.php:124
@@ -670,23 +701,23 @@ msgstr ""
 msgid "Are you sure you want to import settings to that search instance?"
 msgstr ""
 
-#: backend/index_table.php:35 backend/main_settings.php:43
+#: backend/index_table.php:36
+#: backend/main_settings.php:43
 msgid "One or more plugin tables are appear to be missing from the database."
 msgstr ""
 
-#: backend/index_table.php:36 backend/main_settings.php:44
-msgid ""
-"Please check <a href=\"%s\" target=\"_blank\">this article</a> to resolve "
-"the issue."
+#: backend/index_table.php:37
+#: backend/main_settings.php:44
+msgid "Please check <a href=\"%s\" target=\"_blank\">this article</a> to resolve the issue."
 msgstr ""
 
-#: backend/index_table.php:40 backend/main_settings.php:48
-msgid ""
-"Please be <strong>very careful</strong>, before making any changes to your "
-"database. Make sure to have a full database back-up, just in case!"
+#: backend/index_table.php:41
+#: backend/main_settings.php:48
+msgid "Please be <strong>very careful</strong>, before making any changes to your database. Make sure to have a full database back-up, just in case!"
 msgstr ""
 
-#: backend/index_table.php:44 backend/main_settings.php:52
+#: backend/index_table.php:45
+#: backend/main_settings.php:52
 msgid "Copy this SQL code in your database editor tool to create them manually"
 msgstr ""
 
@@ -711,21 +742,15 @@ msgid "Media Service - External File indexing feature (optional)"
 msgstr ""
 
 #: backend/index_table.php:109
-msgid ""
-"The <strong>Media Service</strong> is an external feature to handle very "
-"accurate file content indexing."
+msgid "The <strong>Media Service</strong> is an external feature to handle very accurate file content indexing."
 msgstr ""
 
 #: backend/index_table.php:110
-msgid ""
-"For more details, check the <a href=\"%s\" target=\"_blank\">addon "
-"page</a>.<br>There is a <strong>FREE</strong> version available as well."
+msgid "For more details, check the <a href=\"%s\" target=\"_blank\">addon page</a>.<br>There is a <strong>FREE</strong> version available as well."
 msgstr ""
 
 #: backend/index_table.php:112
-msgid ""
-"The documentation on how to activate, can be found <a href=\"%s\" "
-"target=\"_blank\">here</a>."
+msgid "The documentation on how to activate, can be found <a href=\"%s\" target=\"_blank\">here</a>."
 msgstr ""
 
 #: backend/index_table.php:120
@@ -749,22 +774,15 @@ msgid "<strong>Comma separated list</strong> of allowed mime types."
 msgstr ""
 
 #: backend/index_table.php:136
-msgid ""
-"List of <a href=\"%s\" target=\"_blank\">default allowed mime types</a> in "
-"WordPress."
+msgid "List of <a href=\"%s\" target=\"_blank\">default allowed mime types</a> in WordPress."
 msgstr ""
 
 #: backend/index_table.php:142
-msgid ""
-"Please note, that reading useful content from media files via PHP is a "
-"<strong>very difficult task</strong>."
+msgid "Please note, that reading useful content from media files via PHP is a <strong>very difficult task</strong>."
 msgstr ""
 
 #: backend/index_table.php:143
-msgid ""
-"The plugin uses external libraries as well as internal methods to get the "
-"best results, however it is still possible that some information might not "
-"be extracted properly."
+msgid "The plugin uses external libraries as well as internal methods to get the best results, however it is still possible that some information might not be extracted properly."
 msgstr ""
 
 #: backend/index_table.php:148
@@ -800,9 +818,7 @@ msgid "Index Office PowerPoint document contents?"
 msgstr ""
 
 #: backend/index_table.php:198
-msgid ""
-"<p>These options are hidden unless the <strong>attachment</strong> custom "
-"post type is selected above.</p>"
+msgid "<p>These options are hidden unless the <strong>attachment</strong> custom post type is selected above.</p>"
 msgstr ""
 
 #: backend/index_table.php:202
@@ -829,10 +845,9 @@ msgstr ""
 msgid "Post statuses to index"
 msgstr ""
 
-#: backend/index_table.php:237 backend/tabs/instance/general/sources.php:96
-msgid ""
-"Comma separated list. WP Defaults: publish, future, draft, pending, "
-"private, trash, auto-draft"
+#: backend/index_table.php:237
+#: backend/tabs/instance/general/sources.php:96
+msgid "Comma separated list. WP Defaults: publish, future, draft, pending, private, trash, auto-draft"
 msgstr ""
 
 #: backend/index_table.php:241
@@ -851,496 +866,581 @@ msgstr ""
 msgid "Blogs to index posts from"
 msgstr ""
 
-#: backend/index_table.php:261
-msgid "Post limit per iteration"
+#: backend/index_table.php:262
+msgid "Enable automated singularization/pluralization?"
 msgstr ""
 
-#: backend/index_table.php:264
-msgid ""
-"Posts to index per ajax call. Reduce this number if the process fails. "
-"Default: 25"
+#: backend/index_table.php:268
+msgid "Main language"
 msgstr ""
 
-#: backend/index_table.php:267
-msgid "Enable stop-words?"
-msgstr ""
-
-#: backend/index_table.php:270
-msgid ""
-"Words from the list below (common words, stop words) will be excluded if "
-"enabled."
-msgstr ""
-
-#: backend/index_table.php:273
-msgid "Stop words list"
-msgstr ""
-
-#: backend/index_table.php:276
-msgid "<strong>Comma</strong> separated list of stop words."
-msgstr ""
-
-#: backend/index_table.php:279
-msgid "Min. word length"
-msgstr ""
-
-#: backend/index_table.php:282
-msgid "Words below this length will be ignored. Default: 2"
-msgstr ""
-
-#: backend/index_table.php:285
-msgid "Extract IFRAME contents?"
+#: backend/index_table.php:284
+msgid "Automatically singularize/pluralize all keywords for better matches via an Inflections library. Warning: this will increase the index size GREATLY."
 msgstr ""
 
 #: backend/index_table.php:288
-msgid ""
-"Will try parsing IFRAME sources and extracting them. This <strong>may not "
-"work</strong> in some cases."
+msgid "The post language is automatically detected when using Polylang or WPML."
 msgstr ""
 
-#: backend/index_table.php:291
+#: backend/index_table.php:293
+msgid "Post limit per iteration"
+msgstr ""
+
+#: backend/index_table.php:296
+msgid "Posts to index per ajax call. Reduce this number if the process fails. Default: 25"
+msgstr ""
+
+#: backend/index_table.php:299
+msgid "Enable stop-words?"
+msgstr ""
+
+#: backend/index_table.php:302
+msgid "Words from the list below (common words, stop words) will be excluded if enabled."
+msgstr ""
+
+#: backend/index_table.php:305
+msgid "Stop words list"
+msgstr ""
+
+#: backend/index_table.php:308
+msgid "<strong>Comma</strong> separated list of stop words."
+msgstr ""
+
+#: backend/index_table.php:311
+msgid "Min. word length"
+msgstr ""
+
+#: backend/index_table.php:314
+msgid "Words below this length will be ignored. Default: 2"
+msgstr ""
+
+#: backend/index_table.php:317
+msgid "Extract IFRAME contents?"
+msgstr ""
+
+#: backend/index_table.php:320
+msgid "Will try parsing IFRAME sources and extracting them. This <strong>may not work</strong> in some cases."
+msgstr ""
+
+#: backend/index_table.php:323
 msgid "Execute Gutenberg Editor Blocks?"
 msgstr ""
 
-#: backend/index_table.php:294
+#: backend/index_table.php:326
 msgid "Will execute and parse contents of Gutenberg Editor Blocks."
 msgstr ""
 
-#: backend/index_table.php:297
+#: backend/index_table.php:329
 msgid "Execute shortcodes?"
 msgstr ""
 
-#: backend/index_table.php:300
-msgid ""
-"Will execute shortcodes in content as well. Great if you have lots of "
-"content generated by shortcodes."
+#: backend/index_table.php:332
+msgid "Will execute shortcodes in content as well. Great if you have lots of content generated by shortcodes."
 msgstr ""
 
-#: backend/index_table.php:303
+#: backend/index_table.php:335
 msgid "Remove these shortcodes"
 msgstr ""
 
-#: backend/index_table.php:307
-msgid ""
-"<strong>Comma</strong> separated list of shortcodes to remove. Use this to "
-"exclude shortcodes, which does not reflect your content appropriately."
+#: backend/index_table.php:339
+msgid "<strong>Comma</strong> separated list of shortcodes to remove. Use this to exclude shortcodes, which does not reflect your content appropriately."
 msgstr ""
 
-#: backend/index_table.php:313
+#: backend/index_table.php:345
 msgid "Pool sizes"
 msgstr ""
 
-#: backend/index_table.php:315
-msgid ""
-"The pool size greatly affects the search performance in bigger databases "
-"(50k+ keywords). While high pool values may give more accurate results, "
-"lower values cause much better performance."
-msgstr ""
-
-#: backend/index_table.php:318
-msgid "Let the plugin determine the pool size values?"
-msgstr ""
-
-#: backend/index_table.php:322
-msgid ""
-"When enabled (default), the plugin will adjust these values depending on "
-"the index table size and other factors."
-msgstr ""
-
-#: backend/index_table.php:326
-msgid "Pool size for keywords of one character long (recommended:"
-msgstr ""
-
-#: backend/index_table.php:330 backend/index_table.php:338
-#: backend/index_table.php:346 backend/index_table.php:354
-msgid ""
-"The maximum number in a sub-set of results pool for a search phrase (or "
-"part of the phrase) that is one character long."
-msgstr ""
-
-#: backend/index_table.php:334
-msgid "Pool size for keywords of two characters long (recommended:"
-msgstr ""
-
-#: backend/index_table.php:342
-msgid "Pool size for keywords of three characters long (recommended:"
+#: backend/index_table.php:347
+msgid "The pool size greatly affects the search performance in bigger databases (50k+ keywords). While high pool values may give more accurate results, lower values cause much better performance."
 msgstr ""
 
 #: backend/index_table.php:350
+msgid "Let the plugin determine the pool size values?"
+msgstr ""
+
+#: backend/index_table.php:354
+msgid "When enabled (default), the plugin will adjust these values depending on the index table size and other factors."
+msgstr ""
+
+#: backend/index_table.php:358
+msgid "Pool size for keywords of one character long (recommended:"
+msgstr ""
+
+#: backend/index_table.php:362
+#: backend/index_table.php:370
+#: backend/index_table.php:378
+#: backend/index_table.php:386
+msgid "The maximum number in a sub-set of results pool for a search phrase (or part of the phrase) that is one character long."
+msgstr ""
+
+#: backend/index_table.php:366
+msgid "Pool size for keywords of two characters long (recommended:"
+msgstr ""
+
+#: backend/index_table.php:374
+msgid "Pool size for keywords of three characters long (recommended:"
+msgstr ""
+
+#: backend/index_table.php:382
 msgid "Pool size for keywords of four and more characters long (recommended:"
 msgstr ""
 
-#: backend/index_table.php:361
+#: backend/index_table.php:393
 msgid "Index new posts upon creation?"
 msgstr ""
 
-#: backend/index_table.php:365
-msgid ""
-"When turned OFF, the posts will still be indexed only upon updating, or "
-"when the cron-job runs (if enabled) or when the index table is extended "
-"manually."
+#: backend/index_table.php:397
+msgid "When turned OFF, the posts will still be indexed only upon updating, or when the cron-job runs (if enabled) or when the index table is extended manually."
 msgstr ""
 
-#: backend/index_table.php:369
+#: backend/index_table.php:402
 msgid "Refresh the index, whenever post meta (custom fields) are added or updated?"
 msgstr ""
 
-#: backend/index_table.php:373
-msgid ""
-"(Default: OFF) May help when posts are imported and if you notice missing "
-"results for metadata keywords."
+#: backend/index_table.php:406
+msgid "CAUTION:"
 msgstr ""
 
-#: backend/index_table.php:377
+#: backend/index_table.php:407
+msgid "Under normal cases this option should not be used and may cause major slowdown when saving posts."
+msgstr ""
+
+#: backend/index_table.php:411
+msgid "(Default: OFF) May help when posts are imported and if you notice missing results for metadata keywords."
+msgstr ""
+
+#: backend/index_table.php:415
 msgid "Use wp_cron() to extend the index table automatically?"
 msgstr ""
 
-#: backend/index_table.php:381
+#: backend/index_table.php:419
 msgid "Will register a cron job with wp_cron() and run it periodically."
 msgstr ""
 
-#: backend/index_table.php:388
+#: backend/index_table.php:426
 msgid "Every 2 minutes"
 msgstr ""
 
-#: backend/index_table.php:389
+#: backend/index_table.php:427
 msgid "Every 3 minutes"
 msgstr ""
 
-#: backend/index_table.php:390
+#: backend/index_table.php:428
 msgid "Every 5 minutes"
 msgstr ""
 
-#: backend/index_table.php:391
+#: backend/index_table.php:429
 msgid "Every 15 minutes"
 msgstr ""
 
-#: backend/index_table.php:392
+#: backend/index_table.php:430
 msgid "Every 30 minutes"
 msgstr ""
 
-#: backend/index_table.php:393
+#: backend/index_table.php:431
 msgid "Hourly"
 msgstr ""
 
-#: backend/index_table.php:394
+#: backend/index_table.php:432
 msgid "Twice Daily"
 msgstr ""
 
-#: backend/index_table.php:395
+#: backend/index_table.php:433
 msgid "Daily"
 msgstr ""
 
-#: backend/index_table.php:401
+#: backend/index_table.php:439
 msgid "The periodicity of execution. wp_cron() only accepts these values."
 msgstr ""
 
-#: backend/index_table.php:406
+#: backend/index_table.php:444
 msgid "Last execution info"
 msgstr ""
 
-#: backend/index_table.php:409
+#: backend/index_table.php:447
 msgid "Last exeuction time:"
 msgstr ""
 
-#: backend/index_table.php:412
+#: backend/index_table.php:450
 msgid "Current system time:"
 msgstr ""
 
-#: backend/index_table.php:414
+#: backend/index_table.php:452
 msgid "Posts indexed:"
 msgstr ""
 
-#: backend/index_table.php:416
+#: backend/index_table.php:454
 msgid "Keywords found:"
 msgstr ""
 
-#: backend/index_table.php:485
-msgid ""
-"The options have changed, don't forget to re-create the index table with "
-"the <b>Create new index</b> button!"
+#: backend/index_table.php:525
+msgid "The options have changed, don't forget to re-create the index table with the <b>Create new index</b> button!"
 msgstr ""
 
-#: backend/index_table.php:498
+#: backend/index_table.php:538
 msgid "Index Table Operations"
 msgstr ""
 
-#: backend/index_table.php:502
+#: backend/index_table.php:542
 msgid "Do you want to generate a new index table?"
 msgstr ""
 
-#: backend/index_table.php:503
+#: backend/index_table.php:543
 msgid "Create new index"
 msgstr ""
 
-#: backend/index_table.php:506
+#: backend/index_table.php:546
 msgid "Do you want to extend the index table?"
 msgstr ""
 
-#: backend/index_table.php:507
+#: backend/index_table.php:547
 msgid "Continue existing index"
 msgstr ""
 
-#: backend/index_table.php:509
+#: backend/index_table.php:549
 msgid "Do you really want to empty the index table?"
 msgstr ""
 
-#: backend/index_table.php:510
+#: backend/index_table.php:550
 msgid "Delete the index"
 msgstr ""
 
-#: backend/index_table.php:513
+#: backend/index_table.php:553
 msgid "Initializing, please wait. This might take a while."
 msgstr ""
 
-#: backend/index_table.php:515
+#: backend/index_table.php:555
 msgid "Stop"
 msgstr ""
 
-#: backend/index_table.php:517
+#: backend/index_table.php:557
 msgid "100% - Index table successfully generated!"
 msgstr ""
 
-#: backend/index_table.php:518
+#: backend/index_table.php:558
 msgid "Something went wrong :("
 msgstr ""
 
-#: backend/index_table.php:522
-msgid ""
-"To read more about the index table, please read the <a "
-"href=\"%s\">documentation chapter about Index table</a> usage."
+#: backend/index_table.php:562
+msgid "To read more about the index table, please read the <a href=\"%s\">documentation chapter about Index table</a> usage."
 msgstr ""
 
-#: backend/index_table.php:527 backend/index_table.php:537
+#: backend/index_table.php:567
+#: backend/index_table.php:577
 msgid "Total keywords:"
 msgstr ""
 
-#: backend/index_table.php:533
+#: backend/index_table.php:573
 msgid "<b>Stats</b> (reloads periodically)"
 msgstr ""
 
-#: backend/index_table.php:534
+#: backend/index_table.php:574
 msgid "Items Indexed:"
 msgstr ""
 
-#: backend/index_table.php:535
+#: backend/index_table.php:575
 msgid "Items not indexed:"
 msgstr ""
 
-#: backend/index_table.php:540
+#: backend/index_table.php:580
 msgid "Loading stats"
 msgstr ""
 
-#: backend/index_table.php:551
+#: backend/index_table.php:591
 msgid "Index Table options"
 msgstr ""
 
-#: backend/index_table.php:555
+#: backend/index_table.php:595
 msgid "Index table options successfuly updated!"
 msgstr ""
 
-#: backend/index_table.php:558 backend/tabs/instance/frontend/general.php:3
+#: backend/index_table.php:598
+#: backend/tabs/instance/frontend/general.php:3
 #: backend/tabs/instance/frontend_options.php:2
 msgid "General"
 msgstr ""
 
-#: backend/index_table.php:559 backend/tabs/instance/frontend_options.php:12
+#: backend/index_table.php:599
+#: backend/tabs/instance/frontend_options.php:12
 msgid "Advanced"
 msgstr ""
 
-#: backend/index_table.php:560 backend/tabs/index_table/synonyms.php:43
+#: backend/index_table.php:600
+#: backend/tabs/index_table/synonyms.php:43
 msgid "Synonyms"
 msgstr ""
 
-#: backend/index_table.php:561
+#: backend/index_table.php:601
 msgid "Indexing & Cron"
 msgstr ""
 
-#: backend/index_table.php:562
+#: backend/index_table.php:602
 msgid "Performance & Accuracy"
 msgstr ""
 
-#: backend/index_table.php:585
-msgid ""
-"The index table had been created, so don't forget to enable it on the "
-"search instances, where you need it."
+#: backend/index_table.php:625
+msgid "The index table had been created, so don't forget to enable it on the search instances, where you need it."
 msgstr ""
 
-#: backend/index_table.php:587
-msgid ""
-"If you don't know how to do that, these documentations will help (links "
-"open in new tab):"
+#: backend/index_table.php:627
+msgid "If you don't know how to do that, these documentations will help (links open in new tab):"
 msgstr ""
 
-#: backend/index_table.php:589 backend/index_table.php:594
+#: backend/index_table.php:629
+#: backend/index_table.php:634
 msgid "Enabling for"
 msgstr ""
 
-#: backend/index_table.php:591
+#: backend/index_table.php:631
 msgid "Custom Post Types"
 msgstr ""
 
-#: backend/index_table.php:596
+#: backend/index_table.php:636
 #: backend/tabs/instance/frontend/content_type.php:29
 msgid "Attachments"
 msgstr ""
 
-#: backend/index_table.php:603
+#: backend/index_table.php:643
 msgid "It looks like you are planning on indexing media file contents."
 msgstr ""
 
-#: backend/index_table.php:604
-msgid ""
-"There is a <strong>Media Service</strong> feature to handle more accurate "
-"file indexing, and there is a <strong>FREE</strong> version available as "
-"well! (no credit card required!)"
-msgstr ""
-
-#: backend/index_table.php:605
-msgid "Click"
-msgstr ""
-
-#: backend/index_table.php:606
-msgid "this link"
-msgstr ""
-
-#: backend/index_table.php:606
-msgid "or the blue button below to find out more."
-msgstr ""
-
-#: backend/index_table.php:617
-msgid "Success:"
-msgstr ""
-
-#: backend/index_table.php:618
-msgid "items were imported!"
-msgstr ""
-
-#: backend/index_table.php:619
-msgid "Something went wrong, please try again later."
-msgstr ""
-
-#: backend/index_table.php:620
-msgid "There are no synonyms in the database to export."
-msgstr ""
-
-#: backend/index_table.php:621
-msgid ""
-"The file is empty or invalid. Please make sure to upload and choose the "
-"correct one."
-msgstr ""
-
-#: backend/index_table.php:622
-msgid "Nothing was imported. The items in this file are already in the database."
-msgstr ""
-
-#: backend/index_table.php:623
-msgid "Something went wrong, please check your connection, and try again."
-msgstr ""
-
-#: backend/index_table.php:624
-msgid ""
-"This keyword already exists in the database! (use the search above if you "
-"look to edit it)"
-msgstr ""
-
-#: backend/index_table.php:625
-msgid "The keyword was not deleted, please try refreshing this page!"
-msgstr ""
-
-#: backend/index_table.php:626
-msgid "The keyword field is empty, please enter a keyword!"
-msgstr ""
-
-#: backend/index_table.php:627
-msgid "The synonyms field is missing, please enter some synonyms!"
-msgstr ""
-
-#: backend/index_table.php:628
-msgid "Are you sure you want to delete this keyword?"
-msgstr ""
-
-#: backend/index_table.php:629
-msgid "Are you sure you want to delete all of the synonyms?"
-msgstr ""
-
-#: backend/index_table.php:630
-msgid "Export Synonyms"
-msgstr ""
-
-#: backend/index_table.php:631
-msgid "Import Synonyms"
-msgstr ""
-
-#: backend/index_table.php:632
-msgid "Close"
-msgstr ""
-
-#: backend/index_table.php:642
-msgid "Okay!"
-msgstr ""
-
-#: backend/index_table.php:643
-msgid "Yes, take me there!"
-msgstr ""
-
 #: backend/index_table.php:644
-msgid "Maybe later"
+msgid "There is a <strong>Media Service</strong> feature to handle more accurate file indexing, and there is a <strong>FREE</strong> version available as well! (no credit card required!)"
 msgstr ""
 
 #: backend/index_table.php:645
-msgid "Congratulations, but wait!"
+msgid "Click"
 msgstr ""
 
 #: backend/index_table.php:646
+msgid "this link"
+msgstr ""
+
+#: backend/index_table.php:646
+msgid "or the blue button below to find out more."
+msgstr ""
+
+#: backend/index_table.php:657
+msgid "Success:"
+msgstr ""
+
+#: backend/index_table.php:658
+msgid "items were imported!"
+msgstr ""
+
+#: backend/index_table.php:659
+msgid "Something went wrong, please try again later."
+msgstr ""
+
+#: backend/index_table.php:660
+msgid "There are no synonyms in the database to export."
+msgstr ""
+
+#: backend/index_table.php:661
+msgid "The file is empty or invalid. Please make sure to upload and choose the correct one."
+msgstr ""
+
+#: backend/index_table.php:662
+msgid "Nothing was imported. The items in this file are already in the database."
+msgstr ""
+
+#: backend/index_table.php:663
+msgid "Something went wrong, please check your connection, and try again."
+msgstr ""
+
+#: backend/index_table.php:664
+msgid "This keyword already exists in the database! (use the search above if you look to edit it)"
+msgstr ""
+
+#: backend/index_table.php:665
+msgid "The keyword was not deleted, please try refreshing this page!"
+msgstr ""
+
+#: backend/index_table.php:666
+msgid "The keyword field is empty, please enter a keyword!"
+msgstr ""
+
+#: backend/index_table.php:667
+msgid "The synonyms field is missing, please enter some synonyms!"
+msgstr ""
+
+#: backend/index_table.php:668
+msgid "Are you sure you want to delete this keyword?"
+msgstr ""
+
+#: backend/index_table.php:669
+msgid "Are you sure you want to delete all of the synonyms?"
+msgstr ""
+
+#: backend/index_table.php:670
+msgid "Export Synonyms"
+msgstr ""
+
+#: backend/index_table.php:671
+msgid "Import Synonyms"
+msgstr ""
+
+#: backend/index_table.php:672
+msgid "Close"
+msgstr ""
+
+#: backend/index_table.php:682
+msgid "Okay!"
+msgstr ""
+
+#: backend/index_table.php:683
+msgid "Yes, take me there!"
+msgstr ""
+
+#: backend/index_table.php:684
+msgid "Maybe later"
+msgstr ""
+
+#: backend/index_table.php:685
+msgid "Congratulations, but wait!"
+msgstr ""
+
+#: backend/index_table.php:686
 msgid "Did you know?"
 msgstr ""
 
-#: backend/index_table.php:647
+#: backend/index_table.php:687
 msgid "Progress:"
 msgstr ""
 
-#: backend/index_table.php:648
+#: backend/index_table.php:688
 msgid "Keywords found so far:"
 msgstr ""
 
-#: backend/index_table.php:649
+#: backend/index_table.php:689
 msgid "Processing blog no."
 msgstr ""
 
-#: backend/index_table.php:650
+#: backend/index_table.php:690
 msgid "Success. <strong>%s</strong> new keywords were added to the database."
 msgstr ""
 
-#: backend/index_table.php:651
+#: backend/index_table.php:691
 msgid "Success. The index table was emptied."
 msgstr ""
 
-#: backend/index_table.php:652
+#: backend/index_table.php:692
 msgid "Something went wrong. Here is the error message returned:"
 msgstr ""
 
-#: backend/index_table.php:653
-msgid ""
-"Timeout error. Try lowering the <strong>Post limit per iteration</strong> "
-"option below."
+#: backend/index_table.php:693
+msgid "Timeout error. Try lowering the <strong>Post limit per iteration</strong> option below."
 msgstr ""
 
-#: backend/index_table.php:654
+#: backend/index_table.php:694
 msgid "Status:"
 msgstr ""
 
-#: backend/index_table.php:655
+#: backend/index_table.php:695
 msgid "Code:"
 msgstr ""
 
-#: backend/index_table.php:656
+#: backend/index_table.php:696
 msgid "Initializing, please wait."
 msgstr ""
 
+#: backend/maintenance.php:39
+msgid "Index Table - Optimize and Defragment"
+msgstr ""
+
+#: backend/maintenance.php:41
+msgid "This option will trigger a table defragmentation and optimization command. Usually it takes 1-2 minutes, and may slow down your site a bit for that time."
+msgstr ""
+
+#: backend/maintenance.php:45
+#: backend/maintenance.php:48
+msgid "Optimize and Defragment the index table"
+msgstr ""
+
+#: backend/maintenance.php:56
+msgid "Maintencance -  Reset"
+msgstr ""
+
+#: backend/maintenance.php:58
+msgid "This option will reset all the plugin options to the defaults. Use this option if you want to keep using the plugin, but you need to reset the default options."
+msgstr ""
+
+#: backend/maintenance.php:60
+msgid "All plugin options <strong>will</strong> reset to defaults (caching, compatibility, index table and statistics options)"
+msgstr ""
+
+#: backend/maintenance.php:61
+msgid "The search instance options <strong>will not</strong> be changed"
+msgstr ""
+
+#: backend/maintenance.php:62
+msgid "The database tables, contents and the files <strong>will not</strong> be deleted either."
+msgstr ""
+
+#: backend/maintenance.php:67
+#: backend/maintenance.php:70
+msgid "Reset all options to defaults"
+msgstr ""
+
+#: backend/maintenance.php:78
+msgid "Maintencance -  Wipe & Deactivate"
+msgstr ""
+
+#: backend/maintenance.php:79
+msgid "This option will wipe everything related to Ajax Search Pro, as if it was never installed. Use this if you don't want to use the plugin anymore, or if you want to perform a clean installation."
+msgstr ""
+
+#: backend/maintenance.php:81
+msgid "All plugin options <strong>will be deleted</strong>"
+msgstr ""
+
+#: backend/maintenance.php:82
+msgid "The search instances <strong>will be deleted</strong>"
+msgstr ""
+
+#: backend/maintenance.php:83
+msgid "The database tables and the files <strong>will be deleted</strong>"
+msgstr ""
+
+#: backend/maintenance.php:84
+msgid "The plugin <strong>will deactivate</strong> and redirect to the plugin manager screen after, where you can delete it or re-install it again."
+msgstr ""
+
+#: backend/maintenance.php:89
+#: backend/maintenance.php:92
+msgid "Wipe all plugin data & deactivate Ajax Search Pro"
+msgstr ""
+
+#: backend/maintenance.php:115
+msgid "Are you sure you want to reset Ajax Search Pro to it's default state? All search instances will be deleted!"
+msgstr ""
+
+#: backend/maintenance.php:116
+msgid "Are you sure you want to completely remove Ajax Search Pro? (including instances, database content etc..)"
+msgstr ""
+
+#: backend/maintenance.php:117
+msgid "<strong>SUCCESS! </strong>Refreshing this page, please wait.."
+msgstr ""
+
+#: backend/maintenance.php:118
+msgid "SUCCESS:"
+msgstr ""
+
+#: backend/maintenance.php:119
+msgid "FAILURE:"
+msgstr ""
+
+#: backend/maintenance.php:120
+msgid "Something went wrong. Response returned:"
+msgstr ""
+
+#: backend/maintenance.php:121
+msgid "Timeout error. Please try again!"
+msgstr ""
+
 #: backend/main_settings.php:33
-msgid ""
-"Warning: Please deactivate the Ajax Search Lite to assure every PRO feature "
-"works properly."
+msgid "Warning: Please deactivate the Ajax Search Lite to assure every PRO feature works properly."
 msgstr ""
 
 #: backend/main_settings.php:63
@@ -1359,7 +1459,8 @@ msgstr ""
 msgid "Import from Ajax Search Lite"
 msgstr ""
 
-#: backend/main_settings.php:78 backend/main_settings.php:98
+#: backend/main_settings.php:78
+#: backend/main_settings.php:98
 msgid "Failure. Nonce invalid, please reload the page and try again."
 msgstr ""
 
@@ -1403,7 +1504,8 @@ msgstr ""
 msgid "Replace the default theme search with:"
 msgstr ""
 
-#: backend/main_settings.php:170 backend/main_settings.php:181
+#: backend/main_settings.php:170
+#: backend/main_settings.php:181
 #: backend/tabs/instance/theme/magn_load.php:107
 msgid "None"
 msgstr ""
@@ -1413,10 +1515,7 @@ msgid "and the <strong>WooCommerce</strong> search with:"
 msgstr ""
 
 #: backend/main_settings.php:202
-msgid ""
-"This might not work with all themes. If the default theme search bar is "
-"still visible after selection, then the only way is to replace the search "
-"within the theme code."
+msgid "This might not work with all themes. If the default theme search bar is still visible after selection, then the only way is to replace the search within the theme code."
 msgstr ""
 
 #: backend/main_settings.php:204
@@ -1451,117 +1550,6 @@ msgstr ""
 msgid "Do you want to duplicate this form?"
 msgstr ""
 
-#: backend/maintenance.php:39
-msgid "Index Table - Optimize and Defragment"
-msgstr ""
-
-#: backend/maintenance.php:41
-msgid ""
-"This option will trigger a table defragmentation and optimization command. "
-"Usually it takes 1-2 minutes, and may slow down your site a bit for that "
-"time."
-msgstr ""
-
-#: backend/maintenance.php:45 backend/maintenance.php:48
-msgid "Optimize and Defragment the index table"
-msgstr ""
-
-#: backend/maintenance.php:56
-msgid "Maintencance -  Reset"
-msgstr ""
-
-#: backend/maintenance.php:58
-msgid ""
-"This option will reset all the plugin options to the defaults. Use this "
-"option if you want to keep using the plugin, but you need to reset the "
-"default options."
-msgstr ""
-
-#: backend/maintenance.php:60
-msgid ""
-"All plugin options <strong>will</strong> reset to defaults (caching, "
-"compatibility, index table and statistics options)"
-msgstr ""
-
-#: backend/maintenance.php:61
-msgid "The search instance options <strong>will not</strong> be changed"
-msgstr ""
-
-#: backend/maintenance.php:62
-msgid ""
-"The database tables, contents and the files <strong>will not</strong> be "
-"deleted either."
-msgstr ""
-
-#: backend/maintenance.php:67 backend/maintenance.php:70
-msgid "Reset all options to defaults"
-msgstr ""
-
-#: backend/maintenance.php:78
-msgid "Maintencance -  Wipe & Deactivate"
-msgstr ""
-
-#: backend/maintenance.php:79
-msgid ""
-"This option will wipe everything related to Ajax Search Pro, as if it was "
-"never installed. Use this if you don't want to use the plugin anymore, or "
-"if you want to perform a clean installation."
-msgstr ""
-
-#: backend/maintenance.php:81
-msgid "All plugin options <strong>will be deleted</strong>"
-msgstr ""
-
-#: backend/maintenance.php:82
-msgid "The search instances <strong>will be deleted</strong>"
-msgstr ""
-
-#: backend/maintenance.php:83
-msgid "The database tables and the files <strong>will be deleted</strong>"
-msgstr ""
-
-#: backend/maintenance.php:84
-msgid ""
-"The plugin <strong>will deactivate</strong> and redirect to the plugin "
-"manager screen after, where you can delete it or re-install it again."
-msgstr ""
-
-#: backend/maintenance.php:89 backend/maintenance.php:92
-msgid "Wipe all plugin data & deactivate Ajax Search Pro"
-msgstr ""
-
-#: backend/maintenance.php:115
-msgid ""
-"Are you sure you want to reset Ajax Search Pro to it's default state? All "
-"search instances will be deleted!"
-msgstr ""
-
-#: backend/maintenance.php:116
-msgid ""
-"Are you sure you want to completely remove Ajax Search Pro? (including "
-"instances, database content etc..)"
-msgstr ""
-
-#: backend/maintenance.php:117
-msgid "<strong>SUCCESS! </strong>Refreshing this page, please wait.."
-msgstr ""
-
-#: backend/maintenance.php:118
-msgid "SUCCESS:"
-msgstr ""
-
-#: backend/maintenance.php:119
-msgid "FAILURE:"
-msgstr ""
-
-#: backend/maintenance.php:120
-msgid "Something went wrong. Response returned:"
-msgstr ""
-
-#: backend/maintenance.php:121
-msgid "Timeout error. Please try again!"
-msgstr ""
-
 #: backend/metaboxes/default.php:49
 msgid "Ajax Search Pro settings"
 msgstr ""
@@ -1587,15 +1575,11 @@ msgid "Enter keywords here, separated by space"
 msgstr ""
 
 #: backend/metaboxes/default.php:209
-msgid ""
-"This only works with the <a href=\"%s\" target=\"_blank\">index table "
-"engine!</a>"
+msgid "This only works with the <a href=\"%s\" target=\"_blank\">index table engine!</a>"
 msgstr ""
 
 #: backend/metaboxes/default.php:211
-msgid ""
-"Negative keywords are excluded from indexing, within all fields of this "
-"post."
+msgid "Negative keywords are excluded from indexing, within all fields of this post."
 msgstr ""
 
 #: backend/metaboxes/default.php:217
@@ -1611,9 +1595,7 @@ msgid "All search instances"
 msgstr ""
 
 #: backend/metaboxes/default.php:229
-msgid ""
-"These are the tags displaying under the search bar as suggestions if "
-"enabled."
+msgid "These are the tags displaying under the search bar as suggestions if enabled."
 msgstr ""
 
 #: backend/performance.php:29
@@ -1665,9 +1647,7 @@ msgid "Performance quick FAQ"
 msgstr ""
 
 #: backend/performance.php:97
-msgid ""
-"How come the performance tracker shows low runtime, yet the search results "
-"appear slower?"
+msgid "How come the performance tracker shows low runtime, yet the search results appear slower?"
 msgstr ""
 
 #: backend/performance.php:99
@@ -1676,12 +1656,9 @@ msgstr ""
 
 #: backend/performance.php:100
 msgid ""
-"Before that WordPress initializes, loads all of the plugins, executes all "
-"the tasks needed and\n"
-"                        then executes the search function. Depending on the "
-"number of plugins, server speed, this can take\n"
-"                        some time. In this case not the search is slow, but "
-"actually the WordPress initialization."
+"Before that WordPress initializes, loads all of the plugins, executes all the tasks needed and\n"
+"                        then executes the search function. Depending on the number of plugins, server speed, this can take\n"
+"                        some time. In this case not the search is slow, but actually the WordPress initialization."
 msgstr ""
 
 #: backend/performance.php:104
@@ -1690,32 +1667,24 @@ msgstr ""
 
 #: backend/performance.php:106
 msgid ""
-"Using less plugins is usually the best solution. Lots of plugins will "
-"decrease the WordPress\n"
-"                        performance - thus increasing the response time of "
-"ajax requests."
+"Using less plugins is usually the best solution. Lots of plugins will decrease the WordPress\n"
+"                        performance - thus increasing the response time of ajax requests."
 msgstr ""
 
 #: backend/performance.php:108
 msgid ""
-"Running a <a href=\"%s\">performance profiler plugin</a> might give you an "
-"insight on which plugins take the most\n"
-"                        resources during loading - but it might be "
-"different for ajax requests."
+"Running a <a href=\"%s\">performance profiler plugin</a> might give you an insight on which plugins take the most\n"
+"                        resources during loading - but it might be different for ajax requests."
 msgstr ""
 
 #: backend/performance.php:111
-msgid ""
-"Can't the plugin bypass the WordPress initialization and just run the "
-"search query?"
+msgid "Can't the plugin bypass the WordPress initialization and just run the search query?"
 msgstr ""
 
 #: backend/performance.php:113
 msgid ""
-"Partially, yes. If you go to the <strong>Compatibility settings</strong> "
-"and enable the <strong>Use custom ajax handler</strong>\n"
-"                        option, the search will use a custom handler, which "
-"bypasses some of the loading process."
+"Partially, yes. If you go to the <strong>Compatibility settings</strong> and enable the <strong>Use custom ajax handler</strong>\n"
+"                        option, the search will use a custom handler, which bypasses some of the loading process."
 msgstr ""
 
 #: backend/performance.php:115
@@ -1726,11 +1695,13 @@ msgstr ""
 msgid "Do you want to clear the performance statistics?"
 msgstr ""
 
-#: backend/priorities.php:39 backend/priorities.php:46
+#: backend/priorities.php:39
+#: backend/priorities.php:46
 msgid "Priority Groups"
 msgstr ""
 
-#: backend/priorities.php:40 backend/priorities.php:54
+#: backend/priorities.php:40
+#: backend/priorities.php:54
 msgid "Individual Priorities"
 msgstr ""
 
@@ -1783,304 +1754,295 @@ msgstr ""
 msgid "You have unsaved changes! Are you sure you want to leave?"
 msgstr ""
 
-#: backend/search.php:28
+#: backend/search.php:29
 msgid "Search settings were reset to defaults!"
 msgstr ""
 
-#: backend/search.php:52
+#: backend/search.php:53
 msgid "Search settings saved!"
 msgstr ""
 
-#: backend/search.php:74
+#: backend/search.php:75
 msgid "Woops"
 msgstr ""
 
-#: backend/search.php:75
+#: backend/search.php:76
 msgid "This search instance (id=%s) does not exists."
 msgstr ""
 
-#: backend/search.php:101 backend/search.php:362
+#: backend/search.php:102
+#: backend/search.php:363
+#: build/js/block-editor.js:2728
+#: build/js/search-instance.js:27030
+#: build/js/search-instance.js:27064
 msgid "Loading..."
 msgstr ""
 
-#: backend/search.php:104
+#: backend/search.php:105
 msgid "Preview"
 msgstr ""
 
-#: backend/search.php:105
+#: backend/search.php:106
 msgid "Refresh"
 msgstr ""
 
-#: backend/search.php:106
+#: backend/search.php:107
 msgid "Show"
 msgstr ""
 
-#: backend/search.php:108
+#: backend/search.php:109
 msgid "Background:"
 msgstr ""
 
-#: backend/search.php:114
-msgid ""
-"Please note, that some functions may not work in preview mode.<br>The first "
-"loading can take up to 15 seconds!"
+#: backend/search.php:115
+msgid "Please note, that some functions may not work in preview mode.<br>The first loading can take up to 15 seconds!"
 msgstr ""
 
-#: backend/search.php:129 backend/search.php:195
+#: backend/search.php:130
+#: backend/search.php:196
 msgid "Shortcode generator"
 msgstr ""
 
-#: backend/search.php:132
-msgid ""
-"This tool is to help you generate a Column/Row based layout for the plugin. "
-"For more info on shortcodes, <a href=\"%s\" target=\"_blank\">check this "
-"video</a> tutorial."
-msgstr ""
-
-#: backend/search.php:134
-msgid "Search box"
-msgstr ""
-
-#: backend/search.php:134 backend/search.php:135 backend/search.php:136
-msgid "Ratio:"
+#: backend/search.php:133
+msgid "This tool is to help you generate a Column/Row based layout for the plugin. For more info on shortcodes, <a href=\"%s\" target=\"_blank\">check this video</a> tutorial."
 msgstr ""
 
 #: backend/search.php:135
-msgid "Settings box"
+msgid "Search box"
+msgstr ""
+
+#: backend/search.php:135
+#: backend/search.php:136
+#: backend/search.php:137
+msgid "Ratio:"
 msgstr ""
 
 #: backend/search.php:136
+msgid "Settings box"
+msgstr ""
+
+#: backend/search.php:137
 msgid "Results box"
 msgstr ""
 
-#: backend/search.php:142
+#: backend/search.php:143
 msgid "Pre-defined variations"
 msgstr ""
 
-#: backend/search.php:143
+#: backend/search.php:144
 msgid "Search/Results 50/50"
 msgstr ""
 
-#: backend/search.php:144
+#: backend/search.php:145
 msgid "Search/Settings 50/50"
 msgstr ""
 
-#: backend/search.php:145
+#: backend/search.php:146
 msgid "Search/Settings/Results in columns"
 msgstr ""
 
-#: backend/search.php:146
+#: backend/search.php:147
 msgid "Search/Settings/Results in 100/50/50"
 msgstr ""
 
-#: backend/search.php:147
+#: backend/search.php:148
 msgid "Search/Settings/Results in 50/50/100"
 msgstr ""
 
-#: backend/search.php:149
+#: backend/search.php:150
 msgid "Add the search box"
 msgstr ""
 
-#: backend/search.php:150
+#: backend/search.php:151
 msgid "Add the settings box"
 msgstr ""
 
-#: backend/search.php:151
+#: backend/search.php:152
 msgid "Add the results box"
 msgstr ""
 
-#: backend/search.php:152
+#: backend/search.php:153
 msgid "<b>Copy</b> the shorcode generated:"
 msgstr ""
 
-#: backend/search.php:163
+#: backend/search.php:164
 msgid "Debug mode is on!"
 msgstr ""
 
-#: backend/search.php:168
-msgid ""
-"NOTICE: The custom ajax handler is enabled. In case you experience issues, "
-"please <a href=\"%s\">turn it off.</a>"
+#: backend/search.php:169
+msgid "NOTICE: The custom ajax handler is enabled. In case you experience issues, please <a href=\"%s\">turn it off.</a>"
 msgstr ""
 
-#: backend/search.php:175
+#: backend/search.php:176
 msgid "Back to the search list"
 msgstr ""
 
-#: backend/search.php:177 src/server/Core/Menu.php:52
+#: backend/search.php:178
 msgid "Search Statistics"
 msgstr ""
 
-#: backend/search.php:179
+#: backend/search.php:180
 msgid "Compatibility checking"
 msgstr ""
 
-#: backend/search.php:181
+#: backend/search.php:182
 msgid "Caching options"
 msgstr ""
 
-#: backend/search.php:186
-msgid ""
-"Warning:  <strong>Ajax Search Lite</strong> is still activated, please "
-"deactivate it to assure every PRO feature works properly."
+#: backend/search.php:187
+msgid "Warning:  <strong>Ajax Search Lite</strong> is still activated, please deactivate it to assure every PRO feature works properly."
 msgstr ""
 
-#: backend/search.php:194
+#: backend/search.php:195
 msgid "Toggle shortcodes for"
 msgstr ""
 
-#: backend/search.php:198
+#: backend/search.php:199
 msgid "Simple shortcodes"
 msgstr ""
 
-#: backend/search.php:199
+#: backend/search.php:200
 msgid "Search shortcode:"
 msgstr ""
 
-#: backend/search.php:202
+#: backend/search.php:203
 msgid "Search shortcode for templates:"
 msgstr ""
 
-#: backend/search.php:208
+#: backend/search.php:209
 msgid "Result shortcodes"
 msgstr ""
 
-#: backend/search.php:210
-msgid ""
-"Shortcodes for placing the result box elsewhere. (only works if the result "
-"layout position is <b>block</b> - see in layout options tab)"
+#: backend/search.php:211
+msgid "Shortcodes for placing the result box elsewhere. (only works if the result layout position is <b>block</b> - see in layout options tab)"
 msgstr ""
 
-#: backend/search.php:212
+#: backend/search.php:213
 msgid "Result box shortcode:"
 msgstr ""
 
-#: backend/search.php:216
+#: backend/search.php:217
 msgid "Result shortcode for templates:"
 msgstr ""
 
-#: backend/search.php:222
+#: backend/search.php:223
 msgid "Settings shortcodes"
 msgstr ""
 
-#: backend/search.php:224
+#: backend/search.php:225
 msgid "Shortcodes for placing the settings box elsewhere."
 msgstr ""
 
-#: backend/search.php:226
+#: backend/search.php:227
 msgid "Settings box shortcode:"
 msgstr ""
 
-#: backend/search.php:230
+#: backend/search.php:231
 msgid "Shortcode for templates:"
 msgstr ""
 
-#: backend/search.php:236
+#: backend/search.php:237
 msgid "Two Column Shortcode"
 msgstr ""
 
-#: backend/search.php:238
-msgid ""
-"Will place a search box (left) and a result box (right) next to each other, "
-"like the one on the demo front page."
+#: backend/search.php:239
+msgid "Will place a search box (left) and a result box (right) next to each other, like the one on the demo front page."
 msgstr ""
 
-#: backend/search.php:240
+#: backend/search.php:241
 msgid "TC shortcode:"
 msgstr ""
 
-#: backend/search.php:244
+#: backend/search.php:245
 msgid "TC shortcode for templates:"
 msgstr ""
 
-#: backend/search.php:248
+#: backend/search.php:249
 msgid "Extra Parameters"
 msgstr ""
 
-#: backend/search.php:250
+#: backend/search.php:251
 msgid "search_width - {integer} the search bar width (in %, not px)"
 msgstr ""
 
-#: backend/search.php:251
+#: backend/search.php:252
 msgid "results_width - {integer} the results box width (in %, not px)"
 msgstr ""
 
-#: backend/search.php:252
-msgid ""
-"invert - {0 or 1} inverts the search and results box position from left to "
-"right"
+#: backend/search.php:253
+msgid "invert - {0 or 1} inverts the search and results box position from left to right"
 msgstr ""
 
-#: backend/search.php:256
+#: backend/search.php:257
 #: backend/tabs/instance/search_options/archive_pages.php:88
 #: backend/tabs/instance/search_options/magnifier_click.php:117
 msgid "Elementor Posts Widget Live Filter"
 msgstr ""
 
-#: backend/search.php:259
+#: backend/search.php:260
 #: backend/tabs/instance/search_options/archive_pages.php:97
 #: backend/tabs/instance/search_options/magnifier_click.php:126
-msgid ""
-"Add to Elementor Posts Widget class name to enable live filtering on that "
-"widget"
+msgid "Add to Elementor Posts Widget class name to enable live filtering on that widget"
 msgstr ""
 
-#: backend/search.php:264
+#: backend/search.php:265
 #: backend/tabs/instance/search_options/archive_pages.php:102
 #: backend/tabs/instance/search_options/magnifier_click.php:131
-msgid ""
-"Please check the <a href=\"%s\">Elementor Posts Live Loader "
-"documentation</a> for more details"
-msgstr ""
-
-#: backend/search.php:287 backend/search.php:299
-msgid "Search Sources"
+msgid "Please check the <a href=\"%s\">Elementor Posts Live Loader documentation</a> for more details"
 msgstr ""
 
 #: backend/search.php:288
-msgid "Search Behavior"
+#: backend/search.php:300
+msgid "Search Sources"
 msgstr ""
 
 #: backend/search.php:289
-msgid "Frontend Search Settings"
+msgid "Search Behavior"
 msgstr ""
 
 #: backend/search.php:290
+msgid "Frontend Search Settings"
+msgstr ""
+
+#: backend/search.php:291
 msgid "Layout options"
 msgstr ""
 
-#: backend/search.php:291 backend/search.php:331
+#: backend/search.php:292
+#: backend/search.php:332
 msgid "Autocomplete & Suggestions"
 msgstr ""
 
-#: backend/search.php:292
+#: backend/search.php:293
 msgid "Theme & Styling"
 msgstr ""
 
-#: backend/search.php:293 backend/search.php:347
+#: backend/search.php:294
+#: backend/search.php:348
 msgid "Multisite Options"
 msgstr ""
 
-#: backend/search.php:294
+#: backend/search.php:295
 msgid "Advanced options"
 msgstr ""
 
-#: backend/search.php:307
+#: backend/search.php:308
 msgid "Search Behavior Options"
 msgstr ""
 
-#: backend/search.php:315
+#: backend/search.php:316
 msgid "Frontend Search Settings options"
 msgstr ""
 
-#: backend/search.php:323
+#: backend/search.php:324
 msgid "Layout Options"
 msgstr ""
 
-#: backend/search.php:339
+#: backend/search.php:340
 msgid "Theme & Styling Options"
 msgstr ""
 
-#: backend/search.php:355
+#: backend/search.php:356
 msgid "Advanced Options"
 msgstr ""
 
@@ -2258,6 +2220,10 @@ msgstr ""
 #: backend/settings/class/dateinterval.class.php:45
 #: backend/tabs/instance/frontend/custom_fields.php:392
 #: backend/tabs/instance/frontend/custom_fields.php:621
+#: build/js/dev.js:24866
+#: build/js/dev.js:25216
+#: build/js/search-instance.js:24866
+#: build/js/search-instance.js:25216
 msgid "Type"
 msgstr ""
 
@@ -2447,15 +2413,11 @@ msgid "Search for tags"
 msgstr ""
 
 #: backend/settings/class/tagselect.class.php:139
-msgid ""
-"Note: If you have multiple items checked, the <strong>last checked</strong> "
-"item will be selected as default."
+msgid "Note: If you have multiple items checked, the <strong>last checked</strong> item will be selected as default."
 msgstr ""
 
 #: backend/settings/class/tagselect.class.php:148
-msgid ""
-"Note: If you don't have a default selected tag, the <strong>first "
-"tag</strong> will be selected as default."
+msgid "Note: If you don't have a default selected tag, the <strong>first tag</strong> will be selected as default."
 msgstr ""
 
 #: backend/settings/class/tagselect.class.php:237
@@ -2723,8 +2685,7 @@ msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:27
 msgid ""
-"One item per line. Use the <strong>{get_values}</strong> variable to get "
-"custom field values automatically. \n"
+"One item per line. Use the <strong>{get_values}</strong> variable to get custom field values automatically. \n"
 "                       For more info see the \n"
 "                       <a target=\"_blank\" href=\"%s\">documentation</a>."
 msgstr ""
@@ -2809,9 +2770,7 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/date_to.php:47
 #: backend/tabs/instance/frontend/date.php:27
 #: backend/tabs/instance/frontend/date.php:51
-msgid ""
-"dd/mm/yy is the most popular format, <a href=\"%s\" target=\"_blank\">list "
-"of accepted params</a>"
+msgid "dd/mm/yy is the most popular format, <a href=\"%s\" target=\"_blank\">list of accepted params</a>"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/date_to.php:2
@@ -2832,6 +2791,8 @@ msgid "Multiselect with search"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:21
+#: build/js/dev.js:24942
+#: build/js/search-instance.js:24942
 msgid "Taxonomy"
 msgstr ""
 
@@ -2897,9 +2858,7 @@ msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:89
 #: backend/tabs/instance/frontend/advanced.php:61
-msgid ""
-"Automatically hides the checkbox options, where the parent terms are "
-"unchecked."
+msgid "Automatically hides the checkbox options, where the parent terms are unchecked."
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:94
@@ -2932,9 +2891,7 @@ msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:114
 #: backend/tabs/instance/frontend/taxonomy_terms.php:52
-msgid ""
-"Shows child terms hierarchically under their parents with padding. Supports "
-"multiple term levels."
+msgid "Shows child terms hierarchically under their parents with padding. Supports multiple term levels."
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:117
@@ -2973,10 +2930,7 @@ msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:135
 #: backend/tabs/instance/frontend/advanced.php:44
-msgid ""
-"This decides what happens if the posts does not have any terms from the "
-"selected taxonomies. For example posts with no categories, when using a "
-"category filter."
+msgid "This decides what happens if the posts does not have any terms from the selected taxonomies. For example posts with no categories, when using a category filter."
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:140
@@ -2996,9 +2950,7 @@ msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:144
 #: backend/tabs/instance/frontend/advanced.php:9
-msgid ""
-"All of the selected terms must match EXACTLY, but unselected ones are not "
-"excluded."
+msgid "All of the selected terms must match EXACTLY, but unselected ones are not excluded."
 msgstr ""
 
 #: backend/settings/class/wd_ms_license_activator.class.php:17
@@ -3157,11 +3109,13 @@ msgstr ""
 msgid "Use all from"
 msgstr ""
 
-#: backend/sidebar.php:5 backend/sidebar.php:9
+#: backend/sidebar.php:5
+#: backend/sidebar.php:9
 msgid "ENABLE ACCESSIBILITY"
 msgstr ""
 
-#: backend/sidebar.php:5 backend/sidebar.php:8
+#: backend/sidebar.php:5
+#: backend/sidebar.php:8
 msgid "DISABLE ACCESSIBILITY"
 msgstr ""
 
@@ -3218,6 +3172,7 @@ msgid "Enable statistics?"
 msgstr ""
 
 #: backend/statistics.php:97
+#: backend/settings/assets/search_instance.js:1125
 msgid "Are you sure?"
 msgstr ""
 
@@ -3225,11 +3180,13 @@ msgstr ""
 msgid "Clear search Statistics"
 msgstr ""
 
-#: backend/statistics.php:101 backend/statistics.php:116
+#: backend/statistics.php:101
+#: backend/statistics.php:116
 msgid "Statistics for:"
 msgstr ""
 
-#: backend/statistics.php:103 backend/statistics.php:116
+#: backend/statistics.php:103
+#: backend/statistics.php:116
 msgid "All"
 msgstr ""
 
@@ -3237,7 +3194,8 @@ msgstr ""
 msgid "Get Statistics!"
 msgstr ""
 
-#: backend/statistics.php:117 backend/tabs/instance/suggest/suggestions.php:23
+#: backend/statistics.php:117
+#: backend/tabs/instance/suggest/suggestions.php:23
 msgid "Keywords"
 msgstr ""
 
@@ -3266,13 +3224,7 @@ msgid "Javascript source"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:13
-msgid ""
-"<strong>Legacy</strong> scripts use <strong>jQuery</strong> and will be "
-"removed on the first 2022 release."
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_loading.php:14
-msgid "<a target=\"_blank\" href=\"%s\">Read More</a>"
+msgid "<strong>Legacy</strong> scripts use <strong>jQuery</strong> and will be removed on the first 2022 release."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:20
@@ -3301,9 +3253,7 @@ msgid "<b>Optimized</b> - Scripts are loaded separately, but only the required o
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:35
-msgid ""
-"<b>Optimized asnynchronous</b> - Same as the Optimized, but the scripts "
-"load in the background"
+msgid "<b>Optimized asnynchronous</b> - Same as the Optimized, but the scripts load in the background"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:41
@@ -3311,9 +3261,7 @@ msgid "Initialize search instances only when they get visible on the viewport?"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:45
-msgid ""
-"Lazy loader for the search initializer script. It can reduce the initial "
-"javascript thread work and increase the google lighthouse score."
+msgid "Lazy loader for the search initializer script. It can reduce the initial javascript thread work and increase the google lighthouse score."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:50
@@ -3325,9 +3273,7 @@ msgid "Inline"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:63
-msgid ""
-"<b>Optimized</b> - The basic CSS file is enqueued on-demand, then the "
-"customized styles are printed inline on-demand"
+msgid "<b>Optimized</b> - The basic CSS file is enqueued on-demand, then the customized styles are printed inline on-demand"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:64
@@ -3343,15 +3289,11 @@ msgid "Selective loading options"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:74
-msgid ""
-"THESE OPTIONS ARE NOT RECOMMENDED - use it only if you know what you are "
-"doing!"
+msgid "THESE OPTIONS ARE NOT RECOMMENDED - use it only if you know what you are doing!"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:75
-msgid ""
-"The plugin <strong>automatically detects</strong> which pages have the "
-"search shortcodes, and loads the assets only on those pages."
+msgid "The plugin <strong>automatically detects</strong> which pages have the search shortcodes, and loads the assets only on those pages."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:78
@@ -3359,9 +3301,7 @@ msgid "Enable selective script & style loading?"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:81
-msgid ""
-"It enables the rules below, so the scritps and styles can be excluded from "
-"specific parts of your website."
+msgid "It enables the rules below, so the scritps and styles can be excluded from specific parts of your website."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:84
@@ -3385,16 +3325,11 @@ msgid "Comma separated list of Post/Page/CPT IDs."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:2
-msgid ""
-"Try preventing body touch scroll on mobile devices, when using the vertical "
-"results layout?"
+msgid "Try preventing body touch scroll on mobile devices, when using the vertical results layout?"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:6
-msgid ""
-"When reaching the top or bottom of the results list via touch devices, the "
-"scrolling is automatically propagated to the parent element. This function "
-"will try to prevent that."
+msgid "When reaching the top or bottom of the results list via touch devices, the scrolling is automatically propagated to the parent element. This function will try to prevent that."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:10
@@ -3402,9 +3337,7 @@ msgid "Try to re-initialize if the page was loaded via ajax?"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:14
-msgid ""
-"Will try to re-initialize the plugin in case an AJAX page loader is used, "
-"like Polylang language switcher etc.."
+msgid "Will try to re-initialize the plugin in case an AJAX page loader is used, like Polylang language switcher etc.."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:19
@@ -3428,9 +3361,7 @@ msgid "Minify the generated CSS?"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:44
-msgid ""
-"When enabled, the generated stylesheet files will be minified before "
-"saving. Can save ~10% CSS file size."
+msgid "When enabled, the generated stylesheet files will be minified before saving. Can save ~10% CSS file size."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:48
@@ -3438,16 +3369,11 @@ msgid "Load the <strong>google fonts</strong> used in the search options?"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:52
-msgid ""
-"When <strong>turned off</strong>, the google fonts <strong>will not be "
-"loaded</strong> via this plugin at all.<br>Useful if you already have them "
-"loaded, to avoid mutliple loading times."
+msgid "When <strong>turned off</strong>, the google fonts <strong>will not be loaded</strong> via this plugin at all.<br>Useful if you already have them loaded, to avoid mutliple loading times."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:57
-msgid ""
-"This might speed up the search, but also can cause incompatibility issues "
-"with other plugins."
+msgid "This might speed up the search, but also can cause incompatibility issues with other plugins."
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_options.php:59
@@ -3458,70 +3384,36 @@ msgstr ""
 msgid "Enable the REST API?"
 msgstr ""
 
-#: backend/tabs/compatibility/other.php:6
-msgid ""
-"You can download the <a target=\"_blank\" href=\"%s\">OpenAPI Swagger file "
-"here</a>."
-msgstr ""
-
-#: backend/tabs/compatibility/other.php:8
-msgid ""
-"Check the <a target=\"_blank\" href=\"%s\">REST API</a> section of the "
-"knowledge base for more info."
-msgstr ""
-
 #: backend/tabs/compatibility/other.php:14
 msgid "Display the Ajax Search Pro Meta Boxes on these post types"
 msgstr ""
 
-#: backend/tabs/compatibility/other.php:18
-msgid ""
-"Displays the Negative keywords & Additional keywords Meta Boxes and the "
-"Classic Editor buttons on the selected post types only."
-msgstr ""
-
 #: backend/tabs/compatibility/query_options.php:3
-msgid ""
-"Do a soft-check only on search override, when trying to check if the "
-"current query is the search?"
+msgid "Do a soft-check only on search override, when trying to check if the current query is the search?"
 msgstr ""
 
 #: backend/tabs/compatibility/query_options.php:7
-msgid ""
-"Use this option, when the search override does not work on the search "
-"results page."
+msgid "Use this option, when the search override does not work on the search results page."
 msgstr ""
 
 #: backend/tabs/compatibility/query_options.php:12
-msgid ""
-"<strong>Advanced Custom Fields</strong>: use the ACF get_field() function "
-"to get the metadata?"
+msgid "<strong>Advanced Custom Fields</strong>: use the ACF get_field() function to get the metadata?"
 msgstr ""
 
 #: backend/tabs/compatibility/query_options.php:16
-msgid ""
-"Will use the get_field() Advanced Custom Fields function instead of the "
-"core get_post_meta()"
+msgid "Will use the get_field() Advanced Custom Fields function instead of the core get_post_meta()"
 msgstr ""
 
 #: backend/tabs/compatibility/query_options.php:20
-msgid ""
-"If you are experiencing issues with accent(diacritic) or case "
-"sensitiveness, you can force the search to try these tweaks."
+msgid "If you are experiencing issues with accent(diacritic) or case sensitiveness, you can force the search to try these tweaks."
 msgstr ""
 
 #: backend/tabs/compatibility/query_options.php:21
-msgid ""
-"<i>The search works according to your database collation settings</i>, so "
-"please be aware that <b>this is not an effective way</b> of fixing database "
-"collation issues."
+msgid "<i>The search works according to your database collation settings</i>, so please be aware that <b>this is not an effective way</b> of fixing database collation issues."
 msgstr ""
 
 #: backend/tabs/compatibility/query_options.php:22
-msgid ""
-"If you have case/diacritic issues then please read the <a href=\"%s\" "
-"target=\"_blank\">MySql manual on collations</a> or consult a <b>database "
-"expert</b> - those issues should be treated on database level!"
+msgid "If you have case/diacritic issues then please read the <a href=\"%s\" target=\"_blank\">MySql manual on collations</a> or consult a <b>database expert</b> - those issues should be treated on database level!"
 msgstr ""
 
 #: backend/tabs/compatibility/query_options.php:28
@@ -3541,22 +3433,16 @@ msgid "Force utf8 on LIKE operations"
 msgstr ""
 
 #: backend/tabs/compatibility/query_options.php:49
-msgid ""
-"Will try to force utf8 conversion on all LIKE operations in the WHERE and "
-"HAVING clauses."
+msgid "Will try to force utf8 conversion on all LIKE operations in the WHERE and HAVING clauses."
 msgstr ""
 
 #: backend/tabs/index_table/synonyms.php:13
-msgid ""
-"After adding all the synonyms you needed, make sure to re-create the index "
-"by clicking the <strong>Create new index</strong> button above."
+msgid "After adding all the synonyms you needed, make sure to re-create the index by clicking the <strong>Create new index</strong> button above."
 msgstr ""
 
 #: backend/tabs/index_table/synonyms.php:15
 #: backend/tabs/index_table/synonyms.php:148
-msgid ""
-"For more information check the <a href=\"%s\" target=\"_blank\">Synonyms "
-"Documentation</a>."
+msgid "For more information check the <a href=\"%s\" target=\"_blank\">Synonyms Documentation</a>."
 msgstr ""
 
 #: backend/tabs/index_table/synonyms.php:23
@@ -3593,8 +3479,36 @@ msgid "Keyword"
 msgstr ""
 
 #: backend/tabs/index_table/synonyms.php:52
-#: backend/tabs/instance/advanced/content.php:233
-#: backend/tabs/instance/general/image_options.php:201
+#: backend/tabs/instance/advanced/content.php:235
+#: backend/tabs/instance/general/image_options.php:237
+#: build/js/dev.js:24880
+#: build/js/dev.js:24972
+#: build/js/dev.js:24973
+#: build/js/dev.js:24976
+#: build/js/dev.js:25062
+#: build/js/dev.js:25063
+#: build/js/dev.js:25071
+#: build/js/dev.js:25072
+#: build/js/dev.js:25080
+#: build/js/dev.js:25081
+#: build/js/dev.js:25087
+#: build/js/dev.js:25125
+#: build/js/dev.js:25126
+#: build/js/dev.js:25231
+#: build/js/search-instance.js:24880
+#: build/js/search-instance.js:24972
+#: build/js/search-instance.js:24973
+#: build/js/search-instance.js:24976
+#: build/js/search-instance.js:25062
+#: build/js/search-instance.js:25063
+#: build/js/search-instance.js:25071
+#: build/js/search-instance.js:25072
+#: build/js/search-instance.js:25080
+#: build/js/search-instance.js:25081
+#: build/js/search-instance.js:25087
+#: build/js/search-instance.js:25125
+#: build/js/search-instance.js:25126
+#: build/js/search-instance.js:25231
 msgid "Default"
 msgstr ""
 
@@ -3625,9 +3539,7 @@ msgid "Click here to download the latest export file"
 msgstr ""
 
 #: backend/tabs/index_table/synonyms.php:122
-msgid ""
-"Enter the export file URL, or click the <strong>Upload</strong> button to "
-"upload one.<br>"
+msgid "Enter the export file URL, or click the <strong>Upload</strong> button to upload one.<br>"
 msgstr ""
 
 #: backend/tabs/index_table/synonyms.php:124
@@ -3651,10 +3563,7 @@ msgid "Use synonyms as keywords as well?"
 msgstr ""
 
 #: backend/tabs/index_table/synonyms.php:146
-msgid ""
-"By default, the plugin only looks for synonyms by the keywords defined. "
-"When enabled, the syonomys will be treated as keywords as well. It can "
-"drastically increase the keyword database size."
+msgid "By default, the plugin only looks for synonyms by the keywords defined. When enabled, the syonomys will be treated as keywords as well. It can drastically increase the keyword database size."
 msgstr ""
 
 #: backend/tabs/instance/advanced/accessibility.php:2
@@ -3691,10 +3600,8 @@ msgstr ""
 
 #: backend/tabs/instance/advanced/animations.php:9
 msgid ""
-"In case the search is placed into an interactive element, which hides on "
-"certain events, enable this option.\n"
-"            The plugin will try to detect it's visibility, and hide the "
-"settings and the results container if needed."
+"In case the search is placed into an interactive element, which hides on certain events, enable this option.\n"
+"            The plugin will try to detect it's visibility, and hide the settings and the results container if needed."
 msgstr ""
 
 #: backend/tabs/instance/advanced/animations.php:18
@@ -3703,8 +3610,7 @@ msgstr ""
 
 #: backend/tabs/instance/advanced/animations.php:22
 msgid ""
-"When using the 'searchable select' and 'searchable multiselect' fields in "
-"category, taxonomy, tag or custom field filters - this text is used\n"
+"When using the 'searchable select' and 'searchable multiselect' fields in category, taxonomy, tag or custom field filters - this text is used\n"
 "            when no results match the searched value."
 msgstr ""
 
@@ -3726,9 +3632,7 @@ msgstr ""
 
 #: backend/tabs/instance/advanced/animations.php:46
 #: backend/tabs/instance/advanced/animations.php:98
-msgid ""
-"The animation of the appearing settings box when clicking on the settings "
-"icon."
+msgid "The animation of the appearing settings box when clicking on the settings icon."
 msgstr ""
 
 #: backend/tabs/instance/advanced/animations.php:51
@@ -3765,9 +3669,7 @@ msgstr ""
 
 #: backend/tabs/instance/advanced/content.php:15
 #: backend/tabs/instance/advanced/content.php:24
-msgid ""
-"If turned <strong>ON</strong>: return results from current language. If "
-"turned <strong>OFF</strong>: return results from any language."
+msgid "If turned <strong>ON</strong>: return results from current language. If turned <strong>OFF</strong>: return results from any language."
 msgstr ""
 
 #: backend/tabs/instance/advanced/content.php:20
@@ -3787,9 +3689,7 @@ msgid "Execute them (can by really slow)"
 msgstr ""
 
 #: backend/tabs/instance/advanced/content.php:39
-msgid ""
-"Removing shortcode is usually <strong>much faster</strong>, especially if "
-"you have many of them within posts."
+msgid "Removing shortcode is usually <strong>much faster</strong>, especially if you have many of them within posts."
 msgstr ""
 
 #: backend/tabs/instance/advanced/content.php:44
@@ -3832,117 +3732,97 @@ msgstr ""
 msgid "Secondary Description Field for Posts/Pages/CPT"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:147
-msgid ""
-"Example: <b>{titlefield} - {_price}</b> will show the title and price for a "
-"woocommerce product."
-msgstr ""
-
-#: backend/tabs/instance/advanced/content.php:148
-msgid ""
-"For more info and more advanced uses please <a href=\"%s\" "
-"target=\"_blank\">check this documentation chapter</a>."
-msgstr ""
-
-#: backend/tabs/instance/advanced/content.php:152
+#: backend/tabs/instance/advanced/content.php:151
 msgid "Advanced Title Field (default: {titlefield})"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:156
-#: backend/tabs/instance/advanced/content.php:168
-msgid ""
-"HTML is supported! Use {custom_field_name} format to have custom field "
-"values."
+#: backend/tabs/instance/advanced/content.php:155
+#: backend/tabs/instance/advanced/content.php:167
+msgid "HTML is supported! Use {custom_field_name} format to have custom field values."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:158
-#: backend/tabs/instance/advanced/content.php:170
-#: backend/tabs/instance/advanced/content.php:214
-#: backend/tabs/instance/advanced/content.php:225
+#: backend/tabs/instance/advanced/content.php:157
+#: backend/tabs/instance/advanced/content.php:169
+#: backend/tabs/instance/advanced/content.php:216
+#: backend/tabs/instance/advanced/content.php:227
 msgid "More possibilities explained here!"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:164
+#: backend/tabs/instance/advanced/content.php:163
 msgid "Advanced Description Field (default: {descriptionfield})"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:177
+#: backend/tabs/instance/advanced/content.php:176
 msgid "User Result Fields & URL"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:181
+#: backend/tabs/instance/advanced/content.php:180
 msgid "Title field for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:184
+#: backend/tabs/instance/advanced/content.php:183
 msgid "Login Name"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:185
+#: backend/tabs/instance/advanced/content.php:184
 msgid "Display Name"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:194
+#: backend/tabs/instance/advanced/content.php:196
 msgid "Description field for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:197
+#: backend/tabs/instance/advanced/content.php:199
 msgid "Biography"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:198
+#: backend/tabs/instance/advanced/content.php:200
 msgid "BuddyPress Last Activity"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:199
+#: backend/tabs/instance/advanced/content.php:201
 #: backend/tabs/instance/frontend/reset_button.php:13
 msgid "Nothing"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:208
+#: backend/tabs/instance/advanced/content.php:210
 msgid "Advanced title field for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:213
-msgid ""
-"Variable {titlefield} will be replaced with the Title field value. Use the "
-"format {meta_field} to get user meta."
+#: backend/tabs/instance/advanced/content.php:215
+msgid "Variable {titlefield} will be replaced with the Title field value. Use the format {meta_field} to get user meta."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:219
+#: backend/tabs/instance/advanced/content.php:221
 msgid "Advanced description field for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:224
-msgid ""
-"Variable {descriptionfield} will be replaced with the Description field "
-"value. Use the format {meta_field} to get user meta."
+#: backend/tabs/instance/advanced/content.php:226
+msgid "Variable {descriptionfield} will be replaced with the Description field value. Use the format {meta_field} to get user meta."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:230
+#: backend/tabs/instance/advanced/content.php:232
 msgid "<strong>User</strong> results url source"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:234
+#: backend/tabs/instance/advanced/content.php:236
 msgid "BuddyPress profile"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:235
+#: backend/tabs/instance/advanced/content.php:237
 msgid "Custom scheme"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:242
+#: backend/tabs/instance/advanced/content.php:244
 msgid "This is the result URL destination. By default it's the author profile link."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:247
+#: backend/tabs/instance/advanced/content.php:249
 msgid "Custom url scheme for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:252
-msgid ""
-"You can use these variables: {USER_ID}, {USER_LOGIN}, {USER_NICENAME}, "
-"{USER_DISPLAYNAME}, {USER_NICKNAME}"
+#: backend/tabs/instance/advanced/content.php:254
+msgid "You can use these variables: {USER_ID}, {USER_LOGIN}, {USER_NICENAME}, {USER_DISPLAYNAME}, {USER_NICKNAME}"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:3
@@ -3958,9 +3838,7 @@ msgid "Exclude posts by tags"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:32
-msgid ""
-"<span style='color: red; font-weight: bold'>Exclude</span> posts (or cpt, "
-"attachments, comments) by categories/taxonomy terms"
+msgid "<span style='color: red; font-weight: bold'>Exclude</span> posts (or cpt, attachments, comments) by categories/taxonomy terms"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:47
@@ -3968,9 +3846,7 @@ msgid "An object is excluded if matches <strong>any</strong> of the selected ite
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:51
-msgid ""
-"<span style='color: red; font-weight: bold;'>Include</span> posts (or cpt, "
-"attachments, comments) only from selected categories/taxonomy terms"
+msgid "<span style='color: red; font-weight: bold;'>Include</span> posts (or cpt, attachments, comments) only from selected categories/taxonomy terms"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:66
@@ -3982,9 +3858,7 @@ msgid "Exclude posts/pages/cpt"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:78
-msgid ""
-"The \"Exclude direct children too?\" option only works with "
-"<strong>DIRECT</strong> parent-child relationships. (1 level down)"
+msgid "The \"Exclude direct children too?\" option only works with <strong>DIRECT</strong> parent-child relationships. (1 level down)"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:82
@@ -3992,16 +3866,11 @@ msgid "Exclude Posts/Pages/CPT by ID's (comma separated post ID-s)"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:85
-msgid ""
-"If you wish to exclude Posts, Pages and custom post types (like products "
-"etc..) by ID here. Comma separated list."
+msgid "If you wish to exclude Posts, Pages and custom post types (like products etc..) by ID here. Comma separated list."
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:88
-msgid ""
-"<strong>WARNING:</strong> This option restricts Posts/Pages/CPT to the "
-"selected items only, no other inclusions will apply! <br>Exclusions still "
-"apply."
+msgid "<strong>WARNING:</strong> This option restricts Posts/Pages/CPT to the selected items only, no other inclusions will apply! <br>Exclusions still apply."
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:90
@@ -4049,81 +3918,87 @@ msgid "Reorder groups by highest priority and relevance in results?"
 msgstr ""
 
 #: backend/tabs/instance/advanced/grouping.php:44
-msgid ""
-"The groups are reordered according to the highest priority and relevance of "
-"each result within each individual group."
+msgid "The groups are reordered according to the highest priority and relevance of each result within each individual group."
 msgstr ""
 
 #: backend/tabs/instance/advanced/grouping.php:48
+msgid "Make group header clickable?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:51
+msgid "Makes the group header clickable links to the corresponding archive pages."
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:55
 msgid "Group header prefix text"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:54
+#: backend/tabs/instance/advanced/grouping.php:61
 msgid "Group header suffix text"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:60
+#: backend/tabs/instance/advanced/grouping.php:67
 msgid "If result does not match any group?"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:62
+#: backend/tabs/instance/advanced/grouping.php:69
 msgid "Remove it"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:63
+#: backend/tabs/instance/advanced/grouping.php:70
 msgid "Display in Other results group"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:71
+#: backend/tabs/instance/advanced/grouping.php:78
 msgid "Other results group header text"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:75
+#: backend/tabs/instance/advanced/grouping.php:80
+msgid "location "
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:82
 msgid "Top of results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:76
+#: backend/tabs/instance/advanced/grouping.php:83
 msgid "Bottom of results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:84
+#: backend/tabs/instance/advanced/grouping.php:91
 msgid "Display duplicates only in the first group match?"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:87
-msgid ""
-"For example posts in multiple categories will be displayed in the first "
-"matching group only."
-msgstr ""
-
-#: backend/tabs/instance/advanced/grouping.php:91
-msgid "Display empty groups with the 'No results!' text?"
-msgstr ""
-
 #: backend/tabs/instance/advanced/grouping.php:94
-msgid " ..emtpy group location "
-msgstr ""
-
-#: backend/tabs/instance/advanced/grouping.php:96
-msgid "Leave the default"
-msgstr ""
-
-#: backend/tabs/instance/advanced/grouping.php:97
-msgid "Move to the bottom"
+msgid "For example posts in multiple categories will be displayed in the first matching group only."
 msgstr ""
 
 #: backend/tabs/instance/advanced/grouping.php:98
+msgid "Display empty groups with the 'No results!' text?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:101
+msgid " ..emtpy group location "
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:103
+msgid "Leave the default"
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:104
+msgid "Move to the bottom"
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:105
 msgid "Move to the top"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:106
+#: backend/tabs/instance/advanced/grouping.php:113
 msgid "Show results count in group headers"
 msgstr ""
 
 #: backend/tabs/instance/advanced/kw_exceptions.php:1
-msgid ""
-"Keyword exceptions will be replaced with an empty string \"\" in the search "
-"phrase."
+msgid "Keyword exceptions will be replaced with an empty string \"\" in the search phrase."
 msgstr ""
 
 #: backend/tabs/instance/advanced/kw_exceptions.php:4
@@ -4131,9 +4006,7 @@ msgid "Keyword exceptions - replace anywhere"
 msgstr ""
 
 #: backend/tabs/instance/advanced/kw_exceptions.php:7
-msgid ""
-"<strong>Comma separated list</strong> of keywords you want to remove or "
-"ban. Matching anything, even partial words."
+msgid "<strong>Comma separated list</strong> of keywords you want to remove or ban. Matching anything, even partial words."
 msgstr ""
 
 #: backend/tabs/instance/advanced/kw_exceptions.php:11
@@ -4141,9 +4014,7 @@ msgid "Keyword exceptions - replace whole words only"
 msgstr ""
 
 #: backend/tabs/instance/advanced/kw_exceptions.php:14
-msgid ""
-"<strong>Comma separated list</strong> of keywords you want to remove or "
-"ban. Only matching whole words between word boundaries."
+msgid "<strong>Comma separated list</strong> of keywords you want to remove or ban. Only matching whole words between word boundaries."
 msgstr ""
 
 #: backend/tabs/instance/advanced_options.php:2
@@ -4227,9 +4098,7 @@ msgid "Suggested search keywords"
 msgstr ""
 
 #: backend/tabs/instance/autocomplete_options.php:32
-msgid ""
-"Autocomplete feature will try to help the user finish what is being typed "
-"into the search box."
+msgid "Autocomplete feature will try to help the user finish what is being typed into the search box."
 msgstr ""
 
 #: backend/tabs/instance/autocomplete_options.php:66
@@ -4244,18 +4113,13 @@ msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:16
 msgid ""
-"<strong>WARNING:</strong> This is a very strict configuration - only "
-"results <strong>matching exactly ALL</strong>\n"
-"            of the selected terms will show up. If you don't get any "
-"results, it is probably because of this option.<br>\n"
-"            This logic works best, if you start with all checkboxes "
-"<strong>unchecked</strong>."
+"<strong>WARNING:</strong> This is a very strict configuration - only results <strong>matching exactly ALL</strong>\n"
+"            of the selected terms will show up. If you don't get any results, it is probably because of this option.<br>\n"
+"            This logic works best, if you start with all checkboxes <strong>unchecked</strong>."
 msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:21
-msgid ""
-"This determines the rule how the individual checkbox/multiselect selections "
-"should be treated within each taxonomy group."
+msgid "This determines the rule how the individual checkbox/multiselect selections should be treated within each taxonomy group."
 msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:25
@@ -4275,9 +4139,7 @@ msgid "Uncheck child terms when the parent term is unchecked"
 msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:52
-msgid ""
-"When turned <strong>ON</strong> and using Checkbox filters, the child "
-"categories (terms) are automatically unchecked when the parent is unchecked."
+msgid "When turned <strong>ON</strong> and using Checkbox filters, the child categories (terms) are automatically unchecked when the parent is unchecked."
 msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:57
@@ -4289,10 +4151,7 @@ msgid "Ignore checkbox filters that have nothing selected?"
 msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:69
-msgid ""
-"When turned <strong>ON</strong> and nothing is checked within a checkbox "
-"filter - then the search will ignore it completely - instead of excluding "
-"everything unchecked."
+msgid "When turned <strong>ON</strong> and nothing is checked within a checkbox filter - then the search will ignore it completely - instead of excluding everything unchecked."
 msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:73
@@ -4305,11 +4164,8 @@ msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:89
 msgid ""
-"When using custom field selectors (filters), this option will allow "
-"displaying posts/pages/cpm where the given custom field is not defined.\n"
-"            <br>For example: You have a custom field filter on \"location\" "
-"custom field, but some posts does not have the \"location\" custom field "
-"defined. This option\n"
+"When using custom field selectors (filters), this option will allow displaying posts/pages/cpm where the given custom field is not defined.\n"
+"            <br>For example: You have a custom field filter on \"location\" custom field, but some posts does not have the \"location\" custom field defined. This option\n"
 "            will allow displaying them as results regardless."
 msgstr ""
 
@@ -4355,8 +4211,7 @@ msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:7
 msgid ""
-"One item per line. Use the <strong>{get_values}</strong> variable to get "
-"custom field values automatically. \n"
+"One item per line. Use the <strong>{get_values}</strong> variable to get custom field values automatically. \n"
 "                   For more info see the \n"
 "                   <a target=\"_blank\" href=\"%s\">documentation</a>."
 msgstr ""
@@ -4466,16 +4321,12 @@ msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:469
 #: backend/tabs/instance/frontend/custom_fields.php:685
-msgid ""
-"NOTICE: The MySql datetime format is <strong>Y-m-d H:i:s</strong>, for "
-"example: 2001-03-10 17:16:18"
+msgid "NOTICE: The MySql datetime format is <strong>Y-m-d H:i:s</strong>, for example: 2001-03-10 17:16:18"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:472
 #: backend/tabs/instance/frontend/custom_fields.php:688
-msgid ""
-"NOTICE: The timestamp is a numeric format, for example "
-"<strong>1465111713</strong>. This translates to: 06/05/2016 @ 7:28am (UTC)"
+msgid "NOTICE: The timestamp is a numeric format, for example <strong>1465111713</strong>. This translates to: 06/05/2016 @ 7:28am (UTC)"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:481
@@ -4485,9 +4336,7 @@ msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:484
 #: backend/tabs/instance/frontend/custom_fields.php:700
-msgid ""
-"dd/mm/yy is the most used format, <a href=\"%s\" target=\"_blank\">list of "
-"accepted params</a>"
+msgid "dd/mm/yy is the most used format, <a href=\"%s\" target=\"_blank\">list of accepted params</a>"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:487
@@ -4664,9 +4513,7 @@ msgid "Leave them empty to set the handles automatically."
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:583
-msgid ""
-"Use the numeric operators for numeric values and string operators for text "
-"values"
+msgid "Use the numeric operators for numeric values and string operators for text values"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:589
@@ -4692,9 +4539,7 @@ msgid "ACF date field"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:799
-msgid ""
-"Use the numeric operators for numeric values and string operators for text "
-"values."
+msgid "Use the numeric operators for numeric values and string operators for text values."
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:811
@@ -4754,11 +4599,11 @@ msgid "Search settings position"
 msgstr ""
 
 #: backend/tabs/instance/frontend/general.php:28
-msgid "Hovering (default)"
+msgid "Block (default)"
 msgstr ""
 
 #: backend/tabs/instance/frontend/general.php:29
-msgid "Block or custom"
+msgid "Hovering"
 msgstr ""
 
 #: backend/tabs/instance/frontend/general.php:35
@@ -4767,10 +4612,7 @@ msgid " max. columns "
 msgstr ""
 
 #: backend/tabs/instance/frontend/general.php:63
-msgid ""
-"The position is automatically set to Block if you use the settings "
-"shortcode.<br><strong>Columns WRAP</strong> if they reach the edge of the "
-"screen, or container element!"
+msgid "The position is automatically set to Block if you use the settings shortcode.<br><strong>Columns WRAP</strong> if they reach the edge of the screen, or container element!"
 msgstr ""
 
 #: backend/tabs/instance/frontend/general.php:68
@@ -4778,9 +4620,7 @@ msgid "Hide the settings when the results list show up?"
 msgstr ""
 
 #: backend/tabs/instance/frontend/general.php:72
-msgid ""
-"This will hide the settings (hover mode only), when the result list comes "
-"on screen"
+msgid "This will hide the settings (hover mode only), when the result list comes on screen"
 msgstr ""
 
 #: backend/tabs/instance/frontend/general.php:77
@@ -4814,9 +4654,7 @@ msgstr ""
 #: backend/tabs/instance/theme/vertical_res.php:12
 #: backend/tabs/instance/theme/vertical_res.php:48
 #: backend/tabs/instance/theme/vertical_res.php:111
-msgid ""
-"Use with <a href=\"%s\" target=\"_blank\">CSS units</a> (like %s or %s or "
-"%s ..) Default: <strong>%s</strong>"
+msgid "Use with <a href=\"%s\" target=\"_blank\">CSS units</a> (like %s or %s or %s ..) Default: <strong>%s</strong>"
 msgstr ""
 
 #: backend/tabs/instance/frontend/general.php:111
@@ -4829,10 +4667,8 @@ msgstr ""
 
 #: backend/tabs/instance/frontend/generic.php:14
 msgid ""
-"<strong>WARNING:</strong> These options are not recommended to be used "
-"together with the <strong>index table</strong> engine.<br>\n"
-"        You are seeing this message, because the Index Table engine is "
-"selected on the <strong>General Options</strong> panel."
+"<strong>WARNING:</strong> These options are not recommended to be used together with the <strong>index table</strong> engine.<br>\n"
+"        You are seeing this message, because the Index Table engine is selected on the <strong>General Options</strong> panel."
 msgstr ""
 
 #: backend/tabs/instance/frontend/generic.php:18
@@ -4907,9 +4743,7 @@ msgid "state "
 msgstr ""
 
 #: backend/tabs/instance/frontend/post_tags.php:35
-msgid ""
-"Placeholder text for the multiselect search layout, in case nothing is "
-"selected."
+msgid "Placeholder text for the multiselect search layout, in case nothing is selected."
 msgstr ""
 
 #: backend/tabs/instance/frontend/post_tags.php:49
@@ -4937,9 +4771,7 @@ msgid "All of the selected tags should match EXACTLY, but unchecked not excluded
 msgstr ""
 
 #: backend/tabs/instance/frontend/post_tags.php:68
-msgid ""
-"This determines the rule how the selections should be treated. Only affects "
-"the <strong>checkbox</strong> layout!"
+msgid "This determines the rule how the selections should be treated. Only affects the <strong>checkbox</strong> layout!"
 msgstr ""
 
 #: backend/tabs/instance/frontend/post_tags.php:73
@@ -4947,9 +4779,7 @@ msgid "Display posts/pages/CPT as results, which have no tags?"
 msgstr ""
 
 #: backend/tabs/instance/frontend/post_tags.php:76
-msgid ""
-"When turned OFF, any custom post type (post, page etc..) without tags "
-"<strong>will not be displayed</strong> as results."
+msgid "When turned OFF, any custom post type (post, page etc..) without tags <strong>will not be displayed</strong> as results."
 msgstr ""
 
 #: backend/tabs/instance/frontend/reset_button.php:3
@@ -5096,9 +4926,7 @@ msgstr ""
 
 #: backend/tabs/instance/frontend/search_button.php:54
 #: backend/tabs/instance/search_options/magnifier_click.php:78
-msgid ""
-"You can use the <string>asp_redirect_url</string> filter to add more "
-"variables. See <a href=\"%s\" target=\"_blank\">this tutorial</a>."
+msgid "You can use the <string>asp_redirect_url</string> filter to add more variables. See <a href=\"%s\" target=\"_blank\">this tutorial</a>."
 msgstr ""
 
 #: backend/tabs/instance/frontend/search_button.php:59
@@ -5122,10 +4950,7 @@ msgid "Filtering by parent terms should also include the results from children?"
 msgstr ""
 
 #: backend/tabs/instance/frontend/taxonomy_terms.php:34
-msgid ""
-"If a post from child category is not directly assigned to the parent "
-"category as well, this will force the filter to still apply if the parent "
-"category is selected."
+msgid "If a post from child category is not directly assigned to the parent category as well, this will force the filter to still apply if the parent category is selected."
 msgstr ""
 
 #: backend/tabs/instance/frontend/taxonomy_terms.php:48
@@ -5186,10 +5011,8 @@ msgstr ""
 msgid ""
 "Index table engine will only work if you have the\n"
 "\t\t<a href=\"%s\">index table</a>\n"
-"\t\tgenerated. To learn more about the pros. and cons. of the index table "
-"read the\n"
-"\t\t<a href=\"%s\" target=\"_blank\">documentation about the index "
-"table</a>."
+"\t\tgenerated. To learn more about the pros. and cons. of the index table read the\n"
+"\t\t<a href=\"%s\" target=\"_blank\">documentation about the index table</a>."
 msgstr ""
 
 #: backend/tabs/instance/general/attachment_results.php:33
@@ -5218,9 +5041,7 @@ msgstr ""
 
 #: backend/tabs/instance/general/attachment_results.php:66
 #: backend/tabs/instance/general/sources.php:114
-msgid ""
-"WARNING: <strong>Search in terms</strong> can be database heavy operation. "
-"Not recommended for big databases."
+msgid "WARNING: <strong>Search in terms</strong> can be database heavy operation. Not recommended for big databases."
 msgstr ""
 
 #: backend/tabs/instance/general/attachment_results.php:70
@@ -5229,8 +5050,7 @@ msgstr ""
 
 #: backend/tabs/instance/general/attachment_results.php:75
 msgid ""
-"<strong>Comma separated list</strong> of allowed mime types. List of <a "
-"href=\"%s\"\n"
+"<strong>Comma separated list</strong> of allowed mime types. List of <a href=\"%s\"\n"
 "\ttarget=\"_blank\">default allowed mime types</a> in WordPress."
 msgstr ""
 
@@ -5295,12 +5115,7 @@ msgid "Search in hidden groups?"
 msgstr ""
 
 #: backend/tabs/instance/general/grouping.php:11
-msgid ""
-"Grouping by <strong>title</strong> means, that duplicate results matching "
-"titles are removed, and only the first match is left. This option should be "
-"used where multiple items are reffering to the same post and are not "
-"needed, such as with some <strong>Event calendar</strong> plugins, or "
-"similar."
+msgid "Grouping by <strong>title</strong> means, that duplicate results matching titles are removed, and only the first match is left. This option should be used where multiple items are reffering to the same post and are not needed, such as with some <strong>Event calendar</strong> plugins, or similar."
 msgstr ""
 
 #: backend/tabs/instance/general/grouping.php:16
@@ -5337,9 +5152,7 @@ msgid "Image background color?"
 msgstr ""
 
 #: backend/tabs/instance/general/image_options.php:28
-msgid ""
-"Only works if NOT the BFI Thumb library is used. You can change it on the "
-"<a href=\"%s\">Cache Settings</a> submenu."
+msgid "Only works if NOT the BFI Thumb library is used. You can change it on the <a href=\"%s\">Cache Settings</a> submenu."
 msgstr ""
 
 #: backend/tabs/instance/general/image_options.php:34
@@ -5351,135 +5164,121 @@ msgid "Execute shortcodes when looking for images in content?"
 msgstr ""
 
 #: backend/tabs/instance/general/image_options.php:54
-msgid ""
-"Will execute shortcodes and apply the content filter before looking for "
-"images in the post content."
+msgid "Will execute shortcodes and apply the content filter before looking for images in the post content."
 msgstr ""
 
 #: backend/tabs/instance/general/image_options.php:55
-msgid ""
-"If you have <strong>missing images in results</strong>, try turning ON this "
-"option. <strong>Can cause lower performance!</strong>"
+msgid "If you have <strong>missing images in results</strong>, try turning ON this option. <strong>Can cause lower performance!</strong>"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:59
+#: backend/tabs/instance/general/image_options.php:95
 msgid "Post Type image source options"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:63
+#: backend/tabs/instance/general/image_options.php:99
 msgid "Primary image source"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:74
+#: backend/tabs/instance/general/image_options.php:110
 msgid "Alternative image source 1"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:85
+#: backend/tabs/instance/general/image_options.php:121
 msgid "Alternative image source 2"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:96
+#: backend/tabs/instance/general/image_options.php:132
 msgid "Alternative image source 3"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:107
+#: backend/tabs/instance/general/image_options.php:143
 msgid "Alternative image source 4"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:118
+#: backend/tabs/instance/general/image_options.php:154
 msgid "Featured image size source"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:141
+#: backend/tabs/instance/general/image_options.php:177
 msgid "Default image url"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:150
+#: backend/tabs/instance/general/image_options.php:186
 msgid "Custom field containing the image"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:158
+#: backend/tabs/instance/general/image_options.php:194
 msgid "Media/Attachment image options"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:161
+#: backend/tabs/instance/general/image_options.php:197
 msgid "Generate thumbnails for PDF files?"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:165
-msgid ""
-"WARNING: Make sure that the Imagick library installed and configured. "
-"Please check <a href=\"%s\">this documentation</a> for more details."
+#: backend/tabs/instance/general/image_options.php:201
+msgid "WARNING: Make sure that the Imagick library installed and configured. Please check <a href=\"%s\">this documentation</a> for more details."
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:174
+#: backend/tabs/instance/general/image_options.php:210
 msgid "Taxonomy term image options"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:177
+#: backend/tabs/instance/general/image_options.php:213
 msgid "Custom field containing the image (term meta)"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:181
+#: backend/tabs/instance/general/image_options.php:217
 msgid "This is only used, when no other image is found for the given taxonomy term."
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:185
+#: backend/tabs/instance/general/image_options.php:221
 msgid "Default taxonomy image"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:192
+#: backend/tabs/instance/general/image_options.php:228
 msgid "User image options"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:195
+#: backend/tabs/instance/general/image_options.php:231
 msgid "Display user images?"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:198
+#: backend/tabs/instance/general/image_options.php:234
 msgid "Image source"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:202
+#: backend/tabs/instance/general/image_options.php:238
 msgid "BuddyPress avatar"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:224
-msgid ""
-"Default: 96x96. For avatars where the size is defined by a single value, "
-"the width is used."
+#: backend/tabs/instance/general/image_options.php:260
+msgid "Default: 96x96. For avatars where the size is defined by a single value, the width is used."
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:228
+#: backend/tabs/instance/general/image_options.php:264
 msgid "Default user image"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:236
+#: backend/tabs/instance/general/image_options.php:272
 msgid "Advanced image options"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:244
-msgid ""
-"If the image parser finds multiple images, then the image from this "
-"position is returned"
+#: backend/tabs/instance/general/image_options.php:280
+msgid "If the image parser finds multiple images, then the image from this position is returned"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:247
+#: backend/tabs/instance/general/image_options.php:283
 msgid "Exclude images by file names (comma separated)"
 msgstr ""
 
-#: backend/tabs/instance/general/image_options.php:251
-msgid ""
-"If any part of the image filename or path contains any of the above "
-"strings, it is excluded."
+#: backend/tabs/instance/general/image_options.php:287
+msgid "If any part of the image filename or path contains any of the above strings, it is excluded."
 msgstr ""
 
 #: backend/tabs/instance/general/limits.php:2
 msgid ""
 "Define the number of results for each source group with these options.<br>\n"
-"    The <strong>left</strong> values are for the ajax results, the "
-"<strong>right</strong> values are for non-ajax results (aka. results "
-"page/override)."
+"    The <strong>left</strong> values are for the ajax results, the <strong>right</strong> values are for non-ajax results (aka. results page/override)."
 msgstr ""
 
 #: backend/tabs/instance/general/limits.php:8
@@ -5504,10 +5303,8 @@ msgstr ""
 
 #: backend/tabs/instance/general/limits.php:21
 msgid ""
-"For example if you have search in <strong>posts</strong> and "
-"<strong>pages</strong>\n"
-"        enabled and the post limit is 10,<br>then the plugin will try to "
-"return <strong>5 posts</strong> and <strong>5 pages.</strong>"
+"For example if you have search in <strong>posts</strong> and <strong>pages</strong>\n"
+"        enabled and the post limit is 10,<br>then the plugin will try to return <strong>5 posts</strong> and <strong>5 pages.</strong>"
 msgstr ""
 
 #: backend/tabs/instance/general/limits.php:27
@@ -5642,6 +5439,10 @@ msgstr ""
 #: backend/tabs/instance/general/ordering.php:68
 #: backend/tabs/instance/general/user_search.php:72
 #: backend/tabs/instance/general/user_search.php:111
+#: build/js/dev.js:24865
+#: build/js/dev.js:25209
+#: build/js/search-instance.js:24865
+#: build/js/search-instance.js:25209
 msgid "Field name"
 msgstr ""
 
@@ -5672,16 +5473,11 @@ msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:82
 #: backend/tabs/instance/general/user_search.php:129
-msgid ""
-"If two elements match the primary ordering criteria, the <b>Secondary "
-"ordering</b> is used."
+msgid "If two elements match the primary ordering criteria, the <b>Secondary ordering</b> is used."
 msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:87
-msgid ""
-"Separate ordering options are available for <strong>User results</strong>, "
-"under the <a class=\"asp_to_tab\" href=\"#108\" tabid=\"108\" "
-"data-asp-os-highlight=\"user_orderby_primary\">User Search panel</a>."
+msgid "Separate ordering options are available for <strong>User results</strong>, under the <a class=\"asp_to_tab\" href=\"#108\" tabid=\"108\" data-asp-os-highlight=\"user_orderby_primary\">User Search panel</a>."
 msgstr ""
 
 #: backend/tabs/instance/general/ordering.php:92
@@ -5751,9 +5547,7 @@ msgid "Include activities only from public"
 msgstr ""
 
 #: backend/tabs/instance/general/peepso.php:64
-msgid ""
-"When none selected, all activities are searched, including non-group "
-"related."
+msgid "When none selected, all activities are searched, including non-group related."
 msgstr ""
 
 #: backend/tabs/instance/general/relevance.php:3
@@ -5763,16 +5557,12 @@ msgstr ""
 
 #: backend/tabs/instance/general/relevance.php:11
 #: backend/tabs/instance/relevance_options.php:7
-msgid ""
-"Every result gets a relevance value based on the weight numbers set below. "
-"The weight is the measure of importance."
+msgid "Every result gets a relevance value based on the weight numbers set below. The weight is the measure of importance."
 msgstr ""
 
 #: backend/tabs/instance/general/relevance.php:12
 #: backend/tabs/instance/relevance_options.php:8
-msgid ""
-"If you wish to change the the results basic ordering, then you can do it "
-"under the <a href=\"#107\">General Options -> Ordering</a> panel."
+msgid "If you wish to change the the results basic ordering, then you can do it under the <a href=\"#107\">General Options -> Ordering</a> panel."
 msgstr ""
 
 #: backend/tabs/instance/general/relevance.php:31
@@ -5846,21 +5636,16 @@ msgid "Search engine"
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:14
-msgid ""
-"Index table engine will only work if you have the <a href=\"%s\">index "
-"table</a> generated."
+msgid "Index table engine will only work if you have the <a href=\"%s\">index table</a> generated."
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:15
-msgid ""
-"To learn more about the pros. and cons. of the index table read the <a "
-"href=\"%s\" target=\"_blank\">documentation about the index table</a>."
+msgid "To learn more about the pros. and cons. of the index table read the <a href=\"%s\" target=\"_blank\">documentation about the index table</a>."
 msgstr ""
 
 #: backend/tabs/instance/general/sources.php:22
 msgid ""
-"Since you have the Index table engine selected, some options here are "
-"disabled,<br> because they are available\n"
+"Since you have the Index table engine selected, some options here are disabled,<br> because they are available\n"
 "\ton the <a href=\"%s\" target=\"_blank\">index table</a> options page."
 msgstr ""
 
@@ -6035,10 +5820,7 @@ msgid "Search in these BP Xprofile fields"
 msgstr ""
 
 #: backend/tabs/instance/general/user_search.php:169
-msgid ""
-"To change the user result URL or Title, Content fields, please go to <a "
-"class=\"asp_to_tab\" href=\"%s\" tabid=\"%s\">Advanced Options -> "
-"Content</a> panel."
+msgid "To change the user result URL or Title, Content fields, please go to <a class=\"asp_to_tab\" href=\"%s\" tabid=\"%s\">Advanced Options -> Content</a> panel."
 msgstr ""
 
 #: backend/tabs/instance/general_options.php:3
@@ -6142,9 +5924,7 @@ msgid "Compact layout mode"
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:7
-msgid ""
-"In compact layout only the search magnifier is visible, and the user has to "
-"click on the magnifier first to show the search bar."
+msgid "In compact layout only the search magnifier is visible, and the user has to click on the magnifier first to show the search bar."
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:13
@@ -6176,9 +5956,7 @@ msgid "Compact box final width"
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:90
-msgid ""
-"You might need to adjust this to a static value like 200px, as 100% is not "
-"always working in compact mode."
+msgid "You might need to adjust this to a static value like 200px, as 100% is not always working in compact mode."
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:95
@@ -6191,9 +5969,7 @@ msgid " color "
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:103
-msgid ""
-"Overlay only works with if the <strong>box position is set to "
-"Fixed</strong> below."
+msgid "Overlay only works with if the <strong>box position is set to Fixed</strong> below."
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:107
@@ -6205,9 +5981,7 @@ msgid "No floating"
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:119
-msgid ""
-"By default the search box floats with the theme default (none). You can "
-"change that here."
+msgid "By default the search box floats with the theme default (none). You can change that here."
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:123
@@ -6227,10 +6001,7 @@ msgid "Absolute"
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:135
-msgid ""
-"In absolute position the search can not affect it's parent element height "
-"as absolutely positioned elements are removed from the flow, thus ignored "
-"by other elements."
+msgid "In absolute position the search can not affect it's parent element height as absolutely positioned elements are removed from the flow, thus ignored by other elements."
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:141
@@ -6246,9 +6017,7 @@ msgid "z-index"
 msgstr ""
 
 #: backend/tabs/instance/layout/compact_box_layout.php:158
-msgid ""
-"In case you have some other elements floating above/below the search icon, "
-"you can adjust it's position with the z-index."
+msgid "In case you have some other elements floating above/below the search icon, you can adjust it's position with the z-index."
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:3
@@ -6264,6 +6033,7 @@ msgid " action"
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:16
+#: backend/settings/assets/search_instance.js:1111
 msgid "Load more ajax results"
 msgstr ""
 
@@ -6284,9 +6054,7 @@ msgid "Redirect to custom URL"
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:27
-msgid ""
-"\"Load more ajax results\" option will not work if Polaroid layout or "
-"Grouping is activated, or if results are removed when no images are present."
+msgid "\"Load more ajax results\" option will not work if Polaroid layout or Grouping is activated, or if results are removed when no images are present."
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:44
@@ -6294,9 +6062,7 @@ msgid "' Show more results..' url"
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:50
-msgid ""
-"<strong>Infinite scroll</strong> - Trigger loading more results on "
-"scrolling near the end of results list"
+msgid "<strong>Infinite scroll</strong> - Trigger loading more results on scrolling near the end of results list"
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:56
@@ -6331,9 +6097,7 @@ msgid "Results text keyword highlighter - Single Result & Search Results page"
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:107
-msgid ""
-"<strong>Disclaimer: </strong> This feature is highly experimental, and may "
-"not work correctly in all cases."
+msgid "<strong>Disclaimer: </strong> This feature is highly experimental, and may not work correctly in all cases."
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:111
@@ -6355,20 +6119,19 @@ msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:140
 #: backend/tabs/instance/layout/results_behaviour.php:14
-msgid ""
-"A negative offset will move the window upwards, a positive downwards. "
-"Default: 0"
+msgid "A negative offset will move the window upwards, a positive downwards. Default: 0"
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:144
-msgid "Result page content jQuery element selector"
+#: backend/tabs/instance/search_options/archive_pages.php:27
+#: backend/tabs/instance/search_options/archive_pages.php:46
+#: backend/tabs/instance/search_options/archive_pages.php:65
+#: backend/tabs/instance/search_options/archive_pages.php:81
+msgid "Results container DOM element selector"
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:148
-msgid ""
-"Optional, but very useful - it tells which element contains exactly the "
-"result content, so words are highlighted only on the given section of the "
-"page."
+msgid "Optional, but very useful - it tells which element contains exactly the result content, so words are highlighted only on the given section of the page."
 msgstr ""
 
 #: backend/tabs/instance/layout/results_behaviour.php:3
@@ -6419,9 +6182,7 @@ msgid "Polaroid style Results"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:25
-msgid ""
-"If you are using <b>Polaroid</b> layout type, then <b>block</b> position is "
-"highly recommended!"
+msgid "If you are using <b>Polaroid</b> layout type, then <b>block</b> position is highly recommended!"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:29
@@ -6469,9 +6230,7 @@ msgid "Display the results information box?"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:111
-msgid ""
-"Additional information on top of the results list, like the phrase and the "
-"results count. Only displays when there are results."
+msgid "Additional information on top of the results list, like the phrase and the results count. Only displays when there are results."
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:116
@@ -6479,9 +6238,7 @@ msgid "Information box text, when a search phrase is present"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:120
-msgid ""
-"Supports HTML and variables {phrase}, {results_count} and "
-"{results_count_total}"
+msgid "Supports HTML and variables {phrase}, {results_count} and {results_count_total}"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:123
@@ -6517,9 +6274,7 @@ msgid " format"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:171
-msgid ""
-"If turned OFF, it will use WordPress defaults. Default custom value: "
-"<b>Y-m-d H:i:s</b>"
+msgid "If turned OFF, it will use WordPress defaults. Default custom value: <b>Y-m-d H:i:s</b>"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:176
@@ -6547,9 +6302,7 @@ msgid " ..depth"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:198
-msgid ""
-"Will display the description from around the search phrase, not from the "
-"beginning."
+msgid "Will display the description from around the search phrase, not from the beginning."
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:204
@@ -6589,10 +6342,7 @@ msgid "Inherit"
 msgstr ""
 
 #: backend/tabs/instance/layout/search_box_layout.php:31
-msgid ""
-"By default the plugin follows the parent element alignment. This option "
-"might not have an effect if the parent element is displayed as \"table\" or "
-"\"flex\"."
+msgid "By default the plugin follows the parent element alignment. This option might not have an effect if the parent element is displayed as \"table\" or \"flex\"."
 msgstr ""
 
 #: backend/tabs/instance/layout/search_box_layout.php:36
@@ -6608,9 +6358,7 @@ msgid "Hide the search box completely, display settings only?"
 msgstr ""
 
 #: backend/tabs/instance/layout/search_box_layout.php:56
-msgid ""
-"If enabled, the search box will be hidden, and the Frontend settings will "
-"be displayed instead."
+msgid "If enabled, the search box will be hidden, and the Frontend settings will be displayed instead."
 msgstr ""
 
 #: backend/tabs/instance/layout/search_box_layout.php:61
@@ -6635,10 +6383,8 @@ msgstr ""
 
 #: backend/tabs/instance/layout/search_box_layout.php:83
 msgid ""
-"If enabled, the search will automatically populate on page load based on "
-"the selected configuration. The configuration and the\n"
-"            frontend search options <strong>WILL be taken into "
-"account</strong> as if a normal search was made!"
+"If enabled, the search will automatically populate on page load based on the selected configuration. The configuration and the\n"
+"            frontend search options <strong>WILL be taken into account</strong> as if a normal search was made!"
 msgstr ""
 
 #: backend/tabs/instance/layout/search_box_layout.php:89
@@ -6651,12 +6397,8 @@ msgstr ""
 
 #: backend/tabs/instance/layout/search_box_layout.php:97
 msgid ""
-"The <strong>Results Count</strong> option is <strong>Disabled</strong> for "
-"compatibility reasons, because the <a class=\"asp_to_tab\" tabid=\"405\" "
-"href=\"#405\">Load more feature</a> is enabled.\n"
-"            The default results count will be used, that is set under the "
-"<a class=\"asp_to_tab\" tabid=\"111\" href=\"#111\">General Options -> "
-"Limits</a> panel."
+"The <strong>Results Count</strong> option is <strong>Disabled</strong> for compatibility reasons, because the <a class=\"asp_to_tab\" tabid=\"405\" href=\"#405\">Load more feature</a> is enabled.\n"
+"            The default results count will be used, that is set under the <a class=\"asp_to_tab\" tabid=\"111\" href=\"#111\">General Options -> Limits</a> panel."
 msgstr ""
 
 #: backend/tabs/instance/layout_options.php:2
@@ -6686,8 +6428,7 @@ msgstr ""
 
 #: backend/tabs/instance/multisite_options.php:3
 msgid ""
-"If you not choose any site, then the <strong>currently active</strong> blog "
-"will be used!<br />\n"
+"If you not choose any site, then the <strong>currently active</strong> blog will be used!<br />\n"
 "        Also, you can use the same search on multiple blogs!"
 msgstr ""
 
@@ -6732,18 +6473,35 @@ msgstr ""
 msgid "estore defaults"
 msgstr ""
 
+#: backend/tabs/instance/search_options.php:2
+msgid "Magnifier and Return Actions"
+msgstr ""
+
+#: backend/tabs/instance/search_options.php:3
+msgid "Keyword Logic and Matching"
+msgstr ""
+
+#: backend/tabs/instance/search_options.php:4
+msgid "Live Search Triggers"
+msgstr ""
+
+#: backend/tabs/instance/search_options.php:5
+msgid "Search | Elementor | Archive | Shop page Live Results"
+msgstr ""
+
+#: backend/tabs/instance/search_options.php:6
+msgid "Mobile Device Behavior"
+msgstr ""
+
 #: backend/tabs/instance/search_options/archive_pages.php:3
 msgid "Results and Archive page live loaders"
 msgstr ""
 
 #: backend/tabs/instance/search_options/archive_pages.php:11
 msgid ""
-"<strong>Disclaimer:</strong> Live loading items to a page causes the script "
-"event handlers to detach on the affected elements - if there are\n"
-"        interactive elements (pop-up buttons etc..) controlled by a script "
-"within the results, they will probably stop working after a live load.\n"
-"        This cannot be prevented from this plugins perspective. <a "
-"href=\"%s\" target=\"_blank\">More information here.</a>"
+"<strong>Disclaimer:</strong> Live loading items to a page causes the script event handlers to detach on the affected elements - if there are\n"
+"        interactive elements (pop-up buttons etc..) controlled by a script within the results, they will probably stop working after a live load.\n"
+"        This cannot be prevented from this plugins perspective. <a href=\"%s\" target=\"_blank\">More information here.</a>"
 msgstr ""
 
 #: backend/tabs/instance/search_options/archive_pages.php:17
@@ -6754,42 +6512,24 @@ msgstr ""
 #: backend/tabs/instance/search_options/archive_pages.php:41
 #: backend/tabs/instance/search_options/archive_pages.php:60
 #: backend/tabs/instance/search_options/archive_pages.php:76
-msgid ""
-"If this is enabled, and the current page is the results page, the plugin "
-"will try to load the results there, without reloading the page."
-msgstr ""
-
-#: backend/tabs/instance/search_options/archive_pages.php:27
-#: backend/tabs/instance/search_options/archive_pages.php:46
-#: backend/tabs/instance/search_options/archive_pages.php:65
-#: backend/tabs/instance/search_options/archive_pages.php:81
-msgid "Results container DOM element selector"
+msgid "If this is enabled, and the current page is the results page, the plugin will try to load the results there, without reloading the page."
 msgstr ""
 
 #: backend/tabs/instance/search_options/archive_pages.php:31
 #: backend/tabs/instance/search_options/archive_pages.php:50
-msgid ""
-"In many themes this is <strong>#main</strong>, but it can be different. "
-"This is very important to get right, or this will surely not work. The "
-"plugin will try other values as well, if this fails."
+msgid "In many themes this is <strong>#main</strong>, but it can be different. This is very important to get right, or this will surely not work. The plugin will try other values as well, if this fails."
 msgstr ""
 
 #: backend/tabs/instance/search_options/archive_pages.php:36
-msgid ""
-"Live load the results on the WooCommerce Shop page? "
-"<strong>(experimental)</strong>"
+msgid "Live load the results on the WooCommerce Shop page? <strong>(experimental)</strong>"
 msgstr ""
 
 #: backend/tabs/instance/search_options/archive_pages.php:55
-msgid ""
-"Live load/filter the Taxonomy Archive pages (category, tag etc..)? "
-"<strong>(experimental)</strong>"
+msgid "Live load/filter the Taxonomy Archive pages (category, tag etc..)? <strong>(experimental)</strong>"
 msgstr ""
 
 #: backend/tabs/instance/search_options/archive_pages.php:71
-msgid ""
-"Live load/filter the Post Type Archive pages (post, portfolio etc..)? "
-"<strong>(experimental)</strong>"
+msgid "Live load/filter the Post Type Archive pages (post, portfolio etc..)? <strong>(experimental)</strong>"
 msgstr ""
 
 #: backend/tabs/instance/search_options/archive_pages.php:108
@@ -6804,9 +6544,7 @@ msgstr ""
 #: backend/tabs/instance/search_options/archive_pages.php:126
 #: backend/tabs/instance/search_options/archive_pages.php:136
 #: backend/tabs/instance/search_options/archive_pages.php:146
-msgid ""
-"If enabled, on the results page (or custom Elementor posts widget page), "
-"overrides the default behavior."
+msgid "If enabled, on the results page (or custom Elementor posts widget page), overrides the default behavior."
 msgstr ""
 
 #: backend/tabs/instance/search_options/archive_pages.php:121
@@ -6844,10 +6582,7 @@ msgid "Secondary logic"
 msgstr ""
 
 #: backend/tabs/instance/search_options/keyword_logic.php:43
-msgid ""
-"<strong>Secodary logic</strong> is used when the results count does not "
-"reach the limit. More <a href=\"%s\" target=\"_blank\">information about "
-"logics here</a>."
+msgid "<strong>Secodary logic</strong> is used when the results count does not reach the limit. More <a href=\"%s\" target=\"_blank\">information about logics here</a>."
 msgstr ""
 
 #: backend/tabs/instance/search_options/keyword_logic.php:48
@@ -6879,9 +6614,7 @@ msgid " ..allow Secondary logic when exact matching?"
 msgstr ""
 
 #: backend/tabs/instance/search_options/keyword_logic.php:74
-msgid ""
-"If this is enabled, the Regular search engine is used. Index table engine "
-"doesn't support exact matches."
+msgid "If this is enabled, the Regular search engine is used. Index table engine doesn't support exact matches."
 msgstr ""
 
 #: backend/tabs/instance/search_options/keyword_logic.php:79
@@ -6889,10 +6622,7 @@ msgid "Minimum word length"
 msgstr ""
 
 #: backend/tabs/instance/search_options/keyword_logic.php:83
-msgid ""
-"Words shorter than this will not be treated as separate keywords. Higher "
-"value increases performance, lower increase accuracy. Recommended values: "
-"2-5"
+msgid "Words shorter than this will not be treated as separate keywords. Higher value increases performance, lower increase accuracy. Recommended values: 2-5"
 msgstr ""
 
 #: backend/tabs/instance/search_options/magnifier_click.php:4
@@ -6908,9 +6638,7 @@ msgid "Action when pressing <strong>the return</strong> button"
 msgstr ""
 
 #: backend/tabs/instance/search_options/magnifier_click.php:83
-msgid ""
-"<b>Override</b> the default WordPress search results with results from this "
-"search instance?"
+msgid "<b>Override</b> the default WordPress search results with results from this search instance?"
 msgstr ""
 
 #: backend/tabs/instance/search_options/magnifier_click.php:88
@@ -6918,10 +6646,7 @@ msgid " method "
 msgstr ""
 
 #: backend/tabs/instance/search_options/magnifier_click.php:98
-msgid ""
-"If this is enabled, the plugin will try to replace the default results with "
-"it's own. Might not work with themes which temper the search query "
-"themselves (very very rare)."
+msgid "If this is enabled, the plugin will try to replace the default results with it's own. Might not work with themes which temper the search query themselves (very very rare)."
 msgstr ""
 
 #: backend/tabs/instance/search_options/magnifier_click.php:103
@@ -6934,12 +6659,9 @@ msgstr ""
 
 #: backend/tabs/instance/search_options/magnifier_click.php:109
 msgid ""
-"<strong>WARNING:</strong> This should be set to the same as the number of "
-"results originally displayed on the results page!<br>\n"
-"            Most themes use the system option found on the <strong>General "
-"Options -> Reading</strong> submenu, which is 10 by default. <br>\n"
-"            If you set it differently, or your theme has a different option "
-"for that, then <strong>set this option to the same value</strong> as well."
+"<strong>WARNING:</strong> This should be set to the same as the number of results originally displayed on the results page!<br>\n"
+"            Most themes use the system option found on the <strong>General Options -> Reading</strong> submenu, which is 10 by default. <br>\n"
+"            If you set it differently, or your theme has a different option for that, then <strong>set this option to the same value</strong> as well."
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:2
@@ -6955,9 +6677,7 @@ msgid " .. and on <strong>desktop</strong> devices?"
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:14
-msgid ""
-"If you want to hide this search bar on mobile/desktop devices then turn OFF "
-"these option."
+msgid "If you want to hide this search bar on mobile/desktop devices then turn OFF these option."
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:19
@@ -6973,15 +6693,11 @@ msgid "Action when tapping <strong>the magnifier</strong> icon"
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:49
-msgid ""
-"Action when tapping <strong>the return</strong> button (search icon on "
-"virtual keyboard)<br>"
+msgid "Action when tapping <strong>the return</strong> button (search icon on virtual keyboard)<br>"
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:85
-msgid ""
-"You can use the <string>asp_redirect_url</string> filter to add more "
-"variables."
+msgid "You can use the <string>asp_redirect_url</string> filter to add more variables."
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:86
@@ -6997,10 +6713,7 @@ msgid "Auto focus when opening the navigation menu (jQuery selector)"
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:103
-msgid ""
-"When the search is placed within a mobile navigation menu, you can define a "
-"jQuery selector of the opening menu item here - which when clicking auto "
-"focuses the search"
+msgid "When the search is placed within a mobile navigation menu, you can define a jQuery selector of the opening menu item here - which when clicking auto focuses the search"
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:108
@@ -7008,10 +6721,7 @@ msgid "Force 'hover' results layout on mobile devices?"
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:113
-msgid ""
-"This will force to display the results below the search bar (floating above "
-"the content) on mobile devices, even if it's configured otherwise (or if "
-"the results shortcode is used)."
+msgid "This will force to display the results below the search bar (floating above the content) on mobile devices, even if it's configured otherwise (or if the results shortcode is used)."
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:118
@@ -7019,10 +6729,7 @@ msgid "Force 'hover' settings layout on mobile devices?"
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:123
-msgid ""
-"This will force to display the settings below the search bar (floating "
-"above the content) on mobile devices, even if the settings shortcode is "
-"used."
+msgid "This will force to display the settings below the search bar (floating above the content) on mobile devices, even if the settings shortcode is used."
 msgstr ""
 
 #: backend/tabs/instance/search_options/mobile_behavior.php:128
@@ -7046,15 +6753,12 @@ msgid "Trigger <strong>live</strong> search when typing?"
 msgstr ""
 
 #: backend/tabs/instance/search_options/triggers.php:10
-msgid ""
-"Trigger <strong>live</strong> search when changing a facet on settings "
-"(like checkboxes, drop-downs etc..)?"
+msgid "Trigger <strong>live</strong> search when changing a facet on settings (like checkboxes, drop-downs etc..)?"
 msgstr ""
 
 #: backend/tabs/instance/search_options/triggers.php:15
 msgid ""
-"Will trigger the search if the user changes a checkbox, radio button, "
-"slider on the frontend\n"
+"Will trigger the search if the user changes a checkbox, radio button, slider on the frontend\n"
 "            search settings panel."
 msgstr ""
 
@@ -7063,33 +6767,11 @@ msgid "Update the browser address bar with the last selected options?"
 msgstr ""
 
 #: backend/tabs/instance/search_options/triggers.php:26
-msgid ""
-"The current state of the search and the filters is reflected in the address "
-"bar and remembered for the browser back/forward buttons."
+msgid "The current state of the search and the filters is reflected in the address bar and remembered for the browser back/forward buttons."
 msgstr ""
 
 #: backend/tabs/instance/search_options/triggers.php:31
 msgid "Minimal character count to trigger search"
-msgstr ""
-
-#: backend/tabs/instance/search_options.php:2
-msgid "Magnifier and Return Actions"
-msgstr ""
-
-#: backend/tabs/instance/search_options.php:3
-msgid "Keyword Logic and Matching"
-msgstr ""
-
-#: backend/tabs/instance/search_options.php:4
-msgid "Live Search Triggers"
-msgstr ""
-
-#: backend/tabs/instance/search_options.php:5
-msgid "Search | Elementor | Archive | Shop page Live Results"
-msgstr ""
-
-#: backend/tabs/instance/search_options.php:6
-msgid "Mobile Device Behavior"
 msgstr ""
 
 #: backend/tabs/instance/suggest/autocomplete.php:3
@@ -7133,9 +6815,7 @@ msgid "<strong>Instant</strong> autocomplete item count per source"
 msgstr ""
 
 #: backend/tabs/instance/suggest/autocomplete.php:63
-msgid ""
-"1500 is an optimal count. Changing this to higher numbers may reduce the "
-"initial page load time."
+msgid "1500 is an optimal count. Changing this to higher numbers may reduce the initial page load time."
 msgstr ""
 
 #: backend/tabs/instance/suggest/autocomplete.php:74
@@ -7157,9 +6837,7 @@ msgstr ""
 
 #: backend/tabs/instance/suggest/autocomplete.php:92
 #: backend/tabs/instance/suggest/keywords.php:47
-msgid ""
-"This is required for the Google Places API to work. You can <a href=\"%s\" "
-"target=\"_blank\">get your API key here</a>."
+msgid "This is required for the Google Places API to work. You can <a href=\"%s\" target=\"_blank\">get your API key here</a>."
 msgstr ""
 
 #: backend/tabs/instance/suggest/autocomplete.php:97
@@ -7167,9 +6845,7 @@ msgid "Max. suggestion length"
 msgstr ""
 
 #: backend/tabs/instance/suggest/autocomplete.php:102
-msgid ""
-"The length of each suggestion in characters. 30-60 is a good number to "
-"avoid too long suggestions."
+msgid "The length of each suggestion in characters. 30-60 is a good number to avoid too long suggestions."
 msgstr ""
 
 #: backend/tabs/instance/suggest/autocomplete.php:106
@@ -7181,28 +6857,19 @@ msgid "Keyword exceptions (comma separated)"
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:3
-msgid ""
-"Predictively suggest results on the live results box when nothing matches "
-"the search keyword?"
+msgid "Predictively suggest results on the live results box when nothing matches the search keyword?"
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:8
-msgid ""
-"The first matching keyword is going to be used from the selected "
-"<strong>Keyword Suggestion Sources</strong> below to conduct an additional "
-"search for possible results."
+msgid "The first matching keyword is going to be used from the selected <strong>Keyword Suggestion Sources</strong> below to conduct an additional search for possible results."
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:13
-msgid ""
-"(Experimental) Predictively suggest results on the results page when "
-"nothing matches the search keyword?"
+msgid "(Experimental) Predictively suggest results on the results page when nothing matches the search keyword?"
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:18
-msgid ""
-"WARNING: This may not work in every case! When enabled, the predicted "
-"results will also be shown on the search results page."
+msgid "WARNING: This may not work in every case! When enabled, the predicted results will also be shown on the search results page."
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:23
@@ -7230,9 +6897,7 @@ msgid "Google suggestions language"
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:64
-msgid ""
-"The length of each suggestion in characters. 30-50 is a good number to "
-"avoid too long suggestions."
+msgid "The length of each suggestion in characters. 30-50 is a good number to avoid too long suggestions."
 msgstr ""
 
 #: backend/tabs/instance/suggest/keywords.php:69
@@ -7284,9 +6949,7 @@ msgid "Results box z-index"
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:26
-msgid ""
-"In case you have some other elements floating above/below the results, you "
-"can adjust it's position with the z-index."
+msgid "In case you have some other elements floating above/below the results, you can adjust it's position with the z-index."
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:31
@@ -7294,9 +6957,7 @@ msgid "Settings drop-down box z-index"
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:35
-msgid ""
-"In case you have some other elements floating above/below the settings "
-"drop-down, you can adjust it's position with the z-index."
+msgid "In case you have some other elements floating above/below the settings drop-down, you can adjust it's position with the z-index."
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:39
@@ -7304,10 +6965,7 @@ msgid "Media Query Options"
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:41
-msgid ""
-"These options adjust the media query breakpoints. These are applied for "
-"certain options where you can set device specific values - such as the "
-"search width."
+msgid "These options adjust the media query breakpoints. These are applied for certain options where you can set device specific values - such as the search width."
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:45
@@ -7315,9 +6973,7 @@ msgid "Mobile device max-width"
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:49
-msgid ""
-"If a device max resolution width does not reach this width, it is "
-"considered as mobile device."
+msgid "If a device max resolution width does not reach this width, it is considered as mobile device."
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:54
@@ -7325,9 +6981,7 @@ msgid "Tablet device max-width"
 msgstr ""
 
 #: backend/tabs/instance/theme/custom_css.php:58
-msgid ""
-"If a device max resolution is bigger than the mobile, but does not reach "
-"this resolution, it is considered as tablet device."
+msgid "If a device max resolution is bigger than the mobile, but does not reach this resolution, it is considered as tablet device."
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:2
@@ -7335,9 +6989,7 @@ msgstr ""
 #: backend/tabs/instance/theme/isotopic_res.php:7
 #: backend/tabs/instance/theme/polaroid_res.php:2
 #: backend/tabs/instance/theme/vertical_res.php:2
-msgid ""
-"These options are hidden, because the <span>vertical</span> results layout "
-"is selected."
+msgid "These options are hidden, because the <span>vertical</span> results layout is selected."
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:3
@@ -7346,11 +6998,8 @@ msgstr ""
 #: backend/tabs/instance/theme/polaroid_res.php:3
 #: backend/tabs/instance/theme/vertical_res.php:3
 msgid ""
-"You can change that under the <a href=\"#402\" "
-"data-asp-os-highlight=\"resultstype\" tabid=\"402\">Layout Options -> "
-"Results layout</a> panel,\n"
-"        <br>..or choose a <a href=\"#601\" tabid=\"601\">different "
-"theme</a> with a different pre-defined layout."
+"You can change that under the <a href=\"#402\" data-asp-os-highlight=\"resultstype\" tabid=\"402\">Layout Options -> Results layout</a> panel,\n"
+"        <br>..or choose a <a href=\"#601\" tabid=\"601\">different theme</a> with a different pre-defined layout."
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:8
@@ -7363,9 +7012,7 @@ msgid "Display the results scrollbar?"
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:18
-msgid ""
-"When turned OFF, the results box will break space, instead of showing a "
-"horizontal scroll."
+msgid "When turned OFF, the results box will break space, instead of showing a horizontal scroll."
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:23
@@ -7373,9 +7020,7 @@ msgid "Horizontal result sizes"
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:26
-msgid ""
-"For witdh % (percentage) values only work if the <strong>Display the "
-"results scrollbar</strong> option is <strong>turned OFF</strong> above."
+msgid "For witdh % (percentage) values only work if the <strong>Display the results scrollbar</strong> option is <strong>turned OFF</strong> above."
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:29
@@ -7389,9 +7034,7 @@ msgid "Default: <strong>150px</strong>"
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:48
-msgid ""
-"Use with <a href=\"%s\" target=\"_blank\">CSS units</a> (like %s or %s or "
-"%s ..)"
+msgid "Use with <a href=\"%s\" target=\"_blank\">CSS units</a> (like %s or %s or %s ..)"
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:55
@@ -7403,18 +7046,12 @@ msgstr ""
 msgid "Default: <strong>auto</strong>"
 msgstr ""
 
-#: backend/tabs/instance/theme/horizontal_res.php:73
-msgid "Use values in pixels or auto only, ex: 200px, auto. % values will not work."
-msgstr ""
-
 #: backend/tabs/instance/theme/horizontal_res.php:78
 msgid "Image height"
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:95
-msgid ""
-"Default: <strong>150px</strong>. Only <strong>auto</strong> or "
-"<strong>px</strong> values are accepted."
+msgid "Default: <strong>150px</strong>. Only <strong>auto</strong> or <strong>px</strong> values are accepted."
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:100
@@ -7422,15 +7059,11 @@ msgid "Result item alignment"
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:112
-msgid ""
-"Default: <strong>Center</strong>. Sets where each results is aligned in the "
-"results container."
+msgid "Default: <strong>Center</strong>. Sets where each results is aligned in the results container."
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:113
-msgid ""
-"Applies only when the <strong>Display the results scrollbar?</strong> "
-"option is turned OFF above."
+msgid "Applies only when the <strong>Display the results scrollbar?</strong> option is turned OFF above."
 msgstr ""
 
 #: backend/tabs/instance/theme/horizontal_res.php:119
@@ -7594,21 +7227,15 @@ msgid "Result content background"
 msgstr ""
 
 #: backend/tabs/instance/theme/isotopic_res.php:29
-msgid ""
-"Background color under the image. Not visible by default, unless the image "
-"is opaque."
+msgid "Background color under the image. Not visible by default, unless the image is opaque."
 msgstr ""
 
 #: backend/tabs/instance/theme/isotopic_res.php:55
-msgid ""
-"The search will try to stick close to this value when filling the width of "
-"the results list."
+msgid "The search will try to stick close to this value when filling the width of the results list."
 msgstr ""
 
 #: backend/tabs/instance/theme/isotopic_res.php:81
-msgid ""
-"For % values, it will be relative to the results container width, not "
-"container height - as the container height is dynamic."
+msgid "For % values, it will be relative to the results container width, not container height - as the container height is dynamic."
 msgstr ""
 
 #: backend/tabs/instance/theme/isotopic_res.php:85
@@ -7702,9 +7329,7 @@ msgstr ""
 
 #: backend/tabs/instance/theme/magn_load.php:52
 #: backend/tabs/instance/theme/sett_dropdown.php:61
-msgid ""
-"Only works with the built-in icons, or if the custom icon type is SVG (.svg "
-"file)"
+msgid "Only works with the built-in icons, or if the custom icon type is SVG (.svg file)"
 msgstr ""
 
 #: backend/tabs/instance/theme/magn_load.php:56
@@ -7760,9 +7385,7 @@ msgid "Both"
 msgstr ""
 
 #: backend/tabs/instance/theme/magn_load.php:114
-msgid ""
-"By default the loader displays in the search bar. If the search bar is "
-"hidden, id displays in the results box instead."
+msgid "By default the loader displays in the search bar. If the search bar is hidden, id displays in the results box instead."
 msgstr ""
 
 #: backend/tabs/instance/theme/magn_load.php:127
@@ -7850,16 +7473,11 @@ msgid "Result Information Box"
 msgstr ""
 
 #: backend/tabs/instance/theme/result_info_box.php:4
-msgid ""
-"These options are hidden, because the <strong>Results Information "
-"Box</strong> option is disabled."
+msgid "These options are hidden, because the <strong>Results Information Box</strong> option is disabled."
 msgstr ""
 
 #: backend/tabs/instance/theme/result_info_box.php:5
-msgid ""
-"You can enable it under the <a href=\"#402\" "
-"data-asp-os-highlight=\"results_top_box\" tabid=\"402\">Layout Options -> "
-"Results layout</a> panel."
+msgid "You can enable it under the <a href=\"#402\" data-asp-os-highlight=\"results_top_box\" tabid=\"402\">Layout Options -> Results layout</a> panel."
 msgstr ""
 
 #: backend/tabs/instance/theme/result_info_box.php:9
@@ -7987,9 +7605,7 @@ msgid "Results box viewport size (in item numbers)"
 msgstr ""
 
 #: backend/tabs/instance/theme/vertical_res.php:58
-msgid ""
-"Used to calculate the results scroll box height. Result box height = (this "
-"option) x (average item height)"
+msgid "Used to calculate the results scroll box height. Result box height = (this option) x (average item height)"
 msgstr ""
 
 #: backend/tabs/instance/theme/vertical_res.php:75
@@ -8118,9 +7734,7 @@ msgid "Click the filter to load results!"
 msgstr ""
 
 #: backend/tabs/priorities/priority_groups.php:13
-msgid ""
-"There are no priority groups yet. Click the <strong>Add New</strong> button "
-"to create one!"
+msgid "There are no priority groups yet. Click the <strong>Add New</strong> button to create one!"
 msgstr ""
 
 #: backend/tabs/priorities/priority_groups.php:16
@@ -8137,16 +7751,12 @@ msgstr ""
 
 #: backend/tabs/priorities/priority_groups.php:27
 msgid ""
-"If you don't know what priority groups are, check the <a href=\"%s\" "
-"target=\"_blank\">Priority</a> and the\n"
-"    <a href=\"%s\" target=\"_blank\">Priority groups</a> documentations "
-"first."
+"If you don't know what priority groups are, check the <a href=\"%s\" target=\"_blank\">Priority</a> and the\n"
+"    <a href=\"%s\" target=\"_blank\">Priority groups</a> documentations first."
 msgstr ""
 
 #: backend/tabs/priorities/priority_groups.php:34
-msgid ""
-"PLEASE NOTE: Always create <strong>as few rules as possible</strong>, as "
-"they may affect the search performance negatively."
+msgid "PLEASE NOTE: Always create <strong>as few rules as possible</strong>, as they may affect the search performance negatively."
 msgstr ""
 
 #: backend/tabs/priorities/priority_groups.php:38
@@ -8327,10 +7937,8 @@ msgstr ""
 
 #: backend/updates_help.php:38
 msgid ""
-"If you can't find the answer in the documentation or knowledge base, or if "
-"you are having other issues,\n"
-"                feel free to <a href=\"%s\" target=\"_blank\">open a "
-"support ticket</a>."
+"If you can't find the answer in the documentation or knowledge base, or if you are having other issues,\n"
+"                feel free to <a href=\"%s\" target=\"_blank\">open a support ticket</a>."
 msgstr ""
 
 #: backend/updates_help.php:47
@@ -8345,7 +7953,7 @@ msgstr ""
 msgid "Knowledge base"
 msgstr ""
 
-#: backend/updates_help.php:52 src/server/Updates/Manager.php:115
+#: backend/updates_help.php:52
 msgid "Changelog"
 msgstr ""
 
@@ -8358,15 +7966,11 @@ msgid "License activation & Automatic updates"
 msgstr ""
 
 #: backend/updates_help.php:64
-msgid ""
-"Looks like this license was deactivated remotely or activated on a "
-"different site."
+msgid "Looks like this license was deactivated remotely or activated on a different site."
 msgstr ""
 
 #: backend/updates_help.php:65
-msgid ""
-"<strong>No worries!</strong> You can keep it that way, but this one will "
-"not recieve automatic updates, only stays verified."
+msgid "<strong>No worries!</strong> You can keep it that way, but this one will not recieve automatic updates, only stays verified."
 msgstr ""
 
 #: backend/updates_help.php:68
@@ -8374,15 +7978,11 @@ msgid "To activate Automatic Updates, you can re-activate your license."
 msgstr ""
 
 #: backend/updates_help.php:72
-msgid ""
-"To activate Automatic Updates, please activate your license code with this "
-"site."
+msgid "To activate Automatic Updates, please activate your license code with this site."
 msgstr ""
 
 #: backend/updates_help.php:77
-msgid ""
-"Check <a href=\"%s\" target=\"_blank\">this documentation</a> to see where "
-"you can find your license key."
+msgid "Check <a href=\"%s\" target=\"_blank\">this documentation</a> to see where you can find your license key."
 msgstr ""
 
 #: backend/updates_help.php:83
@@ -8390,9 +7990,7 @@ msgid "License key"
 msgstr ""
 
 #: backend/updates_help.php:91
-msgid ""
-"If you activated the plugin <b>with this site before</b>, and you see this "
-"activation form, just enter the purchase code again to re-activate."
+msgid "If you activated the plugin <b>with this site before</b>, and you see this activation form, just enter the purchase code again to re-activate."
 msgstr ""
 
 #: backend/updates_help.php:99
@@ -8408,266 +8006,786 @@ msgid "Remove"
 msgstr ""
 
 #: backend/updates_help.php:108
-msgid ""
-"<b>NOTICE:</b> After removal there is a <b>30 minute</b> wait time until "
-"you can re-activate the same purchase code to prevent malicious activity."
-msgstr ""
-
-#: backend/updates_help.php:113
-msgid "License Management"
+msgid "<b>NOTICE:</b> After removal there is a <b>30 minute</b> wait time until you can re-activate the same purchase code to prevent malicious activity."
 msgstr ""
 
 #: backend/updates_help.php:117
-msgid ""
-"To see more details about your licenses, you can <a href=\"%s\" "
-"target=\"_blank\">login</a> to our support site."
+msgid "To see more details about your licenses, you can <a href=\"%s\" target=\"_blank\">login</a> to our support site."
 msgstr ""
 
 #: backend/updates_help.php:125
-msgid ""
-"If you don't have an account yet, just create one and <a href='%s' "
-"target='_blank'>add</a> your existing licenses. They will be bound to that "
-"account."
+msgid "If you don't have an account yet, just create one and <a href='%s' target='_blank'>add</a> your existing licenses. They will be bound to that account."
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "Ajax Search Pro"
+#: backend/settings/assets/search_instance.js:1109
+msgid "Please note, that \"Load more results via ajax\" feature is automatically disabled with the current search configuration."
 msgstr ""
 
-#: backend/vc/vc.extend.php:61 backend/vc/vc.extend.php:92
-#: backend/vc/vc.extend.php:123 backend/vc/vc.extend.php:154
-msgid "Search instance"
+#: backend/settings/assets/search_instance.js:1110
+msgid "You are seeing this notice, because:"
 msgstr ""
 
-#: backend/vc/vc.extend.php:64 backend/vc/vc.extend.php:95
-#: backend/vc/vc.extend.php:126 backend/vc/vc.extend.php:157
-#: backend/vc/vc.extend.php:187
-msgid "Select the search instance to show"
+#: backend/settings/assets/search_instance.js:1111
+msgid "The more results action is set to"
 msgstr ""
 
-#: backend/vc/vc.extend.php:70 backend/vc/vc.extend.php:101
-#: backend/vc/vc.extend.php:132 backend/vc/vc.extend.php:193
-msgid "Extra class names"
+#: backend/settings/assets/search_instance.js:1112
+msgid "..and the {{loadmore_option}}"
 msgstr ""
 
-#: backend/vc/vc.extend.php:73 backend/vc/vc.extend.php:104
-#: backend/vc/vc.extend.php:135 backend/vc/vc.extend.php:196
-msgid "An extra class names for the search field"
+#: backend/settings/assets/search_instance.js:1115
+#: backend/settings/assets/search_instance.js:1156
+#: backend/settings/assets/search_instance.js:1178
+msgid "Okay"
 msgstr ""
 
-#: backend/vc/vc.extend.php:163
-msgid "Search width (%)"
+#: backend/settings/assets/search_instance.js:1127
+msgid "Using exact matches and the index table engine at the same time will automatically ignore the Index table engine, are you sure?"
 msgstr ""
 
-#: backend/vc/vc.extend.php:166
-msgid "The search field width in %"
+#: backend/settings/assets/search_instance.js:1130
+msgid "No, please revert this option"
 msgstr ""
 
-#: backend/vc/vc.extend.php:172
-msgid "Result list width (%)"
+#: backend/settings/assets/search_instance.js:1135
+msgid "Yes, I am sure"
 msgstr ""
 
-#: backend/vc/vc.extend.php:175
-msgid "Result list width in %"
+#: backend/settings/assets/search_instance.js:1149
+msgid "Notice"
 msgstr ""
 
-#: backend/vc/vc.extend.php:181
-msgid "Layout"
+#: backend/settings/assets/search_instance.js:1151
+msgid "Using <strong>Compact box layout</strong> mode and the <strong>Live Results Page Loader</strong> at the same time is not possible, this option will be reverted."
 msgstr ""
 
-#: src/server/Api/Rest0/Rest.php:71
-msgid "Not Authorized"
+#: backend/settings/assets/search_instance.js:1152
+msgid "Compact box layout option: <strong>Layout Options -> Compact box Layout</strong>"
 msgstr ""
 
-#: src/server/Api/Rest0/Rest.php:82
-msgid "Route error"
+#: backend/settings/assets/search_instance.js:1153
+msgid "The Live Results Page Loader option: <strong>General Options -> Logic & Behavior</strong>"
 msgstr ""
 
-#: src/server/Cache/BFI_Thumb_1_3.php:173
-msgid "Image rotate failed."
+#: backend/settings/assets/search_instance.js:1170
+msgid "GDPR & Cookie Notice"
 msgstr ""
 
-#: src/server/Cache/BFI_Thumb_1_3.php:196
-msgid "Image opacity change failed."
+#: backend/settings/assets/search_instance.js:1172
+msgid "When using this option cookies might be set during the search redirection, to store the search filter status and the phrase for pagination."
 msgstr ""
 
-#: src/server/Cache/BFI_Thumb_1_3.php:283
-msgid "Image color change failed."
+#: backend/settings/assets/search_instance.js:1173
+msgid " These cookies are <strong>functional</strong> only, they are not used for marketing nor any other purposes."
 msgstr ""
 
-#: src/server/Cache/BFI_Thumb_1_3.php:300
-msgid "Image grayscale failed."
+#: backend/settings/assets/search_instance.js:1174
+msgid "The cookie names are: <i>asp_data, asp_id, asp_phrase</i>"
 msgstr ""
 
-#: src/server/Cache/BFI_Thumb_1_3.php:317
-msgid "Image negate failed."
+#: backend/settings/assets/search_instance.js:1175
+msgid "For more information you can read the <a target=\"_blank\" href=\"https://documentation.ajaxsearchpro.com/gdpr-and-cookie-policy\">GDPR and Cookie policy documentation</a>."
 msgstr ""
 
-#: src/server/Core/Instances.php:546
-msgid "Invalid data"
+#: build/js/block-editor.js:2588
+msgid "search"
 msgstr ""
 
-#: src/server/Core/Instances.php:550
-msgid "Invalid JSON data"
+#: build/js/block-editor.js:2588
+msgid "ajax"
 msgstr ""
 
-#: src/server/Core/Manager.php:140
-msgid "Every 2 Minutes"
+#: build/js/block-editor.js:2610
+msgid "Loading search instances..."
 msgstr ""
 
-#: src/server/Core/Manager.php:144
-msgid "Every 3 Minutes"
+#: build/js/block-editor.js:2642
+msgid "Ajax Search Pro:"
 msgstr ""
 
-#: src/server/Core/Manager.php:148
-msgid "Every 5 Minutes"
+#: build/js/block-editor.js:2646
+msgid "Search bar"
 msgstr ""
 
-#: src/server/Core/Manager.php:152
-msgid "Every 15 Minutes"
+#: build/js/block-editor.js:2647
+msgid "Search settings"
 msgstr ""
 
-#: src/server/Core/Manager.php:156
-msgid "Every 30 Minutes"
+#: build/js/block-editor.js:2648
+msgid "Search results"
 msgstr ""
 
-#: src/server/Core/Manager.php:332
-msgid ""
-"<b>Ajax Search Pro notice: </b> The Index Table options have been modified, "
-"please re-create the index table!"
+#: build/js/block-editor.js:2656
+msgid "Search ID:"
 msgstr ""
 
-#: src/server/Core/Manager.php:333
-msgid "Let's do it!"
+#: build/js/block-editor.js:2704
+msgid "Selecting the search instance above will enable live search and filter for the query loop block for that search bar."
 msgstr ""
 
-#: src/server/Core/Manager.php:334
-msgid "Hide this message"
+#: build/js/block-editor.js:2712
+msgid "Learn more."
 msgstr ""
 
-#: src/server/Core/Menu.php:42
-msgid "Index Table"
+#: build/js/block-editor.js:2753
+msgid "Live search target"
 msgstr ""
 
-#: src/server/Core/Menu.php:47
-msgid "Priorities"
+#: build/js/dev.js:24317
+#: build/js/search-instance.js:24317
+msgid "Do you want to delete this tag?"
 msgstr ""
 
-#: src/server/Core/Menu.php:57
-msgid "Analytics Integration"
+#: build/js/dev.js:24371
+#: build/js/search-instance.js:24371
+msgid "Insert Field"
 msgstr ""
 
-#: src/server/Core/Menu.php:62
-msgid "Cache Settings"
+#: build/js/dev.js:24375
+#: build/js/search-instance.js:24375
+msgid "Switch to Text Editor"
 msgstr ""
 
-#: src/server/Core/Menu.php:67
-msgid "Performance tracking"
+#: build/js/dev.js:24375
+#: build/js/search-instance.js:24375
+msgid "Switch to Visual Editor"
 msgstr ""
 
-#: src/server/Core/Menu.php:72
-msgid "Compatibility & Other Settings"
+#: build/js/dev.js:24377
+#: build/js/search-instance.js:24377
+msgid "Non-webkit browsers may not work correctly for the visual editor! Recommended browser: Chrome"
 msgstr ""
 
-#: src/server/Core/Menu.php:77
-msgid "Export/Import"
+#: build/js/dev.js:24471
+#: build/js/search-instance.js:24471
+msgid "Result:"
 msgstr ""
 
-#: src/server/Core/Menu.php:82
-msgid "Maintenance"
+#: build/js/dev.js:24582
+#: build/js/search-instance.js:24582
+msgid "Select a taxonomy first"
 msgstr ""
 
-#: src/server/Core/Menu.php:87
-msgid "Help & Updates"
+#: build/js/dev.js:24803
+#: build/js/search-instance.js:24803
+msgid "Field editor"
 msgstr ""
 
-#: src/server/Core/NavMenuMetaBox.php:90 src/server/NavMenu/View.php:122
-msgid "Prevent custom script events"
+#: build/js/dev.js:24864
+#: build/js/search-instance.js:24864
+msgid "Custom field (post metadata) content. Supports ACF."
 msgstr ""
 
-#: src/server/Hooks/Filters/MediaScreen.php:14
-msgid "Content (not editable)"
+#: build/js/dev.js:24865
+#: build/js/dev.js:25113
+#: build/js/dev.js:25212
+#: build/js/search-instance.js:24865
+#: build/js/search-instance.js:25113
+#: build/js/search-instance.js:25212
+msgid "Enter field name"
 msgstr ""
 
-#: src/server/Hooks/Filters/MediaScreen.php:15
-msgid "Parsed content by Ajax Search Pro Media Parser service"
+#: build/js/dev.js:24869
+#: build/js/dev.js:25219
+#: build/js/search-instance.js:24869
+#: build/js/search-instance.js:25219
+msgid "Source"
 msgstr ""
 
-#: src/server/Media/RemoteService/License.php:123
-msgid ""
-"Invalid license key length or missing characters. Please make sure to copy "
-"the 36 character license key here."
+#: build/js/dev.js:24872
+#: build/js/search-instance.js:24872
+msgid "Post Meta or ACF"
 msgstr ""
 
-#: src/server/NavMenu/View.php:100
-msgid "Search"
+#: build/js/dev.js:24873
+#: build/js/search-instance.js:24873
+msgid "User (author) Meta or ACF"
 msgstr ""
 
-#: src/server/Rest/AbstractRest.php:21
-msgid "Only logged in users can access this resource."
+#: build/js/dev.js:24874
+#: build/js/dev.js:25224
+#: build/js/search-instance.js:24874
+#: build/js/search-instance.js:25224
+msgid "Relationship to Post Type"
 msgstr ""
 
-#: src/server/Rest/AbstractRest.php:33
-msgid "Only administrators can access this resource."
+#: build/js/dev.js:24875
+#: build/js/dev.js:25223
+#: build/js/search-instance.js:24875
+#: build/js/search-instance.js:25223
+msgid "Relationship to Users"
 msgstr ""
 
-#: src/server/Updates/Manager.php:111
-#. translators: %s: Plugin name - Elementor Pro.
-msgid "More information about %s"
+#: build/js/dev.js:24876
+#: build/js/dev.js:25225
+#: build/js/search-instance.js:24876
+#: build/js/search-instance.js:25225
+msgid "Relationship to Taxonomy Terms"
 msgstr ""
 
-#: src/server/Updates/Manager.php:113
-msgid "View details"
+#: build/js/dev.js:24877
+#: build/js/search-instance.js:24877
+msgid "PODs field"
 msgstr ""
 
-#: src/server/Updates/Manager.php:115
-msgid "View Ajax Search Pro Pro Changelog"
+#: build/js/dev.js:24880
+#: build/js/dev.js:25230
+#: build/js/search-instance.js:24880
+#: build/js/search-instance.js:25230
+msgid "Max. length"
 msgstr ""
 
-#: src/server/Updates/Manager.php:173
-msgid "Activate your license"
+#: build/js/dev.js:24883
+#: build/js/dev.js:24951
+#: build/js/dev.js:25239
+#: build/js/search-instance.js:24883
+#: build/js/search-instance.js:24951
+#: build/js/search-instance.js:25239
+msgid "Separation"
 msgstr ""
 
-#: src/server/Updates/Manager.php:173
-msgid "for automatic updates or"
+#: build/js/dev.js:24885
+#: build/js/dev.js:25241
+#: build/js/search-instance.js:24885
+#: build/js/search-instance.js:25241
+msgid "How to separate items if the field contains an array of values"
 msgstr ""
 
-#: src/server/Updates/Manager.php:173
-msgid "download new version from CodeCanyon."
+#: build/js/dev.js:24887
+#: build/js/dev.js:24955
+#: build/js/dev.js:25243
+#: build/js/search-instance.js:24887
+#: build/js/search-instance.js:24955
+#: build/js/search-instance.js:25243
+msgid "Text with separator"
 msgstr ""
 
-#: src/server/Updates/Manager.php:175
-msgid "Update Ajax Search Pro now."
+#: build/js/dev.js:24888
+#: build/js/dev.js:24956
+#: build/js/dev.js:25244
+#: build/js/search-instance.js:24888
+#: build/js/search-instance.js:24956
+#: build/js/search-instance.js:25244
+msgid "HTML List (ul>li)"
 msgstr ""
 
-#: src/server/Updates/Remote.php:134
-msgid "Ajax Search Pro version <strong>%s</strong> is available."
+#: build/js/dev.js:24898
+#: build/js/dev.js:24966
+#: build/js/search-instance.js:24898
+#: build/js/search-instance.js:24966
+msgid "Separator"
 msgstr ""
 
-#: src/server/Updates/Remote.php:139
-msgid "How to update?"
+#: build/js/dev.js:24899
+#: build/js/dev.js:24967
+#: build/js/search-instance.js:24899
+#: build/js/search-instance.js:24967
+msgid " ,"
 msgstr ""
 
-#: tests/includes/factory/class-wp-unittest-factory-for-bookmark.php:56
-msgid "Could not update link."
+#: build/js/dev.js:24902
+#: build/js/search-instance.js:24902
+msgid "Separator between the items when the value is an array"
 msgstr ""
 
-#: tests/includes/factory/class-wp-unittest-factory-for-comment.php:45
-msgid "Could not insert comment into the database."
+#: build/js/dev.js:24904
+#: build/js/search-instance.js:24904
+msgid "Allow HTML in field output?"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "https://ajaxsearchpro.com"
+#: build/js/dev.js:24913
+#: build/js/dev.js:25034
+#: build/js/search-instance.js:24913
+#: build/js/search-instance.js:25034
+msgid "Date Format"
 msgstr ""
 
-#. Description of the plugin/theme
-msgid "The most powerful live search engine for WordPress."
+#: build/js/dev.js:24916
+#: build/js/dev.js:25037
+#: build/js/search-instance.js:24916
+#: build/js/search-instance.js:25037
+msgid "WordPress Default"
 msgstr ""
 
-#. Author of the plugin/theme
-msgid "Ernest Marcinko"
+#: build/js/dev.js:24917
+#: build/js/dev.js:25038
+#: build/js/search-instance.js:24917
+#: build/js/search-instance.js:25038
+msgid "DateTime format, ex.: \"F j, Y, g:i a\" -> \"March 10, 2001, 5:16 pm\""
 msgstr ""
 
-#. Author URI of the plugin/theme
-msgid "https://codecanyon.net/user/wpdreams"
+#: build/js/dev.js:24922
+#: build/js/search-instance.js:24922
+msgid "Thousand separator"
+msgstr ""
+
+#: build/js/dev.js:24927
+#: build/js/search-instance.js:24927
+msgid "Decimals"
+msgstr ""
+
+#: build/js/dev.js:24930
+#: build/js/search-instance.js:24930
+msgid "Decimal separator"
+msgstr ""
+
+#: build/js/dev.js:24941
+#: build/js/search-instance.js:24941
+msgid "List of taxonomy terms (categories, tags etc..)."
+msgstr ""
+
+#: build/js/dev.js:24942
+#: build/js/search-instance.js:24942
+msgid "Select taxonomy"
+msgstr ""
+
+#: build/js/dev.js:24943
+#: build/js/search-instance.js:24943
+msgid "Count"
+msgstr ""
+
+#: build/js/dev.js:24943
+#: build/js/dev.js:25117
+#: build/js/search-instance.js:24943
+#: build/js/search-instance.js:25117
+msgid "5"
+msgstr ""
+
+#: build/js/dev.js:24944
+#: build/js/search-instance.js:24944
+msgid "Order by"
+msgstr ""
+
+#: build/js/dev.js:24945
+#: build/js/search-instance.js:24945
+msgid "Order"
+msgstr ""
+
+#: build/js/dev.js:24946
+#: build/js/search-instance.js:24946
+msgid "Exclude terms"
+msgstr ""
+
+#: build/js/dev.js:24946
+#: build/js/search-instance.js:24946
+msgid "Select terms to exclude"
+msgstr ""
+
+#: build/js/dev.js:24948
+#: build/js/search-instance.js:24948
+msgid "Make terms clickable links"
+msgstr ""
+
+#: build/js/dev.js:24953
+#: build/js/search-instance.js:24953
+msgid "How to separate the terms?"
+msgstr ""
+
+#: build/js/dev.js:24970
+#: build/js/search-instance.js:24970
+msgid "Separator between the items if the value is an array"
+msgstr ""
+
+#: build/js/dev.js:24972
+#: build/js/dev.js:24976
+#: build/js/search-instance.js:24972
+#: build/js/search-instance.js:24976
+msgid "Term color"
+msgstr ""
+
+#: build/js/dev.js:24973
+#: build/js/search-instance.js:24973
+msgid "Separator color"
+msgstr ""
+
+#: build/js/dev.js:24981
+#: build/js/search-instance.js:24981
+msgid "Open links in new tab?"
+msgstr ""
+
+#: build/js/dev.js:24990
+#: build/js/search-instance.js:24990
+msgid "Field"
+msgstr ""
+
+#: build/js/dev.js:24993
+#: build/js/dev.js:25135
+#: build/js/search-instance.js:24993
+#: build/js/search-instance.js:25135
+msgid "Result ID"
+msgstr ""
+
+#: build/js/dev.js:24994
+#: build/js/dev.js:25136
+#: build/js/search-instance.js:24994
+#: build/js/search-instance.js:25136
+msgid "Result Title"
+msgstr ""
+
+#: build/js/dev.js:24995
+#: build/js/dev.js:25137
+#: build/js/search-instance.js:24995
+#: build/js/search-instance.js:25137
+msgid "Result Content"
+msgstr ""
+
+#: build/js/dev.js:24996
+#: build/js/dev.js:25138
+#: build/js/search-instance.js:24996
+#: build/js/search-instance.js:25138
+msgid "Result Post Type"
+msgstr ""
+
+#: build/js/dev.js:24997
+#: build/js/dev.js:25139
+#: build/js/search-instance.js:24997
+#: build/js/search-instance.js:25139
+msgid "Result URL"
+msgstr ""
+
+#: build/js/dev.js:24998
+#: build/js/dev.js:25140
+#: build/js/search-instance.js:24998
+#: build/js/search-instance.js:25140
+msgid "Result image URL"
+msgstr ""
+
+#: build/js/dev.js:24999
+#: build/js/dev.js:25141
+#: build/js/search-instance.js:24999
+#: build/js/search-instance.js:25141
+msgid "Result date"
+msgstr ""
+
+#: build/js/dev.js:25000
+#: build/js/dev.js:25142
+#: build/js/search-instance.js:25000
+#: build/js/search-instance.js:25142
+msgid "Result author (Display name)"
+msgstr ""
+
+#: build/js/dev.js:25009
+#: build/js/search-instance.js:25009
+msgid "The default Result Title Field as set in the primary or secondary source."
+msgstr ""
+
+#: build/js/dev.js:25015
+#: build/js/search-instance.js:25015
+msgid "The default Result Content Field as set in the primary or secondary source."
+msgstr ""
+
+#: build/js/dev.js:25021
+#: build/js/search-instance.js:25021
+msgid "The result URL parsed by Ajax Search Pro."
+msgstr ""
+
+#: build/js/dev.js:25027
+#: build/js/search-instance.js:25027
+msgid "The image URL parsed by Ajax Search Pro."
+msgstr ""
+
+#: build/js/dev.js:25048
+#: build/js/search-instance.js:25048
+msgid "Price field"
+msgstr ""
+
+#: build/js/dev.js:25052
+#: build/js/search-instance.js:25052
+msgid "Default Price HTML"
+msgstr ""
+
+#: build/js/dev.js:25053
+#: build/js/search-instance.js:25053
+msgid "Price without tax"
+msgstr ""
+
+#: build/js/dev.js:25054
+#: build/js/search-instance.js:25054
+msgid "Price with tax"
+msgstr ""
+
+#: build/js/dev.js:25055
+#: build/js/search-instance.js:25055
+msgid "Sale Price"
+msgstr ""
+
+#: build/js/dev.js:25062
+#: build/js/search-instance.js:25062
+msgid "Regular Price Color"
+msgstr ""
+
+#: build/js/dev.js:25063
+#: build/js/search-instance.js:25063
+msgid "Sale Price Color"
+msgstr ""
+
+#: build/js/dev.js:25070
+#: build/js/dev.js:25124
+#: build/js/search-instance.js:25070
+#: build/js/search-instance.js:25124
+msgid "Stars Size"
+msgstr ""
+
+#: build/js/dev.js:25070
+#: build/js/dev.js:25124
+#: build/js/search-instance.js:25070
+#: build/js/search-instance.js:25124
+msgid "Default: 17px"
+msgstr ""
+
+#: build/js/dev.js:25070
+#: build/js/dev.js:25124
+#: build/js/search-instance.js:25070
+#: build/js/search-instance.js:25124
+msgid "Ex.: 17px or 1em"
+msgstr ""
+
+#: build/js/dev.js:25071
+#: build/js/dev.js:25125
+#: build/js/search-instance.js:25071
+#: build/js/search-instance.js:25125
+msgid "Stars Color"
+msgstr ""
+
+#: build/js/dev.js:25072
+#: build/js/dev.js:25126
+#: build/js/search-instance.js:25072
+#: build/js/search-instance.js:25126
+msgid "Stars Background Color"
+msgstr ""
+
+#: build/js/dev.js:25077
+#: build/js/search-instance.js:25077
+msgid "Display Quantity Input"
+msgstr ""
+
+#: build/js/dev.js:25078
+#: build/js/search-instance.js:25078
+msgid "Display only when product is in-stock"
+msgstr ""
+
+#: build/js/dev.js:25079
+#: build/js/search-instance.js:25079
+msgid "Default quantity"
+msgstr ""
+
+#: build/js/dev.js:25079
+#: build/js/search-instance.js:25079
+msgid "Default: 1"
+msgstr ""
+
+#: build/js/dev.js:25080
+#: build/js/search-instance.js:25080
+msgid "Button Color"
+msgstr ""
+
+#: build/js/dev.js:25081
+#: build/js/search-instance.js:25081
+msgid "Button Text Color"
+msgstr ""
+
+#: build/js/dev.js:25084
+#: build/js/search-instance.js:25084
+msgid "Justification"
+msgstr ""
+
+#: build/js/dev.js:25095
+#: build/js/search-instance.js:25095
+msgid "Display only on these product statuses"
+msgstr ""
+
+#: build/js/dev.js:25097
+#: build/js/search-instance.js:25097
+msgid "All statuses"
+msgstr ""
+
+#: build/js/dev.js:25099
+#: build/js/search-instance.js:25099
+msgid "In Stock"
+msgstr ""
+
+#: build/js/dev.js:25100
+#: build/js/search-instance.js:25100
+msgid "Out of Stock"
+msgstr ""
+
+#: build/js/dev.js:25101
+#: build/js/search-instance.js:25101
+msgid "On Backorder"
+msgstr ""
+
+#: build/js/dev.js:25106
+#: build/js/search-instance.js:25106
+msgid "Display stock count"
+msgstr ""
+
+#: build/js/dev.js:25113
+#: build/js/search-instance.js:25113
+msgid "Rating custom field name"
+msgstr ""
+
+#: build/js/dev.js:25116
+#: build/js/search-instance.js:25116
+msgid "Max. rating"
+msgstr ""
+
+#: build/js/dev.js:25122
+#: build/js/search-instance.js:25122
+msgid "Highest possible rating. Ex.: Users can rate 0-10, then it's 10"
+msgstr ""
+
+#: build/js/dev.js:25132
+#: build/js/search-instance.js:25132
+msgid "Categories or other Taxonomy Terms"
+msgstr ""
+
+#: build/js/dev.js:25133
+#: build/js/search-instance.js:25133
+msgid "Title Field (default)"
+msgstr ""
+
+#: build/js/dev.js:25134
+#: build/js/search-instance.js:25134
+msgid "Description Field (default)"
+msgstr ""
+
+#: build/js/dev.js:25143
+#: build/js/search-instance.js:25143
+msgid "WooCommerce: Price"
+msgstr ""
+
+#: build/js/dev.js:25144
+#: build/js/search-instance.js:25144
+msgid "WooCommerce: Add to Cart"
+msgstr ""
+
+#: build/js/dev.js:25145
+#: build/js/search-instance.js:25145
+msgid "WooCommerce: Star rating"
+msgstr ""
+
+#: build/js/dev.js:25146
+#: build/js/search-instance.js:25146
+msgid "WooCommerce: Stock Status"
+msgstr ""
+
+#: build/js/dev.js:25147
+#: build/js/search-instance.js:25147
+msgid "Star rating field"
+msgstr ""
+
+#: build/js/dev.js:25148
+#: build/js/search-instance.js:25148
+msgid "Result Field"
+msgstr ""
+
+#: build/js/dev.js:25152
+#: build/js/search-instance.js:25152
+msgid "Terms"
+msgstr ""
+
+#: build/js/dev.js:25153
+#: build/js/search-instance.js:25153
+msgid "Price"
+msgstr ""
+
+#: build/js/dev.js:25154
+#: build/js/search-instance.js:25154
+msgid "Woo Star Rating"
+msgstr ""
+
+#: build/js/dev.js:25155
+#: build/js/search-instance.js:25155
+msgid "Woo Add to Cart"
+msgstr ""
+
+#: build/js/dev.js:25156
+#: build/js/search-instance.js:25156
+msgid "Woo Stock Status"
+msgstr ""
+
+#: build/js/dev.js:25157
+#: build/js/search-instance.js:25157
+msgid "Star Rating"
+msgstr ""
+
+#: build/js/dev.js:25206
+#: build/js/search-instance.js:25206
+msgid "Custom field (user metadata) content. Supports ACF."
+msgstr ""
+
+#: build/js/dev.js:25222
+#: build/js/search-instance.js:25222
+msgid "User Meta or ACF"
+msgstr ""
+
+#: build/js/dev.js:25937
+#: build/js/search-instance.js:25937
+msgid "Conditional: If field values wrapped in this tag are empty, it returns an empty string."
+msgstr ""
+
+#: build/js/dev.js:25937
+#: build/js/search-instance.js:25937
+msgid "Shortcode escape: To insert a shortcode into the field, wrap with this tag."
+msgstr ""
+
+#: build/js/dev.js:25937
+#: build/js/search-instance.js:25937
+msgid "See documentation"
+msgstr ""
+
+#: build/js/dev.js:26013
+#: build/js/search-instance.js:26013
+msgid "Paragraph HTML tag"
+msgstr ""
+
+#: build/js/dev.js:26019
+#: build/js/search-instance.js:26019
+msgid "Div HTML tag"
+msgstr ""
+
+#: build/js/dev.js:26025
+#: build/js/search-instance.js:26025
+msgid "Span HTML tag"
+msgstr ""
+
+#: build/js/dev.js:26031
+#: build/js/search-instance.js:26031
+msgid "Strong (bold) HTML tag"
+msgstr ""
+
+#: build/js/dev.js:26037
+#: build/js/search-instance.js:26037
+msgid "Italic HTML tag"
+msgstr ""
+
+#: build/js/dev.js:26043
+#: build/js/search-instance.js:26043
+msgid "Emphasis HTML tag"
+msgstr ""
+
+#: build/js/dev.js:26049
+#: build/js/search-instance.js:26049
+msgid "Line break HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:27033
+#: build/js/search-instance.js:27067
+msgid "There was an issue loading the data, please reload the page."
+msgstr ""
+
+#: build/js/search-instance.js:27040
+msgid "Advanced Title Field for Post Type Results"
+msgstr ""
+
+#: build/js/search-instance.js:27051
+msgid "Advanced Description Field for Post Type Results"
+msgstr ""
+
+#: build/js/search-instance.js:27074
+msgid "Advanced title field for User results"
+msgstr ""
+
+#: build/js/search-instance.js:27085
+msgid "Advanced description field for User result"
 msgstr ""

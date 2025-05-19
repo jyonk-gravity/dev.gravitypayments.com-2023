@@ -443,7 +443,10 @@ class SearchIndex extends SearchPostTypes {
 		/*---------------------------------------------------------------*/
 
 		/*----------------------- Improved title and custom field search query ------------------*/
-		if ( in_array('title', $args['post_fields'], true) && ( MB::strlen($s) > 2 || count($_s) === 0 ) ) {
+		if (
+			$args['post_primary_order'] === 'relevance' &&
+			in_array('title', $args['post_fields'], true) && ( MB::strlen($s) > 2 || count($_s) === 0 )
+		) {
 			$rmod = 1000;
 
 			// Re-calculate the limit to slice the results to the real size

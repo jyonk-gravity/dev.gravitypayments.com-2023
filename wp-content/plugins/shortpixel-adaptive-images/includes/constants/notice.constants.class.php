@@ -12,6 +12,7 @@
 		public $autoptimize;
 		public $avadalazy;
         public $ginger;
+        public $speedoptimizer;
 		public $divitoolbox;
         public $mbstring;
 		public $elementorexternal;
@@ -93,6 +94,22 @@
 					],
 				],
 			];
+
+            $this->speedoptimizer = [
+                'title' => __( 'SpeedOptimizer option conflict', 'shortpixel-adaptive-images' ),
+                'body'  => [
+                    __( 'The option "<strong>Combine JavaScript Files</strong>" is active in Speed Optimizer, under Frontend -> Javascript section. Please <span>deactivate it</span> to let ShortPixel Adaptive Images serve the images properly from CDN.',
+                        'shortpixel-adaptive-images' ),
+                ],
+                'buttons' => [
+                    [
+                        'type'    => 'link',
+                        'title'   => __( 'Deactivate it', 'shortpixel-adaptive-images' ),
+                        'url'     => 'admin.php?page=sgo_frontend',
+                        'primary' => true,
+                    ],
+                ],
+            ];
 
 			$this->ginger = [
 				'title' => __( 'Ginger option conflict', 'shortpixel-adaptive-images' ),

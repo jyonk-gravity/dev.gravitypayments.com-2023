@@ -1,0 +1,91 @@
+.asp_r .item {
+	.price {
+		--regular-price-color: #666;
+		--sale_price_color: #666;
+		color: var(--regular-price-color);
+
+		del {
+			opacity: .5;
+			display: inline-block;
+			text-decoration: line-through;
+			color: var(--regular-price-color);
+		}
+
+		ins {
+			margin-left: 0.5em;
+			text-decoration: none;
+			font-weight: 700;
+			display: inline-block;
+			color: var(--sale_price_color);
+		}
+	}
+
+	.stock {
+		.quantity {
+			color: #666;
+		}
+		.out-of-stock {
+			color: #a00;
+		}
+		.on-backorder {
+			color: #eaa600;
+		}
+		.in-stock {
+			color: #7ad03a;
+		}
+	}
+
+	.add-to-cart-container {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		position: relative;
+		z-index: 10;
+		width: 100%;
+		margin: 12px 0;
+
+		.add-to-cart-quantity {
+			padding: 8px 0 8px 8px;
+			background: #eaeaea;
+			width: 32px;
+			border-radius: 4px 0 0 4px;
+			height: 18px;
+			min-height: unset;
+			display: inline-block;
+			font-size: 13px;
+			line-height: normal;
+		}
+
+		.add-to-cart-button {
+			padding: 8px;
+			border-radius: 4px;
+			background: #6246d7;
+			color: white;
+			height: 18px;
+			min-height: unset;
+			display: block;
+			text-align: center;
+			min-width: 90px;
+			font-size: 13px;
+			line-height: normal;
+
+			&.add-to-cart-variable {
+				border-radius: 4px;
+			}
+			&.loading {
+				content: url("data:image/svg+xml,%3Csvg width='38' height='38' viewBox='0 0 38 38' xmlns='http://www.w3.org/2000/svg' stroke='%23fff'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg transform='translate(1 1)' stroke-width='2'%3E%3Ccircle stroke-opacity='.5' cx='18' cy='18' r='18'/%3E%3Cpath d='M36 18c0-9.94-8.06-18-18-18'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 18 18' to='360 18 18' dur='1s' repeatCount='indefinite'/%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+			}
+		}
+
+		a.added_to_cart {
+			flex-basis: 100%;
+			margin-top: 8px;
+		}
+	}
+
+	.add-to-cart-container:has(.add-to-cart-quantity) {
+		.add-to-cart-button {
+			border-radius: 0 4px 4px 0;
+		}
+	}
+}

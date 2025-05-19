@@ -29,11 +29,12 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_results_horizontal; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_horizontal.js
+;// ./src/client/plugin/core/actions/results_horizontal.js
+
 
 
 "use strict";
@@ -58,7 +59,7 @@ external_AjaxSearchPro_namespaceObject.plugin.showHorizontalResults = function()
   }
   if ($this.o.highlight) {
     external_DoMini_namespaceObject("div.item", $this.n("resultsDiv")).highlight(
-      $this.n("text").val().split(" "),
+      $this.n("text").val().replace(/["']/g, "").split(" "),
       { element: "span", className: "highlighted", wordsOnly: !!$this.o.highlightWholewords }
     );
   }
@@ -88,7 +89,8 @@ external_AjaxSearchPro_namespaceObject.plugin.showHorizontalResults = function()
 };
 /* harmony default export */ var results_horizontal = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-horizontal.js
+;// ./src/client/bundle/optimized/asp-results-horizontal.js
+
 
 
 /* harmony default export */ var asp_results_horizontal = (external_AjaxSearchPro_namespaceObject);

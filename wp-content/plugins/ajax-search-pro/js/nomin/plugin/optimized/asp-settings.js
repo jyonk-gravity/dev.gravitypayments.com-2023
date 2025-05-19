@@ -29,11 +29,12 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_settings; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/settings.js
+;// ./src/client/plugin/core/actions/settings.js
+
 
 
 "use strict";
@@ -245,9 +246,10 @@ external_AjaxSearchPro_namespaceObject.plugin.settingsCheckboxToggle = function(
 };
 /* harmony default export */ var settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: external "intervalUntilExecute"
+;// external "intervalUntilExecute"
 var external_intervalUntilExecute_namespaceObject = Object(window.WPD)["intervalUntilExecute"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/datepicker.js
+;// ./src/client/plugin/core/events/datepicker.js
+
 
 
 
@@ -323,7 +325,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initDatePicker = function() {
 };
 /* harmony default export */ var datepicker = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/facet.js
+;// ./src/client/plugin/core/events/facet.js
+
 
 
 "use strict";
@@ -443,7 +446,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initFacetEvents = function() {
 };
 /* harmony default export */ var facet = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/noui.js
+;// ./src/client/plugin/core/events/noui.js
+
 
 
 "use strict";
@@ -511,7 +515,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initNoUIEvents = function() {
 };
 /* harmony default export */ var noui = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/settings.js
+;// ./src/client/plugin/core/events/settings.js
+
 
 
 "use strict";
@@ -560,15 +565,17 @@ external_AjaxSearchPro_namespaceObject.plugin.initSettingsEvents = function() {
   const setOptionCheckedClass = () => {
     $this.n("searchsettings").find(".asp_option, .asp_label").forEach(function(el) {
       if (external_DoMini_namespaceObject(el).find("input").prop("checked")) {
-        external_DoMini_namespaceObject(el).addClass("asp_option_checked");
+        external_DoMini_namespaceObject(el).addClass("asp_option_checked").attr("aria-checked", true);
       } else {
-        external_DoMini_namespaceObject(el).removeClass("asp_option_checked");
+        external_DoMini_namespaceObject(el).removeClass("asp_option_checked").attr("aria-checked", false);
       }
     });
   };
-  setOptionCheckedClass();
   $this.n("searchsettings").on("click", function() {
     $this.settingsChanged = true;
+  });
+  $this.n("searchsettings").on("set_option_checked", function() {
+    setOptionCheckedClass();
   });
   $this.n("searchsettings").on($this.clickTouchend, function(e) {
     if (!$this.dragging) {
@@ -581,8 +588,14 @@ external_AjaxSearchPro_namespaceObject.plugin.initSettingsEvents = function() {
         e.stopImmediatePropagation();
     }
   });
-  external_DoMini_namespaceObject('.asp_option_cat input[type="checkbox"]', $this.n("searchsettings")).on("asp_chbx_change", function() {
+  external_DoMini_namespaceObject('.asp_option input[type="checkbox"]', $this.n("searchsettings")).on("asp_chbx_change", function() {
     $this.settingsCheckboxToggle(external_DoMini_namespaceObject(this).closest(".asp_option_cat"));
+    const className = external_DoMini_namespaceObject(this).data("targetclass");
+    if (typeof className === "string" && className !== "") {
+      external_DoMini_namespaceObject(this).closest("fieldset").find("input." + className).prop("checked", external_DoMini_namespaceObject(this).prop("checked"));
+    }
+  });
+  $this.n("searchsettings").find('input[type="checkbox"]').on("asp_chbx_change", function() {
     setOptionCheckedClass();
   });
   external_DoMini_namespaceObject('input[type="radio"]', $this.n("searchsettings")).on("change", function() {
@@ -626,17 +639,11 @@ external_AjaxSearchPro_namespaceObject.plugin.initSettingsEvents = function() {
   external_DoMini_namespaceObject("fieldset", $this.n("searchsettings")).forEach(function() {
     external_DoMini_namespaceObject(this).find(".asp_option:not(.hiddend)").last().addClass("asp-o-last");
   });
-  external_DoMini_namespaceObject('.asp_option input[type="checkbox"]', $this.n("searchsettings")).on("asp_chbx_change", function() {
-    let className = external_DoMini_namespaceObject(this).data("targetclass");
-    if (typeof className == "string" && className !== "") {
-      external_DoMini_namespaceObject("input." + className, $this.n("searchsettings")).prop("checked", external_DoMini_namespaceObject(this).prop("checked"));
-    }
-    setOptionCheckedClass();
-  });
 };
 /* harmony default export */ var events_settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/settings.js
+;// ./src/client/plugin/core/init/settings.js
+
 
 
 "use strict";
@@ -753,7 +760,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initSettingsAnimations = function(
 };
 /* harmony default export */ var init_settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-settings.js
+;// ./src/client/bundle/optimized/asp-settings.js
+
 
 
 

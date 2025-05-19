@@ -29,11 +29,12 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_results_polaroid; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_polaroid.js
+;// ./src/client/plugin/core/actions/results_polaroid.js
+
 
 
 "use strict";
@@ -49,7 +50,7 @@ external_AjaxSearchPro_namespaceObject.plugin.showPolaroidResults = function() {
       height: $this.o.prescontainerheight
     });
     if ($this.o.highlight) {
-      external_DoMini_namespaceObject("figcaption", $this.n("resultsDiv")).highlight($this.n("text").val().split(" "), {
+      external_DoMini_namespaceObject("figcaption", $this.n("resultsDiv")).highlight($this.n("text").val().replace(/["']/g, "").split(" "), {
         element: "span",
         className: "highlighted",
         wordsOnly: $this.o.highlightWholewords
@@ -119,7 +120,8 @@ external_AjaxSearchPro_namespaceObject.plugin.initPolaroidEvents = function(figu
 };
 /* harmony default export */ var results_polaroid = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-polaroid.js
+;// ./src/client/bundle/optimized/asp-results-polaroid.js
+
 
 
 /* harmony default export */ var asp_results_polaroid = (external_AjaxSearchPro_namespaceObject);

@@ -2,9 +2,9 @@
 Contributors: ShortPixel
 Tags: image optimization, convert, webp, lazy load, avif
 Requires at least: 4.7
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 5.6.40
-Stable tag: 3.10.0
+Stable tag: 3.10.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -248,6 +248,50 @@ This rule will only be applied by the New JS Engine (so you need to have the opt
 6. Advanced settings page
 
 == Changelog ==
+
+= 3.10.3 =
+
+🌐 The CDN Stability Update
+
+Release Date: April 21, 2025
+
+🛠️ Fixes
+
+* CDN Deliverability: Resolved the CDN delivery issues introduced in the last update.
+
+Update now for a faster, more stable experience with CDN-powered performance! 🚀
+
+= 3.10.2 =
+
+🦅 The Early Bird Fix
+
+Release Date: April 17, 2025
+
+🛠️ Fixes & Improvements
+
+* Textdomain Warning Resolved: Fixed a deprecation warning related to loading the textdomain too early, ensuring cleaner and more reliable plugin initialization.
+
+Update now for a smoother start every time WordPress loads! 🚀
+
+= 3.10.1 =
+
+🔒 The Security & Compatibility Update
+
+Release Date: March 19, 2025
+
+🛠️ Fixes & Security Improvements
+
+Broken Authentication Vulnerability Patched: Addressed a security issue responsibly disclosed by the PatchStack team, ensuring a more secure experience.
+
+🔧 Compatibility Updates
+
+SiteGround Speed Optimizer Notice: Added a notification to warn users about potential conflicts with the "Combine JavaScript files" feature in SiteGround Speed Optimizer.
+
+🌍 Language Updates
+
+Translation Improvements: Added 3 new strings to enhance multilingual support.
+
+This update strengthens security and improves compatibility. Update now to keep your website safe and optimized! 🚀
 
 = 3.10.0 =
 Release date: December 17, 2024

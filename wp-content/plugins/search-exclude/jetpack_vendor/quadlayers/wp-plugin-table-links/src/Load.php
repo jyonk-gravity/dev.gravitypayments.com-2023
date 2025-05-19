@@ -23,6 +23,7 @@ class Load {
 		'text'   => '',
 		'url'    => '',
 		'target' => '_blank',
+		'color'  => '',
 	);
 
 	/**
@@ -46,7 +47,11 @@ class Load {
 						$this->link_defaults
 					);
 					if ( isset( $link['url'], $link['text'] ) && 'row_meta' === $link['place'] ) {
-						$links[] = '<a target="' . $link['target'] . '" href="' . $link['url'] . '">' . $link['text'] . '</a>';
+						$style = '';
+						if ( ! empty( $link['color'] ) ) {
+							$style = 'style="color:' . $link['color'] . ';font-weight:bold;"';
+						}
+						$links[] = '<a ' . $style . ' target="' . $link['target'] . '" href="' . $link['url'] . '">' . $link['text'] . '</a>';
 					}
 				}
 				return $links;
@@ -63,7 +68,11 @@ class Load {
 						$this->link_defaults
 					);
 					if ( isset( $link['url'], $link['text'] ) && 'action' === $link['place'] ) {
-						$links[] = '<a target="' . $link['target'] . '" href="' . $link['url'] . '">' . $link['text'] . '</a>';
+						$style = '';
+						if ( ! empty( $link['color'] ) ) {
+							$style = 'style="color:' . $link['color'] . ';font-weight:bold;"';
+						}
+						$links[] = '<a ' . $style . ' target="' . $link['target'] . '" href="' . $link['url'] . '">' . $link['text'] . '</a>';
 					}
 				}
 				return $links;

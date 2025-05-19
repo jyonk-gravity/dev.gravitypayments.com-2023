@@ -7,6 +7,9 @@ use WPDRMS\ASP\Patterns\SingletonTrait;
 
 /**
  * Options Rest service
+ *
+ * NONCE verification is NOT needed, as authentication is done via the X-WP-Nonce header automatically.
+ * It is sufficient to check the user status to properly authenticate in the permission callback.
  */
 abstract class AbstractRest implements RestInterface {
 	use SingletonTrait;

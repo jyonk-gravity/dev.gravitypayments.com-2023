@@ -143,11 +143,10 @@
         $params[$o->getName()] = $o->getData();
         ?>
     </div>
-    <p class='infoMsg'>
-        <?php echo __('Example: <b>{titlefield} - {_price}</b> will show the title and price for a woocommerce product.', 'ajax-search-pro'); ?>&nbsp;
-        <?php echo sprintf( __('For more info and more advanced uses please <a href="%s" target="_blank">check this documentation chapter</a>.', 'ajax-search-pro'), 'https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields' ); ?>
-    </p>
-    <div class="item">
+	<div id="wdo" class="wdo">
+		<div id="asp-search-post-advanced-fields"></div>
+	</div>
+    <!--<div class="item">
         <?php
         $o = new wd_TextareaExpandable("advtitlefield", __('Advanced Title Field (default: {titlefield})', 'ajax-search-pro'),  $sd['advtitlefield']);
         $params[$o->getName()] = $o->getData();
@@ -159,7 +158,7 @@
             </a>
         </p>
     </div>
-    <div class="item">
+	<div class="item">
         <?php
         $o = new wd_TextareaExpandable("advdescriptionfield", __('Advanced Description Field (default: {descriptionfield})', 'ajax-search-pro'),  $sd['advdescriptionfield']);
         $params[$o->getName()] = $o->getData();
@@ -170,7 +169,7 @@
                 <?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?>
             </a>
         </p>
-    </div>
+    </div>-->
 </fieldset>
 <fieldset class="asp-adv-fields">
     <legend>
@@ -189,7 +188,10 @@
         $params[$o->getName()] = $o->getData();
         ?>
     </div>
-    <div class="item">
+	<div id="wdo"class="wdo">
+		<div id="asp-search-user-advanced-fields"></div>
+	</div>
+	<div class="item">
         <?php
         $o = new wpdreamsCustomSelect("user_search_description_field", __('Description field for <strong>User</strong> results', 'ajax-search-pro'),
             array(
@@ -203,7 +205,7 @@
         $params[$o->getName()] = $o->getData();
         ?>
     </div>
-    <div class="item">
+	<!--<div class="item">
         <?php
         $o = new wd_TextareaExpandable("user_search_advanced_title_field", __('Advanced title field for <strong>User</strong> results', 'ajax-search-pro'),
             $sd['user_search_advanced_title_field']);
@@ -224,7 +226,7 @@
             <?php echo __('Variable {descriptionfield} will be replaced with the Description field value. Use the format {meta_field} to get user meta.', 'ajax-search-pro'); ?><br>
             <a href="https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields/user-search-advanced-title-and-content-fields" target="_blank"><?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?></a>
         </p>
-    </div>
+    </div>-->
     <div class="item">
         <?php
         $o = new wpdreamsCustomSelect("user_search_url_source", __('<strong>User</strong> results url source', 'ajax-search-pro'),

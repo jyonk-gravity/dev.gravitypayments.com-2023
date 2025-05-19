@@ -569,6 +569,7 @@ jQuery(function ($) {
     $("input[name=it_pool_size_auto]").trigger('change');
 
     WPD.Conditionals.init('#it_file_indexing');
+    WPD.Conditionals.init('#it_inflections');
 
     // ------------------------------------------- ETC -----------------------------------------------------------------
     function msg(k) {

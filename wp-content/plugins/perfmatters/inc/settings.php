@@ -279,7 +279,7 @@ function perfmatters_settings() {
         'perfmatters_options', 
         array(
             'id' => 'remove_global_styles',
-            'tooltip' => __('Remove the inline global styles (CSS and SVG code) related to duotone filters.', 'perfmatters')
+            'tooltip' => __('Remove the inline global styles related to WordPress core blocks.', 'perfmatters')
         )
     );
 
@@ -885,7 +885,7 @@ function perfmatters_settings() {
             'input' => 'text',
             'tooltip' => __('Provide your CDN URL if you are using a CDN rewrite outside of Perfmatters.', 'perfmatters'),
             'placeholder' => 'https://cdn.example.com',
-            'class' => 'assets-remove_unused_css' . (empty($perfmatters_options['assets']['remove_unused_css']) ? ' hidden' : ''). ' pm-advanced-option'
+            'class' => 'assets-remove_unused_css' . (empty($perfmatters_options['assets']['remove_unused_css']) ? ' hidden' : '') . ' pm-advanced-option'
         )
     );
 
@@ -1019,19 +1019,23 @@ function perfmatters_settings() {
     /**********************************************************/
     add_settings_section('preload', '', '__return_false', 'perfmatters_options');
 
-    //enable instant page
-    add_settings_field(
-        'instant_page', 
-        perfmatters_title(__('Enable Instant Page', 'perfmatters'), 'instant_page', 'https://perfmatters.io/docs/link-prefetch/'), 
-        'perfmatters_print_input', 
-        'perfmatters_options', 
-        'preload', 
-        array(
-            'id' => 'instant_page',
-            'section' => 'preload',
-            'tooltip' => __('Automatically prefetch URLs in the background after a user hovers over a link. This results in almost instantaneous load times and improves the user experience.', 'perfmatters')
-        )
-    );
+    if(version_compare(get_bloginfo('version'), '6.8' , '<')) {
+
+        //enable instant page
+        add_settings_field(
+            'instant_page', 
+            perfmatters_title(__('Enable Instant Page', 'perfmatters'), 'instant_page', 'https://perfmatters.io/docs/link-prefetch/'), 
+            'perfmatters_print_input', 
+            'perfmatters_options', 
+            'preload', 
+            array(
+                'id' => 'instant_page',
+                'section' => 'preload',
+                'tooltip' => __('Automatically prefetch URLs in the background after a user hovers over a link. This results in almost instantaneous load times and improves the user experience.', 'perfmatters')
+            )
+        );
+
+    }
 
     //preload critical images
     add_settings_field(
@@ -1099,13 +1103,66 @@ function perfmatters_settings() {
         )
     );
 
+    if(version_compare(get_bloginfo('version'), '6.8' , '>=')) {
+
+        //speculative loading
+        add_settings_section('preload_speculative', __('Speculative Loading', 'perfmatters'), '__return_false', 'perfmatters_options');
+
+        //mode
+        add_settings_field(
+            'speculative_mode', 
+            perfmatters_title(__('Mode', 'perfmatters'), 'speculative_mode', 'https://perfmatters.io/docs/speculative-loading/#mode'), 
+            'perfmatters_print_input', 
+            'perfmatters_options', 
+            'preload_speculative', 
+            array(
+                'id' => 'speculative_mode',
+                'section' => 'preload',
+                'input' => 'select',
+                'options' => array(
+                    ''          => __('Auto', 'perfmatters') . ' (' . __('Default', 'perfmatters') . ')',
+                    'prefetch'  => __('Prefetch', 'perfmatters'),
+                    'prerender' => __('Prerender', 'perfmatters'),
+                    'disabled'  => __('Disabled', 'perfmatters')
+                ),
+                'tooltip' => __('Change the mode used for speculative loading.', 'perfmatters'),
+                'class' => 'perfmatters-input-controller'
+            )
+        );
+
+        //eagerness
+        add_settings_field(
+            'speculative_eagerness', 
+            perfmatters_title(__('Eagerness', 'perfmatters'), 'speculative_eagerness', 'https://perfmatters.io/docs/speculative-loading/#eagerness'), 
+            'perfmatters_print_input', 
+            'perfmatters_options', 
+            'preload_speculative', 
+            array(
+                'id' => 'speculative_eagerness',
+                'section' => 'preload',
+                'input' => 'select',
+                'options' => array(
+                    ''             => __('Auto', 'perfmatters') . ' (' . __('Default', 'perfmatters') . ')',
+                    'conservative' => __('Conservative', 'perfmatters'),
+                    'moderate'     => __('Moderate', 'perfmatters'),
+                    'eager'        => __('Eager', 'perfmatters')
+                ),
+                'tooltip' => __('Change how agressive speculative loading will behave.', 'perfmatters'),
+                'class' => 'preload-speculative_mode perfmatters-select-control-disabled perfmatters-control-reverse' . (!empty($perfmatters_options['preload']['speculative_mode']) && $perfmatters_options['preload']['speculative_mode'] == 'disabled' ? ' hidden' : '')
+            )
+        );
+    }
+
+    //connection
+    add_settings_section('preload_connection', __('Connection', 'perfmatters'), '__return_false', 'perfmatters_options');
+
     //preconnect
     add_settings_field(
         'preconnect', 
         perfmatters_title(__('Preconnect', 'perfmatters'), 'preconnect', 'https://perfmatters.io/docs/preconnect/'), 
         'perfmatters_print_input_rows', 
         'perfmatters_options', 
-        'preload', 
+        'preload_connection', 
         array(
             'id' => 'preconnect',
             'section' => 'preload',
@@ -1119,7 +1176,7 @@ function perfmatters_settings() {
         perfmatters_title(__('DNS Prefetch', 'perfmatters'), 'dns_prefetch', 'https://perfmatters.io/docs/dns-prefetching/'), 
         'perfmatters_print_input', 
         'perfmatters_options', 
-        'preload', 
+        'preload_connection', 
         array(
             'id' => 'dns_prefetch',
             'section' => 'preload',
@@ -1297,13 +1354,16 @@ function perfmatters_settings() {
         )
     );
 
+    //lazy elements
+    add_settings_section('lazyload_css_background_images', __('CSS Background Images', 'perfmatters'), '__return_false', 'perfmatters_options');
+
     //css background images
     add_settings_field(
         'css_background_images', 
-        perfmatters_title(__('CSS Background Images', 'perfmatters'), 'css_background_images', 'https://perfmatters.io/docs/lazy-load-wordpress/#css-background-images'), 
+        perfmatters_title(__('Background Images', 'perfmatters'), 'css_background_images', 'https://perfmatters.io/docs/lazy-load-wordpress/#css-background-images'), 
         'perfmatters_print_input', 
         'perfmatters_options', 
-        'lazyload', 
+        'lazyload_css_background_images', 
         array(
             'section' => 'lazyload',
             'id' => 'css_background_images',
@@ -1318,7 +1378,7 @@ function perfmatters_settings() {
         perfmatters_title(__('Background Selectors', 'perfmatters'), 'css_background_selectors', 'https://perfmatters.io/docs/lazy-load-wordpress/#css-background-images'), 
         'perfmatters_print_input', 
         'perfmatters_options', 
-        'lazyload', 
+        'lazyload_css_background_images', 
         array(
             'section' => 'lazyload',
             'id' => 'css_background_selectors',
@@ -1330,13 +1390,37 @@ function perfmatters_settings() {
         )
     );
 
+    //exclude leading
+    add_settings_field(
+        'css_background_exclude_leading', 
+        perfmatters_title(__('Exclude Leading', 'perfmatters'), 'css_background_exclude_leading', 'https://perfmatters.io/docs/lazy-load-wordpress/#css-background-exclude-leading'), 
+        'perfmatters_print_input', 
+        'perfmatters_options', 
+        'lazyload_css_background_images', 
+        array(
+            'section' => 'lazyload',
+            'id' => 'css_background_exclude_leading',
+            'input' => 'select',
+            'options' => array(
+                '' => '0' . ' (' . __('Default', 'perfmatters') . ')',
+                '1' => '1',
+                '2' => '2',
+                '3' => '3',
+                '4' => '4',
+                '5' => '5'
+            ),
+            'tooltip' => __('Exclude a certain number of background image containers from being lazy loaded starting from the first match.', 'perfmatters'),
+            'class' => 'lazyload-css_background_images' . (empty($perfmatters_options['lazyload']['css_background_images']) ? ' hidden' : '')
+        )
+    );
+
     //lazy elements
     add_settings_section('lazyload_elements', __('Lazy Elements', 'perfmatters'), '__return_false', 'perfmatters_options');
 
     //elements
     add_settings_field(
         'elements', 
-        perfmatters_title(__('Elements', 'perfmatters') . '<span class="perfmatters-beta">BETA</span>', 'elements', 'https://perfmatters.io/docs/lazy-load-elements/'), 
+        perfmatters_title(__('Elements', 'perfmatters'), 'elements', 'https://perfmatters.io/docs/lazy-load-elements/'), 
         'perfmatters_print_input', 
         'perfmatters_options', 
         'lazyload_elements', 
@@ -2547,11 +2631,16 @@ function perfmatters_print_purge_meta($args) {
         'perfmatters_exclude_defer_js' => 'Defer JavaScript', 
         'perfmatters_exclude_delay_js' => 'Delay JavaScript', 
         'perfmatters_exclude_minify_js' => 'Minify JavaScript',
-        'perfmatters_exclude_unused_css' => 'Unused CSS', 
+        'perfmatters_exclude_unused_css' => 'Unused CSS',
         'perfmatters_exclude_minify_css' => 'Minify CSS', 
-        'perfmatters_exclude_lazy_loading' => 'Lazy Loading', 
-        'perfmatters_exclude_instant_page' => 'Instant Page'
+        'perfmatters_exclude_lazy_loading' => 'Lazy Loading'
     );
+
+    //deprecated
+    if(version_compare(get_bloginfo('version'), '6.8' , '<')) {
+        $meta_options['perfmatters_exclude_instant_page'] = 'Instant Page';
+    }
+
     echo "<div style='margin-bottom: 10px;' id='perfmatters-purge-meta'>";
         foreach($meta_options as $key => $name) {
             echo "<label for='perfmatters-purge-meta-" . $key . "' style='margin-right: 10px; text-wrap: nowrap;'>";

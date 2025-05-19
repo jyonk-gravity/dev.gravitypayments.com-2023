@@ -49,7 +49,7 @@ class Manager {
 	 */
 	private $tokenizer;
 
-	public static $apostrophes = array('"', "'", "`", '’', '‘', '”', '“');
+	public static $apostrophes = array( '"', "'", '`', '’', '‘', '”', '“' );
 
 	// ------------------------------------------- PUBLIC METHODS --------------------------------------------------
 
@@ -57,51 +57,57 @@ class Manager {
 
 		$defaults = array(
 			// Arguments here
-			'index_title'         => 1,
-			'index_content'       => 1,
-			'index_pdf_content'   => 0,
-			'index_pdf_method'    => 'auto',
-			'index_text_content'    => 0,
-			'index_richtext_content'  => 0,
-			'index_msword_content'    => 0,
-			'index_msexcel_content'   => 0,
-			'index_msppt_content'     => 0,
-			'media_service_send_file'     => 1,
-			'index_excerpt'       => 1,
-			'index_tags'          => 0,
-			'index_categories'    => 0,
-			'index_taxonomies'    => "",
-			'attachment_mime_types' => "",
-			'index_permalinks'	  => 0,
-			'index_customfields'  => "",
-			'index_author_name'   => "",
-			'index_author_bio'    => "",
-			'blog_id'             => get_current_blog_id(),
-			'extend'              => 1,
-			'limit'               => 25,
-			'use_stopwords'       => 1,
-			'stopwords'           => '',
-			'min_word_length'     => 3,
-			'post_types'          => array('post', 'page'),
-			'post_statuses'       => 'publish',
-			'extract_gutenberg_blocks'  => 1,
-			'extract_shortcodes'  => 1,
-			'exclude_shortcodes'  => '',
-			'extract_iframes'	  => 0,
-			'synonyms_as_keywords'=> 0
+			'index_title'              => 1,
+			'index_content'            => 1,
+			'index_pdf_content'        => 0,
+			'index_pdf_method'         => 'auto',
+			'index_text_content'       => 0,
+			'index_richtext_content'   => 0,
+			'index_msword_content'     => 0,
+			'index_msexcel_content'    => 0,
+			'index_msppt_content'      => 0,
+			'media_service_send_file'  => 1,
+			'index_excerpt'            => 1,
+			'index_tags'               => 0,
+			'index_categories'         => 0,
+			'index_taxonomies'         => '',
+			'attachment_mime_types'    => '',
+			'index_permalinks'         => 0,
+			'index_customfields'       => '',
+			'index_author_name'        => '',
+			'index_author_bio'         => '',
+			'blog_id'                  => get_current_blog_id(),
+			'inflections'              => 0,
+			'language'                 => 'english',
+			'extend'                   => 1,
+			'limit'                    => 25,
+			'use_stopwords'            => 1,
+			'stopwords'                => '',
+			'min_word_length'          => 3,
+			'post_types'               => array( 'post', 'page' ),
+			'post_statuses'            => 'publish',
+			'extract_gutenberg_blocks' => 1,
+			'extract_shortcodes'       => 1,
+			'exclude_shortcodes'       => '',
+			'extract_iframes'          => 0,
+			'synonyms_as_keywords'     => 0,
 		);
 
 		$this->args = wp_parse_args( $args, $defaults );
 		$this->args = apply_filters( 'asp_it_args', $this->args, $defaults);
 
-		$this->db = new Database();
+		$this->db        = new Database();
 		$this->shortcode = new Shortcode();
-		$this->tokenizer = new Tokenizer(array(
-			'min_word_length' => $this->args['min_word_length'],
-			'use_stopwords' => $this->args['use_stopwords'],
-			'stopwords' => $this->args['stopwords'],
-			'synonyms_as_keywords' => $this->args['synonyms_as_keywords']
-		));
+		$this->tokenizer = new Tokenizer(
+			array(
+				'min_word_length'      => $this->args['min_word_length'],
+				'use_stopwords'        => $this->args['use_stopwords'],
+				'stopwords'            => $this->args['stopwords'],
+				'synonyms_as_keywords' => $this->args['synonyms_as_keywords'],
+				'inflect'              => $this->args['inflections'],
+				'language'             => $this->args['language'],
+			)
+		);
 
 		// Swap here to have the asp_posts_indexed option for each blog different
 		if ( is_multisite() && !empty($this->args['blog_id']) && $this->args['blog_id'] != get_current_blog_id() ) {
@@ -144,17 +150,17 @@ class Manager {
 		$posts = $this->db->getPostIdsToIndex( $this->args, $this->posts_to_ignore );
 
 		foreach ( $posts as $tpost ) {
-			if ( $this->abort )
+			if ( $this->abort ) {
 				break;
+			}
 
 			$this->updateIgnoreList($tpost);
 
 			if ( $this->indexDocument( $tpost->ID, false ) ) {
-				$this->posts_indexed_now++;
+				++$this->posts_indexed_now;
 				// The post stays on ignore list otherwise (even on error 500)
 				$this->updateIgnoreList($tpost, true);
 			}
-
 		}
 
 		// THIS MUST BE HERE!!
@@ -163,8 +169,8 @@ class Manager {
 			'postsToIndex'    => $this->getPostIdsToIndexCount(),
 			'postsIndexedNow' => $this->getPostsIndexedNow(),
 			'keywordsFound'   => $this->keywords_found,
-			//'totalKeywords'   => $this->getTotalKeywords(),
-			'totalIgnored'    => $this->getIgnoredList( true )
+			// 'totalKeywords'   => $this->getTotalKeywords(),
+			'totalIgnored'    => $this->getIgnoredList( true ),
 		);
 
 		if ( is_multisite() ) {
@@ -175,7 +181,7 @@ class Manager {
 	}
 
 	function initIngoreList() {
-		$this->posts_to_ignore = get_option("_asp_index_ignore", array());
+		$this->posts_to_ignore = get_option('_asp_index_ignore', array());
 	}
 
 	function getIgnoredList( $count_only = false ) {
@@ -187,7 +193,7 @@ class Manager {
 	}
 
 	function emptyIgnoreList() {
-		delete_option("_asp_index_ignore");
+		delete_option('_asp_index_ignore');
 		$this->posts_to_ignore = array();
 	}
 
@@ -195,28 +201,30 @@ class Manager {
 		if ( !empty($post) ) {
 			if ( $remove ) {
 				if (
-					isset($this->posts_to_ignore[$this->args['blog_id']]) &&
-					in_array($post->ID, $this->posts_to_ignore[$this->args['blog_id']])
+					isset($this->posts_to_ignore[ $this->args['blog_id'] ]) &&
+					in_array($post->ID, $this->posts_to_ignore[ $this->args['blog_id'] ])
 				) {
-					if (($key = array_search($post->ID, $this->posts_to_ignore[$this->args['blog_id']])) !== false) {
-						unset($this->posts_to_ignore[$this->args['blog_id']][$key]);
+					if ( ( $key = array_search($post->ID, $this->posts_to_ignore[ $this->args['blog_id'] ]) ) !== false ) {
+						unset($this->posts_to_ignore[ $this->args['blog_id'] ][ $key ]);
 					}
-					if ( empty($this->posts_to_ignore[$this->args['blog_id']]) )
-						unset($this->posts_to_ignore[$this->args['blog_id']]);
+					if ( empty($this->posts_to_ignore[ $this->args['blog_id'] ]) ) {
+						unset($this->posts_to_ignore[ $this->args['blog_id'] ]);
+					}
 				}
 			} else {
-				if ( !isset($this->posts_to_ignore[$this->args['blog_id']]) )
-					$this->posts_to_ignore[$this->args['blog_id']] = array();
-				$this->posts_to_ignore[$this->args['blog_id']][] = $post->ID;
+				if ( !isset($this->posts_to_ignore[ $this->args['blog_id'] ]) ) {
+					$this->posts_to_ignore[ $this->args['blog_id'] ] = array();
+				}
+				$this->posts_to_ignore[ $this->args['blog_id'] ][] = $post->ID;
 			}
 		}
-		update_option("_asp_index_ignore", $this->posts_to_ignore);
+		update_option('_asp_index_ignore', $this->posts_to_ignore);
 	}
 
 	/**
 	 * Indexes a document based on its ID
 	 *
-	 * @param int $post_id the post id
+	 * @param int  $post_id the post id
 	 * @param bool $remove_first
 	 * @param bool $post_editor_context
 	 * @return bool
@@ -228,7 +236,7 @@ class Manager {
 		$tokens = array();
 
 		// forbidden post types
-		$forbidden_pt = array('tablepress_table', 'vc_grid_item', 'revision', 'nav_menu_item', 'custom_css', 'acf');
+		$forbidden_pt = array( 'tablepress_table', 'vc_grid_item', 'revision', 'nav_menu_item', 'custom_css', 'acf' );
 
 		// On creating or extending the index, no need to remove
 		if ( $remove_first ) {
@@ -253,16 +261,18 @@ class Manager {
 		// This needs to be here, after the get_post()
 		if ( $post_editor_context === true ) {
 			if ( count($args['post_types']) ) {
-				if ( !in_array($the_post->post_type, $args['post_types']) )
+				if ( !in_array($the_post->post_type, $args['post_types']) ) {
 					return false;
+				}
 			} else {
 				return false;
 			}
 		}
 
 		// Is this a forbidden post type?
-		if ( in_array($the_post->post_type, $forbidden_pt) )
+		if ( in_array($the_post->post_type, $forbidden_pt) ) {
 			return false;
+		}
 
 		// Check if attachment, if so, check the mime types allowed
 		if ( $the_post->post_type == 'attachment' ) {
@@ -280,10 +290,11 @@ class Manager {
 		// --- GET THE LANGUAGE INFORMATION, IF ANY ---
 		$lang = '';
 		// Is WPML used?
-		if ( class_exists('SitePress') )
+		if ( class_exists('SitePress') ) {
 			$lang = $this->wpml_langcode_post_id( $the_post );
+		}
 		// Is Polylang used?
-		if ( function_exists('pll_get_post_language') && $lang == "" ) {
+		if ( function_exists('pll_get_post_language') && $lang == '' ) {
 			if ( $the_post->post_type == 'product_variation' && class_exists('WooCommerce') ) {
 				/** @noinspection PhpRedundantOptionalArgumentInspection */
 				$lang = pll_get_post_language($the_post->post_parent, 'slug');
@@ -294,13 +305,40 @@ class Manager {
 		}
 		$this->lang = $lang;
 
+		// Set the tokenizer to the content language
+		if ( $this->args['inflections'] ) {
+			switch ( $this->lang ) {
+				case 'en':
+					$this->tokenizer->setLanguage('english');
+					break;
+				case 'fr':
+					$this->tokenizer->setLanguage('french');
+					break;
+				case 'no':
+					$this->tokenizer->setLanguage('norwegian-bokmal');
+					break;
+				case 'pt':
+					$this->tokenizer->setLanguage('portuguese');
+					break;
+				case 'es':
+					$this->tokenizer->setLanguage('spanish');
+					break;
+				case 'tr':
+					$this->tokenizer->setLanguage('turkish');
+					break;
+				default:
+					$this->tokenizer->setLanguage($this->args['language']);
+					break;
+			}
+		}
+
 		/**
 		 * For product variations set the title, content and excerpt to the original product
 		 */
-		if ( $the_post->post_type == "product_variation" ) {
+		if ( $the_post->post_type == 'product_variation' ) {
 			$parent_post = get_post($the_post->post_parent);
 			if ( !empty($parent_post) ) {
-				$the_post->post_title .= " " . $parent_post->post_title;
+				$the_post->post_title  .= ' ' . $parent_post->post_title;
 				$the_post->post_content = $parent_post->post_content;
 				$the_post->post_excerpt = $parent_post->post_excerpt;
 			}
@@ -322,7 +360,7 @@ class Manager {
 			$this->tokenizeExcerpt( $the_post, $tokens );
 		}
 
-		if ( $args['index_categories'] == 1 || $args['index_tags'] == 1 || $args['index_taxonomies'] != "" ) {
+		if ( $args['index_categories'] == 1 || $args['index_tags'] == 1 || $args['index_taxonomies'] != '' ) {
 			$this->tokenizeTerms( $the_post, $tokens );
 		}
 
@@ -344,9 +382,9 @@ class Manager {
 		}
 
 		/*
-		 DO NOT call finishOperation() here, it would switch back the blog too early.
-		 Calling this function from an action hooks does not require switching the blog,
-		 as the correct one is in use there.
+		DO NOT call finishOperation() here, it would switch back the blog too early.
+		Calling this function from an action hooks does not require switching the blog,
+		as the correct one is in use there.
 		*/
 
 		return false;
@@ -361,9 +399,9 @@ class Manager {
 		$this->db->removeDocument( $post_id );
 
 		/*
-		 DO NOT call finishOperation() here, it would switch back the blog too early.
-		 Calling this function from an action hooks does not require switching the blog,
-		 as the correct one is in use there.
+		DO NOT call finishOperation() here, it would switch back the blog too early.
+		Calling this function from an action hooks does not require switching the blog,
+		as the correct one is in use there.
 		*/
 	}
 
@@ -395,8 +433,8 @@ class Manager {
 		}
 
 		return array(
-			'postsToIndex'    => $this->getPostIdsToIndexCount(),
-			'totalKeywords'   => $this->getTotalKeywords()
+			'postsToIndex'  => $this->getPostIdsToIndexCount(),
+			'totalKeywords' => $this->getTotalKeywords(),
 		);
 	}
 
@@ -406,12 +444,12 @@ class Manager {
 	 * @return array
 	 * @noinspection PhpUnused
 	 */
-	public static function suggestPoolSizes( ): array {
+	public static function suggestPoolSizes(): array {
 		return array(
 			'one'   => 50000,
 			'two'   => 90000,
 			'three' => 90000,
-			'rest'  => 90000
+			'rest'  => 90000,
 		);
 	}
 
@@ -422,7 +460,7 @@ class Manager {
 	 * Generates the content tokens and puts them into the tokens array
 	 *
 	 * @param object $the_post the post object
-	 * @param array $tokens tokens array
+	 * @param array  $tokens tokens array
 	 *
 	 * @return int keywords count
 	 * @noinspection PhpReturnValueOfMethodIsNeverUsedInspection
@@ -453,7 +491,7 @@ class Manager {
 
 		$filtered_content = apply_filters( 'asp_post_content_before_tokenize', $content, $the_post );
 
-		if ( $filtered_content == "" ) {
+		if ( $filtered_content == '' ) {
 			return 0;
 		}
 
@@ -471,7 +509,7 @@ class Manager {
 	 * Generates the excerpt tokens and puts them into the tokens array
 	 *
 	 * @param object $the_post the post object
-	 * @param array $tokens tokens array
+	 * @param array  $tokens tokens array
 	 *
 	 * @return int keywords count
 	 * @noinspection PhpReturnValueOfMethodIsNeverUsedInspection
@@ -479,7 +517,7 @@ class Manager {
 	private function tokenizeExcerpt( $the_post, &$tokens ): int {
 		$args = $this->args;
 
-		if ( $the_post->post_excerpt == "" ) {
+		if ( $the_post->post_excerpt == '' ) {
 			return 0;
 		}
 
@@ -502,7 +540,7 @@ class Manager {
 	 * Generates the title tokens and puts them into the tokens array
 	 *
 	 * @param object $the_post the post object
-	 * @param array $tokens tokens array
+	 * @param array  $tokens tokens array
 	 *
 	 * @return int keywords count
 	 */
@@ -520,24 +558,25 @@ class Manager {
 		$single_title = $this->tokenizer->tokenizeSimple($title, $the_post);
 		if ( $single_title != '' ) {
 			$single_title = MB::substr($single_title, 0, 45);
-			$pos = MB::strpos($single_title, ' ');
+			$pos          = MB::strpos($single_title, ' ');
 
 			/*
 			 * The index table unique key is (doc, term, item) - so if this word already exists, then it will be ignored
 			 * by the database. To make sure it is added, append a unique string at the end, that is not searched.
 			 */
-			if ($pos === false)
+			if ( $pos === false ) {
 				$single_title .= '___';
+			}
 
 			$this->insertToken($tokens, $single_title, 1, 'title', true);
 
 			$single_title_al = str_replace(self::$apostrophes, '', $single_title);
-			if ($single_title_al !== $single_title) {
+			if ( $single_title_al !== $single_title ) {
 				$this->insertToken($tokens, $single_title_al, 1, 'title', true);
 			}
 
 			$single_title_spaceless = str_replace(' ', '', $single_title_al);
-			if ($single_title_spaceless !== $single_title) {
+			if ( $single_title_spaceless !== $single_title ) {
 				$this->insertToken($tokens, $single_title_spaceless, 1, 'title', true);
 			}
 		}
@@ -574,27 +613,30 @@ class Manager {
 	 * @return int - keywords count
 	 * @noinspection PhpIncludeInspection
 	 */
-	private function tokenizeMedia($the_post, &$tokens ): int {
+	private function tokenizeMedia( $the_post, &$tokens ): int {
 		$args = $this->args;
 
-		$p = new Parser($the_post, array(
-			'pdf_parser' => $args['index_pdf_method'],
-			'text_content' => $args['index_text_content'],
-			'richtext_content' => $args['index_richtext_content'],
-			'pdf_content' => $args['index_pdf_content'],
-			'msword_content' => $args['index_msword_content'],
-			'msexcel_content' => $args['index_msexcel_content'],
-			'msppt_content' => $args['index_msppt_content'],
-			'media_service_send_file' => $args['media_service_send_file'],
-		));
+		$p = new Parser(
+			$the_post,
+			array(
+				'pdf_parser'              => $args['index_pdf_method'],
+				'text_content'            => $args['index_text_content'],
+				'richtext_content'        => $args['index_richtext_content'],
+				'pdf_content'             => $args['index_pdf_content'],
+				'msword_content'          => $args['index_msword_content'],
+				'msexcel_content'         => $args['index_msexcel_content'],
+				'msppt_content'           => $args['index_msppt_content'],
+				'media_service_send_file' => $args['media_service_send_file'],
+			)
+		);
 
 		$this->abort = true; // Preemptively set the abort flag, so no other document content is indexed
-		$contents = apply_filters( 'asp_index_file_custom_parse', '', $the_post );
+		$contents    = apply_filters( 'asp_index_file_custom_parse', '', $the_post );
 
 		if ( $contents == '' ) {
 
 			$time_elapsed_during_remote = microtime(true);
-			$contents = $p->parse();
+			$contents                   = $p->parse();
 			$time_elapsed_during_remote = microtime(true) - $time_elapsed_during_remote;
 
 			if ( is_wp_error($contents) ) {
@@ -631,7 +673,7 @@ class Manager {
 	 * Generates the permalink tokens and puts them into the tokens array
 	 *
 	 * @param object $the_post the post object
-	 * @param array $tokens tokens array
+	 * @param array  $tokens tokens array
 	 *
 	 * @return int keywords count
 	 */
@@ -647,13 +689,13 @@ class Manager {
 	 * Generates the author display name and biography tokens and puts them into the tokens array
 	 *
 	 * @param object $the_post the post object
-	 * @param array $tokens tokens array
+	 * @param array  $tokens tokens array
 	 *
 	 * @return int keywords count
 	 */
 	private function tokenizeAuthor( $the_post, &$tokens ): int {
 		$args = $this->args;
-		$bio  = "";
+		$bio  = '';
 
 		$user = get_userdata($the_post->post_author);
 		$name = $user->display_name . ' ' . $user->first_name . ' ' . $user->last_name . ' ' . $user->nickname;
@@ -662,7 +704,7 @@ class Manager {
 			$bio = get_user_meta( $the_post->post_author, 'description', true );
 		}
 
-		$author_keywords = $this->tokenizer->tokenize( $name . " " . $bio, $the_post, $this->lang );
+		$author_keywords = $this->tokenizer->tokenize( $name . ' ' . $bio, $the_post, $this->lang );
 		foreach ( $author_keywords as $keyword ) {
 			$this->insertToken( $tokens, $keyword[0], $keyword[1], 'author' );
 		}
@@ -674,7 +716,7 @@ class Manager {
 	 * Generates taxonomy term tokens and puts them into the tokens array
 	 *
 	 * @param object $the_post the post object
-	 * @param array $tokens tokens array
+	 * @param array  $tokens tokens array
 	 *
 	 * @return int keywords count
 	 */
@@ -694,7 +736,7 @@ class Manager {
 		$taxonomies = array_merge( $taxonomies, $custom_taxonomies );
 
 		foreach ( $taxonomies as $taxonomy ) {
-			$terms = wp_get_post_terms( $the_post->ID, trim( $taxonomy ), array( "fields" => "names" ) );
+			$terms = wp_get_post_terms( $the_post->ID, trim( $taxonomy ), array( 'fields' => 'names' ) );
 			$terms = apply_filters('asp_index_terms', $terms, $taxonomy, $the_post);
 			if ( is_array( $terms ) ) {
 				$all_terms = array_merge( $all_terms, $terms );
@@ -728,16 +770,16 @@ class Manager {
 
 	private function tokenizeAdditionalKeywords( $the_post, &$tokens ) {
 		$values = get_post_meta( $the_post->ID, '_asp_additional_tags', false );
-		$values = is_array($values) ? $values : array($values);
+		$values = is_array($values) ? $values : array( $values );
 		$values = apply_filters( 'asp_post_additional_keywords_before_tokenize', $values, $the_post, $tokens );
 		if ( count($values) > 0 ) {
 			$keywords = $this->tokenizer->tokenizePhrases($values, $the_post);
-			foreach ($keywords as $keyword) {
+			foreach ( $keywords as $keyword ) {
 				$this->insertToken($tokens, $keyword[0], $keyword[1], 'customfield');
 			}
 
 			$keywords = $this->tokenizer->tokenize($values, $the_post, $this->lang);
-			foreach ($keywords as $keyword) {
+			foreach ( $keywords as $keyword ) {
 				$this->insertToken($tokens, $keyword[0], $keyword[1], 'customfield');
 			}
 		}
@@ -747,30 +789,31 @@ class Manager {
 	 * Generates selected custom field tokens and puts them into the tokens array
 	 *
 	 * @param object $the_post the post object
-	 * @param array $tokens tokens array
+	 * @param array  $tokens tokens array
 	 *
 	 * @return int keywords count
 	 */
 	private function tokenizeCustomFields( $the_post, &$tokens ): int {
 		$args = $this->args;
 
-		if ( function_exists("mb_strlen") )
-			$fn_strlen = "mb_strlen";
-		else
-			$fn_strlen = "strlen";
-
-		// all the CF content to this variable
-		$cf_content = "";
-
-		if ( $args['index_customfields'] != "" )
-			$custom_fields = explode( '|', $args['index_customfields'] );
-		else
-			$custom_fields = array();
-
-		if ( in_array('_asp_additional_tags', $custom_fields) ) {
-			$custom_fields = array_diff($custom_fields, array('_asp_additional_tags'));
+		if ( function_exists('mb_strlen') ) {
+			$fn_strlen = 'mb_strlen';
+		} else {
+			$fn_strlen = 'strlen';
 		}
 
+		// all the CF content to this variable
+		$cf_content = '';
+
+		if ( $args['index_customfields'] != '' ) {
+			$custom_fields = explode( '|', $args['index_customfields'] );
+		} else {
+			$custom_fields = array();
+		}
+
+		if ( in_array('_asp_additional_tags', $custom_fields) ) {
+			$custom_fields = array_diff($custom_fields, array( '_asp_additional_tags' ));
+		}
 
 		foreach ( $custom_fields as $field ) {
 			$values = array();
@@ -783,12 +826,13 @@ class Manager {
 					}
 				}
 			}
-			
+
 			$field_type = function_exists('get_field') ? asp_acf_get_field_type($field) : 'text';
 
-			if ( empty($values) )
+			if ( empty($values) ) {
 				$values = get_post_meta( $the_post->ID, $field, false );
-			$values = is_array($values) ? $values : array($values);
+			}
+			$values = is_array($values) ? $values : array( $values );
 			$values = apply_filters( 'asp_post_custom_field_before_tokenize', $values, $the_post, $field, $tokens );
 
 			/**
@@ -804,48 +848,48 @@ class Manager {
 					$value = json_decode($value, true);
 				}
 
-				$value = !is_array($value) ? array($value) : $value;
+				$value = !is_array($value) ? array( $value ) : $value;
 
 				foreach ( $value as $v ) {
-				    if ( $field_type == 'user' ) {
-				        if ( is_numeric($v) ) {
-				            $user = get_userdata( $v );
-				            if ( !is_wp_error($user) && isset($user->display_name) ) {
-				                $cf_content .= " " . $user->display_name;
-				            }
-				        }
-				    } else if ( $field_type == 'post_object' ) {
-				        if ( is_numeric($v) ) {
-							$reference_post_title = get_the_title($v);
-							if ( !is_wp_error($reference_post_title) && $reference_post_title != '' ) {
-								$cf_content .= " " . $reference_post_title;
+					if ( $field_type === 'user' ) {
+						if ( is_numeric($v) ) {
+							$user = get_userdata( $v );
+							if ( !is_wp_error($user) && isset($user->display_name) ) {
+								$cf_content .= ' ' . $user->display_name;
 							}
-				        }
-				    } else {
-					    if ( is_object($v) ) { // In case of objects try fetching the IDs
-						    if ( isset($v->ID) ) {
-							    $title = get_the_title($v->ID);
-							    if ( !is_wp_error($title) && $title !== '' ) {
-								    $v = $title;
-							    }
-						    }
-					    }
-    					$v = Str::anyToString( $v );
-    					if ( $v != '' ) {
-    						if ( isset($acf_labels[$v]) && $v != $acf_labels[$v] ) {
-    							$v .= ' ' . $acf_labels[$v];
-    						}
-    						$cf_content .= " " . $v;
-    						// Without spaces for short values (for example product SKUs)
-    						if ( $fn_strlen($v) <= 50 ) {
-    							$spaceless_value = str_replace(' ', '', $v);
-    							if ( $spaceless_value != $v ) {
-    								$cf_content .= " " . $spaceless_value;
-    							}
-    						}
-    					}
-				    }
-
+						}
+					} elseif ( $field_type === 'post_object' || $field_type === 'relationship' ) {
+						$post_id = is_numeric($v) ? intval($v) : (is_object($v) && isset($v->ID) ? $v->ID : null);
+						if ( $post_id ) {
+							$reference_post_title = get_the_title($v);
+							if ( !is_wp_error($reference_post_title) && $reference_post_title !== '' ) {
+								$cf_content .= ' ' . $reference_post_title;
+							}
+						}
+					} else {
+						if ( is_object($v) ) { // In case of objects try fetching the IDs
+							if ( isset($v->ID) ) {
+								$title = get_the_title($v->ID);
+								if ( !is_wp_error($title) && $title !== '' ) {
+									$v = $title;
+								}
+							}
+						}
+						$v = Str::anyToString( $v );
+						if ( $v !== '' ) {
+							if ( isset($acf_labels[ $v ]) && $v != $acf_labels[ $v ] ) {
+								$v .= ' ' . $acf_labels[ $v ];
+							}
+							$cf_content .= ' ' . $v;
+							// Without spaces for short values (for example product SKUs)
+							if ( $fn_strlen($v) <= 50 ) {
+								$spaceless_value = str_replace(' ', '', $v);
+								if ( $spaceless_value !== $v ) {
+									$cf_content .= ' ' . $spaceless_value;
+								}
+							}
+						}
+					}
 				}
 			}
 
@@ -855,14 +899,14 @@ class Manager {
 				 * For numeric values where fields end with "_id" or "ID", try to fetch a reference post
 				 */
 				if ( empty($acf_labels) ) {
-					foreach ($values as $value) {
+					foreach ( $values as $value ) {
 						if (
 							is_numeric($value) &&
-							( substr($field,-strlen('ID'))==='ID' || substr($field,-strlen('_id'))==='_id' )
+							( substr($field, -strlen('ID')) ==='ID' || substr($field, -strlen('_id')) ==='_id' )
 						) {
 							$reference_post_title = get_the_title($value);
 							if ( !is_wp_error($reference_post_title) && $reference_post_title != '' ) {
-								$cf_content .= " " . $reference_post_title;
+								$cf_content .= ' ' . $reference_post_title;
 							}
 						}
 					}
@@ -873,14 +917,15 @@ class Manager {
 					$single_cf_content = $this->tokenizer->tokenizeSimple($value, $the_post);
 					if ( $single_cf_content != '' ) {
 						$single_cf_content = MB::substr($single_cf_content, 0, 45);
-						$pos = MB::strpos($single_cf_content, ' ');
+						$pos               = MB::strpos($single_cf_content, ' ');
 
 						/*
 						 * The index table unique key is (doc, term, item) - so if this word already exists, then it will be ignored
 						 * by the database. To make sure it is added, append a unique string at the end, that is not searched.
 						 */
-						if ( $pos === false )
+						if ( $pos === false ) {
 							$single_cf_content .= '___';
+						}
 						$this->insertToken($tokens, $single_cf_content, 1, 'customfield', true);
 
 						$single_cf_content_al = str_replace(self::$apostrophes, '', $single_cf_content);
@@ -894,7 +939,7 @@ class Manager {
 
 		$cf_content = apply_filters('asp_index_cf_contents_before_tokenize', $cf_content, $the_post);
 
-		if ( $cf_content != "" ) {
+		if ( $cf_content != '' ) {
 			$cf_keywords = $this->tokenizer->tokenize( $cf_content, $the_post, $this->lang );
 			foreach ( $cf_keywords as $keyword ) {
 				$this->insertToken( $tokens, $keyword[0], $keyword[1], 'customfield' );
@@ -910,13 +955,13 @@ class Manager {
 	/**
 	 * Puts the keyword token into the tokens array.
 	 *
-	 * @param array $tokens array to the tokens
+	 * @param array  $tokens array to the tokens
 	 * @param string $keyword keyword
-	 * @param int $count keyword occurrence count
+	 * @param int    $count keyword occurrence count
 	 * @param string $field the field
-	 * @param bool $no_reverse if the reverse keyword should be stored
+	 * @param bool   $no_reverse if the reverse keyword should be stored
 	 */
-	private function insertToken(&$tokens, $keyword, $count = 1, $field = 'content', $no_reverse = false) {
+	private function insertToken( &$tokens, $keyword, $count = 1, $field = 'content', $no_reverse = false ) {
 		// Take care of accidental empty keyowrds
 		if ( trim($keyword) == '' ) {
 			return;
@@ -928,25 +973,26 @@ class Manager {
 		// We need to trim it at inserting
 		$key = $keyword;
 		if ( is_numeric( $keyword ) ) {
-			$key = " " . $keyword;
+			$key = ' ' . $keyword;
 		}
 
 		// Preserve the non-reverse key uniqueness
-		if ( $no_reverse )
+		if ( $no_reverse ) {
 			$key .= '__NOREV__';
+		}
 
-		if ( !isset($tokens[$key]) ) {
-			$tokens[$key] = array(
-				"content" => 0,
-				"title" => 0,
-				"comment" => 0,
-				"tag" => 0,
-				"link" => 0,
-				"author" => 0,
-				"excerpt" => 0,
-				"customfield" => 0,
-				'_keyword' => $keyword,
-				'_no_reverse' => $no_reverse
+		if ( !isset($tokens[ $key ]) ) {
+			$tokens[ $key ] = array(
+				'content'     => 0,
+				'title'       => 0,
+				'comment'     => 0,
+				'tag'         => 0,
+				'link'        => 0,
+				'author'      => 0,
+				'excerpt'     => 0,
+				'customfield' => 0,
+				'_keyword'    => $keyword,
+				'_no_reverse' => $no_reverse,
 			);
 		}
 		$tokens[ $key ][ $field ] += $count;
@@ -959,24 +1005,28 @@ class Manager {
 	 *
 	 * @return string language string
 	 */
-	private function wpml_langcode_post_id($post): string {
+	private function wpml_langcode_post_id( $post ): string {
 		global $wpdb;
 
-		$post_type = "post_" . $post->post_type;
+		$post_type = 'post_' . $post->post_type;
 
-		$query = $wpdb->prepare("
+		$query      = $wpdb->prepare(
+			'
 			SELECT language_code
-			FROM " . $wpdb->prefix . "icl_translations
+			FROM ' . $wpdb->prefix . "icl_translations
 			WHERE
 			element_type = '%s' AND
-			element_id = %d"
-			, $post_type, $post->ID);
+			element_id = %d",
+			$post_type,
+			$post->ID
+		);
 		$query_exec = $wpdb->get_row($query);
 
-		if ( null !== $query_exec )
+		if ( null !== $query_exec ) {
 			return $query_exec->language_code;
+		}
 
-		return "";
+		return '';
 	}
 
 	public function getPostIdsToIndexCount( $check_only = false ): int {
@@ -1015,6 +1065,4 @@ class Manager {
 	private function getPostsIndexedNow(): int {
 		return $this->posts_indexed_now;
 	}
-
-
 }

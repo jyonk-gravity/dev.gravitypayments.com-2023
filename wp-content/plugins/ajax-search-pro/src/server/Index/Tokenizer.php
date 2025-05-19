@@ -2,34 +2,81 @@
 namespace WPDRMS\ASP\Index;
 
 use WPDRMS\ASP\Utils\Html;
+use WPDRMS\ASP\Utils\Inflect\InflectController;
 use WPDRMS\ASP\Utils\MB;
 use WPDRMS\ASP\Utils\Str;
 
-defined('ABSPATH') or die("You can't access this file directly.");
-
-
+/**
+ * @phpstan-type TokenizerArgs array{
+ *      min_word_length: int,
+ *      use_stopwords: bool,
+ *      stopwords: string[],
+ *      synonyms_as_keywords: bool,
+ *      inflect: bool,
+ *      language: string,
+ *  }
+ */
 class Tokenizer {
 	/**
 	 * @var string unique random string for special replacements
 	 */
-	private
-		$randstr = "wpivdny3htnydqd6mlyg",
-		$args;
+	private string $randstr = 'wpivdny3htnydqd6mlyg';
 
-	public static $additional_keywords_pattern = array(
-		'"', "'", "`", '’', '‘', '”', '“', '«', '»', "+",
-		'.', ',', ':', '-', '_', "=", "%", '(', ')', '{',
-		'}', '*', '[', ']', '|', "&", "/"
+	/**
+	 * @var TokenizerArgs
+	 */
+	private array $args;
+
+	/**
+	 * @var string[]
+	 */
+	public static array $additional_keywords_pattern = array(
+		'"',
+		"'",
+		'`',
+		'’',
+		'‘',
+		'”',
+		'“',
+		'«',
+		'»',
+		'+',
+		'.',
+		',',
+		':',
+		'-',
+		'_',
+		'=',
+		'%',
+		'(',
+		')',
+		'{',
+		'}',
+		'*',
+		'[',
+		']',
+		'|',
+		'&',
+		'/',
 	);
 
-	function __construct( $args ) {
-		$defaults = array(
-			'min_word_length' => 2,
-			'use_stopwords' => false,
-			'stopwords' => array(),
-			'synonyms_as_keywords' => false
+	/**
+	 * @param TokenizerArgs $args
+	 */
+	public function __construct( array $args ) {
+		$defaults   = array(
+			'min_word_length'      => 2,
+			'use_stopwords'        => false,
+			'stopwords'            => array(),
+			'synonyms_as_keywords' => false,
+			'inflect'              => false,
+			'language'             => 'english',
 		);
-		$this->args = wp_parse_args( $args, $defaults );
+		$this->args = wp_parse_args( $args, $defaults ); // @phpstan-ignore-line
+	}
+
+	public function setLanguage(string $language): void {
+		$this->args['language'] = $language;
 	}
 
 	/**
@@ -41,7 +88,7 @@ class Tokenizer {
 	 */
 	function tokenizeSimple( $str, $post ): string {
 		if ( function_exists( 'mb_internal_encoding' ) ) {
-			mb_internal_encoding( "UTF-8" );
+			mb_internal_encoding( 'UTF-8' );
 		}
 
 		$str = Str::anyToString($str);
@@ -52,7 +99,7 @@ class Tokenizer {
 		$str = preg_replace('/\xc2\xa0/', ' ', $str);
 		$str = preg_replace( '/[[:space:]]+/', ' ', $str );
 
-		$str = str_replace( array( "\n", "\r", "  " ), " ", $str );
+		$str = str_replace( array( "\n", "\r", '  ' ), ' ', $str );
 		// Turkish uppercase I does not lowercase correctly
 		$str = str_replace( 'İ', 'i', $str );
 		$str = MB::strtolower( $str );
@@ -72,7 +119,7 @@ class Tokenizer {
 		$stop_words = $this->getStopWords();
 		foreach ( $stop_words as $stop_word ) {
 			// whole word matches only
-			if ( preg_match('/\b'.$stop_word.'\b/', $str, $match, PREG_OFFSET_CAPTURE) ) {
+			if ( preg_match('/\b' . $stop_word . '\b/', $str, $match, PREG_OFFSET_CAPTURE) ) {
 				return '';
 			}
 		}
@@ -90,7 +137,7 @@ class Tokenizer {
 	 */
 	function tokenizePhrases( $str, $post, $word_separator = ',' ): array {
 		if ( function_exists( 'mb_internal_encoding' ) ) {
-			mb_internal_encoding( "UTF-8" );
+			mb_internal_encoding( 'UTF-8' );
 		}
 
 		$args = $this->args;
@@ -103,7 +150,7 @@ class Tokenizer {
 		$str = preg_replace('/\xc2\xa0/', ' ', $str);
 		$str = preg_replace( '/[[:space:]]+/', ' ', $str );
 
-		$str = str_replace( array( "\n", "\r", "  " ), " ", $str );
+		$str = str_replace( array( "\n", "\r", '  ' ), ' ', $str );
 		// Turkish uppercase I does not lowercase correctly
 		$str = str_replace( 'İ', 'i', $str );
 		$str = MB::strtolower( $str );
@@ -114,13 +161,16 @@ class Tokenizer {
 
 		$words = explode($word_separator, $str);
 		$words = array_map('trim', $words);
-		$words = array_filter($words, function($word){
-			return \WPDRMS\ASP\Utils\MB::strlen($word);
-		});
+		$words = array_filter(
+			$words,
+			function ( $word ) {
+				return \WPDRMS\ASP\Utils\MB::strlen($word);
+			}
+		);
 
 		$keywords = array();
 
-		while (($c_word = array_shift($words)) !== null) {
+		while ( ( $c_word = array_shift($words) ) !== null ) {
 			$c_word = trim($c_word);
 
 			if ( $c_word == '' || MB::strlen($c_word) < $args['min_word_length'] ) {
@@ -129,13 +179,13 @@ class Tokenizer {
 
 			// Numerics won't work otherwise, need to trim that later
 			if ( is_numeric($c_word) ) {
-				$c_word = " " . $c_word;
+				$c_word = ' ' . $c_word;
 			}
 
 			if ( array_key_exists($c_word, $keywords) ) {
-				$keywords[$c_word][1]++;
+				++$keywords[ $c_word ][1];
 			} else {
-				$keywords[$c_word] = array($c_word, 1);
+				$keywords[ $c_word ] = array( $c_word, 1 );
 			}
 		}
 		unset($c_word);
@@ -146,7 +196,6 @@ class Tokenizer {
 	/**
 	 * Performs a keyword extraction on the given content string.
 	 *
-	 *
 	 * @return array of keywords $keyword = array( 'keyword', {count} )
 	 */
 	function tokenize( $str, $post = false, $lang = '' ): array {
@@ -154,15 +203,16 @@ class Tokenizer {
 		if ( is_array( $str ) ) {
 			$str = Str::anyToString( $str );
 		}
-		if ( function_exists("mb_strlen") )
-			$fn_strlen = "mb_strlen";
-		else
-			$fn_strlen = "strlen";
+		if ( function_exists('mb_strlen') ) {
+			$fn_strlen = 'mb_strlen';
+		} else {
+			$fn_strlen = 'strlen';
+		}
 
 		$args = $this->args;
 
 		if ( function_exists( 'mb_internal_encoding' ) ) {
-			mb_internal_encoding( "UTF-8" );
+			mb_internal_encoding( 'UTF-8' );
 		}
 
 		$str = apply_filters( 'asp_indexing_string_pre_process', $str );
@@ -170,42 +220,170 @@ class Tokenizer {
 		$str = Html::toTxt( $str );
 		$str = wp_specialchars_decode( $str );
 
-
 		$str = strip_tags( $str );
 		$str = stripslashes( $str );
 
 		// Replace non-word boundary dots with a unique string + 'd'
 		/** @noinspection RegExpRedundantEscape */
-		$str = preg_replace("/([0-9])[\.]([0-9])/", "$1".$this->randstr."d$2", $str);
+		$str = preg_replace('/([0-9])[\.]([0-9])/', '$1' . $this->randstr . 'd$2', $str);
 
 		// Remove potentially dangerous or unusable characters
-		$str = str_replace( array(
-			"Â·", "â€¦", "â‚¬", "&shy;", '·', '…', '®', '©', '™', "\xC2\xAD"
-		), "", $str );
-		$str = str_replace( array(
-			". ", // dot followed by space as boundary, otherwise it might be a part of the word
-			", ", // comma followed by space only, otherwise it might be a word part
-			"<", ">", "†", "‡", "‰", "‹", "™", "¡", "¢", "¤", "¥", "¦", "§", "¨", "©", "ª", "«", "¬",
-			"®", "¯", "°", "±", "¹", "²", "³", "¶", "·", "º", "»", "¼", "½", "¾", "¿", "÷", "•", "…", "←",
-			"←", "↑", "→", "↓", "↔", "↵", "⇐", "⇑", "⇒", "⇓", "⇔", "√", "∝", "∞", "∠", "∧", "∨", "∂", "∃", "∅",
-			"∗", "∩", "∪", "∫", "∴", "∼", "≅", "≈", "≠", "≡", "≤", "≥", "⊂", "⊃", "⊄", "⊆", "⊇", "⊕", "⊗", "⊥",
-			"◊", "♠", "♣", "♥", "♦", "🔴", "​", "◊", "〈", "〉", "⌊", "⌋", "⌈", "⌉", "⋅",
-			"Ă‹â€ˇ", "Ă‚Â°", "~", "Ă‹â€ş", "Ă‹ĹĄ", "Ă‚Â¸", "Ă‚Â§", "Ă‚Â¨", "â€™", "â€", "â€ť",
-			"â€ś", "â€ž", "Â´", "â€”", "â€“", "Ă—", '&#8217;', "&#128308;", "&nbsp;", "\n", "\r",
-			"& ", "\\", "^", "?", "!", ";",
-			chr( 194 ) . chr( 160 )
-		), " ", $str );
+		$str = str_replace(
+			array(
+				'Â·',
+				'â€¦',
+				'â‚¬',
+				'&shy;',
+				'·',
+				'…',
+				'®',
+				'©',
+				'™',
+				"\xC2\xAD",
+			),
+			'',
+			$str 
+		);
+		$str = str_replace(
+			array(
+				'. ', // dot followed by space as boundary, otherwise it might be a part of the word
+				', ', // comma followed by space only, otherwise it might be a word part
+				'<',
+				'>',
+				'†',
+				'‡',
+				'‰',
+				'‹',
+				'™',
+				'¡',
+				'¢',
+				'¤',
+				'¥',
+				'¦',
+				'§',
+				'¨',
+				'©',
+				'ª',
+				'«',
+				'¬',
+				'®',
+				'¯',
+				'°',
+				'±',
+				'¹',
+				'²',
+				'³',
+				'¶',
+				'·',
+				'º',
+				'»',
+				'¼',
+				'½',
+				'¾',
+				'¿',
+				'÷',
+				'•',
+				'…',
+				'←',
+				'←',
+				'↑',
+				'→',
+				'↓',
+				'↔',
+				'↵',
+				'⇐',
+				'⇑',
+				'⇒',
+				'⇓',
+				'⇔',
+				'√',
+				'∝',
+				'∞',
+				'∠',
+				'∧',
+				'∨',
+				'∂',
+				'∃',
+				'∅',
+				'∗',
+				'∩',
+				'∪',
+				'∫',
+				'∴',
+				'∼',
+				'≅',
+				'≈',
+				'≠',
+				'≡',
+				'≤',
+				'≥',
+				'⊂',
+				'⊃',
+				'⊄',
+				'⊆',
+				'⊇',
+				'⊕',
+				'⊗',
+				'⊥',
+				'◊',
+				'♠',
+				'♣',
+				'♥',
+				'♦',
+				'🔴',
+				'​',
+				'◊',
+				'〈',
+				'〉',
+				'⌊',
+				'⌋',
+				'⌈',
+				'⌉',
+				'⋅',
+				'Ă‹â€ˇ',
+				'Ă‚Â°',
+				'~',
+				'Ă‹â€ş',
+				'Ă‹ĹĄ',
+				'Ă‚Â¸',
+				'Ă‚Â§',
+				'Ă‚Â¨',
+				'â€™',
+				'â€',
+				'â€ť',
+				'â€ś',
+				'â€ž',
+				'Â´',
+				'â€”',
+				'â€“',
+				'Ă—',
+				'&#8217;',
+				'&#128308;',
+				'&nbsp;',
+				"\n",
+				"\r",
+				'& ',
+				'\\',
+				'^',
+				'?',
+				'!',
+				';',
+				chr( 194 ) . chr( 160 ),
+			),
+			' ',
+			$str 
+		);
 		$str = str_replace( 'Ăź', 'ss', $str );
 
 		// Turkish uppercase I does not lowercase correctly
 		$special_replace = array(
 			'İ' => 'i',
-			'—' => '-'
+			'—' => '-',
 		);
-		$str = str_replace( array_keys($special_replace), array_values($special_replace), $str );
+		$str             = str_replace( array_keys($special_replace), array_values($special_replace), $str );
 
 		// Any yet undefined punctuation
-		//$str = preg_replace( '/[[:punct:]]+/u', ' ', $str );
+		// $str = preg_replace( '/[[:punct:]]+/u', ' ', $str );
 		// Non breakable spaces to regular spaces
 		$str = preg_replace('/\xc2\xa0/', ' ', $str);
 		// Any remaining multiple space characters
@@ -216,13 +394,13 @@ class Tokenizer {
 		$str = Content::hebrewUnvocalize($str);
 		$str = Content::arabicRemoveDiacritics($str);
 
-		//$str = preg_replace('/[^\p{L}0-9 ]/', ' ', $str);
+		// $str = preg_replace('/[^\p{L}0-9 ]/', ' ', $str);
 		$str = str_replace( "\xEF\xBB\xBF", '', $str );
 
 		$str = trim( preg_replace( '/\s+/', ' ', $str ) );
 
 		// Set back the non-word boundary dots
-		$str = str_replace( $this->randstr."d", '.', $str );
+		$str = str_replace( $this->randstr . 'd', '.', $str );
 
 		$str = apply_filters( 'asp_indexing_string_post_process', $str );
 
@@ -231,13 +409,13 @@ class Tokenizer {
 		// Remove punctuation marks + some extra from the start and the end of words
 
 		// Characters, which should not be standalone (but can be in start on end)
-		$non_standalone_strings = array("$", "€", "£", "%");
+		$non_standalone_strings = array( '$', '€', '£', '%' );
 		// Additional keywords, should not be standalone
 		$additional_keywords_string = implode('', array_diff(self::$additional_keywords_pattern, $non_standalone_strings));
 		foreach ( $words as $wk => &$ww ) {
 			$ww = MB::trim($ww, $additional_keywords_string);
 			if ( $ww == '' || in_array($ww, $non_standalone_strings ) ) {
-				unset($words[$wk]);
+				unset($words[ $wk ]);
 			}
 		}
 		unset($wk);
@@ -245,23 +423,23 @@ class Tokenizer {
 
 		// Get additional words if available
 		$additional_words = array();
-		$started = microtime(true);
-		foreach ($words as $ww) {
+		$started          = microtime(true);
+		foreach ( $words as $ww ) {
 			// This operation can be costly, so limit to 3 seconds just to be sure
-			if ( (microtime(true) - $started) > 3 ) {
+			if ( ( microtime(true) - $started ) > 3 ) {
 				break;
 			}
 
 			// ex.: 123-45-678 to 123, 45, 678
 			$ww1 = str_replace(self::$additional_keywords_pattern, ' ', $ww);
-			$wa = explode(" ", $ww1);
-			if (count($wa) > 1) {
+			$wa  = explode(' ', $ww1);
+			if ( count($wa) > 1 ) {
 				foreach ( $wa as $wak => $wav ) {
 					$wav = trim(preg_replace( '/[[:space:]]+/', ' ', $wav ));
 					if ( $wav != '' && !in_array($wav, $words) ) {
-						$wa[$wak] = $wav;
+						$wa[ $wak ] = $wav;
 					} else {
-						unset($wa[$wak]);
+						unset($wa[ $wak ]);
 					}
 				}
 				$additional_words = array_merge($additional_words, $wa);
@@ -273,7 +451,7 @@ class Tokenizer {
 			}
 
 			// Accent removal and transliteration
-			$transliterated = str_replace(array('ʾ', "'", '"'), '', Str::removeAccents($ww));
+			$transliterated = str_replace(array( 'ʾ', "'", '"' ), '', Str::removeAccents($ww));
 			if (
 				$transliterated !== '' &&
 				$transliterated !== $ww &&
@@ -286,6 +464,13 @@ class Tokenizer {
 
 		// Append them after the words array
 		$words = array_merge($words, $additional_words);
+		// Inflections
+		if ( $this->args['inflect'] && !empty($words) ) {
+			$words = array_merge(
+				$words,
+				InflectController::instance()->get($words, $this->args['language'])
+			);
+		}
 
 		/**
 		 * Apply synonyms for the whole string instead of the words, because
@@ -297,12 +482,12 @@ class Tokenizer {
 				$syn_inst->synonymsAsKeywords();
 			}
 			$additional_words_by_synonyms = array();
-			$synonyms = $syn_inst->get();
+			$synonyms                     = $syn_inst->get();
 
 			// If the langauge is set
-			if ( $lang != '' && isset($synonyms[$lang]) ) {
-				foreach ( $synonyms[$lang] as $keyword => $synonyms_arr ) {
-					if ( preg_match('/\b'.preg_quote($keyword).'\b/u', $str) ) {
+			if ( $lang != '' && isset($synonyms[ $lang ]) ) {
+				foreach ( $synonyms[ $lang ] as $keyword => $synonyms_arr ) {
+					if ( preg_match('/\b' . preg_quote($keyword) . '\b/u', $str) ) {
 						$additional_words_by_synonyms = array_merge($additional_words_by_synonyms, $synonyms_arr);
 					}
 				}
@@ -312,7 +497,7 @@ class Tokenizer {
 			// Also for the "default" aka "any"
 			if ( isset($synonyms['default']) ) {
 				foreach ( $synonyms['default'] as $keyword => $synonyms_arr ) {
-					if ( preg_match('/\b'.preg_quote($keyword).'\b/u', $str) ) {
+					if ( preg_match('/\b' . preg_quote($keyword) . '\b/u', $str) ) {
 						$additional_words_by_synonyms = array_merge($additional_words_by_synonyms, $synonyms_arr);
 					}
 				}
@@ -323,12 +508,12 @@ class Tokenizer {
 			}
 		}
 
-		$stop_words = $this->getStopWords();
+		$stop_words        = $this->getStopWords();
 		$negative_keywords = $this->getNegativeWords($post);
 
 		$keywords = array();
 
-		foreach( $words as $c_word ) {
+		foreach ( $words as $c_word ) {
 			$c_word = trim($c_word);
 
 			if ( $c_word == '' || $fn_strlen($c_word) < $args['min_word_length'] ) {
@@ -349,13 +534,13 @@ class Tokenizer {
 
 			// Numerics won't work otherwise, need to trim that later
 			if ( is_numeric($c_word) ) {
-				$c_word = " " . $c_word;
+				$c_word = ' ' . $c_word;
 			}
 
 			if ( array_key_exists($c_word, $keywords) ) {
-				$keywords[$c_word][1]++;
+				++$keywords[ $c_word ][1];
 			} else {
-				$keywords[$c_word] = array($c_word, 1);
+				$keywords[ $c_word ] = array( $c_word, 1 );
 			}
 		}
 		unset($c_word);
@@ -367,18 +552,18 @@ class Tokenizer {
 	/**
 	 * Returns the stop words
 	 */
-	private function getStopWords( ): array {
+	private function getStopWords(): array {
 		$stop_words = array();
 		// Only compare to common words if $restrict is set to false
-		if ( $this->args['use_stopwords'] == 1 && $this->args['stopwords'] != "" ) {
-			$this->args['stopwords'] = str_replace(" ", "", $this->args['stopwords']);
-			$stop_words = explode( ',', $this->args['stopwords'] );
+		if ( $this->args['use_stopwords'] == 1 && $this->args['stopwords'] != '' ) {
+			$this->args['stopwords'] = str_replace(' ', '', $this->args['stopwords']);
+			$stop_words              = explode( ',', $this->args['stopwords'] );
 		}
 		$stop_words = array_unique( $stop_words );
 		foreach ( $stop_words as $sk => &$sv ) {
 			$sv = trim($sv);
 			if ( $sv == '' || MB::strlen($sv) < $this->args['min_word_length'] ) {
-				unset($stop_words[$sk]);
+				unset($stop_words[ $sk ]);
 			}
 		}
 
@@ -393,9 +578,9 @@ class Tokenizer {
 		if ( $post !== false ) {
 			$negative_keywords = get_post_meta($post->ID, '_asp_negative_keywords', true);
 			if ( !empty($negative_keywords) ) {
-				$negative_keywords = trim( preg_replace('/\s+/', ' ',$negative_keywords) );
+				$negative_keywords = trim( preg_replace('/\s+/', ' ', $negative_keywords) );
 				$negative_keywords = explode(' ', $negative_keywords);
-				$negative_keywords = array_filter($negative_keywords, fn($keyword)=>$keyword!=='');
+				$negative_keywords = array_filter($negative_keywords, fn( $keyword )=>$keyword !=='');
 				return array_unique($negative_keywords);
 			}
 		}

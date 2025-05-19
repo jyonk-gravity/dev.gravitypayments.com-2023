@@ -62,7 +62,7 @@ if (!class_exists("wd_CFSearchCallBack")) {
             global $wpdb;
             if ( 
                 isset($_POST['wd_phrase'], $_POST['wd_cf_search_nonce']) &&
-                ( current_user_can('administrator') || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
+                ( current_user_can( 'manage_options' ) || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
                 wp_verify_nonce( $_POST["wd_cf_search_nonce"], 'wd_cf_search_nonce' ) 
             ) {
                 // Exact matches

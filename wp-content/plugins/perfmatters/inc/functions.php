@@ -152,7 +152,9 @@ function perfmatters_rest_authentication_errors($result) {
 			'litespeed',
 			'wp-recipe-maker',
 			'iawp',
-			'sureforms'
+			'sureforms',
+			'surecart',
+			'sliderrevolution'
 		));
 		foreach($exceptions as $exception) {
 			if(strpos($rest_route, $exception) !== false) {
@@ -1064,7 +1066,7 @@ function perfmatters_disable_login_url() {
 
 /* Instant Page
 /***********************************************************************/
-if(!empty($perfmatters_options['preload']['instant_page'])) {
+if(!empty($perfmatters_options['preload']['instant_page']) && version_compare(get_bloginfo('version'), '6.8' , '<')) {
 	if(!is_admin()) {
 		add_action('wp_enqueue_scripts', 'perfmatters_enqueue_instant_page', PHP_INT_MAX);
 		add_filter('script_loader_tag', 'perfmatters_instant_page_attribute', 10, 2);
@@ -1221,6 +1223,7 @@ function perfmatters_print_ga() {
 
 	if(!empty($output)) {
 		echo $output;
+		do_action('perfmatters_after_local_analytics');
 	}
 }
 
@@ -1323,8 +1326,6 @@ if(!empty($perfmatters_options['remove_global_styles'])) {
 	add_action('after_setup_theme', function() {
 	  	remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
 	  	remove_action('wp_footer', 'wp_enqueue_global_styles', 1);
-	  	remove_action('wp_body_open', 'wp_global_styles_render_svg_filters');
-		remove_action('in_admin_header', 'wp_global_styles_render_svg_filters');
 	});
 }
 

@@ -92,7 +92,7 @@ class Requirements {
 				}
 				break;
 			case 'wd-asp-ajaxsearchpro-addon-divi':
-				if ( defined('DE_DB_WOO_VERSION') ) {
+				if ( function_exists('et_setup_theme') ) {
 					$required = true;
 				}
 				break;
@@ -121,7 +121,8 @@ class Requirements {
 		}
 
 		// --- Analytics
-		if ( wd_asp()->o['asp_analytics']['analytics'] != 0 ) {
+		// php 7.4 "string" != 0 -> false, 7.4+ "string" != 0 -> true
+		if ( wd_asp()->o['asp_analytics']['analytics'] !== "0" ) {
 			$dependencies = array_diff($dependencies, array('ga'));
 		}
 

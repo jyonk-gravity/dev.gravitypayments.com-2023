@@ -42,41 +42,16 @@ class Table extends \WP_Plugin_Install_List_Table {
 			$plugin_data,
 			$this->plugin_data
 		);
+		$this->maybe_patch_admin_urls();
+
 		parent::__construct();
 	}
 
-	/**
-	 * Hook into the display_rows action to make url changes.
-	 *
-	 * @return void
-	 */
-	public function display_rows() {
-		add_filter(
-			'self_admin_url',
-			function( $url, $path ) {
-				if ( strpos( $url, 'tab=plugin-information' ) !== false ) {
-					$url = network_admin_url( $path );
-				}
-
-			return $url;
-			},
-			10,
-			2
-		);
-
-		add_filter(
-			'network_admin_url',
-			function ( $url, $path ) {
-				if ( strpos( $url, 'plugins.php' ) !== false ) {
-					$url = self_admin_url( $path );
-				}
-			return $url;
-			},
-			10,
-			2
-		);
-
-		parent::display_rows();
+	private function maybe_patch_admin_urls() {
+		if ( is_multisite() && is_network_admin() ) {
+			add_filter( 'self_admin_url', [ $this, 'fix_self_admin_url' ], 10, 2 );
+			add_filter( 'network_admin_url', [ $this, 'fix_network_admin_url' ], 10, 2 );
+		}
 	}
 
 	/**

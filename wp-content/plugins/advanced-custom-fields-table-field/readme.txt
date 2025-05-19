@@ -1,21 +1,22 @@
-=== Advanced Custom Fields: Table Field ===
+=== Table Field Add-on for ACF and SCF ===
 Contributors: jonua
-Tags: acf table
+Tags: acf, table, scf, advanced custom fields, secure custom fields
 Requires at least: 5.3
-Tested up to: 6.6.2
-Stable tag: 1.3.24
-Requires PHP: 7.3
+Tested up to: 6.8.1
+Stable tag: 1.3.27
+Requires PHP: 7.5
 License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A Table Field Add-on for the Advanced Custom Fields Plugin.
+A Table Field Add-on for the Advanced Custom Fields and Secure Custom Fields Plugin.
 
 == Description ==
 
-The Table Field Plugin enhances the functionality of the ["Advanced Custom Fields" plugin](https://de.wordpress.org/plugins/advanced-custom-fields/) with easy-to-edit tables.
+The Table Field plugin is an Add-on and enhances the functionality of the [Advanced Custom Fields (ACF) plugin](https://www.advancedcustomfields.com) and the [Secure Custom Fields plugin](https://wordpress.org/plugins/advanced-custom-fields/) with easy-to-edit tables.
 
-This plugin requires the ["Advanced Custom Fields" plugin](https://de.wordpress.org/plugins/advanced-custom-fields/) or the [Pro version](https://www.advancedcustomfields.com/pro/)!
+This plugin requires the [Advanced Custom Fields plugin](https://www.advancedcustomfields.com) or the [Secure Custom Fields plugin](https://wordpress.org/plugins/advanced-custom-fields/)!
 
-The table field works also with the repeater and flexible field types and supports the [ACF Blocks for Gutenberg](https://www.advancedcustomfields.com/blog/acf-5-8-introducing-acf-blocks-for-gutenberg/)
+The table field works also with the ACF repeater and flexible field types and supports the [ACF Blocks for Gutenberg](https://www.advancedcustomfields.com/blog/acf-5-8-introducing-acf-blocks-for-gutenberg/)
 
 = Features =
 * Table Header (Option)
@@ -37,7 +38,7 @@ $table = get_field( 'your_table_field_name' );
 
 if ( ! empty ( $table ) ) {
 
-	echo '<table border="0">';
+	echo '<table>';
 
 		if ( ! empty( $table['caption'] ) ) {
 
@@ -147,89 +148,228 @@ function acf_table_styles() {
 }
 `
 
-= How to use the table field in Elementor Page Builder? =
+= How to use the table field in Elementor or other Page Builders? =
 
-In general, its up to Elementor to support ACF field types on the Elementor widgets. All supported ACF fields by Elementor [you can find here](https://docs.elementor.com/article/381-elementor-integration-with-acf). But because the table field is not a native ACF field, the support for this field may never happen.
+In general, its up to the page builder plugins to support ACF field types. But because the table field is not a native ACF field, the support for this field may never happen in page builders.
 
-For now the way to go is using the Elementors shortcode Widget. Before you can use a shortcode to display a table fields table, you have to setup a shortcode in functions.php. The following code does this. You can modify the table html output for your needs.
+For now the way to go is using a shortcode. Elementor provides for example a shortcode widget. Before you can use a shortcode to display a table fields table, you have to setup a shortcode in functions.php. The following code does this. You can modify the table html output for your needs.
 
 `function shortcode_acf_tablefield( $atts ) {
 
-    $a = shortcode_atts( array(
-        'table-class' => '',
+    $param = shortcode_atts( array(
         'field-name' => false,
+        'subfield-name' => false,
         'post-id' => false,
+        'table-class' => '',
     ), $atts );
 
-    $table = get_field( $a['field-name'], $a['post-id'] );
+    $class = new class( $param ) {
 
-    $return = '';
+        public $atts;
 
-    if ( $table ) {
+        public $field_names;
 
-        $return .= '<table class="' . $a['table-class'] . '" border="0">';
+        public $field_data = '';
 
-            if ( ! empty( $table['caption'] ) ) {
+        public $html = '';
 
-                echo '<caption>' . $table['caption'] . '</caption>';
+        public function __construct( $atts ) {
+
+            if ( is_string( $atts['subfield-name'] ) ) {
+
+                $atts['field-name'] = $atts['subfield-name'];
             }
 
-            if ( $table['header'] ) {
+            if ( ! is_string( $atts['field-name'] ) ) {
 
-                $return .= '<thead>';
-
-                    $return .= '<tr>';
-
-                        foreach ( $table['header'] as $th ) {
-
-                            $return .= '<th>';
-                                $return .= $th['c'];
-                            $return .= '</th>';
-                        }
-
-                    $return .= '</tr>';
-
-                $return .= '</thead>';
+                return '';
             }
 
-            $return .= '<tbody>';
+            $this->atts = $atts;
 
-                foreach ( $table['body'] as $tr ) {
+            $this->field_names = explode( '/', $this->atts['field-name'] );
 
-                    $return .= '<tr>';
+            $this->subfield( 0 );
 
-                        foreach ( $tr as $td ) {
+        }
 
-                            $return .= '<td>';
-                                $return .= $td['c'];
-                            $return .= '</td>';
+        private function may_get_table_html( $data ) {
+
+            if ( isset( $data['body'] ) ) {
+
+                $return = '<table class="' . $this->atts['table-class'] . '">';
+
+                    if ( ! empty( $data['caption'] ) ) {
+
+                        echo '<caption>' . $data['caption'] . '</caption>';
+                    }
+
+                    if ( $data['header'] ) {
+
+                        $return .= '<thead>';
+
+                            $return .= '<tr>';
+
+                                foreach ( $data['header'] as $th ) {
+
+                                    $return .= '<th>';
+                                        $return .= $th['c'];
+                                    $return .= '</th>';
+                                }
+
+                            $return .= '</tr>';
+
+                        $return .= '</thead>';
+                    }
+
+                    $return .= '<tbody>';
+
+                        foreach ( $data['body'] as $tr ) {
+
+                            $return .= '<tr>';
+
+                                foreach ( $tr as $td ) {
+
+                                    $return .= '<td>';
+                                        $return .= $td['c'];
+                                    $return .= '</td>';
+                                }
+
+                            $return .= '</tr>';
                         }
 
-                    $return .= '</tr>';
+                    $return .= '</tbody>';
+
+                $return .= '</table>';
+
+                $this->html .= $return;
+            }
+        }
+
+        private function subfield( $level = 0, $data = null ) {
+
+            if ( isset( $data['body'] ) ) {
+
+                $this->may_get_table_html( $data );
+
+                return;
+            }
+            else if ( ! isset( $this->field_names[ $level ] ) ) {
+
+                return;
+            }
+            else if ( $data === null ) {
+
+                if ( $this->atts['subfield-name'] === false ) {
+
+                    $data = get_field(  $this->field_names[0],  $this->atts['post-id'] );
                 }
+                else {
 
-            $return .= '</tbody>';
+                    $data = get_sub_field( $this->field_names[0] );
+                }
+            }
+            else if ( isset( $data[ $this->field_names[ $level ] ] ) ) {
 
-        $return .= '</table>';
-    }
+                $data = $data[ $this->field_names[ $level ] ];
+            }
 
-    return $return;
+            // repeater/group field
+            if (
+                is_array( $data ) &&
+                isset( $data[0] ) &&
+                ! isset( $data[0]['acf_fc_layout'] )
+                ) {
+
+                if ( is_numeric( $this->field_names[ $level + 1 ] )  ) {
+
+                    if ( isset( $data[  $this->field_names[ $level + 1 ] ] ) ) {
+
+                        $this->subfield( $level + 1, $data[  $this->field_names[ $level + 1 ] ] );
+                    }
+                }
+                else {
+
+                    foreach( $data as $key => $item ) {
+
+                        $this->subfield( $level + 1, $item );
+                    }
+                }
+            }
+
+            // flexible content field
+            else if (
+                is_array( $data ) &&
+                isset( $data[0] ) &&
+                isset( $data[0]['acf_fc_layout'] )
+                ) {
+
+                foreach( $data as $key => $item ) {
+
+                    if (
+                        $item['acf_fc_layout'] === $this->field_names[ $level + 1 ] &&
+                        isset( $item[ $this->field_names[ $level + 2 ] ] )
+                    ) {
+
+                        $this->subfield( $level + 2, $item[ $this->field_names[ $level + 2 ] ] );
+                    }
+                }
+            }
+
+            // table field
+            else {
+
+                $this->subfield( $level + 1, $data );
+            }
+        }
+    };
+
+    return $class->html;
 }
 
 add_shortcode( 'tablefield', 'shortcode_acf_tablefield' );`
 
+Then use the shortcode with the corresponding shortcode options of the Page Builder.
 
-Then use the shortcode in a Elementors shortcode widget like this, to **insert a table from the current page or post**…
+Getting a table field from the **current page or post**…
 
-`[tablefield field-name="your table field name" table-class="my-table"]`
+`[tablefield field-name="table_field_name"]`
 
-You also can **insert a table from another page or post**…
+Getting a table field from a **group field**…
 
-`[tablefield field-name="your table field name" post-id="123" table-class="my-table"]`
+`[tablefield field-name="group_field_name/table_field_name"]`
 
-Or you can **insert a table from a ACF option page**…
+Getting a table field from a **repeater field**…
 
-`[tablefield field-name="your table field name" post-id="option" table-class="my-table"]`
+`[tablefield field-name="repeater_field_name/table_field_name"]`
+
+Getting a table field from a specific **repeater field item**…
+
+`[tablefield field-name="repeater_field_name/item_index/table_field_name"]`
+
+Getting a table field from a **flexible content field**…
+
+`[tablefield field-name="flexible_content_field_name/layout_name/table_field_name"]`
+
+You can also **get a table field from any kind of nested fields** like in this example, where the table field is part of a layout of an flexible content field, that is a subfield of a repeater field, that is a subfield of a group field…
+
+`[tablefield field-name="group_field_name/repeater_field_name/flexible_content_field_name/layout_name/table_field_name"]`
+
+Getting a table field from inside a **group**, **repeater** or **flexible content field** loop…
+
+`[tablefield subfield-name="table_field_name"]`
+
+Getting a table field from **another page or post**…
+
+`[tablefield field-name="table_field_name" post-id="123"]`
+
+Getting a table field from a **ACF option page**…
+
+`[tablefield field-name="table_field_name" post-id="option"]`
+
+Adding a **CSS class to the table HTML element**…
+
+`[tablefield field-name="table_field_name" table-class="my-table-style"]`
 
 = Updating a table using update_field() =
 
@@ -353,7 +493,7 @@ However, only when activated as a plugin will updates be available.
 
 == PRO ==
 
-The Advanced Custom Fields Table Field plugin is also available in a <a href="https://www.acf-table-field.com">professional version</a> which includes more functionality and more flexibility. The additional Pro features are:
+There is also a [Table Field Pro](https://www.acf-table-field.com) Add-on for the Advanced Custom Fields and Secure Custom Fields plugins.
 
 * Setup custom default table
 * Setup minimum and maximum amount of rows and columns
@@ -363,19 +503,23 @@ The Advanced Custom Fields Table Field plugin is also available in a <a href="ht
 * Table head and foot rows
 * Stub column
 * Rowspan and colspan
-* Better way for moving rows and columns
+* Improved way for moving rows and columns
+* Disable moving individual columns
 * Support for REST-API
+* Support for WP GraphQL
 * Support for third-party plugins
 
-The Pro version runs completely independend beside the free version and comes with its own field type.
-You can change an existing field with field type "Table" (free version) to field type "Table Pro".
+The Pro plugin can run in parallel and you can change an existing field with field type "Table" to the field type "Table Pro" as required.
 
-<a href="https://www.acf-table-field.com">To Pro Website</a>
+[to the plugin website](https://www.acf-table-field.com)
 
 == Upgrade Notice ==
 
 
 == Changelog ==
+
+= 1.3.27 =
+* Fixes loading plugin textdomain to early.
 
 = 1.3.26 =
 * Adds auto repair table. Fixes table data when loading from database and on editing table.

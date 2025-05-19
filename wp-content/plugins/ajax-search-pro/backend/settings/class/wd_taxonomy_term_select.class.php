@@ -298,7 +298,7 @@ if (!class_exists("wd_TaxonomyTermSelect")) {
         public static function searchTerms() {
             if ( 
                 isset($_POST['wd_taxonomy'], $_POST['wd_taxonomy_search_nonce']) &&
-                ( current_user_can('administrator') || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
+                ( current_user_can( 'manage_options' ) || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
                 wp_verify_nonce( $_POST["wd_taxonomy_search_nonce"], 'wd_taxonomy_search_nonce' ) 
             ) {
                 $taxonomy = $_POST['wd_taxonomy'];
@@ -323,7 +323,7 @@ if (!class_exists("wd_TaxonomyTermSelect")) {
         public static function printTerms() {
             if ( 
                 isset($_POST['wd_taxonomy'], $_POST['wd_taxonomy_search_nonce']) &&
-                ( current_user_can('administrator') || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
+                ( current_user_can( 'manage_options' ) || apply_filters('wpdrms/backend/options/ajax/user_role_override', false) ) &&
                 wp_verify_nonce( $_POST["wd_taxonomy_search_nonce"], 'wd_taxonomy_search_nonce' ) 
             ) {
                 $taxonomy = $_POST['wd_taxonomy'];

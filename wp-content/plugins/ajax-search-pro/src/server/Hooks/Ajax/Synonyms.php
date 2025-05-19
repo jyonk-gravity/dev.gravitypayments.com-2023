@@ -13,7 +13,7 @@ class Synonyms extends AbstractAjax {
 		if ( 
 			isset($_POST['asp_synonyms_request_nonce']) &&
 			wp_verify_nonce( $_POST['asp_synonyms_request_nonce'], 'asp_synonyms_request_nonce' ) &&
-			current_user_can( 'administrator' )
+			current_user_can( 'manage_options' )
 		) {
 			if ( !isset($_POST['op']) ) {
 				print -1;

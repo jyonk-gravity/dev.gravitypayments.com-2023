@@ -25,8 +25,8 @@
         <?php
         $o = new wpdreamsCustomSelect("frontend_search_settings_position", __('Search settings position', 'ajax-search-pro'), array(
             'selects'=>array(
-                array('option' => __('Hovering (default)', 'ajax-search-pro'), 'value' => 'hover'),
-                array('option' => __('Block or custom', 'ajax-search-pro'), 'value' => 'block')
+                array('option' => __('Block (default)', 'ajax-search-pro'), 'value' => 'block'),
+	            array('option' => __('Hovering', 'ajax-search-pro'), 'value' => 'hover'),
             ),
             'value'=>$sd['frontend_search_settings_position']
         ));

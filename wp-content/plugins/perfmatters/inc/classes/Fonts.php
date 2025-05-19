@@ -24,12 +24,12 @@ class Fonts
 
         //add display swap to the buffer
         if(!empty(Config::$options['fonts']['display_swap'])) {
-            add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\Fonts', 'display_swap'));
+            add_action('perfmatters_output_buffer', array('Perfmatters\Fonts', 'display_swap'));
         }
 
         //add local google fonts to the buffer
         if(!empty(Config::$options['fonts']['local_google_fonts'])) {
-            add_action('perfmatters_output_buffer_template_redirect', array('Perfmatters\Fonts', 'local_google_fonts'));
+            add_action('perfmatters_output_buffer', array('Perfmatters\Fonts', 'local_google_fonts'));
         }
     }
 

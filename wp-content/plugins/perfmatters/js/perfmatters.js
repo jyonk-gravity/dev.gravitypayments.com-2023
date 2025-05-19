@@ -309,6 +309,11 @@ jQuery(function($) {
 			    this.CodeMirror.save();
 			});
 	    	formData.append('form', form.serialize());
+
+
+	    	console.log(form);
+
+	    	console.log(formData);
 	    }
 
 	    //ajax request
@@ -320,6 +325,10 @@ jQuery(function($) {
        		contentType: false
 	    })
 	    .done(function(r) {
+
+	    	console.log('testing');
+
+	    	console.log(r);
 
 	    	//add message error class
 	    	if(!r.success) {
@@ -361,10 +370,13 @@ jQuery(function($) {
 	    	}
 		})
 		.fail(function(r) {
+			console.log(r);
 			message.addClass('perfmatters-error');
 			message.html(PERFMATTERS.strings.failed);
 		})
 		.always(function(r) {
+
+			console.log(r.data);
 			
 			//show response message
 			if(r.data && r.data.message) {

@@ -260,7 +260,18 @@
 
 					] );
 			}
-			else if ( $conflict === 'divitoolbox' ) {
+            else if ( $conflict === 'speedoptimizer' ) {
+                self::render( 'speedoptimizer',
+                    [
+                        'notice'  => [
+                            'type' => 'error',
+                            'icon' => 'scared',
+                        ],
+                        'message' => Constants::_()->speedoptimizer,
+
+                    ] );
+            }
+            else if ( $conflict === 'divitoolbox' ) {
 				self::render( 'divitoolbox',
 					[
 						'notice'  => [

@@ -3,7 +3,7 @@
 Plugin Name: Perfmatters
 Plugin URI: https://perfmatters.io/
 Description: Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.
-Version: 2.3.9
+Version: 2.4.5
 Author: forgemedia
 Author URI: https://forgemedia.io/
 License: GPLv2 or later
@@ -18,7 +18,7 @@ Domain Path: /languages
 define('PERFMATTERS_STORE_URL', 'https://perfmatters.io/');
 define('PERFMATTERS_ITEM_ID', 696);
 define('PERFMATTERS_ITEM_NAME', 'perfmatters');
-define('PERFMATTERS_VERSION', '2.3.9');
+define('PERFMATTERS_VERSION', '2.4.5');
 define('PERFMATTERS_PATH', plugin_dir_path(__FILE__ ));
 
 //plugins loaded
@@ -35,11 +35,10 @@ function perfmatters_plugins_loaded() {
 		define('PERFMATTERS_CACHE_URL', str_replace('http:', 'https:', content_url('/')) . $perfmatters_cache_path . "/perfmatters/$host/");
 	}
 
-	//initialize plugin classes
+	//config
 	Perfmatters\Config::init();
-	Perfmatters\Meta::init();
 
-	//initialize classes that filter the buffer
+	//buffer classes
     Perfmatters\Fonts::init();
     Perfmatters\Images::init();
     Perfmatters\CSS::init();
@@ -64,6 +63,9 @@ function perfmatters_init() {
 
 	//load translations
 	load_plugin_textdomain('perfmatters', false, dirname(plugin_basename( __FILE__)) . '/languages/');
+
+	//classes with translations
+	Perfmatters\Meta::init();
 }
 add_action('init', 'perfmatters_init');
 
@@ -473,6 +475,10 @@ function perfmatters_uninstall() {
 	//meta options
 	$perfmatters_meta_options = array(
 		'perfmatters_exclude_defer_js',
+		'perfmatters_exclude_delay_js',
+		'perfmatters_exclude_minify_js',
+		'perfmatters_exclude_unused_css',
+		'perfmatters_exclude_minify_css',
 		'perfmatters_exclude_lazy_loading',
 		'perfmatters_exclude_instant_page'
 	);

@@ -29,11 +29,9 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_addons_divi; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
-;// CONCATENATED MODULE: external "DoMini"
-var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/addons/divi.js
+;// ./src/client/addons/divi.js
 
 
 const helpers = external_AjaxSearchPro_namespaceObject.helpers;
@@ -41,12 +39,13 @@ class DiviAddon {
   name = "Divi Widget Fixes";
   init() {
     helpers.Hooks.addFilter("asp/init/etc", this.diviBodyCommerceResultsPage, 10, this);
+    helpers.Hooks.addFilter("asp/live_load/finished", this.diviBlogModuleTriggerInit.bind(this), 10, this);
   }
   diviBodyCommerceResultsPage($this) {
     if ($this.o.divi.bodycommerce && $this.o.is_results_page) {
-      window.WPD.intervalUntilExecute(function($2) {
+      window.WPD.intervalUntilExecute(function($) {
         setTimeout(function() {
-          $2("#divi_filter_button").trigger("click");
+          $("#divi_filter_button").trigger("click");
         }, 50);
       }, function() {
         return typeof jQuery !== "undefined" ? jQuery : false;
@@ -54,11 +53,17 @@ class DiviAddon {
     }
     return $this;
   }
+  diviBlogModuleTriggerInit(url, obj, selector, widget) {
+    if (jQuery !== void 0 && jQuery(widget).hasClass("et_pb_module")) {
+      jQuery(window).trigger("load");
+    }
+  }
 }
 external_AjaxSearchPro_namespaceObject.addons.add(new DiviAddon());
 /* harmony default export */ var divi = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-addons-divi.js
+;// ./src/client/bundle/optimized/asp-addons-divi.js
+
 
 
 /* harmony default export */ var asp_addons_divi = (external_AjaxSearchPro_namespaceObject);

@@ -78,6 +78,12 @@ class MB {
 	}
 
 	public static function strcasecmp( $str1, $str2, $encoding = null ): int {
+		if ( !function_exists( 'mb_internal_encoding' ) ) {
+			return strcmp(
+				strtoupper(remove_accents($str1)),
+				strtoupper(remove_accents($str2))
+			);
+		}
 		if ( null === $encoding ) {
 			$encoding = mb_internal_encoding();
 		}

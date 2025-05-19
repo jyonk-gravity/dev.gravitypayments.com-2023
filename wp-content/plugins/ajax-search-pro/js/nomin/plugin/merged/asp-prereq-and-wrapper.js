@@ -620,14 +620,15 @@
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/domini/dist/domini.js
 var domini = __webpack_require__(993);
 var domini_default = /*#__PURE__*/__webpack_require__.n(domini);
-;// CONCATENATED MODULE: ./src/client/external/helpers/base64.js
+;// ./src/client/external/helpers/base64.js
+
 const Base64 = {
   // private property
   _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -684,7 +685,8 @@ const Base64 = {
 };
 /* harmony default export */ var base64 = (Base64);
 
-;// CONCATENATED MODULE: ./src/client/external/helpers/hooks-filters.js
+;// ./src/client/external/helpers/hooks-filters.js
+
 const Hooks = {
   filters: {},
   /**
@@ -742,7 +744,8 @@ const Hooks = {
 };
 /* harmony default export */ var hooks_filters = (Hooks);
 
-;// CONCATENATED MODULE: ./src/client/external/helpers/interval-until-execute.js
+;// ./src/client/external/helpers/interval-until-execute.js
+
 function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
   let t, tries = 0, res = typeof criteria === "function" ? criteria() : criteria;
   if (res === false) {
@@ -764,7 +767,8 @@ function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
 }
 ;
 
-;// CONCATENATED MODULE: ./src/client/external/helpers/swiped.js
+;// ./src/client/external/helpers/swiped.js
+
 /**
  * swiped-events.js - v@version@
  * Pure JavaScript swipe events
@@ -858,7 +862,8 @@ function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
   }
 })(window, document);
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-prereq.js
+;// ./src/client/bundle/optimized/asp-prereq.js
+
 
 
 
@@ -873,7 +878,8 @@ window.WPD.Base64 = window.WPD.Base64 || base64;
 window.WPD.Hooks = window.WPD.Hooks || hooks_filters;
 window.WPD.intervalUntilExecute = window.WPD.intervalUntilExecute || intervalUntilExecute;
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/instances.js
+;// ./src/client/plugin/wrapper/instances.js
+
 
 window._asp_instances_storage = window._asp_instances_storage || [];
 const instances = {
@@ -912,10 +918,10 @@ const instances = {
   exist: function(id, instance) {
     this.clean();
     for (let i = 0; i < this.instances.length; i++) {
-      if (parseInt(this.instances[i].o.id) === id) {
+      if (parseInt(this.instances[i].o.id) === parseInt(id)) {
         if (typeof instance === "undefined") {
           return true;
-        } else if (parseInt(this.instances[i].o.iid) === instance) {
+        } else if (parseInt(this.instances[i].o.iid) === parseInt(instance)) {
           return true;
         }
       }
@@ -959,7 +965,8 @@ const instances = {
 };
 /* harmony default export */ var wrapper_instances = (instances);
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/api.ts
+;// ./src/client/plugin/wrapper/api.ts
+
 
 function api() {
   "use strict";
@@ -1005,7 +1012,8 @@ function api() {
   }
 }
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/asp.ts
+;// ./src/client/plugin/wrapper/asp.ts
+
 
 
 
@@ -1105,7 +1113,7 @@ const ASP_EXTENDED = {
       const data = ASP.highlight.data;
       let selector = data.selector !== "" && domini_default()(data.selector).length > 0 ? data.selector : "article", $highlighted;
       selector = domini_default()(selector).length > 0 ? selector : "body";
-      const s = new URLSearchParams(location.search), phrase = s.get("s") || s.get("asp_highlight");
+      const s = new URLSearchParams(location.search), phrase = s.get("s") ?? s.get("asp_highlight") ?? s.get("asp_s") ?? s.get("asp_ls") ?? "";
       domini_default()(selector).unhighlight({ className: "asp_single_highlighted_" + data.id });
       if (phrase !== null && phrase.trim() !== "") {
         domini_default()(selector).highlight(phrase.trim().split(" "), {
@@ -1226,7 +1234,8 @@ const ASP_EXTENDED = {
 };
 /* harmony default export */ var asp = (ASP_EXTENDED);
 
-;// CONCATENATED MODULE: ./src/client/plugin/wrapper/wrapper.js
+;// ./src/client/plugin/wrapper/wrapper.js
+
 
 
 
@@ -1240,7 +1249,8 @@ function load() {
   });
 }
 
-;// CONCATENATED MODULE: ./src/client/bundle/merged/asp-prereq-and-wrapper.js
+;// ./src/client/bundle/merged/asp-prereq-and-wrapper.js
+
 
 
 (function() {

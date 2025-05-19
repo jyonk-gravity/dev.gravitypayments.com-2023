@@ -21,7 +21,7 @@ if ( !class_exists(__NAMESPACE__ . '\Generator') ) {
 
 		function generate(): string {
 			if ( wd_asp()->instances->exists() ) {
-				$basic_css = $this->generateBasic();
+				$basic_css = $this->generateGlobal();
 				$instance_css_arr = $this->generateInstances();
 
 				return $this->saveFiles($basic_css, $instance_css_arr);
@@ -55,9 +55,11 @@ if ( !class_exists(__NAMESPACE__ . '\Generator') ) {
 			return $files[$handle] ?? 'search' . $handle . '.css';
 		}
 
-		private function generateBasic() {
+		private function generateGlobal() {
 			// Basic CSS
 			ob_start();
+			echo file_get_contents(ASP_CSS_PATH . "/global/woocommerce.css");
+			echo file_get_contents(ASP_CSS_PATH . "/global/advanced-result-fields.css");
 			include(ASP_PATH . "/css/style.basic.css.php");
 			$basic_css = ob_get_clean();
 			$unused_assets = Requirements::getUnusedAssets(false);

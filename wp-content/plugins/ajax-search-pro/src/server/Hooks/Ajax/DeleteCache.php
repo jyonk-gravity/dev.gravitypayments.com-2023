@@ -19,7 +19,7 @@ class DeleteCache extends AbstractAjax {
 		// $exit can be an empty string "", so force boolean
 		$exit = $exit !== false ? true : false;
 		if ( 
-			current_user_can( 'administrator' ) && 
+			current_user_can( 'manage_options' ) && 
 			( !$exit || (
 				isset($_POST['asp_delete_cache_request_nonce']) &&
 				wp_verify_nonce( $_POST['asp_delete_cache_request_nonce'], 'asp_delete_cache_request_nonce' )

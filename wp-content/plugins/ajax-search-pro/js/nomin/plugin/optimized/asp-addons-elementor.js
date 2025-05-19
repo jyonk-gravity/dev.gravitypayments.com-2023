@@ -41,13 +41,14 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_addons_elementor; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
 var external_AjaxSearchPro_default = /*#__PURE__*/__webpack_require__.n(external_AjaxSearchPro_namespaceObject);
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
 var external_DoMini_default = /*#__PURE__*/__webpack_require__.n(external_DoMini_namespaceObject);
-;// CONCATENATED MODULE: ./src/client/addons/elementor.ts
+;// ./src/client/addons/elementor.ts
+
 
 
 const helpers = (external_AjaxSearchPro_default()).helpers;
@@ -56,15 +57,15 @@ class ElementorAddon {
   init() {
     const { Hooks } = helpers;
     Hooks.addFilter("asp/init/etc", this.fixElementorPostPagination.bind(this), 10, this);
-    Hooks.addFilter("asp/live_load/selector", this.fixSelector.bind(this), 10, this);
     Hooks.addFilter("asp/live_load/start", this.start.bind(this), 10, this);
     Hooks.addFilter("asp/live_load/finished", this.finished.bind(this), 10, this);
+    Hooks.addFilter("asp/live_load/finished", this.fixImages.bind(this), 11, this);
   }
-  fixSelector(selector) {
-    if (selector.includes("asp_es_")) {
-      selector += " .elementor-widget-container";
-    }
-    return selector;
+  fixImages(url, obj) {
+    const $es = external_DoMini_default()(".asp_es_" + obj.o.id);
+    $es.find("img[nosrcset]").forEach((el) => {
+      external_DoMini_default()(el).attr("srcset", external_DoMini_default()(el).attr("nosrcset")).removeAttr("nosrcset");
+    });
   }
   start(url, obj, selector, widget) {
     const searchSettingsSerialized = obj.n("searchsettings").find("form").serialize();
@@ -73,20 +74,20 @@ class ElementorAddon {
     if (!isNewSearch && external_DoMini_default()(widget).find(".e-load-more-spinner").length > 0) {
       external_DoMini_default()(widget).css("opacity", "1");
     }
-    external_DoMini_default()(selector).parent().removeClass("e-load-more-pagination-end");
+    external_DoMini_default()(selector).removeClass("e-load-more-pagination-end");
   }
   finished(url, obj, selector, widget) {
     const $el = external_DoMini_default()(widget);
     if (selector.includes("asp_es_") && typeof elementorFrontend !== "undefined" && typeof elementorFrontend.init !== "undefined" && $el.find(".asp_elementor_nores").length === 0) {
-      const widgetType = $el.parent().data("widget_type") || "";
+      const widgetType = $el.data("widget_type") || "";
       if (widgetType !== "" && typeof jQuery !== "undefined") {
-        elementorFrontend.hooks.doAction("frontend/element_ready/" + widgetType, jQuery($el.parent().get(0)));
+        elementorFrontend.hooks.doAction("frontend/element_ready/" + widgetType, jQuery($el.get(0)));
       }
       this.fixElementorPostPagination(obj, url);
       if (obj.o.scrollToResults.enabled) {
         this.scrollToResultsIfNeeded($el);
       }
-      obj.n("s").trigger("asp_elementor_results", [obj.o.id, obj.o.iid, $el.parent().get(0)], true, true);
+      obj.n("s").trigger("asp_elementor_results", [obj.o.id, obj.o.iid, $el.get(0)], true, true);
     }
   }
   scrollToResultsIfNeeded($el) {
@@ -151,7 +152,8 @@ class ElementorAddon {
 external_AjaxSearchPro_default().addons.add(new ElementorAddon());
 /* harmony default export */ var elementor = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-addons-elementor.js
+;// ./src/client/bundle/optimized/asp-addons-elementor.js
+
 
 
 /* harmony default export */ var asp_addons_elementor = (external_AjaxSearchPro_namespaceObject);

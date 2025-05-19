@@ -27,16 +27,31 @@ defined('ABSPATH') or die("You can't access this file directly.");
  */
 ?>
 <div class="asp_nores">
-
-    <div class="asp_nores_header">
-        <?php
-        echo stripslashes( \WPDRMS\ASP\Utils\Str::resolveBracketSyntax( asp_icl_t("No results text" . " ($id)", $s_options['noresultstext']), array('phrase' => $phrase) ));
-        ?>
-    </div>
+	<div class="asp_nores_header">
+		<?php
+		echo wp_kses_post(
+			stripslashes(
+				\WPDRMS\ASP\Utils\Str::resolveBracketSyntax(
+					asp_icl_t(
+						'No results text' . " ($id)",
+						$s_options['noresultstext']
+					),
+					array( 'phrase' => $phrase )
+				)
+			)
+		);
+		?>
+	</div>
 	<div class="asp_nores_kw_suggestions">
-		<?php echo stripslashes( asp_icl_t("Did you mean? text" . " ($id)", $s_options['didyoumeantext']) ); ?>
-		<?php foreach($s_keywords as $keyword): ?>
-			<span class='asp_keyword'><?php echo $keyword; ?></span>
+		<?php
+		echo wp_kses_post(
+			stripslashes(
+				asp_icl_t('Did you mean? text' . " ($id)", $s_options['didyoumeantext'])
+			)
+		);
+		?>
+		<?php foreach ( $s_keywords as $keyword ) : ?>
+			<span class='asp_keyword'><?php echo wp_kses_post($keyword); ?></span>
 		<?php endforeach; ?>
 	</div>
 </div>

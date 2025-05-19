@@ -32,11 +32,11 @@ if ( function_exists('qtranxf_getLanguage') ) {
                value='<?php echo pll_current_language(); ?>'/>
     <?php endif; ?>
 	<?php if (defined('ICL_LANGUAGE_CODE')
-	          && ICL_LANGUAGE_CODE != ''
+	          && !empty(ICL_LANGUAGE_CODE)
 	          && defined('ICL_SITEPRESS_VERSION')
 	): ?>
 		<input type='hidden' name='wpml_lang'
-		       value='<?php echo ICL_LANGUAGE_CODE; ?>'/>
+		       value='<?php echo esc_attr(ICL_LANGUAGE_CODE); ?>'/>
 	<?php endif; ?>
     <input type="hidden" name="filters_changed" value="0">
     <input type="hidden" name="filters_initial" value="1">

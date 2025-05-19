@@ -1,10 +1,10 @@
 === Ajax Search Pro ===
 Contributors: wpdreams
 Tags: search, ajax, live
-Donate link: https://codecanyon.net/item/ajax-search-pro-for-wordpress-live-search-plugin/3357410
-Requires at least: 4.9
-Tested up to: 6.6
+Donate link: https://ajaxsearchpro.com/
+Requires at least: 6.5
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 4.26.16
+Stable tag: 4.27.1
 
 Most powerful WordPress Search Engine

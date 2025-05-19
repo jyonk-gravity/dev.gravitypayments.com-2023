@@ -19,6 +19,7 @@ use WPDRMS\ASP\Search\SearchUsers;
 use WPDRMS\ASP\Suggest\KeywordSuggest;
 use WPDRMS\ASP\Utils\MB;
 use WPDRMS\ASP\Utils\Str;
+use WPDRMS\ASP\Utils\Suggest;
 
 defined('ABSPATH') || die("You can't access this file directly.");
 
@@ -55,12 +56,14 @@ class SearchQuery {
 	 */
 	public $options = array();
 
+	public SearchQueryArgs $args;
+
 	/*
 	 * Array of phrases of all synonym variations
 	 */
 	private $final_phrases = array();
 
-	private SearchQueryArgs $args;
+	private static $search_cache = array();
 
 	/**
 	 * @param array<string, mixed> $query_args
@@ -876,26 +879,33 @@ class SearchQuery {
 		$suggestions = $this->kwSuggestions();
 		$posts       = array();
 		$return      = array();
+		$keywords    = array();
 		if ( isset($suggestions['keywords'], $suggestions['keywords'][0]) ) {
-			$this->args['s'] = $suggestions['keywords'][0];
+			if ( count($suggestions['keywords']) > 1 ) {
+				$keywords = Suggest::getSimilarText($suggestions['keywords'], trim($this->args['s']), 1);
+			} else {
+				$keywords = $suggestions['keywords'];
+			}
+			$this->args['s'] = $keywords[0];
 			$posts           = $this->get_posts();
 		}
 
 		if ( count($posts) > 0 ) {
 			$return = array(
 				'suggested' => $posts,
-				'keywords'  => array( $suggestions['keywords'][0] ),
+				'keywords'  => array( $keywords[0] ),
 				'nores'     => 1,
 			);
-		} elseif ( $fallback_on_no_results && isset($suggestions['keywords']) ) {
+		} elseif ( $fallback_on_no_results && count($keywords)>0 ) {
 			$return = array(
-				'keywords' => $suggestions['keywords'],
+				'keywords' => $keywords,
 				'nores'    => 1,
 			);
 		}
 
 		return $return;
 	}
+
 
 	/** @noinspection PhpUnused */
 	public function kwSuggestions( $single = false ) {
@@ -1008,6 +1018,7 @@ class SearchQuery {
 				$groups[ $v['post_type'] ] = array(
 					'title' => $group_prefix . ' ' . asp_icl_t( 'Group (' . $id . '): ' . $v['name'], $v['name']) . ' ' . $group_suffix,
 					'items' => array(),
+					'url'   => $sd['group_make_header_clickable'] ? get_post_type_archive_link($v['post_type']) : '',
 				);
 			}
 			foreach ( $results as $r ) {
@@ -1026,6 +1037,7 @@ class SearchQuery {
 						$groups[ '_' . $tt->term_id ] = array(
 							'title' => $group_prefix . ' ' . $tt->name . ' ' . $group_suffix,
 							'items' => array(),
+							'url'   => $sd['group_make_header_clickable'] ? get_term_link($tt->term_id, $t['taxonomy']) : '',
 						);
 					}
 				} else {
@@ -1033,6 +1045,7 @@ class SearchQuery {
 					$groups[ '_' . $t['id'] ] = array(
 						'title' => $group_prefix . ' ' . $tt->name . ' ' . $group_suffix,
 						'items' => array(),
+						'url'   => $sd['group_make_header_clickable'] ? get_term_link($t['id'], $t['taxonomy']) : '',
 					);
 				}
 				if ( !in_array($t['taxonomy'], $taxonomies) ) {
@@ -1040,7 +1053,7 @@ class SearchQuery {
 				}
 			}
 			foreach ( $results as $r ) {
-				if ( $r->content_type == 'pagepost' && count($taxonomies) > 0 ) {
+				if ( isset($r->post_type) && count($taxonomies) > 0 ) {
 					$terms          = wp_get_object_terms( $r->id, $taxonomies, array( 'fields' =>'ids' ) );
 					$matched_a_term = false;
 					foreach ( $terms as $tt ) {

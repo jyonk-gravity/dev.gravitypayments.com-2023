@@ -15,7 +15,7 @@ class MediaService extends AbstractAjax {
 		if ( 
 			isset($_POST['asp_mediaservice_request_nonce']) &&
 			wp_verify_nonce( $_POST['asp_mediaservice_request_nonce'], 'asp_mediaservice_request_nonce' ) &&
-			current_user_can( 'administrator' )
+			current_user_can( 'manage_options' )
 		) {
 			if ( isset($_POST['ms_deactivate']) ) {
 				RemoteService\License::getInstance()->delete();

@@ -6,6 +6,7 @@
 	use ShortPixel\AI\Options;
 	use ShortPixel\AI\Feedback;
 	use ShortPixel\AI\Converter;
+    use ShortPixel\AI\Page;
 
 	class Actions {
 		/**
@@ -14,6 +15,7 @@
 		 */
 		public static function handle() {
 			if ( ShortPixelAI::isAjax() ) {
+                Page::checkSpaiNonce();
 				$data   = $_POST[ 'data' ];
 				$action = $data[ 'action' ];
 
@@ -42,6 +44,10 @@
 		 * @return array
 		 */
 		private static function handleDeactivation( $data ) {
+            Page::checkSpaiNonce();
+            if ( ! current_user_can('activate_plugins') ) {
+                return [ 'success' => false, 'message' => 'Insufficient permissions' ];
+            }
 			$response = [ 'success' => false ];
 
 			if ( isset( $data[ 'feedback' ] ) ) {

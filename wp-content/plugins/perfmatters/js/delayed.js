@@ -1,5 +1,8 @@
 //assign variables
 //const pmDelayTimer = setTimeout(pmTriggerDOMListener, 10000); //set inline before main minified script for filterable timeout variable
+if(window.pmDT) {
+    var pmDelayTimer = setTimeout(pmTriggerDOMListener, window.pmDT * 1000);
+}
 const pmUserInteractions =["keydown","mousedown","mousemove","wheel","touchmove","touchstart","touchend"];
 const pmDelayedScripts = {normal: [], defer: [], async: []};
 const jQueriesArray = [];
@@ -8,24 +11,16 @@ var pmDOMLoaded = false;
 var pmClickTarget = '';
 window.pmIsClickPending = false;
 
-//add pageshow listener
-window.addEventListener("pageshow", (e) => {
-    window.pmPersisted = e.persisted;
-});
-
 //add user interaction event listeners
 pmUserInteractions.forEach(function(event) {
     window.addEventListener(event, pmTriggerDOMListener, {passive:true});
 });
 
 //add click handling listeners
-if(pmDelayClick) {
+if(window.pmDC) {
     window.addEventListener("touchstart", pmTouchStartHandler, {passive: true});
     window.addEventListener("mousedown", pmTouchStartHandler);
 }
-
-//add visibility change listener
-document.addEventListener("visibilitychange", pmTriggerDOMListener);
 
 //add dom listener and trigger scripts
 function pmTriggerDOMListener() {
@@ -39,9 +34,6 @@ function pmTriggerDOMListener() {
     pmUserInteractions.forEach(function(event) {
         window.removeEventListener(event, pmTriggerDOMListener, {passive:true});
     });
-
-    //remove visibility change listener
-    document.removeEventListener("visibilitychange", pmTriggerDOMListener);
 
     //add dom listner if page is still loading
     if(document.readyState === 'loading') {
@@ -139,13 +131,13 @@ function pmDelayEventListeners() {
     delayDOMEvent(document, "DOMContentLoaded");
     delayDOMEvent(window, "DOMContentLoaded");
     delayDOMEvent(window, "load");
-    delayDOMEvent(window, "pageshow");
+    //delayDOMEvent(window, "pageshow");
     delayDOMEvent(document, "readystatechange");
 
     //delay dom event triggers
     delayDOMEventTrigger(document, "onreadystatechange");
     delayDOMEventTrigger(window, "onload");
-    delayDOMEventTrigger(window, "onpageshow");
+    //delayDOMEventTrigger(window, "onpageshow");
 }
 
 //delay jquery ready
@@ -360,13 +352,6 @@ async function pmTriggerEventListeners() {
     jQueriesArray.forEach(function(singleJQuery) {
         singleJQuery(window).trigger("perfmatters-jquery-load")
     });
-    const pmPageShowEvent = new Event("perfmatters-pageshow");
-    pmPageShowEvent.persisted = window.pmPersisted;
-    window.dispatchEvent(pmPageShowEvent);
-    await pmNextFrame();
-    if(window.perfmattersonpageshow) {
-        window.perfmattersonpageshow({ persisted: window.pmPersisted });
-    }
 }
 
 //wait for next frame before proceeding

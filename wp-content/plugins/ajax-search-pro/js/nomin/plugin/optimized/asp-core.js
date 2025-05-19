@@ -29,7 +29,8 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_core; }
 });
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/base.js
+;// ./src/client/plugin/core/base.js
+
 const base_AjaxSearchPro = new function() {
   this.helpers = {};
   this.plugin = {};
@@ -57,9 +58,10 @@ const base_AjaxSearchPro = new function() {
 }();
 /* harmony default export */ var base = (base_AjaxSearchPro);
 
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/etc/helpers.js
+;// ./src/client/plugin/core/etc/helpers.js
+
 
 
 "use strict";
@@ -263,7 +265,8 @@ base.helpers.isScrolledToLeft = function(el) {
 };
 /* harmony default export */ var helpers = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/animation.js
+;// ./src/client/plugin/core/actions/animation.js
+
 
 
 "use strict";
@@ -302,7 +305,8 @@ base.plugin.removeAnimation = function() {
 };
 /* harmony default export */ var animation = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/filters.js
+;// ./src/client/plugin/core/actions/filters.js
+
 
 
 "use strict";
@@ -335,10 +339,12 @@ base.plugin.resetSearchFilters = function() {
     $this.select2jQuery($this.n("searchsettings").get(0)).find(".asp_gochosen,.asp_goselect2").trigger("change.asp_select2");
   }
   $this.n("text").val("");
+  $this.n("textAutocomplete").val("");
   $this.n("proloading").css("display", "none");
   $this.hideLoader();
   $this.searchAbort();
   $this.setFilterStateInput(0);
+  $this.n("searchsettings").trigger("set_option_checked");
 };
 base.plugin.resetNoUISliderFilters = function() {
   if (this.noUiSliders.length > 0) {
@@ -357,7 +363,8 @@ base.plugin.resetNoUISliderFilters = function() {
 };
 /* harmony default export */ var filters = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/loader.js
+;// ./src/client/plugin/core/actions/loader.js
+
 
 
 "use strict";
@@ -402,7 +409,8 @@ base.plugin.hideLoader = function() {
 };
 /* harmony default export */ var loader = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/other.js
+;// ./src/client/plugin/core/actions/other.js
+
 
 
 "use strict";
@@ -456,6 +464,7 @@ base.plugin.fixClonedSelf = function() {
     $this.o.rid = $this.o.id + "_" + $this.o.iid;
     $this.n("search").get(0).id = "ajaxsearchpro" + $this.o.rid;
     $this.n("search").removeClass("asp_m_" + old_real_id).addClass("asp_m_" + $this.o.rid).data("instance", $this.o.iid);
+    $this.n("container").removeClass("asp_w_container_" + old_real_id).addClass("asp_w_container_" + $this.o.rid).data("instance", $this.o.iid);
     $this.n("searchsettings").get(0).id = $this.n("searchsettings").get(0).id.replace("settings" + old_real_id, "settings" + $this.o.rid);
     if ($this.n("searchsettings").hasClass("asp_s_" + old_real_id)) {
       $this.n("searchsettings").removeClass("asp_s_" + old_real_id).addClass("asp_s_" + $this.o.rid).data("instance", $this.o.iid);
@@ -499,7 +508,8 @@ base.plugin.destroy = function() {
 };
 /* harmony default export */ var other = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/redirect.js
+;// ./src/client/plugin/core/actions/redirect.js
+
 
 
 "use strict";
@@ -666,7 +676,8 @@ base.plugin.parseCustomRedirectURL = function(url, phrase) {
 };
 /* harmony default export */ var redirect = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results.js
+;// ./src/client/plugin/core/actions/results.js
+
 
 
 "use strict";
@@ -891,7 +902,8 @@ base.plugin.updateInfoHeader = function(totalCount) {
   }
 };
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/scroll.js
+;// ./src/client/plugin/core/actions/scroll.js
+
 
 
 "use strict";
@@ -940,7 +952,8 @@ base.plugin.checkAndTriggerInfiniteScroll = function(caller) {
   }
 };
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/search.js
+;// ./src/client/plugin/core/actions/search.js
+
 
 
 "use strict";
@@ -1204,6 +1217,7 @@ base.plugin.search = function(count, order, recall, apiCall, supressInvalidMsg) 
           }
         }
         $this.isAutoP = false;
+        search_helpers.Hooks.applyFilters("asp/search/end", $this, data);
       },
       "fail": function(jqXHR) {
         if (jqXHR.aborted)
@@ -1223,7 +1237,8 @@ base.plugin.search = function(count, order, recall, apiCall, supressInvalidMsg) 
 };
 /* harmony default export */ var search = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/etc/api.js
+;// ./src/client/plugin/core/etc/api.js
+
 
 
 "use strict";
@@ -1304,7 +1319,8 @@ base.plugin.filtersChanged = function() {
 };
 /* harmony default export */ var api = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/etc/position.js
+;// ./src/client/plugin/core/etc/position.js
+
 
 
 "use strict";
@@ -1322,13 +1338,13 @@ base.plugin.detectAndFixFixedPositioning = function() {
     if ($this.n("resultsDiv").css("position") === "absolute") {
       $this.n("resultsDiv").css({
         "position": "fixed",
-        "z-index": 2147483647
+        "z-index": 2147483646
       });
     }
     if (!$this.att("blocking")) {
       $this.n("searchsettings").css({
         "position": "fixed",
-        "z-index": 2147483647
+        "z-index": 2147483646
       });
     }
   } else {
@@ -1450,7 +1466,8 @@ base.plugin.hideOnInvisibleBox = function() {
 };
 /* harmony default export */ var position = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/button.js
+;// ./src/client/plugin/core/events/button.js
+
 
 
 "use strict";
@@ -1531,7 +1548,8 @@ base.plugin.initButtonEvents = function() {
 };
 /* harmony default export */ var events_button = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/input.js
+;// ./src/client/plugin/core/events/input.js
+
 
 
 "use strict";
@@ -1605,6 +1623,7 @@ base.plugin._initSearchInput = function() {
     }
     $this.searchAbort();
     clearTimeout($this.timeouts.search);
+    $this.n("textAutocomplete").val("");
     $this.n("proloading").css("display", "none");
     $this.timeouts.search = setTimeout(function() {
       if (external_DoMini_namespaceObject("form", $this.n("searchsettings")).serialize() + $this.n("text").val().trim() !== $this.lastSuccesfulSearch || !$this.resultsOpened && !$this.usingLiveLoader()) {
@@ -1672,7 +1691,8 @@ base.plugin._initFormEvent = function() {
 };
 /* harmony default export */ var input = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/navigation.js
+;// ./src/client/plugin/core/events/navigation.js
+
 
 
 "use strict";
@@ -1727,7 +1747,8 @@ base.plugin.initNavigationEvents = function() {
 };
 /* harmony default export */ var navigation = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/other.js
+;// ./src/client/plugin/core/events/other.js
+
 
 
 "use strict";
@@ -1904,7 +1925,8 @@ base.plugin.initSelect2 = function() {
 };
 /* harmony default export */ var events_other = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/results.js
+;// ./src/client/plugin/core/events/results.js
+
 
 
 "use strict";
@@ -1965,7 +1987,8 @@ base.plugin.initResultsEvents = function() {
 };
 /* harmony default export */ var results = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/events/touch.js
+;// ./src/client/plugin/core/events/touch.js
+
 
 
 "use strict";
@@ -1980,8 +2003,10 @@ base.plugin.monitorTouchMove = function() {
 };
 /* harmony default export */ var touch = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/autopopulate.js
+;// ./src/client/plugin/core/init/autopopulate.js
 
+
+let autopopulate_helpers = base.helpers;
 "use strict";
 base.plugin.initAutop = function() {
   let $this = this;
@@ -1998,7 +2023,7 @@ base.plugin.initAutop = function() {
   }
   if ($this.o.autop.state === "phrase") {
     if (!$this.o.is_results_page) {
-      $this.n("text").val($this.o.autop.phrase);
+      $this.n("text").val(autopopulate_helpers.decodeHTMLEntities($this.o.autop.phrase));
     }
     $this.search(count);
   } else if ($this.o.autop.state === "latest") {
@@ -2009,7 +2034,8 @@ base.plugin.initAutop = function() {
 };
 /* harmony default export */ var autopopulate = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/etc.js
+;// ./src/client/plugin/core/init/etc.js
+
 
 
 "use strict";
@@ -2077,7 +2103,8 @@ base.plugin.hooks = function() {
 };
 /* harmony default export */ var etc = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/init.js
+;// ./src/client/plugin/core/init/init.js
+
 
 
 "use strict";
@@ -2278,7 +2305,8 @@ base.plugin.initEvents = function() {
 };
 /* harmony default export */ var init = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/core/init/results.js
+;// ./src/client/plugin/core/init/results.js
+
 
 
 "use strict";
@@ -2374,7 +2402,8 @@ base.plugin.initResultsAnimations = function() {
 };
 /* harmony default export */ var init_results = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/plugin/widgets/widgets.js
+;// ./src/client/plugin/widgets/widgets.js
+
 
 "use strict";
 external_DoMini_namespaceObject(function() {
@@ -2403,7 +2432,8 @@ external_DoMini_namespaceObject(function() {
   });
 });
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-core.js
+;// ./src/client/bundle/optimized/asp-core.js
+
 
 
 

@@ -22,5 +22,11 @@ defined('ABSPATH') or die("You can't access this file directly.");
  * @since: 4.0
  */
 ?>
-<div class="asp_results_group <?php echo $group_class; ?>">
-	<div class="asp_group_header"><?php echo $group_name; ?></div>
+<div class="asp_results_group <?php echo esc_attr($group_class); ?>">
+	<?php if ($group_url): ?>
+		<div class="asp_group_header">
+			<a href="<?php echo $group_url;?>"><?php echo wp_kses_post($group_name); ?></a>
+		</div>
+	<?php else: ?>
+		<div class="asp_group_header"><?php echo wp_kses_post($group_name); ?></div>
+	<?php endif; ?>

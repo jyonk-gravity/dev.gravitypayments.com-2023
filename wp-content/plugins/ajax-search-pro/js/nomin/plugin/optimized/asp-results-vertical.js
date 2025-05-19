@@ -29,11 +29,12 @@ __webpack_require__.d(__webpack_exports__, {
   "default": function() { return /* binding */ asp_results_vertical; }
 });
 
-;// CONCATENATED MODULE: external "AjaxSearchPro"
+;// external "AjaxSearchPro"
 var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"];
-;// CONCATENATED MODULE: external "DoMini"
+;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
-;// CONCATENATED MODULE: ./src/client/plugin/core/actions/results_vertical.js
+;// ./src/client/plugin/core/actions/results_vertical.js
+
 
 
 "use strict";
@@ -82,7 +83,7 @@ external_AjaxSearchPro_namespaceObject.plugin.showVerticalResults = function() {
     $this.n("items").last().addClass("asp_last_item");
     $this.n("results").find(".asp_group_header").prev(".item").addClass("asp_last_item");
     if ($this.o.highlight) {
-      external_DoMini_namespaceObject("div.item", $this.n("resultsDiv")).highlight($this.n("text").val().split(" "), {
+      external_DoMini_namespaceObject("div.item", $this.n("resultsDiv")).highlight($this.n("text").val().replace(/["']/g, "").split(" "), {
         element: "span",
         className: "highlighted",
         wordsOnly: $this.o.highlightWholewords
@@ -122,7 +123,8 @@ external_AjaxSearchPro_namespaceObject.plugin.showVerticalResults = function() {
 };
 /* harmony default export */ var results_vertical = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
-;// CONCATENATED MODULE: ./src/client/bundle/optimized/asp-results-vertical.js
+;// ./src/client/bundle/optimized/asp-results-vertical.js
+
 
 
 /* harmony default export */ var asp_results_vertical = (external_AjaxSearchPro_namespaceObject);

@@ -51,6 +51,7 @@ return array(
     		'id' => 'fluentform/fluentform.php',
     		'title' => 'Fluent Forms',
     		'exclusions' => array(
+    			'jquery.min.js',
     			'fluentform',
     			'turnstile'
     		)
@@ -59,6 +60,7 @@ return array(
     		'id' => 'fluentformpro/fluentformpro.php',
     		'title' => 'Fluent Forms Pro',
     		'exclusions' => array(
+    			'jquery.min.js',
     			'fluentform',
     			'turnstile'
     		)
@@ -121,6 +123,7 @@ return array(
     		'exclusions' => array(
     			'kadence-blocks-tabs-js',
 				'kad-splide-js',
+				'kadence-splide-js',
 				'kadence-slide-init-js',
 				'kadence-blocks-splide-init-js',
 				'kadence-blocks-pro-splide-init-js',
@@ -172,6 +175,13 @@ return array(
 				'nf-'
     		)
     	),
+    	'plausible' => array(
+    		'id' => 'plausible-analytics/plausible-analytics.php',
+    		'title' => 'Plausible Analytics',
+    		'exclusions' => array(
+    			'plausible'
+    		)
+    	),
     	'presto-player' => array(
     		'id' => 'presto-player/presto-player.php',
     		'title' => 'Presto Player',
@@ -200,14 +210,15 @@ return array(
     	),
     	'revslider' => array(
     		'id' => 'revslider/revslider.php',
-    		'title' => 'Revolution Slider',
+    		'title' => 'Slider Revolution',
     		'exclusions' => array(
     			'jquery.min.js',
 				'jquery-migrate.min.js',
 				'revslider',
 				'rev_slider',
 				'setREVStartSize',
-				'window.RS_MODULES'
+				'window.RS_MODULES',
+				'SR7'
     		)
     	),
     	'sheknows-infuse' => array(
@@ -221,7 +232,8 @@ return array(
     		'id' => 'shortpixel-adaptive-images/short-pixel-ai.php',
     		'title' => 'ShortPixel Adaptive Images',
     		'exclusions' => array(
-    			'shortpixel.ai/assets/js/bundles/spai-lib'
+    			'jquery.min.js',
+				'spai'
     		)
     	),
     	'slick-engagement' => array(
@@ -313,6 +325,14 @@ return array(
         	'title' => 'WP Armour',
         	'exclusions' => array(
         		'wpa_field_info'
+        	)
+        ),
+        'wpbakery' => array(
+        	'id' => 'js_composer/js_composer.php',
+        	'title' => 'WPBakery',
+        	'exclusions' => array(
+        		'jquery.min.js',
+        		'js_composer_front.min.js'
         	)
         ),
         'wpforms-lite' => array(
