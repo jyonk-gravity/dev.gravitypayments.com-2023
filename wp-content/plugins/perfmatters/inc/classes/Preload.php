@@ -13,21 +13,20 @@ class Preload
     //initialize preload functions
     public static function init() 
     {
-        self::$preloads = apply_filters('perfmatters_preloads', Config::$options['preload']['preload'] ?? array());
-        self::$critical_images = apply_filters('perfmatters_preload_critical_images', Config::$options['preload']['critical_images'] ?? 0);
+        add_action('perfmatters_queue', array('Perfmatters\Preload', 'queue'));
 
         //compatibility
-        if(!empty(self::$preloads) || !empty(self::$critical_images)) {
+        if(!empty(Config::$options['preload']['preload']) || !empty(Config::$options['preload']['critical_images'])) {
             add_filter('rocket_above_the_fold_optimization', '__return_false', 999);
         }
-
-        add_action('perfmatters_queue', array('Perfmatters\Preload', 'queue'));
     }
 
     //queue functions
     public static function queue() 
     {
         self::$fetch_priority = apply_filters('perfmatters_fetch_priority', Config::$options['preload']['fetch_priority'] ?? array());
+        self::$preloads = apply_filters('perfmatters_preloads', Config::$options['preload']['preload'] ?? array());
+        self::$critical_images = apply_filters('perfmatters_preload_critical_images', Config::$options['preload']['critical_images'] ?? 0);
 
         //disable core fetch
         if(!empty(Config::$options['preload']['disable_core_fetch'])) {
@@ -249,6 +248,27 @@ class Preload
             //filter preloads array
             apply_filters('perfmatters_preloads_array', self::$preloads_array);
 
+            //add early hints
+            if(!empty(Config::$options['preload']['early_hints']) && !empty(Config::$options['preload']['early_hint_types'])) {
+
+                foreach(self::$preloads_array as $preload) {
+                    
+                    if(empty($preload['url'])) {
+                        continue;
+                    }
+
+                    if(empty($preload['as']) || !in_array($preload['as'], Config::$options['preload']['early_hint_types'])) {
+                        continue;
+                    }
+
+                    if(!empty($preload['srcset'])) {
+                        continue;
+                    }
+
+                    header("Link: <" . $preload['url'] . ">; rel=preload; as=" . $preload['as'], false);
+                }
+            }
+
             $preloads_string = '';
             foreach(apply_filters('perfmatters_preloads_ready', self::$preloads_ready) as $preload) {
                 $preloads_string.= $preload;
@@ -420,6 +440,15 @@ class Preload
                 if($mode == 'disabled') {
                     add_filter('wp_speculation_rules_configuration', '__return_null');
                     return;
+                }
+
+                //add woocommerce path exclusions
+                if(class_exists('WooCommerce')) {
+                    add_filter('wp_speculation_rules_href_exclude_paths', function (array $exclude_paths) : array {
+                        $exclude_paths[] = '/checkout/';
+                        $exclude_paths[] = '/cart/';
+                        return $exclude_paths;
+                    });
                 }
                 
                 //adjust config

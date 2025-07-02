@@ -1074,6 +1074,36 @@ function perfmatters_settings() {
         )
     );
 
+    //early hints
+    add_settings_field(
+        'early_hints', 
+        perfmatters_title(__('Cloudflare Early Hints', 'perfmatters') . '<span class="perfmatters-beta">BETA</span>', 'early_hints', 'https://perfmatters.io/docs/early-hints'), 
+        'perfmatters_print_input', 
+        'perfmatters_options', 
+        'preload', 
+        array(
+            'id' => 'early_hints',
+            'section' => 'preload',
+            'tooltip' => __('Send early hint link headers for existing Perfmatters preloads.', 'perfmatters'),
+            'class' => 'perfmatters-input-controller pm-advanced-option'
+        )
+    );
+
+    //early hint types
+    add_settings_field(
+        'early_hint_types', 
+        perfmatters_title(__('Early Hint Types', 'perfmatters'), 'early_hint_types', 'https://perfmatters.io/docs/early-hints#types'), 
+        'perfmatters_print_early_hint_types', 
+        'perfmatters_options', 
+        'preload', 
+        array(
+            'id' => 'early_hint_types',
+            'section' => 'preload',
+            'tooltip' => __('Choose which file types get early hint link headers.', 'perfmatters'),
+            'class' => 'pm-advanced-option preload-early_hints' . (empty($perfmatters_options['preload']['early_hints']) ? ' hidden' : '')
+        )
+    );
+
     //fetch priority
     add_settings_field(
         'fetch_priority', 
@@ -2493,6 +2523,36 @@ function perfmatters_print_preload_row($rowCount = 0, $line = array()) {
 
         echo '</div>';
     echo "</div>";
+}
+
+//print early hint types
+function perfmatters_print_early_hint_types($args) {
+
+    $options = get_option('perfmatters_options');
+    
+    $types = array(
+        //'fetch'  => 'Fetch',
+        'font'   => 'Font',
+        'image'  => 'Image',
+        'script' => 'Script',
+        'style'  => 'Style'
+        //'track'  => 'Track'
+    );
+
+    echo "<div style='margin-bottom: 10px;' id='perfmatters-early-hint-types'>";
+        foreach($types as $key => $name) {
+            echo "<label for='perfmatters-early-hint-types-" . $key . "' style='margin-right: 10px; text-wrap: nowrap;'>";
+                echo "<input type='checkbox' name='perfmatters_options[preload][early_hint_types][]' id='perfmatters-early-hint-types-" . $key . "' " . (!empty($options['preload']['early_hint_types']) && in_array($key, $options['preload']['early_hint_types']) ? ' checked' : '') . " value='" . $key . "' />";
+                echo $name;
+            echo "</label>";
+        }
+    echo "</div>";
+    //perfmatters_action_button('purge_meta', __('Purge Meta Options', 'perfmatters'), 'secondary', $args['confirmation'] ?? '');
+
+    //tooltip
+    if(!empty($args['tooltip'])) {
+        perfmatters_tooltip($args['tooltip']);
+    }
 }
 
 //fetch priority input row

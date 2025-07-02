@@ -303,10 +303,10 @@ function perfmatters_script_manager_load_master_array() {
 function perfmatters_script_manager_print_section($category, $group, $scripts = false) {
 	global $perfmatters_script_manager_options;
 	global $currentID;
+	global $perfmatters_script_manager_settings;
 	$options = $perfmatters_script_manager_options;
-	$settings = get_option('perfmatters_script_manager_settings');
 
-	$mu_mode = !empty($settings['mu_mode']) && $category == 'plugins';
+	$mu_mode = !empty($perfmatters_script_manager_settings['mu_mode']) && $category == 'plugins';
 
 	$statusDisabled = false;
 	if(isset($options['disabled'][$category][$group]['everywhere']) 
@@ -495,10 +495,10 @@ function perfmatters_script_manager_print_status($type, $handle) {
 	global $perfmatters_tools;
 	global $perfmatters_script_manager_options;
 	global $currentID;
+	global $perfmatters_script_manager_settings;
 	$options = $perfmatters_script_manager_options;
-	$settings = get_option('perfmatters_script_manager_settings');
 
-	$mu_mode = !empty($settings['mu_mode']) && $type == 'plugins';
+	$mu_mode = !empty($perfmatters_script_manager_settings['mu_mode']) && $type == 'plugins';
 
 	global $statusDisabled;
 	$statusDisabled = false;

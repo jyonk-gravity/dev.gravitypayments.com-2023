@@ -214,11 +214,17 @@ class JS
 				if(!empty(Config::$options['assets']['delay_js_quick_exclusions'])) {
 
 				    $master = self::get_quick_exclusions_master();
+				    $delay_defer_exclusions = array();
 
 					foreach(Config::$options['assets']['delay_js_quick_exclusions'] as $type => $items) {
 						foreach($items as $key => $val) {
 							if(!empty($master[$type][$key])) {
 								self::$data['delay']['exclusions'] = array_merge(self::$data['delay']['exclusions'], $master[$type][$key]['exclusions']);
+
+								//save deferral exclusions if needed
+								if(!empty($master[$type][$key]['deferral_exclusions'])) {
+									$delay_defer_exclusions = array_merge($delay_defer_exclusions, $master[$type][$key]['deferral_exclusions']);
+								}
 							}
 						}
 					}
@@ -249,6 +255,11 @@ class JS
 				'cloudflare.com/turnstile' //turnstile
 			);
 
+			//add deferral exclusions from delay quick exclusions
+			if(!empty($delay_defer_exclusions)) {
+				self::$data['defer']['exclusions'] = array_merge(self::$data['defer']['exclusions'], $delay_defer_exclusions);
+			}
+
 			//add jquery
 			if(empty(apply_filters('perfmatters_defer_jquery', !empty(Config::$options['assets']['defer_jquery'])))) {
 				self::$data['defer']['exclusions'] = array_merge(self::$data['defer']['exclusions'], array('jquery.js', 'jquery.min.js'));
@@ -267,7 +278,7 @@ class JS
 	//print inline delay js
 	public static function print_delay_js() {
 
-		$timeout = apply_filters('perfmatters_delay_js_timeout', !empty(Config::$options['assets']['delay_timeout']) ? 10 : '');
+		$timeout = apply_filters('perfmatters_delay_js_timeout', !empty(Config::$options['assets']['delay_timeout']) ? 15 : '');
 
 		if(!empty(apply_filters('perfmatters_delay_js_behavior', Config::$options['assets']['delay_js_behavior'] ?? ''))) {
 			$delay_click = (int)apply_filters('perfmatters_delay_js_delay_click', empty(Config::$options['assets']['disable_click_delay']));

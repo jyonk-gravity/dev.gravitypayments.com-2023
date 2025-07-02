@@ -1,4 +1,10 @@
-### 2.3.0 - 2024-07-02
+### 2.4.0 | 2025-06-18
+- Added a new [`gform_googleanalytics_mp_session_id`](https://docs.gravityforms.com/gform_googleanalytics_mp_session_id/) filter to allow for custom session ID handling.
+- Updated session ID handling in Measurement Protocol to use the updated GA4 cookie format.
+- Fixed an issue where form submissions fail when using the new AJAX submission method.
+- Fixed an issue where pagination events aren't sent with Google Measurement Protocol using the new AJAX submission method.
+
+### 2.3.0 | 2024-07-02
 - Added the session ID to the event data sent to Google Analytics when using Google Measurement Protocol.
 - Fixed an issue where the result of sending an event to Google might not be written to the log when triggered by a non-logged in user.
 

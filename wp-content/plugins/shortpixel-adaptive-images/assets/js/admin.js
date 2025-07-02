@@ -231,6 +231,7 @@
 				method     : 'post',
 				data       : {
 					action : 'shortpixel_ai_handle_feedback_action',
+					spainonce : spaiNonce.nonce,
 					data   : data
 				},
 				beforeSend : function() {

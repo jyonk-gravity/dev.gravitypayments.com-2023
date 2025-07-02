@@ -2,9 +2,9 @@
 Contributors: jonua
 Tags: acf, table, scf, advanced custom fields, secure custom fields
 Requires at least: 5.3
-Tested up to: 6.8.1
-Stable tag: 1.3.27
-Requires PHP: 7.5
+Tested up to: 6.8
+Stable tag: 1.3.29
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,9 +12,9 @@ A Table Field Add-on for the Advanced Custom Fields and Secure Custom Fields Plu
 
 == Description ==
 
-The Table Field plugin is an Add-on and enhances the functionality of the [Advanced Custom Fields (ACF) plugin](https://www.advancedcustomfields.com) and the [Secure Custom Fields plugin](https://wordpress.org/plugins/advanced-custom-fields/) with easy-to-edit tables.
+The Table Field plugin is an Add-on and enhances the functionality of the [Advanced Custom Fields (ACF) plugin](https://www.advancedcustomfields.com) and the [Secure Custom Fields plugin](https://wordpress.org/plugins/secure-custom-fields/) with easy-to-edit tables.
 
-This plugin requires the [Advanced Custom Fields plugin](https://www.advancedcustomfields.com) or the [Secure Custom Fields plugin](https://wordpress.org/plugins/advanced-custom-fields/)!
+This plugin requires the [Advanced Custom Fields plugin](https://www.advancedcustomfields.com) or the [Secure Custom Fields plugin](https://wordpress.org/plugins/secure-custom-fields/)!
 
 The table field works also with the ACF repeater and flexible field types and supports the [ACF Blocks for Gutenberg](https://www.advancedcustomfields.com/blog/acf-5-8-introducing-acf-blocks-for-gutenberg/)
 
@@ -517,6 +517,12 @@ The Pro plugin can run in parallel and you can change an existing field with fie
 
 
 == Changelog ==
+
+= 1.3.29 =
+* Fixes missing field preview image.
+
+= 1.3.28 =
+* Fixes loading translations from translate.wordpress.org.
 
 = 1.3.27 =
 * Fixes loading plugin textdomain to early.

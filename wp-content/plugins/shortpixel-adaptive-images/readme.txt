@@ -4,7 +4,7 @@ Tags: image optimization, convert, webp, lazy load, avif
 Requires at least: 4.7
 Tested up to: 6.8
 Requires PHP: 5.6.40
-Stable tag: 3.10.3
+Stable tag: 3.10.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -248,6 +248,19 @@ This rule will only be applied by the New JS Engine (so you need to have the opt
 6. Advanced settings page
 
 == Changelog ==
+
+= 3.10.4 =
+
+🚀 The Stability Update
+
+Release Date: June 12, 2025
+
+🛠️ Fixes
+
+* Textdomain Warning Resolved: Fixed a deprecation warning related to the textdomain, especially for multilingual setups.
+* PHP Warning Cleanup: Addressed PHP warnings that appeared in rare edge cases to ensure a cleaner, error-free experience.
+
+Update now for a smoother, more stable experience!
 
 = 3.10.3 =
 

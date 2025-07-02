@@ -274,22 +274,48 @@ class GF_Google_Analytics_Measurement_Protocol {
 	}
 
 	/**
-	 * Get the session id
+	 * Get the session id.
 	 *
 	 * @since 2.3.0
+	 * @since 2.4.0 added support for the GS2 cookie format.
 	 *
 	 * @param string $measurement_id The measurement id.
 	 *
-	 * @return int The session id.
+	 * @return string|null The session id.
 	 */
 	private function get_browser_session_id( $measurement_id ) {
+		$session_id = null;
+
 		// Cookie name example: '_ga_1YS1VWHG3V'.
 		$cookie_name = '_ga_' . str_replace( 'G-', '', $measurement_id );
-		if ( isset( $_COOKIE[ $cookie_name ] ) ) {
-			$parts = explode( '.', sanitize_text_field( wp_unslash( $_COOKIE[ $cookie_name ] ) ) );
 
-			return $parts[2];
+		if ( isset( $_COOKIE[ $cookie_name ] ) ) {
+			$cookie_value = sanitize_text_field( wp_unslash( $_COOKIE[ $cookie_name ] ) );
+
+			// Check for the new GS2 cookie format.
+			if ( str_contains( $cookie_value, '$' ) && preg_match( '/s(\d+)/', $cookie_value, $matches ) ) {
+				$session_id = $matches[1];
+			}
+
+			// Fallback to the dot delimited GS1 format.
+			if ( ! $session_id ) {
+				$parts = explode( '.', $cookie_value );
+				if ( isset( $parts[3] ) && is_numeric( $parts[3] ) ) {
+					$session_id = $parts[3];
+				}
+			}
 		}
+
+		/**
+		 * Filter the GA4 session ID used in Measurement Protocol requests.
+		 *
+		 * @param string|null $session_id     Parsed session ID or null if not found.
+		 * @param string      $cookie_name    Name of the GA cookie used.
+		 * @param string      $measurement_id GA4 Measurement ID.
+		 */
+		$session_id = apply_filters( 'gform_googleanalytics_mp_session_id', $session_id, $cookie_name, $measurement_id );
+
+		return $session_id;
 	}
 
 	/**

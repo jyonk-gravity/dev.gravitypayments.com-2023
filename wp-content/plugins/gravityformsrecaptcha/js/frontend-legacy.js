@@ -84,6 +84,14 @@ var _this = this;
         formIds: self.getFormIds()
       };
       self.addEventListeners();
+      grecaptcha.ready(function () {
+        if (strings.disable_badge) {
+          var badge = document.querySelector('.grecaptcha-badge');
+          if (badge) {
+            badge.style.visibility = 'hidden';
+          }
+        }
+      });
     };
 
     /**

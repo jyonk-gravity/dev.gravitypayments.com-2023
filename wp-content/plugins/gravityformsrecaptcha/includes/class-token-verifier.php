@@ -7,7 +7,6 @@
 
 namespace Gravity_Forms\Gravity_Forms_RECAPTCHA;
 
-use GFCommon;
 use stdClass;
 
 /**
@@ -89,6 +88,15 @@ class Token_Verifier {
 	private $action;
 
 	/**
+	 * The connection type.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @var string
+	 */
+	private $connection_type = '';
+
+	/**
 	 * Token_Verifier constructor.
 	 *
 	 * @since 1.0
@@ -104,16 +112,18 @@ class Token_Verifier {
 	/**
 	 * Initializes this object for use.
 	 *
-	 * @param string $token The reCAPTCHA token.
-	 * @param string $action The reCAPTCHA action.
+	 * @param string $token           The reCAPTCHA token.
+	 * @param string $action          The reCAPTCHA action.
+	 * @param string $connection_type The connection type.
 	 *
 	 * @since 1.0
 	 */
-	public function init( $token = '', $action = '' ) {
+	public function init( $token = '', $action = '', $connection_type = null ) {
 		$this->token           = $token;
 		$this->action          = $action;
 		$this->secret          = $this->addon->get_plugin_settings_instance()->get_recaptcha_key( 'secret_key_v3' );
 		$this->score_threshold = $this->addon->get_plugin_setting( 'score_threshold_v3', 0.5 );
+		$this->connection_type = $connection_type;
 	}
 
 	/**
@@ -133,12 +143,60 @@ class Token_Verifier {
 	 * Validate that the reCAPTCHA response data has the required properties and meets expectations.
 	 *
 	 * @since 1.0
+	 * @since 1.7.0 Added support for enterprise reCAPTCHA.
 	 *
-	 * @param array $response_data The response data to validate.
+	 * @param array  $response_data    The response data to validate.
+	 * @param string $connection_type  The connection type.
 	 *
 	 * @return bool
 	 */
-	private function validate_response_data( $response_data ) {
+	private function validate_response_data( $response_data, $connection_type = null ) {
+
+		if ( $connection_type === 'enterprise' ) {
+			return $this->validate_enterprise_assessment_response( $response_data );
+		} else {
+			return $this->validate_classic_response( $response_data );
+		}
+	}
+
+	/**
+	 * Validate the enterprise assessment response.
+	 *
+	 * @param array $response_data The response data.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return bool
+	 */
+	private function validate_enterprise_assessment_response( $response_data ) {
+		if ( rgar( $response_data, 'error' )
+			|| rgars( $response_data, 'tokenProperties/valid' ) !== true
+			|| ! rgars( $response_data, 'riskAnalysis/score' )
+			|| ! rgars( $response_data, 'tokenProperties/action' )
+			|| ! rgars( $response_data, 'tokenProperties/hostname' )
+		) {
+			return false;
+		}
+
+		return (
+			rgars( $response_data, 'tokenProperties/valid' ) === true
+			&& $this->verify_hostname( rgars( $response_data, 'tokenProperties/hostname' ) )
+			&& $this->verify_action( rgars( $response_data, 'tokenProperties/action' ) )
+			&& $this->verify_score( rgars( $response_data, 'riskAnalysis/score' ) )
+		);
+	}
+
+	/**
+	 * Validate the classic reCAPTCHA response.
+	 *
+	 * @param array $response_data The response data.
+	 *
+	 * @since 1.0.0
+	 * @since 1.7.0 Moved from the validate_response_data method.
+	 *
+	 * @return bool
+	 */
+	private function validate_classic_response( $response_data ) {
 		if (
 			! empty( $response_data->{'error-codes'} )
 			|| ( property_exists( $response_data, 'success' ) && $response_data->success !== true )
@@ -180,7 +238,7 @@ class Token_Verifier {
 
 		$data = \GFCache::get( 'recaptcha_' . $token, $found );
 		if ( $found ) {
-			$this->addon->log_debug( __METHOD__ . '(): Using cached reCAPTCHA result: ' . print_r( $data, true ) );
+			$this->addon->log_debug( __METHOD__ . '(): Using cached reCAPTCHA result: ' . print_r( $data, true ) ); // @codingStandardsIgnoreLine
 			$this->recaptcha_result = $data;
 
 			return true;
@@ -193,12 +251,22 @@ class Token_Verifier {
 			return false;
 		}
 
-		$this->init( $token, 'submit' );
+		$plugin_settings = $this->addon->get_plugin_settings();
+		$connection_type = rgar( $plugin_settings, 'connection_type' );
 
-		$data = $this->get_response_data( $this->api->verify_token( $token, $this->addon->get_plugin_settings_instance()->get_recaptcha_key( 'secret_key_v3' ) ) );
+		$this->init( $token, 'submit', $connection_type );
 
-		if ( is_wp_error( $data ) ) {
-			$this->addon->log_debug( __METHOD__ . '(): Validating the reCAPTCHA response has failed due to the following: ' . $data->get_error_message() );
+		if ( $connection_type !== 'enterprise' ) {
+			$response = $this->get_response_data( $this->api->verify_token( $token, $this->addon->get_plugin_settings_instance()->get_recaptcha_key( 'secret_key_v3' ) ) );
+		} else {
+			$access_token = rgar( $plugin_settings, 'access_token' );
+			$project_id   = $this->addon->get_plugin_settings_instance()->get_recaptcha_key( 'project_number' );
+
+			$response = $this->api->create_recaptcha_assessment( $access_token, $project_id, $token, $this->addon->get_plugin_settings_instance()->get_recaptcha_key( 'site_key_v3_enterprise' ), $action = 'submit' );
+		}
+
+		if ( is_wp_error( $response ) ) {
+			$this->addon->log_debug( __METHOD__ . '(): Validating the reCAPTCHA response has failed due to the following: ' . $response->get_error_message() );
 			wp_send_json_error(
 				array(
 					'error' => $data->get_error_message(),
@@ -207,21 +275,29 @@ class Token_Verifier {
 			);
 		}
 
-		if ( ! $this->validate_response_data( $data ) ) {
+		if ( isset( $response->score ) && $response->score === 'disabled (quota limit)' ) {
+			$this->addon->log_debug( __METHOD__ . '(): Validation bypassed due to reCAPTCHA quota limit.' );
+			$this->recaptcha_result = $response;
+
+			return true;
+		}
+
+		if ( ! $this->validate_response_data( $response, $connection_type ) ) {
 			$this->addon->log_debug(
 				__METHOD__ . '(): Could not validate the token request from the reCAPTCHA service. ' . PHP_EOL
 				. "token: {$token}" . PHP_EOL
-				. "response: " . print_r( $data, true ) . PHP_EOL // @codingStandardsIgnoreLine
+				. "response: " . print_r( $response, true ) . PHP_EOL // @codingStandardsIgnoreLine
 			);
+
 			return false;
 		}
 
 		// @codingStandardsIgnoreLine
-		$this->addon->log_debug( __METHOD__ . '(): Validated reCAPTCHA: ' . print_r( $data, true ) );
-		$this->recaptcha_result = $data;
+		$this->addon->log_debug( __METHOD__ . '(): Validated reCAPTCHA: ' . print_r( $response, true ) );
+		$this->recaptcha_result = $response;
 
 		// Caching result for 1 hour.
-		\GFCache::set( 'recaptcha_' . $token, $data, true, 60 * 60 );
+		\GFCache::set( 'recaptcha_' . $token, $response, true, 60 * 60 );
 
 		return true;
 	}
@@ -238,6 +314,29 @@ class Token_Verifier {
 	private function get_response_data( $response ) {
 		if ( is_wp_error( $response ) ) {
 			return $response;
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+
+		/**
+		 * If the reCAPTCHA API quota has been exceeded, a 429 status code
+		 * is returned. This will fake a successful response to prevent
+		 * the form from being blocked by a reCAPTCHA quota limit.
+		 */
+
+		if ( $response_code === 429 ) {
+			$this->addon->log_debug( __METHOD__ . '(): reCAPTCHA API quota limit exceeded.' );
+
+			update_option( GF_RECAPTCHA::RECAPTCHA_QUOTA_LIMIT_HIT, true );
+
+			$data               = new stdClass;
+			$data->success      = true;
+			$data->challenge_ts = date( 'c' );
+			$data->hostname     = wp_parse_url( get_home_url(), PHP_URL_HOST );
+			$data->score        = 'disabled (quota limit)';
+			$data->action       = $this->action;
+
+			return $data;
 		}
 
 		return json_decode( wp_remote_retrieve_body( $response ) );
@@ -311,7 +410,12 @@ class Token_Verifier {
 	private function verify_score( $score ) {
 		$this->addon->log_debug( __METHOD__ . '(): Verifying score from reCAPTCHA response.' );
 
-		return is_float( $score ) && $score >= 0.0 && $score <= 1.0;
+		if ( $score === 'disabled (quota limit)' ) {
+			$this->addon->log_debug( __METHOD__ . '(): Score verfication bypassed due to exceeding the reCAPTCHA API quota limit.' );
+			return true;
+		}
+
+		return ( is_float( $score ) && $score >= 0.0 && $score <= 1.0 );
 	}
 
 	/**
@@ -341,11 +445,20 @@ class Token_Verifier {
 	 * @return float
 	 */
 	public function get_score() {
-		if ( empty( $this->recaptcha_result ) || ! property_exists( $this->recaptcha_result, 'score' ) ) {
+		if ( empty( $this->recaptcha_result ) ||
+			( ! rgars( $this->recaptcha_result, 'riskAnalysis/score' ) &&
+			  ! property_exists( $this->recaptcha_result, 'score' ) )
+		) {
 			return $this->addon->is_preview() ? 0.9 : 0.0;
 		}
 
-		return (float) $this->recaptcha_result->score;
+		if ( rgars( $this->recaptcha_result, 'riskAnalysis/score' ) ) {
+			$score = rgars( $this->recaptcha_result, 'riskAnalysis/score' );
+		} else {
+			$score = $this->recaptcha_result->score;
+		}
+
+		return (float) $score;
 	}
 
 	/**

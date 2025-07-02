@@ -259,6 +259,23 @@ return array(
 				'_N2'
     		)
     	),
+    	'surecart' => array(
+    		'id' => 'surecart/surecart.php',
+    		'title' => 'SureCart',
+    		'exclusions' => array(
+    			'surecart',
+				'hooks.min.js',
+				'i18n.min.js',
+				'url.min.js',
+				'api-fetch.min.js',
+				'a11y.min.js',
+				'dom-ready.min.js'
+    		),
+    		'deferral_exclusions' => array(
+    			'hooks.min.js',
+				'i18n.min.js'
+    		)
+    	),
         'elementor' => array(
             'id' => 'elementor/elementor.php',
             'title' => 'Elementor',

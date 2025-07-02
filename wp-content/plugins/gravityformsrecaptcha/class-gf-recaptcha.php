@@ -8,6 +8,7 @@ use GFForms;
 use GFAddOn;
 use GF_Fields;
 use GFAPI;
+use GFCommon;
 use GFFormDisplay;
 use GFFormsModel;
 use Gravity_Forms\Gravity_Forms_RECAPTCHA\Settings;
@@ -24,6 +25,13 @@ GFForms::include_addon_framework();
  * @copyright Copyright (c) 2021, Gravity Forms
  */
 class GF_RECAPTCHA extends GFAddOn {
+
+	/**
+	 * Option name for triggering quota hit notification.
+	 *
+	 * @since 1.7
+	 */
+	const RECAPTCHA_QUOTA_LIMIT_HIT = 'gf_recaptcha_quota_limit_hit';
 
 	/**
 	 * Contains an instance of this class, if available.
@@ -180,12 +188,14 @@ class GF_RECAPTCHA extends GFAddOn {
 	 *
 	 * disabled: reCAPTCHA is disabled in feed settings.
 	 * disconnected: No valid v3 site and secret keys are saved.
+	 * quota_bypass: reCAPTCHA API quota limit hit.
 	 *
 	 * @var array
 	 */
 	private $v3_disabled_states = array(
 		'disabled',
 		'disconnected',
+		'disabled (quota limit)'
 	);
 
 	/**
@@ -265,7 +275,8 @@ class GF_RECAPTCHA extends GFAddOn {
 		}
 
 		// Enqueue shared scripts that need to run everywhere, instead of just on forms pages.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_recaptcha_script' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_enqueue_recaptcha_script' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_enqueue_enterprise_recaptcha_script' ) );
 
 		// Add Recaptcha field to the form output.
 		add_filter( 'gform_form_tag', array( $this, 'add_recaptcha_input' ), 50, 2  );
@@ -279,6 +290,9 @@ class GF_RECAPTCHA extends GFAddOn {
 		add_filter( 'gform_field_content', array( $this, 'update_captcha_field_settings_link' ), 10, 2 );
 		add_filter( 'gform_incomplete_submission_pre_save', array( $this, 'add_recaptcha_v3_input_to_draft' ), 10, 3 );
 
+		// Catch the ajax call to remove the reCAPTCHA quota notice.
+		add_action( 'wp_ajax_gf_recaptcha_quota_notice', array( $this, 'gf_recaptcha_quota_notice_dismiss' ), 10, 0 );
+
 	}
 
 	/**
@@ -287,9 +301,25 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @since 1.0
 	 */
 	public function init_admin() {
+		$this->plugin_settings->maybe_update_auth_tokens();
 		parent::init_admin();
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_recaptcha_script' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'maybe_enqueue_recaptcha_script' ) );
+		add_action( 'admin_notices', array( $this, 'recaptcha_quota_notice' ), 10, 0 );
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'maybe_enqueue_enterprise_recaptcha_script' ) );
+	}
+
+	/**
+	 * Override plugin_settings_init to maybe display the saved settings message.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function plugin_settings_init() {
+		parent::plugin_settings_init();
+		$this->maybe_display_settings_saved_message();
 	}
 
 	/**
@@ -301,6 +331,11 @@ class GF_RECAPTCHA extends GFAddOn {
 		parent::init_ajax();
 
 		add_action( 'wp_ajax_verify_secret_key', array( $this->plugin_settings, 'verify_v3_keys' ) );
+		add_action( 'wp_ajax_update_reload_settings', array( $this, 'update_reload_settings' ) );
+		add_action( 'wp_ajax_perform_enterprise_oauth', array( $this->plugin_settings, 'ajax_perform_enterprise_oauth' ) );
+		add_action( 'wp_ajax_disconnect_recaptcha', array( $this, 'ajax_disconnect_recaptcha' ) );
+		add_action( 'wp_ajax_get_enterprise_site_keys', array( $this, 'ajax_get_enterprise_site_keys' ) );
+		add_action( 'wp_ajax_save_recaptcha_enterprise_data', array( $this, 'ajax_save_recaptcha_enterprise_data' ) );
 	}
 
 	/**
@@ -405,7 +440,195 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return array
 	 */
 	public function get_plugin_settings() {
+		$current_settings = parent::get_plugin_settings();
+		// If the mode is enterprise, we don't need the v2 core settings.
+		if ( rgar( $current_settings, 'connection_type' ) === 'enterprise' ) {
+			return $current_settings;
+		}
+
+		// Merge in the v2 core settings in other modes.
 		return $this->plugin_settings->get_settings( parent::get_plugin_settings() );
+	}
+
+	/**
+	 * Sets a nonce for the reCAPTCHA settings page
+	 *
+	 * @since  1.0.0
+	 *
+	 * @return void
+	 */
+	public function settings_nonce_connect() {
+		echo sprintf( '<input type="hidden" name="recaptcha_nonce" value="%s" />', esc_attr( wp_create_nonce( 'connect_recaptcha' ) ) );
+	}
+
+	/**
+	 * Setting for the disconnect button.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function settings_disconnect_recaptcha() {
+		$disconnect_uri  = esc_url_raw(
+			add_query_arg(
+				array(
+					'page'    => 'gf_settings',
+					'subview' => 'gravityformsrecaptcha',
+					'action'  => 'gfrecaptcha-disconnect',
+					'nonce'   => wp_create_nonce( 'gforms_google_recaptcha_disconnect' ),
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		$disconnect_link = sprintf( '<a href="%s" class="button gfrecaptcha-disconnect">%s</a> ', esc_url_raw( $disconnect_uri ), esc_html__( 'Disconnect from reCAPTCHA', 'gravityformsrecaptcha' ) );
+		echo wp_kses_post( $disconnect_link );
+	}
+
+	/**
+	 * Setting for the change connection type button.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function settings_change_connection_type() {
+		$disconnect_uri  = esc_url_raw(
+			add_query_arg(
+				array(
+					'page'    => 'gf_settings',
+					'subview' => 'gravityformsrecaptcha',
+					'action'  => 'gfrecaptcha-disconnect',
+					'nonce'   => wp_create_nonce( 'gforms_google_recaptcha_disconnect' ),
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		$disconnect_link = sprintf( '<a href="%s" class="button gfrecaptcha-disconnect gfrecaptcha-changetype">%s</a> ', esc_url_raw( $disconnect_uri ), esc_html__( 'Change Connection Type', 'gravityformsrecaptcha' ) );
+		echo wp_kses_post( $disconnect_link );
+	}
+
+	/**
+	 * Setting to display the reCAPTCHA Enterprise fields.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return false|void
+	 */
+	public function settings_recaptcha_enterprise_fields() {
+		$plugin_settings        = $this->get_plugin_settings();
+		$current_project_number = $this->get_plugin_settings_instance()->get_recaptcha_key( 'project_number' );
+		$current_site_key       = rgar( $plugin_settings, 'site_key_v3_enterprise' ) ? rgar( $plugin_settings, 'site_key_v3_enterprise' ) : '';
+		if ( ! $this->initialize_api() ) {
+			$this->log_debug( __METHOD__ . '(): Unable to initialize reCAPTCHA API.' );
+
+			return false;
+		}
+
+		if ( ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
+			$this->log_debug( __METHOD__ . '(): User does not have Form Settings capability.' );
+
+			return false;
+		}
+
+		$response = $this->api->get_recaptcha_projects();
+
+		if ( is_wp_error( $response ) ) {
+			$this->log_debug( __METHOD__ . '(): Could not retrieve Google projects' );
+
+			return esc_html_e( 'You have no available projects for reCAPTCHA or have insufficient permissions', 'gravityformsrecaptcha' );
+		}
+
+		if ( defined( 'GF_RECAPTCHA_PROJECT_NUMBER' ) ) {
+			echo '<div class="gform-settings-field">';
+			echo '<span class="gform-settings-input__container"><input type="text" readonly value="' . esc_attr( GF_RECAPTCHA_PROJECT_NUMBER ) . '"> </span>';
+			echo wp_kses_post( $this->plugin_settings->get_constant_message( GF_RECAPTCHA_PROJECT_NUMBER, 'GF_RECAPTCHA_PROJECT_NUMBER' ) );
+			echo '</div>';
+		} else {
+			echo '<div class="gform-settings-field">';
+			echo '<select name="recaptcha_project" id="recaptcha_project">';
+			echo '<option value="">' . esc_html__( 'Select a Project', 'gravityformsrecaptcha' ) . '</option>';
+			foreach ( $response['projects'] as $project ) {
+				if ( $project['lifecycleState'] !== 'ACTIVE' ) {
+					continue;
+				}
+
+				$is_selected = $current_project_number === $project['projectNumber'] ? 'selected' : '';
+
+				printf(
+					'<option value="%1$s" data-project-id="%2$s" data-project-name="%3$s" %4$s>%3$s</option>',
+					esc_attr( $project['projectNumber'] ),
+					esc_attr( $project['projectId'] ),
+					esc_html( $project['name'] ),
+					esc_html( $is_selected )
+				);
+			}
+			echo '</select></div>';
+		}
+
+		if ( defined( 'GF_RECAPTCHA_V3_SITE_KEY_ENTERPRISE' ) ) {
+			echo '<div class="gform-settings-field__header"><label for="recaptcha-site-keys" class="gform-settings-label">' . esc_html__( 'Enterprise Site Key', 'gravityformsrecaptcha' ) . '</label></div>';
+			echo '<span class="gform-settings-input__container"><input type="text" readonly value="' . esc_attr( GF_RECAPTCHA_V3_SITE_KEY_ENTERPRISE ) . '"> </span>';
+			echo wp_kses_post( $this->plugin_settings->get_constant_message( GF_RECAPTCHA_V3_SITE_KEY_ENTERPRISE, 'GF_RECAPTCHA_V3_SITE_KEY_ENTERPRISE' ) );
+		} else {
+			if ( ! empty( $current_project_number ) ) {
+				$site_keys = $this->api->get_enterprise_site_keys( $current_project_number );
+
+				if ( is_wp_error( $site_keys ) ) {
+					$this->log_debug( __METHOD__ . '(): Error retrieving sitekeys associated with the selected project.' );
+					wp_send_json_error( new WP_Error( 'google_recaptcha_error', wp_strip_all_tags( __( 'There was an error retrieving reCAPTHCA site keys.', 'gravityformsrecaptcha' ) ) ) );
+				}
+
+				// Create select field markup.
+				$html  = '<div class="gform-settings-field__header"><label for="recaptcha-site-keys" class="gform-settings-label">' . esc_html__( 'Enterprise Site Key', 'gravityformsrecaptcha' ) . '</label></div>';
+				$html .= '<select name="recaptcha-site-keys">';
+				$html .= '<option value="">' . esc_html__( 'Select a site key', 'gravityformsrecaptcha' ) . '</option>';
+				if ( rgar( $site_keys, 'keys' ) ) {
+					foreach ( rgar( $site_keys, 'keys' ) as $site_key ) {
+						$current_site_key_name = basename( $site_key['name'] );
+						if ( $current_site_key === $current_site_key_name ) {
+							$is_site_key_selected = 'selected';
+						} else {
+							$is_site_key_selected = '';
+						}
+						$html .= sprintf(
+							'<option value="%1$s" data-site-key-display-name="%2$s" %3$s>%2$s</option>',
+							esc_attr( basename( $site_key['name'] ) ),
+							esc_attr( $site_key['displayName'] ),
+							$is_site_key_selected
+						);
+					}
+				}
+				$html .= '</select>';
+				echo '<div id="recaptcha-site-keys">' . $html . '</div>';
+			}
+			?>
+			<div id="recaptcha-site-keys"></div>
+			<?php
+		}
+	}
+
+	/**
+	 * Setting to display the hidden reCAPTCHA action.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function settings_recaptcha_action() {
+		$connection_type = $this->get_connection_type();
+
+		$actions = array(
+			'enterprise' => 'gf_recaptcha_enterprise',
+			'classic'    => 'gf_recaptcha_v3_classic',
+			'v2'         => 'gf_recaptcha_v2',
+		);
+
+		if ( isset( $actions[ $connection_type ] ) ) {
+			echo '<input type="hidden" name="gf_recaptcha_action" value="' . esc_attr( $actions[ $connection_type ] ) . '" />';
+		} else {
+			echo '<input type="hidden" name="gf_recaptcha_action" value="gf_recaptcha_v3_classic" />';
+			echo '<input type="hidden" name="gf_recaptcha_action" value="gf_recaptcha_v2" />';
+		}
 	}
 
 	/**
@@ -420,8 +643,43 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @param array $settings The settings to update.
 	 */
 	public function update_plugin_settings( $settings ) {
-		$this->plugin_settings->update_settings( $settings );
-		parent::update_plugin_settings( $settings );
+
+		if ( $this->get_connection_type() !== 'enterprise' ) {
+			$this->plugin_settings->update_settings( $settings );
+			parent::update_plugin_settings( $settings );
+		} else {
+			// In Enterprise we need to merge the settings so we don't lost the access token and refresh token.
+			$current_settings = $this->get_plugin_settings();
+			if ( is_array( $current_settings ) ) {
+				$settings = array_merge( $current_settings, $settings );
+			}
+
+			parent::update_plugin_settings( $settings );
+		}
+	}
+
+	/**
+	 * Maybe display the settings saved message on the enterprise settings screen.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	private function maybe_display_settings_saved_message() {
+		if ( $this->get_connection_type() === 'enterprise' && rgget( 'subview' ) === 'gravityformsrecaptcha' ) {
+			$renderer = $this->get_settings_renderer();
+			if ( ! $renderer ) {
+				return;
+			}
+			$renderer->set_postback_message_callback(
+				function() {
+					if ( rgget( 'saved' ) === '1' ) {
+						return 'Settings Saved';
+					}
+				}
+			);
+			$this->set_settings_renderer( $renderer );
+		}
 	}
 
 	/**
@@ -547,10 +805,81 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * Initialize the connection to the reCAPTCHA API.
 	 *
 	 * @since 1.0
+	 * @since 1.7.0 Separate methods for initialize enterprise and classic APIs.
 	 *
 	 * @return bool
 	 */
 	private function initialize_api() {
+		$plugin_settings = $this->get_plugin_settings();
+
+		if ( rgar( $plugin_settings, 'connection_type' ) === 'enterprise' ) {
+			return $this->initialize_enterprise_api( $plugin_settings );
+		} else {
+			return $this->initialize_classic_api();
+		}
+	}
+
+	/**
+	 * Initialize the Enterprise API.
+	 *
+	 * @param array $plugin_settings The plugin settings.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return bool
+	 */
+	private function initialize_enterprise_api( $plugin_settings ) {
+		if ( rgar( $plugin_settings, 'access_token' ) ) {
+			$date_created = rgar( $plugin_settings, 'date_created' ) ? $plugin_settings['date_created'] : 0;
+
+			if ( time() > ( $date_created + 3600 ) ) {
+				$this->log_debug( __METHOD__ . '(): API tokens expired, start refreshing.' );
+
+				if ( rgar( $plugin_settings, 'refresh_token' ) ) {
+					// Refresh token.
+					$auth_response = $this->api->refresh_token( $plugin_settings['refresh_token'] );
+
+					$decoded_response = json_decode( rgar( $auth_response, 'auth_payload' ), true );
+
+					if ( is_wp_error( $decoded_response ) || rgar( $decoded_response, 'auth_error' ) ) {
+						$this->log_debug( __METHOD__ . '(): API access token failed to be refreshed; ' . $auth_response->get_error_message() );
+
+						return false;
+					}
+
+					$plugin_settings['access_token']  = rgar( $decoded_response, 'access_token' );
+					$plugin_settings['refresh_token'] = rgar( $decoded_response, 'refresh_token' );
+					$plugin_settings['date_token']    = rgar( $decoded_response, 'created' );
+
+					// Save plugin settings.
+					$this->update_plugin_settings( $plugin_settings );
+					$this->log_debug( __METHOD__ . '(): API access token has been refreshed.' );
+
+					return $this->get_api_instance();
+				} else {
+					$this->log_debug( __METHOD__ . '(): Refresh token does not exist, unable to refresh access token.' );
+				}
+			} else {
+				$this->log_debug( __METHOD__ . '(): Enterprise API Initialized.' );
+				$this->api = $this->get_api_instance();
+
+				return true;
+			}
+		} else {
+			$this->log_debug( __METHOD__ . '(): Access token does not exist, unable to initialize API.' );
+
+			return false;
+		}
+	}
+
+	/**
+	 * Initialize the v2 and v3 Classic settings.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return bool
+	 */
+	private function initialize_classic_api() {
 		static $result;
 
 		if ( is_bool( $result ) ) {
@@ -580,6 +909,26 @@ class GF_RECAPTCHA extends GFAddOn {
 	}
 
 	/**
+	 * Get the Enterprise API instance.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return RECAPTCHA_API
+	 */
+	public function get_api_instance() {
+		$plugin_settings = $this->get_plugin_settings();
+		$auth_data       = array(
+			'access_token'  => rgar( $plugin_settings, 'access_token' ),
+			'refresh_token' => rgar( $plugin_settings, 'refresh_token' ),
+			'project_id'    => rgar( $plugin_settings, 'project_id' ),
+		);
+
+		$this->api = new RECAPTCHA_API( $auth_data, $this );
+
+		return $this->api;
+	}
+
+	/**
 	 * Check to determine whether the reCAPTCHA script is needed on a page.
 	 *
 	 * The script is needed on every page of the front-end if we're able to initialize the API because we've already
@@ -606,8 +955,8 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @since 1.0
 	 * @see GF_RECAPTCHA::init()
 	 */
-	public function enqueue_recaptcha_script() {
-		if ( ! $this->requires_recaptcha_script() ) {
+	public function maybe_enqueue_recaptcha_script() {
+		if ( ! $this->requires_recaptcha_script() || $this->get_connection_type() === 'enterprise' ) {
 			return;
 		}
 
@@ -625,24 +974,83 @@ class GF_RECAPTCHA extends GFAddOn {
 			true
 		);
 
+		$strings                    = $this->localize_script_common_strings();
+		$strings['site_key']        = $this->plugin_settings->get_recaptcha_key( 'site_key_v3' );
+		$strings['connection_type'] = 'classic';
+
+
 		wp_localize_script(
 			"{$this->asset_prefix}recaptcha",
 			"{$this->asset_prefix}recaptcha_strings",
-			array(
-				'site_key' => $this->plugin_settings->get_recaptcha_key( 'site_key_v3' ),
-				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( "{$this->_slug}_verify_token_nonce" ),
-			)
+			$strings
 		);
+	}
 
-		if ( $this->get_plugin_setting( 'disable_badge_v3' ) !== '1' ) {
+	/**
+	 * Custom enqueuing of the external reCAPTCHA Enterpise script.
+	 *
+	 * This script is enqueued via the normal WordPress process because, on the front-end, it's needed on every
+	 * single page of the site in order for reCAPTCHA to properly score the interactions leading up to the form
+	 * submission.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @see GF_RECAPTCHA::init()
+	 */
+	public function maybe_enqueue_enterprise_recaptcha_script() {
+		if ( ! $this->requires_recaptcha_script() || $this->get_connection_type() !== 'enterprise' ) {
 			return;
 		}
 
-		// Add inline JS to disable the badge.
-		wp_add_inline_script(
+		$script_url = add_query_arg(
+			'render',
+			$this->plugin_settings->get_recaptcha_key( 'site_key_v3_enterprise' ),
+			'https://www.google.com/recaptcha/enterprise.js'
+		);
+
+		wp_enqueue_script(
 			"{$this->asset_prefix}recaptcha",
-			'(function($){grecaptcha.ready(function(){$(\'.grecaptcha-badge\').css(\'visibility\',\'hidden\');});})(jQuery);'
+			$script_url,
+			array( 'jquery' ),
+			$this->_version,
+			true
+		);
+
+		$strings                    = $this->localize_script_common_strings();
+		$strings['site_key']        = $this->plugin_settings->get_recaptcha_key( 'site_key_v3_enterprise' );
+		$strings['connection_type'] = 'enterprise';
+		$strings['ajaxurl']         = admin_url( 'admin-ajax.php' );
+
+		wp_localize_script(
+			"{$this->asset_prefix}recaptcha",
+			"{$this->asset_prefix}recaptcha_strings",
+			$strings
+		);
+	}
+
+	/**
+	 * Get the strings used to localize classic and enterprise reCAPTCHA scripts.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return array
+	 */
+	private function localize_script_common_strings() {
+		$disable_badge = array_key_exists( '_gform_setting_disable_badge_v3', $_POST )
+			? rgpost( '_gform_setting_disable_badge_v3' ) === '1'
+			: $this->get_plugin_setting( 'disable_badge_v3' ) === '1';
+
+		return array(
+			'nonce'                          => wp_create_nonce( "{$this->_slug}_verify_token_nonce" ),
+			'disconnect'                     => wp_strip_all_tags( __( 'Disconnecting', 'gravityformsrecaptcha' ) ),
+			'change_connection_type'         => wp_strip_all_tags( __( 'Resetting', 'gravityformsrecaptcha' ) ),
+			'spinner'                        => GFCommon::get_base_url() . '/images/spinner.svg',
+			'connection_type'                => $this->get_connection_type(),
+			'disable_badge'                  => $disable_badge,
+			'change_connection_type_title'   => __( 'Change Connection Type', 'gravityformsrecaptcha' ),
+			'change_connection_type_message' => __( 'Changing the connection type will delete your current settings.  Do you want to proceed?', 'gravityformsrecaptcha' ),
+			'disconnect_title'               => __( 'Disconnect', 'gravityformsrecaptcha' ),
+			'disconnect_message' 		     => __( 'Disconnecting from reCAPTCHA will delete your current settings.  Do you want to proceed?', 'gravityformsrecaptcha' ),
 		);
 	}
 
@@ -706,7 +1114,16 @@ class GF_RECAPTCHA extends GFAddOn {
 			return 'disabled';
 		}
 
+		if ( $this->is_disabled_by_quota_limit() ) {
+			$this->log_debug( __METHOD__ . '(): reCAPTCHA v3 disabled due to API quota limit.' );
+			return 'disabled (quota limit)';
+		}
+
 		if ( ! $this->initialize_api() ) {
+			return 'disconnected';
+		}
+
+		if ( $this->get_connection_type() === 'enterprise' && ! $this->enterprise_keys_configured() ) {
 			return 'disconnected';
 		}
 
@@ -798,7 +1215,7 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @return bool
 	 */
 	public function is_spam_submission( $form, $entry = array() ) {
-		if ( $this->should_skip_validation( $form ) ) {
+		if ( $this->should_skip_validation( $form ) || $this->is_disabled_by_quota_limit() ) {
 			$this->log_debug( __METHOD__ . '(): Score check skipped.' );
 
 			return false;
@@ -867,6 +1284,23 @@ class GF_RECAPTCHA extends GFAddOn {
 	}
 
 	/**
+	 * Determine whether a given form has disabled reCAPTCHA within its settings.
+	 *
+	 * @since 1.7
+	 *
+	 * @return bool
+	 */
+	private function is_disabled_by_quota_limit() {
+		$recaptcha_result = $this->token_verifier->get_recaptcha_result();
+
+		if ( is_a( $recaptcha_result, "stdClass" ) && property_exists( $recaptcha_result, 'score' ) && $recaptcha_result->score === 'disabled (quota limit)' ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Validate the form submission.
 	 *
 	 * @since 1.0
@@ -924,6 +1358,12 @@ class GF_RECAPTCHA extends GFAddOn {
 			return true;
 		}
 
+		if ( $this->get_connection_type() === 'enterprise' && ! $this->enterprise_keys_configured() ) {
+			$this->log_debug( __METHOD__ . '(): Yes! Enterprise has not been fully configured.' );
+
+			return true;
+		}
+
 		if ( $this->is_disabled_by_form_setting( $form ) ) {
 			$this->log_debug( __METHOD__ . '(): Yes! Disabled by form setting.' );
 
@@ -946,6 +1386,22 @@ class GF_RECAPTCHA extends GFAddOn {
 		$result[ $form_id ] = false;
 
 		return false;
+	}
+
+	/**
+	 * Check if the Enterprise keys are configured.
+	 *
+	 * @since 1.7.0
+	 */
+	public function enterprise_keys_configured() {
+		$site_key = $this->plugin_settings->get_recaptcha_key( 'site_key_v3_enterprise' );
+		$project  = $this->plugin_settings->get_recaptcha_key( 'project_number' );
+
+		if ( ! ( $site_key && $project ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -988,6 +1444,237 @@ class GF_RECAPTCHA extends GFAddOn {
 		$submission[ 'partial_entry' ][ $input_name ] = rgpost( $input_name );
 
 		return wp_json_encode( $submission );
+	}
+
+	/**
+	 * Shows admin notice if the quota limit has been reached. Once the notice
+	 * is dismissed, the admin notice will go away until the next time the
+	 * quota limit is reached.
+	 *
+	 * @since 1.7
+	 *
+	 * @return void
+	 */
+	public function recaptcha_quota_notice ( ) {
+		if ( ! current_user_can( 'gform_full_access' ) ) {
+			return;
+		}
+
+		if ( false === get_option( self::RECAPTCHA_QUOTA_LIMIT_HIT ) ) {
+			return;
+		}
+
+		?>
+		<div class="notice notice-warning is-dismissible gf-notice"
+				data-gf_recaptcha_quota_nonce="<?php echo wp_create_nonce( 'gf_recaptcha_quota_notice' ) ?>" >
+			<h2><?php echo $this->_title; ?></h2>
+			<p>
+				<?php
+					// translators: %s is the link markup.
+					echo sprintf(
+						esc_html__( 'You have reached the quota limit for reCAPTCHA set by Google. Please check the quota on your %sreCAPTCHA Account%s.', 'gravityformsrecaptcha' ),
+						'<a href="https://cloud.google.com/security/products/recaptcha" target="_blank">',
+						'</a>'
+					);
+				?>
+			</p>
+		</div>
+		<script>
+			jQuery( document ).ready( function( $ ) {
+				$( document ).on( 'click', '.notice-dismiss', function() {
+					var $div = $( this ).closest( 'div.notice' );
+					if ( $div.length > 0 ) {
+						var nonce = $div.data( 'gf_recaptcha_quota_nonce' );
+						jQuery.ajax( {
+							url: ajaxurl,
+							data: {
+								action: 'gf_recaptcha_quota_notice',
+								nonce: nonce,
+							},
+						} );
+					}
+				} );
+			} );
+		</script>
+		<?php
+	}
+
+	/**
+	 * Removes setting checked by the reCAPTCHA quota limit notice.
+	 *
+	 * @since 1.7
+	 *
+	 * @return void
+	 */
+	public function gf_recaptcha_quota_notice_dismiss() {
+		check_admin_referer( 'gf_recaptcha_quota_notice', 'nonce' );
+		delete_option( self::RECAPTCHA_QUOTA_LIMIT_HIT );
+		wp_send_json_success();
+	}
+
+	/**
+	 * Update and reload the settings.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function update_reload_settings() {
+		if ( ! wp_verify_nonce( rgpost( 'nonce' ), 'connect_recaptcha' ) || ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
+			wp_send_json_error(
+				array(
+					'errors'   => true,
+					'redirect' => '',
+				)
+			);
+		}
+
+		$redirect_url                = admin_url( 'admin.php?page=gf_settings&subview=' . $this->_slug );
+		$settings                    = $this->get_plugin_settings();
+		$settings['connection_type'] = sanitize_text_field( rgpost( 'connection_type' ) );
+
+		// Updating options.
+		$this->update_plugin_settings( $settings );
+
+		wp_send_json_success(
+			array(
+				'errors'   => false,
+				'redirect' => esc_url_raw( $redirect_url ),
+			)
+		);
+	}
+
+	/**
+	 * Get the connection type.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return string The connection type
+	 */
+	public function get_connection_type() {
+		$settings = $this->get_plugin_settings();
+		return rgar( $settings, 'connection_type' );
+	}
+
+	/**
+	 * Disconnects user from reCAPTCHA and deletes relevant settings.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function ajax_disconnect_recaptcha() {
+
+		// Verify nonce and capability.
+		$this->verify_ajax_nonce( 'gforms_google_recaptcha_disconnect' );
+
+		if ( ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
+			$this->log_debug( __METHOD__ . '(): Permissions for form settings not met.' );
+			wp_send_json_error( new WP_Error( 'google_recaptcha_error', wp_strip_all_tags( __( 'User does not have required permissions to setup reCAPTCHA.', 'gravityformsrecaptcha' ) ) ) );
+		}
+
+		delete_option( 'gravityformsaddon_gravityformsrecaptcha_settings' );
+		delete_option( 'rg_gforms_captcha_public_key' );
+		delete_option( 'rg_gforms_captcha_private_key' );
+		delete_option( 'rg_gforms_captcha_type' );
+		delete_option( 'gform_recaptcha_keys_status' );
+		wp_send_json_success( array() );
+	}
+
+	/**
+	 * Verify the ajax nonce.
+	 *
+	 * @param string $nonce_action The name of the nonce action. Defaults to 'connect_recaptcha'.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function verify_ajax_nonce( $nonce_action = 'connect_recaptcha' ) {
+		if ( ! wp_verify_nonce( rgpost( 'nonce' ), $nonce_action ) ) {
+			$this->log_debug( __METHOD__ . '(): Nonce validation failed.' );
+			wp_send_json_error( new WP_Error( 'google_recaptcha_error', wp_strip_all_tags( __( 'Nonce validation has failed.', 'gravityformsrecatpcha' ) ) ) );
+		}
+	}
+
+	/**
+	 * Get the Enterprise site keys with Ajax.
+	 *
+	 * @param string|null $project The Google Project ID.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return false|void
+	 */
+	public function ajax_get_enterprise_site_keys( $project = null ) {
+
+		$this->verify_ajax_nonce();
+
+		if ( ! $this->initialize_api() ) {
+			$this->log_debug( __METHOD__ . '(): Unable to initialize reCAPTCHA API.' );
+
+			return false;
+		}
+
+		if ( ! $this->current_user_can_any( $this->_capabilities_form_settings ) ) {
+			$this->log_debug( __METHOD__ . '(): User does not have Form Settings capability.' );
+
+			return false;
+		}
+
+		// Retrieving data streams.
+		$project   = $project ? $project : sanitize_text_field( rgpost( 'project' ) );
+		$site_keys = $this->api->get_enterprise_site_keys( $project );
+		if ( is_wp_error( $site_keys ) ) {
+			$this->log_debug( __METHOD__ . '(): Error retrieving sitekeys associated with the selected project.' );
+			wp_send_json_error( new WP_Error( 'google_recaptcha_error', wp_strip_all_tags( __( 'There was an error retrieving reCAPTHCA site keys.', 'gravityformsrecaptcha' ) ) ) );
+		}
+
+		$data = array();
+
+		foreach ( $site_keys['keys'] as $site_key ) {
+			$data[] = array(
+				'value'       => basename( $site_key['name'] ),
+				'displayName' => $site_key['displayName'],
+			);
+		}
+
+		wp_send_json_success( $data );
+	}
+
+	/**
+	 * Update the plugin settings with the selected enterprise data.
+	 *
+	 * @since 1.7.0
+	 *
+	 * @return void
+	 */
+	public function ajax_save_recaptcha_enterprise_data() {
+
+		$this->verify_ajax_nonce();
+
+		$this->log_debug( __METHOD__ . '(): Saving reCAPTCHA Enterprise settings.' );
+		$updated_settings = array();
+
+		$updated_settings['project_number']         = sanitize_text_field( rgpost( 'project_number' ) );
+		$updated_settings['project_id']             = sanitize_text_field( rgpost( 'project_id' ) );
+		$updated_settings['site_key_v3_enterprise'] = sanitize_text_field( rgpost( 'site_key_v3_enterprise' ) );
+		$updated_settings['site_key_display_name']  = sanitize_text_field( rgpost( 'site_key_display_name' ) );
+		$updated_settings['score_threshold_v3']     = sanitize_text_field( rgpost( 'score_threshold_v3' ) );
+		$updated_settings['disable_badge_v3']       = rgpost( 'disable_badge_v3' ) === '1' ? '1' : '0';
+
+		$this->update_plugin_settings( $updated_settings );
+
+		// Build redirect url and return it.
+		$redirect_url = add_query_arg(
+			array(
+				'page'    => 'gf_settings',
+				'subview' => 'gravityformsrecaptcha',
+				'saved'   => '1',
+			),
+			admin_url( 'admin.php' )
+		);
+		wp_send_json_success( esc_url_raw( $redirect_url ) );
 	}
 
 }

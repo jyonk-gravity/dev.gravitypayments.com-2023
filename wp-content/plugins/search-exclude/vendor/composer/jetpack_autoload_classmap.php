@@ -19,15 +19,15 @@ return array(
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-autoloader-locator.php'
 	),
 	'Automattic\\Jetpack\\Assets' => array(
-		'version' => '4.0.19.0',
+		'version' => '4.0.21.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-assets/src/class-assets.php'
 	),
 	'Automattic\\Jetpack\\Assets\\Script_Data' => array(
-		'version' => '4.0.19.0',
+		'version' => '4.0.21.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-assets/src/class-script-data.php'
 	),
 	'Automattic\\Jetpack\\Assets\\Semver' => array(
-		'version' => '4.0.19.0',
+		'version' => '4.0.21.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-assets/src/class-semver.php'
 	),
 	'Automattic\\Jetpack\\Autoloader\\AutoloadFileWriter' => array(
@@ -663,59 +663,59 @@ return array(
 		'path'    => $vendorDir . '/franmastromarino/wp-plugin-feedback/src/Validator.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Entities\\Settings\\Base' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/api/entities/settings/class-base.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Entities\\Settings\\Get' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/api/entities/settings/class-get.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Entities\\Settings\\Post' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/api/entities/settings/class-post.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Entities\\Settings\\Routes_Library' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/api/entities/settings/class-routes-library.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Route' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/api/interface-route.php'
 	),
 	'QuadLayers\\QLSE\\Controllers\\Backend' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/controllers/class-backend.php'
 	),
 	'QuadLayers\\QLSE\\Controllers\\Frontend' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/controllers/class-frontend.php'
 	),
 	'QuadLayers\\QLSE\\Controllers\\Gutenberg' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/controllers/class-gutenberg.php'
 	),
 	'QuadLayers\\QLSE\\Controllers\\Settings' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/controllers/class-settings.php'
 	),
 	'QuadLayers\\QLSE\\Entity\\Settings' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/entity/class-settings.php'
 	),
 	'QuadLayers\\QLSE\\Helpers' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/class-helpers.php'
 	),
 	'QuadLayers\\QLSE\\Models\\Settings' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/models/class-settings.php'
 	),
 	'QuadLayers\\QLSE\\Plugin' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/class-plugin.php'
 	),
 	'QuadLayers\\QLSE\\Services\\Entity_Options' => array(
-		'version' => '2.5.1.0',
+		'version' => '2.5.2.0',
 		'path'    => $baseDir . '/lib/services/class-entity-options.php'
 	),
 	'QuadLayers\\WP_Dashboard_Widget_News\\Load' => array(

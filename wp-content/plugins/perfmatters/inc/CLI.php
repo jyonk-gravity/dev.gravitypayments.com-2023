@@ -29,16 +29,15 @@ class CLI {
 			$license_info = perfmatters_check_license($network);
 
 			if(empty($license_info->activations_left) || $license_info->activations_left !== 'unlimited') {
-				WP_CLI::warning(__('Unlimited site license required.', 'perfmatters'));
-				return;
+				WP_CLI::error(__('Unlimited site license required.', 'perfmatters'));
 			}
 		}
 
 		if(perfmatters_activate_license($network)) {
-			WP_CLI::success(__('License activated!', 'perfmatters'));
+			WP_CLI::success(__('License activated.', 'perfmatters'));
 		}
 		else {
-			WP_CLI::warning(__('License could not be activated.', 'perfmatters'));
+			WP_CLI::error(__('License could not be activated.', 'perfmatters'));
 		}
 	}
 
@@ -52,10 +51,10 @@ class CLI {
 		$network = is_multisite() && empty(WP_CLI::get_config()['url']);
 
 		if(perfmatters_deactivate_license($network)) {
-			WP_CLI::success(__('License deactivated!', 'perfmatters'));
+			WP_CLI::success(__('License deactivated.', 'perfmatters'));
 		}
 		else {
-			WP_CLI::warning(__('License could not be deactivated.', 'perfmatters'));
+			WP_CLI::error(__('License could not be deactivated.', 'perfmatters'));
 		}
 	}
 
@@ -75,10 +74,10 @@ class CLI {
 		$removed = $network ? delete_site_option('perfmatters_edd_license_key') : delete_option('perfmatters_edd_license_key');
 
 		if($removed) {
-			WP_CLI::success(__('License removed!', 'perfmatters'));
+			WP_CLI::success(__('License removed.', 'perfmatters'));
 		}
 		else {
-			WP_CLI::warning(__('License could not be removed.', 'perfmatters'));
+			WP_CLI::error(__('License could not be removed.', 'perfmatters'));
 		}
 	}
 
@@ -105,5 +104,199 @@ class CLI {
 			CSS::clear_used_css();
 			WP_CLI::success(__('Used CSS cleared.', 'perfmatters'));
 		}
+	}
+
+	/**
+	 * Import settings configuration from an exported .json file.
+	 * 
+	 * ## OPTIONS
+     *
+     * <filepath>
+     * : The .json settings file to import.
+     * 
+	 * @subcommand import-settings
+	 * 
+	 */
+	public function import_settings($args) {
+
+		//file check
+		if(!file_exists($args[0])) {
+			WP_CLI::error(__('File not found.', 'perfmatters'));
+		}
+
+		//json check
+		$file_parts = explode('.', $args[0]);
+		$extension = end($file_parts);
+		if($extension != 'json') {
+			WP_CLI::error(__('Please use a valid .json file.', 'perfmatters'));
+		}
+
+		//unpack and update
+		$settings = (array) json_decode(file_get_contents($args[0]), true);
+		if(isset($settings['perfmatters_options'])) {
+			update_option('perfmatters_options', $settings['perfmatters_options']);
+		}
+		if(isset($settings['perfmatters_tools'])) {
+			update_option('perfmatters_tools', $settings['perfmatters_tools']);
+		}
+
+		//success
+		WP_CLI::success(__('Settings imported.', 'perfmatters'));
+	}
+
+	/**
+	 * Enable a plugin option.
+	 * 
+	 * ## OPTIONS
+     *
+     * <option>
+     * : The option you want to enable. For available options, run the get-options subcommand.
+     * 
+	 * @subcommand enable
+	 * 
+	 */
+	public function enable($args) {
+
+		$options = self::get_available_options();
+
+		if(!isset($options[$args[0]])) {
+			WP_CLI::error(__('Option not found.', 'perfmatters'));
+		}
+
+		$data = $options[$args[0]];
+
+		$prev = get_option($data['option_row']);
+
+
+		if(!empty($data['section'])) {
+			$prev[$data['section']][$data['option']] = 1;
+		}
+		else {
+			$prev[$data['option']] = 1;
+		}
+	
+		update_option($data['option_row'], $prev);
+
+		WP_CLI::success(__('Option enabled.', 'perfmatters'));
+	}
+
+	/**
+	 * Disable a plugin option.
+	 * 
+	 * ## OPTIONS
+     *
+     * <option>
+     * : The option you want to enable. For available options, run the get-options subcommand.
+     * 
+	 * @subcommand disable
+	 * 
+	 */
+	public function disable($args) {
+
+		$options = self::get_available_options();
+
+		if(!isset($options[$args[0]])) {
+			WP_CLI::error(__('Option not found.', 'perfmatters'));
+		}
+
+		$data = $options[$args[0]];
+
+		$prev = get_option($data['option_row']);
+
+		if(!empty($data['section'])) {
+			unset($prev[$data['section']][$data['option']]);
+		}
+		else {
+			unset($prev[$data['option']]);
+		}
+	
+		update_option($data['option_row'], $prev);
+
+		WP_CLI::success(__('Option disabled.', 'perfmatters'));
+	}
+
+	/**
+	 * Returns a list of available plugin options that can be turned on and off via CLI.
+     * 
+	 * @subcommand get-options
+	 */
+	public function get_options($args) {
+
+		$options = self::get_available_options();
+
+		WP_CLI::log("\n\033[1mOPTIONS\033[0m");
+		WP_CLI::log('---');
+
+		foreach($options as $option => $data) {
+			WP_CLI::log($option);
+		}
+
+		WP_CLI::log('---');
+	}
+
+	//return array of adjustable plugin options 
+	private function get_available_options() {
+
+		return array(
+			'delay-js' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'assets',
+				'option' => 'delay_js'
+			),
+			'defer-js' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'assets',
+				'option' => 'defer_js'
+			),
+			'minify-js' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'assets',
+				'option' => 'minify_js'
+			),
+			'remove-unused-css' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'assets',
+				'option' => 'remove_unused_css'
+			),
+			'minify-css' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'assets',
+				'option' => 'minify_css'
+			),
+			'lazyload-images' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'lazyload',
+				'option' => 'lazy_loading'
+			),
+			'lazyload-iframes' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'lazyload',
+				'option' => 'lazy_loading_iframes'
+			),
+			'css-background-images' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'lazyload',
+				'option' => 'css_background_images'
+			),
+			'lazyload-elements' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'lazyload',
+				'option' => 'elements'
+			),
+			'local-google-fonts' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'fonts',
+				'option' => 'local_google_fonts'
+			),
+			'cdn-rewrite' => array(
+				'option_row' => 'perfmatters_options',
+				'section' => 'cdn',
+				'option' => 'enable_cdn'
+			),
+			'script-manager' => array(
+				'option_row' => 'perfmatters_tools',
+				'option' => 'script_manager'
+			)
+		);
 	}
 }

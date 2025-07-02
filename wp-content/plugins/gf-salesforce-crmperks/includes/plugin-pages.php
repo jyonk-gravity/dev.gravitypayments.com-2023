@@ -877,7 +877,7 @@ if(isset($_REQUEST['error'])){
 $state.='&error='.$_REQUEST['error'];   
 }
 //esc_url($link).'&'.$this->id."_tab_action=get_token&vx_action=redirect&id=".$id."&vx_nonce=".$nonce
-wp_redirect($state);
+wp_safe_redirect($state);
 die();
 }
 

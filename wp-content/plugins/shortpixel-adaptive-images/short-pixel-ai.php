@@ -3,7 +3,7 @@
 	 * Plugin Name: ShortPixel Adaptive Images
 	 * Plugin URI: https://shortpixel.com/
 	 * Description: Display properly sized, smart cropped and optimized images on your website. Images are processed on the fly and served from our CDN.
-	 * Version: 3.10.3
+	 * Version: 3.10.4
 	 * Author: ShortPixel
 	 * GitHub Plugin URI: https://github.com/short-pixel-optimizer/shortpixel-adaptive-images
 	 * Author URI: https://shortpixel.com
@@ -15,7 +15,7 @@
     //ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
 
 	if ( !class_exists( 'ShortPixelAI' ) ) {
-		define( 'SHORTPIXEL_AI_VERSION', '3.10.3' );
+		define( 'SHORTPIXEL_AI_VERSION', '3.10.4' );
 		define( 'SPAI_SNIP_VERSION', '3.1.0' );
 		define( 'SHORTPIXEL_AI_VANILLAJS_VER', '1.1' );
 		define( 'SHORTPIXEL_AI_PLUGIN_FILE', __FILE__ );
@@ -108,5 +108,7 @@
 		//register_uninstall_hook( __FILE__, [ 'ShortPixelAI', 'uninstall' ] ); //Actually the options get deleted on deactivate.
 
 		//init the singleton
-                ShortPixelAI::_();
+        add_action( 'after_setup_theme', function() {
+            ShortPixelAI::_();
+        } );
 	}

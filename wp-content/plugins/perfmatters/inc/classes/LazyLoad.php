@@ -674,11 +674,14 @@ class LazyLoad
 		            //replace attributes string in selector tag
 					$new_selector_tag = str_replace($element['selector_tag_atts'], ' ' . Utilities::get_atts_string($selector_tag_atts), $element['selector_tag']);
 
-					//replace selector tag in element
-					$new_element = str_replace($element['selector_tag'], $new_selector_tag, $element['html']);
+					//replace first instance of selector tag in element
+					$selector_tag_pos = strpos($element['html'], $element['selector_tag']);
+					if($selector_tag_pos !== false) {
+					    $new_element = substr_replace($element['html'], $new_selector_tag, $selector_tag_pos, strlen($element['selector_tag']));
 
-					//replace element in html
-					$html = str_replace($element['html'], $new_element, $html);
+					    //replace element in html
+						$html = str_replace($element['html'], $new_element, $html);
+					}
 		   		}
 	        }
 		}
@@ -742,6 +745,12 @@ class LazyLoad
 	        $elements = HTML::get_selector_elements($html, $selectors);
 
 	        if(!empty($elements)) {
+
+	        	//remove any duplicate matches
+	        	if(count($elements) > 1) {
+	        		$elements = array_map("unserialize", array_unique(array_map("serialize", $elements)));
+	        	}
+	        	
 	        	foreach($elements as $element) {
 
 	        		//swap lazy element in content

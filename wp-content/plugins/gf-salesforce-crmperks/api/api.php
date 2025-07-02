@@ -1366,7 +1366,7 @@ $date_val+= $offset;  //convert utc datetime to local timezone for getting exatc
       }
   } 
   if(is_array($field_val)){ 
-      $field_val=implode(', ',$field_val);
+      $field_val=implode(', ',$field_val); 
   }
   $sf_fields[$field_key]=$field_val;      
   }   

@@ -1,5 +1,4 @@
 /******/ (function() { // webpackBootstrap
-var __webpack_exports__ = {};
 /*!***********************************!*\
   !*** ./js/src/plugin_settings.js ***!
   \***********************************/
@@ -91,7 +90,6 @@ var __webpack_exports__ = {};
           self.hideRecaptcha();
           return;
         }
-        v2Settings.save.prop('disabled', true);
         self.showSelectedRecaptcha();
       };
 
@@ -163,6 +161,9 @@ var __webpack_exports__ = {};
        */
       self.showSelectedRecaptcha = function () {
         var typeValue = $('input[name="_gform_setting_type_v2"]:checked').val();
+        if (!typeValue) {
+          return;
+        }
         self.render(typeValue);
         switch (typeValue) {
           case 'checkbox':
@@ -329,7 +330,7 @@ var __webpack_exports__ = {};
         $.ajax({
           method: 'POST',
           dataType: 'JSON',
-          url: v3Settings.strings.ajaxurl,
+          url: ajaxurl,
           data: {
             action: 'verify_secret_key',
             nonce: v3Settings.strings.nonce,
@@ -402,8 +403,181 @@ var __webpack_exports__ = {};
     v3Settings.init();
   };
   $(document).ready(function () {
-    recaptchaV3Settings();
-    recaptchaV2Settings();
+    var $form = $('#gform-settings');
+    var $action = $form.find('input[name="gf_recaptcha_action"]');
+    if ('gf_recaptcha_v3_classic' === $action.val()) {
+      recaptchaV3Settings();
+    } else if ('gf_recaptcha_v2' === $action.val()) {
+      recaptchaV2Settings();
+    }
+    if (gforms_recaptcha_recaptcha_strings.disable_badge) {
+      var badge = document.querySelector('.grecaptcha-badge');
+      if (badge) {
+        badge.style.visibility = 'hidden';
+      }
+    }
+
+    // Handle disconnects from the admin.
+    var $disconnect = $('.gfrecaptcha-disconnect');
+    if ($disconnect.length > 0) {
+      $disconnect.on('click', function (e) {
+        e.preventDefault();
+
+        // check if we have any saved settings that are going to be deleted
+        var $site_key_v3 = $('#site_key_v3');
+        var $site_key_v2 = $('#site_key_v2');
+        var hasSavedSettings = false;
+        if ($site_key_v3.length > 0 && $site_key_v3.val() !== '') {
+          hasSavedSettings = true;
+        }
+        if ($site_key_v2.length > 0 && $site_key_v2.val() !== '') {
+          hasSavedSettings = true;
+        }
+
+        // Confirm deleting settings if you change connection type or disconnect
+        if (hasSavedSettings || $disconnect.hasClass('gfrecaptcha-disconnect')) {
+          if ($disconnect.hasClass('gfrecaptcha-disconnect')) {
+            var title = gforms_recaptcha_recaptcha_strings.disconnect_title;
+            var message = gforms_recaptcha_recaptcha_strings.disconnect_message;
+          } else {
+            var title = gforms_recaptcha_recaptcha_strings.change_connection_type_title;
+            var message = gforms_recaptcha_recaptcha_strings.change_connection_type_message;
+          }
+          if (typeof gform.instances.dialogConfirmAsync !== 'function') {
+            if (!confirm(message)) {
+              return;
+            }
+          } else {
+            gform.instances.dialogConfirmAsync(title, message).then(function (userConfirmed) {
+              if (!userConfirmed) {
+                return;
+              }
+            });
+          }
+        }
+        if ($disconnect.hasClass('gfrecaptcha-changetype')) {
+          $disconnect.html(gforms_recaptcha_recaptcha_strings.change_connection_type);
+        } else {
+          $disconnect.html(gforms_recaptcha_recaptcha_strings.disconnect);
+        }
+        var url_params = wpAjax.unserialize(e.target.href);
+        var nonce_value = url_params.nonce;
+
+        // Perform Ajax request.
+        $.post(ajaxurl, {
+          action: 'disconnect_recaptcha',
+          nonce: nonce_value
+        }, function (response) {
+          window.location.href = window.location.href;
+        });
+      });
+    }
+
+    // Handle form submission on connect screen.
+    $form.on('submit', function (e) {
+      // Determining if we're just connecting for the first time.
+      if ($form.find('input[value="recaptcha_setup"]').length === 1) {
+        // is_postback
+        e.preventDefault();
+
+        // Set l18n.
+        var $save_button = $form.find('#gform-settings-save');
+        var $connection_type = $form.find('[name="_gform_setting_connection_type"]:checked').val();
+
+        // Get nonce.
+        var nonce_value = $form.find('input[name="recaptcha_nonce"]').val();
+        if ($connection_type === 'enterprise') {
+          // Perform Ajax request.
+          $.post(ajaxurl, {
+            action: 'perform_enterprise_oauth',
+            nonce: nonce_value,
+            mode: $connection_type
+          }, function (response) {
+            if (!response.data.errors) {
+              window.location.href = response.data.redirect;
+            }
+          }, 'json');
+        } else {
+          // Perform Ajax request.
+          $.post(ajaxurl, {
+            action: 'update_reload_settings',
+            nonce: nonce_value,
+            connection_type: $connection_type
+          }, function (response) {
+            if (!response.data.errors) {
+              var url = new URL(response.data.redirect);
+              url.searchParams.set('connection_type', $connection_type);
+              window.location.href = url;
+            }
+          }, 'json');
+        }
+        return;
+      }
+      if ('gf_recaptcha_enterprise' === $action.val()) {
+        e.preventDefault();
+
+        // Getting selected items from the account/property and data stream drop downs.
+        var $selected_project = $form.find('select[name="recaptcha_project"]').find(':selected');
+        var $selected_site_key = $form.find('#recaptcha-site-keys :selected');
+        $.post(ajaxurl, {
+          action: 'save_recaptcha_enterprise_data',
+          project_number: $selected_project.val(),
+          project_id: $selected_project.data('project-id'),
+          project_name: $selected_project.data('project-name'),
+          site_key_v3_enterprise: $selected_site_key.val(),
+          site_key_display_name: $selected_site_key.data('site-key-display-name'),
+          score_threshold_v3: $form.find('#score_threshold_v3').val(),
+          disable_badge_v3: $form.find('input[name="_gform_setting_disable_badge_v3"]').val(),
+          nonce: $form.find('input[name="recaptcha_nonce"]').val()
+        }, function (response) {
+          if (response.success) {
+            window.location.href = response['data'];
+          }
+        });
+      }
+    });
+
+    // Get keys available to the selected project.
+    $('#recaptcha_project').on('change', function (e) {
+      var $option = $(this).find(':selected');
+      var nonce = $('body').find('input[name="recaptcha_nonce"]').val();
+      $('#recaptcha-site-keys').html('<br /><img src="' + gforms_recaptcha_recaptcha_strings.spinner + '" />');
+      $.post(ajaxurl, {
+        action: 'get_enterprise_site_keys',
+        project: $option.val(),
+        nonce: nonce
+      }, function (response) {
+        if (response.success) {
+          var siteKeys = response['data'];
+          var select = document.createElement('select');
+          select.name = 'recaptcha-site-keys';
+          var label = document.createElement('label');
+          label.textContent = 'Enterprise Site Key';
+          label.setAttribute('for', 'recaptcha-site-keys');
+          label.classList.add('gform-settings-label');
+          var header = document.createElement('div');
+          header.classList.add('gform-settings-field__header');
+          header.appendChild(label);
+          var defaultOption = document.createElement('option');
+          defaultOption.value = '';
+          defaultOption.textContent = 'Select a site key';
+          select.appendChild(defaultOption);
+          siteKeys.forEach(function (key) {
+            var option = document.createElement('option');
+            option.value = key.value;
+            option.textContent = key.displayName;
+            option.setAttribute('data-site-key-display-name', key.displayName);
+            select.appendChild(option);
+          });
+          var container = document.querySelector('#recaptcha-site-keys');
+          container.innerHTML = '';
+          container.appendChild(header);
+          container.appendChild(select);
+        } else {
+          $('#recaptcha-site-keys').html('');
+        }
+      });
+    });
     gform.adminUtils.handleUnsavedChanges('#gform-settings');
   });
 })(jQuery);

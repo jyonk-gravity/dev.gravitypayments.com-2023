@@ -7,7 +7,6 @@ defined( 'ABSPATH' ) || die();
 use GFForms;
 use GFFeedAddOn;
 use GFCommon;
-use Gravity_Forms\Gravity_Forms_Google_Analytics\GF_Google_Analytics_Pagination;
 use GFAPI;
 use GFFormsModel;
 use GFCache;
@@ -278,6 +277,7 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		add_action( 'admin_notices', array( $this, 'maybe_display_authentication_notice' ) );
 
 		add_action( 'wp_body_open', array( $this, 'maybe_install_tag_manager_body' ) );
+		add_filter( 'gform_ajax_submission_result', array( $this, 'set_post_ajax_submission_vars' ), 10, 1 );
 
 		// General pagination.
 		add_action( 'gform_post_paging', array( $this, 'pagination' ), 10, 3 );
@@ -2338,6 +2338,9 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @param bool   $is_ajax     Wether or not the form submission was done with AJAX enabled.
 	 */
 	private function render_script_wrapper( $script_body, $is_ajax ) {
+		if ( rgpost( 'gform_submission_method' ) === 'ajax' ) {
+			return;
+		}
 		?>
 		<script>
 			<?php
@@ -2365,6 +2368,10 @@ class GF_Google_Analytics extends GFFeedAddOn {
 	 * @since 2.0
 	 */
 	private function render_script_feed_counter() {
+		// New ajax can't just write to the page.
+		if ( rgpost( 'gform_submission_method' ) === 'ajax' ) {
+			return;
+		}
 		?>
 		<script>
 			window.parent[ 'ga_feed_count' ] = window.parent[ 'ga_feed_count' ] ? window.parent[ 'ga_feed_count' ] + 1 : 1;
@@ -2397,7 +2404,6 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		$event->set_document_location( esc_url( $page_url ) );
 		$event_url_parsed = wp_parse_url( home_url() );
 		$event->set_document_host( $event_url_parsed['host'] );
-
 
 		// Set IP address
 		$event->set_user_ip_address( \GFFormsModel::get_ip() );
@@ -2477,4 +2483,83 @@ class GF_Google_Analytics extends GFFeedAddOn {
 		}
 	}
 
+	/**
+	 * Adds the feed data to the submission results allowing the frontend to send
+	 * the Google Analytics event.
+	 *
+	 * @since 2.3.1
+	 *
+	 * @param array $submissionResults The submission results from the ajax submission.
+	 * @return array The submission results with the feed data added.
+	 */
+	public function set_post_ajax_submission_vars( $submissionResults ) {
+		if ( ! rgar( $submissionResults, 'is_valid' ) || rgar( $submissionResults, 'is_spam' ) ) {
+			return $submissionResults;
+		}
+
+		$formId = rgars( $submissionResults, 'form/id' );
+		$form   = rgar( $submissionResults, 'form' );
+
+		if ( ! rgar( $submissionResults, 'entry_id' ) ) {
+			// Pagination tracking not enabled. Abort.
+			if ( ! rgars( $form, 'gravityformsgoogleanalytics/google_analytics_pagination' ) ) {
+				return $submissionResults;
+			}
+
+			$mode                = self::get_options( '', 'mode' );
+			$source_page_number  = rgar( $submissionResults, 'source_page_number' );
+			$current_page_number = rgar( $submissionResults, 'page_number' );
+			$parameters          = $this->get_mapped_parameters( $form['gravityformsgoogleanalytics'], 'pagination_parameters', $form, \GFFormsModel::get_current_lead( $form ) );
+			$parameters          = $this->maybe_replace_pagination_merge_tags( $parameters, $source_page_number, $current_page_number );
+			$event_name          = $this->get_pagination_event_name( $mode, $form );
+
+			$submissionResults['ajax_pagination'] = [
+				'form_id'    => (string) $formId,
+				'parameters' => $parameters,
+				'eventName'  => $event_name,
+				'mode'       => $mode,
+			];
+
+			$submission_type   = rgar( $submissionResults, 'submission_type' );
+			$submission_method = rgpost( 'gform_submission_method' );
+
+			if ( $mode === 'gmp' && 'ajax' === $submission_method && ( $submission_type === 'next' || $submission_type === 'previous' ) ) {
+				$ua_codes = $this->get_ga_codes( $form );
+				$this->send_measurement_protocol( $ua_codes, $parameters, $event_name, rgpost( 'current_page_url' ) );
+			}
+			return $submissionResults;
+		}
+
+		$feeds = $this->get_feeds( $formId );
+
+		if ( empty( $feeds ) ) {
+			return $submissionResults;
+		}
+
+		$entry = GFAPI::get_entry( rgar( $submissionResults, 'entry_id' ) );
+
+		if ( is_wp_error( $entry ) ) {
+			$this->log_debug( __METHOD__ . '(): Unable to retrieve entry. Entry ID: ' . rgar( $submissionResults, 'entry_id' ) );
+			return $submissionResults;
+		}
+
+		$mode = self::get_options( '', 'mode' );
+
+		foreach ( $feeds as $feed ) {
+			if ( ! rgar( $feed, 'is_active' ) || ! $this->is_feed_condition_met( $feed, $form, $entry ) ) {
+				continue;
+			}
+
+			$parameters                        = $this->get_mapped_parameters( $feed, 'submission_parameters', $form, $entry );
+			$submissionResults['ajax_feeds'][] = [
+				'form_id'    => (string) $formId,
+				'feed_id'    => rgar( $feed, 'id' ),
+				'parameters' => $parameters,
+				'eventName'  => $this->get_submission_event_name( 'ga', $feed, $entry, $form ),
+				'mode'       => $mode,
+			];
+		}
+
+		return $submissionResults;
+	}
 }

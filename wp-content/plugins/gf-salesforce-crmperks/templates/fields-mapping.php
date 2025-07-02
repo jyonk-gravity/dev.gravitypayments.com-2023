@@ -304,7 +304,7 @@ var crm_fields=<?php echo json_encode($json_fields); ?>;
   $events_arr=array(''=>__( 'When anyone submits form.', 'gravity-forms-salesforce-crm'),'1'=>__( 'Manually send the entries to salesforce.', 'gravity-forms-salesforce-crm'));
   if(self::$is_pr){
       $events_arr['2']=__( 'When payment is complete.', 'gravity-forms-salesforce-crm');
-      //$events_arr['3']=__( 'When subscription payment is complete.', 'gravity-forms-salesforce-crm');
+      $events_arr['3']=__( 'When subscription payment is complete.', 'gravity-forms-salesforce-crm');
       $events_arr['4']=__( 'When form submission is Complete.', 'gravity-forms-salesforce-crm');
   }
   foreach($events_arr as $k=>$v){

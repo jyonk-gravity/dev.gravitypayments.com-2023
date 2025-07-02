@@ -2,9 +2,9 @@
 Contributors: crmperks, sbazzi, asif876
 Tags: salesforce, gravity forms salesforce, gravity forms salesforce crm, gravity forms salesforce integration, salesforce wordpress gravity forms
 Requires at least: 4.7
-Tested up to: 6.7
-Stable tag: 1.4.7
-Version: 1.4.7
+Tested up to: 6.8
+Stable tag: 1.4.8
+Version: 1.4.8
 Requires PHP: 5.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -183,6 +183,9 @@ Yes, as you connect your normal salesforce account similarly, you can connect yo
 
 == Changelog ==
 
+
+= 1.4.8 =
+* fixed "post_image field" issue.
 
 = 1.4.7 =
 * fixed "misspells in logs" issue.

@@ -1433,7 +1433,8 @@ function perfmatters_is_page_builder() {
     	'givewp-route', //givewp
     	'gb-template-viewer', //generateblocks
     	'trp-edit-translation', //translatepress
-    	'td_action' //tagdiv
+    	'td_action', //tagdiv
+    	'gform_ajax' //gravity forms
 	));
 
 	if(!empty($page_builders)) {

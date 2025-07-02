@@ -19,6 +19,7 @@
 		this.maybe_trigger_feeds_sent();
 	};
 
+
 	/**
 	 * Send events to Google Analytics. Use ajax call so no duplicate entries are recorded.
 	 *
@@ -220,14 +221,68 @@
 		console.log( message );
 	}
 
+	this.handle_ajax_feeds = async function( data ) {
+		if ( ! data?.submissionResult?.data?.ajax_feeds ) {
+			return data;
+		}
+
+		for ( const feed of data.submissionResult.data.ajax_feeds ) {
+			
+			if ( feed?.mode == 'ga' ) {
+				this.send_unique_to_ga( data.submissionResult.data.entry_id, feed.feed_id, feed.parameters, feed.eventName );
+			}
+
+			if ( feed?.mode == 'gtm' ) {
+				this.send_unique_to_gtm( data.submissionResult.data.entry_id, feed.feed_id, feed.parameters, feed.eventName );
+			}
+
+			window.parent[ 'ga_feed_count' ] = window.parent[ 'ga_feed_count' ] ? window.parent[ 'ga_feed_count' ] + 1 : 1;
+		}
+	}
+
+	this.handle_ajax_pagination = function( data ) {
+		if ( ! data?.submissionResult?.data?.ajax_pagination ) {
+			return data;
+		}
+
+		const ajaxPagination = data?.submissionResult?.data?.ajax_pagination
+
+		if ( ajaxPagination?.mode == 'ga' ) {
+			window.parent.GF_Google_Analytics.send_to_ga( ajaxPagination.parameters, ajaxPagination.eventName );	
+		}
+
+		if ( ajaxPagination?.mode == 'gtm' ) {
+			window.parent.GF_Google_Analytics.send_to_gtm( ajaxPagination.parameters, ajaxPagination.eventName );
+		}
+
+		this.consoleLog( 'Pagination event has been sent.' );
+
+		return data;
+	}
+	
 	/**
 	 * Initializes this object.
 	 */
 	this.init = function() {
 		window.GF_Google_Analytics = this;
+		let ajaxFilterRegistered = false;
 
 		// Trigger script loaded event
 		this.trigger_event( 'googleanalytics/script_loaded' );
+
+		document.addEventListener( 'gform/post_render', ( ) => {
+			if ( ajaxFilterRegistered ) {
+				return;
+			}
+
+			window.gform.utils.addFilter( 'gform/ajax/post_ajax_submission', ( data ) => {
+				this.handle_ajax_feeds( data );
+				this.handle_ajax_pagination( data );
+				return data;	
+			} );
+
+			ajaxFilterRegistered = true;
+		} );
 	}
 
 	this.init();

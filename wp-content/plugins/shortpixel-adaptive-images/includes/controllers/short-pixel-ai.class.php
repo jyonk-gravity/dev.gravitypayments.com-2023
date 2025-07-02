@@ -1110,6 +1110,11 @@ class ShortPixelAI {
         }
 
         $this->register_js( 'spai-admin-scripts', 'admin');
+        wp_localize_script(
+            'spai-admin-scripts',
+            'spaiNonce',
+            ['nonce' => \ShortPixel\AI\Page::_( ShortPixelAI::_() )->getNonce(),]
+        );
 	}
 
 	/**
@@ -1810,7 +1815,7 @@ class ShortPixelAI {
 	    //exclude generated images like JetPack's admin bar hours stats
 	    if(strpos($url, '?page=')) {
 		    $admin = parse_url(admin_url());
-		    if(strpos($url, $admin['path'])) {
+		    if(isset($admin['path']) && strpos($url, $admin['path'])) {
 			    return true;
 		    }
 	    }
@@ -1945,15 +1950,16 @@ class ShortPixelAI {
 			$admin    = parse_url( admin_url() );
 			$referrer = parse_url( $_SERVER[ 'HTTP_REFERER' ] );
             $referrerPath = ( isset( $referrer[ 'path' ] ) ? $referrer[ 'path' ] : '' );
+            $adminPath = $admin[ 'path' ] ?? '';
 
             //don't act on pages being customized (wp-admin/customize.php) or if referred by post.php unless it'a preview
-			if (   $referrerPath === $admin[ 'path' ] . 'customize.php'
-                || $referrerPath === $admin[ 'path' ] . 'post.php' && (!isset($_REQUEST['preview']) || $_REQUEST['preview'] !== 'true')
+			if (   $referrerPath === $adminPath . 'customize.php'
+                || $referrerPath === $adminPath . 'post.php' && (!isset($_REQUEST['preview']) || $_REQUEST['preview'] !== 'true')
             ) {
                 $this->logger->log('NOT WELCOME. customize/post '. $referrerPath);
 				return false;
 			}
-			else if ( $this->doingAjax && $admin[ 'host' ] == $referrer[ 'host' ] && strpos( $referrer[ 'path' ], $admin[ 'path' ] ) === 0 ) {
+			else if ( $this->doingAjax && $admin[ 'host' ] == $referrer[ 'host' ] && strpos( $referrerPath, $adminPath ) === 0 ) {
                 $this->logger->log('NOT WELCOME. admin');
 				return false;
 			}
