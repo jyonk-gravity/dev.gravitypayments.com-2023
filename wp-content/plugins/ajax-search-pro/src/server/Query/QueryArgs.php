@@ -4,6 +4,7 @@ namespace WPDRMS\ASP\Query;
 
 use WPDRMS\ASP\Index\Manager;
 use WPDRMS\ASP\Models\SearchQueryArgs;
+use WPDRMS\ASP\Options\Data\SearchOptions;
 use WPDRMS\ASP\Utils\Str;
 use WPDRMS\ASP\Utils\WPMU;
 
@@ -28,14 +29,20 @@ class QueryArgs {
 
 		$search = wd_asp()->instances->get($search_id);
 		$sd     = $search['data'];
+		/**
+		 * @var SearchOptions $search_options
+		 */
+		$search_options = $search->options;
 		// See if we post the preview data through
 		// phpcs:disable
 		if ( !empty($_POST['asp_preview_options']) && ( current_user_can('manage_options') || ASP_DEMO ) ) {
 			if ( is_array($_POST['asp_preview_options']) ) {
 				$sd = array_merge($sd, $_POST['asp_preview_options']);
+				$search_options->setData( $sd );
 			} else {
 				parse_str($_POST['asp_preview_options'], $preview_options);
 				$sd = array_merge($sd, $preview_options);
+				$search_options->setData( $sd );
 			}
 		}
 		// phpcs:enable
@@ -75,6 +82,7 @@ class QueryArgs {
 			$args,
 			array(
 				'_sd'                        => $sd, // Search Data
+				'search_options'             => $search_options,
 				'_id'                        => $search_id,
 				'keyword_logic'              => $sd['keyword_logic'],
 				'secondary_logic'            => $sd['secondary_kw_logic'],
@@ -421,6 +429,60 @@ class QueryArgs {
 		$args['attachment_link_to_secondary'] = $sd['attachment_link_to_secondary'];
 		$args['attachment_pdf_image']         = $sd['attachment_pdf_image'];
 
+		$args['attachment_exclude_directories'] = $search_options->get('attachment_exclude_directories')->directories;
+		$args['attachment_include_directories'] = $search_options->get('attachment_include_directories')->directories;
+
+		if (
+			count($args['attachment_exclude_directories']) > 0 ||
+			count($args['attachment_include_directories']) > 0
+		) {
+			$uploads = wp_get_upload_dir();
+			if ( false === $uploads['error'] ) {
+				$uploads_relative_dir =
+					trailingslashit( str_replace(ABSPATH, '', $uploads['basedir']) );
+				$args['attachment_exclude_directories'] = array_filter(
+					array_map(
+						function ( $dir ) use ( $uploads_relative_dir ) {
+							return str_replace($uploads_relative_dir, '', $dir);
+						},
+						$args['attachment_exclude_directories']
+					)
+				);
+				$args['attachment_include_directories'] = array_filter(
+					array_map(
+						function ( $dir ) use ( $uploads_relative_dir ) {
+							return str_replace($uploads_relative_dir, '', $dir);
+						},
+						$args['attachment_include_directories']
+					)
+				);
+			}
+
+			if ( count($args['attachment_exclude_directories']) > 0 ) {
+				$args['attachments_cf_filters'] = true;
+				$args['post_meta_filter'][]     = array(
+					'key'           => '_wp_attached_file',
+					'value'         => $args['attachment_exclude_directories'],
+					'operator'      => 'NOT STARTS WITH',
+					'allow_missing' => true,
+					'logic'         => 'AND',
+				);
+			}
+
+			if ( count($args['attachment_include_directories']) > 0 ) {
+				$args['attachments_cf_filters'] = true;
+				$args['post_meta_filter'][]     = array(
+					'key'           => '_wp_attached_file',
+					'value'         => $args['attachment_include_directories'],
+					'operator'      => 'STARTS WITH',
+					'allow_missing' => true,
+					'logic'         => 'OR',
+				);
+			}
+		}
+
+
+
 		// ----------------------------------------------------------------
 		// 3. BLOGS
 		// ----------------------------------------------------------------
@@ -527,14 +589,18 @@ class QueryArgs {
 		// ----------------------------------------------------------------
 
 		/*-------------------- FORCE CORRECT ORDERING -------------------*/
-		$correct_cpt_orders  = array_unique(array_merge(
-			SearchQueryArgs::SUPPORTED_PRIMARY_ORDERINGS,
-			SearchQueryArgs::SUPPORTED_SECONDARY_ORDERINGS,
-		));
-		$correct_user_orders  = array_unique(array_merge(
-			SearchQueryArgs::SUPPORTED_USER_PRIMARY_ORDERINGS,
-			SearchQueryArgs::SUPPORTED_USER_SECONDARY_ORDERINGS,
-		));
+		$correct_cpt_orders  = array_unique(
+			array_merge(
+				SearchQueryArgs::SUPPORTED_PRIMARY_ORDERINGS,
+				SearchQueryArgs::SUPPORTED_SECONDARY_ORDERINGS,
+			)
+		);
+		$correct_user_orders = array_unique(
+			array_merge(
+				SearchQueryArgs::SUPPORTED_USER_PRIMARY_ORDERINGS,
+				SearchQueryArgs::SUPPORTED_USER_SECONDARY_ORDERINGS,
+			)
+		);
 		if ( !in_array($args['post_primary_order'], $correct_cpt_orders, true) ) {
 			$args['post_primary_order'] = 'relevance DESC';
 		}
@@ -552,6 +618,7 @@ class QueryArgs {
 		// 8. Peepso Groups & Activities
 		// ----------------------------------------------------------------
 		if (
+			isset($sd['peep_gs_public']) &&
 			( $sd['peep_gs_public'] || $sd['peep_gs_closed'] || $sd['peep_gs_secret'] ) &&
 			( $sd['peep_gs_title'] || $sd['peep_gs_content'] || $sd['peep_gs_categories'] )
 		) {
@@ -580,7 +647,7 @@ class QueryArgs {
 			$args['peepso_groups_limit_override'] = $sd['peepso_groups_limit_override'];
 		}
 
-		if ( $sd['peep_s_posts'] || $sd['peep_s_comments'] ) {
+		if ( isset($sd['peep_s_posts']) && ( $sd['peep_s_posts'] || $sd['peep_s_comments'] ) ) {
 			$args['search_type'][]         = 'peepso_activities';
 			$args['peepso_activity_types'] = array();
 			if ( $sd['peep_s_posts'] ) {

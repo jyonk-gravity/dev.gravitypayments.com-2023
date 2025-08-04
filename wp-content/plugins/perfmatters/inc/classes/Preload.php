@@ -261,11 +261,11 @@ class Preload
                         continue;
                     }
 
-                    if(!empty($preload['srcset'])) {
+                    if(!empty($preload['srcset']) || !empty($preload['imagesrcset'])) {
                         continue;
                     }
 
-                    header("Link: <" . $preload['url'] . ">; rel=preload; as=" . $preload['as'], false);
+                    header("Link: <" . $preload['url'] . ">; rel=preload; as=" . $preload['as'] . (!empty($preload['priority']) ? "; fetchpriority=" . $preload['priority'] : '') . ($preload['as'] == 'font' ? '; crossorigin' : ''), false);
                 }
             }
 
@@ -379,7 +379,7 @@ class Preload
             self::$preloads_ready[] = '<link rel="preload" href="' . $src . '" as="image"' . (!empty($atts['srcset']) ? ' imagesrcset="' . $atts['srcset'] . '"' : '') . (!empty($atts['sizes']) ? ' imagesizes="' . $atts['sizes'] . '"' : '') . ' fetchpriority="high" />';
 
             //update preloads array
-            self::$preloads_array[] = array('url' => $src, 'as' => 'image', 'srcset' => $atts['srcset'] ?? '', 'sizes' => $atts['sizes'] ?? '');
+            self::$preloads_array[] = array('url' => $src, 'as' => 'image', 'srcset' => $atts['srcset'] ?? '', 'sizes' => $atts['sizes'] ?? '', 'priority' => 'high');
 
             //mark src used and return
             if(!empty($src)) {

@@ -71,7 +71,14 @@ class IndexTable extends AbstractAjax {
 					'index_msexcel_content'    => $options['it_index_msexcel_content'],
 					'index_msppt_content'      => $options['it_index_msppt_content'],
 					'media_service_send_file'  => $options['it_media_service_send_file'],
-	
+
+					'attachment_exclude_directories'  =>
+						$options['attachment_exclude_directories']['directories'] ??
+						wd_asp()->options['asp_it_options']['options']->get('attachment_exclude_directories')->directories,
+					'attachment_include_directories'  =>
+						$options['attachment_include_directories']['directories'] ??
+						wd_asp()->options['asp_it_options']['options']->get('attachment_include_directories')->directories,
+
 					'post_statuses'            => $options['it_post_statuses'],
 					'post_password_protected'  => $options['it_post_password_protected'],
 					'index_taxonomies'         =>$options['it_index_taxonomies'],

@@ -82,16 +82,17 @@ class QueryLoopBlock extends AbstractFilter {
 				// Do not recommend going over that, as the post__in argument will generate a
 				// too long query to complete, as well as Elementor processes all of these
 				// results, yielding a terrible loading time.
-				'posts_per_page' => 500,
+				'posts_per_page' => 1000,
 			);
 			add_filter('asp_query_args', array( SearchOverride::getInstance(), 'getAdditionalArgs' ));
 
+			/**
+			 * The $query_args['page'] should not be set as we want the full set
+			 * and the loop will take care of the page.
+			 */
 			if ( isset($_GET['asp_force_reset_pagination']) ) {
 				// For the correct pagination highlight
-				$search_args['page'] = 1;
-				$query['offset']     = 0;
-			} else {
-				$search_args['page'] = $page;
+				$query['offset'] = 0;
 			}
 			$options = Search::getOptions();
 			if ( $options === false || count($options) == 0 ) {
@@ -99,7 +100,6 @@ class QueryLoopBlock extends AbstractFilter {
 			} else {
 				$asp_query = new SearchQuery($search_args, $id, $options);
 			}
-
 			foreach ( $asp_query->posts as $r ) {
 				$ids[] = $r->ID;
 			}

@@ -50,14 +50,17 @@
 				$options         = json_decode( stripslashes( $data[ 'options' ] ) );
 
 				//sanitize
-                if(isset($options->behaviour->api_url)) {
-                    $options->behaviour->api_url = trim($options->behaviour->api_url);
-                    if(parse_url($options->behaviour->api_url, PHP_URL_HOST) === NULL) {
-                        $options->behaviour->api_url = ShortPixelAI::DEFAULT_API_AI . ShortPixelAI::DEFAULT_API_AI_PATH;
+                if (isset($options->behaviour->api_url)) {
+                    $url = trim($options->behaviour->api_url);
+                    if (parse_url($url, PHP_URL_HOST) === NULL) {
+                        $url = ShortPixelAI::DEFAULT_API_AI . ShortPixelAI::DEFAULT_API_AI_PATH;
                     }
+                    $url = sanitize_text_field($url);
+                    $options->behaviour->api_url = $url;
                 }
 
-				//translate simple meta options
+
+                //translate simple meta options
 				$options = ShortPixelAI::translateSimpleOptions( $options );
 
 				$current_options = Options::_()->settings;

@@ -180,7 +180,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     }
   };
   init();
-})(gform, grecaptcha, gforms_recaptcha_recaptcha_strings);
+})(window.gform || {}, grecaptcha, gforms_recaptcha_recaptcha_strings);
 /******/ })()
 ;
 //# sourceMappingURL=frontend.js.map

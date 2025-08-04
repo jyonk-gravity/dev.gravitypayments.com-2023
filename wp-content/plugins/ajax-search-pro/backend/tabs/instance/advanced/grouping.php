@@ -45,6 +45,16 @@
 </div>
 <div class="item wd_groupby_op">
 	<?php
+	$o = new wpdreamsYesNo("group_order_results_page", __('Try to apply the same results order on the results page? (NOT RECOMMENDED)', 'ajax-search-pro'), $sd['group_order_results_page']);
+	$params[$o->getName()] = $o->getData();
+	?>
+	<p class="descMsg">
+		<?php echo __('The results order is different on the results page as grouping changes that. When this is enabled, the plugin will try to maintain the same order for both the live and results pages.', 'ajax-search-pro'); ?>
+		<?php echo __('Works best if the <a class="asp_to_tab" href="#614" tabid="111">post type limit</a> is set to the same number for both the live and results page.', 'ajax-search-pro'); ?>
+	</p>
+</div>
+<div class="item wd_groupby_op">
+	<?php
 	$o = new wpdreamsYesNo("group_make_header_clickable", __('Make group header clickable?', 'ajax-search-pro'), $sd['group_make_header_clickable']);
 	$params[$o->getName()] = $o->getData();
 	?>

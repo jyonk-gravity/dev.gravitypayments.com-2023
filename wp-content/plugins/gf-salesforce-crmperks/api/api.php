@@ -143,7 +143,9 @@ if(!isset($info['instance_url']) || empty($info['instance_url'])){
   $head['Sforce-Duplicate-Rule-Header'] = 'allowSave=true';    
   }
   $body=json_encode($body);
-
+  if(!$body){
+    return array( 'errorCode'=>'2004' , 'message'=>'Invalid POST body - 2004');  
+  }
   }
 if(!empty($dev_key)){
   $sales_res=$this->post_sales($dev_key,$url.$path,$method,$body,$head); 
@@ -661,7 +663,7 @@ unset($fields['vx_camp_id']);
   if(!empty($meta['primary_key_custom'])){
       $meta['primary_key']=$meta['primary_key_custom'];
   }
-  $search=$this->get_search_val($meta['primary_key'],$fields,$fields_info); 
+  $search=$this->get_search_val($meta['primary_key'],$fields,$fields_info,true);
   //var_dump($search); die();
   $search=apply_filters('crm_perks_salesforce_search',$search,$fields);
   if( !empty($meta['primary_key2']) ){
@@ -840,7 +842,8 @@ if(!empty($line_items)){
        if(!empty($item['PricebookEntryId']) && $old_k !== false ){
          $old_item=$old_lines[$old_k]; unset($old_lines[$old_k]);unset($old_keys[$old_k]); //var_dump($old_item);
         // if($old_item['quantity'] != $item['quantity']){    
-        $item_patch=array('quantity'=>$item['quantity'],'UnitPrice'=>$item['UnitPrice']);     
+        //tem_patch=array('quantity'=>$item['quantity'],'UnitPrice'=>$item['UnitPrice']);  //disabled @ jan-25 , it does not support custom line fields
+ $item_patch=$item; unset($item_patch['PricebookEntryId']);
  $item_res=$this->post_sales_arr('/services/data/'.$this->api_version.'/sobjects/'.$line_object."Item/".$old_item['Id'],"PATCH",$item_patch);  
  $extra['Item Patch '.$old_item['Id']]=$item_patch;  
  $extra['Item Response '.$old_item['Id']]=$item_res;    
@@ -968,7 +971,7 @@ $extra['camp_res']=$camp_res;
   return array("error"=>$error,"id"=>$id,"link"=>$link,"action"=>$action,"status"=>$status,"data"=>$fields,"response"=>$sales_response,"extra"=>$extra);
   }
 
-public function get_search_val($field,$fields,$fields_info){
+public function get_search_val($field,$fields,$fields_info,$clean=false){
    $search=array(); 
    if(strpos($field,'Product2Id+') !== false ){
       if(!empty($fields['Product2Id'])){
@@ -993,14 +996,16 @@ public function get_search_val($field,$fields,$fields_info){
          if(isset($fields_info[$field]['type'])){
           $type=$fields_info[$field]['type'];
           if( $type == 'phone'){
-        // $val=preg_replace( '/[^0-9]/', '', $val );
+              if($clean){
+        $val=preg_replace( '/[^0-9+]/', '', $val );
+              }
           }else if( in_array($type,array('date','datetime'))){
               $search[$field]=array('val'=>$val,'type'=>$type);
           }
       }
   } 
 return $search;   
-}  
+}   
 public function post_note($post,$meta,$id=''){
 $note_object=!empty($meta['note_list']) ? 'ContentNote' : 'Note'; 
  $object='';
@@ -1366,7 +1371,7 @@ $date_val+= $offset;  //convert utc datetime to local timezone for getting exatc
       }
   } 
   if(is_array($field_val)){ 
-      $field_val=implode(', ',$field_val); 
+      $field_val=implode('; ',$field_val); //REMOVED , @april-25 ; shows links for multiple files in textarea field while , does not convert to links
   }
   $sf_fields[$field_key]=$field_val;      
   }   

@@ -406,7 +406,7 @@ return $results;
   }
   $feed=$results[0];
   $fields=json_decode($feed['data'],true);
-  $meta=json_decode($feed['meta'],true);
+  $meta=!empty($feed['meta']) ? json_decode($feed['meta'],true) : array();
   $feed['meta']=is_array($meta) ? $meta : array();
   $feed['data']=is_array($fields) ? $fields : array();
   return $feed;

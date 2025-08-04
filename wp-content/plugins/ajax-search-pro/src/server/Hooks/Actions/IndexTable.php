@@ -3,6 +3,7 @@ namespace WPDRMS\ASP\Hooks\Actions;
 
 use Closure;
 use WPDRMS\ASP\Index\Manager;
+use WPDRMS\ASP\Options\Data\IndexTableOptions;
 
 if ( !defined('ABSPATH') ) {
 	die('-1');
@@ -86,7 +87,13 @@ class IndexTable extends AbstractAction {
 			foreach ( $it_options as $k => $o ) {
 				$args[ str_replace('it_', '', $k) ] = $o;
 			}
-			$it_o = new Manager( $args );
+			/**
+			 * @var IndexTableOptions $new_options
+			 */
+			$new_options                            = $it_options['options'];
+			$args['attachment_exclude_directories'] = $new_options->get('attachment_exclude_directories')->directories;
+			$args['attachment_include_directories'] = $new_options->get('attachment_include_directories')->directories;
+			$it_o                                   = new Manager( $args );
 
 			$post_status      = get_post_status( $post_id );
 			$allowed_statuses = array_filter(explode(',', $args['post_statuses']), fn( $v )=>trim($v) !=='');
@@ -96,6 +103,8 @@ class IndexTable extends AbstractAction {
 			foreach ( $allowed_statuses as &$v ) {
 				$v = trim($v);
 			}
+
+			$allowed_statuses = apply_filters('asp/index/hooks/post_update/allowed_statuses', $allowed_statuses, $post_id);
 
 			if ( $post_status === 'trash' || !in_array($post_status, $allowed_statuses, true) ) {
 				$this->delete( $post_id );
@@ -177,8 +186,15 @@ class IndexTable extends AbstractAction {
 			foreach ( $asp_it_options as $k => $o ) {
 				$args[ str_replace('it_', '', $k) ] = $o;
 			}
-			$it_obj = new Manager( $args );
-			$res    = $it_obj->extendIndex( );
+			/**
+			 * @var IndexTableOptions $new_options
+			 */
+			$new_options                            = $asp_it_options['options'];
+			$args['attachment_exclude_directories'] = $new_options->get('attachment_exclude_directories')->directories;
+			$args['attachment_include_directories'] = $new_options->get('attachment_include_directories')->directories;
+			$it_obj                                 = new Manager( $args );
+
+			$res = $it_obj->extendIndex( );
 			update_option(
 				'asp_it_cron',
 				array(
@@ -190,27 +206,30 @@ class IndexTable extends AbstractAction {
 	}
 
 	public function cron_extend(): void {
-		// Index Table CRON
-		if ( !wp_next_scheduled( 'asp_cron_it_extend' ) ) {
-			$asp_it_options = wd_asp()->o['asp_it_options'];
-			if ( $asp_it_options !== false ) {
-				$enabled  = $asp_it_options['it_cron_enable'];
-				$period   = $asp_it_options['it_cron_period'];
-				$do_media = is_array($asp_it_options['it_post_types']) && in_array( 'attachment', $asp_it_options['it_post_types'], true );
+		if ( wp_next_scheduled( 'asp_cron_it_extend' ) !== false ) {
+			return;
+		}
 
-				// If enabled, or attachments are queued for index
-				if ( $enabled || $do_media ) {
-					if ( $do_media ) {
-						// Index media at least every 5 minutes
-						if ( $enabled && in_array($period, array( 'asp_cr_two_minutes', 'asp_cr_three_minutes' ), true) ) {
-							wp_schedule_event(time(), $period, 'asp_cron_it_extend');
-						} else {
-							wp_schedule_event(time(), 'asp_cr_five_minutes', 'asp_cron_it_extend');
-						}
-					} else {
-						wp_schedule_event(time(), $period, 'asp_cron_it_extend');
-					}
+		$asp_it_options = wd_asp()->o['asp_it_options'];
+		if ( $asp_it_options === false ) {
+			return;
+		}
+
+		$enabled  = $asp_it_options['it_cron_enable'];
+		$period   = $asp_it_options['it_cron_period'];
+		$do_media = is_array($asp_it_options['it_post_types']) && in_array( 'attachment', $asp_it_options['it_post_types'], true );
+
+		// If enabled, or attachments are queued for index
+		if ( $enabled || $do_media ) {
+			if ( $do_media ) {
+				// Index media at least every 5 minutes
+				if ( $enabled && in_array($period, array( 'asp_cr_two_minutes', 'asp_cr_three_minutes' ), true) ) {
+					wp_schedule_event(time(), $period, 'asp_cron_it_extend');
+				} else {
+					wp_schedule_event(time(), 'asp_cr_five_minutes', 'asp_cron_it_extend');
 				}
+			} else {
+				wp_schedule_event(time(), $period, 'asp_cron_it_extend');
 			}
 		}
 	}

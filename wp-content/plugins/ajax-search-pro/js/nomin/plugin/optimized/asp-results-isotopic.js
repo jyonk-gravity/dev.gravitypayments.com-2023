@@ -113,13 +113,7 @@ external_AjaxSearchPro_namespaceObject.plugin.showIsotopicResults = function() {
     $this.n("results").css({
       height: "auto"
     });
-    if ($this.o.highlight) {
-      external_DoMini_namespaceObject("div.item", $this.n("resultsDiv")).highlight($this.n("text").val().replace(/["']/g, "").split(" "), {
-        element: "span",
-        className: "highlighted",
-        wordsOnly: $this.o.highlightWholewords
-      });
-    }
+    $this.keywordHighlight();
   }
   if ($this.call_num === 0)
     $this.calculateIsotopeRows();

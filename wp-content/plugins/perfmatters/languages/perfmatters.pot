@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Perfmatters\n"
-"POT-Creation-Date: 2025-06-17 13:53-0700\n"
-"PO-Revision-Date: 2025-06-17 13:52-0700\n"
+"POT-Creation-Date: 2025-07-15 13:38-0700\n"
+"PO-Revision-Date: 2025-07-15 13:38-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -87,7 +87,7 @@ msgstr ""
 msgid "Used CSS cleared for all network sites."
 msgstr ""
 
-#: inc/CLI.php:105 inc/classes/CSS.php:786 inc/classes/CSS.php:826
+#: inc/CLI.php:105 inc/classes/CSS.php:792 inc/classes/CSS.php:832
 msgid "Used CSS cleared."
 msgstr ""
 
@@ -220,20 +220,20 @@ msgstr ""
 msgid "Nonce is invalid."
 msgstr ""
 
-#: inc/classes/CSS.php:752 inc/classes/CSS.php:766 inc/classes/Meta.php:85
+#: inc/classes/CSS.php:758 inc/classes/CSS.php:772 inc/classes/Meta.php:85
 #: inc/settings.php:895 inc/settings.php:904
 msgid "Clear Used CSS"
 msgstr ""
 
-#: inc/classes/CSS.php:752
+#: inc/classes/CSS.php:758
 msgid "All"
 msgstr ""
 
-#: inc/classes/CSS.php:766
+#: inc/classes/CSS.php:772
 msgid "Current"
 msgstr ""
 
-#: inc/classes/CSS.php:838
+#: inc/classes/CSS.php:844
 msgid "Minified CSS cleared."
 msgstr ""
 
@@ -646,45 +646,45 @@ msgstr ""
 msgid "Save or remove your license key."
 msgstr ""
 
-#: inc/license.php:112 inc/license.php:119
+#: inc/license.php:112 inc/license.php:121
 msgid "Activate License"
 msgstr ""
 
-#: inc/license.php:115
+#: inc/license.php:116
 msgid "Deactivate License"
 msgstr ""
 
-#: inc/license.php:116
+#: inc/license.php:118
 msgid "License is activated."
 msgstr ""
 
-#: inc/license.php:120
+#: inc/license.php:122
 msgid "License is not activated."
 msgstr ""
 
-#: inc/license.php:123
+#: inc/license.php:125
 msgid ""
 "Unlimited License needed for use in a multisite environment. Please contact "
 "support to upgrade."
 msgstr ""
 
-#: inc/license.php:132
+#: inc/license.php:134
 msgid "License Status"
 msgstr ""
 
-#: inc/license.php:137
+#: inc/license.php:139
 msgid "Renew Your License for Updates + Support!"
 msgstr ""
 
-#: inc/license.php:146
+#: inc/license.php:148
 msgid "Licenses Used"
 msgstr ""
 
-#: inc/license.php:154
+#: inc/license.php:156
 msgid "Expiration Date"
 msgstr ""
 
-#: inc/license.php:155
+#: inc/license.php:157
 msgid "Lifetime"
 msgstr ""
 

@@ -277,8 +277,9 @@ class SearchQueryArgs implements ArrayAccess {
 	 * @var array{
 	 *     key: string,
 	 *     value: mixed,
-	 *     operator: '<'|'>'|"<>"|"="|'BETWEEN'|'LIKE'|'NOT LIKE'|'IN',
+	 *     operator: '<'|'>'|"<>"|"="|'BETWEEN'|'LIKE'|'NOT LIKE'|'IN'|'STARTS WITH'|'ENDS WITH',
 	 *     allow_missing: bool,
+	 *     logic: 'AND'|'OR',
 	 *     logic_and_separate_custom_fields: bool,
 	 * }[]
 	 */
@@ -299,9 +300,14 @@ class SearchQueryArgs implements ArrayAccess {
 			//      'LIKE'
 			//      'NOT LIKE'
 			//      'IN'
+			//      'STARTS WITH'
+			//      'NOT STARTS WITH'
+			//      'ENDS WITH'
+			//      'NOT ENDS WITH'
 			'operator' => 'BETWEEN',
 			'allow_missing' => false,   // allow match if this custom field is unset
 			'logic_and_separate_custom_fields' => false,
+			'logic' => 'OR', // If 'value' key is array then this logic is used to connect
 		)
 		*/
 	);
@@ -407,6 +413,16 @@ class SearchQueryArgs implements ArrayAccess {
 	 * @var int[]
 	 */
 	public array $attachment_exclude = array();
+
+	/**
+	 * @var string[]
+	 */
+	public array $attachment_exclude_directories = array();
+
+	/**
+	 * @var string[]
+	 */
+	public array $attachment_include_directories = array();
 
 	/**
 	 * @var "page"|"file"|"parent"

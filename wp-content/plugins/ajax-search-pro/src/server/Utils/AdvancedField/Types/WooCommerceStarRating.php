@@ -31,9 +31,9 @@ class WooCommerceStarRating extends AbstractWooCommerceBase implements AdvancedF
 		if ( isset($average) ) {
 			return Html::optimize(
 				'<span class="average-rating" 
-			style="--percent: calc(' . $average . '/5*100%);' . $this->star_color . $this->star_bg_color . $this->star_size . '"
-			data-rating="' . $average . '"
-			title="' . sprintf(__('Rated %s out of 5', 'woocommerce'), $average) . '">★★★★★</span>'
+			style="--percent: calc(' . esc_attr($average) . '/5*100%);' . esc_attr($this->star_color . $this->star_bg_color . $this->star_size) . '"
+			data-rating="' . esc_attr($average) . '"
+			title="' . sprintf(esc_attr__('Rated %s out of 5', 'woocommerce'), $average) . '">★★★★★</span>'
 			);
 		}
 

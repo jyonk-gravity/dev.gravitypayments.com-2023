@@ -143,10 +143,12 @@
         $params[$o->getName()] = $o->getData();
         ?>
     </div>
+	<?php if ( version_compare(asp_wp_get_wp_version(), '6.0', '>=') ): ?>
 	<div id="wdo" class="wdo">
 		<div id="asp-search-post-advanced-fields"></div>
 	</div>
-    <!--<div class="item">
+	<?php else: ?>
+    <div class="item">
         <?php
         $o = new wd_TextareaExpandable("advtitlefield", __('Advanced Title Field (default: {titlefield})', 'ajax-search-pro'),  $sd['advtitlefield']);
         $params[$o->getName()] = $o->getData();
@@ -169,7 +171,8 @@
                 <?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?>
             </a>
         </p>
-    </div>-->
+    </div>
+	<?php endif; ?>
 </fieldset>
 <fieldset class="asp-adv-fields">
     <legend>
@@ -188,9 +191,7 @@
         $params[$o->getName()] = $o->getData();
         ?>
     </div>
-	<div id="wdo"class="wdo">
-		<div id="asp-search-user-advanced-fields"></div>
-	</div>
+
 	<div class="item">
         <?php
         $o = new wpdreamsCustomSelect("user_search_description_field", __('Description field for <strong>User</strong> results', 'ajax-search-pro'),
@@ -205,28 +206,34 @@
         $params[$o->getName()] = $o->getData();
         ?>
     </div>
-	<!--<div class="item">
-        <?php
-        $o = new wd_TextareaExpandable("user_search_advanced_title_field", __('Advanced title field for <strong>User</strong> results', 'ajax-search-pro'),
-            $sd['user_search_advanced_title_field']);
-        $params[$o->getName()] = $o->getData();
-        ?>
-        <p class="descMsg">
-            <?php echo __('Variable {titlefield} will be replaced with the Title field value. Use the format {meta_field} to get user meta.', 'ajax-search-pro'); ?><br>
-            <a href="https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields/user-search-advanced-title-and-content-fields" target="_blank"><?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?></a>
-        </p>
-    </div>
-    <div class="item">
-        <?php
-        $o = new wd_TextareaExpandable("user_search_advanced_description_field", __('Advanced description field for <strong>User</strong> results', 'ajax-search-pro'),
-            $sd['user_search_advanced_description_field']);
-        $params[$o->getName()] = $o->getData();
-        ?>
-        <p class="descMsg">
-            <?php echo __('Variable {descriptionfield} will be replaced with the Description field value. Use the format {meta_field} to get user meta.', 'ajax-search-pro'); ?><br>
-            <a href="https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields/user-search-advanced-title-and-content-fields" target="_blank"><?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?></a>
-        </p>
-    </div>-->
+	<?php if ( version_compare(asp_wp_get_wp_version(), '6.0', '>=') ): ?>
+		<div id="wdo" class="wdo">
+			<div id="asp-search-user-advanced-fields"></div>
+		</div>
+	<?php else: ?>
+		<div class="item">
+			<?php
+			$o = new wd_TextareaExpandable("user_search_advanced_title_field", __('Advanced title field for <strong>User</strong> results', 'ajax-search-pro'),
+				$sd['user_search_advanced_title_field']);
+			$params[$o->getName()] = $o->getData();
+			?>
+			<p class="descMsg">
+				<?php echo __('Variable {titlefield} will be replaced with the Title field value. Use the format {meta_field} to get user meta.', 'ajax-search-pro'); ?><br>
+				<a href="https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields/user-search-advanced-title-and-content-fields" target="_blank"><?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?></a>
+			</p>
+		</div>
+		<div class="item">
+			<?php
+			$o = new wd_TextareaExpandable("user_search_advanced_description_field", __('Advanced description field for <strong>User</strong> results', 'ajax-search-pro'),
+				$sd['user_search_advanced_description_field']);
+			$params[$o->getName()] = $o->getData();
+			?>
+			<p class="descMsg">
+				<?php echo __('Variable {descriptionfield} will be replaced with the Description field value. Use the format {meta_field} to get user meta.', 'ajax-search-pro'); ?><br>
+				<a href="https://documentation.ajaxsearchpro.com/advanced-options/advanced-title-and-description-fields/user-search-advanced-title-and-content-fields" target="_blank"><?php echo __('More possibilities explained here!', 'ajax-search-pro'); ?></a>
+			</p>
+		</div>
+	<?php endif; ?>
     <div class="item">
         <?php
         $o = new wpdreamsCustomSelect("user_search_url_source", __('<strong>User</strong> results url source', 'ajax-search-pro'),

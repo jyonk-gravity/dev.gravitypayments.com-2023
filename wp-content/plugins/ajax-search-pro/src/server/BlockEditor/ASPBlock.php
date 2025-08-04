@@ -22,14 +22,6 @@ class ASPBlock implements BlockInterface {
 		if ( !function_exists('register_block_type') ) {
 			return;
 		}
-		register_block_type(
-			'wpdreams-site-core/block-open-ticket',
-			array(
-				'editor_script_handles' => array( 'wpdreams-site-core-blocks-editor' ),
-				'view_script_handles'   => array( 'wpdreams-site-core-blocks-frontend' ),
-				'render_callback'       => array( $this, 'render' ),
-			),
-		);
 
 		$instances = wd_asp()->instances->getWithoutData();
 		if ( count($instances) === 0 ) {

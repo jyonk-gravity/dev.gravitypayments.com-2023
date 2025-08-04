@@ -422,7 +422,7 @@ jQuery(function ($) {
     $("ul.connectedSortable", $('input[name=it_post_types]').parent()).on("sortupdate", function(){
         var val = JSON.parse( WD_Helpers.Base64.decode($('input[name=it_post_types]').val().replace(/^(_decode_)/,"")) );
         val = val.join(',');
-        if ( val.indexOf('attachment') > -1 ) {
+        if ( val.indexOf('attachment') > -1 || val.indexOf('ngg_pictures') > -1 ) {
             $('#it_file_indexing').removeClass('disabled-opacity');
             $('#it_media_service').removeClass('hiddend');
             if (

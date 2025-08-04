@@ -350,19 +350,19 @@ class Manager {
 	 * Fires up the plugin hooks
 	 */
 	private function loadHooks(): void {
+		$factory = Factory::instance();
 		// Register handlers only if the context is ajax indeed
 		if ( $this->context === 'ajax' ) {
 			AjaxManager::registerAll();
 		}
 
 		if ( $this->context !== 'ajax' ) {
-			$factory = Factory::instance();
-			foreach ( $factory->get(Asset\AssetInterface::class) as $asset ) {
+			foreach ( $factory->get('Asset') as $asset ) {
 				$asset->register();
 			}
 
 			// Editor blocks
-			foreach ( $factory->get( BlockInterface::class ) as $block ) {
+			foreach ( $factory->get( 'Block' ) as $block ) {
 				$block->register();
 			}
 
@@ -380,11 +380,15 @@ class Manager {
 			add_action(
 				'rest_api_init',
 				function () {
-					foreach ( Factory::instance()->get(RestInterface::class) as $rest ) {
+					foreach ( Factory::instance()->get('Rest') as $rest ) {
 						$rest->registerRoutes();
 					}
 				}
 			);
+		}
+
+		foreach ( $factory->get('Integration') as $integration ) {
+			$integration->load();
 		}
 
 		FiltersManager::registerAll();

@@ -57,43 +57,47 @@ class Manager {
 
 		$defaults = array(
 			// Arguments here
-			'index_title'              => 1,
-			'index_content'            => 1,
-			'index_pdf_content'        => 0,
-			'index_pdf_method'         => 'auto',
-			'index_text_content'       => 0,
-			'index_richtext_content'   => 0,
-			'index_msword_content'     => 0,
-			'index_msexcel_content'    => 0,
-			'index_msppt_content'      => 0,
-			'media_service_send_file'  => 1,
-			'index_excerpt'            => 1,
-			'index_tags'               => 0,
-			'index_categories'         => 0,
-			'index_taxonomies'         => '',
-			'attachment_mime_types'    => '',
-			'index_permalinks'         => 0,
-			'index_customfields'       => '',
-			'index_author_name'        => '',
-			'index_author_bio'         => '',
-			'blog_id'                  => get_current_blog_id(),
-			'inflections'              => 0,
-			'language'                 => 'english',
-			'extend'                   => 1,
-			'limit'                    => 25,
-			'use_stopwords'            => 1,
-			'stopwords'                => '',
-			'min_word_length'          => 3,
-			'post_types'               => array( 'post', 'page' ),
-			'post_statuses'            => 'publish',
-			'extract_gutenberg_blocks' => 1,
-			'extract_shortcodes'       => 1,
-			'exclude_shortcodes'       => '',
-			'extract_iframes'          => 0,
-			'synonyms_as_keywords'     => 0,
+			'index_title'                    => 1,
+			'index_content'                  => 1,
+			'index_pdf_content'              => 0,
+			'index_pdf_method'               => 'auto',
+			'index_text_content'             => 0,
+			'index_richtext_content'         => 0,
+			'index_msword_content'           => 0,
+			'index_msexcel_content'          => 0,
+			'index_msppt_content'            => 0,
+			'media_service_send_file'        => 1,
+			'index_excerpt'                  => 1,
+			'index_tags'                     => 0,
+			'index_categories'               => 0,
+			'index_taxonomies'               => '',
+			'attachment_mime_types'          => '',
+			'attachment_exclude_directories' => array(),
+			'attachment_include_directories' => array(),
+			'index_permalinks'               => 0,
+			'index_customfields'             => '',
+			'index_author_name'              => '',
+			'index_author_bio'               => '',
+			'blog_id'                        => get_current_blog_id(),
+			'inflections'                    => 0,
+			'language'                       => 'english',
+			'extend'                         => 1,
+			'limit'                          => 25,
+			'use_stopwords'                  => 1,
+			'stopwords'                      => '',
+			'min_word_length'                => 3,
+			'post_types'                     => array( 'post', 'page' ),
+			'post_statuses'                  => 'publish',
+			'extract_gutenberg_blocks'       => 1,
+			'extract_shortcodes'             => 1,
+			'exclude_shortcodes'             => '',
+			'extract_iframes'                => 0,
+			'synonyms_as_keywords'           => 0,
 		);
 
 		$this->args = wp_parse_args( $args, $defaults );
+		$this->args['attachment_exclude_directories'] = array_filter($this->args['attachment_exclude_directories']);
+		$this->args['attachment_include_directories'] = array_filter($this->args['attachment_include_directories']);
 		$this->args = apply_filters( 'asp_it_args', $this->args, $defaults);
 
 		$this->db        = new Database();
@@ -859,7 +863,7 @@ class Manager {
 							}
 						}
 					} elseif ( $field_type === 'post_object' || $field_type === 'relationship' ) {
-						$post_id = is_numeric($v) ? intval($v) : (is_object($v) && isset($v->ID) ? $v->ID : null);
+						$post_id = is_numeric($v) ? intval($v) : ( is_object($v) && isset($v->ID) ? $v->ID : null );
 						if ( $post_id ) {
 							$reference_post_title = get_the_title($v);
 							if ( !is_wp_error($reference_post_title) && $reference_post_title !== '' ) {

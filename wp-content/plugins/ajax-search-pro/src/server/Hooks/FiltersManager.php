@@ -68,6 +68,12 @@ class FiltersManager {
 			'args'     => 3,
 		),
 		array(
+			'filter'   => 'jet-engine/listing/grid/source',
+			'handler'  => array( 'Elementor', 'jetListingGridQueryBuilderToPost' ),
+			'priority' => 99999,
+			'args'     => 3,
+		),
+		array(
 			'filter'   => 'register_block_type_args',
 			'handler'  => array( 'QueryLoopBlock', 'addAttributes' ),
 			'priority' => 10,
@@ -90,6 +96,20 @@ class FiltersManager {
 			'handler'  => array( 'GenerateBlocksQueryBlock', 'queryVars' ),
 			'priority' => 10,
 			'args'     => 2,
+		),
+
+		array(
+			'filter'   => 'blocksy:general:blocks:query:args',
+			'handler'  => array( 'BlocksyAdvancedPostsBlock', 'queryVars' ),
+			'priority' => 10,
+			'args'     => 2,
+		),
+
+		array(
+			'filter'   => 'bricks/posts/query_vars',
+			'handler'  => array( 'BricksQueryLoop', 'bricksPostsQueryVars' ),
+			'priority' => 10,
+			'args'     => 4,
 		),
 		array(
 			'filter'   => 'wp_enqueue_scripts',
@@ -260,6 +280,12 @@ class FiltersManager {
 			'handler'  => array( 'EtcFixes', 'diviInitModulesOnAjax' ),
 			'priority' => 9999,
 			'args'     => 1,
+		),
+		array(
+			'filter'   => 'divi_blog_extras_query_args',
+			'handler'  => array( 'Divi', 'blogExtras' ),
+			'priority' => 9999,
+			'args'     => 2,
 		),
 		array(
 			'filter'   => 'asp_post_custom_field_before_tokenize',

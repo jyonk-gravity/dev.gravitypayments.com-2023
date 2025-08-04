@@ -1,3 +1,13 @@
+## 1.9.0 | 2025-07-21
+- Fixed an issue where reCAPTCHA Enterprise can fail if reCAPTCHA returns a response of 1 instead of 1.0.
+
+## 1.8.0 | 2025-07-08
+- Added a new [`gform_recaptcha_enterprise_keys_page_size`](https://docs.gravityforms.com/gform_recaptcha_enterprise_keys_page_size/) filter to control the number of keys returned per API call.
+- Fixed an issue where when connected with the Enterprise connection method, the settings page only retrieves 10 reCAPTCHA keys.
+- Fixed an issue where the reCAPTCHA badge is visible on pages that don't include a form when the "Disable Google reCAPTCHA Badge" setting is enabled.
+- Fixed an issue where multiple Enterprise API auth token refresh requests can occur when the site has multiple concurrent visitors, causing the add-on to become disconnected.
+- Fixed an issue where the Enterprise API can be initialised multiple times during the same request.
+
 ## 1.7.0 | 2025-06-04
 - Added support for using reCAPTCHA Enterprise keys and the reCAPTCHA Enterprise API.
 - Updated the connection screen to improve clarity and differentiate connection options.

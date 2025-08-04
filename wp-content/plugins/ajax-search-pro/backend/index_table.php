@@ -143,7 +143,6 @@ $asp_cron_data = get_option("asp_it_cron", array(
                             <?php echo __('The plugin uses external libraries as well as internal methods to get the best results, however it is still possible that some information might not be extracted properly.', 'ajax-search-pro'); ?>
                         </div>
                     </div>
-
                     <div class="item item-flex-nogrow  item-flex-wrap item-conditional" wd-show-on="multi_attachment_mime_types_5:pdf">
                         <?php $o = new wpdreamsYesNo("it_index_pdf_content", __('Index PDF file contents?', 'ajax-search-pro'),
                             $it_options['it_index_pdf_content']
@@ -194,6 +193,9 @@ $asp_cron_data = get_option("asp_it_cron", array(
                             $it_options['it_index_msppt_content']
                         ); ?>
                     </div>
+	                <div id="wdo" class="wdo">
+		                <div id="asp-it-attachment-directories"></div>
+	                </div>
                     <div class="wd-hint">
                         <?php echo __('<p>These options are hidden unless the <strong>attachment</strong> custom post type is selected above.</p>', 'ajax-search-pro'); ?>
                     </div>
@@ -475,6 +477,10 @@ $asp_cron_data = get_option("asp_it_cron", array(
                     'it_index_taxonomies' => $_POST['it_index_taxonomies'],
 
                     'it_attachment_mime_types' => $_POST['it_attachment_mime_types'],
+					'options' => array(
+						'attachment_exclude_directories' => $_POST['attachment_exclude_directories'],
+						'attachment_include_directories' => $_POST['attachment_include_directories'],
+					),
                     'it_index_pdf_content' => $_POST['it_index_pdf_content'],
                     'it_index_pdf_method' => $_POST['it_index_pdf_method'],
                     'it_index_text_content' => $_POST['it_index_text_content'],
@@ -698,3 +704,11 @@ wp_localize_script('asp-backend-index-table', 'ASP_IT_MSG', array(
 wp_enqueue_script('asp-backend-jquery-tag', plugin_dir_url(__FILE__) . 'settings/assets/jquery-tagging/tagging.min.js', array(
     'jquery'
 ), $media_query, true);
+$metadata = require_once ASP_PATH . 'build/js/index-table.asset.php';
+wp_enqueue_script(
+	'wpd-asp-index-table',
+	ASP_URL_NP . 'build/js/index-table.js',
+	$metadata['dependencies'],
+	$metadata['version'],
+	array( 'in_footer' =>true ),
+);

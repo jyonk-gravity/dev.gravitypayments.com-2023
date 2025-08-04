@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-3.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms reCAPTCHA Add-On 1.7.0\n"
+"Project-Id-Version: Gravity Forms reCAPTCHA Add-On 1.9.0\n"
 "Report-Msgid-Bugs-To: https://gravityforms.com/support\n"
 "Last-Translator: Gravity Forms <support@gravityforms.com>\n"
 "Language-Team: Gravity Forms <support@gravityforms.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-04T13:51:06+00:00\n"
+"POT-Creation-Date: 2025-07-21T15:46:42+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: gravityformsrecaptcha\n"
@@ -31,85 +31,85 @@ msgstr ""
 msgid "Gravity Forms"
 msgstr ""
 
-#: class-gf-recaptcha.php:483
+#: class-gf-recaptcha.php:469
 msgid "Disconnect from reCAPTCHA"
 msgstr ""
 
-#: class-gf-recaptcha.php:506
-#: class-gf-recaptcha.php:1050
+#: class-gf-recaptcha.php:492
+#: class-gf-recaptcha.php:1114
 #: includes/settings/class-plugin-settings.php:636
 msgid "Change Connection Type"
 msgstr ""
 
-#: class-gf-recaptcha.php:538
+#: class-gf-recaptcha.php:524
 msgid "You have no available projects for reCAPTCHA or have insufficient permissions"
 msgstr ""
 
-#: class-gf-recaptcha.php:549
+#: class-gf-recaptcha.php:535
 msgid "Select a Project"
 msgstr ""
 
-#: class-gf-recaptcha.php:569
-#: class-gf-recaptcha.php:582
+#: class-gf-recaptcha.php:555
+#: class-gf-recaptcha.php:568
 msgid "Enterprise Site Key"
 msgstr ""
 
-#: class-gf-recaptcha.php:578
-#: class-gf-recaptcha.php:1630
+#: class-gf-recaptcha.php:564
+#: class-gf-recaptcha.php:1681
 msgid "There was an error retrieving reCAPTHCA site keys."
 msgstr ""
 
-#: class-gf-recaptcha.php:584
+#: class-gf-recaptcha.php:570
 msgid "Select a site key"
 msgstr ""
 
-#: class-gf-recaptcha.php:750
+#: class-gf-recaptcha.php:736
 msgid "Disable reCAPTCHA v3 for this form."
 msgstr ""
 
-#: class-gf-recaptcha.php:1045
+#: class-gf-recaptcha.php:1109
 msgid "Disconnecting"
 msgstr ""
 
-#: class-gf-recaptcha.php:1046
+#: class-gf-recaptcha.php:1110
 msgid "Resetting"
 msgstr ""
 
-#: class-gf-recaptcha.php:1051
+#: class-gf-recaptcha.php:1115
 msgid "Changing the connection type will delete your current settings.  Do you want to proceed?"
 msgstr ""
 
-#: class-gf-recaptcha.php:1052
+#: class-gf-recaptcha.php:1116
 #: includes/settings/class-plugin-settings.php:615
 msgid "Disconnect"
 msgstr ""
 
-#: class-gf-recaptcha.php:1053
+#: class-gf-recaptcha.php:1117
 msgid "Disconnecting from reCAPTCHA will delete your current settings.  Do you want to proceed?"
 msgstr ""
 
-#: class-gf-recaptcha.php:1082
+#: class-gf-recaptcha.php:1133
 msgid "reCAPTCHA Score"
 msgstr ""
 
-#: class-gf-recaptcha.php:1152
+#: class-gf-recaptcha.php:1203
 msgid "reCAPTCHA"
 msgstr ""
 
-#: class-gf-recaptcha.php:1173
+#: class-gf-recaptcha.php:1224
 msgid "Score"
 msgstr ""
 
-#: class-gf-recaptcha.php:1176
+#: class-gf-recaptcha.php:1227
 msgid "Click here to learn more about reCAPTCHA."
 msgstr ""
 
 #. translators: %s is the link markup.
-#: class-gf-recaptcha.php:1475
+#: class-gf-recaptcha.php:1526
 msgid "You have reached the quota limit for reCAPTCHA set by Google. Please check the quota on your %sreCAPTCHA Account%s."
 msgstr ""
 
-#: class-gf-recaptcha.php:1573
+#: class-gf-recaptcha.php:1624
 msgid "User does not have required permissions to setup reCAPTCHA."
 msgstr ""
 

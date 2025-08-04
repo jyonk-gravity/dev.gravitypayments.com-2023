@@ -15,13 +15,31 @@ class jh_acf_field_table extends acf_field {
 	*  @return	n/a
 	*/
 
+	public $settings;
+
+	public $name;
+
+	public $description;
+
+	public $preview_image;
+
+	public $doc_url;
+
+	public $label;
+
+	public $category;
+
+	public $defaults;
+
+	public $l10n;
+
 	function __construct() {
 
 		/*
 		*  settings (array) Array of settings
 		*/
 		$this->settings = array(
-			'version' => '1.3.29',
+			'version' => '1.3.30',
 			'dir_url' => plugins_url( '', __FILE__ ) . '/',
 		);
 
@@ -449,13 +467,19 @@ class jh_acf_field_table extends acf_field {
 				// try post_meta
 				$data = get_post_meta( $post_id, $field['name'], true );
 
+				// try user meta
+				if ( empty( $data ) ) {
+
+					$data = get_user_meta( str_replace('user_', '', $post_id ), $field['name'], true );
+				}
+
 				// try term_meta
 				if ( empty( $data ) ) {
 
 					$data = get_term_meta( str_replace('term_', '', $post_id ), $field['name'], true );
 				}
 
-				//try options
+				// try options
 				if (
 					empty( $data ) AND (
 						$post_id = 'options' OR

@@ -791,6 +791,29 @@ base.plugin.showResultsBox = function() {
   $this.n("resultsDiv").removeClass($this.resAnim.hideClass).addClass($this.resAnim.showClass);
   $this.fixResultsPosition(true);
 };
+base.plugin.keywordHighlight = function() {
+  const $this = this;
+  if (!$this.o.highlight) {
+    return;
+  }
+  const phrase = $this.n("text").val().replace(/["']/g, "");
+  if (phrase === "" || phrase.length < $this.o.trigger.minWordLength) {
+    return;
+  }
+  const words = phrase.trim().split(" ").filter((s) => s.length >= $this.o.trigger.minWordLength);
+  $this.n("resultsDiv").find("figcaption, div.item").highlight([phrase.trim()], {
+    element: "span",
+    className: "highlighted",
+    wordsOnly: $this.o.highlightWholewords
+  });
+  if (words.length > 0) {
+    $this.n("resultsDiv").find("figcaption, div.item").highlight(words, {
+      element: "span",
+      className: "highlighted",
+      wordsOnly: $this.o.highlightWholewords
+    });
+  }
+};
 base.plugin.addHighlightString = function($items) {
   let $this = this, phrase = $this.n("text").val().replace(/["']/g, "");
   $items = typeof $items == "undefined" ? $this.n("items").find("a.asp_res_url") : $items;
@@ -1747,7 +1770,66 @@ base.plugin.initNavigationEvents = function() {
 };
 /* harmony default export */ var navigation = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
+;// ./src/client/global/utils/device.ts
+
+const deviceType = () => {
+  let w = window.innerWidth;
+  if (w <= 640) {
+    return "phone";
+  } else if (w <= 1024) {
+    return "tablet";
+  } else {
+    return "desktop";
+  }
+};
+const detectIOS = () => {
+  if (typeof window.navigator != "undefined" && typeof window.navigator.userAgent != "undefined")
+    return window.navigator.userAgent.match(/(iPod|iPhone|iPad)/) != null;
+  return false;
+};
+const isMobile = () => {
+  try {
+    document.createEvent("TouchEvent");
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+const isTouchDevice = () => {
+  return "ontouchstart" in window;
+};
+
+;// ./src/client/utils/browser.ts
+
+
+const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
+const ua = navigator.userAgent;
+const isWebKit = /AppleWebKit/.test(ua) && !/Edge/.test(ua);
+let fakeInput;
+const focusInput = (targetInput) => {
+  if (!detectIOS()) {
+    targetInput?.focus();
+    return;
+  }
+  if (targetInput === void 0 || fakeInput === void 0) {
+    fakeInput = document.createElement("input");
+    fakeInput.setAttribute("type", "text");
+    fakeInput.style.position = "absolute";
+    fakeInput.style.opacity = "0";
+    fakeInput.style.height = "0";
+    fakeInput.style.fontSize = "16px";
+    document.body.prepend(fakeInput);
+  }
+  if (targetInput === void 0) {
+    fakeInput.focus();
+  } else {
+    targetInput.focus();
+  }
+};
+
+
 ;// ./src/client/plugin/core/events/other.js
+
 
 
 
@@ -1828,17 +1910,18 @@ base.plugin.initOtherEvents = function() {
   });
   external_DoMini_namespaceObject(window).on("scroll", handler2, { passive: true });
   if (other_helpers.isMobile() && $this.o.mobile.menu_selector !== "") {
-    external_DoMini_namespaceObject($this.o.mobile.menu_selector).on("touchend", function() {
+    external_DoMini_namespaceObject($this.o.mobile.menu_selector).on("touchend", function(e) {
       let _this = this;
+      focusInput();
       setTimeout(function() {
         let $input = external_DoMini_namespaceObject(_this).find("input.orig");
         $input = $input.length === 0 ? external_DoMini_namespaceObject(_this).next().find("input.orig") : $input;
         $input = $input.length === 0 ? external_DoMini_namespaceObject(_this).parent().find("input.orig") : $input;
         $input = $input.length === 0 ? $this.n("text") : $input;
         if ($this.n("search").inViewPort()) {
-          $input.get(0).focus();
+          focusInput($input.get(0));
         }
-      }, 300);
+      }, 1e3);
     });
   }
   if (other_helpers.detectIOS() && other_helpers.isMobile() && other_helpers.isTouchDevice()) {

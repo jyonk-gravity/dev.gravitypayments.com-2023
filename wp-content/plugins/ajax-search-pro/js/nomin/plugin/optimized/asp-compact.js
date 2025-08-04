@@ -64,7 +64,66 @@ external_AjaxSearchPro_namespaceObject.plugin.initCompact = function() {
 };
 /* harmony default export */ var compact = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
+;// ./src/client/global/utils/device.ts
+
+const deviceType = () => {
+  let w = window.innerWidth;
+  if (w <= 640) {
+    return "phone";
+  } else if (w <= 1024) {
+    return "tablet";
+  } else {
+    return "desktop";
+  }
+};
+const detectIOS = () => {
+  if (typeof window.navigator != "undefined" && typeof window.navigator.userAgent != "undefined")
+    return window.navigator.userAgent.match(/(iPod|iPhone|iPad)/) != null;
+  return false;
+};
+const isMobile = () => {
+  try {
+    document.createEvent("TouchEvent");
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+const isTouchDevice = () => {
+  return "ontouchstart" in window;
+};
+
+;// ./src/client/utils/browser.ts
+
+
+const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
+const ua = navigator.userAgent;
+const isWebKit = /AppleWebKit/.test(ua) && !/Edge/.test(ua);
+let fakeInput;
+const focusInput = (targetInput) => {
+  if (!detectIOS()) {
+    targetInput?.focus();
+    return;
+  }
+  if (targetInput === void 0 || fakeInput === void 0) {
+    fakeInput = document.createElement("input");
+    fakeInput.setAttribute("type", "text");
+    fakeInput.style.position = "absolute";
+    fakeInput.style.opacity = "0";
+    fakeInput.style.height = "0";
+    fakeInput.style.fontSize = "16px";
+    document.body.prepend(fakeInput);
+  }
+  if (targetInput === void 0) {
+    fakeInput.focus();
+  } else {
+    targetInput.focus();
+  }
+};
+
+
 ;// ./src/client/plugin/core/actions/compact.js
+
 
 
 
@@ -124,6 +183,9 @@ external_AjaxSearchPro_namespaceObject.plugin.openCompact = function() {
     }
     $this.n("search").attr("data-asp-compact", "open");
   }, 50);
+  if ($this.o.compact.focus) {
+    focusInput();
+  }
   clearTimeout($this.timeouts.compactAfterOpen);
   $this.timeouts.compactAfterOpen = setTimeout(function() {
     $this.resize();
@@ -137,7 +199,7 @@ external_AjaxSearchPro_namespaceObject.plugin.openCompact = function() {
       });
     }
     if ($this.o.compact.focus) {
-      $this.n("text").get(0).focus();
+      focusInput($this.n("text").get(0));
     }
     $this.n("text").trigger("focus");
     $this.scrolling();

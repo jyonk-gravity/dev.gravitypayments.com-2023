@@ -971,6 +971,18 @@ div.asp_w.asp_r .photostack-back {
     background: #fff;
     padding: 50px 40px;
     text-align: left;
+	z-index: 2;
+}
+
+div.asp_w.asp_r .photostack-flipped .photostack-back {
+	display: block;
+	transform: rotateY(180deg);
+}
+
+div.asp_w.asp_r .photostack-perspective figure.photostack-flipped ,
+div.asp_w.asp_r .photostack-perspective figure.photostack-flipped  div {
+	-webkit-backface-visibility: visible !important;
+	backface-visibility: visible !important;
 }
 
 div.asp_w.asp_r .photostack-back p {

@@ -415,7 +415,7 @@ class Token_Verifier {
 			return true;
 		}
 
-		return ( is_float( $score ) && $score >= 0.0 && $score <= 1.0 );
+		return ( is_numeric( $score ) && $score >= 0.0 && $score <= 1.0 );
 	}
 
 	/**

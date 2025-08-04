@@ -171,6 +171,12 @@
             <?php echo __('If turned OFF, it will use WordPress defaults. Default custom value: <b>Y-m-d H:i:s</b>', 'ajax-search-pro'); ?>
         </div>
     </div>
+	<div class="item">
+		<?php
+		$o = new wpdreamsTextSmall("post_type_res_title_length", __('Max. title field length', 'ajax-search-pro'), $sd['post_type_res_title_length']);
+		$params[$o->getName()] = $o->getData();
+		?>
+	</div>
     <div class="item item-flex-nogrow item-conditional" style="flex-wrap: wrap;">
         <?php
         $o = new wpdreamsYesNo("showdescription", __('Show description (content) in results?', 'ajax-search-pro'), $sd['showdescription']);
@@ -208,7 +214,12 @@
             </a>
         </span>
     </legend>
-
+	<div class="item">
+		<?php
+		$o = new wpdreamsTextSmall("tax_res_title_length", __('Max. title field length', 'ajax-search-pro'), $sd['tax_res_title_length']);
+		$params[$o->getName()] = $o->getData();
+		?>
+	</div>
     <div class="item item-flex-nogrow item-conditional" style="flex-wrap: wrap;">
         <?php
         $o = new wpdreamsYesNo("tax_res_showdescription", __('Show description (content) in taxonomy term results?', 'ajax-search-pro'), $sd['tax_res_showdescription']);
@@ -230,7 +241,12 @@
             </a>
         </span>
     </legend>
-
+	<div class="item">
+		<?php
+		$o = new wpdreamsTextSmall("user_res_title_length", __('Max. title field length', 'ajax-search-pro'), $sd['user_res_title_length']);
+		$params[$o->getName()] = $o->getData();
+		?>
+	</div>
     <div class="item item-flex-nogrow item-conditional" style="flex-wrap: wrap;">
         <?php
         $o = new wpdreamsYesNo("user_res_showdescription", __('Show description (content) in user results?', 'ajax-search-pro'), $sd['user_res_showdescription']);

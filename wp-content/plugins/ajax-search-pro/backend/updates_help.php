@@ -47,7 +47,7 @@ if ( ASP_DEMO ) {
 				<h3><?php echo __('Useful Resources', 'ajax-search-pro'); ?></h3>
 				<div class="item">
 					<ul>
-						<li><a target="_blank" href="https://documentation.ajaxsearchpro.com/" title="Documentation"><?php echo __('Onlie Documentation', 'ajax-search-pro'); ?></a></li>
+						<li><a target="_blank" href="https://documentation.ajaxsearchpro.com/" title="Documentation"><?php echo __('Online Documentation', 'ajax-search-pro'); ?></a></li>
 						<li><a target="_blank" href="https://knowledgebase.ajaxsearchpro.com/" title="Knowledge Base"><?php echo __('Knowledge base', 'ajax-search-pro'); ?></a></li>
 						<li><a target="_blank" href="https://changelog.ajaxsearchpro.com/" title="Changelog"><?php echo __('Changelog', 'ajax-search-pro'); ?></a></li>
 						<li><a target="_blank" href="https://documentation.ajaxsearchpro.com/plugin-updates/manual-updates"><?php echo __('How to manual update?', 'ajax-search-pro'); ?></a></li>

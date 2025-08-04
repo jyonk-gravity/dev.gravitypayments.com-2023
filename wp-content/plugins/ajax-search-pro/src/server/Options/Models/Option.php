@@ -4,7 +4,7 @@ namespace WPDRMS\ASP\Options\Models;
 
 interface Option {
 	/**
-	 * Returns the option value for storage
+	 * Returns all public properties from the option
 	 *
 	 * @return Array<string, mixed>
 	 */

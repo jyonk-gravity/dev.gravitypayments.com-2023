@@ -86,6 +86,11 @@ class Requirements {
 					$required = true;
 				}
 				break;
+			case 'wd-asp-ajaxsearchpro-addon-bricks':
+				if ( defined('BRICKS_VERSION') ) {
+					$required = true;
+				}
+				break;
 			case 'wd-asp-ajaxsearchpro-addon-elementor':
 				if ( defined('ELEMENTOR_PRO_VERSION') ) {
 					$required = true;
@@ -93,6 +98,11 @@ class Requirements {
 				break;
 			case 'wd-asp-ajaxsearchpro-addon-divi':
 				if ( function_exists('et_setup_theme') ) {
+					$required = true;
+				}
+				break;
+			case 'wd-asp-ajaxsearchpro-addon-blocksy':
+				if ( defined('BLOCKSY_PATH') ) {
 					$required = true;
 				}
 				break;

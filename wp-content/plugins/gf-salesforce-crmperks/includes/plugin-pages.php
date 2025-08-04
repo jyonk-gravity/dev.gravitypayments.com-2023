@@ -12,6 +12,7 @@ if( !class_exists( 'vxg_salesforce_pages' ) ) {
 */
 class vxg_salesforce_pages   extends vxg_salesforce{
     public $ajax=false;
+    public $account=0;
 /**
 * initialize plugin hooks
 *  
@@ -941,13 +942,10 @@ $log_id=$this->post('id');
 $log=$this->data->get_log_by_id($log_id); 
   $data=json_decode($log['data'],true); 
   $response=json_decode($log['response'],true);
-    $triggers=array('manual'=>'Submitted Manually','submit'=>'Form Submission','after_submit'=>'After Form Submission','paid'=>'Payment Completed','update'=>'Entry Update'
-  ,'delete'=>'Entry Deletion','add_note'=>'Entry Note Created','delete_note'=>'Entry Note Deleted','restore'=>'Entry Restored');
+    $triggers=array('manual'=>'Submitted Manually','submit'=>'Form Submission','after_submit'=>'After Form Submission','paid'=>'Payment Completed','subscription_paid'=>'Subscription Payment Completed','update'=>'Entry Update','delete'=>'Entry Deletion','add_note'=>'Entry Note Created','delete_note'=>'Entry Note Deleted','restore'=>'Entry Restored');
   $event= empty($log['event']) ? 'manual' : $log['event'];
   $extra=array('Object'=>$log['object']);
-  if(isset($triggers[$event])){
-    $extra['Trigger']=$triggers[$event];  
-  }
+    $extra['Trigger']=isset($triggers[$event]) ? $triggers[$event] : $event;  
   $extra_log=json_decode($log['extra'],true);
   if(is_array($extra_log)){
       $extra=array_merge($extra,$extra_log);
@@ -1335,7 +1333,7 @@ include_once(self::$path . "templates/feed-account.php");
 
   array_push($form['fields'],array("id" => "status" , "label" => esc_html__('Entry Status', 'gravity-forms-infusionsoft-crm')));
 
-  $skip_inputs=array('checkbox','select','time','date','radio','poll'); 
+  $skip_inputs=array('checkbox','select','time','date','radio','poll','multi_choice'); 
   if(is_array($form['fields'])){
   foreach($form['fields'] as $field){
   if(isset($field["inputs"]) && is_array($field["inputs"]) && !in_array($field['type'] ,$skip_inputs) ){

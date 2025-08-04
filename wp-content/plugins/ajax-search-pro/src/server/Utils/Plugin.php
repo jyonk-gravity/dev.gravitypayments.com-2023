@@ -61,5 +61,14 @@ if ( !class_exists(__NAMESPACE__ . '\Plugin') ) {
 			else
 				return ASP_INCLUDES_PATH . 'views/' . $file;
 		}
+
+		/**
+		 * Checks if user had Ajax Search Lite installed before
+		 *
+		 * @return bool
+		 */
+		public static function hadLiteVersionInstalledBefore(): bool {
+			return count( (array)get_option('asl_options', array()) ) > 0 && get_option('asl_version', 0) > 4732;
+		}
 	}
 }

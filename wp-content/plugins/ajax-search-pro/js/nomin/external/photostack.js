@@ -385,6 +385,26 @@
 
             this.flipped = !this.flipped;
             this.currentItem.addEventListener( 'transitionend', onEndTransitionFn );
+            this.currentItem.addEventListener( 'transitionstart' , function handler(event) {
+                // Get the transition duration (in seconds)
+                const style = getComputedStyle(self.currentItem);
+                const duration = parseFloat(style.transitionDuration) * 1000; // Convert to ms
+
+                // Calculate halfway point
+                const halfway = duration / 2;
+
+                // Trigger callback at halfway point
+                setTimeout(() => {
+                    if ( self.flipped ) {
+                        self.currentItem.classList.add('photostack-flipped');
+                    } else {
+                        self.currentItem.classList.remove('photostack-flipped');
+                    }
+                }, halfway);
+
+                // Remove the event listener to prevent multiple triggers
+                self.currentItem.removeEventListener('transitionstart', handler);
+            });
         }
     }
 

@@ -162,20 +162,22 @@ class SearchOverride extends AbstractFilter {
 		/**
 		 * Reset post type
 		 * Very important. Some archive posts modules fail because asp_override is non-existent.
-		 **/
+		 */
 		if ( empty($wp_query->query_vars['post_type']) || $this->queryVarsHasAspOverridePostType( $wp_query ) ) {
 			$wp_query->query_vars['post_type'] = $asp_query->args->post_type;
 		}
 
 		$wp_query->found_posts = $asp_query->found_posts;
 		if ( ( $wp_query->found_posts / $posts_per_page ) > 1 ) {
-			$wp_query->max_num_pages = ceil($wp_query->found_posts / $posts_per_page);
+			$wp_query->max_num_pages = intval(ceil($wp_query->found_posts / $posts_per_page));
 		} else {
-			$wp_query->max_num_pages = 0;
+			$wp_query->max_num_pages = 1;
 		}
 
-		++self::$overrideCount;
+		$res      = apply_filters('asp/search/override/results', $res, $posts, $wp_query, $asp_query);
+		$wp_query = apply_filters('asp/search/override/wp_query', $wp_query, $res, $posts, $asp_query);
 
+		++self::$overrideCount;
 		if ( $return_as === 'posts' ) {
 			return $res;
 		} else {
@@ -420,6 +422,14 @@ class SearchOverride extends AbstractFilter {
 			$_POST['np_asp_data'] = $_COOKIE['asp_data'];
 			$_POST['np_asid']     = $_COOKIE['asp_id'];
 			$_p_id                = $_COOKIE['asp_id'];
+		} elseif (
+			isset($wp_query, $wp_query->query_vars['asp_id'])
+		) {
+			if ( $check_only ) {
+				return true;
+			}
+			$_p_id = $wp_query->query_vars['asp_id'];
+			$s_data = array();
 		} else {
 			// Probably the search results page visited via URL, not triggered via search bar
 			if ( isset($_GET['post_type']) && $_GET['post_type'] == 'product' ) {
@@ -553,7 +563,9 @@ class SearchOverride extends AbstractFilter {
 	}
 
 	private function queryVarsHasAspOverridePostType( ?WP_Query $wp_query ): bool {
-		if ( $wp_query === null || !isset($wp_query->query_vars['post_type']) ) return false;
+		if ( $wp_query === null || !isset($wp_query->query_vars['post_type']) ) {
+			return false;
+		}
 
 		if ( is_array($wp_query->query_vars['post_type']) ) {
 			return in_array('asp_override', $wp_query->query_vars['post_type']);

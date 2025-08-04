@@ -42,12 +42,12 @@ class VanillaJsLoader extends JsLoader {
                     s.async = true; // This includes the script as async.
                     s.src = "https://<?= $scriptDomain ?>/assets/js/bundles/spai-lib-bg<?= $convert === 'detect' ? '-webp' : '' ?>" + v
                         + ".<?=$vjsVer?><?=($dbg ? '.dev' : '')?>.min.js?v=<?= SHORTPIXEL_AI_VERSION ?>";
-                    w.spaiDomain = "<?= $spaiDomain ?>";
+                    w.spaiDomain = "<?= esc_js($spaiDomain) ?>";
                     w.spaiData = {
-                        version: "<?= SHORTPIXEL_AI_VERSION ?>",
-                        key: "<?= end($apiUrlParts)?>",
-                        quality: "<?= $this->settings->compression->level ?>",
-                        convert: "<?= $convert ?>",
+                        version: "<?= esc_js(SHORTPIXEL_AI_VERSION) ?>",
+                        key: "<?= esc_js(end($apiUrlParts)) ?>",
+                        quality: "<?= esc_js($this->settings->compression->level) ?>",
+                        convert: "<?= esc_js($convert) ?>",
                         lqip: <?= $this->settings->behaviour->lqip ? 'true' : 'false' ?>,
                         <?php
                             if(!!$this->settings->compression->webp && !(!!$this->settings->compression->png_to_webp && !!$this->settings->compression->jpg_to_webp && !!$this->settings->compression->gif_to_webp)) {
@@ -73,7 +73,7 @@ class VanillaJsLoader extends JsLoader {
                         doSelectors: "__SPAI_DO_SELECTORS__",
                         exclusions: "__SPAI_EXCLUSIONS__",
                         sizeFromImageSuffix: <?php echo(defined('SPAI_FILENAME_RESOLUTION_UNSAFE') ? 'false' : 'true'); ?>,
-                        ajax_url: "<?= admin_url( 'admin-ajax.php' ) ?>",
+                        ajax_url: "<?= esc_js(admin_url('admin-ajax.php')) ?>"
                     };
                     b.appendChild(s);
                 }(window, document));

@@ -6,6 +6,7 @@ use WPDRMS\ASP\Utils\FrontendFilters;
 use WPDRMS\ASP\Utils\MB;
 use WPDRMS\ASP\Utils\Polylang\StringTranslations as PolylangStringTranslations;
 use WPDRMS\ASP\Utils\Post;
+use WPDRMS\ASP\Utils\PostMeta;
 use WPDRMS\ASP\Utils\Str;
 
 defined('ABSPATH') or die("You can't access this file directly.");
@@ -18,31 +19,12 @@ defined('ABSPATH') or die("You can't access this file directly.");
  *  4. BACK-END SPECIFIC
  *  5. NON-AJAX RESULTS
  *  6. FRONT-END
+ *  7. Polyfill
 */
 
 // ----------------------------------------------------------------------------------------------------------------------
 // 1. BASIC FUNCTIONS
 // ----------------------------------------------------------------------------------------------------------------------
-
-if ( !function_exists('wpd_is_wp_version') ) {
-	function wpd_is_wp_version( $operator = '>', $version = '4.5' ) {
-		global $wp_version;
-
-		return version_compare($wp_version, $version, $operator);
-	}
-}
-
-if ( !function_exists('wpd_is_wp_older') ) {
-	function wpd_is_wp_older( $version = '4.5' ) {
-		return wpd_is_wp_version('<', $version);
-	}
-}
-
-if ( !function_exists('wpd_is_wp_newer') ) {
-	function wpd_is_wp_newer( $version = '4.5' ) {
-		return wpd_is_wp_version('>', $version);
-	}
-}
 
 if ( !function_exists('wpd_get_terms') ) {
 	function wpd_get_terms( $args = array() ) {
@@ -338,15 +320,16 @@ if ( !function_exists('wd_array_merge_recursive_distinct') ) {
 if ( !function_exists('wd_flatten_array') ) {
 	/**
 	 * Flattens array without preserving the keys
+	 *
 	 * @param mixed $array
 	 * @return array<int, mixed>
 	 */
-	function wd_flatten_array(array $array): array {
+	function wd_flatten_array( array $array ): array {
 		$recursiveArrayIterator = new RecursiveArrayIterator(
 			$array,
 			RecursiveArrayIterator::CHILD_ARRAYS_ONLY
 		);
-		$iterator = new RecursiveIteratorIterator($recursiveArrayIterator);
+		$iterator               = new RecursiveIteratorIterator($recursiveArrayIterator);
 
 		return iterator_to_array($iterator, false);
 	}
@@ -1798,27 +1781,11 @@ if ( !function_exists('asp_parse_custom_field_filters') ) {
 			}
 
 			if ( isset($bfield->asp_f_number_range_from, $bfield->asp_f_number_range_to) ) {
-				if ( $bfield->asp_f_number_range_from == '' ) {
-					$min = $wpdb->get_var(
-						$wpdb->prepare(
-							"SELECT MIN(CAST(meta_value as SIGNED)) FROM $table_name WHERE meta_key LIKE '%s'",
-							$bfield->asp_f_field
-						)
-					);
-					if ( !is_wp_error($min) && $min != null ) {
-						$bfield->asp_f_number_range_from = $min;
-					}
+				if ( $bfield->asp_f_number_range_from === '' ) {
+					$bfield->asp_f_number_range_from = PostMeta::getNumericFieldMin($bfield->asp_f_field);
 				}
-				if ( $bfield->asp_f_number_range_to == '' ) {
-					$max = $wpdb->get_var(
-						$wpdb->prepare(
-							"SELECT MAX(CAST(meta_value as SIGNED)) FROM $table_name WHERE meta_key LIKE '%s'",
-							$bfield->asp_f_field
-						)
-					);
-					if ( !is_wp_error($max) && $max != null ) {
-						$bfield->asp_f_number_range_to = $max;
-					}
+				if ( $bfield->asp_f_number_range_to === '' ) {
+					$bfield->asp_f_number_range_to = PostMeta::getNumericFieldMax($bfield->asp_f_field);
 				}
 
 				$default = array( $bfield->asp_f_number_range_default1, $bfield->asp_f_number_range_default2 );
@@ -1856,26 +1823,10 @@ if ( !function_exists('asp_parse_custom_field_filters') ) {
 
 			if ( isset($bfield->asp_f_slider_from, $bfield->asp_f_slider_to) ) {
 				if ( $bfield->asp_f_slider_from == '' ) {
-					$min = $wpdb->get_var(
-						$wpdb->prepare(
-							"SELECT MIN(CAST(meta_value as SIGNED)) FROM $table_name WHERE meta_key LIKE '%s'",
-							$bfield->asp_f_field
-						)
-					);
-					if ( !is_wp_error($min) && $min != null ) {
-						$bfield->asp_f_slider_from = $min;
-					}
+					$bfield->asp_f_slider_from = PostMeta::getNumericFieldMin($bfield->asp_f_field);
 				}
 				if ( $bfield->asp_f_slider_to == '' ) {
-					$max = $wpdb->get_var(
-						$wpdb->prepare(
-							"SELECT MAX(CAST(meta_value as SIGNED)) FROM $table_name WHERE meta_key LIKE '%s'",
-							$bfield->asp_f_field
-						)
-					);
-					if ( !is_wp_error($max) && $max != null ) {
-						$bfield->asp_f_slider_to = $max;
-					}
+					$bfield->asp_f_slider_to = PostMeta::getNumericFieldMax($bfield->asp_f_field);
 				}
 
 				$default = $bfield->asp_f_slider_default == '' ? $bfield->asp_f_slider_from : $bfield->asp_f_slider_default;
@@ -1907,26 +1858,10 @@ if ( !function_exists('asp_parse_custom_field_filters') ) {
 			}
 			if ( isset($bfield->asp_f_range_from, $bfield->asp_f_range_to) ) {
 				if ( $bfield->asp_f_range_from == '' ) {
-					$min = $wpdb->get_var(
-						$wpdb->prepare(
-							"SELECT MIN(CAST(meta_value as SIGNED)) FROM $table_name WHERE meta_key LIKE '%s'",
-							$bfield->asp_f_field
-						)
-					);
-					if ( !is_wp_error($min) && $min != null ) {
-						$bfield->asp_f_range_from = $min;
-					}
+					$bfield->asp_f_range_from = PostMeta::getNumericFieldMin($bfield->asp_f_field);
 				}
 				if ( $bfield->asp_f_range_to == '' ) {
-					$max = $wpdb->get_var(
-						$wpdb->prepare(
-							"SELECT MAX(CAST(meta_value as SIGNED)) FROM $table_name WHERE meta_key LIKE '%s'",
-							$bfield->asp_f_field
-						)
-					);
-					if ( !is_wp_error($max) && $max != null ) {
-						$bfield->asp_f_range_to = $max;
-					}
+					$bfield->asp_f_range_to = PostMeta::getNumericFieldMax($bfield->asp_f_field);
 				}
 
 				$bfield->asp_f_range_default1 = $bfield->asp_f_range_default1 == '' ? $bfield->asp_f_range_from : $bfield->asp_f_range_default1;
@@ -2909,5 +2844,26 @@ if ( !function_exists('asp_register_advanced_field_option') ) {
 				}
 			}
 		);
+	}
+}
+
+// ----------------------------------------------------------------------------------------------------------------------
+// 7. Polyfill
+// Well, not exactly classic polyfill, but with asp_ prefixes
+// ----------------------------------------------------------------------------------------------------------------------
+if ( !function_exists('asp_wp_get_wp_version') ) {
+	/**
+	 * wp_get_wp_version function only exists in wp 6.7+
+	 *
+	 * @return mixed
+	 */
+	function asp_wp_get_wp_version() {
+		static $wp_version;
+
+		if ( !isset($wp_version) ) {
+			require ABSPATH . WPINC . '/version.php';
+		}
+
+		return $wp_version;
 	}
 }

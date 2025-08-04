@@ -6,6 +6,7 @@
 	?>
 </div>
 <div wd-disable-on="return_attachments:0">
+
 <div class="item"><?php
 	$o = new wpdreamsCustomSelect("attachments_use_index", __('Search engine for media', 'ajax-search-pro'),
 		array(
@@ -123,6 +124,9 @@
         <?php echo __('This only has effect if you have use any custom field filters.', 'ajax-search-pro'); ?>
     </p>
 </div>
+	<div id="wdo" class="wdo">
+		<div id="asp-search-attachment-directories"></div>
+	</div>
 <div class="item">
 	<?php
 	$o = new wd_TextareaExpandable("attachment_exclude", __('Exclude attachment IDs', 'ajax-search-pro'),

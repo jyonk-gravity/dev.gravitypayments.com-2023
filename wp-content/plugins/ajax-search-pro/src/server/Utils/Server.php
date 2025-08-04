@@ -120,6 +120,7 @@ class Server {
 				'127.0.0.1',
 				'::1',
 				'wpengine.com',
+				'.wpenginepowered.com',
 				'.kinsta.cloud',
 				'.local/',
 				'.test/',

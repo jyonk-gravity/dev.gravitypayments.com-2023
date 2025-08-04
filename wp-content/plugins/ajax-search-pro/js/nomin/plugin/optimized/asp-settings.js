@@ -112,7 +112,8 @@ external_AjaxSearchPro_namespaceObject.plugin.reportSettingsValidity = function(
       }
     });
     $_this.find("select").forEach(function() {
-      if (external_DoMini_namespaceObject(this).val() == null || external_DoMini_namespaceObject(this).val() === "" || external_DoMini_namespaceObject(this).closest("fieldset").is(".asp_filter_tax, .asp_filter_content_type") && parseInt(external_DoMini_namespaceObject(this).val()) === -1) {
+      const value = external_DoMini_namespaceObject(this).val();
+      if (value == null || value === "" || Array.isArray(value) && value.length === 0 || external_DoMini_namespaceObject(this).closest("fieldset").is(".asp_filter_tax, .asp_filter_content_type") && parseInt(external_DoMini_namespaceObject(this).val()) === -1) {
         fieldset_valid = false;
       }
     });
@@ -571,6 +572,7 @@ external_AjaxSearchPro_namespaceObject.plugin.initSettingsEvents = function() {
       }
     });
   };
+  setOptionCheckedClass();
   $this.n("searchsettings").on("click", function() {
     $this.settingsChanged = true;
   });

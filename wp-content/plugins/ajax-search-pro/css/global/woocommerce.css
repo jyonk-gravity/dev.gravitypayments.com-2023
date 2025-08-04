@@ -88,4 +88,45 @@
 			border-radius: 0 4px 4px 0;
 		}
 	}
+
+	.sale-badge {
+		--font-size: 14px;
+		--font-color: white;
+		--background-color: #6246d7;
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		padding: 6px 12px;
+		font-size: var(--font-size);
+		color: var(--font-color);
+		background: var(--background-color);
+		box-shadow: 0 0 6px -3px rgb(0, 0, 0);
+
+		&.sale-badge-capsule {
+			border-radius: 50px;
+		}
+
+		&.sale-badge-round {
+			border-radius: 3px;
+		}
+
+		&.sale-badge-top-left {
+			right: unset;
+			left: 12px;
+		}
+
+		&.sale-badge-bottom-left {
+			right: unset;
+			top: unset;
+			bottom: 12px;
+			left: 12px;
+		}
+
+		&.sale-badge-bottom-right {
+			top: unset;
+			bottom: 12px;
+		}
+	}
+
+
 }

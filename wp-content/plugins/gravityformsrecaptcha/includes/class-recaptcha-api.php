@@ -318,25 +318,51 @@ class RECAPTCHA_API {
 	 * @param string $project The Google Cloud Project ID.
 	 *
 	 * @since 1.7.0
+	 * @since 1.8.0 Increased the default page size to 100 and added pagination to retrieve all keys.
 	 *
 	 * @return array|mixed
 	 */
 	public function get_enterprise_site_keys( $project ) {
-		$request_path = 'projects/' . $project . '/keys';
+		$request_path_base = 'projects/' . $project . '/keys';
 
 		$headers = array(
 			'Authorization' => 'Bearer ' . $this->access_token,
 			'Accept'        => 'application/json',
 		);
 
-		$response = $this->make_request( $request_path, array(), $headers );
+		$all_keys   = array(
+			'keys' => array(),
+		);
+		$page_token = null;
+		$page_size  = apply_filters( 'gform_recaptcha_enterprise_keys_page_size', 100 );
 
-		if ( is_wp_error( $response ) ) {
-			return array();
-		}
+		$query_params = array(
+			'pageSize' => $page_size,
+		);
 
-		$data = json_decode( $response, true );
+		do {
+			if ( $page_token ) {
+				$query_params['pageToken'] = $page_token;
+			}
 
-		return $data;
+			$request_path = $request_path_base . '?' . http_build_query( $query_params );
+
+			$response = $this->make_request( $request_path, array(), $headers );
+
+			if ( is_wp_error( $response ) ) {
+				$this->addon->log_error( __METHOD__ . '(): Unable to retrieve site keys: ' . $response->get_error_message() );
+				break;
+			}
+
+			$data = json_decode( $response, true );
+
+			if ( isset( $data['keys'] ) && is_array( $data['keys'] ) ) {
+				$all_keys['keys'] = array_merge( $all_keys['keys'], $data['keys'] );
+			}
+
+			$page_token = rgar( $data, 'nextPageToken' ) ? $data['nextPageToken'] : null;
+		} while ( $page_token );
+
+		return $all_keys;
 	}
-}
+ }

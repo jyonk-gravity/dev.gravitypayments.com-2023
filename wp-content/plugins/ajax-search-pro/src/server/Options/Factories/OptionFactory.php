@@ -4,6 +4,7 @@ namespace WPDRMS\ASP\Options\Factories;
 
 use WPDRMS\ASP\Options\Models\BorderOption;
 use WPDRMS\ASP\Options\Models\BoxShadowOption;
+use WPDRMS\ASP\Options\Models\DirectoryListOption;
 use WPDRMS\ASP\Options\Models\Option;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 use InvalidArgumentException;
@@ -15,8 +16,9 @@ class OptionFactory {
 	 * @var array<string, class-string>
 	 */
 	private const TYPES = array(
-		'border'    => BorderOption::class,
-		'boxshadow' => BoxShadowOption::class,
+		'border'         => BorderOption::class,
+		'box_shadow'     => BoxShadowOption::class,
+		'directory_list' => DirectoryListOption::class,
 	);
 
 	/**
@@ -28,7 +30,7 @@ class OptionFactory {
 	 */
 	public function create( string $type, ...$args ): Option {
 		if ( !isset(self::TYPES[ $type ]) ) {
-			throw new InvalidArgumentException('woop');
+			throw new InvalidArgumentException("Invalid option type: $type");
 		}
 
 		$class = self::TYPES[ $type ];

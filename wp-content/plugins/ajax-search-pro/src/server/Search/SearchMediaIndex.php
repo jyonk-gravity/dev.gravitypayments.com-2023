@@ -22,11 +22,10 @@ class SearchMediaIndex extends SearchIndex {
 	}
 
 	protected function postProcess(): void {
-		$args        = &$this->args;
-		$s           = $this->s;
-		$_s          = $this->_s;
-		$sd          = $args['_sd'] ?? array();
-		$com_options = wd_asp()->o['asp_compatibility'];
+		$args = &$this->args;
+		$s    = $this->s;
+		$_s   = $this->_s;
+		$sd   = $args['_sd'] ?? array();
 
 		// No post-processing if the search data param is missing or explicitly set
 		if ( empty($args['_sd']) || !$args['_post_process'] ) {
@@ -45,6 +44,7 @@ class SearchMediaIndex extends SearchIndex {
 			if ( !empty($sd['advtitlefield']) ) {
 				$r->title = AdvancedFieldParser::instance()->parse($sd['advtitlefield'], $r);
 			}
+			$r->title = wd_substr_at_word($r->title, $sd['post_type_res_title_length']);
 
 			$image_settings = $sd['image_options'];
 			$image_args     = array(

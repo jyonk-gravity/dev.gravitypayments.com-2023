@@ -6,7 +6,10 @@ use WPDRMS\ASP\Asset\AssetInterface;
 use WPDRMS\ASP\BlockEditor\ASPBlock;
 use WPDRMS\ASP\BlockEditor\BlockEditorAssets;
 use WPDRMS\ASP\BlockEditor\BlockInterface;
+use WPDRMS\ASP\Integration\Imagely\NextGenGallery;
 use WPDRMS\ASP\Options\OptionAssets;
+use WPDRMS\ASP\Options\Routes\DirectoriesRoute;
+use WPDRMS\ASP\Options\Routes\IndexTableOptionsRoute;
 use WPDRMS\ASP\Options\Routes\SearchOptionsRoute;
 use WPDRMS\ASP\Options\Routes\TaxonomyTermsRoute;
 use WPDRMS\ASP\Patterns\SingletonTrait;
@@ -14,34 +17,37 @@ use WPDRMS\ASP\Rest\RestInterface;
 use WPDRMS\ASP\Rest\TimedModalRoutes;
 
 /**
- * @phpstan-type FactorySupports RestInterface|AssetInterface|BlockInterface
- * @phpstan-type FactoryResults FactorySupports[]
+ * Returns all class instances for a given interface name
+ *
+ * @see .phpstorm.meta.php for corrected type hints
  */
 class Factory {
 	use SingletonTrait;
 
 	const SUPPORTED_INTERFACES = array(
-		RestInterface::class  => array(
+		'Rest'        => array(
 			TimedModalRoutes::class,
+			DirectoriesRoute::class,
 			TaxonomyTermsRoute::class,
 			SearchOptionsRoute::class,
+			IndexTableOptionsRoute::class,
 		),
-		AssetInterface::class => array(
+		'Asset'       => array(
 			OptionAssets::class,
 		),
-		BlockInterface::class => array(
+		'Block'       => array(
 			ASPBlock::class,
+		),
+		'Integration' => array(
+			NextGenGallery::class,
 		),
 	);
 
 	/**
-	 * Get the objects from
+	 * Get all the objects array for a given interface
 	 *
-	 * @template T of FactorySupports
-	 * @param class-string<T>   $interface_name
-	 * @param array<mixed>|null $args
-	 * @return T[]
-	 * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
+	 * @param key-of<self::SUPPORTED_INTERFACES> $interface_name
+	 * @param mixed[]                            $args
 	 */
 	public function get( string $interface_name, ?array $args = null ): array {
 		if ( !isset(self::SUPPORTED_INTERFACES[ $interface_name ]) ) {

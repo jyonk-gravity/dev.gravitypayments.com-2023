@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Perfmatters\n"
-"POT-Creation-Date: 2025-05-08 12:23-0700\n"
-"PO-Revision-Date: 2025-05-09 21:31+0300\n"
+"POT-Creation-Date: 2025-06-17 13:53-0700\n"
+"PO-Revision-Date: 2025-06-18 18:48+0300\n"
 "Last-Translator: Irina\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -60,37 +60,61 @@ msgstr "Ошибка"
 msgid "Unlimited site license required."
 msgstr "Требуется лицензия на неограниченное количество сайтов."
 
-#: inc/CLI.php:38
-msgid "License activated!"
-msgstr "Лицензия активирована!"
+#: inc/CLI.php:37
+msgid "License activated."
+msgstr "Лицензия активирована."
 
-#: inc/CLI.php:41
+#: inc/CLI.php:40
 msgid "License could not be activated."
 msgstr "Не удалось активировать лицензию."
 
-#: inc/CLI.php:55
-msgid "License deactivated!"
-msgstr "Лицензия деактивирована!"
+#: inc/CLI.php:54
+msgid "License deactivated."
+msgstr "Лицензия деактивирована."
 
-#: inc/CLI.php:58
+#: inc/CLI.php:57
 msgid "License could not be deactivated."
 msgstr "Не удалось деактивировать лицензию."
 
-#: inc/CLI.php:78
-msgid "License removed!"
-msgstr "Лицензия удалена!"
+#: inc/CLI.php:77
+msgid "License removed."
+msgstr "Лицензия удалена."
 
-#: inc/CLI.php:81
+#: inc/CLI.php:80
 msgid "License could not be removed."
 msgstr "Не удалось удалить лицензию."
 
-#: inc/CLI.php:102
+#: inc/CLI.php:101
 msgid "Used CSS cleared for all network sites."
 msgstr "Используемый CSS очищен для всех сайтов сети."
 
-#: inc/CLI.php:106 inc/classes/CSS.php:786 inc/classes/CSS.php:826
+#: inc/CLI.php:105 inc/classes/CSS.php:786 inc/classes/CSS.php:826
 msgid "Used CSS cleared."
 msgstr "Используемые CSS очищены."
+
+#: inc/CLI.php:124
+msgid "File not found."
+msgstr "Файл не найден."
+
+#: inc/CLI.php:131
+msgid "Please use a valid .json file."
+msgstr "Используйте действительный .json файл."
+
+#: inc/CLI.php:144
+msgid "Settings imported."
+msgstr "Настройки импортированы."
+
+#: inc/CLI.php:163 inc/CLI.php:199
+msgid "Option not found."
+msgstr "Параметр не найден."
+
+#: inc/CLI.php:180
+msgid "Option enabled."
+msgstr "Параметр включен."
+
+#: inc/CLI.php:215
+msgid "Option disabled."
+msgstr "Параметры отключен."
 
 #: inc/admin.php:37 inc/admin.php:98
 msgid "General"
@@ -144,7 +168,7 @@ msgstr "Сеть"
 msgid "License"
 msgstr "Лицензия"
 
-#: inc/admin.php:66 inc/support.php:2 perfmatters.php:170
+#: inc/admin.php:66 inc/support.php:2 perfmatters.php:172
 msgid "Support"
 msgstr "Поддержка"
 
@@ -242,15 +266,15 @@ msgstr "Редакции"
 msgid "Auto Drafts"
 msgstr "Авто черновики"
 
-#: inc/classes/DatabaseOptimizer.php:179 inc/settings.php:1983
+#: inc/classes/DatabaseOptimizer.php:179 inc/settings.php:2013
 msgid "Trashed Posts"
 msgstr "Удалённые записи"
 
-#: inc/classes/DatabaseOptimizer.php:180 inc/settings.php:1998
+#: inc/classes/DatabaseOptimizer.php:180 inc/settings.php:2028
 msgid "Spam Comments"
 msgstr "Спам комментарии"
 
-#: inc/classes/DatabaseOptimizer.php:181 inc/settings.php:2013
+#: inc/classes/DatabaseOptimizer.php:181 inc/settings.php:2043
 msgid "Trashed Comments"
 msgstr "Удалённые комментарии"
 
@@ -262,7 +286,7 @@ msgstr "Просроченные транзиенты"
 msgid "Transients"
 msgstr "Транзиенты"
 
-#: inc/classes/DatabaseOptimizer.php:184 inc/settings.php:2058
+#: inc/classes/DatabaseOptimizer.php:184 inc/settings.php:2088
 msgid "Tables"
 msgstr "Таблицы"
 
@@ -322,7 +346,7 @@ msgstr "Сканирование БД завершено."
 msgid "Local fonts cleared."
 msgstr "Локальные шрифты очищены."
 
-#: inc/classes/JS.php:333
+#: inc/classes/JS.php:344
 msgid "Minified JS cleared."
 msgstr "Очищен минифицированный JS."
 
@@ -435,11 +459,11 @@ msgid "Choose a subsite that you want to pull default settings from."
 msgstr ""
 "Выберите дочерний сайт, с которого вы хотите получить настройки по умолчанию."
 
-#: inc/functions_network.php:45 inc/settings.php:1853
+#: inc/functions_network.php:45 inc/settings.php:1883
 msgid "Clean Uninstall"
 msgstr "Полная деинсталляция"
 
-#: inc/functions_network.php:52 inc/settings.php:1860
+#: inc/functions_network.php:52 inc/settings.php:1890
 msgid ""
 "When enabled, this will cause all Perfmatters options data to be removed "
 "from your database when the plugin is uninstalled."
@@ -461,7 +485,7 @@ msgstr "Отсутствует"
 
 #: inc/functions_script_manager.php:49 inc/functions_script_manager.php:61
 #: inc/functions_script_manager.php:103 inc/script_manager.php:169
-#: inc/script_manager.php:215 inc/settings.php:1776
+#: inc/script_manager.php:215 inc/settings.php:1806
 msgid "Script Manager"
 msgstr "Менеджер скриптов"
 
@@ -542,8 +566,8 @@ msgstr "ВКЛ"
 msgid "OFF"
 msgstr "ОТКЛ"
 
-#: inc/functions_script_manager.php:552 inc/settings.php:1126
-#: inc/settings.php:2125
+#: inc/functions_script_manager.php:552 inc/settings.php:1156
+#: inc/settings.php:2155
 msgid "Disabled"
 msgstr "Отключено"
 
@@ -569,9 +593,9 @@ msgstr "Пользователи"
 #: inc/settings.php:310 inc/settings.php:329 inc/settings.php:349
 #: inc/settings.php:377 inc/settings.php:423 inc/settings.php:624
 #: inc/settings.php:812 inc/settings.php:832 inc/settings.php:1052
-#: inc/settings.php:1123 inc/settings.php:1145 inc/settings.php:1221
-#: inc/settings.php:1405 inc/settings.php:1500 inc/settings.php:1698
-#: inc/settings.php:1717 inc/settings.php:2595
+#: inc/settings.php:1153 inc/settings.php:1175 inc/settings.php:1251
+#: inc/settings.php:1435 inc/settings.php:1530 inc/settings.php:1728
+#: inc/settings.php:1747 inc/settings.php:2655
 msgid "Default"
 msgstr "по умолчанию"
 
@@ -588,12 +612,12 @@ msgid "Devices"
 msgstr "Устройства"
 
 #: inc/functions_script_manager.php:702 inc/functions_script_manager.php:867
-#: inc/settings.php:2477 inc/settings.php:2528
+#: inc/settings.php:2507 inc/settings.php:2588
 msgid "Desktop"
 msgstr "Настольный ПК"
 
 #: inc/functions_script_manager.php:703 inc/functions_script_manager.php:868
-#: inc/settings.php:2478 inc/settings.php:2529
+#: inc/settings.php:2508 inc/settings.php:2589
 msgid "Mobile"
 msgstr "Мобильный"
 
@@ -611,7 +635,7 @@ msgstr "Несоответствие версии плагина MU."
 
 #: inc/functions_script_manager.php:1537 inc/functions_script_manager.php:1545
 #: inc/script_manager.php:194 inc/script_manager.php:328
-#: inc/script_manager.php:340 inc/settings.php:2780
+#: inc/script_manager.php:340 inc/settings.php:2840
 msgid "View Documentation"
 msgstr "Посмотреть документацию"
 
@@ -747,9 +771,9 @@ msgstr ""
 msgid "Global View"
 msgstr "Глобальное представление"
 
-#: inc/script_manager.php:171 inc/script_manager.php:287 inc/settings.php:1846
-#: inc/settings.php:2469 inc/settings.php:2518 inc/settings.php:2561
-#: perfmatters.php:183
+#: inc/script_manager.php:171 inc/script_manager.php:287 inc/settings.php:1876
+#: inc/settings.php:2499 inc/settings.php:2578 inc/settings.php:2621
+#: perfmatters.php:185
 msgid "Settings"
 msgstr "Настройки"
 
@@ -1481,11 +1505,11 @@ msgstr ""
 msgid "Used CSS Method"
 msgstr "Используемый метод CSS"
 
-#: inc/settings.php:812 inc/settings.php:1501
+#: inc/settings.php:812 inc/settings.php:1531
 msgid "Inline"
 msgstr "Встроить"
 
-#: inc/settings.php:813 inc/settings.php:1500
+#: inc/settings.php:813 inc/settings.php:1530
 msgid "File"
 msgstr "Файл"
 
@@ -1501,8 +1525,8 @@ msgstr "Поведение таблицы стилей"
 msgid "Async"
 msgstr "Async (асинхронная)"
 
-#: inc/settings.php:834 inc/settings.php:2470 inc/settings.php:2520
-#: inc/settings.php:2562
+#: inc/settings.php:834 inc/settings.php:2500 inc/settings.php:2580
+#: inc/settings.php:2622
 msgid "Remove"
 msgstr "Удалить"
 
@@ -1536,7 +1560,7 @@ msgstr ""
 "Исключить удаление определенных селекторов CSS, добавив ID элемента, имя "
 "класса и т. д. (#id, .class). Формат: по одному на строку"
 
-#: inc/settings.php:878 inc/settings.php:1540 inc/settings.php:1608
+#: inc/settings.php:878 inc/settings.php:1570 inc/settings.php:1638
 msgid "CDN URL"
 msgstr "URL-адрес CDN"
 
@@ -1649,10 +1673,29 @@ msgstr ""
 "example.com/font.woff2"
 
 #: inc/settings.php:1080
+msgid "Cloudflare Early Hints"
+msgstr "Ранние подсказки Cloudflare"
+
+#: inc/settings.php:1087
+msgid "Send early hint link headers for existing Perfmatters preloads."
+msgstr ""
+"Отправлять ранние заголовки ссылок-подсказок для существующих "
+"предварительных загрузок Perfmatters."
+
+#: inc/settings.php:1095
+msgid "Early Hint Types"
+msgstr "Типы ранних подсказок"
+
+#: inc/settings.php:1102
+msgid "Choose which file types get early hint link headers."
+msgstr ""
+"Выберите, какие типы файлов получат заголовки ссылок с ранними подсказками."
+
+#: inc/settings.php:1110
 msgid "Fetch Priority"
 msgstr "Приоритет выборки"
 
-#: inc/settings.php:1087
+#: inc/settings.php:1117
 msgid ""
 "Add the fetchpriority HTML attribute to a resource to proritize it higher or "
 "lower. This can help improve Largest Contentful Paint (LCP)."
@@ -1661,67 +1704,67 @@ msgstr ""
 "высокий или низкий приоритет. Это может помочь самую большую отрисовку "
 "контента (LCP)."
 
-#: inc/settings.php:1094
+#: inc/settings.php:1124
 msgid "Disable Core Fetch"
 msgstr "Отключить выборку ядра"
 
-#: inc/settings.php:1101
+#: inc/settings.php:1131
 msgid "Disable the fetch priority attribute added by WordPress core."
 msgstr "Отключите атрибут приоритета выборки, добавленный ядром WordPress."
 
-#: inc/settings.php:1109
+#: inc/settings.php:1139
 msgid "Speculative Loading"
 msgstr "Спекулятивная загрузка"
 
-#: inc/settings.php:1114
+#: inc/settings.php:1144
 msgid "Mode"
 msgstr "Режим"
 
-#: inc/settings.php:1123 inc/settings.php:1145 inc/settings.php:2487
+#: inc/settings.php:1153 inc/settings.php:1175 inc/settings.php:2517
 msgid "Auto"
 msgstr "Авто"
 
-#: inc/settings.php:1124
+#: inc/settings.php:1154
 msgid "Prefetch"
 msgstr "Предварительная выборка"
 
-#: inc/settings.php:1125
+#: inc/settings.php:1155
 msgid "Prerender"
 msgstr "Предварительный рендеринг"
 
-#: inc/settings.php:1128
+#: inc/settings.php:1158
 msgid "Change the mode used for speculative loading."
 msgstr "Изменение режима спекулятивной загрузки."
 
-#: inc/settings.php:1136
+#: inc/settings.php:1166
 msgid "Eagerness"
 msgstr "Cтремление"
 
-#: inc/settings.php:1146
+#: inc/settings.php:1176
 msgid "Conservative"
 msgstr "Консервативный"
 
-#: inc/settings.php:1147
+#: inc/settings.php:1177
 msgid "Moderate"
 msgstr "Умеренный"
 
-#: inc/settings.php:1148
+#: inc/settings.php:1178
 msgid "Eager"
 msgstr "Нетерпеливый"
 
-#: inc/settings.php:1150
+#: inc/settings.php:1180
 msgid "Change how agressive speculative loading will behave."
 msgstr "Изменение поведения спекулятивной загрузки."
 
-#: inc/settings.php:1157
+#: inc/settings.php:1187
 msgid "Connection"
 msgstr "Подключение"
 
-#: inc/settings.php:1162
+#: inc/settings.php:1192
 msgid "Preconnect"
 msgstr "Предварительное подключение"
 
-#: inc/settings.php:1169
+#: inc/settings.php:1199
 msgid ""
 "Preconnect allows the browser to set up early connections before an HTTP "
 "request, eliminating roundtrip latency and saving time for users. Format: "
@@ -1731,11 +1774,11 @@ msgstr ""
 "запросом, устраняя задержку в обоих направлениях и экономя время для "
 "пользователей. Формат: https://example.com"
 
-#: inc/settings.php:1176
+#: inc/settings.php:1206
 msgid "DNS Prefetch"
 msgstr "Предварительный выбор DNS"
 
-#: inc/settings.php:1186
+#: inc/settings.php:1216
 msgid ""
 "Resolve domain names before a user clicks. Format: //example.com (one per "
 "line)"
@@ -1743,37 +1786,37 @@ msgstr ""
 "Разрешите доменные имена до того, как пользователь щелкнет. Формат: //"
 "example.com (по одному в строке)"
 
-#: inc/settings.php:1197
+#: inc/settings.php:1227
 msgid "Images"
 msgstr "Изображения"
 
-#: inc/settings.php:1204
+#: inc/settings.php:1234
 msgid "Enable lazy loading on images."
 msgstr "Включить отложенную загрузку изображений."
 
-#: inc/settings.php:1212
+#: inc/settings.php:1242
 msgid "Exclude Leading Images"
 msgstr "Исключить ведущие изображения"
 
-#: inc/settings.php:1228
+#: inc/settings.php:1258
 msgid "Exclude a certain number of images starting from the top of the page."
 msgstr ""
 "Исключить определенное количество изображений, начиная с верхней части "
 "страницы."
 
-#: inc/settings.php:1236
+#: inc/settings.php:1266
 msgid "iFrames and Videos"
 msgstr "iFrames и видео"
 
-#: inc/settings.php:1243
+#: inc/settings.php:1273
 msgid "Enable lazy loading on iframes and videos."
 msgstr "Включить отложенную загрузку iframes и видео."
 
-#: inc/settings.php:1251
+#: inc/settings.php:1281
 msgid "YouTube Preview Thumbnails"
 msgstr "Миниатюры предпросмотра YouTube"
 
-#: inc/settings.php:1258
+#: inc/settings.php:1288
 msgid ""
 "Swap out YouTube iFrames with preview thumbnails. The original iFrame is "
 "loaded when the thumbnail is clicked."
@@ -1781,11 +1824,11 @@ msgstr ""
 "Замена YouTube iFrames миниатюрами предпросмотра. Исходный iFrame "
 "загружается при щелчке миниатюры."
 
-#: inc/settings.php:1266
+#: inc/settings.php:1296
 msgid "Exclude from Lazy Loading"
 msgstr "Исключить из отложенной загрузки"
 
-#: inc/settings.php:1276
+#: inc/settings.php:1306
 msgid ""
 "Exclude specific elements from lazy loading. Exclude an element by adding "
 "the source URL (example.png) or by adding any unique portion of its "
@@ -1795,11 +1838,11 @@ msgstr ""
 "добавив исходный URL-адрес (example.png) или любую уникальную часть его "
 "строки атрибута (class = \"example\"). Формат: по одному на строку"
 
-#: inc/settings.php:1283
+#: inc/settings.php:1313
 msgid "Exclude by Parent Selector"
 msgstr "Исключение по родительскому селектору"
 
-#: inc/settings.php:1293
+#: inc/settings.php:1323
 msgid ""
 "Exclude specific images from lazy loading by adding any unique portion of an "
 "attribute string (class=\"example\") from a parent container. Format: one "
@@ -1809,11 +1852,11 @@ msgstr ""
 "уникальную часть строки атрибутов (class=\"example\") из родительского "
 "контейнера. Формат: по одному в строке"
 
-#: inc/settings.php:1301
+#: inc/settings.php:1331
 msgid "Threshold"
 msgstr "Пороговое значение"
 
-#: inc/settings.php:1311
+#: inc/settings.php:1341
 msgid ""
 "Extend the lazy loading threshold allowing images to load before they are "
 "visible in the viewport. (px or %)"
@@ -1821,51 +1864,51 @@ msgstr ""
 "Увеличьте порог отложенной загрузки, чтобы изображения загружались до того, "
 "как они станут видны в окне просмотра. (px или %)"
 
-#: inc/settings.php:1318
+#: inc/settings.php:1348
 msgid "DOM Monitoring"
 msgstr "Мониторинг DOM"
 
-#: inc/settings.php:1325
+#: inc/settings.php:1355
 msgid ""
 "Watch for changes in the DOM and dynamically lazy load newly added elements."
 msgstr ""
 "Следите за изменениями в DOM и динамически отложено загружайте вновь "
 "добавленные элементы."
 
-#: inc/settings.php:1332
+#: inc/settings.php:1362
 msgid "Add Missing Image Dimensions"
 msgstr "Добавить недостающие размеры изображения"
 
-#: inc/settings.php:1339
+#: inc/settings.php:1369
 msgid "Add missing width and height attributes to images."
 msgstr "Добавить недостающие атрибуты ширины и высоты к изображениям."
 
-#: inc/settings.php:1346
+#: inc/settings.php:1376
 msgid "Fade In"
 msgstr "Плавное появление"
 
-#: inc/settings.php:1353
+#: inc/settings.php:1383
 msgid "Add fade in effect when images are loaded in."
 msgstr "Добавить эффект плавного появления при загрузке изображений."
 
-#: inc/settings.php:1358
+#: inc/settings.php:1388
 msgid "CSS Background Images"
 msgstr "Фоновые изображения с помощью CSS"
 
-#: inc/settings.php:1363
+#: inc/settings.php:1393
 msgid "Background Images"
 msgstr "Фоновые изображения"
 
-#: inc/settings.php:1370
+#: inc/settings.php:1400
 msgid "Allow lazy loading of background images coming from (CSS) stylesheets."
 msgstr ""
 "Разрешить отложенную загрузку фоновых изображений из таблиц стилей (CSS)."
 
-#: inc/settings.php:1378
+#: inc/settings.php:1408
 msgid "Background Selectors"
 msgstr "Селекторы фона"
 
-#: inc/settings.php:1388
+#: inc/settings.php:1418
 msgid ""
 "Lazy load a CSS background image by adding a unique selector (ID or class) "
 "found on the element that the background image has been applied to. Format: "
@@ -1875,11 +1918,11 @@ msgstr ""
 "селектора (ID или класса), найденного в элементе, к которому было применено "
 "фоновое изображение. Формат: по одному на строку"
 
-#: inc/settings.php:1396
+#: inc/settings.php:1426
 msgid "Exclude Leading"
 msgstr "Исключить ведущие"
 
-#: inc/settings.php:1412
+#: inc/settings.php:1442
 msgid ""
 "Exclude a certain number of background image containers from being lazy "
 "loaded starting from the first match."
@@ -1887,23 +1930,23 @@ msgstr ""
 "Исключить определенное количество контейнеров фоновых изображений из "
 "отложенной загрузки, начиная с первого совпадения."
 
-#: inc/settings.php:1418
+#: inc/settings.php:1448
 msgid "Lazy Elements"
 msgstr "Отложенные элементы"
 
-#: inc/settings.php:1423
+#: inc/settings.php:1453
 msgid "Elements"
 msgstr "Элементы"
 
-#: inc/settings.php:1430
+#: inc/settings.php:1460
 msgid "Allow lazy loading of elements in the DOM."
 msgstr "Разрешить отложенную загрузку элементов в DOM."
 
-#: inc/settings.php:1438
+#: inc/settings.php:1468
 msgid "Element Selectors"
 msgstr "Селекторы элементов"
 
-#: inc/settings.php:1448
+#: inc/settings.php:1478
 msgid ""
 "Lazy load specific elements and their descendants by adding any unique "
 "portion of an attribute string (class=\"example\") from a parent container. "
@@ -1913,48 +1956,48 @@ msgstr ""
 "любой уникальной части строки атрибута (class=\"example\") из родительского "
 "контейнера. Формат: один на строку"
 
-#: inc/settings.php:1460
+#: inc/settings.php:1490
 msgid "Local Google Fonts"
 msgstr "Локальные шрифты Google"
 
-#: inc/settings.php:1468
+#: inc/settings.php:1498
 msgid "Host Google Font files locally on your server or CDN."
 msgstr "Разместить файлы шрифтов Google локально на своем сервере или в CDN."
 
-#: inc/settings.php:1475
+#: inc/settings.php:1505
 msgid "Display Swap"
 msgstr "Display Swap"
 
-#: inc/settings.php:1483
+#: inc/settings.php:1513
 msgid "Add the font-display swap property to your Google Fonts."
 msgstr "Добавить свойство font-display swap к своим шрифтам Google."
 
-#: inc/settings.php:1490
+#: inc/settings.php:1520
 msgid "Print Method"
 msgstr "Способ вывода"
 
-#: inc/settings.php:1503
+#: inc/settings.php:1533
 msgid "Choose how the local font stylesheet will be included."
 msgstr "Выберите, как будет включена локальная таблица стилей шрифтов."
 
-#: inc/settings.php:1510
+#: inc/settings.php:1540
 msgid "Limit Subsets"
 msgstr "Ограничение подмножества"
 
-#: inc/settings.php:1518
+#: inc/settings.php:1548
 msgid "Limit subsets that are downloaded and included in the stylesheet."
 msgstr ""
 "Ограничьте подмножества, которые загружаются и включаются в таблицу стилей."
 
-#: inc/settings.php:1525
+#: inc/settings.php:1555
 msgid "Allowed Subsets"
 msgstr "Разрешенные подмножества"
 
-#: inc/settings.php:1533
+#: inc/settings.php:1563
 msgid "Choose which subsets to download locally."
 msgstr "Выберите, какие подмножества следует загрузить локально."
 
-#: inc/settings.php:1550
+#: inc/settings.php:1580
 msgid ""
 "Use your CDN URL when referencing Google Font files inside a parent "
 "stylesheet. Example: https://cdn.example.com"
@@ -1962,28 +2005,28 @@ msgstr ""
 "Используйте свой URL-адрес CDN при обращении к файлам шрифтов Google внутри "
 "родительской таблицы стилей. Пример: https://cdn.example.com"
 
-#: inc/settings.php:1557 inc/settings.php:1566
+#: inc/settings.php:1587 inc/settings.php:1596
 msgid "Clear Local Fonts"
 msgstr "Очистить локальные шрифты"
 
-#: inc/settings.php:1568
+#: inc/settings.php:1598
 msgid "Remove all existing local Google Font files and stylesheets."
 msgstr "Удалить все существующие локальные файлы и таблицы стилей Google Font."
 
-#: inc/settings.php:1575
+#: inc/settings.php:1605
 msgid "Disable Google Fonts"
 msgstr "Отключить шрифты Google"
 
-#: inc/settings.php:1583
+#: inc/settings.php:1613
 msgid ""
 "Removes any instances of Google Fonts being loaded across your entire site."
 msgstr "Удаляет все случаи загрузки шрифтов Google по всему сайту."
 
-#: inc/settings.php:1594
+#: inc/settings.php:1624
 msgid "Enable CDN Rewrite"
 msgstr "Включить перезапись CDN"
 
-#: inc/settings.php:1601
+#: inc/settings.php:1631
 msgid ""
 "Enables rewriting of your site URLs with your CDN URLs which can be "
 "configured below."
@@ -1991,7 +2034,7 @@ msgstr ""
 "Включить переписывание URL вашего сайта с вашими URL CDN, которые можно "
 "настроить ниже."
 
-#: inc/settings.php:1617
+#: inc/settings.php:1647
 msgid ""
 "Enter your CDN URL without the trailing backslash. Example: https://"
 "cdn.example.com"
@@ -1999,11 +2042,11 @@ msgstr ""
 "Введите ваш URL-адрес CDN без обратной косой черты. Пример: https://"
 "cdn.example.com"
 
-#: inc/settings.php:1624
+#: inc/settings.php:1654
 msgid "Included Directories"
 msgstr "Включенные каталоги"
 
-#: inc/settings.php:1633
+#: inc/settings.php:1663
 msgid ""
 "Enter any directories you would like to be included in CDN rewriting, "
 "separated by commas (,). Default: wp-content,wp-includes"
@@ -2011,11 +2054,11 @@ msgstr ""
 "Введите любые каталоги, которые вы хотели бы включить в перезапись CDN, "
 "разделяя их запятыми (,). По умолчанию: wp-content, wp-includes"
 
-#: inc/settings.php:1640
+#: inc/settings.php:1670
 msgid "CDN Exclusions"
 msgstr "Исключения из CDN"
 
-#: inc/settings.php:1649
+#: inc/settings.php:1679
 msgid ""
 "Enter any directories or file extensions you would like to be excluded from "
 "CDN rewriting, separated by commas (,). Default: .php"
@@ -2023,47 +2066,47 @@ msgstr ""
 "Введите любые каталоги или расширения файлов, которые вы хотели бы исключить "
 "из перезаписи CDN, разделяя их запятыми (,). По умолчанию: .php"
 
-#: inc/settings.php:1660
+#: inc/settings.php:1690
 msgid "Enable Local Analytics"
 msgstr "Включить аналитику"
 
-#: inc/settings.php:1667
+#: inc/settings.php:1697
 msgid "Enable syncing of the Google Analytics script to your own server."
 msgstr ""
 "Включить синхронизацию скрипта Google Analytics с вашим собственным сервером."
 
-#: inc/settings.php:1674
+#: inc/settings.php:1704
 msgid "Tracking ID"
 msgstr "ID отслеживания"
 
-#: inc/settings.php:1682
+#: inc/settings.php:1712
 msgid "Input your Google Analytics tracking or measurement ID."
 msgstr "Введите свой ID отслеживания Google Analytics."
 
-#: inc/settings.php:1689
+#: inc/settings.php:1719
 msgid "Tracking Code Position"
 msgstr "Расположения кода отслеживания"
 
-#: inc/settings.php:1698
+#: inc/settings.php:1728
 msgid "Header"
 msgstr "Хедер"
 
-#: inc/settings.php:1699
+#: inc/settings.php:1729
 msgid "Footer"
 msgstr "Футер"
 
-#: inc/settings.php:1701
+#: inc/settings.php:1731
 msgid ""
 "Load your analytics script in the header (default) or footer of your site. "
 "Default: Header"
 msgstr ""
 "Загрузите скрипт аналитики в хедер или футер сайта. По умолчанию: хедер"
 
-#: inc/settings.php:1708
+#: inc/settings.php:1738
 msgid "Script Type"
 msgstr "Тип скрипта"
 
-#: inc/settings.php:1721
+#: inc/settings.php:1751
 msgid ""
 "Choose which script method you would like to use. Default Google Analytics 4 "
 "is larger and includes all features, while Minimal is smaller and only "
@@ -2073,21 +2116,21 @@ msgstr ""
 "Analytics 4 больше и включает все функции, а Minimal меньше и включает "
 "только основные функции отчетности."
 
-#: inc/settings.php:1728
+#: inc/settings.php:1758
 msgid "Track Logged In Admins"
 msgstr "Отслеживание вошедших в систему"
 
-#: inc/settings.php:1735
+#: inc/settings.php:1765
 msgid "Include logged-in WordPress admins in your Google Analytics reports."
 msgstr ""
 "Включите вошедших в систему администраторов WordPress в отчеты Google "
 "Analytics."
 
-#: inc/settings.php:1742
+#: inc/settings.php:1772
 msgid "Use MonsterInsights"
 msgstr "Использовать MonsterInsights"
 
-#: inc/settings.php:1750
+#: inc/settings.php:1780
 msgid ""
 "Allows MonsterInsights to manage your Google Analytics while still using the "
 "locally hosted gtag.js file generated by Perfmatters."
@@ -2095,11 +2138,11 @@ msgstr ""
 "Позволяет MonsterInsights управлять вашей Google Analytics, продолжая "
 "использовать локально размещенный файл gtag.js, созданный Perfmatters."
 
-#: inc/settings.php:1757
+#: inc/settings.php:1787
 msgid "Enable AMP Support"
 msgstr "Включить поддержку AMP"
 
-#: inc/settings.php:1764
+#: inc/settings.php:1794
 msgid ""
 "Enable support for analytics tracking on AMP sites. This is not a local "
 "script, but a native AMP script."
@@ -2107,11 +2150,11 @@ msgstr ""
 "Включить поддержку отслеживания аналитики на сайтах AMP. Это не локальный "
 "скрипт, а собственный AMP-скрипт."
 
-#: inc/settings.php:1771
+#: inc/settings.php:1801
 msgid "Plugin"
 msgstr "Плагин"
 
-#: inc/settings.php:1783
+#: inc/settings.php:1813
 msgid ""
 "Enables the Perfmatters Script Manager, which gives you the ability to "
 "disable CSS and JS files on a page by page basis."
@@ -2119,16 +2162,16 @@ msgstr ""
 "Включить Менеджер скриптов Perfmatters, который позволяет отключать файлы "
 "CSS и JS на каждой странице."
 
-#: inc/settings.php:1790
+#: inc/settings.php:1820
 msgid "Show Advanced Options"
 msgstr "Показать дополнительные параметры"
 
-#: inc/settings.php:1797
+#: inc/settings.php:1827
 msgid "Show advanced options in the Perfmatters UI."
 msgstr ""
 "Показать дополнительные параметры в пользовательском интерфейсе Perfmatters."
 
-#: inc/settings.php:1798
+#: inc/settings.php:1828
 msgid ""
 "Advanced options should only be used if you know exactly what you are doing, "
 "as they can break certain plugin functionality if used improperly."
@@ -2137,27 +2180,27 @@ msgstr ""
 "точно знаете, что делаете, поскольку при неправильном использовании они "
 "могут нарушить определенные функции плагина."
 
-#: inc/settings.php:1805
+#: inc/settings.php:1835
 msgid "Disable for Logged In Users"
 msgstr "Отключить для вошедших пользователей"
 
-#: inc/settings.php:1812
+#: inc/settings.php:1842
 msgid "Disable optimizations for logged in users."
 msgstr "Отключить оптимизацию для вошедших в систему пользователей."
 
-#: inc/settings.php:1819
+#: inc/settings.php:1849
 msgid "Hide Admin Bar Menu"
 msgstr "Скрыть меню в админ-панеле"
 
-#: inc/settings.php:1826
+#: inc/settings.php:1856
 msgid "Hide the Perfmatters menu in the admin bar."
 msgstr "Скрыть меню Perfmatters в админ-панеле."
 
-#: inc/settings.php:1833
+#: inc/settings.php:1863
 msgid "Accessibility Mode"
 msgstr "Режим специальных возможностей"
 
-#: inc/settings.php:1841
+#: inc/settings.php:1871
 msgid ""
 "Disable the use of visual UI elements in the plugin settings such as "
 "checkbox toggles and hovering tooltips."
@@ -2165,11 +2208,11 @@ msgstr ""
 "Отключите использование элементов визуального интерфейса в настройках "
 "плагина, таких как переключатели флажков и всплывающие подсказки."
 
-#: inc/settings.php:1868 inc/settings.php:1876
+#: inc/settings.php:1898 inc/settings.php:1906
 msgid "Restore Default Options"
 msgstr "Восстановить параметры по умолчанию"
 
-#: inc/settings.php:1877
+#: inc/settings.php:1907
 msgid ""
 "Are you sure? This will remove all existing plugin options and restore them "
 "to their default states."
@@ -2177,15 +2220,15 @@ msgstr ""
 "Ты уверен? Это удалит все существующие параметры плагина и восстановит их "
 "состояние по умолчанию."
 
-#: inc/settings.php:1879
+#: inc/settings.php:1909
 msgid "Restore all plugin options to their default settings."
 msgstr "Восстановите все параметры плагина до значений по умолчанию."
 
-#: inc/settings.php:1886 inc/settings.php:1894 inc/settings.php:2652
+#: inc/settings.php:1916 inc/settings.php:1924 inc/settings.php:2712
 msgid "Purge Meta Options"
 msgstr "Очистить мета-параметры"
 
-#: inc/settings.php:1895
+#: inc/settings.php:1925
 msgid ""
 "Are you sure? This will delete all existing Perfmatters meta options for all "
 "posts from the database."
@@ -2193,21 +2236,21 @@ msgstr ""
 "Вы уверены? Это приведет к удалению всех существующих параметров метаданных "
 "Perfmatters для всех сообщений из БД."
 
-#: inc/settings.php:1896
+#: inc/settings.php:1926
 msgid ""
 "Permanently delete all existing Perfmatters meta options from your database."
 msgstr ""
 "Безвозвратно удалите все существующие мета-параметры Perfmatters из вашей БД."
 
-#: inc/settings.php:1903
+#: inc/settings.php:1933
 msgid "Export Settings"
 msgstr "Экспорт настроек"
 
-#: inc/settings.php:1911
+#: inc/settings.php:1941
 msgid "Export Plugin Settings"
 msgstr "Экспорт настроек плагина"
 
-#: inc/settings.php:1913
+#: inc/settings.php:1943
 msgid ""
 "Export your Perfmatters settings for this site as a .json file. This lets "
 "you easily import the configuration into another site."
@@ -2215,31 +2258,31 @@ msgstr ""
 "Экспортируйте настройки Perfmatters для этого сайта в виде файла .json. Это "
 "позволяет легко импортировать конфигурацию на другой сайт."
 
-#: inc/settings.php:1920
+#: inc/settings.php:1950
 msgid "Import Settings"
 msgstr "Импорт настроек"
 
-#: inc/settings.php:1925
+#: inc/settings.php:1955
 msgid "Import Perfmatters settings from an exported .json file."
 msgstr "Импортировать настройки Perfmatters из экспортируемого файла .json."
 
-#: inc/settings.php:1935
+#: inc/settings.php:1965
 msgid "Scan Database"
 msgstr "Сканирование БД"
 
-#: inc/settings.php:1943
+#: inc/settings.php:1973
 msgid "Scan Now"
 msgstr "Сканировать сейчас"
 
-#: inc/settings.php:1946
+#: inc/settings.php:1976
 msgid "Scan the database to calculate items available for optimization."
 msgstr "Сканируйте БД для расчета элементов, доступных для оптимизации."
 
-#: inc/settings.php:1953
+#: inc/settings.php:1983
 msgid "Post Revisions"
 msgstr "Редакции записей"
 
-#: inc/settings.php:1961
+#: inc/settings.php:1991
 msgid ""
 "Include post revisions in your database optimization. This also includes "
 "revisions for pages and custom post types."
@@ -2247,11 +2290,11 @@ msgstr ""
 "Включить редакции записей в оптимизацию БД. Это также включает в себя "
 "редакции для страниц и пользовательских типов записей."
 
-#: inc/settings.php:1968
+#: inc/settings.php:1998
 msgid "Post Auto-Drafts"
 msgstr "Авто черновики записей"
 
-#: inc/settings.php:1976
+#: inc/settings.php:2006
 msgid ""
 "Include post auto-drafts in your database optimization. This also includes "
 "auto-drafts for pages and custom post types."
@@ -2259,7 +2302,7 @@ msgstr ""
 "Включить авто черновики записей в оптимизацию БД. Это также включает в себя "
 "авто-черновики для страниц и пользовательских типов записей."
 
-#: inc/settings.php:1991
+#: inc/settings.php:2021
 msgid ""
 "Include trashed posts in your database optimization. This also includes "
 "trashed pages and custom post types."
@@ -2267,43 +2310,43 @@ msgstr ""
 "Включить удаленные записи в оптимизацию БД. Сюда также входят загруженные "
 "страницы и пользовательские типы записей."
 
-#: inc/settings.php:2006
+#: inc/settings.php:2036
 msgid "Include spam comments in your database optimization."
 msgstr "Включить спам-комментарии в оптимизацию БД."
 
-#: inc/settings.php:2021
+#: inc/settings.php:2051
 msgid "Include trashed comments in your database optimization."
 msgstr "Включить удаленные комментарии в оптимизацию БД."
 
-#: inc/settings.php:2028
+#: inc/settings.php:2058
 msgid "Expired Transients"
 msgstr "Просроченные транзиенты"
 
-#: inc/settings.php:2036
+#: inc/settings.php:2066
 msgid "Include expired transients in your database optimization."
 msgstr "Включить просроченные транзиенты в оптимизацию БД."
 
-#: inc/settings.php:2043
+#: inc/settings.php:2073
 msgid "All Transients"
 msgstr "Все транзиенты"
 
-#: inc/settings.php:2051
+#: inc/settings.php:2081
 msgid "Include all transients in your database optimization."
 msgstr "Включите все транзиенты в оптимизацию БД."
 
-#: inc/settings.php:2066
+#: inc/settings.php:2096
 msgid "Include tables in your database optimization."
 msgstr "Включить таблицы в оптимизацию БД."
 
-#: inc/settings.php:2075
+#: inc/settings.php:2105
 msgid "Optimize Database"
 msgstr "Оптимизация БД"
 
-#: inc/settings.php:2083
+#: inc/settings.php:2113
 msgid "Optimize Now"
 msgstr "Оптимизировать сейчас"
 
-#: inc/settings.php:2086
+#: inc/settings.php:2116
 msgid ""
 "This will make permanent changes that cannot be reverted! Are you sure you "
 "want to proceed with optimization?"
@@ -2311,7 +2354,7 @@ msgstr ""
 "Это внесет необратимые изменения, которые нельзя будет отменить! Вы уверены, "
 "что хотите продолжить оптимизацию?"
 
-#: inc/settings.php:2087
+#: inc/settings.php:2117
 msgid ""
 "Run a one-time optimization of your WordPress database based on the selected "
 "options above. This process runs in the background."
@@ -2319,35 +2362,35 @@ msgstr ""
 "Запустите однократную оптимизацию БД WordPress на основе выбранных выше "
 "параметров. Этот процесс работает в фоновом режиме."
 
-#: inc/settings.php:2096
+#: inc/settings.php:2126
 msgid "Cancel Optimization"
 msgstr "Отменить оптимизацию"
 
-#: inc/settings.php:2104
+#: inc/settings.php:2134
 msgid "Cancel Current Optimization"
 msgstr "Отменить текущую оптимизацию"
 
-#: inc/settings.php:2107
+#: inc/settings.php:2137
 msgid "Cancel the current database optimization process."
 msgstr "Отменить текущий процесс оптимизации БД."
 
-#: inc/settings.php:2115
+#: inc/settings.php:2145
 msgid "Scheduled Optimization"
 msgstr "Оптимизация по расписанию"
 
-#: inc/settings.php:2126
+#: inc/settings.php:2156
 msgid "Daily"
 msgstr "Ежедневно"
 
-#: inc/settings.php:2127
+#: inc/settings.php:2157
 msgid "Weekly"
 msgstr "Еженедельно"
 
-#: inc/settings.php:2128
+#: inc/settings.php:2158
 msgid "Monthly"
 msgstr "Ежемесячно"
 
-#: inc/settings.php:2130
+#: inc/settings.php:2160
 msgid ""
 "Schedule a routine optimization of your WordPress database based on the "
 "selected options above. This process runs in the background and starts "
@@ -2357,51 +2400,51 @@ msgstr ""
 "параметров. Этот процесс выполняется в фоновом режиме и запускается сразу "
 "после сохранения."
 
-#: inc/settings.php:2322
+#: inc/settings.php:2352
 msgid "Plugins"
 msgstr "Плагины"
 
-#: inc/settings.php:2327
+#: inc/settings.php:2357
 msgid "Themes"
 msgstr "Темы"
 
-#: inc/settings.php:2435
+#: inc/settings.php:2465
 msgid "Add New"
 msgstr "Добавить новый"
 
-#: inc/settings.php:2463
+#: inc/settings.php:2493
 msgid "Select Type"
 msgstr "Выбрать тип"
 
-#: inc/settings.php:2476 inc/settings.php:2527
+#: inc/settings.php:2506 inc/settings.php:2587
 msgid "All Devices"
 msgstr "Все устройства"
 
-#: inc/settings.php:2481 inc/settings.php:2532
+#: inc/settings.php:2511 inc/settings.php:2592
 msgid "Location"
 msgstr "Местонахождение"
 
-#: inc/settings.php:2485
+#: inc/settings.php:2515
 msgid "Priority"
 msgstr "Приоритет"
 
-#: inc/settings.php:2488
+#: inc/settings.php:2518
 msgid "High"
 msgstr "Высокий"
 
-#: inc/settings.php:2489
+#: inc/settings.php:2519
 msgid "Low"
 msgstr "Низкий"
 
-#: inc/settings.php:2512
+#: inc/settings.php:2572
 msgid "Select Priority"
 msgstr "Выберите приоритет"
 
-#: inc/settings.php:2665
+#: inc/settings.php:2725
 msgid "Import Plugin Settings"
 msgstr "Импортировать настройки плагина"
 
-#: inc/settings.php:2758
+#: inc/settings.php:2818
 #, php-format
 msgid "Click %s to view documentation."
 msgstr "Нажмите %s, чтобы просмотреть документацию."
@@ -2474,11 +2517,11 @@ msgstr "Как отложить загрузку изображения и ви�
 msgid "How do I host Google Analytics locally?"
 msgstr "Как разместить Google Analytics локально?"
 
-#: perfmatters.php:141
+#: perfmatters.php:143
 msgid "Action failed."
 msgstr "Действие не удалось."
 
-#: perfmatters.php:196
+#: perfmatters.php:198
 msgid "Enter valid license key for automatic updates."
 msgstr "Введите действительный лицензионный ключ для авто обновлений."
 

@@ -49,6 +49,7 @@ class ModalFactory implements ModalFactoryInterface {
 			->build();
 
 		// Take Survey Modal
+		/*
 		$modals['take_survey'] = ( new ModalBuilder() )
 			->setHeading('Help us improve Ajax Search Pro!')
 			->setContent('Please take a super quick survey, it will help us tremendously. Thank you!')
@@ -78,6 +79,7 @@ class ModalFactory implements ModalFactoryInterface {
 				)
 			)
 			->build();
+		*/
 
 		return $modals;
 	}

@@ -2,22 +2,21 @@
 # This file is distributed under the same license as the Ajax Search Pro plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Pro 4.27.1\n"
+"Project-Id-Version: Ajax Search Pro 4.27.2\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-pro-development\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-28T07:35:10+00:00\n"
+"POT-Creation-Date: 2025-07-25T12:47:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: ajax-search-pro\n"
 
 #. Plugin Name of the plugin
 #: ajax-search-pro.php
-#: build/js/block-editor.js:2576
-#: build/js/block-editor.js:2746
+#: build/js/block-editor.js:20
 msgid "Ajax Search Pro"
 msgstr ""
 
@@ -234,7 +233,7 @@ msgstr ""
 #: backend/analytics.php:337
 #: backend/cache_settings.php:59
 #: backend/compatibility_settings.php:123
-#: backend/index_table.php:610
+#: backend/index_table.php:616
 msgid "Save options"
 msgstr ""
 
@@ -284,8 +283,8 @@ msgstr ""
 #: backend/tabs/instance/layout/results_layout.php:6
 #: backend/tabs/instance/layout/results_layout.php:101
 #: backend/tabs/instance/layout/results_layout.php:136
-#: backend/tabs/instance/layout/results_layout.php:207
-#: backend/tabs/instance/layout/results_layout.php:229
+#: backend/tabs/instance/layout/results_layout.php:213
+#: backend/tabs/instance/layout/results_layout.php:240
 #: backend/tabs/instance/layout/search_box_layout.php:64
 #: backend/tabs/instance/layout_options.php:21
 #: backend/tabs/instance/layout_options.php:34
@@ -415,8 +414,8 @@ msgstr ""
 #: backend/Classes/Options/OptionDefaults.php:223
 #: backend/tabs/instance/general/image_options.php:73
 #: backend/tabs/priorities/priority_groups.php:123
-#: build/js/dev.js:25131
-#: build/js/search-instance.js:25131
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
 msgid "Custom field"
 msgstr ""
 
@@ -437,7 +436,7 @@ msgstr ""
 
 #: backend/Classes/Options/PostType.php:70
 #: backend/settings/class/customposttypes-all.class.php:29
-#: backend/settings/class/customposttypes.class.php:38
+#: backend/settings/class/customposttypes.class.php:33
 #: backend/settings/class/customposttypeseditable.class.php:25
 #: backend/settings/class/wd_cpt_editable.class.php:25
 msgid "Available post types"
@@ -445,7 +444,7 @@ msgstr ""
 
 #: backend/Classes/Options/PostType.php:83
 #: backend/settings/class/customposttypes-all.class.php:38
-#: backend/settings/class/customposttypes.class.php:49
+#: backend/settings/class/customposttypes.class.php:44
 #: backend/settings/class/customposttypeseditable.class.php:37
 #: backend/settings/class/wd_cpt_editable.class.php:37
 msgid "Drag here the post types you want to use!"
@@ -785,562 +784,562 @@ msgstr ""
 msgid "The plugin uses external libraries as well as internal methods to get the best results, however it is still possible that some information might not be extracted properly."
 msgstr ""
 
-#: backend/index_table.php:148
+#: backend/index_table.php:147
 msgid "Index PDF file contents?"
 msgstr ""
 
-#: backend/index_table.php:151
+#: backend/index_table.php:150
 msgid "method"
 msgstr ""
 
-#: backend/index_table.php:163
+#: backend/index_table.php:162
 msgid "When set to 'Auto', the plugin will try both methods if possible."
 msgstr ""
 
-#: backend/index_table.php:167
+#: backend/index_table.php:166
 msgid "Index Text file contents?"
 msgstr ""
 
-#: backend/index_table.php:172
+#: backend/index_table.php:171
 msgid "Index RichText file contents?"
 msgstr ""
 
-#: backend/index_table.php:183
+#: backend/index_table.php:182
 msgid "Index Office Word document contents?"
 msgstr ""
 
-#: backend/index_table.php:188
+#: backend/index_table.php:187
 msgid "Index Office Excel document contents?"
 msgstr ""
 
-#: backend/index_table.php:193
+#: backend/index_table.php:192
 msgid "Index Office PowerPoint document contents?"
 msgstr ""
 
-#: backend/index_table.php:198
+#: backend/index_table.php:200
 msgid "<p>These options are hidden unless the <strong>attachment</strong> custom post type is selected above.</p>"
 msgstr ""
 
-#: backend/index_table.php:202
+#: backend/index_table.php:204
 msgid "Index post tags?"
 msgstr ""
 
-#: backend/index_table.php:207
+#: backend/index_table.php:209
 msgid "Index post categories?"
 msgstr ""
 
-#: backend/index_table.php:213
+#: backend/index_table.php:215
 msgid "Index taxonomies"
 msgstr ""
 
-#: backend/index_table.php:220
+#: backend/index_table.php:222
 msgid "Index permalinks?"
 msgstr ""
 
-#: backend/index_table.php:225
+#: backend/index_table.php:227
 msgid "Index custom fields"
 msgstr ""
 
-#: backend/index_table.php:233
+#: backend/index_table.php:235
 msgid "Post statuses to index"
 msgstr ""
 
-#: backend/index_table.php:237
+#: backend/index_table.php:239
 #: backend/tabs/instance/general/sources.php:96
 msgid "Comma separated list. WP Defaults: publish, future, draft, pending, private, trash, auto-draft"
 msgstr ""
 
-#: backend/index_table.php:241
+#: backend/index_table.php:243
 msgid "Index password protected posts?"
 msgstr ""
 
-#: backend/index_table.php:244
+#: backend/index_table.php:246
 msgid "Index post author name?"
 msgstr ""
 
-#: backend/index_table.php:249
+#: backend/index_table.php:251
 msgid "Index post author bio (description)?"
 msgstr ""
 
-#: backend/index_table.php:256
+#: backend/index_table.php:258
 msgid "Blogs to index posts from"
 msgstr ""
 
-#: backend/index_table.php:262
+#: backend/index_table.php:264
 msgid "Enable automated singularization/pluralization?"
 msgstr ""
 
-#: backend/index_table.php:268
+#: backend/index_table.php:270
 msgid "Main language"
 msgstr ""
 
-#: backend/index_table.php:284
+#: backend/index_table.php:286
 msgid "Automatically singularize/pluralize all keywords for better matches via an Inflections library. Warning: this will increase the index size GREATLY."
 msgstr ""
 
-#: backend/index_table.php:288
+#: backend/index_table.php:290
 msgid "The post language is automatically detected when using Polylang or WPML."
 msgstr ""
 
-#: backend/index_table.php:293
+#: backend/index_table.php:295
 msgid "Post limit per iteration"
 msgstr ""
 
-#: backend/index_table.php:296
+#: backend/index_table.php:298
 msgid "Posts to index per ajax call. Reduce this number if the process fails. Default: 25"
 msgstr ""
 
-#: backend/index_table.php:299
+#: backend/index_table.php:301
 msgid "Enable stop-words?"
 msgstr ""
 
-#: backend/index_table.php:302
+#: backend/index_table.php:304
 msgid "Words from the list below (common words, stop words) will be excluded if enabled."
 msgstr ""
 
-#: backend/index_table.php:305
+#: backend/index_table.php:307
 msgid "Stop words list"
 msgstr ""
 
-#: backend/index_table.php:308
+#: backend/index_table.php:310
 msgid "<strong>Comma</strong> separated list of stop words."
 msgstr ""
 
-#: backend/index_table.php:311
+#: backend/index_table.php:313
 msgid "Min. word length"
 msgstr ""
 
-#: backend/index_table.php:314
+#: backend/index_table.php:316
 msgid "Words below this length will be ignored. Default: 2"
 msgstr ""
 
-#: backend/index_table.php:317
+#: backend/index_table.php:319
 msgid "Extract IFRAME contents?"
 msgstr ""
 
-#: backend/index_table.php:320
+#: backend/index_table.php:322
 msgid "Will try parsing IFRAME sources and extracting them. This <strong>may not work</strong> in some cases."
 msgstr ""
 
-#: backend/index_table.php:323
+#: backend/index_table.php:325
 msgid "Execute Gutenberg Editor Blocks?"
 msgstr ""
 
-#: backend/index_table.php:326
+#: backend/index_table.php:328
 msgid "Will execute and parse contents of Gutenberg Editor Blocks."
 msgstr ""
 
-#: backend/index_table.php:329
+#: backend/index_table.php:331
 msgid "Execute shortcodes?"
 msgstr ""
 
-#: backend/index_table.php:332
+#: backend/index_table.php:334
 msgid "Will execute shortcodes in content as well. Great if you have lots of content generated by shortcodes."
 msgstr ""
 
-#: backend/index_table.php:335
+#: backend/index_table.php:337
 msgid "Remove these shortcodes"
 msgstr ""
 
-#: backend/index_table.php:339
+#: backend/index_table.php:341
 msgid "<strong>Comma</strong> separated list of shortcodes to remove. Use this to exclude shortcodes, which does not reflect your content appropriately."
 msgstr ""
 
-#: backend/index_table.php:345
+#: backend/index_table.php:347
 msgid "Pool sizes"
 msgstr ""
 
-#: backend/index_table.php:347
+#: backend/index_table.php:349
 msgid "The pool size greatly affects the search performance in bigger databases (50k+ keywords). While high pool values may give more accurate results, lower values cause much better performance."
 msgstr ""
 
-#: backend/index_table.php:350
+#: backend/index_table.php:352
 msgid "Let the plugin determine the pool size values?"
 msgstr ""
 
-#: backend/index_table.php:354
+#: backend/index_table.php:356
 msgid "When enabled (default), the plugin will adjust these values depending on the index table size and other factors."
 msgstr ""
 
-#: backend/index_table.php:358
+#: backend/index_table.php:360
 msgid "Pool size for keywords of one character long (recommended:"
 msgstr ""
 
-#: backend/index_table.php:362
-#: backend/index_table.php:370
-#: backend/index_table.php:378
-#: backend/index_table.php:386
+#: backend/index_table.php:364
+#: backend/index_table.php:372
+#: backend/index_table.php:380
+#: backend/index_table.php:388
 msgid "The maximum number in a sub-set of results pool for a search phrase (or part of the phrase) that is one character long."
 msgstr ""
 
-#: backend/index_table.php:366
+#: backend/index_table.php:368
 msgid "Pool size for keywords of two characters long (recommended:"
 msgstr ""
 
-#: backend/index_table.php:374
+#: backend/index_table.php:376
 msgid "Pool size for keywords of three characters long (recommended:"
 msgstr ""
 
-#: backend/index_table.php:382
+#: backend/index_table.php:384
 msgid "Pool size for keywords of four and more characters long (recommended:"
 msgstr ""
 
-#: backend/index_table.php:393
+#: backend/index_table.php:395
 msgid "Index new posts upon creation?"
 msgstr ""
 
-#: backend/index_table.php:397
+#: backend/index_table.php:399
 msgid "When turned OFF, the posts will still be indexed only upon updating, or when the cron-job runs (if enabled) or when the index table is extended manually."
 msgstr ""
 
-#: backend/index_table.php:402
+#: backend/index_table.php:404
 msgid "Refresh the index, whenever post meta (custom fields) are added or updated?"
 msgstr ""
 
-#: backend/index_table.php:406
+#: backend/index_table.php:408
 msgid "CAUTION:"
 msgstr ""
 
-#: backend/index_table.php:407
+#: backend/index_table.php:409
 msgid "Under normal cases this option should not be used and may cause major slowdown when saving posts."
 msgstr ""
 
-#: backend/index_table.php:411
+#: backend/index_table.php:413
 msgid "(Default: OFF) May help when posts are imported and if you notice missing results for metadata keywords."
 msgstr ""
 
-#: backend/index_table.php:415
+#: backend/index_table.php:417
 msgid "Use wp_cron() to extend the index table automatically?"
 msgstr ""
 
-#: backend/index_table.php:419
+#: backend/index_table.php:421
 msgid "Will register a cron job with wp_cron() and run it periodically."
 msgstr ""
 
-#: backend/index_table.php:426
+#: backend/index_table.php:428
 msgid "Every 2 minutes"
 msgstr ""
 
-#: backend/index_table.php:427
+#: backend/index_table.php:429
 msgid "Every 3 minutes"
 msgstr ""
 
-#: backend/index_table.php:428
+#: backend/index_table.php:430
 msgid "Every 5 minutes"
 msgstr ""
 
-#: backend/index_table.php:429
+#: backend/index_table.php:431
 msgid "Every 15 minutes"
 msgstr ""
 
-#: backend/index_table.php:430
+#: backend/index_table.php:432
 msgid "Every 30 minutes"
 msgstr ""
 
-#: backend/index_table.php:431
+#: backend/index_table.php:433
 msgid "Hourly"
 msgstr ""
 
-#: backend/index_table.php:432
+#: backend/index_table.php:434
 msgid "Twice Daily"
 msgstr ""
 
-#: backend/index_table.php:433
+#: backend/index_table.php:435
 msgid "Daily"
 msgstr ""
 
-#: backend/index_table.php:439
+#: backend/index_table.php:441
 msgid "The periodicity of execution. wp_cron() only accepts these values."
 msgstr ""
 
-#: backend/index_table.php:444
+#: backend/index_table.php:446
 msgid "Last execution info"
 msgstr ""
 
-#: backend/index_table.php:447
+#: backend/index_table.php:449
 msgid "Last exeuction time:"
 msgstr ""
 
-#: backend/index_table.php:450
+#: backend/index_table.php:452
 msgid "Current system time:"
 msgstr ""
 
-#: backend/index_table.php:452
+#: backend/index_table.php:454
 msgid "Posts indexed:"
 msgstr ""
 
-#: backend/index_table.php:454
+#: backend/index_table.php:456
 msgid "Keywords found:"
 msgstr ""
 
-#: backend/index_table.php:525
+#: backend/index_table.php:531
 msgid "The options have changed, don't forget to re-create the index table with the <b>Create new index</b> button!"
 msgstr ""
 
-#: backend/index_table.php:538
+#: backend/index_table.php:544
 msgid "Index Table Operations"
 msgstr ""
 
-#: backend/index_table.php:542
+#: backend/index_table.php:548
 msgid "Do you want to generate a new index table?"
 msgstr ""
 
-#: backend/index_table.php:543
+#: backend/index_table.php:549
 msgid "Create new index"
 msgstr ""
 
-#: backend/index_table.php:546
+#: backend/index_table.php:552
 msgid "Do you want to extend the index table?"
 msgstr ""
 
-#: backend/index_table.php:547
+#: backend/index_table.php:553
 msgid "Continue existing index"
 msgstr ""
 
-#: backend/index_table.php:549
+#: backend/index_table.php:555
 msgid "Do you really want to empty the index table?"
 msgstr ""
 
-#: backend/index_table.php:550
+#: backend/index_table.php:556
 msgid "Delete the index"
 msgstr ""
 
-#: backend/index_table.php:553
+#: backend/index_table.php:559
 msgid "Initializing, please wait. This might take a while."
 msgstr ""
 
-#: backend/index_table.php:555
+#: backend/index_table.php:561
 msgid "Stop"
 msgstr ""
 
-#: backend/index_table.php:557
+#: backend/index_table.php:563
 msgid "100% - Index table successfully generated!"
 msgstr ""
 
-#: backend/index_table.php:558
+#: backend/index_table.php:564
 msgid "Something went wrong :("
 msgstr ""
 
-#: backend/index_table.php:562
+#: backend/index_table.php:568
 msgid "To read more about the index table, please read the <a href=\"%s\">documentation chapter about Index table</a> usage."
 msgstr ""
 
-#: backend/index_table.php:567
-#: backend/index_table.php:577
+#: backend/index_table.php:573
+#: backend/index_table.php:583
 msgid "Total keywords:"
 msgstr ""
 
-#: backend/index_table.php:573
+#: backend/index_table.php:579
 msgid "<b>Stats</b> (reloads periodically)"
 msgstr ""
 
-#: backend/index_table.php:574
+#: backend/index_table.php:580
 msgid "Items Indexed:"
 msgstr ""
 
-#: backend/index_table.php:575
+#: backend/index_table.php:581
 msgid "Items not indexed:"
 msgstr ""
 
-#: backend/index_table.php:580
+#: backend/index_table.php:586
 msgid "Loading stats"
 msgstr ""
 
-#: backend/index_table.php:591
+#: backend/index_table.php:597
 msgid "Index Table options"
 msgstr ""
 
-#: backend/index_table.php:595
+#: backend/index_table.php:601
 msgid "Index table options successfuly updated!"
 msgstr ""
 
-#: backend/index_table.php:598
+#: backend/index_table.php:604
 #: backend/tabs/instance/frontend/general.php:3
 #: backend/tabs/instance/frontend_options.php:2
 msgid "General"
 msgstr ""
 
-#: backend/index_table.php:599
+#: backend/index_table.php:605
 #: backend/tabs/instance/frontend_options.php:12
 msgid "Advanced"
 msgstr ""
 
-#: backend/index_table.php:600
+#: backend/index_table.php:606
 #: backend/tabs/index_table/synonyms.php:43
 msgid "Synonyms"
 msgstr ""
 
-#: backend/index_table.php:601
+#: backend/index_table.php:607
 msgid "Indexing & Cron"
 msgstr ""
 
-#: backend/index_table.php:602
+#: backend/index_table.php:608
 msgid "Performance & Accuracy"
 msgstr ""
 
-#: backend/index_table.php:625
+#: backend/index_table.php:631
 msgid "The index table had been created, so don't forget to enable it on the search instances, where you need it."
 msgstr ""
 
-#: backend/index_table.php:627
+#: backend/index_table.php:633
 msgid "If you don't know how to do that, these documentations will help (links open in new tab):"
 msgstr ""
 
-#: backend/index_table.php:629
-#: backend/index_table.php:634
+#: backend/index_table.php:635
+#: backend/index_table.php:640
 msgid "Enabling for"
 msgstr ""
 
-#: backend/index_table.php:631
+#: backend/index_table.php:637
 msgid "Custom Post Types"
 msgstr ""
 
-#: backend/index_table.php:636
+#: backend/index_table.php:642
 #: backend/tabs/instance/frontend/content_type.php:29
 msgid "Attachments"
 msgstr ""
 
-#: backend/index_table.php:643
+#: backend/index_table.php:649
 msgid "It looks like you are planning on indexing media file contents."
 msgstr ""
 
-#: backend/index_table.php:644
+#: backend/index_table.php:650
 msgid "There is a <strong>Media Service</strong> feature to handle more accurate file indexing, and there is a <strong>FREE</strong> version available as well! (no credit card required!)"
 msgstr ""
 
-#: backend/index_table.php:645
+#: backend/index_table.php:651
 msgid "Click"
 msgstr ""
 
-#: backend/index_table.php:646
+#: backend/index_table.php:652
 msgid "this link"
 msgstr ""
 
-#: backend/index_table.php:646
+#: backend/index_table.php:652
 msgid "or the blue button below to find out more."
 msgstr ""
 
-#: backend/index_table.php:657
+#: backend/index_table.php:663
 msgid "Success:"
 msgstr ""
 
-#: backend/index_table.php:658
+#: backend/index_table.php:664
 msgid "items were imported!"
 msgstr ""
 
-#: backend/index_table.php:659
+#: backend/index_table.php:665
 msgid "Something went wrong, please try again later."
 msgstr ""
 
-#: backend/index_table.php:660
+#: backend/index_table.php:666
 msgid "There are no synonyms in the database to export."
 msgstr ""
 
-#: backend/index_table.php:661
+#: backend/index_table.php:667
 msgid "The file is empty or invalid. Please make sure to upload and choose the correct one."
 msgstr ""
 
-#: backend/index_table.php:662
+#: backend/index_table.php:668
 msgid "Nothing was imported. The items in this file are already in the database."
 msgstr ""
 
-#: backend/index_table.php:663
+#: backend/index_table.php:669
 msgid "Something went wrong, please check your connection, and try again."
 msgstr ""
 
-#: backend/index_table.php:664
+#: backend/index_table.php:670
 msgid "This keyword already exists in the database! (use the search above if you look to edit it)"
 msgstr ""
 
-#: backend/index_table.php:665
+#: backend/index_table.php:671
 msgid "The keyword was not deleted, please try refreshing this page!"
 msgstr ""
 
-#: backend/index_table.php:666
+#: backend/index_table.php:672
 msgid "The keyword field is empty, please enter a keyword!"
 msgstr ""
 
-#: backend/index_table.php:667
+#: backend/index_table.php:673
 msgid "The synonyms field is missing, please enter some synonyms!"
 msgstr ""
 
-#: backend/index_table.php:668
+#: backend/index_table.php:674
 msgid "Are you sure you want to delete this keyword?"
 msgstr ""
 
-#: backend/index_table.php:669
+#: backend/index_table.php:675
 msgid "Are you sure you want to delete all of the synonyms?"
 msgstr ""
 
-#: backend/index_table.php:670
+#: backend/index_table.php:676
 msgid "Export Synonyms"
 msgstr ""
 
-#: backend/index_table.php:671
+#: backend/index_table.php:677
 msgid "Import Synonyms"
 msgstr ""
 
-#: backend/index_table.php:672
+#: backend/index_table.php:678
 msgid "Close"
 msgstr ""
 
-#: backend/index_table.php:682
+#: backend/index_table.php:688
 msgid "Okay!"
 msgstr ""
 
-#: backend/index_table.php:683
+#: backend/index_table.php:689
 msgid "Yes, take me there!"
 msgstr ""
 
-#: backend/index_table.php:684
+#: backend/index_table.php:690
 msgid "Maybe later"
 msgstr ""
 
-#: backend/index_table.php:685
+#: backend/index_table.php:691
 msgid "Congratulations, but wait!"
 msgstr ""
 
-#: backend/index_table.php:686
+#: backend/index_table.php:692
 msgid "Did you know?"
 msgstr ""
 
-#: backend/index_table.php:687
+#: backend/index_table.php:693
 msgid "Progress:"
 msgstr ""
 
-#: backend/index_table.php:688
+#: backend/index_table.php:694
 msgid "Keywords found so far:"
 msgstr ""
 
-#: backend/index_table.php:689
+#: backend/index_table.php:695
 msgid "Processing blog no."
 msgstr ""
 
-#: backend/index_table.php:690
+#: backend/index_table.php:696
 msgid "Success. <strong>%s</strong> new keywords were added to the database."
 msgstr ""
 
-#: backend/index_table.php:691
+#: backend/index_table.php:697
 msgid "Success. The index table was emptied."
 msgstr ""
 
-#: backend/index_table.php:692
+#: backend/index_table.php:698
 msgid "Something went wrong. Here is the error message returned:"
 msgstr ""
 
-#: backend/index_table.php:693
+#: backend/index_table.php:699
 msgid "Timeout error. Try lowering the <strong>Post limit per iteration</strong> option below."
 msgstr ""
 
-#: backend/index_table.php:694
+#: backend/index_table.php:700
 msgid "Status:"
 msgstr ""
 
-#: backend/index_table.php:695
+#: backend/index_table.php:701
 msgid "Code:"
 msgstr ""
 
-#: backend/index_table.php:696
+#: backend/index_table.php:702
 msgid "Initializing, please wait."
 msgstr ""
 
@@ -1459,94 +1458,98 @@ msgstr ""
 msgid "Import from Ajax Search Lite"
 msgstr ""
 
-#: backend/main_settings.php:78
-#: backend/main_settings.php:98
+#: backend/main_settings.php:72
+msgid "Check <a target='_blank' href='%s'>this documentation</a> for more information about importing your settings from Ajax Search Lite."
+msgstr ""
+
+#: backend/main_settings.php:84
+#: backend/main_settings.php:104
 msgid "Failure. Nonce invalid, please reload the page and try again."
 msgstr ""
 
-#: backend/main_settings.php:88
+#: backend/main_settings.php:94
 msgid "Search Form Successfuly added!"
 msgstr ""
 
-#: backend/main_settings.php:90
+#: backend/main_settings.php:96
 msgid "The search form was not created. Please contact support."
 msgstr ""
 
-#: backend/main_settings.php:104
+#: backend/main_settings.php:110
 msgid "Form name changed!"
 msgstr ""
 
-#: backend/main_settings.php:106
+#: backend/main_settings.php:112
 msgid "Failure. Search could not be renamed."
 msgstr ""
 
-#: backend/main_settings.php:108
+#: backend/main_settings.php:114
 msgid "Failure. Form name must be at least 1 character long"
 msgstr ""
 
-#: backend/main_settings.php:116
+#: backend/main_settings.php:122
 msgid "Form duplicated!"
 msgstr ""
 
-#: backend/main_settings.php:118
+#: backend/main_settings.php:124
 msgid "Failure. Search form could not be duplicated."
 msgstr ""
 
-#: backend/main_settings.php:121
+#: backend/main_settings.php:127
 msgid "Failure :("
 msgstr ""
 
-#: backend/main_settings.php:167
+#: backend/main_settings.php:173
 msgid "Theme search bar replace"
 msgstr ""
 
-#: backend/main_settings.php:168
+#: backend/main_settings.php:174
 msgid "Replace the default theme search with:"
 msgstr ""
 
-#: backend/main_settings.php:170
-#: backend/main_settings.php:181
+#: backend/main_settings.php:176
+#: backend/main_settings.php:187
 #: backend/tabs/instance/theme/magn_load.php:107
 msgid "None"
 msgstr ""
 
-#: backend/main_settings.php:179
+#: backend/main_settings.php:185
 msgid "and the <strong>WooCommerce</strong> search with:"
 msgstr ""
 
-#: backend/main_settings.php:202
+#: backend/main_settings.php:208
 msgid "This might not work with all themes. If the default theme search bar is still visible after selection, then the only way is to replace the search within the theme code."
 msgstr ""
 
-#: backend/main_settings.php:204
+#: backend/main_settings.php:210
 msgid "Save"
 msgstr ""
 
-#: backend/main_settings.php:269
+#: backend/main_settings.php:275
 msgid "Click here to rename this form!"
 msgstr ""
 
-#: backend/main_settings.php:280
+#: backend/main_settings.php:286
 msgid "Click here to duplicate this form!"
 msgstr ""
 
-#: backend/main_settings.php:304
+#: backend/main_settings.php:310
 msgid "Click here to change the owner of this form!"
 msgstr ""
 
-#: backend/main_settings.php:309
+#: backend/main_settings.php:315
 msgid "Quick shortcode:"
 msgstr ""
 
-#: backend/main_settings.php:332
+#: backend/main_settings.php:338
 msgid "Do you want to change the name of this form?"
 msgstr ""
 
-#: backend/main_settings.php:336
+#: backend/main_settings.php:342
 msgid "Do you want to change the owner of this form?"
 msgstr ""
 
-#: backend/main_settings.php:340
+#: backend/main_settings.php:346
 msgid "Do you want to duplicate this form?"
 msgstr ""
 
@@ -1772,9 +1775,9 @@ msgstr ""
 
 #: backend/search.php:102
 #: backend/search.php:363
-#: build/js/block-editor.js:2728
-#: build/js/search-instance.js:27030
-#: build/js/search-instance.js:27064
+#: build/js/block-editor.js:20
+#: build/js/index-table.js:32
+#: build/js/search-instance.js:87
 msgid "Loading..."
 msgstr ""
 
@@ -2064,6 +2067,8 @@ msgstr ""
 
 #: backend/settings/class/border.class.php:35
 #: backend/settings/class/boxshadow.class.php:36
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
 msgid "Style"
 msgstr ""
 
@@ -2220,10 +2225,8 @@ msgstr ""
 #: backend/settings/class/dateinterval.class.php:45
 #: backend/tabs/instance/frontend/custom_fields.php:392
 #: backend/tabs/instance/frontend/custom_fields.php:621
-#: build/js/dev.js:24866
-#: build/js/dev.js:25216
-#: build/js/search-instance.js:24866
-#: build/js/search-instance.js:25216
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
 msgid "Type"
 msgstr ""
 
@@ -2656,6 +2659,8 @@ msgstr ""
 #: backend/tabs/instance/frontend/custom_fields.php:398
 #: backend/tabs/instance/frontend/custom_fields.php:627
 #: backend/tabs/priorities/priority_groups.php:202
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
 msgid "Text"
 msgstr ""
 
@@ -2791,8 +2796,8 @@ msgid "Multiselect with search"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:21
-#: build/js/dev.js:24942
-#: build/js/search-instance.js:24942
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
 msgid "Taxonomy"
 msgstr ""
 
@@ -3479,36 +3484,10 @@ msgid "Keyword"
 msgstr ""
 
 #: backend/tabs/index_table/synonyms.php:52
-#: backend/tabs/instance/advanced/content.php:235
+#: backend/tabs/instance/advanced/content.php:242
 #: backend/tabs/instance/general/image_options.php:237
-#: build/js/dev.js:24880
-#: build/js/dev.js:24972
-#: build/js/dev.js:24973
-#: build/js/dev.js:24976
-#: build/js/dev.js:25062
-#: build/js/dev.js:25063
-#: build/js/dev.js:25071
-#: build/js/dev.js:25072
-#: build/js/dev.js:25080
-#: build/js/dev.js:25081
-#: build/js/dev.js:25087
-#: build/js/dev.js:25125
-#: build/js/dev.js:25126
-#: build/js/dev.js:25231
-#: build/js/search-instance.js:24880
-#: build/js/search-instance.js:24972
-#: build/js/search-instance.js:24973
-#: build/js/search-instance.js:24976
-#: build/js/search-instance.js:25062
-#: build/js/search-instance.js:25063
-#: build/js/search-instance.js:25071
-#: build/js/search-instance.js:25072
-#: build/js/search-instance.js:25080
-#: build/js/search-instance.js:25081
-#: build/js/search-instance.js:25087
-#: build/js/search-instance.js:25125
-#: build/js/search-instance.js:25126
-#: build/js/search-instance.js:25231
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
 msgid "Default"
 msgstr ""
 
@@ -3732,96 +3711,96 @@ msgstr ""
 msgid "Secondary Description Field for Posts/Pages/CPT"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:151
+#: backend/tabs/instance/advanced/content.php:153
 msgid "Advanced Title Field (default: {titlefield})"
-msgstr ""
-
-#: backend/tabs/instance/advanced/content.php:155
-#: backend/tabs/instance/advanced/content.php:167
-msgid "HTML is supported! Use {custom_field_name} format to have custom field values."
 msgstr ""
 
 #: backend/tabs/instance/advanced/content.php:157
 #: backend/tabs/instance/advanced/content.php:169
-#: backend/tabs/instance/advanced/content.php:216
-#: backend/tabs/instance/advanced/content.php:227
+msgid "HTML is supported! Use {custom_field_name} format to have custom field values."
+msgstr ""
+
+#: backend/tabs/instance/advanced/content.php:159
+#: backend/tabs/instance/advanced/content.php:171
+#: backend/tabs/instance/advanced/content.php:222
+#: backend/tabs/instance/advanced/content.php:233
 msgid "More possibilities explained here!"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:163
+#: backend/tabs/instance/advanced/content.php:165
 msgid "Advanced Description Field (default: {descriptionfield})"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:176
+#: backend/tabs/instance/advanced/content.php:179
 msgid "User Result Fields & URL"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:180
+#: backend/tabs/instance/advanced/content.php:183
 msgid "Title field for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:183
+#: backend/tabs/instance/advanced/content.php:186
 msgid "Login Name"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:184
+#: backend/tabs/instance/advanced/content.php:187
 msgid "Display Name"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:196
+#: backend/tabs/instance/advanced/content.php:197
 msgid "Description field for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:199
+#: backend/tabs/instance/advanced/content.php:200
 msgid "Biography"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:200
+#: backend/tabs/instance/advanced/content.php:201
 msgid "BuddyPress Last Activity"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:201
+#: backend/tabs/instance/advanced/content.php:202
 #: backend/tabs/instance/frontend/reset_button.php:13
 msgid "Nothing"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:210
+#: backend/tabs/instance/advanced/content.php:216
 msgid "Advanced title field for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:215
+#: backend/tabs/instance/advanced/content.php:221
 msgid "Variable {titlefield} will be replaced with the Title field value. Use the format {meta_field} to get user meta."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:221
+#: backend/tabs/instance/advanced/content.php:227
 msgid "Advanced description field for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:226
+#: backend/tabs/instance/advanced/content.php:232
 msgid "Variable {descriptionfield} will be replaced with the Description field value. Use the format {meta_field} to get user meta."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:232
+#: backend/tabs/instance/advanced/content.php:239
 msgid "<strong>User</strong> results url source"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:236
+#: backend/tabs/instance/advanced/content.php:243
 msgid "BuddyPress profile"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:237
+#: backend/tabs/instance/advanced/content.php:244
 msgid "Custom scheme"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:244
+#: backend/tabs/instance/advanced/content.php:251
 msgid "This is the result URL destination. By default it's the author profile link."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:249
+#: backend/tabs/instance/advanced/content.php:256
 msgid "Custom url scheme for <strong>User</strong> results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:254
+#: backend/tabs/instance/advanced/content.php:261
 msgid "You can use these variables: {USER_ID}, {USER_LOGIN}, {USER_NICENAME}, {USER_DISPLAYNAME}, {USER_NICKNAME}"
 msgstr ""
 
@@ -3922,78 +3901,90 @@ msgid "The groups are reordered according to the highest priority and relevance 
 msgstr ""
 
 #: backend/tabs/instance/advanced/grouping.php:48
+msgid "Try to apply the same results order on the results page? (NOT RECOMMENDED)"
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:52
+msgid "The results order is different on the results page as grouping changes that. When this is enabled, the plugin will try to maintain the same order for both the live and results pages."
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:53
+msgid "Works best if the <a class=\"asp_to_tab\" href=\"#614\" tabid=\"111\">post type limit</a> is set to the same number for both the live and results page."
+msgstr ""
+
+#: backend/tabs/instance/advanced/grouping.php:58
 msgid "Make group header clickable?"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:51
+#: backend/tabs/instance/advanced/grouping.php:61
 msgid "Makes the group header clickable links to the corresponding archive pages."
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:55
+#: backend/tabs/instance/advanced/grouping.php:65
 msgid "Group header prefix text"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:61
+#: backend/tabs/instance/advanced/grouping.php:71
 msgid "Group header suffix text"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:67
+#: backend/tabs/instance/advanced/grouping.php:77
 msgid "If result does not match any group?"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:69
+#: backend/tabs/instance/advanced/grouping.php:79
 msgid "Remove it"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:70
+#: backend/tabs/instance/advanced/grouping.php:80
 msgid "Display in Other results group"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:78
+#: backend/tabs/instance/advanced/grouping.php:88
 msgid "Other results group header text"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:80
+#: backend/tabs/instance/advanced/grouping.php:90
 msgid "location "
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:82
+#: backend/tabs/instance/advanced/grouping.php:92
 msgid "Top of results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:83
+#: backend/tabs/instance/advanced/grouping.php:93
 msgid "Bottom of results"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:91
+#: backend/tabs/instance/advanced/grouping.php:101
 msgid "Display duplicates only in the first group match?"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:94
+#: backend/tabs/instance/advanced/grouping.php:104
 msgid "For example posts in multiple categories will be displayed in the first matching group only."
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:98
+#: backend/tabs/instance/advanced/grouping.php:108
 msgid "Display empty groups with the 'No results!' text?"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:101
+#: backend/tabs/instance/advanced/grouping.php:111
 msgid " ..emtpy group location "
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:103
+#: backend/tabs/instance/advanced/grouping.php:113
 msgid "Leave the default"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:104
+#: backend/tabs/instance/advanced/grouping.php:114
 msgid "Move to the bottom"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:105
+#: backend/tabs/instance/advanced/grouping.php:115
 msgid "Move to the top"
 msgstr ""
 
-#: backend/tabs/instance/advanced/grouping.php:113
+#: backend/tabs/instance/advanced/grouping.php:123
 msgid "Show results count in group headers"
 msgstr ""
 
@@ -4995,19 +4986,19 @@ msgstr ""
 msgid "Return media files as results?"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:10
+#: backend/tabs/instance/general/attachment_results.php:11
 msgid "Search engine for media"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:13
+#: backend/tabs/instance/general/attachment_results.php:14
 msgid "Regular engine"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:14
+#: backend/tabs/instance/general/attachment_results.php:15
 msgid "Index table engine"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:21
+#: backend/tabs/instance/general/attachment_results.php:22
 msgid ""
 "Index table engine will only work if you have the\n"
 "\t\t<a href=\"%s\">index table</a>\n"
@@ -5015,82 +5006,82 @@ msgid ""
 "\t\t<a href=\"%s\" target=\"_blank\">documentation about the index table</a>."
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:33
+#: backend/tabs/instance/general/attachment_results.php:34
 msgid "Search in attachment titles?"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:40
+#: backend/tabs/instance/general/attachment_results.php:41
 msgid "Search in attachment description?"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:47
+#: backend/tabs/instance/general/attachment_results.php:48
 msgid "Search in attachment captions?"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:54
+#: backend/tabs/instance/general/attachment_results.php:55
 msgid "Search in attachment IDs?"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:61
+#: backend/tabs/instance/general/attachment_results.php:62
 msgid "Search in attachment terms (tags, etc..)?"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:65
+#: backend/tabs/instance/general/attachment_results.php:66
 msgid "Will search in terms (categories, tags) related to the attachments."
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:66
+#: backend/tabs/instance/general/attachment_results.php:67
 #: backend/tabs/instance/general/sources.php:114
 msgid "WARNING: <strong>Search in terms</strong> can be database heavy operation. Not recommended for big databases."
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:70
+#: backend/tabs/instance/general/attachment_results.php:71
 msgid "Allowed mime types"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:75
+#: backend/tabs/instance/general/attachment_results.php:76
 msgid ""
 "<strong>Comma separated list</strong> of allowed mime types. List of <a href=\"%s\"\n"
 "\ttarget=\"_blank\">default allowed mime types</a> in WordPress."
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:83
+#: backend/tabs/instance/general/attachment_results.php:84
 msgid "Link the results to"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:86
+#: backend/tabs/instance/general/attachment_results.php:87
 msgid "attachment page"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:87
+#: backend/tabs/instance/general/attachment_results.php:88
 msgid "attachment file directly"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:88
+#: backend/tabs/instance/general/attachment_results.php:89
 msgid "attachment parent post"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:97
+#: backend/tabs/instance/general/attachment_results.php:98
 msgid " ..and if parent does not exist then "
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:111
+#: backend/tabs/instance/general/attachment_results.php:112
 msgid "Use the image of image mime types as the result image?"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:118
+#: backend/tabs/instance/general/attachment_results.php:119
 msgid "Allow custom field filters to apply on Attachment results as well?"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:123
+#: backend/tabs/instance/general/attachment_results.php:124
 msgid "This only has effect if you have use any custom field filters."
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:128
+#: backend/tabs/instance/general/attachment_results.php:132
 msgid "Exclude attachment IDs"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:132
+#: backend/tabs/instance/general/attachment_results.php:136
 msgid "<strong>Comma separated list</strong> of attachment IDs to exclude."
 msgstr ""
 
@@ -5439,10 +5430,8 @@ msgstr ""
 #: backend/tabs/instance/general/ordering.php:68
 #: backend/tabs/instance/general/user_search.php:72
 #: backend/tabs/instance/general/user_search.php:111
-#: build/js/dev.js:24865
-#: build/js/dev.js:25209
-#: build/js/search-instance.js:24865
-#: build/js/search-instance.js:25209
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
 msgid "Field name"
 msgstr ""
 
@@ -6278,46 +6267,52 @@ msgid "If turned OFF, it will use WordPress defaults. Default custom value: <b>Y
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:176
-msgid "Show description (content) in results?"
-msgstr ""
-
-#: backend/tabs/instance/layout/results_layout.php:178
-#: backend/tabs/instance/layout/results_layout.php:216
-#: backend/tabs/instance/layout/results_layout.php:238
-msgid "Description (content) length"
+#: backend/tabs/instance/layout/results_layout.php:219
+#: backend/tabs/instance/layout/results_layout.php:246
+msgid "Max. title field length"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:182
-#: backend/tabs/instance/layout/results_layout.php:220
-#: backend/tabs/instance/layout/results_layout.php:242
+msgid "Show description (content) in results?"
+msgstr ""
+
+#: backend/tabs/instance/layout/results_layout.php:184
+#: backend/tabs/instance/layout/results_layout.php:227
+#: backend/tabs/instance/layout/results_layout.php:254
+msgid "Description (content) length"
+msgstr ""
+
+#: backend/tabs/instance/layout/results_layout.php:188
+#: backend/tabs/instance/layout/results_layout.php:231
+#: backend/tabs/instance/layout/results_layout.php:258
 msgid "Content length in characters."
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:187
+#: backend/tabs/instance/layout/results_layout.php:193
 msgid "Display the description context?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:190
+#: backend/tabs/instance/layout/results_layout.php:196
 msgid " ..depth"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:198
+#: backend/tabs/instance/layout/results_layout.php:204
 msgid "Will display the description from around the search phrase, not from the beginning."
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:204
+#: backend/tabs/instance/layout/results_layout.php:210
 msgid "Results fields - Taxonomy term results"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:214
+#: backend/tabs/instance/layout/results_layout.php:225
 msgid "Show description (content) in taxonomy term results?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:226
+#: backend/tabs/instance/layout/results_layout.php:237
 msgid "Results fields - User results"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:236
+#: backend/tabs/instance/layout/results_layout.php:252
 msgid "Show description (content) in user results?"
 msgstr ""
 
@@ -7946,7 +7941,7 @@ msgid "Useful Resources"
 msgstr ""
 
 #: backend/updates_help.php:50
-msgid "Onlie Documentation"
+msgid "Online Documentation"
 msgstr ""
 
 #: backend/updates_help.php:51
@@ -8087,705 +8082,749 @@ msgstr ""
 msgid "For more information you can read the <a target=\"_blank\" href=\"https://documentation.ajaxsearchpro.com/gdpr-and-cookie-policy\">GDPR and Cookie policy documentation</a>."
 msgstr ""
 
-#: build/js/block-editor.js:2588
+#: build/js/block-editor.js:20
 msgid "search"
 msgstr ""
 
-#: build/js/block-editor.js:2588
+#: build/js/block-editor.js:20
 msgid "ajax"
 msgstr ""
 
-#: build/js/block-editor.js:2610
+#: build/js/block-editor.js:20
 msgid "Loading search instances..."
 msgstr ""
 
-#: build/js/block-editor.js:2642
+#: build/js/block-editor.js:20
 msgid "Ajax Search Pro:"
 msgstr ""
 
-#: build/js/block-editor.js:2646
+#: build/js/block-editor.js:20
 msgid "Search bar"
 msgstr ""
 
-#: build/js/block-editor.js:2647
+#: build/js/block-editor.js:20
 msgid "Search settings"
 msgstr ""
 
-#: build/js/block-editor.js:2648
+#: build/js/block-editor.js:20
 msgid "Search results"
 msgstr ""
 
-#: build/js/block-editor.js:2656
+#: build/js/block-editor.js:20
 msgid "Search ID:"
 msgstr ""
 
-#: build/js/block-editor.js:2704
+#: build/js/block-editor.js:20
 msgid "Selecting the search instance above will enable live search and filter for the query loop block for that search bar."
 msgstr ""
 
-#: build/js/block-editor.js:2712
+#: build/js/block-editor.js:20
 msgid "Learn more."
 msgstr ""
 
-#: build/js/block-editor.js:2753
+#: build/js/block-editor.js:20
 msgid "Live search target"
 msgstr ""
 
-#: build/js/dev.js:24317
-#: build/js/search-instance.js:24317
-msgid "Do you want to delete this tag?"
-msgstr ""
-
-#: build/js/dev.js:24371
-#: build/js/search-instance.js:24371
-msgid "Insert Field"
-msgstr ""
-
-#: build/js/dev.js:24375
-#: build/js/search-instance.js:24375
-msgid "Switch to Text Editor"
-msgstr ""
-
-#: build/js/dev.js:24375
-#: build/js/search-instance.js:24375
-msgid "Switch to Visual Editor"
-msgstr ""
-
-#: build/js/dev.js:24377
-#: build/js/search-instance.js:24377
-msgid "Non-webkit browsers may not work correctly for the visual editor! Recommended browser: Chrome"
-msgstr ""
-
-#: build/js/dev.js:24471
-#: build/js/search-instance.js:24471
-msgid "Result:"
-msgstr ""
-
-#: build/js/dev.js:24582
-#: build/js/search-instance.js:24582
+#: build/js/dev.js:62
+#: build/js/search-instance.js:62
 msgid "Select a taxonomy first"
 msgstr ""
 
-#: build/js/dev.js:24803
-#: build/js/search-instance.js:24803
+#: build/js/dev.js:62
+#: build/js/search-instance.js:62
 msgid "Field editor"
 msgstr ""
 
-#: build/js/dev.js:24864
-#: build/js/search-instance.js:24864
-msgid "Custom field (post metadata) content. Supports ACF."
+#: build/js/dev.js:62
+#: build/js/search-instance.js:62
+msgid "Result:"
 msgstr ""
 
-#: build/js/dev.js:24865
-#: build/js/dev.js:25113
-#: build/js/dev.js:25212
-#: build/js/search-instance.js:24865
-#: build/js/search-instance.js:25113
-#: build/js/search-instance.js:25212
-msgid "Enter field name"
-msgstr ""
-
-#: build/js/dev.js:24869
-#: build/js/dev.js:25219
-#: build/js/search-instance.js:24869
-#: build/js/search-instance.js:25219
-msgid "Source"
-msgstr ""
-
-#: build/js/dev.js:24872
-#: build/js/search-instance.js:24872
-msgid "Post Meta or ACF"
-msgstr ""
-
-#: build/js/dev.js:24873
-#: build/js/search-instance.js:24873
-msgid "User (author) Meta or ACF"
-msgstr ""
-
-#: build/js/dev.js:24874
-#: build/js/dev.js:25224
-#: build/js/search-instance.js:24874
-#: build/js/search-instance.js:25224
-msgid "Relationship to Post Type"
-msgstr ""
-
-#: build/js/dev.js:24875
-#: build/js/dev.js:25223
-#: build/js/search-instance.js:24875
-#: build/js/search-instance.js:25223
-msgid "Relationship to Users"
-msgstr ""
-
-#: build/js/dev.js:24876
-#: build/js/dev.js:25225
-#: build/js/search-instance.js:24876
-#: build/js/search-instance.js:25225
-msgid "Relationship to Taxonomy Terms"
-msgstr ""
-
-#: build/js/dev.js:24877
-#: build/js/search-instance.js:24877
-msgid "PODs field"
-msgstr ""
-
-#: build/js/dev.js:24880
-#: build/js/dev.js:25230
-#: build/js/search-instance.js:24880
-#: build/js/search-instance.js:25230
-msgid "Max. length"
-msgstr ""
-
-#: build/js/dev.js:24883
-#: build/js/dev.js:24951
-#: build/js/dev.js:25239
-#: build/js/search-instance.js:24883
-#: build/js/search-instance.js:24951
-#: build/js/search-instance.js:25239
-msgid "Separation"
-msgstr ""
-
-#: build/js/dev.js:24885
-#: build/js/dev.js:25241
-#: build/js/search-instance.js:24885
-#: build/js/search-instance.js:25241
-msgid "How to separate items if the field contains an array of values"
-msgstr ""
-
-#: build/js/dev.js:24887
-#: build/js/dev.js:24955
-#: build/js/dev.js:25243
-#: build/js/search-instance.js:24887
-#: build/js/search-instance.js:24955
-#: build/js/search-instance.js:25243
-msgid "Text with separator"
-msgstr ""
-
-#: build/js/dev.js:24888
-#: build/js/dev.js:24956
-#: build/js/dev.js:25244
-#: build/js/search-instance.js:24888
-#: build/js/search-instance.js:24956
-#: build/js/search-instance.js:25244
-msgid "HTML List (ul>li)"
-msgstr ""
-
-#: build/js/dev.js:24898
-#: build/js/dev.js:24966
-#: build/js/search-instance.js:24898
-#: build/js/search-instance.js:24966
-msgid "Separator"
-msgstr ""
-
-#: build/js/dev.js:24899
-#: build/js/dev.js:24967
-#: build/js/search-instance.js:24899
-#: build/js/search-instance.js:24967
-msgid " ,"
-msgstr ""
-
-#: build/js/dev.js:24902
-#: build/js/search-instance.js:24902
-msgid "Separator between the items when the value is an array"
-msgstr ""
-
-#: build/js/dev.js:24904
-#: build/js/search-instance.js:24904
-msgid "Allow HTML in field output?"
-msgstr ""
-
-#: build/js/dev.js:24913
-#: build/js/dev.js:25034
-#: build/js/search-instance.js:24913
-#: build/js/search-instance.js:25034
-msgid "Date Format"
-msgstr ""
-
-#: build/js/dev.js:24916
-#: build/js/dev.js:25037
-#: build/js/search-instance.js:24916
-#: build/js/search-instance.js:25037
-msgid "WordPress Default"
-msgstr ""
-
-#: build/js/dev.js:24917
-#: build/js/dev.js:25038
-#: build/js/search-instance.js:24917
-#: build/js/search-instance.js:25038
-msgid "DateTime format, ex.: \"F j, Y, g:i a\" -> \"March 10, 2001, 5:16 pm\""
-msgstr ""
-
-#: build/js/dev.js:24922
-#: build/js/search-instance.js:24922
-msgid "Thousand separator"
-msgstr ""
-
-#: build/js/dev.js:24927
-#: build/js/search-instance.js:24927
-msgid "Decimals"
-msgstr ""
-
-#: build/js/dev.js:24930
-#: build/js/search-instance.js:24930
-msgid "Decimal separator"
-msgstr ""
-
-#: build/js/dev.js:24941
-#: build/js/search-instance.js:24941
-msgid "List of taxonomy terms (categories, tags etc..)."
-msgstr ""
-
-#: build/js/dev.js:24942
-#: build/js/search-instance.js:24942
-msgid "Select taxonomy"
-msgstr ""
-
-#: build/js/dev.js:24943
-#: build/js/search-instance.js:24943
-msgid "Count"
-msgstr ""
-
-#: build/js/dev.js:24943
-#: build/js/dev.js:25117
-#: build/js/search-instance.js:24943
-#: build/js/search-instance.js:25117
-msgid "5"
-msgstr ""
-
-#: build/js/dev.js:24944
-#: build/js/search-instance.js:24944
-msgid "Order by"
-msgstr ""
-
-#: build/js/dev.js:24945
-#: build/js/search-instance.js:24945
-msgid "Order"
-msgstr ""
-
-#: build/js/dev.js:24946
-#: build/js/search-instance.js:24946
-msgid "Exclude terms"
-msgstr ""
-
-#: build/js/dev.js:24946
-#: build/js/search-instance.js:24946
-msgid "Select terms to exclude"
-msgstr ""
-
-#: build/js/dev.js:24948
-#: build/js/search-instance.js:24948
-msgid "Make terms clickable links"
-msgstr ""
-
-#: build/js/dev.js:24953
-#: build/js/search-instance.js:24953
-msgid "How to separate the terms?"
-msgstr ""
-
-#: build/js/dev.js:24970
-#: build/js/search-instance.js:24970
-msgid "Separator between the items if the value is an array"
-msgstr ""
-
-#: build/js/dev.js:24972
-#: build/js/dev.js:24976
-#: build/js/search-instance.js:24972
-#: build/js/search-instance.js:24976
-msgid "Term color"
-msgstr ""
-
-#: build/js/dev.js:24973
-#: build/js/search-instance.js:24973
-msgid "Separator color"
-msgstr ""
-
-#: build/js/dev.js:24981
-#: build/js/search-instance.js:24981
-msgid "Open links in new tab?"
-msgstr ""
-
-#: build/js/dev.js:24990
-#: build/js/search-instance.js:24990
-msgid "Field"
-msgstr ""
-
-#: build/js/dev.js:24993
-#: build/js/dev.js:25135
-#: build/js/search-instance.js:24993
-#: build/js/search-instance.js:25135
-msgid "Result ID"
-msgstr ""
-
-#: build/js/dev.js:24994
-#: build/js/dev.js:25136
-#: build/js/search-instance.js:24994
-#: build/js/search-instance.js:25136
-msgid "Result Title"
-msgstr ""
-
-#: build/js/dev.js:24995
-#: build/js/dev.js:25137
-#: build/js/search-instance.js:24995
-#: build/js/search-instance.js:25137
-msgid "Result Content"
-msgstr ""
-
-#: build/js/dev.js:24996
-#: build/js/dev.js:25138
-#: build/js/search-instance.js:24996
-#: build/js/search-instance.js:25138
-msgid "Result Post Type"
-msgstr ""
-
-#: build/js/dev.js:24997
-#: build/js/dev.js:25139
-#: build/js/search-instance.js:24997
-#: build/js/search-instance.js:25139
-msgid "Result URL"
-msgstr ""
-
-#: build/js/dev.js:24998
-#: build/js/dev.js:25140
-#: build/js/search-instance.js:24998
-#: build/js/search-instance.js:25140
-msgid "Result image URL"
-msgstr ""
-
-#: build/js/dev.js:24999
-#: build/js/dev.js:25141
-#: build/js/search-instance.js:24999
-#: build/js/search-instance.js:25141
-msgid "Result date"
-msgstr ""
-
-#: build/js/dev.js:25000
-#: build/js/dev.js:25142
-#: build/js/search-instance.js:25000
-#: build/js/search-instance.js:25142
-msgid "Result author (Display name)"
-msgstr ""
-
-#: build/js/dev.js:25009
-#: build/js/search-instance.js:25009
-msgid "The default Result Title Field as set in the primary or secondary source."
-msgstr ""
-
-#: build/js/dev.js:25015
-#: build/js/search-instance.js:25015
-msgid "The default Result Content Field as set in the primary or secondary source."
-msgstr ""
-
-#: build/js/dev.js:25021
-#: build/js/search-instance.js:25021
-msgid "The result URL parsed by Ajax Search Pro."
-msgstr ""
-
-#: build/js/dev.js:25027
-#: build/js/search-instance.js:25027
-msgid "The image URL parsed by Ajax Search Pro."
-msgstr ""
-
-#: build/js/dev.js:25048
-#: build/js/search-instance.js:25048
-msgid "Price field"
-msgstr ""
-
-#: build/js/dev.js:25052
-#: build/js/search-instance.js:25052
-msgid "Default Price HTML"
-msgstr ""
-
-#: build/js/dev.js:25053
-#: build/js/search-instance.js:25053
-msgid "Price without tax"
-msgstr ""
-
-#: build/js/dev.js:25054
-#: build/js/search-instance.js:25054
-msgid "Price with tax"
-msgstr ""
-
-#: build/js/dev.js:25055
-#: build/js/search-instance.js:25055
-msgid "Sale Price"
-msgstr ""
-
-#: build/js/dev.js:25062
-#: build/js/search-instance.js:25062
-msgid "Regular Price Color"
-msgstr ""
-
-#: build/js/dev.js:25063
-#: build/js/search-instance.js:25063
-msgid "Sale Price Color"
-msgstr ""
-
-#: build/js/dev.js:25070
-#: build/js/dev.js:25124
-#: build/js/search-instance.js:25070
-#: build/js/search-instance.js:25124
-msgid "Stars Size"
-msgstr ""
-
-#: build/js/dev.js:25070
-#: build/js/dev.js:25124
-#: build/js/search-instance.js:25070
-#: build/js/search-instance.js:25124
-msgid "Default: 17px"
-msgstr ""
-
-#: build/js/dev.js:25070
-#: build/js/dev.js:25124
-#: build/js/search-instance.js:25070
-#: build/js/search-instance.js:25124
-msgid "Ex.: 17px or 1em"
-msgstr ""
-
-#: build/js/dev.js:25071
-#: build/js/dev.js:25125
-#: build/js/search-instance.js:25071
-#: build/js/search-instance.js:25125
-msgid "Stars Color"
-msgstr ""
-
-#: build/js/dev.js:25072
-#: build/js/dev.js:25126
-#: build/js/search-instance.js:25072
-#: build/js/search-instance.js:25126
-msgid "Stars Background Color"
-msgstr ""
-
-#: build/js/dev.js:25077
-#: build/js/search-instance.js:25077
-msgid "Display Quantity Input"
-msgstr ""
-
-#: build/js/dev.js:25078
-#: build/js/search-instance.js:25078
-msgid "Display only when product is in-stock"
-msgstr ""
-
-#: build/js/dev.js:25079
-#: build/js/search-instance.js:25079
-msgid "Default quantity"
-msgstr ""
-
-#: build/js/dev.js:25079
-#: build/js/search-instance.js:25079
-msgid "Default: 1"
-msgstr ""
-
-#: build/js/dev.js:25080
-#: build/js/search-instance.js:25080
-msgid "Button Color"
-msgstr ""
-
-#: build/js/dev.js:25081
-#: build/js/search-instance.js:25081
-msgid "Button Text Color"
-msgstr ""
-
-#: build/js/dev.js:25084
-#: build/js/search-instance.js:25084
-msgid "Justification"
-msgstr ""
-
-#: build/js/dev.js:25095
-#: build/js/search-instance.js:25095
-msgid "Display only on these product statuses"
-msgstr ""
-
-#: build/js/dev.js:25097
-#: build/js/search-instance.js:25097
-msgid "All statuses"
-msgstr ""
-
-#: build/js/dev.js:25099
-#: build/js/search-instance.js:25099
-msgid "In Stock"
-msgstr ""
-
-#: build/js/dev.js:25100
-#: build/js/search-instance.js:25100
-msgid "Out of Stock"
-msgstr ""
-
-#: build/js/dev.js:25101
-#: build/js/search-instance.js:25101
-msgid "On Backorder"
-msgstr ""
-
-#: build/js/dev.js:25106
-#: build/js/search-instance.js:25106
-msgid "Display stock count"
-msgstr ""
-
-#: build/js/dev.js:25113
-#: build/js/search-instance.js:25113
-msgid "Rating custom field name"
-msgstr ""
-
-#: build/js/dev.js:25116
-#: build/js/search-instance.js:25116
-msgid "Max. rating"
-msgstr ""
-
-#: build/js/dev.js:25122
-#: build/js/search-instance.js:25122
-msgid "Highest possible rating. Ex.: Users can rate 0-10, then it's 10"
-msgstr ""
-
-#: build/js/dev.js:25132
-#: build/js/search-instance.js:25132
-msgid "Categories or other Taxonomy Terms"
-msgstr ""
-
-#: build/js/dev.js:25133
-#: build/js/search-instance.js:25133
-msgid "Title Field (default)"
-msgstr ""
-
-#: build/js/dev.js:25134
-#: build/js/search-instance.js:25134
-msgid "Description Field (default)"
-msgstr ""
-
-#: build/js/dev.js:25143
-#: build/js/search-instance.js:25143
-msgid "WooCommerce: Price"
-msgstr ""
-
-#: build/js/dev.js:25144
-#: build/js/search-instance.js:25144
-msgid "WooCommerce: Add to Cart"
-msgstr ""
-
-#: build/js/dev.js:25145
-#: build/js/search-instance.js:25145
-msgid "WooCommerce: Star rating"
-msgstr ""
-
-#: build/js/dev.js:25146
-#: build/js/search-instance.js:25146
-msgid "WooCommerce: Stock Status"
-msgstr ""
-
-#: build/js/dev.js:25147
-#: build/js/search-instance.js:25147
-msgid "Star rating field"
-msgstr ""
-
-#: build/js/dev.js:25148
-#: build/js/search-instance.js:25148
-msgid "Result Field"
-msgstr ""
-
-#: build/js/dev.js:25152
-#: build/js/search-instance.js:25152
-msgid "Terms"
-msgstr ""
-
-#: build/js/dev.js:25153
-#: build/js/search-instance.js:25153
-msgid "Price"
-msgstr ""
-
-#: build/js/dev.js:25154
-#: build/js/search-instance.js:25154
-msgid "Woo Star Rating"
-msgstr ""
-
-#: build/js/dev.js:25155
-#: build/js/search-instance.js:25155
-msgid "Woo Add to Cart"
-msgstr ""
-
-#: build/js/dev.js:25156
-#: build/js/search-instance.js:25156
-msgid "Woo Stock Status"
-msgstr ""
-
-#: build/js/dev.js:25157
-#: build/js/search-instance.js:25157
-msgid "Star Rating"
-msgstr ""
-
-#: build/js/dev.js:25206
-#: build/js/search-instance.js:25206
-msgid "Custom field (user metadata) content. Supports ACF."
-msgstr ""
-
-#: build/js/dev.js:25222
-#: build/js/search-instance.js:25222
-msgid "User Meta or ACF"
-msgstr ""
-
-#: build/js/dev.js:25937
-#: build/js/search-instance.js:25937
-msgid "Conditional: If field values wrapped in this tag are empty, it returns an empty string."
-msgstr ""
-
-#: build/js/dev.js:25937
-#: build/js/search-instance.js:25937
-msgid "Shortcode escape: To insert a shortcode into the field, wrap with this tag."
-msgstr ""
-
-#: build/js/dev.js:25937
-#: build/js/search-instance.js:25937
-msgid "See documentation"
-msgstr ""
-
-#: build/js/dev.js:26013
-#: build/js/search-instance.js:26013
+#: build/js/dev.js:69
+#: build/js/search-instance.js:69
 msgid "Paragraph HTML tag"
 msgstr ""
 
-#: build/js/dev.js:26019
-#: build/js/search-instance.js:26019
+#: build/js/dev.js:69
+#: build/js/search-instance.js:69
 msgid "Div HTML tag"
 msgstr ""
 
-#: build/js/dev.js:26025
-#: build/js/search-instance.js:26025
+#: build/js/dev.js:69
+#: build/js/search-instance.js:69
 msgid "Span HTML tag"
 msgstr ""
 
-#: build/js/dev.js:26031
-#: build/js/search-instance.js:26031
+#: build/js/dev.js:69
+#: build/js/search-instance.js:69
 msgid "Strong (bold) HTML tag"
 msgstr ""
 
-#: build/js/dev.js:26037
-#: build/js/search-instance.js:26037
+#: build/js/dev.js:69
+#: build/js/search-instance.js:69
 msgid "Italic HTML tag"
 msgstr ""
 
-#: build/js/dev.js:26043
-#: build/js/search-instance.js:26043
+#: build/js/dev.js:69
+#: build/js/search-instance.js:69
 msgid "Emphasis HTML tag"
 msgstr ""
 
-#: build/js/dev.js:26049
-#: build/js/search-instance.js:26049
+#: build/js/dev.js:69
+#: build/js/search-instance.js:69
 msgid "Line break HTML tag"
 msgstr ""
 
-#: build/js/search-instance.js:27033
-#: build/js/search-instance.js:27067
+#: build/js/dev.js:85
+#: build/js/search-instance.js:85
+msgid "Conditional: If field values wrapped in this tag are empty, it returns an empty string."
+msgstr ""
+
+#: build/js/dev.js:86
+#: build/js/search-instance.js:86
+msgid "Shortcode escape: To insert a shortcode into the field, wrap with this tag."
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "See documentation"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Do you want to delete this tag?"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Insert Field"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Switch to Text Editor"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Switch to Visual Editor"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Non-webkit browsers may not work correctly for the visual editor! Recommended browser: Chrome"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Custom field (post metadata) content. Supports ACF."
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Enter field name"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Source"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Post Meta or ACF"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "User (author) Meta or ACF"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Relationship to Post Type"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Relationship to Users"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Relationship to Taxonomy Terms"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "PODs field"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Max. length"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Separation"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "How to separate items if the field contains an array of values"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Text with separator"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "HTML List (ul>li)"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Separator"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid " ,"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Separator between the items when the value is an array"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Allow HTML in field output?"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Date Format"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "WordPress Default"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "DateTime format, ex.: \"F j, Y, g:i a\" -> \"March 10, 2001, 5:16 pm\""
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Thousand separator"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Decimals"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Decimal separator"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "List of taxonomy terms (categories, tags etc..)."
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Select taxonomy"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Count"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "5"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Order by"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Order"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Exclude terms"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Select terms to exclude"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Make terms clickable links"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "How to separate the terms?"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Separator between the items if the value is an array"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Term color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Separator color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Open links in new tab?"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Field"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Result ID"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Result Title"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Result Content"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Result Post Type"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Result URL"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Result image URL"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Result date"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Result author (Display name)"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "The default Result Title Field as set in the primary or secondary source."
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "The default Result Content Field as set in the primary or secondary source."
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "The result URL parsed by Ajax Search Pro."
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "The image URL parsed by Ajax Search Pro."
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Price field"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Default Price HTML"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Price without tax"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Price with tax"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Sale Price"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Regular Price Color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Sale Price Color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Stars Size"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Default: 17px"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Ex.: 17px or 1em"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Stars Color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Stars Background Color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Default: Sale!"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Font Size"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Default: 14px"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Ex.: 14px or 1em"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Font Color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Background Color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Position"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Top Right"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Top Left"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Bottom Left"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Bottom Right"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Box"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Capsule"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Round"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Display Quantity Input"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Display only when product is in-stock"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Default quantity"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Default: 1"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Button Color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Button Text Color"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Justification"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Display only on these product statuses"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "All statuses"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "In Stock"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Out of Stock"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "On Backorder"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Display stock count"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Rating custom field name"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Max. rating"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Highest possible rating. Ex.: Users can rate 0-10, then it's 10"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Categories or other Taxonomy Terms"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Title Field (default)"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Description Field (default)"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "WooCommerce: Price"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "WooCommerce: Add to Cart"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "WooCommerce: Sale badge"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "WooCommerce: Star rating"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "WooCommerce: Stock Status"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Star rating field"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Result Field"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Terms"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Price"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Woo Sale Badge"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Woo Star Rating"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Woo Add to Cart"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Woo Stock Status"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Star Rating"
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "Custom field (user metadata) content. Supports ACF."
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
+msgid "User Meta or ACF"
+msgstr ""
+
+#: build/js/index-table.js:32
+#: build/js/search-instance.js:87
 msgid "There was an issue loading the data, please reload the page."
 msgstr ""
 
-#: build/js/search-instance.js:27040
+#: build/js/index-table.js:32
+msgid "Exclude indexing files from directories"
+msgstr ""
+
+#: build/js/index-table.js:32
+msgid "Media Files from the selected directories will be skipped from indexing."
+msgstr ""
+
+#: build/js/index-table.js:32
+msgid "Include indexing files only from directories"
+msgstr ""
+
+#: build/js/index-table.js:32
+msgid "When selected, only Media Files from the selected directories will be indexed. Exclusions from above will still apply!"
+msgstr ""
+
+#: build/js/search-instance.js:87
 msgid "Advanced Title Field for Post Type Results"
 msgstr ""
 
-#: build/js/search-instance.js:27051
+#: build/js/search-instance.js:87
 msgid "Advanced Description Field for Post Type Results"
 msgstr ""
 
-#: build/js/search-instance.js:27074
+#: build/js/search-instance.js:87
 msgid "Advanced title field for User results"
 msgstr ""
 
-#: build/js/search-instance.js:27085
+#: build/js/search-instance.js:87
 msgid "Advanced description field for User result"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Exclude files from directories"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Media files from these directories will be excluded"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Include files only from directories"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "When selected, only Media Files from the selected directories will be returned. Exclusions from above will still apply!"
 msgstr ""

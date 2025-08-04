@@ -34,7 +34,7 @@ class StarRatingFieldTypes implements AdvancedFieldTypeInterface {
 		if ( isset($this->average) ) {
 			return Html::optimize(
 				'<span class="average-rating" 
-			style="--percent: calc(' . $this->average . '/'.$this->max_rating.'*100%);' . $this->star_color . $this->star_bg_color . $this->star_size . '"
+			style="--percent: calc(' . $this->average . '/' . $this->max_rating . '*100%);' . esc_attr($this->star_color . $this->star_bg_color . $this->star_size) . '"
 			data-rating="' . $this->average . '"
 			title="' . sprintf(__('Rated %s out of 5', 'woocommerce'), $this->average) . '">★★★★★</span>'
 			);

@@ -55,7 +55,11 @@ class TaxonomyFieldTypes extends AbstractWooCommerceBase implements AdvancedFiel
 			'number'     => $this->count,
 		);
 
-		$args = apply_filters('asp/utils/advanced-field/field-types/taxonomy/args', $args);
+		$args = apply_filters('asp/utils/advanced-field/field-types/taxonomy/args', $args, $this->result);
+
+		if ( empty($args) ) {
+			return '';
+		}
 
 		/**
 		 * @var WP_Term[]|WP_Error $terms
@@ -64,6 +68,8 @@ class TaxonomyFieldTypes extends AbstractWooCommerceBase implements AdvancedFiel
 		if ( $terms instanceof WP_Error || empty($terms) ) {
 			return '';
 		}
+
+		$terms = apply_filters('asp/utils/advanced-field/field-types/taxonomy/terms', $terms, $args, $this->result);
 
 		$term_style = $this->term_color ? " style='color:" . esc_attr($this->term_color) . ";'" : '';
 		$terms      = array_filter(

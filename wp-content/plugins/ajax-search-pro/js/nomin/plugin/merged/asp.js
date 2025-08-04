@@ -746,7 +746,7 @@ const Hooks = {
 
 ;// ./src/client/external/helpers/interval-until-execute.js
 
-function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
+function interval_until_execute_intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
   let t, tries = 0, res = typeof criteria === "function" ? criteria() : criteria;
   if (res === false) {
     t = setInterval(function() {
@@ -876,7 +876,7 @@ window.WPD.DoMini = window.WPD.dom;
 window.DoMini = window.WPD.dom;
 window.WPD.Base64 = window.WPD.Base64 || base64;
 window.WPD.Hooks = window.WPD.Hooks || hooks_filters;
-window.WPD.intervalUntilExecute = window.WPD.intervalUntilExecute || intervalUntilExecute;
+window.WPD.intervalUntilExecute = window.WPD.intervalUntilExecute || interval_until_execute_intervalUntilExecute;
 
 ;// ./src/client/plugin/core/base.js
 
@@ -1637,6 +1637,29 @@ base.plugin.showResultsBox = function() {
   $this.n("resultsDiv").css($this.resAnim.showCSS);
   $this.n("resultsDiv").removeClass($this.resAnim.hideClass).addClass($this.resAnim.showClass);
   $this.fixResultsPosition(true);
+};
+base.plugin.keywordHighlight = function() {
+  const $this = this;
+  if (!$this.o.highlight) {
+    return;
+  }
+  const phrase = $this.n("text").val().replace(/["']/g, "");
+  if (phrase === "" || phrase.length < $this.o.trigger.minWordLength) {
+    return;
+  }
+  const words = phrase.trim().split(" ").filter((s) => s.length >= $this.o.trigger.minWordLength);
+  $this.n("resultsDiv").find("figcaption, div.item").highlight([phrase.trim()], {
+    element: "span",
+    className: "highlighted",
+    wordsOnly: $this.o.highlightWholewords
+  });
+  if (words.length > 0) {
+    $this.n("resultsDiv").find("figcaption, div.item").highlight(words, {
+      element: "span",
+      className: "highlighted",
+      wordsOnly: $this.o.highlightWholewords
+    });
+  }
 };
 base.plugin.addHighlightString = function($items) {
   let $this = this, phrase = $this.n("text").val().replace(/["']/g, "");
@@ -2594,7 +2617,66 @@ base.plugin.initNavigationEvents = function() {
 };
 /* harmony default export */ var navigation = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
+;// ./src/client/global/utils/device.ts
+
+const deviceType = () => {
+  let w = window.innerWidth;
+  if (w <= 640) {
+    return "phone";
+  } else if (w <= 1024) {
+    return "tablet";
+  } else {
+    return "desktop";
+  }
+};
+const detectIOS = () => {
+  if (typeof window.navigator != "undefined" && typeof window.navigator.userAgent != "undefined")
+    return window.navigator.userAgent.match(/(iPod|iPhone|iPad)/) != null;
+  return false;
+};
+const isMobile = () => {
+  try {
+    document.createEvent("TouchEvent");
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+const isTouchDevice = () => {
+  return "ontouchstart" in window;
+};
+
+;// ./src/client/utils/browser.ts
+
+
+const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
+const ua = navigator.userAgent;
+const isWebKit = /AppleWebKit/.test(ua) && !/Edge/.test(ua);
+let fakeInput;
+const focusInput = (targetInput) => {
+  if (!detectIOS()) {
+    targetInput?.focus();
+    return;
+  }
+  if (targetInput === void 0 || fakeInput === void 0) {
+    fakeInput = document.createElement("input");
+    fakeInput.setAttribute("type", "text");
+    fakeInput.style.position = "absolute";
+    fakeInput.style.opacity = "0";
+    fakeInput.style.height = "0";
+    fakeInput.style.fontSize = "16px";
+    document.body.prepend(fakeInput);
+  }
+  if (targetInput === void 0) {
+    fakeInput.focus();
+  } else {
+    targetInput.focus();
+  }
+};
+
+
 ;// ./src/client/plugin/core/events/other.js
+
 
 
 
@@ -2675,17 +2757,18 @@ base.plugin.initOtherEvents = function() {
   });
   domini(window).on("scroll", handler2, { passive: true });
   if (other_helpers.isMobile() && $this.o.mobile.menu_selector !== "") {
-    domini($this.o.mobile.menu_selector).on("touchend", function() {
+    domini($this.o.mobile.menu_selector).on("touchend", function(e) {
       let _this = this;
+      focusInput();
       setTimeout(function() {
         let $input = domini(_this).find("input.orig");
         $input = $input.length === 0 ? domini(_this).next().find("input.orig") : $input;
         $input = $input.length === 0 ? domini(_this).parent().find("input.orig") : $input;
         $input = $input.length === 0 ? $this.n("text") : $input;
         if ($this.n("search").inViewPort()) {
-          $input.get(0).focus();
+          focusInput($input.get(0));
         }
-      }, 300);
+      }, 1e3);
     });
   }
   if (other_helpers.detectIOS() && other_helpers.isMobile() && other_helpers.isTouchDevice()) {
@@ -3478,6 +3561,7 @@ base.plugin.initCompact = function() {
 
 
 
+
 "use strict";
 let compact_helpers = base.helpers;
 base.plugin.openCompact = function() {
@@ -3534,6 +3618,9 @@ base.plugin.openCompact = function() {
     }
     $this.n("search").attr("data-asp-compact", "open");
   }, 50);
+  if ($this.o.compact.focus) {
+    focusInput();
+  }
   clearTimeout($this.timeouts.compactAfterOpen);
   $this.timeouts.compactAfterOpen = setTimeout(function() {
     $this.resize();
@@ -3547,7 +3634,7 @@ base.plugin.openCompact = function() {
       });
     }
     if ($this.o.compact.focus) {
-      $this.n("text").get(0).focus();
+      focusInput($this.n("text").get(0));
     }
     $this.n("text").trigger("focus");
     $this.scrolling();
@@ -3780,7 +3867,7 @@ base.plugin.liveLoad = function(origSelector, url, updateLocation, forceAjax, ca
     }
   }
   updateLocation = typeof updateLocation == "undefined" ? true : updateLocation;
-  forceAjax = typeof forceAjax == "undefined" ? false : forceAjax;
+  forceAjax = typeof forceAjax == "undefined" ? true : forceAjax;
   let altSel = $this.getLiveLoadAltSelectors();
   if (selector !== "#main")
     altSel.unshift("#main");
@@ -3985,12 +4072,7 @@ base.plugin.showHorizontalResults = function() {
     $this.n("results").css("overflowX", "hidden");
     $this.n("resdrg").css("width", "auto");
   }
-  if ($this.o.highlight) {
-    domini("div.item", $this.n("resultsDiv")).highlight(
-      $this.n("text").val().replace(/["']/g, "").split(" "),
-      { element: "span", className: "highlighted", wordsOnly: !!$this.o.highlightWholewords }
-    );
-  }
+  $this.keywordHighlight();
   if ($this.call_num < 1) {
     let $container = $this.n("results");
     $container.get(0).scrollLeft = 0;
@@ -4103,13 +4185,7 @@ base.plugin.showIsotopicResults = function() {
     $this.n("results").css({
       height: "auto"
     });
-    if ($this.o.highlight) {
-      domini("div.item", $this.n("resultsDiv")).highlight($this.n("text").val().replace(/["']/g, "").split(" "), {
-        element: "span",
-        className: "highlighted",
-        wordsOnly: $this.o.highlightWholewords
-      });
-    }
+    $this.keywordHighlight();
   }
   if ($this.call_num === 0)
     $this.calculateIsotopeRows();
@@ -4341,13 +4417,7 @@ base.plugin.showPolaroidResults = function() {
     $this.n("results").css({
       height: $this.o.prescontainerheight
     });
-    if ($this.o.highlight) {
-      domini("figcaption", $this.n("resultsDiv")).highlight($this.n("text").val().replace(/["']/g, "").split(" "), {
-        element: "span",
-        className: "highlighted",
-        wordsOnly: $this.o.highlightWholewords
-      });
-    }
+    $this.keywordHighlight();
     if (typeof Photostack !== "undefined") {
       $this.ptstack = new Photostack($this.n("results").get(0), {
         callback: function(item) {
@@ -4467,13 +4537,7 @@ base.plugin.showVerticalResults = function() {
     }
     $this.n("items").last().addClass("asp_last_item");
     $this.n("results").find(".asp_group_header").prev(".item").addClass("asp_last_item");
-    if ($this.o.highlight) {
-      domini("div.item", $this.n("resultsDiv")).highlight($this.n("text").val().replace(/["']/g, "").split(" "), {
-        element: "span",
-        className: "highlighted",
-        wordsOnly: $this.o.highlightWholewords
-      });
-    }
+    $this.keywordHighlight();
   }
   $this.resize();
   if ($this.n("items").length === 0) {
@@ -4593,7 +4657,8 @@ base.plugin.reportSettingsValidity = function() {
       }
     });
     $_this.find("select").forEach(function() {
-      if (domini(this).val() == null || domini(this).val() === "" || domini(this).closest("fieldset").is(".asp_filter_tax, .asp_filter_content_type") && parseInt(domini(this).val()) === -1) {
+      const value = domini(this).val();
+      if (value == null || value === "" || Array.isArray(value) && value.length === 0 || domini(this).closest("fieldset").is(".asp_filter_tax, .asp_filter_content_type") && parseInt(domini(this).val()) === -1) {
         fieldset_valid = false;
       }
     });
@@ -4736,7 +4801,7 @@ base.plugin.settingsCheckboxToggle = function($node, checkState) {
 let datepicker_helpers = base.helpers;
 base.plugin.initDatePicker = function() {
   let $this = this;
-  intervalUntilExecute(function(_$) {
+  interval_until_execute_intervalUntilExecute(function(_$) {
     function onSelectEvent(dateText, inst, _this, nochange, nochage) {
       let obj;
       if (_this != null) {
@@ -5050,6 +5115,7 @@ base.plugin.initSettingsEvents = function() {
       }
     });
   };
+  setOptionCheckedClass();
   $this.n("searchsettings").on("click", function() {
     $this.settingsChanged = true;
   });
@@ -5250,6 +5316,188 @@ base.plugin.initSettingsAnimations = function() {
 
 /* harmony default export */ var asp_settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
+;// ./src/client/addons/bricks.ts
+
+
+const bricks_helpers = base.helpers;
+class BricksAddon {
+  name = "Elementor Widget Fixes";
+  init() {
+    const { Hooks } = bricks_helpers;
+    Hooks.addFilter("asp/live_load/finished", this.fixImages.bind(this), 11, this);
+  }
+  fixImages(url, obj) {
+    window?.bricksLazyLoad?.();
+  }
+}
+base.addons.add(new BricksAddon());
+/* harmony default export */ var bricks = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
+
+;// ./src/client/bundle/optimized/asp-addons-bricks.js
+
+
+
+/* harmony default export */ var asp_addons_bricks = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
+
+;// ./node_modules/@wordpress/url/build-module/safe-decode-uri-component.js
+function safeDecodeURIComponent(uriComponent) {
+  try {
+    return decodeURIComponent(uriComponent);
+  } catch (uriComponentError) {
+    return uriComponent;
+  }
+}
+
+;// ./node_modules/@wordpress/url/build-module/get-query-string.js
+function getQueryString(url) {
+  let query;
+  try {
+    query = new URL(url, "http://example.com").search.substring(1);
+  } catch (error) {
+  }
+  if (query) {
+    return query;
+  }
+}
+
+;// ./node_modules/@wordpress/url/build-module/get-query-args.js
+
+
+function setPath(object, path, value) {
+  const length = path.length;
+  const lastIndex = length - 1;
+  for (let i = 0; i < length; i++) {
+    let key = path[i];
+    if (!key && Array.isArray(object)) {
+      key = object.length.toString();
+    }
+    key = ["__proto__", "constructor", "prototype"].includes(key) ? key.toUpperCase() : key;
+    const isNextKeyArrayIndex = !isNaN(Number(path[i + 1]));
+    object[key] = i === lastIndex ? (
+      // If at end of path, assign the intended value.
+      value
+    ) : (
+      // Otherwise, advance to the next object in the path, creating
+      // it if it does not yet exist.
+      object[key] || (isNextKeyArrayIndex ? [] : {})
+    );
+    if (Array.isArray(object[key]) && !isNextKeyArrayIndex) {
+      object[key] = {
+        ...object[key]
+      };
+    }
+    object = object[key];
+  }
+}
+function getQueryArgs(url) {
+  return (getQueryString(url) || "").replace(/\+/g, "%20").split("&").reduce((accumulator, keyValue) => {
+    const [key, value = ""] = keyValue.split("=").filter(Boolean).map(safeDecodeURIComponent);
+    if (key) {
+      const segments = key.replace(/\]/g, "").split("[");
+      setPath(accumulator, segments, value);
+    }
+    return accumulator;
+  }, /* @__PURE__ */ Object.create(null));
+}
+
+;// ./node_modules/@wordpress/url/build-module/build-query-string.js
+function buildQueryString(data) {
+  let string = "";
+  const stack = Object.entries(data);
+  let pair;
+  while (pair = stack.shift()) {
+    let [key, value] = pair;
+    const hasNestedData = Array.isArray(value) || value && value.constructor === Object;
+    if (hasNestedData) {
+      const valuePairs = Object.entries(value).reverse();
+      for (const [member, memberValue] of valuePairs) {
+        stack.unshift([`${key}[${member}]`, memberValue]);
+      }
+    } else if (value !== void 0) {
+      if (value === null) {
+        value = "";
+      }
+      string += "&" + [key, value].map(encodeURIComponent).join("=");
+    }
+  }
+  return string.substr(1);
+}
+
+;// ./node_modules/@wordpress/url/build-module/remove-query-args.js
+
+
+function removeQueryArgs(url, ...args) {
+  const fragment = url.replace(/^[^#]*/, "");
+  url = url.replace(/#.*/, "");
+  const queryStringIndex = url.indexOf("?");
+  if (queryStringIndex === -1) {
+    return url + fragment;
+  }
+  const query = getQueryArgs(url);
+  const baseURL = url.substr(0, queryStringIndex);
+  args.forEach((arg) => delete query[arg]);
+  const queryString = buildQueryString(query);
+  const updatedUrl = queryString ? baseURL + "?" + queryString : baseURL;
+  return updatedUrl + fragment;
+}
+
+;// ./node_modules/@wordpress/url/build-module/get-fragment.js
+function getFragment(url) {
+  const matches = /^\S+?(#[^\s\?]*)/.exec(url);
+  if (matches) {
+    return matches[1];
+  }
+}
+
+;// ./node_modules/@wordpress/url/build-module/add-query-args.js
+
+
+
+function addQueryArgs(url = "", args) {
+  if (!args || !Object.keys(args).length) {
+    return url;
+  }
+  const fragment = getFragment(url) || "";
+  let baseUrl = url.replace(fragment, "");
+  const queryStringIndex = url.indexOf("?");
+  if (queryStringIndex !== -1) {
+    args = Object.assign(getQueryArgs(url), args);
+    baseUrl = baseUrl.substr(0, queryStringIndex);
+  }
+  return baseUrl + "?" + buildQueryString(args) + fragment;
+}
+
+;// ./src/client/addons/blocksy.ts
+
+
+
+const blocksy_helpers = base.helpers;
+class blocksy_BricksAddon {
+  name = "Elementor Widget Fixes";
+  init() {
+    const { Hooks } = blocksy_helpers;
+    Hooks.addFilter("asp/live_load/url", this.addQueryIdToUrl.bind(this), 11, this);
+  }
+  addQueryIdToUrl(url, obj, selector, el) {
+    if (!el.classList.contains("wp-block-blocksy-query")) {
+      return url;
+    }
+    if (el.dataset.id === void 0) {
+      return url;
+    }
+    url = removeQueryArgs(url, "query-" + el.dataset.id);
+    return addQueryArgs(url, { "unique_id": el.dataset.id });
+  }
+}
+base.addons.add(new blocksy_BricksAddon());
+/* harmony default export */ var blocksy = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
+
+;// ./src/client/bundle/optimized/asp-addons-blocksy.js
+
+
+
+/* harmony default export */ var asp_addons_blocksy = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
+
 ;// ./src/client/addons/divi.js
 
 
@@ -5286,6 +5534,39 @@ base.addons.add(new DiviAddon());
 
 
 /* harmony default export */ var asp_addons_divi = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
+
+;// ./src/client/addons/jetengine.ts
+
+
+
+const jetengine_helpers = base.helpers;
+class JetEngineAddon {
+  name = "Elementor Widget Fixes";
+  init() {
+    const { Hooks } = jetengine_helpers;
+    Hooks.addFilter("asp/live_load/finished", this.finished.bind(this), 10, this);
+  }
+  finished(url, obj, selector, widget) {
+    const $el = domini_default()(widget);
+    const $widget = $el.find(".jet-listing div[data-nav]");
+    if (!selector.includes("asp_es_") || $widget.length === 0) {
+      return;
+    }
+    const widgetEl = $widget.get(0);
+    if (widgetEl?.dataset?.nav === void 0 || widgetEl?.dataset?.nav === null) {
+      return;
+    }
+    const data = JSON.parse(widgetEl.dataset.nav);
+    if (data.query === void 0) {
+      data.query = {};
+    }
+    data.query.s = obj.n("text").val().trim();
+    data.query.asp_id = obj.o.id;
+    widgetEl.dataset.nav = JSON.stringify(data);
+  }
+}
+base.addons.add(new JetEngineAddon());
+/* harmony default export */ var jetengine = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
 ;// ./src/client/addons/elementor.ts
 
@@ -5393,6 +5674,7 @@ base.addons.add(new ElementorAddon());
 /* harmony default export */ var elementor = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
 ;// ./src/client/bundle/optimized/asp-addons-elementor.js
+
 
 
 
@@ -5647,7 +5929,197 @@ function api_api() {
   }
 }
 
+;// ./src/client/global/utils/browser.ts
+
+
+
+const isSafari = () => {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+};
+const whichjQuery = (plugin) => {
+  let jq = false;
+  if (typeof window.$ != "undefined") {
+    if (typeof plugin === "undefined") {
+      jq = window.$;
+    } else {
+      if (typeof window.$.fn[plugin] != "undefined") {
+        jq = window.$;
+      }
+    }
+  }
+  if (jq === false && typeof window.jQuery != "undefined") {
+    jq = window.jQuery;
+    if (typeof plugin === "undefined") {
+      jq = window.jQuery;
+    } else {
+      if (typeof window.jQuery.fn[plugin] != "undefined") {
+        jq = window.jQuery;
+      }
+    }
+  }
+  return jq;
+};
+const formData = function(form, d) {
+  let els = form.find("input,textarea,select,button").get();
+  if (arguments.length === 1) {
+    const data = {};
+    els.forEach(function(el) {
+      if (el.name && !el.disabled && (el.checked || /select|textarea/i.test(el.nodeName) || /text/i.test(el.type) || $(el).hasClass("hasDatepicker") || $(el).hasClass("asp_slider_hidden"))) {
+        if (data[el.name] === void 0) {
+          data[el.name] = [];
+        }
+        if ($(el).hasClass("hasDatepicker")) {
+          data[el.name].push($(el).parent().find(".asp_datepicker_hidden").val());
+        } else {
+          data[el.name].push($(el).val());
+        }
+      }
+    });
+    return JSON.stringify(data);
+  } else if (d !== void 0) {
+    const data = typeof d != "object" ? JSON.parse(d) : d;
+    els.forEach(function(el) {
+      if (el.name) {
+        if (data[el.name]) {
+          let names = data[el.name], _this = $(el);
+          if (Object.prototype.toString.call(names) !== "[object Array]") {
+            names = [names];
+          }
+          if (el.type === "checkbox" || el.type === "radio") {
+            let val = _this.val(), found = false;
+            for (let i = 0; i < names.length; i++) {
+              if (names[i] === val) {
+                found = true;
+                break;
+              }
+            }
+            _this.prop("checked", found);
+          } else {
+            _this.val(names[0]);
+            if ($(el).hasClass("asp_gochosen") || $(el).hasClass("asp_goselect2")) {
+              intervalUntilExecute(function(_$) {
+                _$(el).trigger("change.asp_select2");
+              }, function() {
+                return whichjQuery("asp_select2");
+              }, 50, 3);
+            } else if ($(el).hasClass("hasDatepicker")) {
+              intervalUntilExecute(function(_$) {
+                const node = _this.get(0);
+                if (node === void 0) {
+                  return;
+                }
+                let value = names[0], format = _$(node).datepicker("option", "dateFormat");
+                _$(node).datepicker("option", "dateFormat", "yy-mm-dd");
+                _$(node).datepicker("setDate", value);
+                _$(node).datepicker("option", "dateFormat", format);
+                _$(node).trigger("selectnochange");
+              }, function() {
+                return whichjQuery("datepicker");
+              }, 50, 3);
+            }
+          }
+        } else {
+          if (el.type === "checkbox" || el.type === "radio") {
+            $(el).prop("checked", false);
+          }
+        }
+      }
+    });
+    return form;
+  }
+};
+const submitToUrl = function(action, method, input, target = "self") {
+  let form;
+  form = $('<form style="display: none;" />');
+  form.attr("action", action);
+  form.attr("method", method);
+  $("body").append(form);
+  if (typeof input !== "undefined" && input !== null) {
+    Object.keys(input).forEach(function(name) {
+      let value = input[name];
+      let $input = $('<input type="hidden" />');
+      $input.attr("name", name);
+      $input.attr("value", value);
+      form.append($input);
+    });
+  }
+  if (target == "new") {
+    form.attr("target", "_blank");
+  }
+  form.get(0).submit();
+};
+const openInNewTab = function(url) {
+  Object.assign(document.createElement("a"), { target: "_blank", href: url }).click();
+};
+const scrollToFirstVisibleElement = function(elements, offset = 0) {
+  for (const element2 of elements) {
+    if (recursiveCheckVisibility(element2)) {
+      window.scrollTo({
+        top: element2.getBoundingClientRect().top - 120 + window.pageYOffset + offset,
+        behavior: "smooth"
+      });
+      return true;
+    }
+  }
+  return false;
+};
+const recursiveCheckVisibility = function(element2) {
+  if (typeof element2.checkVisibility === "undefined") {
+    return true;
+  }
+  let el = element2, visible = true;
+  while (el !== null) {
+    if (!el.checkVisibility({
+      opacityProperty: true,
+      visibilityProperty: true,
+      contentVisibilityAuto: true
+    })) {
+      visible = false;
+      break;
+    }
+    el = el.parentElement;
+  }
+  return visible;
+};
+
+;// ./src/client/utils/onSafeDocumentReady.ts
+
+const onSafeDocumentReady = (callback) => {
+  let wasExecuted = false;
+  const isDocumentReady = () => {
+    return document.readyState === "complete" || document.readyState === "interactive" || document.readyState === "loaded";
+  };
+  const removeListeners = () => {
+    window.removeEventListener("DOMContentLoaded", onDOMContentLoaded);
+    document.removeEventListener("readystatechange", onReadyStateChange);
+  };
+  const runCallback = () => {
+    if (!wasExecuted) {
+      wasExecuted = true;
+      callback();
+      removeListeners();
+    }
+  };
+  const onDOMContentLoaded = () => {
+    runCallback();
+  };
+  const onReadyStateChange = () => {
+    if (isDocumentReady()) {
+      runCallback();
+    }
+  };
+  if (isDocumentReady()) {
+    runCallback();
+  } else {
+    window.addEventListener("DOMContentLoaded", onDOMContentLoaded);
+    document.addEventListener("readystatechange", onReadyStateChange);
+  }
+};
+/* harmony default export */ var utils_onSafeDocumentReady = (onSafeDocumentReady);
+
 ;// ./src/client/plugin/wrapper/asp.ts
+
+
 
 
 
@@ -5744,35 +6216,42 @@ const ASP_EXTENDED = {
     return true;
   },
   initializeHighlight: function() {
-    if (asp_ASP.highlight.enabled) {
-      const data = asp_ASP.highlight.data;
-      let selector = data.selector !== "" && domini_default()(data.selector).length > 0 ? data.selector : "article", $highlighted;
-      selector = domini_default()(selector).length > 0 ? selector : "body";
-      const s = new URLSearchParams(location.search), phrase = s.get("s") ?? s.get("asp_highlight") ?? s.get("asp_s") ?? s.get("asp_ls") ?? "";
-      domini_default()(selector).unhighlight({ className: "asp_single_highlighted_" + data.id });
-      if (phrase !== null && phrase.trim() !== "") {
-        domini_default()(selector).highlight(phrase.trim().split(" "), {
-          element: "span",
-          className: "asp_single_highlighted_" + data.id,
-          wordsOnly: data.whole,
-          excludeParents: ".asp_w, .asp-try"
-        });
-        $highlighted = domini_default()(".asp_single_highlighted_" + data.id);
-        if (data.scroll && $highlighted.length > 0) {
-          let stop = $highlighted.offset().top - 120;
-          const $adminbar = domini_default()("#wpadminbar");
-          if ($adminbar.length > 0)
-            stop -= $adminbar.height();
-          stop = stop + data.scroll_offset;
-          stop = stop < 0 ? 0 : stop;
-          domini_default()("html").animate({
-            "scrollTop": stop
-          }, 500);
-        }
-      }
-      return false;
+    if (!asp_ASP.highlight.enabled) {
+      return;
     }
-    return false;
+    const data = asp_ASP.highlight.data;
+    let selector = data.selector !== "" && domini_default()(data.selector).length > 0 ? data.selector : "article", $highlighted, phrase;
+    selector = domini_default()(selector).length > 0 ? selector : "body";
+    const s = new URLSearchParams(location.search);
+    phrase = s.get("s") ?? s.get("asp_highlight") ?? s.get("asp_s") ?? s.get("asp_ls") ?? "";
+    domini_default()(selector).unhighlight({ className: "asl_single_highlighted" });
+    if (phrase === null) {
+      return;
+    }
+    phrase = phrase.trim();
+    if (phrase === "") {
+      return;
+    }
+    const words = phrase.trim().split(" ").map((s2) => s2.trim(".")).filter((s2) => s2.length >= data.minWordLength);
+    domini_default()(selector).highlight([phrase.trim()], {
+      element: "span",
+      className: "asp_single_highlighted_" + data.id + " asp_single_highlighted_exact",
+      wordsOnly: data.whole,
+      excludeParents: ".asp_w, .asp-try"
+    });
+    if (words.length > 0) {
+      domini_default()(selector).highlight(words, {
+        element: "span",
+        className: "asp_single_highlighted_" + data.id,
+        wordsOnly: data.whole,
+        excludeParents: ".asp_w, .asp-try, .asp_single_highlighted_" + data.id
+      });
+    }
+    if (data.scroll) {
+      if (!scrollToFirstVisibleElement(domini_default()(".asp_single_highlighted_" + data.id + ".asp_single_highlighted_exact").get(), data.scroll_offset)) {
+        scrollToFirstVisibleElement(domini_default()(".asp_single_highlighted_" + data.id).get(), data.scroll_offset);
+      }
+    }
   },
   initializeOtherEvents: function() {
     let ttt, ts;
@@ -5842,20 +6321,10 @@ const ASP_EXTENDED = {
     }
   },
   ready: function() {
-    const documentReady = () => document.readyState === "complete" || document.readyState === "interactive" || document.readyState === "loaded";
-    if (documentReady()) {
-      this.initialize();
-    } else {
-      window.addEventListener("DOMContentLoaded", () => {
-        this.initialize();
-      });
-      document.addEventListener("readystatechange", () => {
-        ;
-        if (documentReady()) {
-          this.initialize();
-        }
-      });
-    }
+    const $this = this;
+    utils_onSafeDocumentReady(() => {
+      $this.initialize();
+    });
   },
   init: function() {
     if (asp_ASP.script_async_load) {
@@ -5879,12 +6348,14 @@ function load() {
     domini._fn.plugin("ajaxsearchpro", window.WPD.AjaxSearchPro.plugin);
   }
   window.ASP = { ...window.ASP, ...asp };
-  intervalUntilExecute(() => window.ASP.init(), function() {
+  interval_until_execute_intervalUntilExecute(() => window.ASP.init(), function() {
     return typeof window.ASP.version != "undefined";
   });
 }
 
 ;// ./src/client/bundle/merged/asp.js
+
+
 
 
 

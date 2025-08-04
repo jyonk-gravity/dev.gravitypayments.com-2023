@@ -82,13 +82,7 @@ external_AjaxSearchPro_namespaceObject.plugin.showVerticalResults = function() {
     }
     $this.n("items").last().addClass("asp_last_item");
     $this.n("results").find(".asp_group_header").prev(".item").addClass("asp_last_item");
-    if ($this.o.highlight) {
-      external_DoMini_namespaceObject("div.item", $this.n("resultsDiv")).highlight($this.n("text").val().replace(/["']/g, "").split(" "), {
-        element: "span",
-        className: "highlighted",
-        wordsOnly: $this.o.highlightWholewords
-      });
-    }
+    $this.keywordHighlight();
   }
   $this.resize();
   if ($this.n("items").length === 0) {

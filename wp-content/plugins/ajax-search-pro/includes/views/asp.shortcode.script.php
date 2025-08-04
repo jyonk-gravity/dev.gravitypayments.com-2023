@@ -185,6 +185,7 @@ $options_array = array(
 		'return_location'    => $style['return_action_location'],
 		'redirect_url'       => apply_filters('asp_redirect_url', $style['redirect_url'], $real_id),
 		'elementor_url'      => $style['redirect_elementor'],
+		'minWordLength'      => intval($style['min_word_length']),
 	),
 	'wooShop'             => array(
 		'useAjax'  => ( \WPDRMS\ASP\Utils\WooCommerce::isShop() && $style['woo_shop_live_search'] ) ? 1 : 0,

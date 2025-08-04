@@ -3,7 +3,7 @@
 Plugin Name: Perfmatters
 Plugin URI: https://perfmatters.io/
 Description: Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.
-Version: 2.4.6
+Version: 2.4.7
 Author: forgemedia
 Author URI: https://forgemedia.io/
 License: GPLv2 or later
@@ -18,7 +18,7 @@ Domain Path: /languages
 define('PERFMATTERS_STORE_URL', 'https://perfmatters.io/');
 define('PERFMATTERS_ITEM_ID', 696);
 define('PERFMATTERS_ITEM_NAME', 'perfmatters');
-define('PERFMATTERS_VERSION', '2.4.6');
+define('PERFMATTERS_VERSION', '2.4.7');
 define('PERFMATTERS_PATH', plugin_dir_path(__FILE__ ));
 
 //plugins loaded
@@ -88,7 +88,7 @@ function perfmatters_edd_plugin_updater() {
 	}
 
 	//retrieve our license key from the DB
-	$license_key = is_multisite() ? trim(get_site_option('perfmatters_edd_license_key')) : trim(get_option('perfmatters_edd_license_key'));
+	$license_key = perfmatters_license_key_constant() ?? (is_multisite() ? trim(get_site_option('perfmatters_edd_license_key')) : trim(get_option('perfmatters_edd_license_key')));
 	
 	//setup the updater
 	$edd_updater = new Perfmatters_Plugin_Updater(PERFMATTERS_STORE_URL, __FILE__, array(
@@ -467,6 +467,7 @@ function perfmatters_uninstall() {
 		'perfmatters_script_manager',
 		'perfmatters_script_manager_settings',
 		'perfmatters_edd_license_key',
+		'perfmatters_edd_license_key_constant',
 		'perfmatters_edd_license_status',
 		'perfmatters_version',
 		'perfmatters_close_cta'

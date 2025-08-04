@@ -2,7 +2,9 @@
 namespace WPDRMS\ASP\Core;
 
 use WP_Error;
+use WPDRMS\ASP\Core\Models\SearchInstance;
 use WPDRMS\ASP\Misc\Themes;
+use WPDRMS\ASP\Options\Data\SearchOptions;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 
 defined('ABSPATH') or die("You can't access this file directly.");
@@ -22,43 +24,48 @@ class Instances {
 
 	use SingletonTrait;
 
+	public const ALL_INSTANCES = -1;
+
 	/**
 	 * This holds the search instances
 	 *
-	 * @var array()
+	 * @var SearchInstance[]
 	 */
-	private $search_instances;
+	private array $search_instances;
 
 	/**
 	 * This holds the search instances without data
 	 *
-	 * @var array()
+	 * @var array{
+	 *     id: int,
+	 *     name: string
+	 * }
 	 */
-	private $instancesNoData;
+	private array $instances_no_data;
 
 	/**
 	 * When updating or first demand, this variable sets to true, telling that instances need re-parsing
 	 *
 	 * @var bool
 	 */
-	private $refresh = true;
+	private bool $refresh = true;
 
 	/**
 	 * The search instances init script JSON data
 	 *
 	 * @var string[]
 	 */
-	private $script_data = array();
+	private array $script_data = array();
 
 	/**
 	 * Gets the search instance if exists
 	 *
-	 * @param int      $id
-	 * @param bool     $force_refresh
+	 * @param int $id
+	 * @param bool $force_refresh
 	 * @param bool|int $check_ownership
-	 * @return array
+	 * @return ( $id is positive-int ? SearchInstance : SearchInstance[] )
 	 */
-	public function get( $id = -1, $force_refresh = false, $check_ownership = false ) {
+	public function get(int $id = self::ALL_INSTANCES, bool $force_refresh = false, $check_ownership = false ) {
 		if ( $this->refresh || $force_refresh ) {
 			$this->init();
 			$this->refresh = false;
@@ -126,16 +133,16 @@ class Instances {
 	 * @param bool $force_refresh
 	 * @return array
 	 */
-	public function getWithoutData( $id = -1, $force_refresh = false ) {
+	public function getWithoutData( $id = self::ALL_INSTANCES, $force_refresh = false ) {
 		if ( $this->refresh || $force_refresh ) {
 			$this->init();
 			$this->refresh = false;
 		}
 		if ( $id > -1 ) {
-			return isset($this->instancesNoData[ $id ]) ? $this->instancesNoData[ $id ] : array();
+			return isset($this->instances_no_data[ $id ]) ? $this->instances_no_data[ $id ] : array();
 		}
 
-		return $this->instancesNoData;
+		return $this->instances_no_data;
 	}
 
 	/**
@@ -687,11 +694,6 @@ class Instances {
 	// ------------------------------------------------------------
 
 	/**
-	 * Just calls init
-	 */
-	private function __construct() {}
-
-	/**
 	 * Clears unwanted keys from the search instance data array
 	 *
 	 * @param $data array
@@ -719,7 +721,7 @@ class Instances {
 
 		// Reset both variables, so in case of deleting no remains are left
 		$this->search_instances = array();
-		$this->instancesNoData  = array();
+		$this->instances_no_data  = array();
 
 		if ( !wd_asp()->db->exists('main') ) {
 			return;
@@ -727,13 +729,18 @@ class Instances {
 
 		$instances = $wpdb->get_results('SELECT * FROM ' . wd_asp()->db->table('main') . ' ORDER BY id ASC', ARRAY_A);
 
-		foreach ( $instances as $k => $instance ) {
-			$this->instancesNoData[ $instance['id'] ] = array(
-				'name' => $instance['name'],
-				'id'   => $instance['id'],
+		foreach ( $instances as $k => $inst ) {
+			$instance                               = new SearchInstance(
+				array(
+					'name' => $inst['name'],
+					'id'   => $inst['id'],
+				)
+			);
+			$this->instances_no_data[ $instance->id ] = array(
+				'name' => $instance->name,
+				'id'   => $instance->id,
 			);
 
-			$this->search_instances[ $instance['id'] ] = $instance;
 			/**
 			 * Explanation:
 			 *  1. json_decode(..) -> converts the params from the database to PHP format
@@ -746,13 +753,14 @@ class Instances {
 			 *  raw_data is used in backwards compatibility checks, to see if a certain option exists before merging
 			 *           with the defaults
 			 */
-			$this->search_instances[ $instance['id'] ]['raw_data'] = $this->decode_params(json_decode($instance['data'], true));
-			$this->search_instances[ $instance['id'] ]['data']     = array_merge(
+			$instance->raw_data                      = $this->decode_params(json_decode($inst['data'], true));
+			$instance->data                          = array_merge(
 				wd_asp()->options['asp_defaults'],
-				$this->search_instances[ $instance['id'] ]['raw_data']
+				$instance->raw_data
 			);
-
-			$this->search_instances[ $instance['id'] ]['data'] = apply_filters('asp_instance_options', $this->search_instances[ $instance['id'] ]['data'], $instance['id']);
+			$instance->options                       = new SearchOptions(json_decode($inst['data'], true));
+			$instance->data                          = apply_filters('asp_instance_options', $instance->data  , $instance->id);
+			$this->search_instances[ $instance->id ] = $instance;
 		}
 	}
 }

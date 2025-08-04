@@ -47,15 +47,48 @@ var external_AjaxSearchPro_default = /*#__PURE__*/__webpack_require__.n(external
 ;// external "DoMini"
 var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
 var external_DoMini_default = /*#__PURE__*/__webpack_require__.n(external_DoMini_namespaceObject);
-;// ./src/client/addons/elementor.ts
+;// ./src/client/addons/jetengine.ts
 
 
 
 const helpers = (external_AjaxSearchPro_default()).helpers;
-class ElementorAddon {
+class JetEngineAddon {
   name = "Elementor Widget Fixes";
   init() {
     const { Hooks } = helpers;
+    Hooks.addFilter("asp/live_load/finished", this.finished.bind(this), 10, this);
+  }
+  finished(url, obj, selector, widget) {
+    const $el = external_DoMini_default()(widget);
+    const $widget = $el.find(".jet-listing div[data-nav]");
+    if (!selector.includes("asp_es_") || $widget.length === 0) {
+      return;
+    }
+    const widgetEl = $widget.get(0);
+    if (widgetEl?.dataset?.nav === void 0 || widgetEl?.dataset?.nav === null) {
+      return;
+    }
+    const data = JSON.parse(widgetEl.dataset.nav);
+    if (data.query === void 0) {
+      data.query = {};
+    }
+    data.query.s = obj.n("text").val().trim();
+    data.query.asp_id = obj.o.id;
+    widgetEl.dataset.nav = JSON.stringify(data);
+  }
+}
+external_AjaxSearchPro_default().addons.add(new JetEngineAddon());
+/* harmony default export */ var jetengine = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
+
+;// ./src/client/addons/elementor.ts
+
+
+
+const elementor_helpers = (external_AjaxSearchPro_default()).helpers;
+class ElementorAddon {
+  name = "Elementor Widget Fixes";
+  init() {
+    const { Hooks } = elementor_helpers;
     Hooks.addFilter("asp/init/etc", this.fixElementorPostPagination.bind(this), 10, this);
     Hooks.addFilter("asp/live_load/start", this.start.bind(this), 10, this);
     Hooks.addFilter("asp/live_load/finished", this.finished.bind(this), 10, this);
@@ -153,6 +186,7 @@ external_AjaxSearchPro_default().addons.add(new ElementorAddon());
 /* harmony default export */ var elementor = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
 
 ;// ./src/client/bundle/optimized/asp-addons-elementor.js
+
 
 
 

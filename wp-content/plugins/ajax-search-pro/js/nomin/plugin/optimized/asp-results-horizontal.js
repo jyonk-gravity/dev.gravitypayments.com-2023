@@ -57,12 +57,7 @@ external_AjaxSearchPro_namespaceObject.plugin.showHorizontalResults = function()
     $this.n("results").css("overflowX", "hidden");
     $this.n("resdrg").css("width", "auto");
   }
-  if ($this.o.highlight) {
-    external_DoMini_namespaceObject("div.item", $this.n("resultsDiv")).highlight(
-      $this.n("text").val().replace(/["']/g, "").split(" "),
-      { element: "span", className: "highlighted", wordsOnly: !!$this.o.highlightWholewords }
-    );
-  }
+  $this.keywordHighlight();
   if ($this.call_num < 1) {
     let $container = $this.n("results");
     $container.get(0).scrollLeft = 0;

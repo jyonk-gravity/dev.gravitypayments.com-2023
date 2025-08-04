@@ -334,6 +334,8 @@ class SearchTaxonomyTerms extends SearchPostTypes {
 			}
 		}
 
+
+
 		$image_settings = $sd['image_options'];
 		if ( $image_settings['show_images'] ) {
 			foreach ( $term_res as $result ) {
@@ -417,6 +419,8 @@ class SearchTaxonomyTerms extends SearchPostTypes {
 		 * If you move this loop up, then the WooImage script might not work with isotope
 		 */
 		foreach ( $term_res as $k =>$v ) {
+
+			$v->title = wd_substr_at_word($v->title, $sd['tax_res_title_length']);
 
 			if ( $args['_ajax_search'] ) {
 				// If no image and defined, remove the result here, to perevent JS confusions

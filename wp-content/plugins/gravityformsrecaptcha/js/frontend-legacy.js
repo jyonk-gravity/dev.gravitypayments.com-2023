@@ -136,7 +136,7 @@ var _this = this;
   $(document).ready(function () {
     gfRecaptcha();
   });
-})(jQuery, gform, grecaptcha, gforms_recaptcha_recaptcha_strings);
+})(jQuery, window.gform || {}, grecaptcha, gforms_recaptcha_recaptcha_strings);
 
 /***/ })
 

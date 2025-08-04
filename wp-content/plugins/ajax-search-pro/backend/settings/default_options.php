@@ -20,53 +20,57 @@ function asp_do_init_options() {
 
 	/* Index table options */
 	$options['asp_it_def'] = array(
-		'it_index_title'               => 1,
-		'it_index_content'             => 1,
-		'it_index_excerpt'             => 1,
-		'it_post_types'                => array( 'post', 'page' ),
-		'it_index_tags'                => 0,
-		'it_index_categories'          => 0,
-		'it_index_taxonomies'          => '',
-		'it_attachment_mime_types'     => 'image/jpeg, image/gif, image/png',
+		'it_index_title'                    => 1,
+		'it_index_content'                  => 1,
+		'it_index_excerpt'                  => 1,
+		'it_post_types'                     => array( 'post', 'page' ),
+		'it_index_tags'                     => 0,
+		'it_index_categories'               => 0,
+		'it_index_taxonomies'               => '',
+		'it_attachment_mime_types'          => 'image/jpeg, image/gif, image/png',
+		'options' => array(
+			'attachment_exclude_directories' => array( 'directories' => array() ),
+			'attachment_include_directories' => array( 'directories' => array() ),
+		),
 
-		'it_index_pdf_content'         => 0,
-		'it_index_pdf_method'          => 'auto',
-		'it_index_text_content'        => 0,
-		'it_index_richtext_content'    => 0,
-		'it_index_msword_content'      => 0,
-		'it_index_msexcel_content'     => 0,
-		'it_index_msppt_content'       => 0,
-		'it_media_service_send_file'   => 1,
+		'it_index_pdf_content'              => 0,
+		'it_index_pdf_method'               => 'auto',
+		'it_index_text_content'             => 0,
+		'it_index_richtext_content'         => 0,
+		'it_index_msword_content'           => 0,
+		'it_index_msexcel_content'          => 0,
+		'it_index_msppt_content'            => 0,
+		'it_media_service_send_file'        => 1,
 
-		'it_synonyms_as_keywords'      => 0,
+		'it_synonyms_as_keywords'           => 0,
 
-		'it_index_permalinks'          => 0,
-		'it_index_customfields'        => '',
-		'it_post_statuses'             => 'publish',
-		'it_post_password_protected'   => 1,
-		'it_index_author_name'         => 0,
-		'it_index_author_bio'          => 0,
-		'it_blog_ids'                  => '',
-		'it_inflections'               => 0,
-		'it_language'                  => 'english',
-		'it_limit'                     => 25,
-		'it_use_stopwords'             => 0,
-		'it_stopwords'                 => 'a, about, above, across, after, afterwards, again, against, all, almost, alone, along, already, also, although, always, am, among, amongst, amoungst, amount, an, and, another, any, anyhow, anyone, anything, anyway, anywhere, are, around, as, at, back, be, became, because, become, becomes, becoming, been, before, beforehand, behind, being, below, beside, besides, between, beyond, bill, both, bottom, but, by, call, can, cannot, cant, co, con, could, couldnt, cry, de, describe, detail, do, done, down, due, during, each, eg, eight, either, eleven, else, elsewhere, empty, enough, etc, even, ever, every, everyone, everything, everywhere, except, few, fifteen, fify, fill, find, fire, first, five, for, former, formerly, forty, found, four, from, front, full, further, get, give, go, had, has, hasnt, have, he, hence, her, here, hereafter, hereby, herein, hereupon, hers, herself, him, himself, his, how, however, hundred, ie, if, in, inc, indeed, interest, into, is, it, its, itself, keep, last, latter, latterly, least, less, ltd, made, many, may, me, meanwhile, might, mill, mine, more, moreover, most, mostly, move, much, must, my, myself, name, namely, neither, never, nevertheless, next, nine, no, nobody, none, noone, nor, not, nothing, now, nowhere, of, off, often, on, once, one, only, onto, or, other, others, otherwise, our, ours, ourselves, out, over, own, part, per, perhaps, please, put, rather, re, same, see, seem, seemed, seeming, seems, serious, several, she, should, show, side, since, sincere, six, sixty, so, some, somehow, someone, something, sometime, sometimes, somewhere, still, such, system, take, ten, than, that, the, their, them, themselves, then, thence, there, thereafter, thereby, therefore, therein, thereupon, these, they, thickv, thin, third, this, those, though, three, through, throughout, thru, thus, to, together, too, top, toward, towards, twelve, twenty, two, un, under, until, up, upon, us, very, via, was, we, well, were, what, whatever, when, whence, whenever, where, whereafter, whereas, whereby, wherein, whereupon, wherever, whether, which, while, whither, who, whoever, whole, whom, whose, why, will, with, within, without, would, yet, you, your, yours, yourself, yourselves',
-		'it_min_word_length'           => 1,
-		'it_extract_iframes'           => 0,
-		'it_extract_gutenberg_blocks'  => 1,
-		'it_extract_shortcodes'        => 1,
-		'it_exclude_shortcodes'        => 'wpdreams_rpl, wpdreams_rpp',
-		'it_index_on_save'             => 1,
-		'it_index_on_update_post_meta' => 0,
-		'it_cron_enable'               => 0,
-		'it_cron_period'               => 'asp_cr_five_minutes',
+		'it_index_permalinks'               => 0,
+		'it_index_customfields'             => '',
+		'it_post_statuses'                  => 'publish',
+		'it_post_password_protected'        => 1,
+		'it_index_author_name'              => 0,
+		'it_index_author_bio'               => 0,
+		'it_blog_ids'                       => '',
+		'it_inflections'                    => 0,
+		'it_language'                       => 'english',
+		'it_limit'                          => 25,
+		'it_use_stopwords'                  => 0,
+		'it_stopwords'                      => 'a, about, above, across, after, afterwards, again, against, all, almost, alone, along, already, also, although, always, am, among, amongst, amoungst, amount, an, and, another, any, anyhow, anyone, anything, anyway, anywhere, are, around, as, at, back, be, became, because, become, becomes, becoming, been, before, beforehand, behind, being, below, beside, besides, between, beyond, bill, both, bottom, but, by, call, can, cannot, cant, co, con, could, couldnt, cry, de, describe, detail, do, done, down, due, during, each, eg, eight, either, eleven, else, elsewhere, empty, enough, etc, even, ever, every, everyone, everything, everywhere, except, few, fifteen, fify, fill, find, fire, first, five, for, former, formerly, forty, found, four, from, front, full, further, get, give, go, had, has, hasnt, have, he, hence, her, here, hereafter, hereby, herein, hereupon, hers, herself, him, himself, his, how, however, hundred, ie, if, in, inc, indeed, interest, into, is, it, its, itself, keep, last, latter, latterly, least, less, ltd, made, many, may, me, meanwhile, might, mill, mine, more, moreover, most, mostly, move, much, must, my, myself, name, namely, neither, never, nevertheless, next, nine, no, nobody, none, noone, nor, not, nothing, now, nowhere, of, off, often, on, once, one, only, onto, or, other, others, otherwise, our, ours, ourselves, out, over, own, part, per, perhaps, please, put, rather, re, same, see, seem, seemed, seeming, seems, serious, several, she, should, show, side, since, sincere, six, sixty, so, some, somehow, someone, something, sometime, sometimes, somewhere, still, such, system, take, ten, than, that, the, their, them, themselves, then, thence, there, thereafter, thereby, therefore, therein, thereupon, these, they, thickv, thin, third, this, those, though, three, through, throughout, thru, thus, to, together, too, top, toward, towards, twelve, twenty, two, un, under, until, up, upon, us, very, via, was, we, well, were, what, whatever, when, whence, whenever, where, whereafter, whereas, whereby, wherein, whereupon, wherever, whether, which, while, whither, who, whoever, whole, whom, whose, why, will, with, within, without, would, yet, you, your, yours, yourself, yourselves',
+		'it_min_word_length'                => 1,
+		'it_extract_iframes'                => 0,
+		'it_extract_gutenberg_blocks'       => 1,
+		'it_extract_shortcodes'             => 1,
+		'it_exclude_shortcodes'             => 'wpdreams_rpl, wpdreams_rpp',
+		'it_index_on_save'                  => 1,
+		'it_index_on_update_post_meta'      => 0,
+		'it_cron_enable'                    => 0,
+		'it_cron_period'                    => 'asp_cr_five_minutes',
 		// performance
-		'it_pool_size_auto'            => 1,
-		'it_pool_size_one'             => 5000,
-		'it_pool_size_two'             => 8000,
-		'it_pool_size_three'           => 10000,
-		'it_pool_size_rest'            => 10000,
+		'it_pool_size_auto'                 => 1,
+		'it_pool_size_one'                  => 5000,
+		'it_pool_size_two'                  => 8000,
+		'it_pool_size_three'                => 10000,
+		'it_pool_size_rest'                 => 10000,
 	);
 
 	/* Analytics options */
@@ -298,6 +302,8 @@ function asp_do_init_options() {
 		// General / Attachments
 			'attachments_use_index'               => 'regular',
 		'return_attachments'                      => 0,
+		'attachment_exclude_directories'          => array( 'directories' => array() ),
+		'attachment_include_directories'          => array( 'directories' => array() ),
 		'search_attachments_title'                => 1,
 		'search_attachments_content'              => 1,
 		'search_attachments_caption'              => 1,
@@ -626,11 +632,14 @@ function asp_do_init_options() {
 		'custom_date'                             => 0,
 		'custom_date_format'                      => 'Y-m-d H:i:s',
 		'showdescription'                         => 1,
+		'post_type_res_title_length'              => 999,
 		'descriptionlength'                       => 130,
 		'description_context'                     => 1,
 		'description_context_depth'               => 15000,
+		'tax_res_title_length'                    => 999,
 		'tax_res_showdescription'                 => 1,
 		'tax_res_descriptionlength'               => 130,
+		'user_res_title_length'                   => 999,
 		'user_res_showdescription'                => 1,
 		'user_res_descriptionlength'              => 130,
 		'noresultstext'                           => 'No results[ for "{phrase}"]!',
@@ -773,6 +782,7 @@ function asp_do_init_options() {
 
 		'group_make_header_clickable'             => 0,
 		'group_reorder_by_pr'                     => 0,
+		'group_order_results_page'                => 0,
 		'group_result_no_group'                   => 'display',
 		'group_other_location'                    => 'bottom',
 		'group_other_results_head'                => 'Other results',
@@ -1053,6 +1063,11 @@ function asp_parse_options() {
 
 			wd_asp()->o[ $ok ] = asp_decode_params( get_option($ok, wd_asp()->o[ $def_k ]) );
 			wd_asp()->o[ $ok ] = array_merge(wd_asp()->o[ $def_k ], wd_asp()->o[ $ok ]);
+
+			if ( $ok === "asp_it_options" ) {
+				$index_table_options          = new \WPDRMS\ASP\Options\Data\IndexTableOptions(wd_asp()->o[ $ok ]['options']);
+				wd_asp()->o[ $ok ]['options'] = $index_table_options;
+			}
 		}
 	}
 	// Long previous version compatibility

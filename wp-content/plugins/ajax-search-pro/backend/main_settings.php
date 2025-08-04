@@ -65,8 +65,14 @@ wp_enqueue_script(
                 $new_slider = new wpdreamsText("addsearch", __('Search form name:', 'ajax-search-pro'), "", array(array("func" => "wd_isEmpty", "op" => "eq", "val" => false)), "Please enter a valid form name!");
                 ?>
                 <input name="submit" type="submit" value="<?php esc_attr_e("Add", 'ajax-search-pro' ); ?>"/>
-                <?php if ( count( (array)get_option('asl_options', array()) ) > 0 && get_option('asl_version', 0) > 4732 ): ?>
+                <?php if ( \WPDRMS\ASP\Utils\Plugin::hadLiteVersionInstalledBefore() ): ?>
                 <input name="import" type="submit" value="<?php echo __('Import from Ajax Search Lite', 'ajax-search-pro'); ?>">
+                <div class='descMsg' style="text-align: initial; margin-top: 8px;">
+		                <?php echo sprintf(
+			                __("Check <a target='_blank' href='%s'>this documentation</a> for more information about importing your settings from Ajax Search Lite.", 'ajax-search-pro'),
+			                'https://documentation.ajaxsearchpro.com/getting-started/importing-from-the-lite-version',
+		                ); ?>
+                </div>
                 <?php endif; ?>
                 <input type="hidden"
                        name="asp_new_nonce"

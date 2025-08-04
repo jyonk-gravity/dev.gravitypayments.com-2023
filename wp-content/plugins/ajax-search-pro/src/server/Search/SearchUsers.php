@@ -725,6 +725,7 @@ class SearchUsers extends SearchPostTypes {
 			if ( !empty($sd['user_search_advanced_title_field']) ) {
 				$r->title = AdvancedFieldParser::instance()->parse($sd['user_search_advanced_title_field'], $r);
 			}
+			$r->title = wd_substr_at_word($r->title, $sd['user_res_title_length']);
 
 			/*---------------------- Description ----------------------------*/
 			switch ( $sd['user_search_description_field'] ) {

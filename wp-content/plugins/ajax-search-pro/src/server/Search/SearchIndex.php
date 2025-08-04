@@ -413,10 +413,12 @@ class SearchIndex extends SearchPostTypes {
 		// $words = $options['set_exactonly'] == 1 ? array($s) : $_s;
 		$words = $_s;
 
-		if ( $kw_logic === 'orex' ) {
-			$rmod       = 1;
-			$like_query = "(asp_index.term = '" . implode("' OR asp_index.term = '", $words) . "') AND asp_index.term_reverse <> ''";
-			$queries[]  = str_replace(array( '{like_query}', '{rmod}', '{limit}', '{group_by}' ), array( $like_query, $rmod, $this->getPoolSize(), '' ), $this->query);
+		if ( empty($words) ) {
+			$queries[] = str_replace(array( '{like_query}', '{rmod}', '{limit}', '{group_by}' ), array( '1', 1, $this->getPoolSize(), '' ), $this->query);
+		} elseif ( $kw_logic === 'orex' ) {
+				$rmod       = 1;
+				$like_query = "(asp_index.term = '" . implode("' OR asp_index.term = '", $words) . "') AND asp_index.term_reverse <> ''";
+				$queries[]  = str_replace(array( '{like_query}', '{rmod}', '{limit}', '{group_by}' ), array( $like_query, $rmod, $this->getPoolSize(), '' ), $this->query);
 		} elseif ( $kw_logic === 'andex' ) {
 			foreach ( $words as $wk => $word ) {
 				$rmod = max(10 - ( $wk * 8 ), 1);
@@ -583,7 +585,7 @@ class SearchIndex extends SearchPostTypes {
 		 *
 		 * This is only neccessary with the "and" logic. Others work fine.
 		 */
-		if ( $kw_logic === 'and' ) {
+		if ( $kw_logic === 'and' && $this->s !== '' ) {
 			$new_ra = array();
 			$i      = 0;
 			$tmp_v  = array();

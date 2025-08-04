@@ -2,7 +2,7 @@
 /**
 * Plugin Name: WP Gravity Forms Salesforce
 * Description: Integrates Gravity Forms with Salesforce allowing form submissions to be automatically sent to your Salesforce account 
-* Version: 1.4.8
+* Version: 1.5.0
 * Requires at least: 4.7
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/gravity-forms-plugins/gravity-forms-salesforce-plugin/
@@ -24,7 +24,7 @@ class vxg_salesforce {
   public  $crm_name = 'salesforce';
   public  $id = 'vxg_salesforce';
   public  $domain = 'vxg-sales';
-  public  $version = "1.4.8";
+  public  $version = "1.5.0";
   public  $update_id = '30001';
   public  $min_gravityforms_version = '1.3.9';
   public $type = 'vxg_salesforce_pro';
@@ -121,6 +121,7 @@ require_once(self::$path . "includes/plugin-pages.php");
   */
   public function setup_main(){
 
+      
   include_once(self::$path. "includes/edit-form.php");
  
         //handling post submission.  gform_after_submission runs after gform_replace_merge_tags
@@ -554,8 +555,9 @@ return $result;
       return $value;
   }*/
 
-  if(isset($entry[$gf_field_id])){   
-  $value=maybe_unserialize($entry[$gf_field_id]);
+  if(isset($entry[$gf_field_id])){
+  $value=$entry[$gf_field_id];     
+  //$value=maybe_unserialize($entry[$gf_field_id]);
   if(in_array($gf_field_id,array('date_created','payment_date'))){
       $value=strtotime($value);
       if(!$this->is_api){ //convert utc to local for web2lead
@@ -570,6 +572,9 @@ return $result;
   }
   if(is_numeric($gf_field_id)){
   $field = RGFormsModel::get_field($form, $gf_field_id);
+    if(isset($field->type) && in_array($field->type,array('list')) ){
+     $value=maybe_unserialize($value); 
+  }
   if(isset($field->type) && in_array($field->type,array('option','product')) ){
         $found=strpos($value,'|');
       if($found){
@@ -589,6 +594,7 @@ return $result;
     foreach($field->choices  as $v){
         if($v['value'] == $value){
    $value=!empty($v['score']) ? $v['score'] :  $v['text'];
+    $value=!empty($v['gquizWeight']) ? $v['gquizWeight'] :  $v['text'];
    break;         
         }
     }  
@@ -672,7 +678,7 @@ return $result;
   }
   if($value && is_array($value)){
  // $value=implode(", ",$value);
-  }
+  } 
   return $value;        
   }
   /**
@@ -1381,6 +1387,7 @@ public function update_entry($form,$lead_id){ //with after hook update_entry($fo
   }
   
   public function gf_entry_paid_normal($entry,$pay_info){
+  
      $this->gf_entry_paid($entry,$pay_info); 
   }  
   public function gf_entry_paid_subscription($entry,$pay_info){
@@ -1396,7 +1403,7 @@ public function update_entry($form,$lead_id){ //with after hook update_entry($fo
         if($this->do_actions()){
      do_action('vx_addons_save_entry',$entry_id,$entry,'gf',$form);   
         }
-      $this->push($entry,$form,'paid',false);
+      $this->push($entry,$form,$event,false);
    //  }     
   }
 
@@ -1852,7 +1859,7 @@ public function process_tags($entry,$form,$value,$crm_field_id='',$custom=''){
    foreach($matches[0] as $m){
        $m=trim($m,'{}');
        $val_cust=$this->verify_field_val($entry,$form,$m,$crm_field_id,$custom);
-       if(is_array($val_cust)){ $val_cust=trim(implode(' ',$val_cust)); }   
+       if(is_array($val_cust)){ $val_cust=trim(implode(', ',$val_cust)); }   
     $vals['{'.$m.'}']=$val_cust;  
    }
    

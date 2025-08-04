@@ -825,11 +825,22 @@ class SearchQuery {
 			$results_count_adjust += $rca;
 			// Group if neccessary
 			if (
-				$args->_sd['resultstype'] == 'vertical' &&
-				$args->_sd['group_by'] != 'none' &&
-				$args->_ajax_search
+				$args->_sd['resultstype'] === 'vertical' &&
+				$args->_sd['group_by'] !== 'none' &&
+				( $args->_ajax_search || $args->_sd['group_order_results_page'] )
 			) {
 				$results = $this->group( $results );
+
+				// Flatten results if grouping order is requested for the results pages
+				if ( !$args->_ajax_search && $args->_sd['group_order_results_page'] && isset($results['groups']) ) {
+					$new_res = array();
+					foreach ( $results['groups'] as $group ) {
+						foreach ( $group['items'] as $item ) {
+							$new_res[] = $item;
+						}
+					}
+					$results = $new_res;
+				}
 			}
 		} else {
 			$results = array();
@@ -896,7 +907,7 @@ class SearchQuery {
 				'keywords'  => array( $keywords[0] ),
 				'nores'     => 1,
 			);
-		} elseif ( $fallback_on_no_results && count($keywords)>0 ) {
+		} elseif ( $fallback_on_no_results && count($keywords) >0 ) {
 			$return = array(
 				'keywords' => $keywords,
 				'nores'    => 1,
@@ -964,7 +975,7 @@ class SearchQuery {
 						'api_key'         => $sd['kws_google_places_api'],
 						'search_id'       => $this->args['_id'],
 						'options'         => $this->options,
-						'args'            => (array)$args,
+						'args'            => (array) $args,
 					)
 				);
 

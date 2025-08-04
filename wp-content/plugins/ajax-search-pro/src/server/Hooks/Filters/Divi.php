@@ -44,4 +44,20 @@ class Divi extends AbstractFilter {
 		$new_query                               = SearchOverride::instance()->override(array(), $wp_query, 'wp_query');
 		return $new_query;
 	}
+
+	/**
+	 * Divi extras blog module
+	 *
+	 * @param array<string, mixed> $args
+	 * @param array<string, mixed> $atts
+	 * @return array<string, mixed>
+	 */
+	public function blogExtras( array $args, array $atts = array() ): array {
+		$id = Search::overrideSearchId();
+		if ( !isset($atts['module_class']) || !str_contains('asp_es_' . $id, $atts['module_class']) ) {
+			return $args;
+		}
+		$args['asp_override'] = true;
+		return $args;
+	}
 }

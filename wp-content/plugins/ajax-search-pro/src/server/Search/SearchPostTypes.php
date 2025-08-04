@@ -1128,6 +1128,20 @@ class SearchPostTypes extends AbstractSearch {
 							} else {
 								$values .= "$wpdb->postmeta.meta_value $operator '%" . $v . "%'";
 							}
+						} elseif ( $operator === 'STARTS WITH' || $operator === 'NOT STARTS WITH' ) {
+							$_op = $operator === 'STARTS WITH' ? 'LIKE' : 'NOT LIKE';
+							if ( $values !== '' ) {
+								$values .= " $logic $wpdb->postmeta.meta_value $_op '" . $v . "%'";
+							} else {
+								$values .= "$wpdb->postmeta.meta_value $_op '" . $v . "%'";
+							}
+						} elseif ( $operator === 'ENDS WITH' || $operator === 'NOT ENDS WITH' ) {
+							$_op = $operator === 'ENDS WITH' ? 'LIKE' : 'NOT LIKE';
+							if ( $values !== '' ) {
+								$values .= " $logic $wpdb->postmeta.meta_value $_op '%" . $v . "'";
+							} else {
+								$values .= "$wpdb->postmeta.meta_value $_op '%" . $v . "'";
+							}
 						} elseif ( $values !== '' ) {
 								$values .= " $logic $wpdb->postmeta.meta_value $operator " . $v;
 						} else {
@@ -1144,6 +1158,12 @@ class SearchPostTypes extends AbstractSearch {
 			} elseif ( $operator === 'ELIKE' || $operator === 'NOT ELIKE' ) {
 				$_op          = $operator === 'ELIKE' ? 'LIKE' : 'NOT LIKE';
 				$current_part = "($wpdb->postmeta.meta_value $_op '$posted')";
+			} elseif ( $operator === 'STARTS WITH' || $operator === 'NOT STARTS WITH' ) {
+				$_op          = $operator === 'STARTS WITH' ? 'LIKE' : 'NOT LIKE';
+				$current_part = "($wpdb->postmeta.meta_value $_op '$posted%')";
+			} elseif ( $operator === 'ENDS WITH' || $operator === 'NOT ENDS WITH' ) {
+				$_op          = $operator === 'ENDS WITH' ? 'LIKE' : 'NOT LIKE';
+				$current_part = "($wpdb->postmeta.meta_value $_op '%$posted')";
 			} else {
 				// Numeric operations or problematic stuff left
 				$current_part = "($wpdb->postmeta.meta_value $operator $posted  )";
@@ -1603,6 +1623,8 @@ class SearchPostTypes extends AbstractSearch {
 			if ( !empty($sd['advtitlefield']) ) {
 				$r->title = AdvancedFieldParser::instance()->parse($sd['advtitlefield'], $r);
 			}
+
+			$r->title = wd_substr_at_word($r->title, $sd['post_type_res_title_length']);
 
 			if ( ! isset( $sd['striptagsexclude'] ) ) {
 				$sd['striptagsexclude'] = '<a><span>';

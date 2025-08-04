@@ -24,9 +24,29 @@ class Elementor extends AbstractFilter {
 				$args['paged'] = 1;
 			}
 			$args['post_type']    = 'asp_override';
-			$args['is_elementor'] = true;
 		}
 		return $args;
+	}
+
+	/**
+	 * Converts the "query" query type (query builder) to post so the override can apply
+	 *
+	 * @param $source
+	 * @param $settings
+	 * @param $widget
+	 * @return string
+	 */
+	public function jetListingGridQueryBuilderToPost( $source, $settings, $widget ) {
+		$id = Search::overrideSearchId();
+		if (
+			$id > 0 &&
+			isset($settings['_css_classes']) &&
+			strpos($settings['_css_classes'], 'asp_es_' . $id) !== false
+		) {
+			return 'posts';
+		}
+
+		return $source;
 	}
 
 	/**

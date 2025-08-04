@@ -106,7 +106,7 @@ external_AjaxSearchPro_namespaceObject.plugin.liveLoad = function(origSelector, 
     }
   }
   updateLocation = typeof updateLocation == "undefined" ? true : updateLocation;
-  forceAjax = typeof forceAjax == "undefined" ? false : forceAjax;
+  forceAjax = typeof forceAjax == "undefined" ? true : forceAjax;
   let altSel = $this.getLiveLoadAltSelectors();
   if (selector !== "#main")
     altSel.unshift("#main");

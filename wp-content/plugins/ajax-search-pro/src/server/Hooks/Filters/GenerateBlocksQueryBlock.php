@@ -96,12 +96,13 @@ class GenerateBlocksQueryBlock extends AbstractFilter {
 			);
 			add_filter('asp_query_args', array( SearchOverride::getInstance(), 'getAdditionalArgs' ));
 
+			/**
+			 * The $query_args['page'] should not be set as we want the full set
+			 * and the loop will take care of the page.
+			 */
 			if ( isset($_GET['asp_force_reset_pagination']) ) {
 				// For the correct pagination highlight
-				$search_args['page'] = 1;
 				$query['offset']     = 0;
-			} else {
-				$search_args['page'] = $page;
 			}
 			$options = Search::getOptions();
 			if ( $options === false || count($options) === 0 ) {

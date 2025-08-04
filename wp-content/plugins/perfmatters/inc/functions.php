@@ -1420,6 +1420,7 @@ function perfmatters_is_page_builder() {
 		'et_pb_preview',
 		'ct_builder', //oxygen
 		'tve', //thrive
+		'tge',
 		'app', //flatsome
 		'uxb_iframe',
 		'fb-edit', //fusion builder
@@ -1434,7 +1435,8 @@ function perfmatters_is_page_builder() {
     	'gb-template-viewer', //generateblocks
     	'trp-edit-translation', //translatepress
     	'td_action', //tagdiv
-    	'gform_ajax' //gravity forms
+    	'gform_ajax', //gravity forms
+    	'etch' //etch
 	));
 
 	if(!empty($page_builders)) {
@@ -1504,10 +1506,10 @@ function perfmatters_prefer_html_request() {
 
 /* EDD License Functions
 /***********************************************************************/
-function perfmatters_activate_license($network = false) {
+function perfmatters_activate_license($license_key = null, $network = false) {
 
 	//grab existing license data
-	$license = is_network_admin() || $network ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
+	$license = $license_key ?? (perfmatters_license_key_constant() ?? (is_multisite() || $network ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key')));
 
 	if(!empty($license)) {
 
@@ -1532,7 +1534,7 @@ function perfmatters_activate_license($network = false) {
 		if(!empty($license_data->license) && $license_data->license == 'valid') {
 
 			//update stored option
-			if(is_network_admin() || $network) {
+			if(is_multisite() || $network) {
 				update_site_option('perfmatters_edd_license_status', $license_data->license);
 				return true;
 			}
@@ -1546,10 +1548,10 @@ function perfmatters_activate_license($network = false) {
 	return false;
 }
 
-function perfmatters_deactivate_license($network = false) {
+function perfmatters_deactivate_license($license_key = null, $network = false) {
 
 	//grab existing license data
-	$license = is_network_admin() || $network ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
+	$license = $license_key ?? (perfmatters_license_key_constant() ?? (is_multisite() || $network ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key')));
 
 	if(!empty($license)) {
 
@@ -1574,7 +1576,7 @@ function perfmatters_deactivate_license($network = false) {
 		if($license_data->license == 'deactivated') {
 
 			//update license option
-			if(is_network_admin() || $network) {
+			if(is_multisite() || $network) {
 				delete_site_option('perfmatters_edd_license_status');
 				return true;
 			}
@@ -1588,10 +1590,10 @@ function perfmatters_deactivate_license($network = false) {
 	return false;
 }
 
-function perfmatters_check_license($network = false) {
+function perfmatters_check_license($license_key = null, $network = false) {
 
 	//grab existing license data
-	$license = is_network_admin() || $network ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key');
+	$license = $license_key ?? (perfmatters_license_key_constant() ?? (is_multisite() || $network ? get_site_option('perfmatters_edd_license_key') : get_option('perfmatters_edd_license_key')));
 
 	if(!empty($license)) {
 
@@ -1614,7 +1616,7 @@ function perfmatters_check_license($network = false) {
 		$license_data = json_decode(wp_remote_retrieve_body($response));
 
 		//update license option
-		if(is_network_admin() || $network) {
+		if(is_multisite() || $network) {
 			update_site_option('perfmatters_edd_license_status', $license_data->license);
 		}
 		else {
@@ -1626,4 +1628,65 @@ function perfmatters_check_license($network = false) {
 	}
 
 	return false;
+}
+
+//check for license key constant
+function perfmatters_license_key_constant_check() {
+
+	//only check in admin
+	if(is_admin()) {
+
+		$license_key_constant = perfmatters_license_key_constant();
+		$license_key_constant_stored = is_multisite() ? get_site_option('perfmatters_edd_license_key_constant') : get_option('perfmatters_edd_license_key_constant');
+
+		//license constant defined
+		if($license_key_constant !== false) {
+
+			//mismatch on stored constant
+			if($license_key_constant != $license_key_constant_stored) {
+
+				//deactivate previous stored key
+				if(!empty($license_key_constant_stored )) {
+					perfmatters_deactivate_license($license_key_constant_stored);
+				}
+
+				//store new key
+				if(is_multisite()) {
+					update_site_option('perfmatters_edd_license_key_constant', $license_key_constant);
+				}
+				else {
+					update_option('perfmatters_edd_license_key_constant', $license_key_constant, false);
+				}
+
+				//active new key
+				perfmatters_activate_license($license_key_constant);
+			}
+
+		}
+		else {
+
+			//constant still stored but no definition
+			if($license_key_constant_stored != '') {
+
+				//deactivate previous stored key
+				perfmatters_deactivate_license($license_key_constant_stored);
+
+				//remove stored key
+				if(is_multisite()) {
+					delete_site_option('perfmatters_edd_license_key_constant');
+				}
+				else {
+					delete_option('perfmatters_edd_license_key_constant');
+				}
+			}
+		}
+	}
+}
+add_action('init', 'perfmatters_license_key_constant_check');
+
+//get license key constant
+function perfmatters_license_key_constant() {
+	if(defined('PERFMATTERS_LICENSE_KEY')) {
+		return trim(PERFMATTERS_LICENSE_KEY);
+	}
 }

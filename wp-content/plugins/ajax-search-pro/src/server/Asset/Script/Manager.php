@@ -14,138 +14,144 @@ if ( !defined('ABSPATH') ) {
 
 class Manager extends AssetManager implements ManagerInterface {
 	use SingletonTrait;
-	private $prepared = array();
-	private $media_query = '';
-	private $inline = '';
+
+	private $prepared        = array();
+	private $media_query     = '';
+	private $inline          = '';
 	private $inline_instance = '';
-	private $instances = false;
+	private $instances       = false;
 
 	private $args = array();
 
 
 	private $scripts = array(
-		'wd-asp-photostack' => array(
-			'src' => 'js/{js_source}/external/photostack.js',
-			'prereq' => false
+		'wd-asp-photostack'         => array(
+			'src'    => 'js/{js_source}/external/photostack.js',
+			'prereq' => false,
 		),
-		'wd-asp-select2' => array(
-			'src' => 'js/{js_source}/external/jquery.select2.js',
-			'prereq' => array('jquery')
+		'wd-asp-select2'            => array(
+			'src'    => 'js/{js_source}/external/jquery.select2.js',
+			'prereq' => array( 'jquery' ),
 		),
-		'wd-asp-nouislider' => array(
-			'src' => 'js/{js_source}/external/nouislider.all.js',
-			'prereq' => false
+		'wd-asp-nouislider'         => array(
+			'src'    => 'js/{js_source}/external/nouislider.all.js',
+			'prereq' => false,
 		),
-		'wd-asp-rpp-isotope' => array(
-			'src' => 'js/{js_source}/external/isotope.js',
-			'prereq' => false
+		'wd-asp-rpp-isotope'        => array(
+			'src'    => 'js/{js_source}/external/isotope.js',
+			'prereq' => false,
 		),
-		'wd-asp-ajaxsearchpro' => array(
-			'src' => 'js/{js_source}/plugin/merged/asp{js_min}.js',
-			'prereq' => false
+		'wd-asp-ajaxsearchpro'      => array(
+			'src'    => 'js/{js_source}/plugin/merged/asp{js_min}.js',
+			'prereq' => false,
 		),
 		'wd-asp-prereq-and-wrapper' => array(
-			'src' => 'js/{js_source}/plugin/merged/asp-prereq-and-wrapper{js_min}.js',
-			'prereq' => false
-		)
+			'src'    => 'js/{js_source}/plugin/merged/asp-prereq-and-wrapper{js_min}.js',
+			'prereq' => false,
+		),
 	);
 
 	private $optimized_scripts = array(
 		'wd-asp-ajaxsearchpro' => array(
-			'wd-asp-ajaxsearchpro-prereq' => array(
-				'handle' => 'wd-asp-ajaxsearchpro',	// Handle alias, for the enqueue
-				'src' => 'js/{js_source}/plugin/optimized/asp-prereq.js',
+			'wd-asp-ajaxsearchpro-prereq'            => array(
+				'handle' => 'wd-asp-ajaxsearchpro', // Handle alias, for the enqueue
+				'src'    => 'js/{js_source}/plugin/optimized/asp-prereq.js',
 			),
-			'wd-asp-ajaxsearchpro-core' => array(
+			'wd-asp-ajaxsearchpro-core'              => array(
 				'src' => 'js/{js_source}/plugin/optimized/asp-core.js',
 			),
-			'wd-asp-ajaxsearchpro-settings' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-settings.js',
-				'prereq' => array('wd-asp-ajaxsearchpro'),
+			'wd-asp-ajaxsearchpro-settings'          => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-settings.js',
+				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-compact' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-compact.js',
-				'prereq' => array('wd-asp-ajaxsearchpro'),
+			'wd-asp-ajaxsearchpro-compact'           => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-compact.js',
+				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-vertical' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-results-vertical.js',
-				'prereq' => array('wd-asp-ajaxsearchpro'),
+			'wd-asp-ajaxsearchpro-vertical'          => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-results-vertical.js',
+				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-horizontal' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-results-horizontal.js',
-				'prereq' => array('wd-asp-ajaxsearchpro'),
+			'wd-asp-ajaxsearchpro-horizontal'        => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-results-horizontal.js',
+				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-polaroid' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-results-polaroid.js',
-				'prereq' => array('wd-asp-ajaxsearchpro'),
+			'wd-asp-ajaxsearchpro-polaroid'          => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-results-polaroid.js',
+				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-isotopic' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-results-isotopic.js',
-				'prereq' => array('wd-asp-ajaxsearchpro'),
+			'wd-asp-ajaxsearchpro-isotopic'          => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-results-isotopic.js',
+				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-ga' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-ga.js',
-				'prereq' => array('wd-asp-ajaxsearchpro'),
+			'wd-asp-ajaxsearchpro-ga'                => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-ga.js',
+				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-live' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-live.js',
-				'prereq' => array('wd-asp-ajaxsearchpro'),
+			'wd-asp-ajaxsearchpro-live'              => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-live.js',
+				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-autocomplete' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-autocomplete.js',
-				'prereq' => array('wd-asp-ajaxsearchpro'),
+			'wd-asp-ajaxsearchpro-autocomplete'      => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-autocomplete.js',
+				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-wrapper' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-wrapper.js',
+			'wd-asp-ajaxsearchpro-wrapper'           => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-wrapper.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
-			'wd-asp-ajaxsearchpro-addon-elementor' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-addons-elementor.js',
+			'wd-asp-ajaxsearchpro-addon-elementor'   => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-elementor.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
-			'wd-asp-ajaxsearchpro-addon-divi' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-addons-divi.js',
+			'wd-asp-ajaxsearchpro-addon-bricks'      => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-bricks.js',
+				'prereq' => true, // TRUE => previously loaded script
+			),
+			'wd-asp-ajaxsearchpro-addon-divi'        => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-divi.js',
+				'prereq' => true, // TRUE => previously loaded script
+			),
+			'wd-asp-ajaxsearchpro-addon-blocksy'        => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-blocksy.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
 			'wd-asp-ajaxsearchpro-addon-woocommerce' => array(
-				'src' => 'js/{js_source}/plugin/optimized/asp-addons-woocommerce.js',
+				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-woocommerce.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
-		)
+		),
 	);
 
-
-	// -------------------------------------------- PUBLIC ---------------------------------------------------------
-
 	public function enqueue( $force = false ): void {
-		if ( $force || $this->args['method'] == 'classic' ) {
+		if ( $force || $this->args['method'] === 'classic' ) {
 			// Do not allow async method in footer enqueue
-			$this->args['method'] = $this->args['method'] == 'optimized_async' ? 'optimized' :$this->args['method'];
+			$this->args['method'] = $this->args['method'] === 'optimized_async' ? 'optimized' :$this->args['method'];
 			$this->earlyFooterEnqueue();
 			$this->initialize();
-			echo $this->inline;
-			foreach ($this->prepared as $script) {
+			echo $this->inline; // @phpcs:ignore
+			foreach ( $this->prepared as $script ) {
 				wp_enqueue_script($script['handle']);
 			}
 		}
 	}
 
 	public function printInline( $instances = array() ): void {
-		if ( $this->args['method'] != 'classic' ) {
+		if ( $this->args['method'] !== 'classic' ) {
 			$this->initialize();
 			$output = $this->inline_instance . $this->inline . $this->preparedToInline();
-			if ( $output != '' ) {
-				echo $output;
+			if ( $output !== '' ) {
+				echo $output; // @phpcs:ignore
 			}
 		}
 	}
 
-	public function injectToBuffer($buffer, $instances): string {
-		if ( $this->args['method'] != 'classic' ) {
+	public function injectToBuffer( $buffer, $instances ): string {
+		if ( $this->args['method'] !== 'classic' ) {
 			$this->initialize($instances);
 			$output = $this->inline_instance . $this->inline . $this->preparedToInline();
-			if ( $output != '' ) {
-				Html::inject($output, $buffer, array('</body>', '</html>', "<script"), false);
+			if ( $output !== '' ) {
+				Html::inject($output, $buffer, array( '</body>', '</html>', '<script' ), false);
 			}
 		}
 		return $buffer;
@@ -155,24 +161,23 @@ class Manager extends AssetManager implements ManagerInterface {
 		Generator::deleteFiles();
 	}
 
-	// ------------------------------------------- PRIVATE ---------------------------------------------------------
 
 	private function preparedToInline() {
 		$out = '';
-		foreach ($this->prepared as $script) {
+		foreach ( $this->prepared as $script ) {
 			$async = isset($script['async']) ? 'async ' : '';
-			$out .= "<script " . $async . "type='text/javascript' src='" . $script['src'] ."' id='" . $script['handle'] ."-js'></script>";
+			$out  .= '<script ' . $async . "type='text/javascript' src='" . $script['src'] . "' id='" . $script['handle'] . "-js'></script>";
 		}
 		return $out;
 	}
 
 	private function __construct() {
 		$this->args = array(
-			'method' => wd_asp()->o['asp_compatibility']['script_loading_method'],
-			'source' => wd_asp()->o['asp_compatibility']['js_source'],
-			'detect_ajax' => wd_asp()->o['asp_compatibility']['detect_ajax'],
+			'method'                => wd_asp()->o['asp_compatibility']['script_loading_method'],
+			'source'                => wd_asp()->o['asp_compatibility']['js_source'],
+			'detect_ajax'           => wd_asp()->o['asp_compatibility']['detect_ajax'],
 			'init_only_in_viewport' => wd_asp()->o['asp_compatibility']['init_instances_inviewport_only'],
-			'custom_ajax_handler' => wd_asp()->o['asp_compatibility']['usecustomajaxhandler'],
+			'custom_ajax_handler'   => wd_asp()->o['asp_compatibility']['usecustomajaxhandler'],
 		);
 
 		$this->adjustOptionsForCompatibility();
@@ -185,41 +190,41 @@ class Manager extends AssetManager implements ManagerInterface {
 	}
 
 	private function get( $handles = array(), $minified = true, $optimized = false, $except = array() ): array {
-		$handles = is_string($handles) ? array($handles) : $handles;
-		$handles = count($handles) == 0 ? array_keys($this->scripts) : $handles;
-		$js_source = $minified ? "min" : "nomin";
-		$js_min = $minified ? '.min' : '';
-		$return = array();
+		$handles   = is_string($handles) ? array( $handles ) : $handles;
+		$handles   = count($handles) === 0 ? array_keys($this->scripts) : $handles;
+		$js_source = $minified ? 'min' : 'nomin';
+		$js_min    = $minified ? '.min' : '';
+		$return    = array();
 
 		foreach ( $handles as $handle ) {
-			if ( in_array($handle, $except) || !Requirements::isRequired($handle, $this->instances) ) {
+			if ( in_array($handle, $except, true) || !Requirements::isRequired($handle, $this->instances) ) {
 				continue;
 			}
-			if ( isset($this->scripts[$handle]) ) {
+			if ( isset($this->scripts[ $handle ]) ) {
 
-				if ( $optimized && isset($this->optimized_scripts[$handle]) ) {
+				if ( $optimized && isset($this->optimized_scripts[ $handle ]) ) {
 					$prev_handle = '';
-					foreach ( $this->optimized_scripts[$handle] as $optimized_script_handle => $optimized_script ) {
-						if ( in_array($optimized_script_handle, $except) || !Requirements::isRequired($optimized_script_handle, $this->instances) ) {
+					foreach ( $this->optimized_scripts[ $handle ] as $optimized_script_handle => $optimized_script ) {
+						if ( in_array($optimized_script_handle, $except, true) || !Requirements::isRequired($optimized_script_handle, $this->instances) ) {
 							continue;
 						}
 						$prereq = !isset($optimized_script['prereq']) || $optimized_script['prereq'] === false ? array() : $optimized_script['prereq'];
 						if ( $prereq === true ) {
-							$prereq = array($prev_handle);
+							$prereq = array( $prev_handle );
 						}
 						$return[] = array(
 							'handle' => $optimized_script['handle'] ?? $optimized_script_handle,
-							'path' => ASP_PATH . str_replace(
-									array('{js_source}'),
-									array($js_source),
-									$js_source == 'min' ? str_replace('.js', '.min.js', $optimized_script['src']) : $optimized_script['src']
-								),
-							'src' => ASP_URL . str_replace(
-									array('{js_source}'),
-									array($js_source),
-									$js_source == 'min' ? str_replace('.js', '.min.js', $optimized_script['src']) : $optimized_script['src']
-								),
-							'prereq' => $prereq
+							'path'   => ASP_PATH . str_replace(
+								array( '{js_source}' ),
+								array( $js_source ),
+								$js_source === 'min' ? str_replace('.js', '.min.js', $optimized_script['src']) : $optimized_script['src']
+							),
+							'src'    => ASP_URL . str_replace(
+								array( '{js_source}' ),
+								array( $js_source ),
+								$js_source === 'min' ? str_replace('.js', '.min.js', $optimized_script['src']) : $optimized_script['src']
+							),
+							'prereq' => $prereq,
 						);
 
 						$prev_handle = $optimized_script_handle;
@@ -227,37 +232,36 @@ class Manager extends AssetManager implements ManagerInterface {
 					continue;
 				}
 
-
 				$return[] = array(
 					'handle' => $handle,
-					'path' => ASP_PATH . str_replace(
-							array('{js_source}'),
-							array($js_source),
-							str_replace('{js_min}', $js_min, $this->scripts[$handle]['src'])
-						),
-					'src' => ASP_URL . str_replace(
-							array('{js_source}'),
-							array($js_source),
-							str_replace('{js_min}', $js_min, $this->scripts[$handle]['src'])
-						),
-					'prereq' => $this->scripts[$handle]['prereq']
+					'path'   => ASP_PATH . str_replace(
+						array( '{js_source}' ),
+						array( $js_source ),
+						str_replace('{js_min}', $js_min, $this->scripts[ $handle ]['src'])
+					),
+					'src'    => ASP_URL . str_replace(
+						array( '{js_source}' ),
+						array( $js_source ),
+						str_replace('{js_min}', $js_min, $this->scripts[ $handle ]['src'])
+					),
+					'prereq' => $this->scripts[ $handle ]['prereq'],
 				);
-			} else if ( $optimized && wd_in_array_r($handle, $this->optimized_scripts) ) {
+			} elseif ( $optimized && wd_in_array_r($handle, $this->optimized_scripts) ) {
 				foreach ( $this->optimized_scripts as $scripts ) {
-					if ( isset($scripts[$handle]) ) {
+					if ( isset($scripts[ $handle ]) ) {
 						$return[] = array(
 							'handle' => $handle,
-							'path' => ASP_PATH . str_replace(
-									array('{js_source}'),
-									array($js_source),
-									$scripts[$handle]['src']
-								),
-							'src' => ASP_URL . str_replace(
-									array('{js_source}'),
-									array($js_source),
-									$scripts[$handle]['src']
-								),
-							'prereq' => $scripts[$handle]['prereq']
+							'path'   => ASP_PATH . str_replace(
+								array( '{js_source}' ),
+								array( $js_source ),
+								$scripts[ $handle ]['src']
+							),
+							'src'    => ASP_URL . str_replace(
+								array( '{js_source}' ),
+								array( $js_source ),
+								$scripts[ $handle ]['src']
+							),
+							'prereq' => $scripts[ $handle ]['prereq'],
 						);
 					}
 				}
@@ -277,49 +281,46 @@ class Manager extends AssetManager implements ManagerInterface {
 		if ( Requirements::isRequired('jquery-ui-datepicker', $instances) ) {
 			wp_enqueue_script('jquery-ui-datepicker');
 		}
-
 	}
 
-	/**
-	 * Prints the scripts
-	 */
 	public function initialize( $instances = false ): bool {
 		$this->instances = $instances;
-		$analytics = wd_asp()->o['asp_analytics'];
-		$load_in_footer = true;
-		$media_query = ASP_DEBUG == 1 ? asp_gen_rnd_str() : get_site_option("asp_media_query", "defn");
-		if ( wd_asp()->manager->getContext() == "backend" ) {
-			$js_minified = false;
-			$js_optimized = true;
+		$analytics       = wd_asp()->o['asp_analytics'];
+		$load_in_footer  = true;
+		$media_query     = ASP_DEBUG ? asp_gen_rnd_str() : get_site_option('asp_media_query', 'defn');
+		if ( wd_asp()->manager->getContext() === 'backend' ) {
+			$js_minified   = false;
+			$js_optimized  = true;
 			$js_async_load = false;
-			$js_aggregate = false;
+			$js_aggregate  = false;
 		} else {
-			$js_minified = $this->args['source'] == 'jqueryless-min';
-			$js_optimized = $this->args['method']  != 'classic';
-			$js_async_load = $this->args['method']  == 'optimized_async';
-			$js_aggregate = !$js_async_load && !ASP_DEBUG && !(defined('WP_ASP_TEST_ENV') && is_user_logged_in());
+			$js_minified   = $this->args['source'] === 'jqueryless-min';
+			$js_optimized  = $this->args['method'] !== 'classic';
+			$js_async_load = $this->args['method'] === 'optimized_async';
+			$js_aggregate  = !$js_async_load && !ASP_DEBUG && !( defined('WP_ASP_TEST_ENV') && is_user_logged_in() );
 		}
 
-		$single_highlight = false;
+		$single_highlight     = false;
 		$single_highlight_arr = array();
 
 		// Search results page && keyword highlighter
 
 		if (
 			isset($_GET['p_asid']) && intval($_GET['p_asid']) > 0 &&
-			wd_asp()->instances->exists($_GET['p_asid'])
+			wd_asp()->instances->exists($_GET['p_asid'])  // @phpcs:ignore
 		) {
-			$phrase = $_GET['s'] ?? $_GET['asp_highlight'] ?? '';
-			if ( $phrase != '' ) {
+			$phrase = $_GET['s'] ?? $_GET['asp_highlight'] ?? '';  // @phpcs:ignore
+			if ( $phrase !== '' ) {
 				$search = wd_asp()->instances->get(intval($_GET['p_asid']));
-				if ( $search['data']['single_highlight'] == 1 || $search['data']['result_page_highlight'] == 1 ) {
-					$single_highlight = true;
+				if ( $search['data']['single_highlight'] || $search['data']['result_page_highlight'] ) {
+					$single_highlight     = true;
 					$single_highlight_arr = array(
-						'id' => $search['id'],
-						'selector' => $search['data']['single_highlight_selector'],
-						'scroll' => $search['data']['single_highlight_scroll'] == 1,
+						'id'            => $search['id'],
+						'selector'      => $search['data']['single_highlight_selector'],
+						'scroll'        => boolval($search['data']['single_highlight_scroll']),
 						'scroll_offset' => intval($search['data']['single_highlight_offset']),
-						'whole' => $search['data']['single_highlightwholewords'] == 1,
+						'whole'         => boolval($search['data']['single_highlightwholewords']),
+						'minWordLength' => intval($search['data']['min_word_length']),
 					);
 				}
 			}
@@ -327,29 +328,37 @@ class Manager extends AssetManager implements ManagerInterface {
 
 		$ajax_url = admin_url('admin-ajax.php');
 		if ( !is_admin() ) {
-			if (  $this->args['custom_ajax_handler'] == 1) {
+			if ( $this->args['custom_ajax_handler'] ) {
 				$ajax_url = ASP_URL . 'ajax_search.php';
 			}
-			if ( wd_asp()->o['asp_caching']['caching'] == 1 && wd_asp()->o['asp_caching']['caching_method'] == 'sc_file' ) {
+			if ( wd_asp()->o['asp_caching']['caching'] && wd_asp()->o['asp_caching']['caching_method'] === 'sc_file' ) {
 				$ajax_url = ASP_URL . 'sc-ajax.php';
 			}
 		}
 
 		$handle = 'wd-asp-ajaxsearchpro';
 		if ( !$js_async_load ) {
-			$handle = $this->prepare(
-				$this->get(array(), $js_minified, $js_optimized, array(
-					'wd-asp-prereq-and-wrapper'
-				)),
+			$handle             = $this->prepare(
+				$this->get(
+					array(),
+					$js_minified,
+					$js_optimized,
+					array(
+						'wd-asp-prereq-and-wrapper',
+					)
+				),
 				array(
 					'media_query' => $media_query,
-					'in_footer' => $load_in_footer,
-					'aggregate' => $js_aggregate,
-					'handle' => $handle
+					'in_footer'   => $load_in_footer,
+					'aggregate'   => $js_aggregate,
+					'handle'      => $handle,
 				)
 			);
-			$additional_scripts = $this->get(array(), $js_minified, $js_optimized,
-				array('wd-asp-prereq-and-wrapper', 'wd-asp-ajaxsearchpro-wrapper')
+			$additional_scripts = $this->get(
+				array(),
+				$js_minified,
+				$js_optimized,
+				array( 'wd-asp-prereq-and-wrapper', 'wd-asp-ajaxsearchpro-wrapper' )
 			);
 		} else {
 			$handle = 'wd-asp-prereq-and-wrapper';
@@ -357,123 +366,143 @@ class Manager extends AssetManager implements ManagerInterface {
 				$this->get($handle, $js_minified, $js_optimized),
 				array(
 					'media_query' => $media_query,
-					'in_footer' => $load_in_footer
+					'in_footer'   => $load_in_footer,
 				)
 			);
-			$additional_scripts = $this->get(array(), $js_minified, $js_optimized,
+			$additional_scripts = $this->get(
+				array(),
+				$js_minified,
+				$js_optimized,
 				array(
 					'wd-asp-prereq-and-wrapper',
 					'wd-asp-ajaxsearchpro-wrapper',
-					'wd-asp-ajaxsearchpro-prereq'
+					'wd-asp-ajaxsearchpro-prereq',
 				)
 			);
 		}
 
+		// Safety against Path Traversal attacks
+		$additional_scripts = array_map(
+			function ( $script ) {
+				unset($script['path']);
+				return $script;
+			},
+			$additional_scripts
+		);
+
 		// The new variable is ASP
-		$this->inline = Script::objectToInlineScript($handle, 'ASP', array(
-			'wp_rocket_exception' => 'DOMContentLoaded',	// WP Rocket hack to prevent the wrapping of the inline script: https://docs.wp-rocket.me/article/1265-load-javascript-deferred
-			'ajaxurl' => $ajax_url,
-			'backend_ajaxurl' => admin_url('admin-ajax.php'),
-			'asp_url' => ASP_URL,
-			'upload_url' => wd_asp()->upload_url,
-			'detect_ajax' => $this->args['detect_ajax'],
-			'media_query' => get_site_option("asp_media_query", "defn"),
-			'version' => ASP_CURR_VER,
-			'pageHTML' => '',
-			'additional_scripts' => $additional_scripts,
-			'script_async_load' => $js_async_load,
-			'font_url' => str_replace('http:', "", plugins_url()). '/ajax-search-pro/css/fonts/icons/icons2.woff2',
-			'init_only_in_viewport' => $this->args['init_only_in_viewport'] == 1,
-			'highlight' => array(
-				'enabled' => $single_highlight,
-				'data' => $single_highlight_arr
+		$this->inline = Script::objectToInlineScript(
+			$handle,
+			'ASP',
+			array(
+				'wp_rocket_exception'   => 'DOMContentLoaded',    // WP Rocket hack to prevent the wrapping of the inline script: https://docs.wp-rocket.me/article/1265-load-javascript-deferred
+				'ajaxurl'               => $ajax_url,
+				'backend_ajaxurl'       => admin_url('admin-ajax.php'),
+				'asp_url'               => ASP_URL,
+				'upload_url'            => wd_asp()->upload_url,
+				'detect_ajax'           => $this->args['detect_ajax'],
+				'media_query'           => get_site_option('asp_media_query', 'defn'),
+				'version'               => ASP_CURR_VER_STRING,
+				'build'                 => ASP_CURR_VER,
+				'pageHTML'              => '',
+				'additional_scripts'    => $additional_scripts,
+				'script_async_load'     => $js_async_load,
+				'font_url'              => str_replace('http:', '', plugins_url()) . '/ajax-search-pro/css/fonts/icons/icons2.woff2',
+				'init_only_in_viewport' => boolval( $this->args['init_only_in_viewport']),
+				'highlight'             => array(
+					'enabled' => $single_highlight,
+					'data'    => $single_highlight_arr,
+				),
+				'debug'                 => ASP_DEBUG || defined('WP_ASP_TEST_ENV'),
+				'instances'             => new stdClass(),
+				'analytics'             => array(
+					'method'      => $analytics['analytics'],
+					'tracking_id' => $analytics['analytics_tracking_id'],
+					'event'       => array(
+						'focus'        => array(
+							'active'   => boolval($analytics['gtag_focus']),
+							'action'   => $analytics['gtag_focus_action'],
+							'category' => $analytics['gtag_focus_ec'],
+							'label'    => $analytics['gtag_focus_el'],
+							'value'    => $analytics['gtag_focus_value'],
+						),
+						'search_start' => array(
+							'active'   => boolval($analytics['gtag_search_start']),
+							'action'   => $analytics['gtag_search_start_action'],
+							'category' => $analytics['gtag_search_start_ec'],
+							'label'    => $analytics['gtag_search_start_el'],
+							'value'    => $analytics['gtag_search_start_value'],
+						),
+						'search_end'   => array(
+							'active'   => boolval($analytics['gtag_search_end']),
+							'action'   => $analytics['gtag_search_end_action'],
+							'category' => $analytics['gtag_search_end_ec'],
+							'label'    => $analytics['gtag_search_end_el'],
+							'value'    => $analytics['gtag_search_end_value'],
+						),
+						'magnifier'    => array(
+							'active'   => boolval($analytics['gtag_magnifier']),
+							'action'   => $analytics['gtag_magnifier_action'],
+							'category' => $analytics['gtag_magnifier_ec'],
+							'label'    => $analytics['gtag_magnifier_el'],
+							'value'    => $analytics['gtag_magnifier_value'],
+						),
+						'return'       => array(
+							'active'   => boolval($analytics['gtag_return']),
+							'action'   => $analytics['gtag_return_action'],
+							'category' => $analytics['gtag_return_ec'],
+							'label'    => $analytics['gtag_return_el'],
+							'value'    => $analytics['gtag_return_value'],
+						),
+						'try_this'     => array(
+							'active'   => boolval($analytics['gtag_try_this']),
+							'action'   => $analytics['gtag_try_this_action'],
+							'category' => $analytics['gtag_try_this_ec'],
+							'label'    => $analytics['gtag_try_this_el'],
+							'value'    => $analytics['gtag_try_this_value'],
+						),
+						'facet_change' => array(
+							'active'   => boolval($analytics['gtag_facet_change']),
+							'action'   => $analytics['gtag_facet_change_action'],
+							'category' => $analytics['gtag_facet_change_ec'],
+							'label'    => $analytics['gtag_facet_change_el'],
+							'value'    => $analytics['gtag_facet_change_value'],
+						),
+						'result_click' => array(
+							'active'   => boolval($analytics['gtag_result_click']),
+							'action'   => $analytics['gtag_result_click_action'],
+							'category' => $analytics['gtag_result_click_ec'],
+							'label'    => $analytics['gtag_result_click_el'],
+							'value'    => $analytics['gtag_result_click_value'],
+						),
+					),
+				),
 			),
-			'debug' => ASP_DEBUG == 1 || defined('WP_ASP_TEST_ENV'),
-			'instances' => new stdClass(),
-			'analytics' => array(
-				'method' => $analytics['analytics'],
-				'tracking_id' => $analytics['analytics_tracking_id'],
-				'event' => array(
-					'focus' => array(
-						'active' => $analytics['gtag_focus'],
-						'action' => $analytics['gtag_focus_action'],
-						"category" => $analytics['gtag_focus_ec'],
-						"label" =>  $analytics['gtag_focus_el'],
-						"value" => $analytics['gtag_focus_value']
-					),
-					'search_start' => array(
-						'active' => $analytics['gtag_search_start'],
-						'action' => $analytics['gtag_search_start_action'],
-						"category" => $analytics['gtag_search_start_ec'],
-						"label" =>  $analytics['gtag_search_start_el'],
-						"value" => $analytics['gtag_search_start_value']
-					),
-					'search_end' => array(
-						'active' => $analytics['gtag_search_end'],
-						'action' => $analytics['gtag_search_end_action'],
-						"category" => $analytics['gtag_search_end_ec'],
-						"label" =>  $analytics['gtag_search_end_el'],
-						"value" => $analytics['gtag_search_end_value']
-					),
-					'magnifier' => array(
-						'active' => $analytics['gtag_magnifier'],
-						'action' => $analytics['gtag_magnifier_action'],
-						"category" => $analytics['gtag_magnifier_ec'],
-						"label" =>  $analytics['gtag_magnifier_el'],
-						"value" => $analytics['gtag_magnifier_value']
-					),
-					'return' => array(
-						'active' => $analytics['gtag_return'],
-						'action' => $analytics['gtag_return_action'],
-						"category" => $analytics['gtag_return_ec'],
-						"label" =>  $analytics['gtag_return_el'],
-						"value" => $analytics['gtag_return_value']
-					),
-					'try_this' => array(
-						'active' => $analytics['gtag_try_this'],
-						'action' => $analytics['gtag_try_this_action'],
-						"category" => $analytics['gtag_try_this_ec'],
-						"label" =>  $analytics['gtag_try_this_el'],
-						"value" => $analytics['gtag_try_this_value']
-					),
-					'facet_change' => array(
-						'active' => $analytics['gtag_facet_change'],
-						'action' => $analytics['gtag_facet_change_action'],
-						"category" => $analytics['gtag_facet_change_ec'],
-						"label" =>  $analytics['gtag_facet_change_el'],
-						"value" => $analytics['gtag_facet_change_value']
-					),
-					'result_click' => array(
-						'active' => $analytics['gtag_result_click'],
-						'action' => $analytics['gtag_result_click_action'],
-						"category" => $analytics['gtag_result_click_ec'],
-						"label" =>  $analytics['gtag_result_click_el'],
-						"value" => $analytics['gtag_result_click_value']
-					)
-				)
-			)
-		), 'before',true, false);
+			'before', 
+			true,
+			false
+		);
 
 		// Instance data
 		$script_data = wd_asp()->instances->get_script_data();
 		if ( count($script_data) > 0 ) {
 			if ( $instances === false ) {
-				$script = "window.ASP_INSTANCES = [];";
-				foreach ($script_data as $id => $data) {
+				$script = 'window.ASP_INSTANCES = [];';
+				foreach ( $script_data as $id => $data ) {
 					$script .= "window.ASP_INSTANCES[$id] = $data;";
 				}
 
-				$script_id = 'wd-asp-instances-' . substr(md5($script), 0, 8);
+				$script_id              = 'wd-asp-instances-' . substr(md5($script), 0, 8);
 				$this->inline_instance .= "<script id='$script_id'>$script</script>";
 			} else {
 				$script = '';
 				foreach ( $instances as $id ) {
-					if ( isset($script_data[$id]) ) {
+					if ( isset($script_data[ $id ]) ) {
 						$script .= "window.ASP_INSTANCES[$id] = $script_data[$id];";
 					}
 				}
-				if ( $script != '' ) {
-					$script = "window.ASP_INSTANCES = [];" . $script;
+				if ( $script !== '' ) {
+					$script = 'window.ASP_INSTANCES = [];' . $script;
 				}
 			}
 
@@ -486,8 +515,8 @@ class Manager extends AssetManager implements ManagerInterface {
 			 *
 			 * WordPress prints scripts at priority: 10 in this hook
 			 */
-			if ( $script != '' ) {
-				$script_id = 'wd-asp-instances-' . substr(md5($script), 0, 8);
+			if ( $script !== '' ) {
+				$script_id              = 'wd-asp-instances-' . substr(md5($script), 0, 8);
 				$this->inline_instance .= "<script id='$script_id'>$script</script>";
 			}
 		}
@@ -495,37 +524,40 @@ class Manager extends AssetManager implements ManagerInterface {
 	}
 
 	private function prepare( $scripts = array(), $args = array() ) {
-		$defaults = array(
+		$defaults         = array(
 			'media_query' => '',
-			'in_footer'	=> true,
-			'prereq'	=> array(),
-			'aggregate' => false,
-			'handle'    => ''
+			'in_footer'   => true,
+			'prereq'      => array(),
+			'aggregate'   => false,
+			'handle'      => '',
 		);
-		$args = wp_parse_args($args, $defaults);
+		$args             = wp_parse_args($args, $defaults);
 		$register_scripts = $scripts;
 		if ( $args['aggregate'] ) {
 			$generator = new Generator($scripts);
-			$filename = $generator->get();
-			if ( $filename != '' ) {
+			$filename  = $generator->get();
+			if ( $filename !== '' ) {
 				$handle = $generator->fileHandle();
 				$prereq = $args['prereq'];
-				foreach ($scripts as $script) {
+				foreach ( $scripts as $script ) {
 					if ( is_array($script['prereq']) ) {
 						$prereq = array_merge($prereq, $script['prereq']);
 					}
 				}
-				$prereq = array_unique($prereq);
-				$prereq = array_filter($prereq, function($p){
-					return strpos($p, 'asp-') === false;
-				});
+				$prereq           = array_unique($prereq);
+				$prereq           = array_filter(
+					$prereq,
+					function ( $p ) {
+						return strpos($p, 'asp-') === false;
+					}
+				);
 				$register_scripts = array(
 					array(
 						'handle' => $handle,
-						'src'	 => wd_asp()->cache_url . $filename,
+						'src'    => wd_asp()->cache_url . $filename,
 						'prereq' => $prereq,
-						'async'  => true
-					)
+						'async'  => true,
+					),
 				);
 			}
 		}

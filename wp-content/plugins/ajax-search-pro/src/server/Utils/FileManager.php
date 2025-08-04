@@ -2,7 +2,10 @@
 
 namespace WPDRMS\ASP\Utils;
 
+use Exception;
 use InvalidArgumentException;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 
 /**
@@ -205,6 +208,112 @@ class FileManager {
 			}
 		}
 		rmdir($path); // @phpcs:ignore
+	}
+
+	/**
+	 * Lists directories, excluding WP system, plugin and theme directories
+	 *
+	 * @param string $path
+	 * @param int    $limit
+	 * @return string[]
+	 * @throws Exception
+	 */
+	public function safeListDirectories( string $path, int $limit = 5000 ): array {
+		$unsafe_directories = apply_filters(
+			'asp/utils/filemanager/unsafe_directories',
+			array(
+				'node_modules',
+				'vendor',
+				'cache',
+				'.git',
+				'_phpstorm',
+				'themes',
+				'wp-includes',
+				'wp-admin',
+				'plugins',
+				'mu-plugins',
+				'et-cache',
+				'wpml',
+				'wflogs',
+				'w3tc-config',
+				'config',
+				'elementor',
+				'wpallimport',
+				'buddypress',
+				'asp_upload',
+				'AAPL',
+				'sucuri',
+			)
+		);
+		$directories        = $this->listDirectoriesRecursively( $path, $unsafe_directories );
+
+		sort($directories);
+
+		return array_slice(
+			array_values(
+				array_map(
+					function ( $directory ) {
+						return str_replace(ABSPATH, '', rtrim($directory, DIRECTORY_SEPARATOR));
+					},
+					$directories
+				)
+			),
+			0,
+			$limit
+		);
+	}
+
+
+	/**
+	 * A very fast recursive directory listing method
+	 *
+	 * Much faster then using DirectoryIterators
+	 *
+	 * @param string   $path
+	 * @param string[] $exclude_dirs
+	 * @return string[]
+	 */
+	function listDirectoriesRecursively( string $path = '', $exclude_dirs = array() ): array {
+		$directories = array();
+		$paths       = glob($path . '*', GLOB_MARK | GLOB_ONLYDIR | GLOB_NOSORT);
+		foreach ( $paths as $path ) {
+			// Skip excluded directories
+			$dir_name = basename(rtrim($path, DIRECTORY_SEPARATOR));
+			if ( in_array($dir_name, $exclude_dirs, true) ) {
+				continue;
+			}
+			$directories[] = $path;
+			$directories   = array_merge($directories, $this->listDirectoriesRecursively($path, $exclude_dirs));
+		}
+		return $directories;
+	}
+
+	/**
+	 * Gets all unique subdirectories from the path
+	 *
+	 * @param string $path
+	 * @return string[]
+	 */
+	public function listDirectoriesRecursively2( string $path ): array {
+		$path        = trailingslashit($path);
+		$directories = array();
+		$iterator    = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
+			RecursiveIteratorIterator::SELF_FIRST,
+		);
+
+		foreach ( $iterator as $file ) {
+			if ( $file->isDir() ) {
+				$dir_path = $file->getRealpath();
+				if ( !in_array($dir_path, $directories, true ) ) {
+					$directories[] = $dir_path;
+				}
+			}
+		}
+
+		// $directories = array_unique($directories);
+
+		return $directories;
 	}
 
 	/**

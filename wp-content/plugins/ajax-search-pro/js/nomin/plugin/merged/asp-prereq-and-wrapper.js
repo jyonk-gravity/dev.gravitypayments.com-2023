@@ -746,7 +746,7 @@ const Hooks = {
 
 ;// ./src/client/external/helpers/interval-until-execute.js
 
-function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
+function interval_until_execute_intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
   let t, tries = 0, res = typeof criteria === "function" ? criteria() : criteria;
   if (res === false) {
     t = setInterval(function() {
@@ -876,7 +876,7 @@ window.WPD.DoMini = window.WPD.dom;
 window.DoMini = window.WPD.dom;
 window.WPD.Base64 = window.WPD.Base64 || base64;
 window.WPD.Hooks = window.WPD.Hooks || hooks_filters;
-window.WPD.intervalUntilExecute = window.WPD.intervalUntilExecute || intervalUntilExecute;
+window.WPD.intervalUntilExecute = window.WPD.intervalUntilExecute || interval_until_execute_intervalUntilExecute;
 
 ;// ./src/client/plugin/wrapper/instances.js
 
@@ -1012,7 +1012,197 @@ function api() {
   }
 }
 
+;// ./src/client/global/utils/browser.ts
+
+
+
+const isSafari = () => {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+};
+const whichjQuery = (plugin) => {
+  let jq = false;
+  if (typeof window.$ != "undefined") {
+    if (typeof plugin === "undefined") {
+      jq = window.$;
+    } else {
+      if (typeof window.$.fn[plugin] != "undefined") {
+        jq = window.$;
+      }
+    }
+  }
+  if (jq === false && typeof window.jQuery != "undefined") {
+    jq = window.jQuery;
+    if (typeof plugin === "undefined") {
+      jq = window.jQuery;
+    } else {
+      if (typeof window.jQuery.fn[plugin] != "undefined") {
+        jq = window.jQuery;
+      }
+    }
+  }
+  return jq;
+};
+const formData = function(form, d) {
+  let els = form.find("input,textarea,select,button").get();
+  if (arguments.length === 1) {
+    const data = {};
+    els.forEach(function(el) {
+      if (el.name && !el.disabled && (el.checked || /select|textarea/i.test(el.nodeName) || /text/i.test(el.type) || $(el).hasClass("hasDatepicker") || $(el).hasClass("asp_slider_hidden"))) {
+        if (data[el.name] === void 0) {
+          data[el.name] = [];
+        }
+        if ($(el).hasClass("hasDatepicker")) {
+          data[el.name].push($(el).parent().find(".asp_datepicker_hidden").val());
+        } else {
+          data[el.name].push($(el).val());
+        }
+      }
+    });
+    return JSON.stringify(data);
+  } else if (d !== void 0) {
+    const data = typeof d != "object" ? JSON.parse(d) : d;
+    els.forEach(function(el) {
+      if (el.name) {
+        if (data[el.name]) {
+          let names = data[el.name], _this = $(el);
+          if (Object.prototype.toString.call(names) !== "[object Array]") {
+            names = [names];
+          }
+          if (el.type === "checkbox" || el.type === "radio") {
+            let val = _this.val(), found = false;
+            for (let i = 0; i < names.length; i++) {
+              if (names[i] === val) {
+                found = true;
+                break;
+              }
+            }
+            _this.prop("checked", found);
+          } else {
+            _this.val(names[0]);
+            if ($(el).hasClass("asp_gochosen") || $(el).hasClass("asp_goselect2")) {
+              intervalUntilExecute(function(_$) {
+                _$(el).trigger("change.asp_select2");
+              }, function() {
+                return whichjQuery("asp_select2");
+              }, 50, 3);
+            } else if ($(el).hasClass("hasDatepicker")) {
+              intervalUntilExecute(function(_$) {
+                const node = _this.get(0);
+                if (node === void 0) {
+                  return;
+                }
+                let value = names[0], format = _$(node).datepicker("option", "dateFormat");
+                _$(node).datepicker("option", "dateFormat", "yy-mm-dd");
+                _$(node).datepicker("setDate", value);
+                _$(node).datepicker("option", "dateFormat", format);
+                _$(node).trigger("selectnochange");
+              }, function() {
+                return whichjQuery("datepicker");
+              }, 50, 3);
+            }
+          }
+        } else {
+          if (el.type === "checkbox" || el.type === "radio") {
+            $(el).prop("checked", false);
+          }
+        }
+      }
+    });
+    return form;
+  }
+};
+const submitToUrl = function(action, method, input, target = "self") {
+  let form;
+  form = $('<form style="display: none;" />');
+  form.attr("action", action);
+  form.attr("method", method);
+  $("body").append(form);
+  if (typeof input !== "undefined" && input !== null) {
+    Object.keys(input).forEach(function(name) {
+      let value = input[name];
+      let $input = $('<input type="hidden" />');
+      $input.attr("name", name);
+      $input.attr("value", value);
+      form.append($input);
+    });
+  }
+  if (target == "new") {
+    form.attr("target", "_blank");
+  }
+  form.get(0).submit();
+};
+const openInNewTab = function(url) {
+  Object.assign(document.createElement("a"), { target: "_blank", href: url }).click();
+};
+const scrollToFirstVisibleElement = function(elements, offset = 0) {
+  for (const element2 of elements) {
+    if (recursiveCheckVisibility(element2)) {
+      window.scrollTo({
+        top: element2.getBoundingClientRect().top - 120 + window.pageYOffset + offset,
+        behavior: "smooth"
+      });
+      return true;
+    }
+  }
+  return false;
+};
+const recursiveCheckVisibility = function(element2) {
+  if (typeof element2.checkVisibility === "undefined") {
+    return true;
+  }
+  let el = element2, visible = true;
+  while (el !== null) {
+    if (!el.checkVisibility({
+      opacityProperty: true,
+      visibilityProperty: true,
+      contentVisibilityAuto: true
+    })) {
+      visible = false;
+      break;
+    }
+    el = el.parentElement;
+  }
+  return visible;
+};
+
+;// ./src/client/utils/onSafeDocumentReady.ts
+
+const onSafeDocumentReady = (callback) => {
+  let wasExecuted = false;
+  const isDocumentReady = () => {
+    return document.readyState === "complete" || document.readyState === "interactive" || document.readyState === "loaded";
+  };
+  const removeListeners = () => {
+    window.removeEventListener("DOMContentLoaded", onDOMContentLoaded);
+    document.removeEventListener("readystatechange", onReadyStateChange);
+  };
+  const runCallback = () => {
+    if (!wasExecuted) {
+      wasExecuted = true;
+      callback();
+      removeListeners();
+    }
+  };
+  const onDOMContentLoaded = () => {
+    runCallback();
+  };
+  const onReadyStateChange = () => {
+    if (isDocumentReady()) {
+      runCallback();
+    }
+  };
+  if (isDocumentReady()) {
+    runCallback();
+  } else {
+    window.addEventListener("DOMContentLoaded", onDOMContentLoaded);
+    document.addEventListener("readystatechange", onReadyStateChange);
+  }
+};
+/* harmony default export */ var utils_onSafeDocumentReady = (onSafeDocumentReady);
+
 ;// ./src/client/plugin/wrapper/asp.ts
+
+
 
 
 
@@ -1109,35 +1299,42 @@ const ASP_EXTENDED = {
     return true;
   },
   initializeHighlight: function() {
-    if (ASP.highlight.enabled) {
-      const data = ASP.highlight.data;
-      let selector = data.selector !== "" && domini_default()(data.selector).length > 0 ? data.selector : "article", $highlighted;
-      selector = domini_default()(selector).length > 0 ? selector : "body";
-      const s = new URLSearchParams(location.search), phrase = s.get("s") ?? s.get("asp_highlight") ?? s.get("asp_s") ?? s.get("asp_ls") ?? "";
-      domini_default()(selector).unhighlight({ className: "asp_single_highlighted_" + data.id });
-      if (phrase !== null && phrase.trim() !== "") {
-        domini_default()(selector).highlight(phrase.trim().split(" "), {
-          element: "span",
-          className: "asp_single_highlighted_" + data.id,
-          wordsOnly: data.whole,
-          excludeParents: ".asp_w, .asp-try"
-        });
-        $highlighted = domini_default()(".asp_single_highlighted_" + data.id);
-        if (data.scroll && $highlighted.length > 0) {
-          let stop = $highlighted.offset().top - 120;
-          const $adminbar = domini_default()("#wpadminbar");
-          if ($adminbar.length > 0)
-            stop -= $adminbar.height();
-          stop = stop + data.scroll_offset;
-          stop = stop < 0 ? 0 : stop;
-          domini_default()("html").animate({
-            "scrollTop": stop
-          }, 500);
-        }
-      }
-      return false;
+    if (!ASP.highlight.enabled) {
+      return;
     }
-    return false;
+    const data = ASP.highlight.data;
+    let selector = data.selector !== "" && domini_default()(data.selector).length > 0 ? data.selector : "article", $highlighted, phrase;
+    selector = domini_default()(selector).length > 0 ? selector : "body";
+    const s = new URLSearchParams(location.search);
+    phrase = s.get("s") ?? s.get("asp_highlight") ?? s.get("asp_s") ?? s.get("asp_ls") ?? "";
+    domini_default()(selector).unhighlight({ className: "asl_single_highlighted" });
+    if (phrase === null) {
+      return;
+    }
+    phrase = phrase.trim();
+    if (phrase === "") {
+      return;
+    }
+    const words = phrase.trim().split(" ").map((s2) => s2.trim(".")).filter((s2) => s2.length >= data.minWordLength);
+    domini_default()(selector).highlight([phrase.trim()], {
+      element: "span",
+      className: "asp_single_highlighted_" + data.id + " asp_single_highlighted_exact",
+      wordsOnly: data.whole,
+      excludeParents: ".asp_w, .asp-try"
+    });
+    if (words.length > 0) {
+      domini_default()(selector).highlight(words, {
+        element: "span",
+        className: "asp_single_highlighted_" + data.id,
+        wordsOnly: data.whole,
+        excludeParents: ".asp_w, .asp-try, .asp_single_highlighted_" + data.id
+      });
+    }
+    if (data.scroll) {
+      if (!scrollToFirstVisibleElement(domini_default()(".asp_single_highlighted_" + data.id + ".asp_single_highlighted_exact").get(), data.scroll_offset)) {
+        scrollToFirstVisibleElement(domini_default()(".asp_single_highlighted_" + data.id).get(), data.scroll_offset);
+      }
+    }
   },
   initializeOtherEvents: function() {
     let ttt, ts;
@@ -1207,20 +1404,10 @@ const ASP_EXTENDED = {
     }
   },
   ready: function() {
-    const documentReady = () => document.readyState === "complete" || document.readyState === "interactive" || document.readyState === "loaded";
-    if (documentReady()) {
-      this.initialize();
-    } else {
-      window.addEventListener("DOMContentLoaded", () => {
-        this.initialize();
-      });
-      document.addEventListener("readystatechange", () => {
-        ;
-        if (documentReady()) {
-          this.initialize();
-        }
-      });
-    }
+    const $this = this;
+    utils_onSafeDocumentReady(() => {
+      $this.initialize();
+    });
   },
   init: function() {
     if (ASP.script_async_load) {
@@ -1244,7 +1431,7 @@ function load() {
     domini._fn.plugin("ajaxsearchpro", window.WPD.AjaxSearchPro.plugin);
   }
   window.ASP = { ...window.ASP, ...asp };
-  intervalUntilExecute(() => window.ASP.init(), function() {
+  interval_until_execute_intervalUntilExecute(() => window.ASP.init(), function() {
     return typeof window.ASP.version != "undefined";
   });
 }

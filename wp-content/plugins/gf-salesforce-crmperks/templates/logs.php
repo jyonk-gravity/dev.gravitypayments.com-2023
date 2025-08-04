@@ -328,7 +328,7 @@ margin-left: 2px;
   <?php
 if($items>0){
   ?>
-  <div class="tablenav-pages"> <span id="paging_header" class="displaying-num"><?php esc_html_e('Displaying','gravity-forms-salesforce-crm') ?> <span id="paging_range_min_header"><?php echo esc_html($data['min']) ?></span> - <span id="paging_range_max_header"><?php echo esc_html($data['max']) ?></span> of <span id="paging_total_header"><?php echo esc_html($data['items']) ?></span></span><?php echo wp_kses_post($data['links']); ?></div>
+  <div class="tablenav-pages"> <span id="paging_header" class="displaying-num"><?php esc_html_e('Displaying','gravity-forms-salesforce-crm') ?> <span id="paging_range_min_header"><?php echo esc_html($data['min']) ?></span> - <span id="paging_range_max_header"><?php echo esc_html($data['max']) ?></span> of <span id="paging_total_header"><?php echo esc_html($data['items']) ?></span></span><?php if(!empty($data['links'])){ echo wp_kses_post($data['links']); } ?></div>
  <?php
 }
         ?>       
@@ -436,7 +436,7 @@ if($items>0){
   ?>
     <div class="crm_actions tablenav">
    <a id="vx_clear_logs" class="button" title="<?php esc_html_e('Clear Salesforce Log','gravity-forms-salesforce-crm') ?>" href="<?php echo wp_nonce_url(admin_url('admin.php?page='.$this->post('page')."&view=log&vx_tab_action_".$this->id."=clear_logs"),'vx_nonce','vx_nonce'); ?>"><?php esc_html_e('Clear Salesforce Log','gravity-forms-salesforce-crm') ?></a>
-  <div class="tablenav-pages"> <span id="paging_header" class="displaying-num"><?php esc_html_e('Displaying','gravity-forms-salesforce-crm') ?> <span id="paging_range_min_header"><?php echo esc_html($data['min']) ?></span> - <span id="paging_range_max_header"><?php echo esc_html($data['max']) ?></span> of <span id="paging_total_header"><?php echo esc_html($data['items']) ?></span></span><?php echo wp_kses_post($data['links']); ?></div>
+  <div class="tablenav-pages"> <span id="paging_header" class="displaying-num"><?php esc_html_e('Displaying','gravity-forms-salesforce-crm') ?> <span id="paging_range_min_header"><?php echo esc_html($data['min']) ?></span> - <span id="paging_range_max_header"><?php echo esc_html($data['max']) ?></span> of <span id="paging_total_header"><?php echo esc_html($data['items']) ?></span></span><?php if(!empty($data['links'])){ echo wp_kses_post($data['links']); } ?></div>
     </div>
   <?php
   }

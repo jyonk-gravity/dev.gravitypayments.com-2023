@@ -12,6 +12,7 @@ use WPDRMS\ASP\Utils\AdvancedField\Types\ResultsFieldTypes;
 use WPDRMS\ASP\Utils\AdvancedField\Types\StarRatingFieldTypes;
 use WPDRMS\ASP\Utils\AdvancedField\Types\TaxonomyFieldTypes;
 use WPDRMS\ASP\Utils\AdvancedField\Types\WooCommercePrice;
+use WPDRMS\ASP\Utils\AdvancedField\Types\WooCommerceSaleBadge;
 use WPDRMS\ASP\Utils\AdvancedField\Types\WooCommerceStarRating;
 use WPDRMS\ASP\Utils\AdvancedField\Types\WooCommerceStockStatus;
 use WPDRMS\ASP\Utils\AdvancedField\Types\WooCommerceAddToCart;
@@ -42,6 +43,7 @@ class PostFieldTypeFactory {
 		TaxonomyFieldTypes::class      => array( 'terms' ),
 		StarRatingFieldTypes::class    => array( 'star_rating_html' ),
 		WooCommercePrice::class        => array( 'woo_price_html' ),
+		WooCommerceSaleBadge::class    => array( 'woo_sale_badge_html' ),
 		WooCommerceStockStatus::class  => array( 'woo_stock_status_html' ),
 		WooCommerceStarRating::class   => array( 'woo_star_rating_html' ),
 		WooCommerceAddToCart::class    => array( 'woo_add_to_cart_html' ),

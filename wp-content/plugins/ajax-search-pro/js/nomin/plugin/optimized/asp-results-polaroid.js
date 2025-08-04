@@ -49,13 +49,7 @@ external_AjaxSearchPro_namespaceObject.plugin.showPolaroidResults = function() {
     $this.n("results").css({
       height: $this.o.prescontainerheight
     });
-    if ($this.o.highlight) {
-      external_DoMini_namespaceObject("figcaption", $this.n("resultsDiv")).highlight($this.n("text").val().replace(/["']/g, "").split(" "), {
-        element: "span",
-        className: "highlighted",
-        wordsOnly: $this.o.highlightWholewords
-      });
-    }
+    $this.keywordHighlight();
     if (typeof Photostack !== "undefined") {
       $this.ptstack = new Photostack($this.n("results").get(0), {
         callback: function(item) {

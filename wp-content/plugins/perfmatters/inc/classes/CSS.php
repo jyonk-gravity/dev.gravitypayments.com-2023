@@ -111,7 +111,8 @@ class CSS
                 '/uploads/generateblocks/', //generateblocks
                 '/et-cache/', //divi
                 '/widget-google-reviews/assets/css/public-main.css', //plugin for google reviews
-                '.google-fonts.', //google fonts
+                'google-fonts', //google fonts
+                '/astra-local-fonts/', //astra local fonts
                 '//fonts.googleapis.com/css',
                 '/wp-content/uploads/bricks/css/post-' //bricks
             );
@@ -272,6 +273,11 @@ class CSS
                         }
                         $used_css_output = '<link rel="preload" href="' . $used_css_url . '" as="style" />';
                         $used_css_output.= '<link rel="stylesheet" id="perfmatters-used-css" href="' . $used_css_url . '" media="all" />';
+
+                        //add early hint if needed
+                        if(!empty(Config::$options['preload']['early_hints']) && !empty(Config::$options['preload']['early_hint_types']) && in_array('style', Config::$options['preload']['early_hint_types'])) {
+                            header("Link: <" . $used_css_url. ">; rel=preload; as=style", false);
+                        }
                     }
                     //print inline
                     else {
