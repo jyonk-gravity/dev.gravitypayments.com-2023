@@ -1,3 +1,6 @@
+### 4.5.0 | 2025-09-04
+- Updated "Steps to Connect a Zap" to provide a correction.
+
 ### 4.4.0 | 2025-03-19
 - AF: Updated process_feed() return value for compatibility with Gravity Forms 2.9.4, so the framework can save the feed status to the entry meta.
 

@@ -649,7 +649,12 @@ function perfmatters_disable_emojis() {
 	remove_filter('comment_text_rss', 'wp_staticize_emoji');	
 	remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
 	add_filter('tiny_mce_plugins', 'perfmatters_disable_emojis_tinymce');
-	add_filter('emoji_svg_url', '__return_false');
+	add_filter('emoji_svg_url', function($url) {
+		if(is_admin()) {
+			return $url;
+		}
+		return false;
+	});
 }
 
 function perfmatters_disable_emojis_tinymce($plugins) {

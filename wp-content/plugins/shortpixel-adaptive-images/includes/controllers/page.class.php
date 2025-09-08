@@ -243,7 +243,7 @@
                     Page::checkSpaiNonce();
                     header('Content-Type: application/json');
                     header('Content-Disposition: attachment; filename=SPAI-settings.json');
-                    echo(json_encode($this->ctrl->options->get()->settings, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+                    echo(json_encode($this->ctrl->options->get()->settings->exportRecursive(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
                     die();
                 } );
 

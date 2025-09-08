@@ -261,7 +261,7 @@ class Preload
                         continue;
                     }
 
-                    if(!empty($preload['srcset']) || !empty($preload['imagesrcset'])) {
+                    if(!empty($preload['srcset']) || !empty($preload['imagesrcset']) || !empty($preload['sizes']) || !empty($preload['imagesizes']) || !empty($preload['media'])) {
                         continue;
                     }
 

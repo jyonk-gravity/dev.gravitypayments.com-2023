@@ -195,9 +195,16 @@ class Fonts
     }
 
     //delete all files in the fonts cache directory
-    public static function clear_local_fonts()
+    public static function clear_local_fonts($site = null)
     {
-        $files = glob(PERFMATTERS_CACHE_DIR . 'fonts/*');
+        $path = '';
+
+        //add site path if specified
+        if(is_object($site) && !empty($site->path)) {
+           $path = ltrim($site->path, '/');
+        }
+
+        $files = glob(PERFMATTERS_CACHE_DIR . $path . 'fonts/*');
         foreach($files as $file) {
             if(is_file($file)) {
                 unlink($file);

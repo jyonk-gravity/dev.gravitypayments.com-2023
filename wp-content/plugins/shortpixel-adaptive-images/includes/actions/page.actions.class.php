@@ -59,11 +59,24 @@
                     $options->behaviour->api_url = $url;
                 }
 
+                if (isset($options->behaviour->storage_url)) {
+                    $options->behaviour->storage_url = sanitize_text_field(trim($options->behaviour->storage_url));
+                }
+
+                if (isset($options->behaviour->host_removal)) {
+                    $options->behaviour->host_removal = sanitize_text_field(trim($options->behaviour->host_removal));
+                }
+
+
 
                 //translate simple meta options
 				$options = ShortPixelAI::translateSimpleOptions( $options );
-
 				$current_options = Options::_()->settings;
+
+                // if user just disabled the LQIP option, delete the LQIP state from DB
+                if (($options->behaviour->lqip ?? null) === false && ($current_options->behaviour->lqip ?? null) === true) {
+                    delete_option('shortpixel_ai_lqip_state');
+                }
 
                 $success = true;
 				if ( is_object( $options ) || is_array( $options ) ) {
@@ -175,7 +188,7 @@
                     $firstMessage = '';
                     $cdnMessage = '';
                     $cdnErrorMessage =  '';
-                    $messageData = $api_response['message']['Message'] ?? [];
+                    $messageData = $api_response['message']['Details'] ?? [];
                     //getting the array of messages
                     if (!empty($messageData['0']['Message']) || !empty($messageData['CDN']['Message']) || !empty($messageData['CDN']['Error']) ) {
                             $firstMessage = $messageData['0']['Message'] ?? '';
@@ -251,7 +264,6 @@
 			}
 			else if ( $action === 'clear lqip cache' ) {
 				$success = LQIP::clearCache();
-                //var_dump('HERE:', $success, $response);exit('this is only for admin button');
 				$response[ 'success' ] = $success;
 				$response[ 'notice' ]  = Notice::get( null, [
 					'notice'  => [

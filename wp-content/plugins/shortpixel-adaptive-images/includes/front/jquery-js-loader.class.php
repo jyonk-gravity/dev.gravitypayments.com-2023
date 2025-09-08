@@ -69,6 +69,7 @@ class JqueryJsLoader extends JsLoader {
             //**** LET THIS ONE BE LAST - SWIFT Performance HTML optimize bug when their Fix Invalid HTML option is on
             //the excluded_paths can contain URLs so we base64 encode them in order to pass our own JS parser :)
             'excluded_paths'        => array_map( 'base64_encode', $this->ctrl->splitSelectors( $this->settings->exclusions->excluded_paths, PHP_EOL ) ),
+            'eager_paths'        => array_map( 'base64_encode', $this->ctrl->splitSelectors( $this->settings->exclusions->eager_paths, PHP_EOL ) ),
         ] );
 
         wp_enqueue_script( 'spai-scripts' );

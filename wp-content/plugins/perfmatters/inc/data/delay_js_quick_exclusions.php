@@ -43,8 +43,8 @@ return array(
     		'title' => 'CookieYes',
     		'exclusions' => array(
     			'jquery.min.js',
-    			'/plugins/cookie-law-info/legacy/public/js/cookie-law-info-public.js',
-				'cookie-law-info-js-extra'
+				'cookie-law-info',
+				'cookieyes'
     		)
     	),
     	'fluentform' => array(
@@ -431,6 +431,7 @@ return array(
     		'exclusions' => array(
     			'/themes/bricks/assets/js/bricks.min.js',
     			'/themes/bricks/assets/js/libs/swiper.min.js',
+    			'/themes/bricks/assets/js/libs/splide.min.js',
     			'bricks-scripts-js-extra'
     		)
     	),

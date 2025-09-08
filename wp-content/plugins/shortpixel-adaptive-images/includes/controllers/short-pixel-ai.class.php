@@ -469,6 +469,7 @@ class ShortPixelAI {
 
 		if ( is_null( $this->options->get( 'api_url', [ 'settings', 'behaviour' ], null ) ) ) {
 			$this->options->settings_behaviour_apiUrl        = ShortPixelAI::DEFAULT_API_AI . self::DEFAULT_API_AI_PATH;
+            $this->options->settings_behaviour_amazonS3        = false;
 			$this->options->settings_behaviour_replaceMethod = 'src';
 			$this->options->settings_behaviour_fadein        = true;
 			// moved to self::migrate_options()
@@ -1132,7 +1133,7 @@ class ShortPixelAI {
             if(empty($_POST['selector']) || !is_string($_POST['selector'])) {
                 $result['message'] = __('Invalid selector has been provided.', 'shortpixel-adaptive-images' );
             }
-            else if(empty($which) || !is_string($which) || !in_array($which, array('noresize_selectors', 'excluded_selectors', 'excluded_paths', 'eager_selectors'))) {
+            else if(empty($which) || !is_string($which) || !in_array($which, array('noresize_selectors', 'excluded_selectors', 'excluded_paths', 'eager_paths', 'eager_selectors'))) {
                 $result['message'] = __('Invalid list has been provided.', 'shortpixel-adaptive-images' );
             }
             else {
@@ -1140,7 +1141,7 @@ class ShortPixelAI {
                 $wp_option_name = 'settings_exclusions_' . \ShortPixel\AI\Converter::snakeToCamelCase($which);
                 $selectors_now = $this->options->$wp_option_name;
                 $result['status'] = 'ok';
-                if($which === 'excluded_paths') {
+                if($which === 'excluded_paths' || $which === 'eager_paths' ) {
                     $name = 'URL';
                     $delimiter = "\n";
 
@@ -1213,7 +1214,7 @@ class ShortPixelAI {
             if(empty($_POST['selector']) || !is_string($_POST['selector'])) {
                 $result['message'] = __('Invalid list has been provided.', 'shortpixel-adaptive-images' );
             }
-            else if(empty($which) || !is_string($which) || !in_array($which, array('noresize_selectors', 'excluded_selectors', 'excluded_paths', 'eager_selectors'))) {
+            else if(empty($which) || !is_string($which) || !in_array($which, array('noresize_selectors', 'excluded_selectors', 'excluded_paths', 'eager_selectors', 'eager_paths'))) {
                 $result['message'] = __('Invalid list has been provided.', 'shortpixel-adaptive-images' );
             }
             else {
@@ -1302,7 +1303,7 @@ class ShortPixelAI {
 				$options->settings_behaviour_crop          = !!get_option( 'spai_settings_crop' );
 				$options->settings_behaviour_replaceMethod = $replace_method == 1 ? 'src' : ( $replace_method == 3 ? 'both' : 'srcset' );
 				$options->settings_behaviour_apiUrl        = get_option( 'spai_settings_api_url' );
-				$options->settings_behaviour_hoverHandling = !!get_option( 'spai_settings_hover_handling' );
+                $options->settings_behaviour_hoverHandling = !!get_option( 'spai_settings_hover_handling' );
 				$options->settings_behaviour_nativeLazy    = !!get_option( 'spai_settings_native_lazy' );
 
 				// Areas
@@ -1502,7 +1503,6 @@ class ShortPixelAI {
         }
         if (function_exists('is_plugin_active') && is_plugin_active('sg-cachepress/sg-cachepress.php')) {
             $speedoptimizer = get_option('siteground_optimizer_combine_javascript', false);
-            //var_dump($speedoptimizer);
             if ($speedoptimizer === '1') {
                 $this->conflict = 'speedoptimizer';
                 return $this->conflict;
@@ -1550,11 +1550,127 @@ class ShortPixelAI {
         return preg_replace('/^https?:\/\//', '', $url);
     }
 
-	public function get_api_url( $url = false, $width = '%WIDTH%', $height = '%HEIGHT%', $type = false, $compression = false, $retAuto = false, $cacheVer = false) {
+
+    /**
+     * This function checks whether the CDN returned by get_cdn_url() is different
+     * from the default "https://cdn.shortpixel.ai/spai".
+     *
+     * If it is different, we consider it a "custom CDN".
+     */
+    private function is_custom_cdn()
+    {
+        $cdn = $this->get_cdn_url();
+        if (!$cdn) {
+            $cdn = self::DEFAULT_API_AI . self::DEFAULT_API_AI_PATH;
+        }
+        $cdn = rtrim($cdn, '/');
+        $defaultCdn = rtrim(self::DEFAULT_API_AI . self::DEFAULT_API_AI_PATH, '/');
+        $isBasicCustom = ($cdn !== $defaultCdn);
+
+        return $isBasicCustom;
+    }
+
+    private function is_amazon_cdn(){
+        $amazonGet = $this->settings->behaviour->amazon_s3;
+        $amazonEnabled   = !empty($amazonGet);
+        $amazonStorageGet   = $this->settings->behaviour->storage_url; // tha's the user input
+        $amazonStorage = !empty($amazonStorageGet);
+        // only if user has a storage_url (and amazon_s3 is enabled), we  consider that is 'custom as well.
+        $isAmazonCustom = ($amazonEnabled && $amazonStorage);
+
+        return $isAmazonCustom;
+    }
+
+    /**
+     * chooses the appropriate API base URL based on CDN settings.
+     *
+     * @param string|false $url The original URL.
+     * @return string The selected base URL.
+     */
+    public function choose_api_base()
+    {
+        $isAmazonCdn = $this->is_amazon_cdn();
+
+        if ($isAmazonCdn) {
+            return rtrim($this->settings->behaviour->storage_url, '/');
+        } else {
+            $cdnUrl = rtrim($this->get_cdn_url(), '/');
+            if (!$cdnUrl) {
+                $cdnUrl = rtrim(self::DEFAULT_API_AI . self::DEFAULT_API_AI_PATH, '/');
+            }
+            return $cdnUrl;
+        }
+    }
+
+    private function do_host_removal(){
+        $hostRemovalGet = $this->settings->behaviour->host_removal;
+        $isHostRemoval   = !empty($hostRemovalGet);
+        return$isHostRemoval;
+    }
+
+    /**
+     * Applies host removal to the API URL if conditions are met.
+     *
+     * @param string $api_url The constructed API URL.
+     * @param string|false $url The original URL.
+     * @return string The final URL after host removal (if applied).
+     */
+    private function host_removal_logic($api_url, $url)
+    {
+        if (!$url) {
+            return $api_url;
+        }
+
+        $doHostRemoval = $this->do_host_removal();
+        $hostRemoval = $this->settings->behaviour->host_removal;
+
+        if ($doHostRemoval && $url){
+            $parsedUrl = parse_url($url);
+            $host = $parsedUrl['host'] ?? '';
+
+            if (strpos($host, $hostRemoval) !== false) {
+                $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
+                $query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
+                $frag = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+                $final = rtrim($api_url, '/') . $path . $query . $frag;
+                return $final;
+            }
+        }
+
+        return $api_url;
+    }
+
+
+
+
+    /**
+     * This helper method builds the final URL by appending ShortPixel parameters
+     * (w_, q_, ex_, to_, etc.) to the base URL using self::SEP.
+     *
+     * @param string $baseUrl  e.g. "https://cdn.shortpixel.ai/spai"
+     * @param array  $args     e.g. [ ['w' => 300], ['q' => 'lossy'], ['ex' => '1'] ]
+     * @return string          e.g. "https://cdn.shortpixel.ai/spai/w_300+q_lossy+ex_1"
+     */
+    private function build_spai_url($baseUrl, array $args, $separator = self::SEP){
+        $api_url = trailingslashit($baseUrl);
+        foreach ($args as $arg) {
+            foreach ($arg as $k => $v) {
+                $api_url .= $k . '_' . $v . $separator;
+            }
+        }
+        return  rtrim($api_url, $separator);
+
+    }
+	public function get_api_url( $url = false, $width = '%WIDTH%', $height = '%HEIGHT%', $type = false, $compression = false, $retAuto = false, $cacheVer = false, $separator = self::SEP) {
+
+        if ($url && $this->urlIsExcluded($url)) {
+            $this->logger->log("DEBUG get_api_url: URL completly excluded. Returning original URL: " . $url);
+            return $url;
+        }
         $args = array();
         $http = $url === false ? !is_ssl() : !self::is_ssl($url);
 
-        if($compression == 'orig' && defined('SHORTPIXEL_AI_ORIG_NO_CDN')) {
+        if ($compression == 'orig' && defined('SHORTPIXEL_AI_ORIG_NO_CDN')) {
             return '';
         }
 
@@ -1589,26 +1705,56 @@ class ShortPixelAI {
             $args[] = [ 'v' => $cacheVer ];
         }
 
-		$api_url = $this->get_cdn_url();
 
-        if ( !$api_url ) {
-			$api_url = self::DEFAULT_API_AI . self::DEFAULT_API_AI_PATH;
-		}
+        $isAmazonCdn = $this->is_amazon_cdn(); //verify if it is amazon CDN
 
-        $api_url = trailingslashit($api_url);
+//        detect bucket name presence in host
+        $hostFound = false;
+        if ($isAmazonCdn) {
+            $hostRemovalGet = $this->settings->behaviour->host_removal ?? null;
 
-        /*
-        Make args to be in desired format
-         */
-        foreach ($args as $arg) {
-            foreach ($arg as $k => $v) {
-                $api_url .= $k . '_' . $v . self::SEP;
+            if ($hostRemovalGet && $url) {
+                $parsed = parse_url($url);
+                $host = $parsed['host'] ?? '';
+                if (strpos($host, $hostRemovalGet) !== false) {
+                    $hostFound = true;
+                }
             }
         }
-        $api_url = rtrim($api_url, self::SEP);
-        //$api_url = trailingslashit( $api_url );
-        return $api_url . ($url ?  '/' . self::rem_proto($url) : '');
-    }
+            if ($hostFound){
+                // case 1: amazon CDN active and URL contains host_removal, will apply amazon cdn + host removal
+                $amazonStorageGet = $this->settings->behaviour->storage_url;
+                $base = rtrim($amazonStorageGet, '/'); // Amazon base
+                $api_url = $this->build_spai_url($base, $args, $separator);
+                $this->logger->log("BUILT Amazon api_url => ", $api_url);
+
+                $final_url = $this->host_removal_logic($api_url, $url);
+                if ($final_url !== $api_url) {
+                    return $final_url;
+                }
+                if (!$url) {
+                    return $api_url;
+                }
+
+                $ret = $api_url . '/' . self::rem_proto($url);
+                return $ret;
+            } else {
+                // case 2: Amazon CDN active but URL does't match host_removal will not put amazon cdn and not remove host
+                // case 3: Amazon CDN disabled ... get as usual with normal cdn
+                $base = rtrim($this->get_cdn_url(), '/');
+                if (!$base) {
+                    $base = rtrim(self::DEFAULT_API_AI . self::DEFAULT_API_AI_PATH, '/');
+                }
+                $api_url = $this->build_spai_url($base, $args, $separator);
+
+                if (!$url) {
+                    return $api_url;
+                }
+
+                $final = $api_url . '/' . self::rem_proto($url);
+                return $final;
+            }
+        }
 
     public function maybe_replace_images_src($content)
     {
@@ -1752,6 +1898,7 @@ class ShortPixelAI {
 			'eager_selectors'    => $this->splitSelectors( @$ex->eager_selectors, ',' ),
 			'noresize_selectors' => $this->splitSelectors( @$ex->noresize_selectors, ',' ),
 			'excluded_paths'     => $this->splitSelectors( @$ex->excluded_paths, "\n" ),
+            'eager_paths'        => $this->splitSelectors( @$ex->eager_paths, "\n" ),
 			'excluded_pages'     => $this->splitSelectors( @$ex->excluded_pages, "\n" ),
 		];
 	}
@@ -1810,24 +1957,98 @@ class ShortPixelAI {
 		return isset( $parsed[ 'host' ] ) && $parsed[ 'host' ] === $parsedApi[ 'host' ];
 	}
 
-    public function urlIsExcluded($url) {
 
-	    //exclude generated images like JetPack's admin bar hours stats
-	    if(strpos($url, '?page=')) {
-		    $admin = parse_url(admin_url());
-		    if(isset($admin['path']) && strpos($url, $admin['path'])) {
-			    return true;
-		    }
-	    }
+    /**
+     *
+     * This function parses the given URL and removes any resolution suffix (e.g., "-1024x576")
+     * that is automatically appended by some WordPress themes for images.      *
+     *
+     * useful when comparing image URLs against exclusion rules, insuring that any
+     * appended resolution suffix does not prevent a match with the base URL.
+     *
+     * @param string $url - original image URL.
+     * @return string -  normalized image URL without the resolution suffix, or the original URL if parsing fails.
+     */
+    public function normalizeUrlForExcluded($url) {
+        $parsed = parse_url($url);
+        $this->logger->log("DEBUG: parsed " . json_encode($parsed, JSON_PRETTY_PRINT)); //var_export($parsed) //print_r($parsed)
+        if (!isset($parsed['path'])) {
+            return $url;
+        }
+        $normalizedPath = preg_replace(
+            '/-\d+x\d+(?=\.\w+$)/',
+            '',
+            $parsed['path']
+        );
+        $scheme   = isset($parsed['scheme']) ? $parsed['scheme'] : (is_ssl() ? 'https' : 'http');
+        $siteUrl  = home_url();
+        $siteHost = parse_url($siteUrl, PHP_URL_HOST);
+        return $scheme . '://' . $siteHost . $normalizedPath;
+    }
 
-        if( strlen($this->settings->exclusions->excluded_paths)) {
-			return $this->isExcluded($url, $this->settings->exclusions->excluded_paths);
-		} else {
-			return false;
-	    }
+    /**
+     * Core URL-matching method to test either total or eager exclusion.
+     *
+     * @param  string $mode  Either 'excluded' (full exclusion) or 'eager' (skip lazy only)
+     * @param  string $url   The image URL (may include CDN, Amazon, any host or size suffix)
+     * @return bool          True for matching either one mode’s rules
+     */
+    public function urlIs($mode, $url)
+    {
+        //revert CDN url to original
+        if ($this->urlIsApi($url)) {
+            $stripped = self::rem_proto($url);
+            $scheme = self::is_ssl($url) ? 'https://' : 'http://';
+            $url = $scheme . $stripped;
+            $this->logger->log("DEBUG urlIs: Reverted CDN URL to original: $url");
+        }
+        //exclude generated images like JetPack's admin bar hours stats
+        if (strpos($url, '?page=')) {
+            $admin = parse_url(admin_url());
+            if (strpos($url, $admin['path'])) {
+                return true;
+            }
+        }
+        //normalize any resolution suffix...
+        $normalizedUrl = $this->normalizeUrlForExcluded($url);
+        $this->logger->log("DEBUG urlIsExcluded: Normalized URL: " . $normalizedUrl);
+        //2 posibilities URL -> total exclusion('excluded') or eager exclusion('eager')
+        $list = ($mode === 'excluded')
+            ? $this->settings->exclusions->excluded_paths
+            : $this->settings->exclusions->eager_paths;
+        if (strlen($list)) {
+            if ($this->isExcluded($url, $list) || $this->isExcluded($normalizedUrl, $list)) {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
+    /**
+     * FULL-EXCLUSION wrapper:
+     * Returns true if this URL must skip CDN entirely (no lazy, no CDN).
+     *
+     * @param  string $url
+     * @return bool
+     */
+    public function urlIsExcluded(string $url): bool
+    {
+        return $this->urlIs('excluded', $url);
+    }
+
+    /**
+     * EAGER-ONLY wrapper:
+     * Returns true if this URL should load eagerly (CDN OK but no lazy loading).
+     *
+     * @param  string $url
+     * @return bool
+     */
+    public function urlIsEager(string $url): bool
+    {
+        return $this->urlIs('eager', $url);
+    }
 
 	/**
 	 * Return if a page is Excluded
@@ -1875,16 +2096,22 @@ class ShortPixelAI {
 					case 'path':
 					case 'http': //being so kind to accept urls as they are. :)
 					case 'https':
-						if(!isset($urlParsed['host'])) {
-							$valueParsed = parse_url($value);
-							if(isset($valueParsed['host'])) {
-								$url = ShortPixelUrlTools::absoluteUrl($url);
-							}
-						}
 						if(strpos($url, $value) !== false) {
 							$this->logger->log("EXCLUDED by $type $value RULE:", $rule);
 							return true;
 						}
+
+                        if (isset($urlParsed['path'])) {
+                            $ruleParsed = parse_url($value);
+                            if (!empty($ruleParsed['path'])) {
+                                $rulePathNorm = preg_replace('/-\d+x\d+(?=\.\w+$)/', '', $ruleParsed['path']);
+                                $urlPathNorm  = preg_replace('/-\d+x\d+(?=\.\w+$)/', '', $urlParsed['path']);
+                                if ($rulePathNorm === $urlPathNorm) {
+                                    $this->logger->log("EXCLUDED by HOST-INSENSITIVE PATH MATCH: $rulePathNorm");
+                                    return true;
+                                }
+                            }
+                        }
 						if(isset($urlParsed['path'])) {
 							preg_match(self::THUMBNAIL_REGEX, $urlParsed['path'], $matches);
 							//$this->logger->log("MATCHED THUMBNAIL for $url: ", $matches);
@@ -2058,7 +2285,8 @@ class ShortPixelAI {
 			],
 			'exclusions' => [
 				'excluded_paths' => self::GRAVATAR_REGEX,
-				'eager_selectors' => '',
+                'eager_paths' => '',
+                'eager_selectors' => '',
 				'noresize_selectors' => '',
 				'excluded_selectors' => '',
 				'excluded_pages' => '',

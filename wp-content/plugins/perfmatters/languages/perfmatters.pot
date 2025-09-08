@@ -2,22 +2,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Perfmatters\n"
-"POT-Creation-Date: 2025-07-15 13:38-0700\n"
-"PO-Revision-Date: 2025-07-15 13:38-0700\n"
+"POT-Creation-Date: 2025-08-26 15:49-0700\n"
+"PO-Revision-Date: 2025-08-26 15:42-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.7\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: perfmatters.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 "X-Poedit-SearchPathExcluded-1: vendor\n"
@@ -87,31 +86,55 @@ msgstr ""
 msgid "Used CSS cleared for all network sites."
 msgstr ""
 
-#: inc/CLI.php:105 inc/classes/CSS.php:792 inc/classes/CSS.php:832
+#: inc/CLI.php:105 inc/classes/CSS.php:793 inc/classes/CSS.php:833
 msgid "Used CSS cleared."
 msgstr ""
 
-#: inc/CLI.php:124
+#: inc/CLI.php:126
+msgid "Minified CSS cleared for all network sites."
+msgstr ""
+
+#: inc/CLI.php:130 inc/classes/CSS.php:845
+msgid "Minified CSS cleared."
+msgstr ""
+
+#: inc/CLI.php:151
+msgid "Minified JS cleared for all network sites."
+msgstr ""
+
+#: inc/CLI.php:155 inc/classes/JS.php:344
+msgid "Minified JS cleared."
+msgstr ""
+
+#: inc/CLI.php:176
+msgid "Local Fonts cleared for all network sites."
+msgstr ""
+
+#: inc/CLI.php:180 inc/classes/Fonts.php:223
+msgid "Local fonts cleared."
+msgstr ""
+
+#: inc/CLI.php:199
 msgid "File not found."
 msgstr ""
 
-#: inc/CLI.php:131
+#: inc/CLI.php:206
 msgid "Please use a valid .json file."
 msgstr ""
 
-#: inc/CLI.php:144
+#: inc/CLI.php:219
 msgid "Settings imported."
 msgstr ""
 
-#: inc/CLI.php:163 inc/CLI.php:199
+#: inc/CLI.php:238 inc/CLI.php:274
 msgid "Option not found."
 msgstr ""
 
-#: inc/CLI.php:180
+#: inc/CLI.php:255
 msgid "Option enabled."
 msgstr ""
 
-#: inc/CLI.php:215
+#: inc/CLI.php:290
 msgid "Option disabled."
 msgstr ""
 
@@ -172,7 +195,6 @@ msgid "Support"
 msgstr ""
 
 #: inc/admin.php:75
-#, no-php-format
 msgid "Get 25% off our social sharing plugin."
 msgstr ""
 
@@ -220,21 +242,17 @@ msgstr ""
 msgid "Nonce is invalid."
 msgstr ""
 
-#: inc/classes/CSS.php:758 inc/classes/CSS.php:772 inc/classes/Meta.php:85
+#: inc/classes/CSS.php:759 inc/classes/CSS.php:773 inc/classes/Meta.php:85
 #: inc/settings.php:895 inc/settings.php:904
 msgid "Clear Used CSS"
 msgstr ""
 
-#: inc/classes/CSS.php:758
+#: inc/classes/CSS.php:759
 msgid "All"
 msgstr ""
 
-#: inc/classes/CSS.php:772
+#: inc/classes/CSS.php:773
 msgid "Current"
-msgstr ""
-
-#: inc/classes/CSS.php:844
-msgid "Minified CSS cleared."
 msgstr ""
 
 #: inc/classes/DatabaseOptimizer.php:71
@@ -341,14 +359,6 @@ msgstr ""
 msgid "Database scan completed."
 msgstr ""
 
-#: inc/classes/Fonts.php:216
-msgid "Local fonts cleared."
-msgstr ""
-
-#: inc/classes/JS.php:344
-msgid "Minified JS cleared."
-msgstr ""
-
 #: inc/classes/LazyLoad.php:171
 msgid "video"
 msgstr ""
@@ -410,8 +420,8 @@ msgstr ""
 msgid "Comments are disabled."
 msgstr ""
 
-#: inc/functions.php:615 inc/functions.php:635 inc/functions.php:1271
-#: inc/functions_script_manager.php:1536 inc/functions_script_manager.php:1544
+#: inc/functions.php:615 inc/functions.php:635 inc/functions.php:1276
+#: inc/functions_script_manager.php:1541 inc/functions_script_manager.php:1549
 msgid "Perfmatters Warning"
 msgstr ""
 
@@ -427,11 +437,11 @@ msgid ""
 "only enabling this feature in one place."
 msgstr ""
 
-#: inc/functions.php:1063 inc/settings.php:444
+#: inc/functions.php:1068 inc/settings.php:444
 msgid "This has been disabled."
 msgstr ""
 
-#: inc/functions.php:1272
+#: inc/functions.php:1277
 msgid "Local Analytics is enabled but no Tracking ID is set."
 msgstr ""
 
@@ -616,17 +626,17 @@ msgstr ""
 msgid "Exceptions"
 msgstr ""
 
-#: inc/functions_script_manager.php:1537 inc/script_manager.php:357
+#: inc/functions_script_manager.php:1542 inc/script_manager.php:357
 msgid "MU plugin version mismatch."
 msgstr ""
 
-#: inc/functions_script_manager.php:1537 inc/functions_script_manager.php:1545
+#: inc/functions_script_manager.php:1542 inc/functions_script_manager.php:1550
 #: inc/script_manager.php:194 inc/script_manager.php:328
 #: inc/script_manager.php:340 inc/settings.php:2840
 msgid "View Documentation"
 msgstr ""
 
-#: inc/functions_script_manager.php:1545 inc/script_manager.php:366
+#: inc/functions_script_manager.php:1550 inc/script_manager.php:366
 msgid "MU plugin file not found."
 msgstr ""
 
@@ -1874,8 +1884,8 @@ msgstr ""
 
 #: inc/settings.php:1647
 msgid ""
-"Enter your CDN URL without the trailing backslash. Example: https://cdn."
-"example.com"
+"Enter your CDN URL without the trailing backslash. Example: https://"
+"cdn.example.com"
 msgstr ""
 
 #: inc/settings.php:1654

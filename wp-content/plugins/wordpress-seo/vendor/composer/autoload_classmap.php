@@ -1049,6 +1049,7 @@ return array(
     'Yoast\\WP\\SEO\\Integrations\\Watchers\\Search_Engines_Discouraged_Watcher' => $baseDir . '/src/integrations/watchers/search-engines-discouraged-watcher.php',
     'Yoast\\WP\\SEO\\Integrations\\Watchers\\Woocommerce_Beta_Editor_Watcher' => $baseDir . '/src/integrations/watchers/woocommerce-beta-editor-watcher.php',
     'Yoast\\WP\\SEO\\Integrations\\XMLRPC' => $baseDir . '/src/integrations/xmlrpc.php',
+    'Yoast\\WP\\SEO\\Introductions\\Application\\AI_Brand_Insights_Pre_Launch' => $baseDir . '/src/introductions/application/ai-brand-insights-pre-launch.php',
     'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Fix_Assessments_Upsell' => $baseDir . '/src/introductions/application/ai-fix-assessments-upsell.php',
     'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell' => $baseDir . '/src/deprecated/src/introductions/application/ai-generate-titles-and-descriptions-introduction-upsell.php',
     'Yoast\\WP\\SEO\\Introductions\\Application\\Current_Page_Trait' => $baseDir . '/src/introductions/application/current-page-trait.php',

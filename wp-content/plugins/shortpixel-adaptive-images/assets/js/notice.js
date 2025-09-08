@@ -93,5 +93,81 @@
 				}
 			}
 		} );
+		// feedback survey handler
+		$document.on( 'click', '.notice[data-causer="recommend_survey"] .survey-rating-btn', function(e){
+			e.preventDefault();
+			var $btn    = $( this ),
+				rating  = $btn.data('rating'),
+				$notice = $btn.closest('.notice[data-causer="recommend_survey"]');
+
+			$notice.find('.survey-rating-btn').removeClass('selected');
+			$btn.addClass('selected');
+			// send (only) rating first
+			$.post( ajaxurl, {
+				action: 'shortpixel_ai_send_rating',
+				data:   { rating: rating }
+			});
+			// for 9–10: show inline thank-you + review prompt for WP pagre
+			if ( rating >= 9 ) {
+				$notice.find('h3, .message-wrap > p').slideUp();
+
+				var promptHtml =
+					'<p>Thank you for your high rating! ' +
+					'If you have a moment, the ShortPixel team would be very happy ' +
+					'if you could leave a short review for our plugin.</p>';
+
+				var reviewLinkHtml =
+					'<p>' +
+					'<button id="survey-feedback-submit" class="button button-primary" '+
+					'onclick="window.open(\'https://wordpress.org/support/plugin/shortpixel-adaptive-images/reviews/?filter=5\', \'_blank\')">' +
+					'Leave a review' +
+					'</button>' +
+					'</p>';
+
+				$notice
+					.find('#survey-feedback-area')
+					.html( promptHtml + reviewLinkHtml )
+					.slideDown();
+
+				return;
+			}
+			// 1–8: close title + buttons & open feedback area
+			$notice.find('h3').slideUp();
+			$notice.find('.survey-rating-btn').closest('p').slideUp();
+			var prompt = rating <= 4
+				? 'Thank you for your feedback! If you have encountered any issues with our plugin, we are more than eager to help solving them! Please give us more details:'
+				: 'Thank you for your feedback! Please let us know what we can improve:';
+
+			$notice.find('#survey-feedback-prompt').text( prompt );
+			$notice.find('#survey-feedback-area').slideDown();
+		});
+
+		// now, when click on submit button send 2nd ajax with feedback
+		$document.on( 'click', '.notice[data-causer="recommend_survey"] #survey-feedback-submit', function(e){
+			e.preventDefault();
+			var $notice      = $( this ).closest( '.notice[data-causer="recommend_survey"]'),
+				rating       = $notice.find('.survey-rating-btn.selected').data('rating'),
+				feedbackText = $notice.find('#survey-feedback').val() || '';
+
+			$.post( ajaxurl, {
+				action: 'shortpixel_ai_send_feedback',
+				data:   {
+					rating:   rating,
+					feedback: feedbackText
+				}
+			})
+				.done(function( resp ){
+						var $msgWrap = $notice.find('.message-wrap');
+						if ( resp.success ) {
+							$msgWrap.html('<p>Thank you for your feedback!</p>');
+							$notice.find('#survey-feedback-area, .buttons-wrap').slideUp();
+						}
+						else {
+							var error = resp.data || 'Something went wrong sending feedback!';
+							$msgWrap.html('<p>' + error + '</p>');
+					}
+				});
+		});
+
 	} );
 } )( jQuery, document, window );

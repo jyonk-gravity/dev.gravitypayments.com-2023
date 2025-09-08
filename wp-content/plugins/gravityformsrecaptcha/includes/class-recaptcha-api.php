@@ -252,6 +252,41 @@ class RECAPTCHA_API {
 	}
 
 	/**
+	 * Annotates the assessment; informing Google that the submission was spam or ham.
+	 *
+	 * @since 2.0
+	 *
+	 * @param string $assessment_id The assessment ID
+	 * @param string $annotation    The annotation to added to the assessment. Possible values: LEGITIMATE or FRAUDULENT.
+	 *
+	 * @return array|mixed|WP_Error
+	 */
+	public function annotate_assessment( $assessment_id, $annotation ) {
+		$body = array(
+			'annotation' => $annotation,
+		);
+
+		$response = wp_remote_post(
+			sprintf( 'https://recaptchaenterprise.googleapis.com/v1/%s:annotate', $assessment_id ),
+			array(
+				'headers' => array(
+					'Authorization' => 'Bearer ' . $this->access_token,
+					'Content-Type'  => 'application/json',
+				),
+				'body'    => wp_json_encode( $body ),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+
+		return $body ? json_decode( $body, true ) : $body;
+	}
+
+	/**
 	 * Refresh the reCAPTCHA access token.
 	 *
 	 * @param string $refresh_token The refresh token.
@@ -273,15 +308,26 @@ class RECAPTCHA_API {
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		$response_body = gf_recaptcha()->maybe_decode_json( wp_remote_retrieve_body( $response ) );
-		$auth_payload  = json_decode( rgar( $response_body, 'auth_payload' ), true );
 
-		$retrieved_response_code = $response['response']['code'];
-		if ( 200 !== absint( $retrieved_response_code ) || ! rgar( $auth_payload, 'access_token' ) ) {
+		$retrieved_response_code = wp_remote_retrieve_response_code( $response );
+		if ( 200 !== $retrieved_response_code ) {
 			$error_message = "Expected response code: 200. Returned response code: {$retrieved_response_code}.";
 
 			return new WP_Error( 'google_recaptcha_api_error', $error_message, $retrieved_response_code );
 		}
+
+		$response_body = gf_recaptcha()->maybe_decode_json( wp_remote_retrieve_body( $response ) );
+
+		if ( isset( $response_body['auth_error'] ) ) {
+			if ( empty( $response_body['auth_error'] ) ) {
+				$error_message = 'Google returned an empty response.';
+			} else {
+				$error_message = 'Google response: ' . print_r( $response_body['auth_error'], true );
+			}
+
+			return new WP_Error( 'google_recaptcha_api_error', $error_message );
+		}
+
 		return $response_body;
 	}
 

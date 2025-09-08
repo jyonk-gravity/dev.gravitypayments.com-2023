@@ -50,6 +50,15 @@
 			die;
 		}
 
+        private static function handleRecommendSurvey( $data ) {
+            if ( ( $data['action'] ?? '' ) === 'dismiss' ) {
+                return [
+                    'success' => Notice::dismiss( 'recommend_survey' ),
+                ];
+            }
+            return null;
+        }
+
         private static function handleRemoteInfoNotice ($data){
             $action = isset($data['action']) ? $data['action'] : null;
             $causerId = $data['causerId'];

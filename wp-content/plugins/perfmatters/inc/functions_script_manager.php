@@ -1316,6 +1316,11 @@ function perfmatters_dequeue_scripts($src, $handle) {
 		$group = $match[1];
 	}
 
+	//prevent disabling dashicons when logged in
+	if(!empty($options['disabled']['css']['dashicons']) && is_user_logged_in()) {
+		unset($options['disabled']['css']['dashicons']);
+	}
+
 	//check for group disable settings and override
 	if(!empty($category) && !empty($group) && !empty($options['disabled'][$category][$group])) {
 		if(!empty($options['disabled'][$category][$group]['everywhere']) 

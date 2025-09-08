@@ -1,3 +1,83 @@
+= 2.3.3 =
+Release date: June 30th, 2021
+* Fix: issue with validating API key
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.3.2 =
+Release date: June 29th, 2021
+* Temporarily deactivate AVIF pending codec bug fix (https://github.com/xiph/rav1e/issues/2757);
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.3.1 =
+Release date: June 28th, 2021
+* New: Version the javascript in the file name in order to get around more stubborn caches;
+* Fix: do not parse AJAX responses to uploads;
+* Fix: nested element that has a different background - was taking the background of the parent element;
+* Fix: notice in logs sometimes when domain info from server;
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.3.0 =
+Release date: June 17th, 2021
+* New: images (including the ones from CSS files) are now served automatically in the new AVIF format to supporting browsers;
+* New: moved the JS detection mechanism for WebP/AVIF support directly to the CDN level, so no JS is required anymore for this;
+* Language: 0 new strings added, 6 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.2.4 =
+Release date: June 14th, 2021
+* Compat: added a constant - `SPAI_ELEMENTOR_WORKAROUND` - to deactivate the parsing of Elementor modules that are resulting in critical errors;
+* Compat: workaround for WP Rocket that calls in certain circumstances the filter `rocket_css_content` with only one parameter;
+* Fix: some warnings when lqip queue is not array were showing up in some cases;
+* Fix: wrong array key when the no background calculation can't determine crop size and returns just width and height;
+* Fix: iPhone issues with parsing stylesheets while also improving page responsiveness while parsing them (async);
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.2.3 =
+Release date: May 18th, 2021
+* New: also parse inside `<script type="text/template">` blocks;
+* Fix: the background crop resize wasn't working in several cases, which is now fixed;
+* Fix: update the notification text about the next generation images served by SPIO;
+* Fix: cases when a mutation has backgrounds from an existing CSS block are now properly handled;
+* Fix: the special crop feature now handles correctly the situations when the width parameter isn't the first one;
+* Fix: the inline background selector will handle situations with no space before the CSS class definition;
+* Fix: remove the default values for JS parameters in order to support IE11;
+* Fix: the images from `li` elements added with `data-thumb` are now replaced;
+* Fix: the URL exclusions are checked when replacing inside JS blocks too;
+* Language: 0 new strings added, 2 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.2.2 =
+Release date: April 29th, 2021
+* Fix: the minified version of the plugin CSS files was bigger than the not minified one;
+* Fix: find local file when URL contains a path element before wp-content, that is not present on disk;
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.2.1 =
+Release date: April 26th, 2021
+* Compat: added integration with Real3D Flipbook;
+* Fix: there was a "Class not found" error in some cases when purging LiteSpeed cache from our plugin;
+* Fix: in some cases, the size of background images wasn't properly set;
+* Fix: protection added for very large number of product variations; the plugin will now work properly in these cases;
+* Language: 0 new strings added, 0 updated, 0 fuzzed, and 0 obsoleted.
+
+= 2.2.0 =
+Release date: April 20th, 2021
+* New: added filter `shortpixel/ai/customRules` for custom replacement rules;
+* New: added proper lazy loading for background images;
+* New: take into account the `background-*` CSS styles: size, position, etc.;
+* New: lazy load the images in the CSS blocks;
+* New: handle correctly multiple URLs in the same `background-image:` declaration;
+* New: when running out of credits you can now have an option to top-up directly from the plugin settings;
+* Compat: added an integration with the Uncode theme and its iLightBox component;
+* Compat: added integration with WPC Variations Table;
+* Compat: added integration with Soliloquy Slider Plugin;
+* Compat: also integrate properly with Divi child themes;
+* Compat: improved the integration with Elementor, all images should now be properly replaced;
+* Fix: WooCommerce product variations were broken if srcset was present, but false;
+* Fix: in certain cases, background images with important CSS priority weren't properly handled;
+* Fix: also remove the sizes attribute if we remove the srcset;
+* Fix: replacement error when html attribute contains "<style>.." data;
+* Fix: various small fixes to settings, fonts, debug messages, ShortPixel account login and lazy loading;
+* Language: 7 new strings added, 2 updated, 0 fuzzed, and 3 obsoleted.
+
 = 2.1.6 =
 Release date: March 19th, 2021
 * Fix: getting image sizes from the file was broken by the previous release;

@@ -705,6 +705,81 @@ $controller = $this->ctrl;
                                         </div>
                                     </td>
                                 </tr>
+
+
+                                <tr>
+                                    <th scope="row">
+                                        <?= __( 'Amazon S3', 'shortpixel-adaptive-images' ); ?>
+                                    </th>
+                                    <td>
+                                        <div class="spai-inline-help">
+                <span class="dashicons dashicons-editor-help"
+                      title="Inline help"
+                      data-link="https://shortpixel.com/knowledge-base/article/using-shortpixel-adaptive-images-with-images-on-amazon-s3/"></span>
+                                        </div>
+                                        <input
+                                                id="amazon_s3"
+                                                type="checkbox"
+                                                name="amazon_s3"
+                                                class="tgl"
+                                                data-type="bool"
+                                                value="1"
+                                        <?php checked( 1, $options->settings_behaviour_amazonS3, true ); ?>
+                                        />
+
+                                        <label for="amazon_s3" class="tgl-btn">
+                                            <span></span>
+                                            <?= __( 'Deliver the images stored on Amazon S3 using ShortPixel CDN', 'shortpixel-adaptive-images' ); ?>
+                                        </label>
+                                        <p class="description">
+                                            <?= __( 'Enable this option if you are offloading the images to an Amazon S3 bucket and you want to deliver them via our CDN to reduce costs. Read the configuration guide in <a href="https://shortpixel.com/knowledge-base/article/using-shortpixel-adaptive-images-with-images-on-amazon-s3/" target="_blank">our knowledge base</a>', 'shortpixel-adaptive-images' ); ?>
+                                        </p>
+                                        <div class="amazon-s3-fields-wrapper">
+                                            <p>
+                                                <label for="storage_url" style="display: inline-block; width: 140px;">
+                                                    <strong><?= __( 'Base URL', 'shortpixel-adaptive-images' ); ?></strong>
+                                                </label>
+                                                <input
+                                                        id="storage_url"
+                                                        type="text"
+                                                        data-type="string"
+                                                        name="storage_url"
+                                                        size="40"
+                                                        placeholder="<?= __( 'Paste Base URL from ShortPixel Dashboard', 'shortpixel-adaptive-images' ); ?>"
+                                                        value="<?= esc_attr( $options->settings_behaviour_storageUrl ); ?>"
+                                                    <?php disabled(!$options->settings_behaviour_amazonS3, true); ?>
+                                                />
+
+
+                                            </p>
+                                            <p>
+                                                <label for="host_removal" style="display: inline-block; width: 140px;">
+                                                    <strong><?= __( 'S3 Bucket URL', 'shortpixel-adaptive-images' ); ?></strong>
+                                                </label>
+                                                <input
+                                                        id="host_removal"
+                                                        type="text"
+                                                        data-type="string"
+                                                        name="host_removal"
+                                                        size="40"
+                                                        placeholder="<?= __( 'Get it from your Amazon S3 bucket details', 'shortpixel-adaptive-images' ); ?>"
+                                                        value="<?= esc_attr( $options->settings_behaviour_hostRemoval ); ?>"
+                                                    <?php disabled(!$options->settings_behaviour_amazonS3, true); ?>
+                                                />
+                                            </p>
+                                        </div>
+                                        <script>
+                                            jQuery(document).ready(function($){
+                                                $('#amazon_s3').on('change', function() {
+                                                    var isChecked = $(this).is(':checked');
+                                                    $('#storage_url, #host_removal').prop('disabled', !isChecked);
+                                                }).trigger('change');
+                                            });
+                                        </script>
+                                    </td>
+                                </tr>
+
+
                                 <tr>
                                     <th scope="row">
                                         <?= __( 'Lazy-load threshold', 'shortpixel-adaptive-images' ); ?>
@@ -1365,6 +1440,7 @@ $controller = $this->ctrl;
                                 $eager_selectors     = $options->settings_exclusions_eagerSelectors;
                                 $no_resize_selectors = $options->settings_exclusions_noresizeSelectors;
                                 $excluded_selectors  = $options->settings_exclusions_excludedSelectors;
+                                $eager_paths         = $options->settings_exclusions_eagerPaths;
                                 $excluded_paths      = $options->settings_exclusions_excludedPaths;
                                 $excluded_pages      = $options->settings_exclusions_excludedPages;
 
@@ -1372,6 +1448,7 @@ $controller = $this->ctrl;
                                     'eager_selectors'     => $controller->splitSelectors( $eager_selectors, ',' ),
                                     'no_resize_selectors' => $controller->splitSelectors( $no_resize_selectors, ',' ),
                                     'excluded_selectors'  => $controller->splitSelectors( $excluded_selectors, ',' ),
+                                    'eager_paths'         => $controller->splitSelectors( $eager_paths, PHP_EOL ),
                                     'excluded_paths'      => $controller->splitSelectors( $excluded_paths, PHP_EOL ),
                                 ];
 
@@ -1381,7 +1458,7 @@ $controller = $this->ctrl;
                                 ];
 
                                 $excluded_selectors_qty = count( $split_selectors[ 'eager_selectors' ] ) + count( $split_selectors[ 'no_resize_selectors' ] ) + count( $split_selectors[ 'excluded_selectors' ] );
-                                $excluded_paths_qty     = count( $split_selectors[ 'excluded_paths' ] );
+                                $excluded_paths_qty     = count( $split_selectors[ 'excluded_paths' ] ) + count( $split_selectors[ 'eager_paths' ] );
                             ?>
                             <table class="form-table">
                                 <tr>
@@ -1447,7 +1524,19 @@ $controller = $this->ctrl;
                                         <p class="warning error-message<?= $excluded_paths_qty <= $exclusion_limits[ 'paths' ] ? ' hidden' : ''; ?>" data-limit="<?= $exclusion_limits[ 'paths' ]; ?>">
                                             <?= str_replace( '{{QTY}}', $excluded_paths_qty, __( 'You already have <span>{{QTY}}</span> URL exclusions active. Please keep the number of exclusion selectors low for best performance.', 'shortpixel-adaptive-images' ) ); ?>
                                         </p>
-                                        <div>
+
+                                        <div><label for="eager_paths"><?= __( 'Don\'t lazy-load Url\'s:', 'shortpixel-adaptive-images' ); ?></label><br>
+                                            <textarea
+                                                    id="eager_paths"
+                                                    name="eager_paths"
+                                                    rows="5"
+                                                    data-type="string"
+                                                    data-exclusion-type="urls"
+                                                    data-setting="exclusion"
+                                                    data-separator="<?= PHP_EOL; ?>"
+                                            ><?= $eager_paths; ?></textarea>
+                                        </div>
+                                        <div><label for="excluded_paths"><?= __( 'Leave out completely Url\'s:', 'shortpixel-adaptive-images' ); ?></label><br>
                                             <textarea
                                                 id="excluded_paths"
                                                 name="excluded_paths"

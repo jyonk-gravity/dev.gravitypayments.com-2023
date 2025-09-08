@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb1d81772ab59f73f787ac47c64836096
+class ComposerStaticInit91347d4778f0a8704858a500d0acfeb6
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -1064,6 +1064,7 @@ class ComposerStaticInitb1d81772ab59f73f787ac47c64836096
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Search_Engines_Discouraged_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/search-engines-discouraged-watcher.php',
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Woocommerce_Beta_Editor_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/woocommerce-beta-editor-watcher.php',
         'Yoast\\WP\\SEO\\Integrations\\XMLRPC' => __DIR__ . '/../..' . '/src/integrations/xmlrpc.php',
+        'Yoast\\WP\\SEO\\Introductions\\Application\\AI_Brand_Insights_Pre_Launch' => __DIR__ . '/../..' . '/src/introductions/application/ai-brand-insights-pre-launch.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Fix_Assessments_Upsell' => __DIR__ . '/../..' . '/src/introductions/application/ai-fix-assessments-upsell.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Ai_Generate_Titles_And_Descriptions_Introduction_Upsell' => __DIR__ . '/../..' . '/src/deprecated/src/introductions/application/ai-generate-titles-and-descriptions-introduction-upsell.php',
         'Yoast\\WP\\SEO\\Introductions\\Application\\Current_Page_Trait' => __DIR__ . '/../..' . '/src/introductions/application/current-page-trait.php',
@@ -1336,9 +1337,9 @@ class ComposerStaticInitb1d81772ab59f73f787ac47c64836096
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb1d81772ab59f73f787ac47c64836096::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb1d81772ab59f73f787ac47c64836096::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb1d81772ab59f73f787ac47c64836096::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit91347d4778f0a8704858a500d0acfeb6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit91347d4778f0a8704858a500d0acfeb6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit91347d4778f0a8704858a500d0acfeb6::$classMap;
 
         }, null, ClassLoader::class);
     }

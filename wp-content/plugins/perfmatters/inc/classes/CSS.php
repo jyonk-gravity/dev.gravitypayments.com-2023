@@ -114,7 +114,8 @@ class CSS
                 'google-fonts', //google fonts
                 '/astra-local-fonts/', //astra local fonts
                 '//fonts.googleapis.com/css',
-                '/wp-content/uploads/bricks/css/post-' //bricks
+                '/wp-content/uploads/bricks/css/post-', //bricks
+                '-layer.min.css'
             );
             if(!empty(Config::$options['assets']['rucss_excluded_stylesheets'])) {
                 self::$data['rucss']['exclusions']['stylesheet'] = array_merge(self::$data['rucss']['exclusions']['stylesheet'], Config::$options['assets']['rucss_excluded_stylesheets']);

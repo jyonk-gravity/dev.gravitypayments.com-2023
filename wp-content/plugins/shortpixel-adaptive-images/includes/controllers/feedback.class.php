@@ -15,6 +15,8 @@
 		 */
 		protected $controller;
 
+        private $logger;
+
 		/**
 		 * Single ton implementation
 		 *
@@ -300,10 +302,56 @@
 			if ( !isset( self::$instance ) || !self::$instance instanceof self ) {
 				self::$instance = $this;
 			}
-
+            $this->logger = \ShortPixelAILogger::instance();
 			$this->controller = $controller;
 
 			add_action( 'admin_footer-plugins.php', [ $this, 'generatePopUp' ] );
 			add_action( 'wp_ajax_shortpixel_ai_handle_feedback_action', [ 'ShortPixel\AI\Feedback\Actions', 'handle' ] );
-		}
-	}
+
+            add_action( 'wp_ajax_shortpixel_ai_send_rating', [ $this, 'handleSurveyAjax' ] );
+            add_action( 'wp_ajax_shortpixel_ai_send_feedback', [ $this, 'handleSurveyAjax' ] );
+        }
+
+        public function handleSurveyAjax() {
+
+
+            $rating   = isset($_POST['data']['rating']) ? intval($_POST['data']['rating']) : 0;
+            $feedback = isset($_POST['data']['feedback']) ? sanitize_text_field($_POST['data']['feedback']) : '';
+
+            if ( ! $rating || $rating < 1 || $rating > 10 ) {
+                wp_send_json_error(__('Invalid rating', 'shortpixel-adaptive-images'));
+            }
+            $response = self::sendSurvey( $rating, $feedback );
+
+            if ( is_wp_error($response) ) {
+                wp_send_json_error(__('Feedback could not be sent.', 'shortpixel-adaptive-images'));
+            }
+
+            Notice::dismiss( 'recommend_survey' );
+            wp_send_json_success();
+
+        }
+
+
+        public  function sendSurvey( $rating, $feedback, $anonymous = false ) {
+
+            if ( ! is_int( $rating ) || $rating < 1 || $rating > 10 ) {
+                return false;
+            }
+            $wordpress = self::collectWordpressData( ShortPixelAI::is_beta() );
+            $wordpress['deactivated_plugin']['uninstall_reason']  = 'rating';
+            $wordpress['deactivated_plugin']['uninstall_details'] = 'Rating: ' . $rating
+                . ( $feedback ? ' – Feedback: ' . $feedback : '' );
+
+            $body = [
+                'user'      => self::collectUserData( $anonymous ),
+                'wordpress' => $wordpress,
+            ];
+            $spai_key = Options::_()->settings_general_apiKey;
+            if ( $spai_key && ! $anonymous ) {
+                $body['key'] = $spai_key;
+            }
+
+            return Request::post( 'https://api.shortpixel.com/v2/feedback.php', true, [ 'body' => $body ] );
+        }
+    }

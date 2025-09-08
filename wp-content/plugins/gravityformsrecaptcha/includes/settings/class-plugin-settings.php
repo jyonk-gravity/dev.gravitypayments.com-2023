@@ -80,6 +80,11 @@ class Plugin_Settings {
 		// Show the relevant fields based on the connection type.
 		switch ( rgar( $plugin_settings, 'connection_type' ) ) {
 			case 'enterprise':
+				// Force manual reconnection when a WP_Error during refresh bug (versions 1.7-1.9) erased these values.
+				if ( empty( $plugin_settings['access_token'] ) || empty( $plugin_settings['refresh_token'] ) ) {
+					return $this->get_recaptcha_key_type();
+				}
+
 				return array(
 					$this->get_description_fields( 'enterprise' ),
 					$this->get_v3_enterprise_fields(),

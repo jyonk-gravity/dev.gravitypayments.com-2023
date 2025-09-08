@@ -16,6 +16,16 @@ class VanillaJsLoader extends JsLoader {
     {
         add_action( 'wp_head', function() {
             $apiUrlParts = explode('/', rtrim($this->ctrl->get_cdn_url(), '/'));
+            $customApiUrlParts = explode('/', rtrim($this->ctrl->choose_api_base(), '/'));
+            $customKeys = [];
+            if ($this->settings->behaviour->amazon_s3) {
+                $hostRemoval = $this->settings->behaviour->host_removal;
+                $customKey   = end($customApiUrlParts);
+                if ($hostRemoval && $customKey) {
+                    $customKeys[$hostRemoval] = $customKey;
+                }
+            }
+
             $convert = 'none';
             if(!!$this->settings->compression->webp || !!$this->settings->compression->avif) {
                 if (!$this->ctrl->varyCacheSupport) {
@@ -46,6 +56,7 @@ class VanillaJsLoader extends JsLoader {
                     w.spaiData = {
                         version: "<?= esc_js(SHORTPIXEL_AI_VERSION) ?>",
                         key: "<?= esc_js(end($apiUrlParts)) ?>",
+                        customKeys: <?= wp_json_encode($customKeys) ?>,
                         quality: "<?= esc_js($this->settings->compression->level) ?>",
                         convert: "<?= esc_js($convert) ?>",
                         lqip: <?= $this->settings->behaviour->lqip ? 'true' : 'false' ?>,
@@ -90,6 +101,7 @@ class VanillaJsLoader extends JsLoader {
                 'eager_selectors'       => $this->ctrl->splitSelectors( $this->settings->exclusions->eager_selectors, ',' ),
                 'noresize_selectors'    => $this->ctrl->splitSelectors( $this->settings->exclusions->noresize_selectors, ',' ),
                 'excluded_paths'        => array_map( 'base64_encode', $this->ctrl->splitSelectors( $this->settings->exclusions->excluded_paths, PHP_EOL ) ),
+                'eager_paths'           => array_map( 'base64_encode', $this->ctrl->splitSelectors( $this->settings->exclusions->eager_paths, PHP_EOL ) ),
             ]);
             wp_enqueue_script( 'spai-snip-action'  );
             wp_add_inline_script('spai-snip-action',
@@ -272,6 +284,11 @@ class VanillaJsLoader extends JsLoader {
             $this->alterExclusion($exclusions, 'urls', $excludedPath,
                 ['lazy' => 0, 'cdn' => 0, 'resize' => 0, 'crop' => -1]);
         }
+
+        foreach($this->ctrl->splitSelectors( $this->settings->exclusions->eager_paths, PHP_EOL) as $eagerPath) {
+            $this->alterExclusion($exclusions, 'urls', $eagerPath, ['lazy' => 0]);
+        }
+
         foreach($this->ctrl->splitSelectors( $this->settings->exclusions->excluded_selectors, ',') as $excludedSel) {
             $this->alterExclusion($exclusions, 'selectors', $excludedSel,
                 ['lazy' => 0, 'cdn' => 0, 'resize' => 0, 'crop' => -1]);

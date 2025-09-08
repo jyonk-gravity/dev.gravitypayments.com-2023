@@ -119,6 +119,79 @@
 		 */
 		private $ctrl;
 
+        private function normalizeLqipItem(array $item): array {
+            if (!isset($item['source']) || !isset($item['url'])) {
+                return $item;
+            }
+
+            if ($item['source'] === $item['url']) {
+                $item['lqipUrl'] = $item['url'];
+                unset($item['source'], $item['url']);
+            } else {// log to catch them and see if it's really useful to keep both sourcce & url
+                $this->log('LQIP normalize: source ≠ url', [
+                    'source' => $item['source'],
+                    'url'    => $item['url'],
+                    'referer' => $item['referer'] ?? null
+                ]);
+
+                $item['source'] = null;
+                $item['lqipUrl'] = $item['url'];
+                unset($item['url']);
+            }
+            return $item;
+        }
+
+
+        private function provideTimestamp(array $collection): array {
+            $now = time();
+            foreach ($collection as &$item) {
+                if (!isset($item['timestamp'])) {
+                    $item['timestamp'] = $now;
+                }
+            }
+            unset($item);
+            return $collection;
+        }
+
+        private function removeOldItemsFromCollection(array $collection, int $maxAgeSeconds = 86400): array {
+            $threshold = time() - $maxAgeSeconds;
+            return array_filter($collection, function($item) use ($threshold) {
+                return !isset($item['timestamp']) || $item['timestamp'] >= $threshold;
+            });
+        }
+
+        private function getLqipState() {
+            $state = get_option('shortpixel_ai_lqip_state', null);
+
+            if ($state === null) {
+                // get previous data from old options
+                $state = [
+                    'collection' => Options::_()->get('collection', self::OPTIONS_CATEGORY, []),
+                    'processed'  => Options::_()->get('processed', self::OPTIONS_CATEGORY, []),
+                ];
+                $state['collection'] = $this->provideTimestamp($state['collection']);
+
+                update_option('shortpixel_ai_lqip_state', $state);
+                Options::_()->delete('collection', self::OPTIONS_CATEGORY);
+                Options::_()->delete('processed', self::OPTIONS_CATEGORY);
+            }
+
+            if (!is_array($state)) {
+                $state = [ 'collection' => [], 'processed' => [] ];
+            }
+
+            if (!isset($state['collection']) || !is_array($state['collection'])) $state['collection'] = [];
+            if (!isset($state['processed']) || !is_array($state['processed'])) $state['processed'] = [];
+
+            return $state;
+        }
+
+        private function saveLqipState($state) {
+            update_option('shortpixel_ai_lqip_state', $state);
+        }
+
+
+
 		/**
 		 * Single ton implementation
 		 *
@@ -178,7 +251,7 @@
 					$name = $this->getFileName( $item[ 'source' ] );
 					$valid = !$this->exists( $name ) || $this->expired( $name );
 					if(!$valid) {
-					    $this->log("Dropping URL: " . $item . ' name: ' . $name);
+                        $this->log("Dropping URL: " . json_encode($item) . ' name: ' . $name);
                     }
 
 					return $valid;
@@ -250,26 +323,19 @@
 		 * Cron event handler
 		 */
 		public function eventHandler() {
-			$collection = Options::_()->get( 'collection', self::OPTIONS_CATEGORY, [] );
-			if(!is_array($collection)) $collection = [];
-            $this->log('LQIP EVT HANLER: COLLECTION: ', $collection);
+            $state = $this->getLqipState();
+            $collection = $state['collection'];
+            $processed = $state['processed'];
 
-			if ( empty( $collection ) ) {
-				return;
-			}
-
-			$processed = Options::_()->get( 'processed', self::OPTIONS_CATEGORY, [] );
-            $this->log('LQIP EVT HANLER: PROCESSED REQUESTS: ', $processed);
+            $this->log('LQIP EVT HANDLER: PROCESSED REQUESTS: ', $processed);
 
 
             $collection = $this->filterWithProcessed( $collection, $processed );
-
 			$bundle = array_splice( $collection, 0, self::BUNDLE_CAPACITY );
 
-            $this->log('LQIP EVT HANLER: SETTING COLLECTION: ', $collection);
-			Options::_()->set( $collection, 'collection', self::OPTIONS_CATEGORY );
-
-            $this->log('LQIP EVT HANLER: GENERATE BUNDLE: ', $bundle);
+            $this->log('LQIP EVT HANDLER: GENERATE BUNDLE: ', $bundle);
+            $state['collection'] = $collection;
+            $this->saveLqipState($state);
 			$this->generate( $bundle );
 
 			if ( empty( $collection ) ) {
@@ -290,22 +356,27 @@
 		 */
 		private function schedule( $collection ) {
 			if ( !empty( $collection ) && is_array( $collection ) ) {
-				$scheduled_collection = Options::_()->get( 'collection', self::OPTIONS_CATEGORY, [] );
-                if(!is_array($scheduled_collection)) $scheduled_collection = [];
-
+                $state = $this->getLqipState();
+                $scheduled_collection = $state['collection'];
 				$collection = array_merge( $scheduled_collection, $collection );
+                $collection = $this->provideTimestamp($collection);
+                $collection = $this->removeOldItemsFromCollection($collection);
 				$collection = $this->replaceWithParent( $collection );
 				$collection = $this->filterCollection( $collection );
 
+                $collection = array_map(function($item) {
+                    return $this->normalizeLqipItem($item);
+                }, $collection);
+
 				$collection = array_filter( $collection, function( $item ) {
-					$name = $this->getFileName( $item[ 'source' ] );
+                    $name = $this->getFileName( $item[ 'source' ] ?? $item['lqipUrl'] ?? '' );
 
 					return !$this->exists( $name ) || $this->expired( $name );
 				} );
 
-                $this->log('SETTING LQIP COLLECTION: ', $collection);
 
-                $option_set = Options::_()->set( $collection, 'collection', self::OPTIONS_CATEGORY );
+                $state['collection'] = $collection;
+                $this->saveLqipState($state);
 
 				if ( empty( $collection ) ) {
 					$this->removeSchedule();
@@ -315,7 +386,7 @@
 				else {
 					$this->reschedule( 'quick' );
 
-					return ['processed' => !!$option_set, 'message' => (!!$option_set ? '' : 'Could not set lqip option.')];
+					return ['processed' => true];
 				}
 			}
 			else {
@@ -336,7 +407,8 @@
 
 			if ( !empty( $collection ) && is_array( $collection ) ) {
 
-                $processed = Options::_()->get( 'processed', self::OPTIONS_CATEGORY, [] );
+                $state = $this->getLqipState();
+                $processed = $state['processed'];
                 $this->log( 'LQIP REQUESTS START. ALREADY PROCESSED: ', $processed );
 
                 foreach ( $collection as $index => $item ) {
@@ -410,7 +482,8 @@
 
             $return = $this->countAttempts( $return, $processed );
             $processed    = $this->filterCollection( array_merge( $processed, $return ) );
-            Options::_()->set( $processed, 'processed', self::OPTIONS_CATEGORY );
+            $state['processed'] = $processed;
+            $this->saveLqipState($state);
 
             return $return;
 		}
@@ -434,7 +507,8 @@
 		 * @return bool
 		 */
 		private function isPlaceholder( $content ) {
-			return empty( $content ) ? false : $this->isSvg( $content ) && strpos( $content, 'feGaussianBlur' ) !== false;
+			return empty( $content ) ? false : $this->isSvg( $content ) && (strpos( $content, 'feGaussianBlur' ) !== false ||
+                strpos( $content, 'filter="blur' ) !== false);
 		}
 
 		/**
@@ -958,6 +1032,7 @@
 			//we add the JS only if it's INSTANT LQIP, otherwise the server-side will enqueue the LQIPs to be processed while parsing the page (since it doesn't take time as when INSTANT)
 			if ( !!$this->ctrl->options->settings_behaviour_lqip && $this->ctrl->options->settings_behaviour_processWay === LQIP::USE_INSTANT)
 			{
+
 				wp_register_script( 'spai-lqip', $this->ctrl->plugin_url . $file, $this->ctrl->options->settings_behaviour_nojquery <= 0 ? [ 'spai-scripts' ] : [], $version, true );
 				wp_localize_script( 'spai-lqip', 'lqipConstants', [
 					'action'       => 'shortpixel_ai_handle_lqip_action',

@@ -14,7 +14,7 @@ class HTML
         }
 
         //find tags with selector
-        if(!preg_match_all("/<(?:div|section|figure|footer)([^>]*({$selectors})[^>]*)>/s", $html, $selector_tags, PREG_OFFSET_CAPTURE)) {
+        if(!preg_match_all("/<(?:header|div|section|figure|footer)([^>]*({$selectors})[^>]*)>/s", $html, $selector_tags, PREG_OFFSET_CAPTURE)) {
             return;
         }
 

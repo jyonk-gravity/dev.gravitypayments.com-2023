@@ -25,6 +25,7 @@ class ShortPixelRegexParser {
     private $isEager = false;
     private $forceEager = false;
     private $isTemplate = false;
+    private $content;
 
 
     private $regexes = [
@@ -41,6 +42,19 @@ class ShortPixelRegexParser {
         'ahref' => '/\<a[^\<\>]*?\shref\=(\"|\'?)(.+?)(?:\"|\')(?:.+?)\>/s',
     ];
 
+
+    protected function markTotalExclude(string $tagHtml, string $origUrl): string
+    {
+        $attrs  = ' data-spai-target="src"';
+        $attrs .= ' data-spai-orig="' . esc_attr($origUrl) . '"';
+        $attrs .= ' data-spai-exclude="nocdn"';
+        return preg_replace(
+            '/<img\b([^>]*)>/i',
+            '<img$1' . $attrs . '>',
+            $tagHtml,
+            1
+        );
+    }
 
     public function __construct(ShortPixelAI $ctrl)
     {
@@ -159,6 +173,8 @@ class ShortPixelRegexParser {
 
         //In some cases the regex fails with this limit reached (default is 1000000) so make it larger (HS#75940)
         ini_set('pcre.backtrack_limit', 2000000);
+
+        $this->content = $content;
 
         foreach (\ShortPixel\AI\TagRules::_()->items() as $tagRule) {
             SHORTPIXEL_AI_DEBUG && $this->logger->log("******** TAG RULE IS : ", $tagRule);
@@ -669,7 +685,10 @@ class ShortPixelRegexParser {
         if($this->ctrl->urlIsApi($url)) {$this->logger->log('IS API');return $text;}
         if(   !ShortPixelUrlTools::isValid($url)
            && (!$this->isTemplate || strpos($url, '{{:') === false)) {$this->logger->log('NOT VALID');return $text;}
-        if($this->ctrl->urlIsExcluded($url)) {$this->logger->log('EXCLUDED');return $text;}
+        if ($this->ctrl->urlIsExcluded($url)) {
+            $this->logger->log('EXCLUDED TOTALLY: ' . $url);
+            return $this->markTotalExclude($text, $url);
+        }
 
         //custom exclusion for SliderRevolution TODO unhack
         if(ActiveIntegrations::_()->get('slider-revolution') && preg_match('/plugins\/revslider\/.*\/dummy.png$/', $url )) {
@@ -698,7 +717,7 @@ class ShortPixelRegexParser {
             $text = preg_replace('/data-spai(-upd|)=["\'][0-9]*["\']/s', '', $text);
         }
 
-        $eager = $this->isEager || $this->ctrl->tagIs('eager', $text);
+        $eager = $this->isEager || $this->ctrl->tagIs('eager', $text) || $this->ctrl->urlIsEager($url);;
 
         SHORTPIXEL_AI_DEBUG && $this->logger->log("Including: " . $url . ($eager ? ' EAGER' : ' LAZY'));
 
@@ -775,14 +794,15 @@ class ShortPixelRegexParser {
         $text = preg_replace('/\s\bloading=["\']?lazy["\']?/s', '', $text);
 
         if($eager) {
-            //we set any CSS or JS to ret_wait because of the many CORS issues we've seen with these.
-            $wait = $ext == 'css' || $ext == 'js';
+            //we set any CSS or JS or FONTS to ret_wait because of the many CORS issues we've seen with these.
+            $wait = in_array($ext, ShortPixelUrlTools::$EAGER_WAIT);
             $cacheVer = $wait ? $this->ctrl->cssCacheVer : false;
             if($this->isTemplate && strpos($url, '{{:') === 0) {
                 $inlinePlaceholder = $this->ctrl->get_api_url( false, false, false, false, $this->tagRule->getCustomCompression(), $wait, $cacheVer)
                     . '/' . $url;
             } else {
-                $inlinePlaceholder = $this->ctrl->get_api_url( $absoluteUrl, false, false, $this->ctrl->get_extension( $url ), $this->tagRule->getCustomCompression(), $wait, $cacheVer);
+                $separator = strpos($this->content, $absoluteUrl) > 0 && $this->tagRule->attrValFilter == "preload" ? "," : ShortPixelAI::SEP;
+                $inlinePlaceholder = $this->ctrl->get_api_url($absoluteUrl, false, false, $this->ctrl->get_extension($url),  $this->tagRule->getCustomCompression(), $wait, $cacheVer, $separator);
             }
             $spaiMarker = ' data-spai-egr=' . $qm . '1' . $qm;
         } else {
@@ -1029,7 +1049,8 @@ class ShortPixelRegexParser {
     public function replace_srcset($srcset) {
         $aiSrcsetItems = array();
         $aiUrl = $this->ctrl->get_api_url(false, false);
-        $aiUrlBase = $this->ctrl->settings->behaviour->api_url;
+        $aiUrlBase = $this->ctrl->settings->behaviour->api_url; //ex: https://cdn.shortpixel.ai/spai
+        $aiUrlBaseAmazon = $this->ctrl->settings->behaviour->storage_url; //ex: https://cdn.shortpixel.ai/x9
         $srcsetItems = explode(',', $srcset);
         foreach($srcsetItems as $srcsetItem) {
             $srcsetItem = trim($srcsetItem);
@@ -1039,7 +1060,7 @@ class ShortPixelRegexParser {
                 SHORTPIXEL_AI_DEBUG && $this->logger->log("REPLACE SRCSET abort - excluded: " . $srcsetItem);
                 return $srcset;
             }
-            if(strpos($srcsetItem, $aiUrlBase) !== false || strpos($srcsetItem, 'data:image/') === 0) {
+            if(strpos($srcsetItem, $aiUrlBase) !== false || strpos($srcsetItem, $aiUrlBaseAmazon) !== false || strpos($srcsetItem, 'data:image/') === 0) {
                 SHORTPIXEL_AI_DEBUG && $this->logger->log("REPLACE SRCSET abort - AI url: " . $srcsetItem);
                 return $srcset; //already parsed by the hook.
             }

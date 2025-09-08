@@ -380,7 +380,8 @@ div.spai-modal button.spai-close-upgrade-button {
     outline            : none;
 }
 
-.blue_link {
+.blue_link,
+.survey-rating-btn, #survey-feedback-submit {
     cursor             : pointer;
     color              : #ffffff !important;
     height             : 30px;
@@ -401,10 +402,11 @@ div.spai-modal button.spai-close-upgrade-button {
     outline            : none;
 }
 
-.dark_blue_link:hover, .blue_link:hover {
+.dark_blue_link:hover,.blue_link:hover,
+.survey-rating-btn:hover, #survey-feedback-submit {
     color   : #ffffff !important;
     border  : none !important;
-    opacity : 0.9 !important;
+    opacity : 0.7 !important;
 }
 
 .dark_blue_link:focus, .blue_link:focus, .dark_blue_link:active, .blue_link:active {

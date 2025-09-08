@@ -16,6 +16,7 @@ class ShortPixelUrlTools {
         'css', 'js',
         'eot', 'woff', 'woff2', 'ttf', 'otf' ];
     public static $ONLY_STORE = [ 'svg', 'js', 'eot', 'webp', 'avif', 'woff', 'woff2', 'ttf', 'otf' ];
+    public static $EAGER_WAIT = [ 'css', 'js', 'woff2', 'woff', 'otf', 'ttf', 'eot' ];
     private static $SIZE_CACHE = [];
 
     public static function isValid($url) {

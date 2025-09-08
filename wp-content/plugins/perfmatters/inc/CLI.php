@@ -26,14 +26,14 @@ class CLI {
 
 		if(is_multisite()) {
 
-			$license_info = perfmatters_check_license($network);
+			$license_info = perfmatters_check_license(null, $network);
 
 			if(empty($license_info->activations_left) || $license_info->activations_left !== 'unlimited') {
 				WP_CLI::error(__('Unlimited site license required.', 'perfmatters'));
 			}
 		}
 
-		if(perfmatters_activate_license($network)) {
+		if(perfmatters_activate_license(null, $network)) {
 			WP_CLI::success(__('License activated.', 'perfmatters'));
 		}
 		else {
@@ -50,7 +50,7 @@ class CLI {
 
 		$network = is_multisite() && empty(WP_CLI::get_config()['url']);
 
-		if(perfmatters_deactivate_license($network)) {
+		if(perfmatters_deactivate_license(null, $network)) {
 			WP_CLI::success(__('License deactivated.', 'perfmatters'));
 		}
 		else {
@@ -67,7 +67,7 @@ class CLI {
 
 		$network = is_multisite() && empty(WP_CLI::get_config()['url']);
 
-		if(perfmatters_deactivate_license($network)) {
+		if(perfmatters_deactivate_license(null, $network)) {
 			WP_CLI::success('License deactivated!');
 		}
 
@@ -103,6 +103,81 @@ class CLI {
 		else {
 			CSS::clear_used_css();
 			WP_CLI::success(__('Used CSS cleared.', 'perfmatters'));
+		}
+	}
+
+	/**
+	 * Clears minified CSS.
+	 * 
+	 * ## OPTIONS
+     *
+     * [--network]
+     * : Clear minified CSS for all sites in the network.
+     * 
+	 * @subcommand clear-minified-css
+	 * 
+	 */
+	public function clear_minified_css($args, $assoc_args) {
+
+		if(!empty($assoc_args['network']) && is_multisite()) {
+			foreach(get_sites(array('number' => 500)) as $blog) {
+			   	Minify::clear_minified('css', $blog);
+			}
+			WP_CLI::success(__('Minified CSS cleared for all network sites.', 'perfmatters'));
+		}
+		else {
+			Minify::clear_minified('css');
+			WP_CLI::success(__('Minified CSS cleared.', 'perfmatters'));
+		}
+	}
+
+	/**
+	 * Clears minified JS.
+	 * 
+	 * ## OPTIONS
+     *
+     * [--network]
+     * : Clear minified JS for all sites in the network.
+     * 
+	 * @subcommand clear-minified-js
+	 * 
+	 */
+	public function clear_minified_js($args, $assoc_args) {
+
+		if(!empty($assoc_args['network']) && is_multisite()) {
+			foreach(get_sites(array('number' => 500)) as $blog) {
+			   	Minify::clear_minified('js', $blog);
+			}
+			WP_CLI::success(__('Minified JS cleared for all network sites.', 'perfmatters'));
+		}
+		else {
+			Minify::clear_minified('js');
+			WP_CLI::success(__('Minified JS cleared.', 'perfmatters'));
+		}
+	}
+
+	/**
+	 * Clears local fonts.
+	 * 
+	 * ## OPTIONS
+     *
+     * [--network]
+     * : Clear local fonts for all sites in the network.
+     * 
+	 * @subcommand clear-local-fonts
+	 * 
+	 */
+	public function clear_local_fonts($args, $assoc_args) {
+
+		if(!empty($assoc_args['network']) && is_multisite()) {
+			foreach(get_sites(array('number' => 500)) as $blog) {
+			   	Fonts::clear_local_fonts($blog);
+			}
+			WP_CLI::success(__('Local Fonts cleared for all network sites.', 'perfmatters'));
+		}
+		else {
+			Fonts::clear_local_fonts();
+			WP_CLI::success(__('Local fonts cleared.', 'perfmatters'));
 		}
 	}
 
@@ -296,6 +371,10 @@ class CLI {
 			'script-manager' => array(
 				'option_row' => 'perfmatters_tools',
 				'option' => 'script_manager'
+			),
+			'clean-uninstall' => array(
+				'option_row' => 'perfmatters_tools',
+				'option' => 'clean_uninstall'
 			)
 		);
 	}

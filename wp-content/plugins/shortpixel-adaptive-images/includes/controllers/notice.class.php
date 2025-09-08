@@ -372,6 +372,46 @@
 				delete_transient( "shortpixelai_thrown_notice" );
 			}
 
+            if ( is_admin() && isset( $_GET['page'] ) && $_GET['page'] === 'shortpixel-ai-settings') {
+                $installed = get_option( 'shortpixel_ai_installed_time' );
+                if ( ! $installed ) {
+                    update_option( 'shortpixel_ai_installed_time', time() );
+                }
+                elseif ( time() - $installed >= 30 * DAY_IN_SECONDS ) {
+                    $dismissed = self::getDismissed();
+                    if ( !isset( $dismissed->recommend_survey ) ) {
+                        Notice::render('recommend_survey', [
+                            'notice' => [
+                                'type' => 'info',
+                                'icon' => 'notes',
+                                'dismissible' => true,
+                            ],
+                            'message' => [
+                                'title' => __('How likely are you to recommend ShortPixel AI to a friend or colleague?', 'shortpixel-adaptive-images'),
+                                'body' => [
+                                    '<p><span style="margin-right:1em;">' . __('Not likely', 'shortpixel-adaptive-images') . '</span>'
+                                    . implode('', array_map(function ($i) {
+                                        return '<button class="button survey-rating-btn" '
+                                            . 'data-rating="'. $i .'" '
+                                            . 'style="margin:0 3px; min-width:2.5em; text-align:center; line-height:1.6;">'
+                                            . $i
+                                            . '</button>';
+                                    }, range(1, 10)))
+                                    . '<span style="margin-left:1em;">' . __('Very likely', 'shortpixel-adaptive-images') . '</span></p>',
+                                    '<div id="survey-feedback-area" style="display:none;margin-top:10px;">'
+                                    . '<p><strong id="survey-feedback-prompt">' . __('Give us your feedback:', 'shortpixel-adaptive-images') . '</strong></p>'
+                                    . '<textarea id="survey-feedback" rows="3" style="width:100%;"></textarea><br><br>'
+                                    . '<button id="survey-feedback-submit" class="button button-primary">'
+                                    . __('Submit', 'shortpixel-adaptive-images')
+                                    . '</button>'
+                                    . '</div>',
+                                ],
+                            ],
+                        ]);
+                    }
+                }
+            }
+
 			if ( !isset( $dismissed->wp_rocket_defer_js ) && $integrations->has( 'wp-rocket', 'defer-all-js' ) ) {
 				self::render( 'wp rocket defer js', [
 					'notice'  => [
