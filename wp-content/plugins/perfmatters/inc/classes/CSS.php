@@ -109,6 +109,7 @@ class CSS
                 '/uploads/oxygen/css/', //oxygen
                 '/uploads/bb-plugin/cache/', //beaver builder
                 '/uploads/generateblocks/', //generateblocks
+                'offside.min.css', //generatepress
                 '/et-cache/', //divi
                 '/widget-google-reviews/assets/css/public-main.css', //plugin for google reviews
                 'google-fonts', //google fonts

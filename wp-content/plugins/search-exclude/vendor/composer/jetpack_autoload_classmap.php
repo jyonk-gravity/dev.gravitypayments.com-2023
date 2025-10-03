@@ -7,47 +7,47 @@ $baseDir   = dirname($vendorDir);
 
 return array(
 	'Autoloader' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-autoloader.php'
 	),
 	'Autoloader_Handler' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-autoloader-handler.php'
 	),
 	'Autoloader_Locator' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-autoloader-locator.php'
 	),
 	'Automattic\\Jetpack\\Assets' => array(
-		'version' => '4.3.2.0',
+		'version' => '4.3.9.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-assets/src/class-assets.php'
 	),
 	'Automattic\\Jetpack\\Assets\\Script_Data' => array(
-		'version' => '4.3.2.0',
+		'version' => '4.3.9.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-assets/src/class-script-data.php'
 	),
 	'Automattic\\Jetpack\\Assets\\Semver' => array(
-		'version' => '4.3.2.0',
+		'version' => '4.3.9.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-assets/src/class-semver.php'
 	),
 	'Automattic\\Jetpack\\Autoloader\\AutoloadFileWriter' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/AutoloadFileWriter.php'
 	),
 	'Automattic\\Jetpack\\Autoloader\\AutoloadGenerator' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/AutoloadGenerator.php'
 	),
 	'Automattic\\Jetpack\\Autoloader\\AutoloadProcessor' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/AutoloadProcessor.php'
 	),
 	'Automattic\\Jetpack\\Autoloader\\CustomAutoloaderPlugin' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/CustomAutoloaderPlugin.php'
 	),
 	'Automattic\\Jetpack\\Autoloader\\ManifestGenerator' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/ManifestGenerator.php'
 	),
 	'Automattic\\Jetpack\\Composer\\Manager' => array(
@@ -63,663 +63,159 @@ return array(
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-constants/src/class-constants.php'
 	),
 	'Automattic\\Jetpack\\CookieState' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-cookiestate.php'
 	),
 	'Automattic\\Jetpack\\Errors' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-errors.php'
 	),
 	'Automattic\\Jetpack\\Files' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-files.php'
 	),
 	'Automattic\\Jetpack\\Modules' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-modules.php'
 	),
 	'Automattic\\Jetpack\\Paths' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-paths.php'
 	),
 	'Automattic\\Jetpack\\Status' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-status.php'
 	),
 	'Automattic\\Jetpack\\Status\\Cache' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-cache.php'
 	),
 	'Automattic\\Jetpack\\Status\\Host' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-host.php'
 	),
 	'Automattic\\Jetpack\\Status\\Request' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-request.php'
 	),
 	'Automattic\\Jetpack\\Status\\Visitor' => array(
-		'version' => '6.0.2.0',
+		'version' => '6.0.4.0',
 		'path'    => $baseDir . '/jetpack_vendor/automattic/jetpack-status/src/class-visitor.php'
 	),
 	'Container' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-container.php'
 	),
 	'Hook_Manager' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-hook-manager.php'
 	),
 	'Latest_Autoloader_Guard' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-latest-autoloader-guard.php'
 	),
 	'Manifest_Reader' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-manifest-reader.php'
 	),
-	'Monolog\\Attribute\\AsMonologProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Attribute/AsMonologProcessor.php'
-	),
-	'Monolog\\DateTimeImmutable' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/DateTimeImmutable.php'
-	),
-	'Monolog\\ErrorHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/ErrorHandler.php'
-	),
-	'Monolog\\Formatter\\ChromePHPFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/ChromePHPFormatter.php'
-	),
-	'Monolog\\Formatter\\ElasticaFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/ElasticaFormatter.php'
-	),
-	'Monolog\\Formatter\\ElasticsearchFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/ElasticsearchFormatter.php'
-	),
-	'Monolog\\Formatter\\FlowdockFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/FlowdockFormatter.php'
-	),
-	'Monolog\\Formatter\\FluentdFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/FluentdFormatter.php'
-	),
-	'Monolog\\Formatter\\FormatterInterface' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/FormatterInterface.php'
-	),
-	'Monolog\\Formatter\\GelfMessageFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/GelfMessageFormatter.php'
-	),
-	'Monolog\\Formatter\\GoogleCloudLoggingFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/GoogleCloudLoggingFormatter.php'
-	),
-	'Monolog\\Formatter\\HtmlFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/HtmlFormatter.php'
-	),
-	'Monolog\\Formatter\\JsonFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/JsonFormatter.php'
-	),
-	'Monolog\\Formatter\\LineFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/LineFormatter.php'
-	),
-	'Monolog\\Formatter\\LogglyFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/LogglyFormatter.php'
-	),
-	'Monolog\\Formatter\\LogmaticFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/LogmaticFormatter.php'
-	),
-	'Monolog\\Formatter\\LogstashFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/LogstashFormatter.php'
-	),
-	'Monolog\\Formatter\\MongoDBFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/MongoDBFormatter.php'
-	),
-	'Monolog\\Formatter\\NormalizerFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/NormalizerFormatter.php'
-	),
-	'Monolog\\Formatter\\ScalarFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/ScalarFormatter.php'
-	),
-	'Monolog\\Formatter\\WildfireFormatter' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/WildfireFormatter.php'
-	),
-	'Monolog\\Handler\\AbstractHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/AbstractHandler.php'
-	),
-	'Monolog\\Handler\\AbstractProcessingHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/AbstractProcessingHandler.php'
-	),
-	'Monolog\\Handler\\AbstractSyslogHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/AbstractSyslogHandler.php'
-	),
-	'Monolog\\Handler\\AmqpHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/AmqpHandler.php'
-	),
-	'Monolog\\Handler\\BrowserConsoleHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/BrowserConsoleHandler.php'
-	),
-	'Monolog\\Handler\\BufferHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/BufferHandler.php'
-	),
-	'Monolog\\Handler\\ChromePHPHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/ChromePHPHandler.php'
-	),
-	'Monolog\\Handler\\CouchDBHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/CouchDBHandler.php'
-	),
-	'Monolog\\Handler\\CubeHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/CubeHandler.php'
-	),
-	'Monolog\\Handler\\Curl\\Util' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/Curl/Util.php'
-	),
-	'Monolog\\Handler\\DeduplicationHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/DeduplicationHandler.php'
-	),
-	'Monolog\\Handler\\DoctrineCouchDBHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/DoctrineCouchDBHandler.php'
-	),
-	'Monolog\\Handler\\DynamoDbHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/DynamoDbHandler.php'
-	),
-	'Monolog\\Handler\\ElasticaHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/ElasticaHandler.php'
-	),
-	'Monolog\\Handler\\ElasticsearchHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/ElasticsearchHandler.php'
-	),
-	'Monolog\\Handler\\ErrorLogHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/ErrorLogHandler.php'
-	),
-	'Monolog\\Handler\\FallbackGroupHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FallbackGroupHandler.php'
-	),
-	'Monolog\\Handler\\FilterHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FilterHandler.php'
-	),
-	'Monolog\\Handler\\FingersCrossedHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FingersCrossedHandler.php'
-	),
-	'Monolog\\Handler\\FingersCrossed\\ActivationStrategyInterface' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FingersCrossed/ActivationStrategyInterface.php'
-	),
-	'Monolog\\Handler\\FingersCrossed\\ChannelLevelActivationStrategy' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FingersCrossed/ChannelLevelActivationStrategy.php'
-	),
-	'Monolog\\Handler\\FingersCrossed\\ErrorLevelActivationStrategy' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FingersCrossed/ErrorLevelActivationStrategy.php'
-	),
-	'Monolog\\Handler\\FirePHPHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FirePHPHandler.php'
-	),
-	'Monolog\\Handler\\FleepHookHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FleepHookHandler.php'
-	),
-	'Monolog\\Handler\\FlowdockHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FlowdockHandler.php'
-	),
-	'Monolog\\Handler\\FormattableHandlerInterface' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FormattableHandlerInterface.php'
-	),
-	'Monolog\\Handler\\FormattableHandlerTrait' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/FormattableHandlerTrait.php'
-	),
-	'Monolog\\Handler\\GelfHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/GelfHandler.php'
-	),
-	'Monolog\\Handler\\GroupHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/GroupHandler.php'
-	),
-	'Monolog\\Handler\\Handler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/Handler.php'
-	),
-	'Monolog\\Handler\\HandlerInterface' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/HandlerInterface.php'
-	),
-	'Monolog\\Handler\\HandlerWrapper' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/HandlerWrapper.php'
-	),
-	'Monolog\\Handler\\IFTTTHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/IFTTTHandler.php'
-	),
-	'Monolog\\Handler\\InsightOpsHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/InsightOpsHandler.php'
-	),
-	'Monolog\\Handler\\LogEntriesHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/LogEntriesHandler.php'
-	),
-	'Monolog\\Handler\\LogglyHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/LogglyHandler.php'
-	),
-	'Monolog\\Handler\\LogmaticHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/LogmaticHandler.php'
-	),
-	'Monolog\\Handler\\MailHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/MailHandler.php'
-	),
-	'Monolog\\Handler\\MandrillHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/MandrillHandler.php'
-	),
-	'Monolog\\Handler\\MissingExtensionException' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/MissingExtensionException.php'
-	),
-	'Monolog\\Handler\\MongoDBHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/MongoDBHandler.php'
-	),
-	'Monolog\\Handler\\NativeMailerHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/NativeMailerHandler.php'
-	),
-	'Monolog\\Handler\\NewRelicHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/NewRelicHandler.php'
-	),
-	'Monolog\\Handler\\NoopHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/NoopHandler.php'
-	),
-	'Monolog\\Handler\\NullHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/NullHandler.php'
-	),
-	'Monolog\\Handler\\OverflowHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/OverflowHandler.php'
-	),
-	'Monolog\\Handler\\PHPConsoleHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/PHPConsoleHandler.php'
-	),
-	'Monolog\\Handler\\ProcessHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/ProcessHandler.php'
-	),
-	'Monolog\\Handler\\ProcessableHandlerInterface' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/ProcessableHandlerInterface.php'
-	),
-	'Monolog\\Handler\\ProcessableHandlerTrait' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/ProcessableHandlerTrait.php'
-	),
-	'Monolog\\Handler\\PsrHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/PsrHandler.php'
-	),
-	'Monolog\\Handler\\PushoverHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/PushoverHandler.php'
-	),
-	'Monolog\\Handler\\RedisHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/RedisHandler.php'
-	),
-	'Monolog\\Handler\\RedisPubSubHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/RedisPubSubHandler.php'
-	),
-	'Monolog\\Handler\\RollbarHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/RollbarHandler.php'
-	),
-	'Monolog\\Handler\\RotatingFileHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/RotatingFileHandler.php'
-	),
-	'Monolog\\Handler\\SamplingHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SamplingHandler.php'
-	),
-	'Monolog\\Handler\\SendGridHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SendGridHandler.php'
-	),
-	'Monolog\\Handler\\SlackHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SlackHandler.php'
-	),
-	'Monolog\\Handler\\SlackWebhookHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SlackWebhookHandler.php'
-	),
-	'Monolog\\Handler\\Slack\\SlackRecord' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/Slack/SlackRecord.php'
-	),
-	'Monolog\\Handler\\SocketHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SocketHandler.php'
-	),
-	'Monolog\\Handler\\SqsHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SqsHandler.php'
-	),
-	'Monolog\\Handler\\StreamHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/StreamHandler.php'
-	),
-	'Monolog\\Handler\\SwiftMailerHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SwiftMailerHandler.php'
-	),
-	'Monolog\\Handler\\SymfonyMailerHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SymfonyMailerHandler.php'
-	),
-	'Monolog\\Handler\\SyslogHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SyslogHandler.php'
-	),
-	'Monolog\\Handler\\SyslogUdpHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SyslogUdpHandler.php'
-	),
-	'Monolog\\Handler\\SyslogUdp\\UdpSocket' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/SyslogUdp/UdpSocket.php'
-	),
-	'Monolog\\Handler\\TelegramBotHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/TelegramBotHandler.php'
-	),
-	'Monolog\\Handler\\TestHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/TestHandler.php'
-	),
-	'Monolog\\Handler\\WebRequestRecognizerTrait' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/WebRequestRecognizerTrait.php'
-	),
-	'Monolog\\Handler\\WhatFailureGroupHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/WhatFailureGroupHandler.php'
-	),
-	'Monolog\\Handler\\ZendMonitorHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Handler/ZendMonitorHandler.php'
-	),
-	'Monolog\\LogRecord' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/LogRecord.php'
-	),
-	'Monolog\\Logger' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Logger.php'
-	),
-	'Monolog\\Processor\\GitProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/GitProcessor.php'
-	),
-	'Monolog\\Processor\\HostnameProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/HostnameProcessor.php'
-	),
-	'Monolog\\Processor\\IntrospectionProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/IntrospectionProcessor.php'
-	),
-	'Monolog\\Processor\\MemoryPeakUsageProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/MemoryPeakUsageProcessor.php'
-	),
-	'Monolog\\Processor\\MemoryProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/MemoryProcessor.php'
-	),
-	'Monolog\\Processor\\MemoryUsageProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/MemoryUsageProcessor.php'
-	),
-	'Monolog\\Processor\\MercurialProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/MercurialProcessor.php'
-	),
-	'Monolog\\Processor\\ProcessIdProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/ProcessIdProcessor.php'
-	),
-	'Monolog\\Processor\\ProcessorInterface' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/ProcessorInterface.php'
-	),
-	'Monolog\\Processor\\PsrLogMessageProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/PsrLogMessageProcessor.php'
-	),
-	'Monolog\\Processor\\TagProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/TagProcessor.php'
-	),
-	'Monolog\\Processor\\UidProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/UidProcessor.php'
-	),
-	'Monolog\\Processor\\WebProcessor' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Processor/WebProcessor.php'
-	),
-	'Monolog\\Registry' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Registry.php'
-	),
-	'Monolog\\ResettableInterface' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/ResettableInterface.php'
-	),
-	'Monolog\\SignalHandler' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/SignalHandler.php'
-	),
-	'Monolog\\Test\\TestCase' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Test/TestCase.php'
-	),
-	'Monolog\\Utils' => array(
-		'version' => '2.10.0.0',
-		'path'    => $vendorDir . '/monolog/monolog/src/Monolog/Utils.php'
-	),
 	'PHP_Autoloader' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-php-autoloader.php'
 	),
 	'Path_Processor' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-path-processor.php'
 	),
 	'Plugin_Locator' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-plugin-locator.php'
 	),
 	'Plugins_Handler' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-plugins-handler.php'
 	),
-	'Psr\\Log\\AbstractLogger' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/AbstractLogger.php'
-	),
-	'Psr\\Log\\InvalidArgumentException' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/InvalidArgumentException.php'
-	),
-	'Psr\\Log\\LogLevel' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/LogLevel.php'
-	),
-	'Psr\\Log\\LoggerAwareInterface' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/LoggerAwareInterface.php'
-	),
-	'Psr\\Log\\LoggerAwareTrait' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/LoggerAwareTrait.php'
-	),
-	'Psr\\Log\\LoggerInterface' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/LoggerInterface.php'
-	),
-	'Psr\\Log\\LoggerTrait' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/LoggerTrait.php'
-	),
-	'Psr\\Log\\NullLogger' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/NullLogger.php'
-	),
-	'Psr\\Log\\Test\\DummyTest' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/Test/DummyTest.php'
-	),
-	'Psr\\Log\\Test\\LoggerInterfaceTest' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php'
-	),
-	'Psr\\Log\\Test\\TestLogger' => array(
-		'version' => '1.1.4.0',
-		'path'    => $vendorDir . '/psr/log/Psr/Log/Test/TestLogger.php'
-	),
 	'QuadLayers\\PluginFeedback\\AjaxHandler' => array(
-		'version' => '1.0.9.0',
+		'version' => 'dev-php7.2',
 		'path'    => $vendorDir . '/franmastromarino/wp-plugin-feedback/src/AjaxHandler.php'
 	),
 	'QuadLayers\\PluginFeedback\\Client' => array(
-		'version' => '1.0.9.0',
+		'version' => 'dev-php7.2',
 		'path'    => $vendorDir . '/franmastromarino/wp-plugin-feedback/src/Client.php'
 	),
 	'QuadLayers\\PluginFeedback\\Collector' => array(
-		'version' => '1.0.9.0',
+		'version' => 'dev-php7.2',
 		'path'    => $vendorDir . '/franmastromarino/wp-plugin-feedback/src/Collector.php'
 	),
 	'QuadLayers\\PluginFeedback\\Load' => array(
-		'version' => '1.0.9.0',
+		'version' => 'dev-php7.2',
 		'path'    => $vendorDir . '/franmastromarino/wp-plugin-feedback/src/Load.php'
 	),
 	'QuadLayers\\PluginFeedback\\Request' => array(
-		'version' => '1.0.9.0',
+		'version' => 'dev-php7.2',
 		'path'    => $vendorDir . '/franmastromarino/wp-plugin-feedback/src/Request.php'
 	),
 	'QuadLayers\\PluginFeedback\\Scripts' => array(
-		'version' => '1.0.9.0',
+		'version' => 'dev-php7.2',
 		'path'    => $vendorDir . '/franmastromarino/wp-plugin-feedback/src/Scripts.php'
 	),
 	'QuadLayers\\PluginFeedback\\Validator' => array(
-		'version' => '1.0.9.0',
+		'version' => 'dev-php7.2',
 		'path'    => $vendorDir . '/franmastromarino/wp-plugin-feedback/src/Validator.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Entities\\Settings\\Base' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/api/entities/settings/class-base.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Entities\\Settings\\Get' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/api/entities/settings/class-get.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Entities\\Settings\\Post' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/api/entities/settings/class-post.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Entities\\Settings\\Routes_Library' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/api/entities/settings/class-routes-library.php'
 	),
 	'QuadLayers\\QLSE\\Api\\Route' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/api/interface-route.php'
 	),
 	'QuadLayers\\QLSE\\Controllers\\Backend' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/controllers/class-backend.php'
 	),
 	'QuadLayers\\QLSE\\Controllers\\Frontend' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/controllers/class-frontend.php'
 	),
 	'QuadLayers\\QLSE\\Controllers\\Gutenberg' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/controllers/class-gutenberg.php'
 	),
 	'QuadLayers\\QLSE\\Controllers\\Settings' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/controllers/class-settings.php'
 	),
 	'QuadLayers\\QLSE\\Entity\\Settings' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/entity/class-settings.php'
 	),
 	'QuadLayers\\QLSE\\Helpers' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/class-helpers.php'
 	),
 	'QuadLayers\\QLSE\\Models\\Settings' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/models/class-settings.php'
 	),
 	'QuadLayers\\QLSE\\Plugin' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/class-plugin.php'
 	),
 	'QuadLayers\\QLSE\\Services\\Entity_Options' => array(
-		'version' => '2.5.6.0',
+		'version' => '2.5.7.0',
 		'path'    => $baseDir . '/lib/services/class-entity-options.php'
 	),
 	'QuadLayers\\WP_Dashboard_Widget_News\\Load' => array(
@@ -859,15 +355,15 @@ return array(
 		'path'    => $baseDir . '/jetpack_vendor/quadlayers/wp-plugin-table-links/src/Load.php'
 	),
 	'Shutdown_Handler' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-shutdown-handler.php'
 	),
 	'Version_Loader' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-version-loader.php'
 	),
 	'Version_Selector' => array(
-		'version' => '5.0.9',
+		'version' => '5.0.10',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/class-version-selector.php'
 	),
 );

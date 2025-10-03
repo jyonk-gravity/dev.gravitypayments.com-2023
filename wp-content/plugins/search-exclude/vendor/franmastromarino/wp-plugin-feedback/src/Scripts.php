@@ -5,8 +5,11 @@ namespace QuadLayers\PluginFeedback;
 class Scripts
 {
 
+    /** @var Scripts|null */
     public static $instance;
+    /** @var array */
     public static $plugins;
+    /** @var array */
     public static $options;
 
     private function __construct(array $plugins = [], array $options = [])

@@ -1060,12 +1060,32 @@ class ShortPixelRegexParser {
                 SHORTPIXEL_AI_DEBUG && $this->logger->log("REPLACE SRCSET abort - excluded: " . $srcsetItem);
                 return $srcset;
             }
-            if(strpos($srcsetItem, $aiUrlBase) !== false || strpos($srcsetItem, $aiUrlBaseAmazon) !== false || strpos($srcsetItem, 'data:image/') === 0) {
+            if(
+                strpos($srcsetItem, $aiUrlBase) !== false
+                || (!empty($aiUrlBaseAmazon) && strpos($srcsetItem, $aiUrlBaseAmazon) !== false)
+                || strpos($srcsetItem, 'data:image/') === 0
+            ) {
                 SHORTPIXEL_AI_DEBUG && $this->logger->log("REPLACE SRCSET abort - AI url: " . $srcsetItem);
                 return $srcset; //already parsed by the hook.
             }
-            $prefix = strpos($aiUrl, 'http') === 0 ? '' : 'http:';
-            $aiSrcsetItems[] = $prefix . $aiUrl .'/' . ShortPixelUrlTools::absoluteUrl(trim($srcsetItem));
+// now we get ugly cdn url like this:
+// srcset="https://cdn.shortpixel.ai/spai/q_lossy+ret_img+to_webp/https://calin.shortpixel.com/wp-content/uploads/2025/02/image00031-1024x576.jpg 1024w
+// so we need to strip scheme from middle of url(origin) https://cdn.shortpixel.ai/spai/.../https://....
+            $parts = explode(' ', $srcsetItem, 2);
+            $url   = trim($parts[0]);
+            $desc  = isset($parts[1]) ? ' ' . trim($parts[1]) : '';
+
+            $abs = ShortPixelUrlTools::absoluteUrl($url);
+
+            $u = parse_url($abs);
+            $host  = isset($u['host']) ? $u['host'] : '';
+            $path  = isset($u['path']) ? $u['path'] : '';
+            $query = isset($u['query']) ? ('?' . $u['query']) : '';
+
+            $absNoScheme = $host . $path . $query;
+
+            $prefix = (strpos($aiUrl, 'http') === 0) ? '' : 'http:';
+            $aiSrcsetItems[] = $prefix . $aiUrl . '/' . $absNoScheme . $desc;
         }
         return implode(', ', $aiSrcsetItems);
     }

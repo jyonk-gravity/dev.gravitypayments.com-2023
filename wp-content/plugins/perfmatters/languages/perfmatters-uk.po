@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2025-06-17 13:53-0700\n"
-"PO-Revision-Date: 2025-06-18 18:47+0300\n"
+"POT-Creation-Date: 2025-08-26 15:49-0700\n"
+"PO-Revision-Date: 2025-08-28 18:13+0300\n"
 "Last-Translator: Irina\n"
 "Language-Team: \n"
 "Language: uk_UA\n"
@@ -79,31 +79,55 @@ msgstr "Ліцензію не вдалося вилучити."
 msgid "Used CSS cleared for all network sites."
 msgstr "Використаний CSS очищено для всіх сайтів мережі."
 
-#: inc/CLI.php:105 inc/classes/CSS.php:786 inc/classes/CSS.php:826
+#: inc/CLI.php:105 inc/classes/CSS.php:793 inc/classes/CSS.php:833
 msgid "Used CSS cleared."
 msgstr "Використані CSS очищено."
 
-#: inc/CLI.php:124
+#: inc/CLI.php:126
+msgid "Minified CSS cleared for all network sites."
+msgstr "Мініфікований CSS очищено для всіх сайтів мережі."
+
+#: inc/CLI.php:130 inc/classes/CSS.php:845
+msgid "Minified CSS cleared."
+msgstr "Мініфікований CSS очищено."
+
+#: inc/CLI.php:151
+msgid "Minified JS cleared for all network sites."
+msgstr "Мініфікований CSS очищено для всіх сайтів мережі."
+
+#: inc/CLI.php:155 inc/classes/JS.php:344
+msgid "Minified JS cleared."
+msgstr "Мініфікований JS очищено."
+
+#: inc/CLI.php:176
+msgid "Local Fonts cleared for all network sites."
+msgstr "Локальні шрифти очищено для всіх сайтів мережі."
+
+#: inc/CLI.php:180 inc/classes/Fonts.php:223
+msgid "Local fonts cleared."
+msgstr "Локальні шрифти очищено."
+
+#: inc/CLI.php:199
 msgid "File not found."
 msgstr "Файл не знайдено."
 
-#: inc/CLI.php:131
+#: inc/CLI.php:206
 msgid "Please use a valid .json file."
 msgstr "Використайте дійсний файл .json."
 
-#: inc/CLI.php:144
+#: inc/CLI.php:219
 msgid "Settings imported."
 msgstr "Налаштування імпортовано."
 
-#: inc/CLI.php:163 inc/CLI.php:199
+#: inc/CLI.php:238 inc/CLI.php:274
 msgid "Option not found."
 msgstr "Параметр не знайдено."
 
-#: inc/CLI.php:180
+#: inc/CLI.php:255
 msgid "Option enabled."
 msgstr "Параметр увімкнено."
 
-#: inc/CLI.php:215
+#: inc/CLI.php:290
 msgid "Option disabled."
 msgstr "Параметри вимкнено."
 
@@ -164,7 +188,6 @@ msgid "Support"
 msgstr "Підтримка"
 
 #: inc/admin.php:75
-#, no-php-format
 msgid "Get 25% off our social sharing plugin."
 msgstr ""
 "Отримайте знижку 25% на наш плагін для обміну інформацією в соцмережах."
@@ -213,22 +236,18 @@ msgstr "Доступ заборонено."
 msgid "Nonce is invalid."
 msgstr "Nonce недійсний."
 
-#: inc/classes/CSS.php:752 inc/classes/CSS.php:766 inc/classes/Meta.php:85
+#: inc/classes/CSS.php:759 inc/classes/CSS.php:773 inc/classes/Meta.php:85
 #: inc/settings.php:895 inc/settings.php:904
 msgid "Clear Used CSS"
 msgstr "Очистити використані CSS"
 
-#: inc/classes/CSS.php:752
+#: inc/classes/CSS.php:759
 msgid "All"
 msgstr "Всі"
 
-#: inc/classes/CSS.php:766
+#: inc/classes/CSS.php:773
 msgid "Current"
 msgstr "Поточний"
-
-#: inc/classes/CSS.php:838
-msgid "Minified CSS cleared."
-msgstr "Мінімізований CSS очищено."
 
 #: inc/classes/DatabaseOptimizer.php:71
 msgid "Database optimization is running in the background."
@@ -334,14 +353,6 @@ msgstr "неоптимізовані таблиці знайдено"
 msgid "Database scan completed."
 msgstr "Сканування БД завершено."
 
-#: inc/classes/Fonts.php:216
-msgid "Local fonts cleared."
-msgstr "Локальні шрифти очищено."
-
-#: inc/classes/JS.php:344
-msgid "Minified JS cleared."
-msgstr "Мінімізований JS очищено."
-
 #: inc/classes/LazyLoad.php:171
 msgid "video"
 msgstr "відео"
@@ -384,11 +395,11 @@ msgstr "Мета-параметри не очищено."
 
 #: inc/classes/Minify.php:150
 msgid "Clear Minified JS/CSS"
-msgstr "Очистити мінімізований JS/CSS"
+msgstr "Очистити мініфіковані JS/CSS"
 
 #: inc/classes/Minify.php:170
 msgid "Minified JS/CSS cleared."
-msgstr "Мінімізовані JS/CSS очищено."
+msgstr "Мініфіковані JS/CSS очищено."
 
 #: inc/functions.php:104
 #, php-format
@@ -405,8 +416,8 @@ msgstr "У вас немає дозволу на запити до REST API."
 msgid "Comments are disabled."
 msgstr "Коментарі відключені."
 
-#: inc/functions.php:615 inc/functions.php:635 inc/functions.php:1271
-#: inc/functions_script_manager.php:1536 inc/functions_script_manager.php:1544
+#: inc/functions.php:615 inc/functions.php:635 inc/functions.php:1276
+#: inc/functions_script_manager.php:1541 inc/functions_script_manager.php:1549
 msgid "Perfmatters Warning"
 msgstr "Попередження Perfmatters"
 
@@ -426,11 +437,11 @@ msgstr ""
 "AUTOSAVE_INTERVAL вже ввімкнено десь на вашому сайті. Ми рекомендуємо "
 "ввімкнути цю функцію лише в одному місці."
 
-#: inc/functions.php:1063 inc/settings.php:444
+#: inc/functions.php:1068 inc/settings.php:444
 msgid "This has been disabled."
 msgstr "Це було відключено."
 
-#: inc/functions.php:1272
+#: inc/functions.php:1277
 msgid "Local Analytics is enabled but no Tracking ID is set."
 msgstr "Локальна аналітика ввімкнена, але ID відстеження не встановлено."
 
@@ -623,17 +634,17 @@ msgstr "Regex (регулярні вирази)"
 msgid "Exceptions"
 msgstr "Винятки"
 
-#: inc/functions_script_manager.php:1537 inc/script_manager.php:357
+#: inc/functions_script_manager.php:1542 inc/script_manager.php:357
 msgid "MU plugin version mismatch."
 msgstr "Невідповідність версії плагіна MU."
 
-#: inc/functions_script_manager.php:1537 inc/functions_script_manager.php:1545
+#: inc/functions_script_manager.php:1542 inc/functions_script_manager.php:1550
 #: inc/script_manager.php:194 inc/script_manager.php:328
 #: inc/script_manager.php:340 inc/settings.php:2840
 msgid "View Documentation"
 msgstr "Дивитись документацію"
 
-#: inc/functions_script_manager.php:1545 inc/script_manager.php:366
+#: inc/functions_script_manager.php:1550 inc/script_manager.php:366
 msgid "MU plugin file not found."
 msgstr "Файл плагіна MU не знайдено."
 
@@ -653,23 +664,23 @@ msgstr "Видалити ліцензію"
 msgid "Save or remove your license key."
 msgstr "Збережіть або вилучіть ліцензійний ключ."
 
-#: inc/license.php:112 inc/license.php:119
+#: inc/license.php:112 inc/license.php:121
 msgid "Activate License"
 msgstr "Активувати ліцензію"
 
-#: inc/license.php:115
+#: inc/license.php:116
 msgid "Deactivate License"
 msgstr "Деактивувати ліцензію"
 
-#: inc/license.php:116
+#: inc/license.php:118
 msgid "License is activated."
 msgstr "Ліцензія активована."
 
-#: inc/license.php:120
+#: inc/license.php:122
 msgid "License is not activated."
 msgstr "Ліцензія не активована."
 
-#: inc/license.php:123
+#: inc/license.php:125
 msgid ""
 "Unlimited License needed for use in a multisite environment. Please contact "
 "support to upgrade."
@@ -677,23 +688,23 @@ msgstr ""
 "Для використання в багатосайтовому середовищі потрібна необмежена ліцензія. "
 "Щоб оновити, зверніться до служби підтримки."
 
-#: inc/license.php:132
+#: inc/license.php:134
 msgid "License Status"
 msgstr "Статус ліцензії"
 
-#: inc/license.php:137
+#: inc/license.php:139
 msgid "Renew Your License for Updates + Support!"
 msgstr "Поновіть ліцензію на оновлення + підтримка!"
 
-#: inc/license.php:146
+#: inc/license.php:148
 msgid "Licenses Used"
 msgstr "Ліцензії, які використовуються"
 
-#: inc/license.php:154
+#: inc/license.php:156
 msgid "Expiration Date"
 msgstr "Дійсна до"
 
-#: inc/license.php:155
+#: inc/license.php:157
 msgid "Lifetime"
 msgstr "Дійсна до"
 
@@ -1475,7 +1486,7 @@ msgstr ""
 
 #: inc/settings.php:767 inc/settings.php:776
 msgid "Clear Minified JS"
-msgstr "Очистити мінімізований JS"
+msgstr "Очистити мініфікований JS"
 
 #: inc/settings.php:778
 msgid "Remove all existing minified JavaScript files that have been generated."
@@ -1584,7 +1595,7 @@ msgstr ""
 
 #: inc/settings.php:949 inc/settings.php:958
 msgid "Clear Minified CSS"
-msgstr "Очистити мінімізований CSS"
+msgstr "Очистити мініфіковані CSS"
 
 #: inc/settings.php:960
 msgid "Remove all existing minified CSS files that have been generated."

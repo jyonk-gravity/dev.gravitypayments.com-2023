@@ -244,18 +244,21 @@ function perfmatters_settings() {
         )
     );
 
-    //remove comment urls
-    add_settings_field(
-        'remove_comment_urls', 
-        perfmatters_title(__('Remove Comment URLs', 'perfmatters'), 'remove_comment_urls', 'https://perfmatters.io/docs/remove-wordpress-comment-author-link'),
-        'perfmatters_print_input', 
-        'perfmatters_options', 
-        'perfmatters_options', 
-        array(
-            'id' => 'remove_comment_urls',
-            'tooltip' => __('Removes the WordPress comment author link and website field from blog posts.', 'perfmatters')
-        )
-    );
+    if(!defined('KADENCE_VERSION')) {
+
+        //remove comment urls
+        add_settings_field(
+            'remove_comment_urls', 
+            perfmatters_title(__('Remove Comment URLs', 'perfmatters'), 'remove_comment_urls', 'https://perfmatters.io/docs/remove-wordpress-comment-author-link'),
+            'perfmatters_print_input', 
+            'perfmatters_options', 
+            'perfmatters_options', 
+            array(
+                'id' => 'remove_comment_urls',
+                'tooltip' => __('Removes the WordPress comment author link and website field from blog posts.', 'perfmatters')
+            )
+        );
+    }
 
     //blank favicon
     add_settings_field(

@@ -5,10 +5,11 @@ namespace QuadLayers\PluginFeedback;
 class Collector
 {
 
-    private string $pluginBasename = '';
+    /** @var string */
+    private $pluginBasename = '';
 
     public function __construct(
-        string $pluginBasename = null
+        ?string $pluginBasename = null
     ) {
         $this->pluginBasename = $pluginBasename;
     }
