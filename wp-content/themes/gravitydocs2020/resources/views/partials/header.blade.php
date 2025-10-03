@@ -1,3 +1,11 @@
+@if ( get_field('show_alert_banner', 'option') )
+<section class="alert-banner">
+	<div class="alert-banner__message">
+		{!! get_field('alert_banner_message', 'option') !!}
+	</div>
+</section>
+@endif
+
 <header class="banner">
   <div class="container-fluid">
   	<div class="row align-items-center">
