@@ -1,3 +1,17 @@
+.alert-banner {
+	background: #FDC165;
+	display: flex;
+	justify-content: center;
+	padding: 8px 20px;
+}
+
+.alert-banner__message {
+	color: #253750;
+	font-size: 0.875rem;
+	font-weight: 600;
+	text-align: center;
+}
+
 .banner {
 	background: $navy;
 	padding: 1rem 0;
