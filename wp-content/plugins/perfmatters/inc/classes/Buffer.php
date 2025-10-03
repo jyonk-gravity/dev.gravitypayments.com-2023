@@ -90,4 +90,27 @@ class Buffer
         //default
         return 'after_setup_theme';
     }
+
+    //check viewport meta tag position in relation to the title tag
+    public static function check_viewport_position($html)
+    {   
+        //tag positions
+        $title_pos = strpos($html, '<title');
+        $viewport_pos = strpos($html, '<meta name="viewport"');
+
+        //both tags exist but are in the wrong order
+        if($title_pos !== false && $viewport_pos !== false && $title_pos < $viewport_pos) {
+
+            //match full viewport tag string
+            if(preg_match('/<meta[^>]+name=["\']viewport["\'][^>]*>/is', $html, $match)) {
+
+                //remove original viewport tag and add right before the title tag
+                $viewport_tag_string = $match[0];
+                $html = str_replace($match[0], '', $html);
+                $html = substr_replace($html, $match[0], $title_pos, 0);
+            }
+        }
+
+        return $html;
+    }
 }

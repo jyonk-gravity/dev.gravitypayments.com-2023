@@ -440,9 +440,13 @@ function perfmatters_blank_comments_template() {
 /* Remove Comment URLs
 /***********************************************************************/
 if(!empty($perfmatters_options['remove_comment_urls'])) {
-	add_filter('get_comment_author_link', 'perfmatters_remove_comment_author_link', 10, 3);
-	add_filter('get_comment_author_url', 'perfmatters_remove_comment_author_url');
-	add_filter('comment_form_default_fields', 'perfmatters_remove_website_field', 9999);
+	add_action('template_redirect', function() {
+		if(!defined('KADENCE_VERSION')) {
+			add_filter('get_comment_author_link', 'perfmatters_remove_comment_author_link', 10, 3);
+			add_filter('get_comment_author_url', 'perfmatters_remove_comment_author_url');
+			add_filter('comment_form_default_fields', 'perfmatters_remove_website_field', 9999);
+		}
+	});
 }
 
 function perfmatters_remove_comment_author_link($return, $author, $comment_ID) {

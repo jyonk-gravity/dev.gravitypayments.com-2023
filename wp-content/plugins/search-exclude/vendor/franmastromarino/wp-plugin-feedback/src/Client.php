@@ -4,9 +4,12 @@ namespace QuadLayers\PluginFeedback;
 
 class Client
 {
-    private Collector $collector;
-    private Validator $validator;
-    private Request $request;
+    /** @var Collector */
+    private $collector;
+    /** @var Validator */
+    private $validator;
+    /** @var Request */
+    private $request;
 
     /**
      * Constructor to initialize the client with plugin slug and version.

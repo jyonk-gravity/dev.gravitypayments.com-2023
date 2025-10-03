@@ -107,7 +107,7 @@ class Utilities
 
         //try pathless home url if nothing matched so far
         if(empty($count)) {
-            $parsed_url = trailingslashit(str_replace(parse_url(home_url())['path'], '', home_url()));
+            $parsed_url = trailingslashit(($path = wp_parse_url(home_url(), PHP_URL_PATH)) ? str_replace($path, '', home_url()) : home_url());
             $wp_content_relative_path = str_replace($parsed_url, '', content_url());
         }
 

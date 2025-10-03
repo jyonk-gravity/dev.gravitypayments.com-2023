@@ -4,7 +4,7 @@ Tags: image optimization, convert, webp, lazy load, avif
 Requires at least: 4.7
 Tested up to: 6.8
 Requires PHP: 5.6.40
-Stable tag: 3.11.0
+Stable tag: 3.11.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -248,6 +248,19 @@ This rule will only be applied by the New JS Engine (so you need to have the opt
 6. Advanced settings page
 
 == Changelog ==
+
+= 3.11.1 =
+
+🔧 The Compatibility & CDN Sync Update
+
+Release Date: September 24, 2025
+
+🛠️ Fixes & Improvements
+
+* PHP 8.4 Compatibility: Fixed a deprecation warning that appeared when running the plugin on PHP 8.4, ensuring smooth operation with the latest PHP versions.
+* Better CDN Replacement: Ensured that all image links (including those in both src and srcset attributes, when "BOTH" is selected from the settings) are now consistently replaced with their CDN counterparts for optimal delivery.
+
+Update now to improve compatibility and get consistent, CDN-powered performance across your site! 🚀
 
 = 3.11.0 =
 

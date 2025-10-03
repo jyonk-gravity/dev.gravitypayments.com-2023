@@ -2016,7 +2016,7 @@ class ShortPixelAI {
         $list = ($mode === 'excluded')
             ? $this->settings->exclusions->excluded_paths
             : $this->settings->exclusions->eager_paths;
-        if (strlen($list)) {
+        if (!empty($list)) {
             if ($this->isExcluded($url, $list) || $this->isExcluded($normalizedUrl, $list)) {
                 return true;
             }

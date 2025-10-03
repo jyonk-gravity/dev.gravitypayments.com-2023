@@ -137,6 +137,10 @@ class Preload
     public static function add_preloads($html) {
 
         if(!empty(self::$critical_images)) {
+
+            //check viewport position
+            $html = Buffer::check_viewport_position($html);
+
             self::add_critical_image_preloads($html, Utilities::clean_html($html));
         }
 
@@ -302,7 +306,7 @@ class Preload
         }
 
         //match all image formats
-        preg_match_all('#(<picture.*?)?<img([^>]+?)\/?>(?><\/picture>)?#is', $clean_html, $matches, PREG_SET_ORDER);
+        preg_match_all('#(<picture.*?)?(<img([^>]+?)\/?>)(?><\/picture>)?#is', $clean_html, $matches, PREG_SET_ORDER);
 
         if(!empty($matches)) {
 
@@ -338,9 +342,13 @@ class Preload
                     preg_match('#<source([^>]+?image\/(webp|avif)[^>]+?)\/?>#is', $match[0], $source);
 
                     if(!empty($source)) {
-                        if(self::generate_critical_image_preload($source[1])) {
+                        if(self::generate_critical_image_preload($source[1], $match[0])) {
                             $new_picture = str_replace('<picture', '<picture data-perfmatters-preload', $match[0]);
-                            $new_picture = str_replace('<img', '<img data-perfmatters-preload', $new_picture);
+                            if(!empty($match[3])) {
+                                $atts = Utilities::get_atts_array($match[3]);
+                                $atts['fetchpriority'] = 'high';
+                                $new_picture = str_replace($match[3], ' data-perfmatters-preload ' . Utilities::get_atts_string($atts), $new_picture);
+                            }
                             $html = str_replace($match[0], $new_picture, $html);
                             $count++;
                         }
@@ -349,10 +357,13 @@ class Preload
                 }
 
                 //img tag
-                if(!empty($match[2])) {
-                    if(self::generate_critical_image_preload($match[2])) {
-                        $new_image = str_replace('<img', '<img data-perfmatters-preload', $match[0]);
-                        $html = str_replace($match[0], $new_image, $html);
+                if(!empty($match[3])) {
+                    if(self::generate_critical_image_preload($match[3])) {
+                        $atts = Utilities::get_atts_array($match[3]);
+                        $atts['fetchpriority'] = 'high';
+                        $new_image = '<img data-perfmatters-preload ' .  Utilities::get_atts_string($atts) . '>';
+                        $new_match = str_replace($match[2], $new_image, $match[0]);
+                        $html = str_replace($match[0], $new_match, $html);
                         $count++;
                     }
                 }
@@ -365,10 +376,20 @@ class Preload
     }
 
     //generate preload link from att string
-    private static function generate_critical_image_preload($att_string) {
+    private static function generate_critical_image_preload($att_string, $picture_html = '') {
         if(!empty($att_string)) {
             $atts = Utilities::get_atts_array($att_string);
             $src = $atts['data-src'] ?? $atts['src'] ?? '';
+
+            //if picture, see if we can grab a src from the fallback img tag
+            if(empty($src) && !empty($picture_html)) {
+                if(preg_match('#<img([^>]+?)\/?>#is', $picture_html, $match)) {
+                    if(!empty($match[1])) {
+                        $img_atts = Utilities::get_atts_array($match[1]);
+                        $src = $img_atts['data-src'] ?? $img_atts['src'] ?? '';
+                    }
+                }
+            }
 
             //dont add if src was already used
             if(in_array($src, self::$used_srcs)) {
@@ -376,7 +397,7 @@ class Preload
             }
 
             //generate preload
-            self::$preloads_ready[] = '<link rel="preload" href="' . $src . '" as="image"' . (!empty($atts['srcset']) ? ' imagesrcset="' . $atts['srcset'] . '"' : '') . (!empty($atts['sizes']) ? ' imagesizes="' . $atts['sizes'] . '"' : '') . ' fetchpriority="high" />';
+            self::$preloads_ready[] = '<link rel="preload" href="' . $src . '" as="image"' . (!empty($atts['srcset']) ? ' imagesrcset="' . $atts['srcset'] . '"' : '') . (!empty($atts['sizes']) ? ' imagesizes="' . $atts['sizes'] . '"' : '') . ' fetchpriority="high">';
 
             //update preloads array
             self::$preloads_array[] = array('url' => $src, 'as' => 'image', 'srcset' => $atts['srcset'] ?? '', 'sizes' => $atts['sizes'] ?? '', 'priority' => 'high');

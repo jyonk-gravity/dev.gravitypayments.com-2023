@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Perfmatters\n"
-"POT-Creation-Date: 2025-06-17 13:53-0700\n"
-"PO-Revision-Date: 2025-06-18 18:48+0300\n"
+"POT-Creation-Date: 2025-08-26 15:49-0700\n"
+"PO-Revision-Date: 2025-08-28 18:13+0300\n"
 "Last-Translator: Irina\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: EDD_SL_Plugin_Updater.php:257
 #, php-format
 msgid "There is a new version of %1$s available."
-msgstr "There is a new version of %1$s available."
+msgstr "Доступна новая версия %1$s."
 
 #: EDD_SL_Plugin_Updater.php:263
 msgid "Contact your network administrator to install the update."
@@ -88,31 +88,55 @@ msgstr "Не удалось удалить лицензию."
 msgid "Used CSS cleared for all network sites."
 msgstr "Используемый CSS очищен для всех сайтов сети."
 
-#: inc/CLI.php:105 inc/classes/CSS.php:786 inc/classes/CSS.php:826
+#: inc/CLI.php:105 inc/classes/CSS.php:793 inc/classes/CSS.php:833
 msgid "Used CSS cleared."
 msgstr "Используемые CSS очищены."
 
-#: inc/CLI.php:124
+#: inc/CLI.php:126
+msgid "Minified CSS cleared for all network sites."
+msgstr "Минифицированый CSS очищен для всех сайтов сети."
+
+#: inc/CLI.php:130 inc/classes/CSS.php:845
+msgid "Minified CSS cleared."
+msgstr "Очищен минифицированный CSS."
+
+#: inc/CLI.php:151
+msgid "Minified JS cleared for all network sites."
+msgstr "Минифицированый JS очищен для всех сайтов сети."
+
+#: inc/CLI.php:155 inc/classes/JS.php:344
+msgid "Minified JS cleared."
+msgstr "Очищен минифицированный JS."
+
+#: inc/CLI.php:176
+msgid "Local Fonts cleared for all network sites."
+msgstr "Локальные шрифты очищены для всех сайтов сети."
+
+#: inc/CLI.php:180 inc/classes/Fonts.php:223
+msgid "Local fonts cleared."
+msgstr "Локальные шрифты очищены."
+
+#: inc/CLI.php:199
 msgid "File not found."
 msgstr "Файл не найден."
 
-#: inc/CLI.php:131
+#: inc/CLI.php:206
 msgid "Please use a valid .json file."
 msgstr "Используйте действительный .json файл."
 
-#: inc/CLI.php:144
+#: inc/CLI.php:219
 msgid "Settings imported."
 msgstr "Настройки импортированы."
 
-#: inc/CLI.php:163 inc/CLI.php:199
+#: inc/CLI.php:238 inc/CLI.php:274
 msgid "Option not found."
 msgstr "Параметр не найден."
 
-#: inc/CLI.php:180
+#: inc/CLI.php:255
 msgid "Option enabled."
 msgstr "Параметр включен."
 
-#: inc/CLI.php:215
+#: inc/CLI.php:290
 msgid "Option disabled."
 msgstr "Параметры отключен."
 
@@ -173,7 +197,6 @@ msgid "Support"
 msgstr "Поддержка"
 
 #: inc/admin.php:75
-#, no-php-format
 msgid "Get 25% off our social sharing plugin."
 msgstr "Получите скидку 25 % на наш плагин для обмена в соцсетях."
 
@@ -221,22 +244,18 @@ msgstr "Доступ запрещен."
 msgid "Nonce is invalid."
 msgstr "Nonce недействителен."
 
-#: inc/classes/CSS.php:752 inc/classes/CSS.php:766 inc/classes/Meta.php:85
+#: inc/classes/CSS.php:759 inc/classes/CSS.php:773 inc/classes/Meta.php:85
 #: inc/settings.php:895 inc/settings.php:904
 msgid "Clear Used CSS"
 msgstr "Очистить используемые CSS"
 
-#: inc/classes/CSS.php:752
+#: inc/classes/CSS.php:759
 msgid "All"
 msgstr "Все"
 
-#: inc/classes/CSS.php:766
+#: inc/classes/CSS.php:773
 msgid "Current"
 msgstr "Текущий"
-
-#: inc/classes/CSS.php:838
-msgid "Minified CSS cleared."
-msgstr "Очищен минифицированный CSS."
 
 #: inc/classes/DatabaseOptimizer.php:71
 msgid "Database optimization is running in the background."
@@ -342,14 +361,6 @@ msgstr "неоптимизированные таблицы найдены"
 msgid "Database scan completed."
 msgstr "Сканирование БД завершено."
 
-#: inc/classes/Fonts.php:216
-msgid "Local fonts cleared."
-msgstr "Локальные шрифты очищены."
-
-#: inc/classes/JS.php:344
-msgid "Minified JS cleared."
-msgstr "Очищен минифицированный JS."
-
 #: inc/classes/LazyLoad.php:171
 msgid "video"
 msgstr "видео"
@@ -412,8 +423,8 @@ msgstr "У вас нет разрешения на запросы к REST API."
 msgid "Comments are disabled."
 msgstr "Комментарии отключены."
 
-#: inc/functions.php:615 inc/functions.php:635 inc/functions.php:1271
-#: inc/functions_script_manager.php:1536 inc/functions_script_manager.php:1544
+#: inc/functions.php:615 inc/functions.php:635 inc/functions.php:1276
+#: inc/functions_script_manager.php:1541 inc/functions_script_manager.php:1549
 msgid "Perfmatters Warning"
 msgstr "Предупреждение Perfmatters"
 
@@ -433,11 +444,11 @@ msgstr ""
 "AUTOSAVE-INTERVAL уже включен где-то еще на вашем сайте. Мы предлагаем "
 "включить эту функцию только в одном месте."
 
-#: inc/functions.php:1063 inc/settings.php:444
+#: inc/functions.php:1068 inc/settings.php:444
 msgid "This has been disabled."
 msgstr "Это было отключено."
 
-#: inc/functions.php:1272
+#: inc/functions.php:1277
 msgid "Local Analytics is enabled but no Tracking ID is set."
 msgstr "Локальная аналитика включена, но ID отслеживания не установлен."
 
@@ -629,17 +640,17 @@ msgstr "Regex (регулярные выражения)"
 msgid "Exceptions"
 msgstr "Исключения"
 
-#: inc/functions_script_manager.php:1537 inc/script_manager.php:357
+#: inc/functions_script_manager.php:1542 inc/script_manager.php:357
 msgid "MU plugin version mismatch."
 msgstr "Несоответствие версии плагина MU."
 
-#: inc/functions_script_manager.php:1537 inc/functions_script_manager.php:1545
+#: inc/functions_script_manager.php:1542 inc/functions_script_manager.php:1550
 #: inc/script_manager.php:194 inc/script_manager.php:328
 #: inc/script_manager.php:340 inc/settings.php:2840
 msgid "View Documentation"
 msgstr "Посмотреть документацию"
 
-#: inc/functions_script_manager.php:1545 inc/script_manager.php:366
+#: inc/functions_script_manager.php:1550 inc/script_manager.php:366
 msgid "MU plugin file not found."
 msgstr "Файл плагина MU не найден."
 
@@ -659,23 +670,23 @@ msgstr "Удалить лицензию"
 msgid "Save or remove your license key."
 msgstr "Сохранить или удалить лицензионный ключ."
 
-#: inc/license.php:112 inc/license.php:119
+#: inc/license.php:112 inc/license.php:121
 msgid "Activate License"
 msgstr "Активировать лицензию"
 
-#: inc/license.php:115
+#: inc/license.php:116
 msgid "Deactivate License"
 msgstr "Деактивировать лицензию"
 
-#: inc/license.php:116
+#: inc/license.php:118
 msgid "License is activated."
 msgstr "Лицензия активирована."
 
-#: inc/license.php:120
+#: inc/license.php:122
 msgid "License is not activated."
 msgstr "Лицензия не активирована."
 
-#: inc/license.php:123
+#: inc/license.php:125
 msgid ""
 "Unlimited License needed for use in a multisite environment. Please contact "
 "support to upgrade."
@@ -683,23 +694,23 @@ msgstr ""
 "Неограниченная лицензия, необходима для использования в мультисайтовой "
 "среде. Пожалуйста, обратитесь в службу поддержки для обновления."
 
-#: inc/license.php:132
+#: inc/license.php:134
 msgid "License Status"
 msgstr "Статус лицензии"
 
-#: inc/license.php:137
+#: inc/license.php:139
 msgid "Renew Your License for Updates + Support!"
 msgstr "Продлить лицензию на обновления + поддержку!"
 
-#: inc/license.php:146
+#: inc/license.php:148
 msgid "Licenses Used"
 msgstr "Используемые лицензии"
 
-#: inc/license.php:154
+#: inc/license.php:156
 msgid "Expiration Date"
 msgstr "Действительна до"
 
-#: inc/license.php:155
+#: inc/license.php:157
 msgid "Lifetime"
 msgstr "Время существования"
 
