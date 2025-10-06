@@ -4,7 +4,7 @@
 Plugin Name: Advanced Custom Fields: Image Aspect Ratio Crop
 Plugin URI: https://github.com/joppuyo/acf-image-aspect-ratio-crop
 Description: ACF field that allows user to crop image to a specific aspect ratio or pixel size
-Version: 6.0.3
+Version: 6.0.5
 Author: Johannes Siipola
 Author URI: https://siipo.la
 License: GPLv2 or later
@@ -60,7 +60,9 @@ class npx_acf_plugin_image_aspect_ratio_crop
 
         // set text domain
         // https://codex.wordpress.org/Function_Reference/load_plugin_textdomain
-        load_plugin_textdomain('acf-image-aspect-ratio-crop');
+        add_action('init', function () {
+            load_plugin_textdomain('acf-image-aspect-ratio-crop');
+        });
 
         add_action('plugins_loaded', [$this, 'initialize_settings']);
 
