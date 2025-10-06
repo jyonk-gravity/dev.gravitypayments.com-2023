@@ -317,17 +317,21 @@ final class Settings {
     }
 
     // Check if top level and slug already exists
-    if ( ! isset( $sections['parent_slug'] ) ) {
-      if ( in_array( $section['menu_slug'], array_column( array_filter( $sections, fn( $s ) => ! isset( $s['parent_slug'] ) ), 'menu_slug' ) ) ) {
+    if ( ! isset( $section['parent_slug'] ) ) {
+      $exists = array_filter( $sections, function ( $s ) use ( $section ) {
+        return $s['menu_slug'] === $section['menu_slug'] 
+          && $s['id'] === $section['id'];
+      } );
+      if ( ! empty( $exists ) ) {
         return false;
       }
 
     // Check if submenu and same slug exists with same parent
     } else {
       $exists = array_filter( $sections, function ( $s ) use ( $section ) {
-        return isset( $s['parent_slug'] ) 
-          && $s['parent_slug'] === $section['parent_slug'] 
-          && $s['menu_slug'] === $section['menu_slug'];
+        return $s['parent_slug'] === $section['parent_slug'] 
+          && $s['menu_slug'] === $section['menu_slug']
+          && $s['id'] === $section['id'];
       } );
       if ( ! empty( $exists ) ) {
         return false;
@@ -418,6 +422,11 @@ final class Settings {
 
     if ( ! isset( $setting['option'] ) ) {
       $section = self::$instance->get_section( $setting['section'] );
+      if ( ! $section ) {
+        $message = "<p>Section <strong>{$setting['section']}</strong> does not exist.</p>";
+        self::$instance->add_admin_notice( 'error', $message );
+        return false;
+      }
       $setting['option'] = $section['option'];
     }
     
@@ -870,9 +879,9 @@ final class Settings {
             $admin_page['menu_title'],
             $admin_page['capability'],
             $admin_page['menu_slug'],
-            function () {
+            function () use ( $admin_page ) {
               echo '<div class="wrap">';
-                echo '<div id="mtphr-settings-app" namespace="' . self::$instance->get_id() . '">Test Page</div>'; // React App will be injected here
+                echo '<div id="mtphr-settings-app" data-id="' . self::$instance->get_id() . '" data-title="' . esc_attr( $admin_page['page_title'] ) . '"></div>'; // React App will be injected here
               echo '</div>';
             },
             isset( $admin_page['icon'] ) ? $admin_page['icon'] : null,
@@ -909,7 +918,7 @@ final class Settings {
       self::$instance->get_id() . 'Registry',
       self::$instance->settings_url . 'assets/build/mtphrSettingsRegistry.js',
       $asset_file['dependencies'],
-      $asset_file['version'],
+      filemtime( self::$instance->settings_dir . 'assets/build/mtphrSettingsRegistry.js' ),
       true
     );
 
@@ -921,13 +930,13 @@ final class Settings {
       self::$instance->get_id(),
       self::$instance->settings_url . 'assets/build/mtphrSettings.css',
       ['wp-components'],
-      $asset_file['version']
+      filemtime( self::$instance->settings_dir . 'assets/build/mtphrSettings.css' ),
     );
     wp_enqueue_script(
       self::$instance->get_id(),
       self::$instance->settings_url . 'assets/build/mtphrSettings.js',
       array_unique( array_merge( $asset_file['dependencies'], ['wp-element', 'wp-data', 'wp-components', 'wp-notices'] ) ),
-      $asset_file['version'],
+      filemtime( self::$instance->settings_dir . 'assets/build/mtphrSettings.js' ),
       true
     ); 
     wp_add_inline_script( self::$instance->get_id(), self::$instance->get_id() . 'Vars = ' . json_encode( array(
