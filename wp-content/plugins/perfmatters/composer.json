@@ -1,7 +1,7 @@
 {
     "autoload": {
         "psr-4": {
-          "Perfmatters\\": "inc/classes"
+            "Perfmatters\\": "inc/classes"
         }
     },
     "require": {

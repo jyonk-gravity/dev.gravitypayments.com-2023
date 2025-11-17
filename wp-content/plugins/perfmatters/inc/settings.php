@@ -906,7 +906,7 @@ function perfmatters_settings() {
             'action' => 'clear_used_css',
             'title' => __('Clear Used CSS', 'perfmatters'),
             'class' => 'assets-remove_unused_css' . (empty($perfmatters_options['assets']['remove_unused_css']) ? ' hidden' : ''),
-            'tooltip' => __('Remove all existing unused CSS files that have been generated.', 'perfmatters')
+            'tooltip' => __('Remove all existing used CSS files that have been generated.', 'perfmatters')
         )
     );
 

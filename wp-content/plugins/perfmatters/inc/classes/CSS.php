@@ -110,6 +110,7 @@ class CSS
                 '/uploads/bb-plugin/cache/', //beaver builder
                 '/uploads/generateblocks/', //generateblocks
                 'offside.min.css', //generatepress
+                '/uploads/generatepress/fonts/',
                 '/et-cache/', //divi
                 '/widget-google-reviews/assets/css/public-main.css', //plugin for google reviews
                 'google-fonts', //google fonts
@@ -129,6 +130,9 @@ class CSS
                 'animations.min.css',
                 '/animations/'
             ));
+
+            //inline stylesheets
+            self::$data['rucss']['inline'] = apply_filters('perfmatters_rucss_inline_stylesheets', array());
 
             $used_css_string = '';
         }
@@ -178,16 +182,8 @@ class CSS
                     //need to generate used css
                     if(!$used_css_exists) {
 
-                        //get any custom set url
-                        $custom_url = apply_filters('perfmatters_local_stylesheet_url', !empty(Config::$options['assets']['rucss_cdn_url']) ? Config::$options['assets']['rucss_cdn_url'] : '');
-
-                        //prep local url
-                        $local_url = !empty($custom_url) ? trailingslashit($custom_url) : array(trailingslashit(home_url()), trailingslashit(site_url()));
-
-                        //get local stylesheet path
-                        $url = str_ireplace($local_url, '', explode('?', $atts_array['href'])[0]);
-        
-                        $file = Utilities::get_root_dir_path() . ltrim($url, '/');
+                        //get local stylesheet file path
+                        $file = self::get_local_stylesheet_path($atts_array['href']);
 
                         //make sure local file exists
                         if(file_exists($file)) {
@@ -229,7 +225,28 @@ class CSS
                     }
                 }
                 else {
-                    if(Utilities::match_in_array($stylesheet[0], self::$data['rucss']['async'])) {
+
+                    //inline fallback
+                    if(Utilities::match_in_array($stylesheet[0], self::$data['rucss']['inline'])) {
+
+                        //get local stylesheet file path
+                        $file = self::get_local_stylesheet_path($atts_array_new['href']);
+
+                        //make sure local file exists
+                        if(file_exists($file)) {
+
+                            //get used css from stylesheet
+                            $content = @file_get_contents($file);
+
+                            if($content) {
+                                $inline_style = '<style' . (!empty($atts_array_new['id']) ? ' id="' . $atts_array_new['id'] . '"' : '') . '>' . $content . '</style>';
+                                $html = str_replace($stylesheet[0], $inline_style, $html);
+                                continue;
+                            }
+                        }
+                    }
+                    //async fallback
+                    elseif(Utilities::match_in_array($stylesheet[0], self::$data['rucss']['async'])) {
                         $atts_array_new['media'] = 'print';
                         $atts_array_new['onload'] = 'this.media=\'all\';this.onload=null;';
                     }
@@ -425,6 +442,7 @@ class CSS
             '.elementor-motion-effects-layer',
             '.animated',
             '.elementor-animated-content',
+            '.gb-menu-container--mobile', //generateblocks
             '.splide-initialized', //splide
             '.splide',
             '.splide-slider',
@@ -455,6 +473,28 @@ class CSS
             self::$excluded_selectors = array_merge(self::$excluded_selectors, Config::$options['assets']['rucss_excluded_selectors']);
         }
         self::$excluded_selectors = apply_filters('perfmatters_rucss_excluded_selectors', self::$excluded_selectors);
+    }
+
+    //get local stylesheet file path from a stylesheet url
+    public static function get_local_stylesheet_path($stylesheet_url) {
+
+        if(!empty($stylesheet_url)) {
+
+            //get any custom set url
+            $custom_url = apply_filters('perfmatters_local_stylesheet_url', !empty(Config::$options['assets']['rucss_cdn_url']) ? Config::$options['assets']['rucss_cdn_url'] : '');
+
+            //prep local url
+            $local_url = !empty($custom_url) ? trailingslashit($custom_url) : array(trailingslashit(home_url()), trailingslashit(site_url()));
+
+            //get local stylesheet path
+            $url = str_ireplace($local_url, '', explode('?', $stylesheet_url)[0]);
+
+            $file = Utilities::get_root_dir_path() . ltrim($url, '/');
+
+            return $file;
+        }
+        
+        return false;
     }
 
     //remove unusde css from stylesheet

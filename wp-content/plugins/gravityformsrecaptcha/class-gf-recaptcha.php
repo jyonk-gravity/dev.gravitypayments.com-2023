@@ -11,6 +11,7 @@ use GFAPI;
 use GFCommon;
 use GFFormDisplay;
 use GFFormsModel;
+use Gravity_Forms\Gravity_Forms\Honeypot;
 use Gravity_Forms\Gravity_Forms_RECAPTCHA\Settings;
 
 // Include the Gravity Forms Add-On Framework.
@@ -32,6 +33,13 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * @since 1.7
 	 */
 	const RECAPTCHA_QUOTA_LIMIT_HIT = 'gf_recaptcha_quota_limit_hit';
+
+	/**
+	 * The status used to indicate that the Google Workspace session policy requires regular reauthentication.
+	 *
+	 * @since 2.1
+	 */
+    const POLICY_REAUTH_REQUIRED = 'disconnected (reauthentication required)';
 
 	/**
 	 * Contains an instance of this class, if available.
@@ -200,6 +208,7 @@ class GF_RECAPTCHA extends GFAddOn {
 		'disabled (quota limit)',
 		'disabled (token refresh in progress)',
 		'disabled (token refresh failed)',
+		self::POLICY_REAUTH_REQUIRED,
 	);
 
 	/**
@@ -298,8 +307,8 @@ class GF_RECAPTCHA extends GFAddOn {
 		// Register a custom metabox for the entry details page.
 		add_filter( 'gform_entry_detail_meta_boxes', array( $this, 'register_meta_box' ), 10, 3 );
 
-		add_filter( 'gform_entry_is_spam', array( $this, 'check_for_spam_entry' ), 10, 3 );
-		add_filter( 'gform_validation', array( $this, 'validate_submission' ) );
+		add_filter( 'gform_entry_is_spam', array( $this, 'check_for_spam_entry' ), 50, 3 );
+		add_filter( 'gform_validation', array( $this, 'validate_submission' ), 19 );
 
 		add_filter( 'gform_field_content', array( $this, 'update_captcha_field_settings_link' ), 10, 2 );
 		add_filter( 'gform_incomplete_submission_pre_save', array( $this, 'add_recaptcha_v3_input_to_draft' ), 10, 3 );
@@ -540,6 +549,10 @@ class GF_RECAPTCHA extends GFAddOn {
 			$support_url = GFCommon::get_support_url();
 		} else {
 			$support_url = 'https://www.gravityforms.com/open-support-ticket/';
+		}
+
+		if ( $this->init_error_status === self::POLICY_REAUTH_REQUIRED ) {
+			return esc_html__( 'Your Google Workspace session requires periodic reauthentication. Please reconnect the add-on, and contact your Google Workspace administrator if you need help with this policy.', 'gravityformsrecaptcha' );
 		}
 
 		/* translators: 1: Open link tag 2: Screen reader text opening span tag 3: Screen reader text closing span tag, external link span tags, and closing link tag */
@@ -956,7 +969,19 @@ class GF_RECAPTCHA extends GFAddOn {
 		$auth_response = $this->api->refresh_token( $plugin_settings['refresh_token'] );
 
 		if ( is_wp_error( $auth_response ) ) {
-			$this->log_error( __METHOD__ . '(): API access token failed to be refreshed; ' . $auth_response->get_error_message() );
+			$message = $auth_response->get_error_message();
+			$this->log_error( __METHOD__ . '(): API access token failed to be refreshed; ' . $message );
+			$refresh_lock_handler->release_lock();
+			$refresh_lock_handler->increment_rate_limit();
+			$this->init_error_status = str_contains( $message, 'invalid_rapt' ) ? self::POLICY_REAUTH_REQUIRED : 'disabled (token refresh failed)';
+
+			return false;
+		}
+
+		$decoded_response = json_decode( rgar( $auth_response, 'auth_payload' ), true );
+		$access_token     = rgar( $decoded_response, 'access_token' );
+		if ( empty( $access_token ) ) {
+			$this->log_error( __METHOD__ . '(): Access token failed to be refreshed; Response: ' . print_r( $auth_response, true ) );
 			$refresh_lock_handler->release_lock();
 			$refresh_lock_handler->increment_rate_limit();
 			$this->init_error_status = 'disabled (token refresh failed)';
@@ -964,16 +989,14 @@ class GF_RECAPTCHA extends GFAddOn {
 			return false;
 		}
 
-		$decoded_response = json_decode( rgar( $auth_response, 'auth_payload' ), true );
-
-		$plugin_settings['access_token']  = rgar( $decoded_response, 'access_token' );
+		$plugin_settings['access_token']  = $access_token;
 		$plugin_settings['refresh_token'] = rgar( $decoded_response, 'refresh_token' );
 		$plugin_settings['date_token']    = rgar( $decoded_response, 'created' );
 
 		// Save plugin settings.
 		$this->update_plugin_settings( $plugin_settings );
 		$this->log_debug( __METHOD__ . '(): API access token has been refreshed; Enterprise API Initialized.' );
-		$this->get_api_instance();
+		$this->get_api_instance( $plugin_settings );
 		$refresh_lock_handler->release_lock();
 		$refresh_lock_handler->reset_rate_limit();
 
@@ -1020,12 +1043,18 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * Get the Enterprise API instance.
 	 *
 	 * @since 1.7.0
+	 * @since 2.1.0 Added the optional $plugin_settings param.
+	 *
+	 * @param array $plugin_settings The plugin settings.
 	 *
 	 * @return RECAPTCHA_API
 	 */
-	public function get_api_instance() {
-		$plugin_settings = $this->get_plugin_settings();
-		$auth_data       = array(
+	public function get_api_instance( $plugin_settings = null ) {
+		if ( is_null( $plugin_settings ) ) {
+			$plugin_settings = $this->get_plugin_settings();
+		}
+
+		$auth_data = array(
 			'access_token'  => rgar( $plugin_settings, 'access_token' ),
 			'refresh_token' => rgar( $plugin_settings, 'refresh_token' ),
 			'project_id'    => rgar( $plugin_settings, 'project_id' ),
@@ -1302,7 +1331,7 @@ class GF_RECAPTCHA extends GFAddOn {
 	public function register_meta_box( $metaboxes, $entry, $form ) {
 		$score = $this->get_score_from_entry( $entry );
 
-		if ( ! $score ) {
+		if ( rgblank( $score ) ) {
 			return $metaboxes;
 		}
 
@@ -1377,6 +1406,10 @@ class GF_RECAPTCHA extends GFAddOn {
 		$is_spam = $this->is_spam_submission( $form, $entry );
 		$this->log_debug( __METHOD__ . '(): Is submission considered spam? ' . ( $is_spam ? 'Yes.' : 'No.' ) );
 
+		if ( $is_spam ) {
+			GFCommon::set_spam_filter( absint( rgar( $form, 'id' ) ), $this->get_short_title(), '' );
+		}
+
 		return $is_spam;
 	}
 
@@ -1403,7 +1436,7 @@ class GF_RECAPTCHA extends GFAddOn {
 			return false;
 		}
 
-		$threshold = $this->get_spam_score_threshold();
+		$threshold = $this->get_spam_score_threshold( $form );
 
 		return (float) $score <= (float) $threshold;
 	}
@@ -1420,7 +1453,7 @@ class GF_RECAPTCHA extends GFAddOn {
 	private function get_score_from_entry( $entry ) {
 		$score = rgar( $entry, "{$this->_slug}_score" );
 
-		if ( in_array( $score, $this->v3_disabled_states, true ) ) {
+		if ( rgblank( $score ) || in_array( $score, $this->v3_disabled_states, true ) ) {
 			return $score;
 		}
 
@@ -1447,6 +1480,7 @@ class GF_RECAPTCHA extends GFAddOn {
 			'disabled (quota limit)'               => __( 'Disabled (quota limit)', 'gravityformsrecaptcha' ),
 			'disabled (token refresh in progress)' => __( 'Disabled (token refresh in progress)', 'gravityformsrecaptcha' ),
 			'disabled (token refresh failed)'      => __( 'Disabled (token refresh failed)', 'gravityformsrecaptcha' ),
+			self::POLICY_REAUTH_REQUIRED           => __( 'Disconnected (reauthentication required)', 'gravityformsrecaptcha' ),
 		);
 
 		return rgar( $states, $meta_value, $meta_value );
@@ -1455,26 +1489,34 @@ class GF_RECAPTCHA extends GFAddOn {
 	/**
 	 * The score that determines whether the entry is spam.
 	 *
-	 * Hard-coded for now, but this will eventually be an option within the add-on.
-	 *
 	 * @since 1.0
 	 *
 	 * @return float
 	 */
-	private function get_spam_score_threshold() {
-		static $value;
-
-		if ( ! empty( $value ) ) {
-			return $value;
+	private function get_spam_score_threshold( $form ) {
+		$threshold = (float) $this->get_plugin_setting( 'score_threshold_v3' );
+		if ( empty( $threshold ) ) {
+			$threshold = 0.5;
 		}
 
-		$value = (float) $this->get_plugin_setting( 'score_threshold_v3' );
-		if ( empty( $value ) ) {
-			$value = 0.5;
+		$gform_recaptcha_spam_score_threshold_args = array( 'gform_recaptcha_spam_score_threshold', rgar( $form, 'id' ) );
+		if ( gf_has_filter( $gform_recaptcha_spam_score_threshold_args ) ) {
+			$this->log_debug( __METHOD__ . '(): Executing functions hooked to gform_recaptcha_spam_score_threshold.' );
+			/**
+			 * Allows filtering of the spam score threshold.
+			 *
+			 * @since 2.1
+			 *
+			 * @param float $threshold The spam score threshold.
+			 * @param array $form      The form currently being processed.
+			 */
+			$threshold = gf_apply_filters( $gform_recaptcha_spam_score_threshold_args, $threshold, $form );
+			$this->log_debug( __METHOD__ . '(): Completed gform_recaptcha_spam_score_threshold.' );
 		}
-		$this->log_debug( __METHOD__ . '(): ' . $value );
 
-		return $value;
+		$this->log_debug( __METHOD__ . '(): ' . $threshold );
+
+		return $threshold;
 	}
 
 	/**
@@ -1511,23 +1553,47 @@ class GF_RECAPTCHA extends GFAddOn {
 	 * Validate the form submission.
 	 *
 	 * @since 1.0
+	 * @since 2.1 Updated to skip validation if the form is already invalid, it's not the first or last page, or the honeypot failed validation.
 	 *
-	 * @param array $submission_data The submitted form data.
+	 * @param array $result The validation result, including the form.
 	 *
 	 * @return array
 	 */
-	public function validate_submission( $submission_data ) {
-		$this->log_debug( __METHOD__ . '(): Validating form (#' . rgars( $submission_data, 'form/id' ) . ') submission.' );
+	public function validate_submission( $result ) {
+		$form_id     = absint( rgars( $result, 'form/id' ) );
+		$source_page = (int) GFFormDisplay::get_source_page( $form_id );
+		$this->log_debug( __METHOD__ . sprintf( '(): Validating form (#%d; Page #%d) submission.', $form_id, $source_page ) );
 
-		if ( $this->should_skip_validation( rgar( $submission_data, 'form' ) ) ) {
+		if ( ! rgar( $result, 'is_valid' ) ) {
+			$this->log_debug( __METHOD__ . '(): Form is already invalid. Validation skipped.' );
+
+			return $result;
+		}
+
+		$form = rgar( $result, 'form' );
+		if ( $this->should_skip_validation( $form ) ) {
 			$this->log_debug( __METHOD__ . '(): Validation skipped.' );
 
-			return $submission_data;
+			return $result;
+		}
+
+		if ( $source_page !== 1 && ! GFFormDisplay::is_last_page( $form ) ) {
+			$this->log_debug( __METHOD__ . '(): Not the first or last page. Validation skipped.' );
+
+			return $result;
+		}
+
+		/** @var Honeypot\GF_Honeypot_Handler $honeypot_handler */
+		$honeypot_handler = GFForms::get_service_container()->get( Honeypot\GF_Honeypot_Service_Provider::GF_HONEYPOT_HANDLER );
+		if ( $honeypot_handler->is_honeypot_enabled( $form ) && ! $honeypot_handler->validate_honeypot( $form ) ) {
+			$this->log_debug( __METHOD__ . '(): Honeypot validation failed. Validation skipped.' );
+
+			return $result;
 		}
 
 		$this->log_debug( __METHOD__ . '(): Validating reCAPTCHA v3.' );
 
-		return $this->field->validation_check( $submission_data );
+		return $this->field->validation_check( $result );
 	}
 
 	/**

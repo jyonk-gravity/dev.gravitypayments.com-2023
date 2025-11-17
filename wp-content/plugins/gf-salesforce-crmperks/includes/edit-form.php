@@ -290,7 +290,6 @@ if(isset($objects[$object])){
   $str = $custom = $standard = '';
   ////echo json_encode($fields); die();
   //getting list of all fields for the selected form
-
   if(is_array($fields)) {
   foreach($fields as $field){ 
   if(isset($field['options']) && is_array($field['options']) && count($field['options'])>0){
@@ -425,19 +424,24 @@ account_sel.val(crm_account);
     SetFieldProperty('crm_account',setting.find('.sel_account').val());
   SetFieldProperty('crm_object',setting.find('.sel_object').val());
   // We add the Object choices in the list to the field choices.
-  field["choices"] = new Array();
-  
+  //InsertBulkChoices(choices)   //newChoice.key = GenerateUniqueFieldKey();``
+ // field["choices"] = new Array();
+ field.choices = new Array();
   div.find('li').each(function() {
   choice = new Choice();
   choice.text = $(this).data('label').toString();
   choice.value = $(this).data('value').toString();
   choice.isSelected = $(this).data('default')*1;
-
-  field["choices"].push(choice);
+if ( FieldIsChoiceType( field ) ) {
+        InsertFieldForChoice( choice, field );
+    }
+        field.choices.push( choice );
+ // field["choices"].push(choice);
   });
   // We update the field choices in the field display
-  UpdateFieldChoices(field.type);
-  LoadFieldChoices(field); 
+ // UpdateFieldChoices(field.type);
+  LoadFieldChoices( field );
+  RefreshSelectedFieldPreview();
   toggle_choices(obj);
   })
   //.unbind('change')

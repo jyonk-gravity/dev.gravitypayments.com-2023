@@ -1333,7 +1333,7 @@ include_once(self::$path . "templates/feed-account.php");
 
   array_push($form['fields'],array("id" => "status" , "label" => esc_html__('Entry Status', 'gravity-forms-infusionsoft-crm')));
 
-  $skip_inputs=array('checkbox','select','time','date','radio','poll','multi_choice'); 
+  $skip_inputs=array('checkbox','select','time','date','radio','poll','multi_choice','image_choice'); 
   if(is_array($form['fields'])){
   foreach($form['fields'] as $field){
   if(isset($field["inputs"]) && is_array($field["inputs"]) && !in_array($field['type'] ,$skip_inputs) ){

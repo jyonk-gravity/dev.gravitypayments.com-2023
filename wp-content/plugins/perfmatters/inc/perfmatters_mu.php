@@ -3,7 +3,7 @@
 Plugin Name: Perfmatters MU
 Plugin URI: https://perfmatters.io/
 Description: Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.
-Version: 2.5.1
+Version: 2.5.2
 Author: forgemedia
 Author URI: https://forgemedia.io/
 License: GPLv2 or later

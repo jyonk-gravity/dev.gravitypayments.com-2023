@@ -1,3 +1,11 @@
+## 2.1.0 | 2025-11-13
+- Added a new [`gform_recaptcha_spam_score_threshold`](https://docs.gravityforms.com/gform_recaptcha_spam_score_threshold/) filter to control score threshold used to identify spam.
+- Updated the connection error message on the settings page (shown when auth token refresh fails) to indicate when the connected Google Workspace account has a policy requiring periodic reauthentication.
+- Updated to skip validation if the form or honeypot is already invalid, or it's not the first or last page, reducing the Google credit usage by some forms.
+- Updated Enterprise API auth token refresh to log the response for an edge case where a 200 status is returned but a new auth token is not issued.
+- Fixed an issue where the entry detail page metabox is not added when the score is 0.
+- Fixed an issue where an entry note is not added when the entry is marked as spam.
+
 ## 2.0.0 | 2025-08-20
 - Added support for notifying Google (annotating the assessment) when an entry that has a reCAPTCHA score is marked as spam or not spam via the entries list or detail pages. Note: only applies to the Enterprise connection type and entries created after this version is installed.
 - Fixed a JavaScript error on the Forms > Settings > reCAPTCHA page when no-conflict mode is enabled.

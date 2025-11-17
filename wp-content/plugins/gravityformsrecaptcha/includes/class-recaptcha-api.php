@@ -318,7 +318,7 @@ class RECAPTCHA_API {
 
 		$response_body = gf_recaptcha()->maybe_decode_json( wp_remote_retrieve_body( $response ) );
 
-		if ( isset( $response_body['auth_error'] ) ) {
+		if ( array_key_exists( 'auth_error', $response_body ) ) {
 			if ( empty( $response_body['auth_error'] ) ) {
 				$error_message = 'Google returned an empty response.';
 			} else {

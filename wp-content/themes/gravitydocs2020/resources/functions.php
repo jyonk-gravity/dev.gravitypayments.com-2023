@@ -175,3 +175,10 @@ function awesome_acf_responsive_image( $image_id, $image_size, $max_width ) {
 
     }
 }
+
+
+// Remove "Protected:" from Doc title on password protected pages
+function remove_protected_text() {
+    return '%s';
+}
+add_filter('protected_title_format', 'remove_protected_text');

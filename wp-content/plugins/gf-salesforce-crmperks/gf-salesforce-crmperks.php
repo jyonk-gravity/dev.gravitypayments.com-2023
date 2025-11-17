@@ -2,7 +2,7 @@
 /**
 * Plugin Name: WP Gravity Forms Salesforce
 * Description: Integrates Gravity Forms with Salesforce allowing form submissions to be automatically sent to your Salesforce account 
-* Version: 1.5.0
+* Version: 1.5.2
 * Requires at least: 4.7
 * Author URI: https://www.crmperks.com
 * Plugin URI: https://www.crmperks.com/plugins/gravity-forms-plugins/gravity-forms-salesforce-plugin/
@@ -24,7 +24,7 @@ class vxg_salesforce {
   public  $crm_name = 'salesforce';
   public  $id = 'vxg_salesforce';
   public  $domain = 'vxg-sales';
-  public  $version = "1.5.0";
+  public  $version = "1.5.2";
   public  $update_id = '30001';
   public  $min_gravityforms_version = '1.3.9';
   public $type = 'vxg_salesforce_pro';
@@ -551,9 +551,6 @@ return $result;
   */
   public  function verify_field_val($entry,$form,$gf_field_id,$crm_field_id="",$custom=""){
   $value=false;
-/*  if(empty($field)){
-      return $value;
-  }*/
 
   if(isset($entry[$gf_field_id])){
   $value=$entry[$gf_field_id];     
@@ -572,8 +569,8 @@ return $result;
   }
   if(is_numeric($gf_field_id)){
   $field = RGFormsModel::get_field($form, $gf_field_id);
-    if(isset($field->type) && in_array($field->type,array('list')) ){
-     $value=maybe_unserialize($value); 
+    if(isset($field->type) && in_array($field->type,array('list')) && is_serialized($value) ){
+     $value=unserialize($value, array('allowed_classes' => false));
   }
   if(isset($field->type) && in_array($field->type,array('option','product')) ){
         $found=strpos($value,'|');

@@ -74,6 +74,14 @@ return array(
 				'moove_gdpr'
     		)
     	),
+    	'generateblocks-pro' => array(
+    		'id' => 'generateblocks-pro/plugin.php',
+    		'title' => 'GenerateBlocks Pro',
+    		'exclusions' => array(
+    			'/generateblocks-pro/dist/classic-menu.js',
+    			'/generateblocks-pro/dist/sticky-element.js'
+    		)
+    	),
     	'gravityforms' => array(
     		'id' => 'gravityforms/gravityforms.php',
     		'title' => 'Gravity Forms',
@@ -400,7 +408,7 @@ return array(
     		'exclusions' => array(
     			'jquery.min.js',
     			'jquery/ui',
-				'ws-form-pro',
+				'ws-form',
 				'wsf-wp-footer',
 				'quicktags-js-extra'
     		)

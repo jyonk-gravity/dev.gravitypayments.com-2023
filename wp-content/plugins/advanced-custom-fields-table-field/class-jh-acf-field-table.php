@@ -39,7 +39,7 @@ class jh_acf_field_table extends acf_field {
 		*  settings (array) Array of settings
 		*/
 		$this->settings = array(
-			'version' => '1.3.30',
+			'version' => '1.3.31',
 			'dir_url' => plugins_url( '', __FILE__ ) . '/',
 		);
 
@@ -287,7 +287,7 @@ class jh_acf_field_table extends acf_field {
 	function input_admin_enqueue_scripts() {
 
 		// register & include JS
-		wp_enqueue_script( 'acf-input-table', $this->settings['dir_url'] . 'js/input-v5.js', array( 'jquery', 'acf-input' ), $this->settings['version'], true );
+		wp_enqueue_script( 'acf-input-table', $this->settings['dir_url'] . 'js/input.js', array( 'jquery', 'acf-input' ), $this->settings['version'], true );
 
 		// register & include CSS
 		wp_register_style( 'acf-input-table', $this->settings['dir_url'] . 'css/input.css', array( 'acf-input' ), $this->settings['version'] );
@@ -553,6 +553,48 @@ class jh_acf_field_table extends acf_field {
 				// }
 
 				$value = $data;
+			}
+
+		// }
+
+		// SANITIZES DATA VALUES {
+
+			// CAPTION
+			if ( isset( $value['p']['ca'] ) ) {
+
+				$value['p']['ca'] = wp_kses( $value['p']['ca'], 'post' );
+			}
+
+			// HEADER CELL VALUES
+			if (
+				isset( $value['h'] ) &&
+				is_array( $value['h'] )
+			) {
+
+				array_walk_recursive( $value['h'], function ( &$item ) {
+
+					if ( is_string( $item ) ) {
+
+						$item = wp_kses( $item, 'post' );
+					}
+				});
+
+			}
+
+			// BODY CELL VALUES
+			if (
+				isset( $value['b'] ) &&
+				is_array( $value['b'] )
+			) {
+
+				array_walk_recursive( $value['b'], function ( &$item ) {
+
+					if ( is_string( $item ) ) {
+
+						$item = wp_kses( $item, 'post' );
+					}
+				});
+
 			}
 
 		// }
