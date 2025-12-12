@@ -85,10 +85,10 @@ external_AjaxSearchPro_default().addons.add(new JetEngineAddon());
 
 
 const elementor_helpers = (external_AjaxSearchPro_default()).helpers;
+const { Hooks } = elementor_helpers;
 class ElementorAddon {
   name = "Elementor Widget Fixes";
   init() {
-    const { Hooks } = elementor_helpers;
     Hooks.addFilter("asp/init/etc", this.fixElementorPostPagination.bind(this), 10, this);
     Hooks.addFilter("asp/live_load/start", this.start.bind(this), 10, this);
     Hooks.addFilter("asp/live_load/finished", this.finished.bind(this), 10, this);

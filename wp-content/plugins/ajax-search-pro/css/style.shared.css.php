@@ -730,6 +730,11 @@ p[id*=asp-try-<?php echo $id; ?>] a:last-child:after {
     <?php echo $asp_res_ids2; ?> .results .item,
 <?php endif; ?>
 <?php echo $asp_res_ids; ?> .results .item {
+	<?php if ( $style['results_click_disable'] ): ?>
+		a.asp_res_url {
+			cursor: initial;
+		}
+	<?php endif; ?>
     height: <?php echo $style['resultitemheight']; ?>;
     background: <?php echo $style['resultscontainerbackground']; ?>;
 }
@@ -1268,5 +1273,12 @@ if ( $style['fss_block_columns'] === "auto" ) {
     <?php echo $asp_set_ids; ?>.searchsettings fieldset.asp_s_btn_container button.asp_reset_btn.asp_r_btn:active,
     <?php echo $asp_bset_ids; ?>.searchsettings fieldset.asp_s_btn_container button.asp_reset_btn.asp_r_btn:active {
        transform: translateY(1px);
+    }
+<?php endif; ?>
+
+
+<?php if ($style['lightbox_overlay']): ?>
+    .asp-sl-overlay {
+       background: <?php echo esc_attr($style['lightbox_overlay_color']); ?> !important;
     }
 <?php endif; ?>

@@ -125,6 +125,7 @@ class TimedModalService {
 						self::CLICKED_OKAY_COOKIE_PREFIX . $name,
 						$this->modals[ $name ]['heading'],
 						$this->modals[ $name ]['content'],
+						$this->modals[ $name ]['show_close_icon'] ?? true,
 						$this->modals[ $name ]['close_on_background_click'] ?? true,
 						$this->modals[ $name ]['buttons'] ?? null,
 					)

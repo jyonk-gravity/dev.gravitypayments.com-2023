@@ -2,10 +2,16 @@
 
 namespace WPDRMS\ASP\Options\Factories;
 
+use WPDRMS\ASP\Options\Models\BoolOption;
 use WPDRMS\ASP\Options\Models\BorderOption;
 use WPDRMS\ASP\Options\Models\BoxShadowOption;
 use WPDRMS\ASP\Options\Models\DirectoryListOption;
+use WPDRMS\ASP\Options\Models\IntArrayOption;
+use WPDRMS\ASP\Options\Models\IntOption;
 use WPDRMS\ASP\Options\Models\Option;
+use WPDRMS\ASP\Options\Models\SelectOption;
+use WPDRMS\ASP\Options\Models\StringArrayOption;
+use WPDRMS\ASP\Options\Models\StringOption;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 use InvalidArgumentException;
 
@@ -16,9 +22,15 @@ class OptionFactory {
 	 * @var array<string, class-string>
 	 */
 	private const TYPES = array(
+		'bool'           => BoolOption::class,
+		'int'            => IntOption::class,
+		'string'         => StringOption::class,
+		'select'         => SelectOption::class,
 		'border'         => BorderOption::class,
 		'box_shadow'     => BoxShadowOption::class,
 		'directory_list' => DirectoryListOption::class,
+		'string_array'   => StringArrayOption::class,
+		'int_array'      => IntArrayOption::class,
 	);
 
 	/**
@@ -30,7 +42,7 @@ class OptionFactory {
 	 */
 	public function create( string $type, ...$args ): Option {
 		if ( !isset(self::TYPES[ $type ]) ) {
-			throw new InvalidArgumentException("Invalid option type: $type");
+			throw new InvalidArgumentException("Invalid option type: $type"); // phpcs:ignore
 		}
 
 		$class = self::TYPES[ $type ];

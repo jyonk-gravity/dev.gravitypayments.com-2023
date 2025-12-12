@@ -70,11 +70,10 @@ class Manager {
 
 			if ( $license_key !== false ) {
 				if ( get_site_transient('_asp_update_dl_url') === false ) {
-
 					$response = $this->getDownloadUrl( $license_key );
 					if ( !empty($response) ) {
 						if ( isset($response['status']) && $response['status'] != 1 ) {
-							return new WP_Error( 'inactive', $response['msg'] );
+							return $transient;
 						} else {
 							$download_url = $response['url'];
 							set_site_transient('_asp_update_dl_url', $download_url, 60);

@@ -12,7 +12,11 @@ trait SingletonTrait {
 	 */
 	protected static $singleton__object_instances__array = array();
 
-	final public static function getInstance( ...$args ): self {
+	/**
+	 * @param mixed ...$args
+	 * @return static
+	 */
+	final public static function getInstance( ...$args ) {
 		$class = get_called_class();
 		if ( !isset(static::$singleton__object_instances__array[ $class ]) ) {
 			static::$singleton__object_instances__array[ $class ] = new $class(...$args);
@@ -20,7 +24,11 @@ trait SingletonTrait {
 		return static::$singleton__object_instances__array[ $class ];
 	}
 
-	final public static function instance( ...$args ): self {
+	/**
+	 * @param mixed ...$args
+	 * @return static
+	 */
+	final public static function instance( ...$args ) {
 		return static::getInstance( ...$args );
 	}
 

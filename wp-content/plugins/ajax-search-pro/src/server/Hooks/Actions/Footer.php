@@ -1,14 +1,18 @@
 <?php
 namespace WPDRMS\ASP\Hooks\Actions;
 
-if (!defined('ABSPATH')) die('-1');
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
 
 class Footer extends AbstractAction {
-	public function handle() {
-		$exit1 = apply_filters('asp_load_css_js', false);
-		$exit2 = apply_filters('asp_load_css', false);
-		if ($exit1 || $exit2)
+	public function handle(): void {
+		$load_assets = apply_filters('asp/assets/load', true);
+		$load_css    = apply_filters('asp/assets/load/css', true);
+
+		if ( !$load_assets || !$load_css ) {
 			return;
+		}
 
 		// Blur for isotopic
 		?>

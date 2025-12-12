@@ -31,7 +31,10 @@ defined('ABSPATH') or die("You can't access this file directly.");
  */
 ?>
 <div id="asp-res-<?php echo esc_attr($r->id); ?>"
-	class='item<?php echo esc_attr(apply_filters('asp_result_css_class', $asp_res_css_class, $r->id, $r)); ?>'>
+	class='item<?php echo esc_attr(apply_filters('asp_result_css_class', $asp_res_css_class, $r->id, $r)); ?>'
+	data-id="<?php echo esc_attr($r->id); ?>"
+	data-content-type="<?php echo esc_attr($r->content_type ?? 'pagepost'); ?>"
+>
 
 	<?php do_action('asp_res_vertical_begin_item'); ?>
 

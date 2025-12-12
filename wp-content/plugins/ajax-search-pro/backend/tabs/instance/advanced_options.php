@@ -5,6 +5,7 @@
     <li><a tabid="703" class='subtheme'><?php echo __('Animations, Visual & Others', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="704" class='subtheme'><?php echo __('Keyword exceptions', 'ajax-search-pro'); ?></a></li>
     <li><a tabid="705" class='subtheme'><?php echo __('Accessibility', 'ajax-search-pro'); ?></a></li>
+    <li><a tabid="707" class='subtheme'><?php echo __('Lightbox', 'ajax-search-pro'); ?></a></li>
 </ul>
 <div class='tabscontent'>
 	<div tabid="701">
@@ -52,6 +53,12 @@
 		<fieldset>
 			<legend><?php echo __('Accessibility', 'ajax-search-pro'); ?></legend>
 			<?php include(ASP_PATH."backend/tabs/instance/advanced/accessibility.php"); ?>
+		</fieldset>
+	</div>
+	<div tabid="707">
+		<fieldset>
+			<legend><?php echo __('Lightbox Settings', 'ajax-search-pro'); ?></legend>
+			<?php include(ASP_PATH."backend/tabs/instance/advanced/lightbox.php"); ?>
 		</fieldset>
 	</div>
 </div>

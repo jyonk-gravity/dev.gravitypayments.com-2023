@@ -955,6 +955,7 @@ if ( !class_exists('ASP_Post') ) {
 		public $asp_id;
 		public $asp_data;                   // All the original results data
 		public $blogid;
+		public $filter;
 
 		public function __construct() {}
 	}
@@ -2715,6 +2716,18 @@ if ( !function_exists('asp_parse_date_filters') ) {
 	}
 }
 
+if ( !function_exists('asp_is_multilang') ) {
+	function asp_is_multilang(): bool {
+		if ( function_exists('pll_register_string') && function_exists('pll__') ) {
+			return true;
+		} elseif ( defined('WPML_PLUGIN_BASENAME') || defined('ICL_SITEPRESS_VERSION') ) {
+			return true;
+		}
+
+		return false;
+	}
+}
+
 if ( !function_exists('asp_icl_t') ) {
 	/* Ajax Search pro wrapper for WPML and Polylang print */
 	function asp_icl_t( $name, $value, $esc_html = false ) {
@@ -2865,5 +2878,27 @@ if ( !function_exists('asp_wp_get_wp_version') ) {
 		}
 
 		return $wp_version;
+	}
+}
+
+// ----------------------------------------------------------------------------------------------------------------------
+// 8. Unit and Integration testing
+// ----------------------------------------------------------------------------------------------------------------------
+if ( !function_exists('asp_get_global_function_mock') ) {
+	function asp_get_global_function_mock( string $name ): bool {
+		return (
+			defined('ASP_UNIT_TEST') &&
+			isset($GLOBALS['_mocks']) &&
+			is_object($GLOBALS['_mocks']) &&
+			method_exists( $GLOBALS['_mocks'], $name)
+		);
+	}
+}
+
+if ( !function_exists('asp_run_global_function_mock') ) {
+	function asp_run_global_function_mock( string $name, ...$args ): void {
+		if ( asp_get_global_function_mock($name) ) {
+			call_user_func(array( $GLOBALS['_mocks'], $name ), ...$args);
+		}
 	}
 }

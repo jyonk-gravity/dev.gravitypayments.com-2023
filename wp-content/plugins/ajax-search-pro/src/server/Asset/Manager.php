@@ -4,19 +4,19 @@ namespace WPDRMS\ASP\Asset;
 use WPDRMS\ASP\Misc\OutputBuffer;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 
-/* Prevent direct access */
-defined('ABSPATH') or die("You can't access this file directly.");
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
 
 class Manager {
 	use SingletonTrait;
 
-	private
-		$instances = array();
+	private $instances = array();
 
 	/**
 	 * hook: wp_enqueue_scripts
 	 */
-	function enqueue() {
+	public function enqueue() {
 		if ( $this->shouldLoadCss() ) {
 			Css\Manager::instance()->enqueue();
 		}
@@ -29,7 +29,7 @@ class Manager {
 	 * hook: wp_print_footer_scripts, priority 6
 	 * hook: admin_print_footer_scripts, priority 6
 	 */
-	function onPluginFooter() {
+	public function onPluginFooter() {
 		// Needed to enqueue the internal (jquery, UI) requirements
 		$this->getVisibleSearchIds();
 		if ( count($this->instances) ) {
@@ -44,12 +44,12 @@ class Manager {
 	 *
 	 * hook: admin_print_footer_scripts, priority 7
 	 */
-	function onPluginBackendFooter() {
+	public function onPluginBackendFooter() {
 		Script\Manager::instance()->enqueue( true );
 	}
 
 	// asp_ob_end
-	function injectToBuffer($buffer) {
+	public function injectToBuffer( $buffer ) {
 		$this->getVisibleSearchIds($buffer);
 		if ( count($this->instances) ) {
 			if ( $this->shouldLoadCss() ) {
@@ -80,20 +80,18 @@ class Manager {
 	}
 
 	public function shouldLoadCss(): bool {
-		return
-			wd_asp()->instances->exists() &&
-			!apply_filters('asp_load_css_js', false) &&
-			!apply_filters('asp_load_css', false);
+		return wd_asp()->instances->exists() &&
+			apply_filters('asp/assets/load', true) &&
+			apply_filters('asp/assets/load/css', true);
 	}
 
 	public function shouldLoadJs(): bool {
-		return
-			wd_asp()->instances->exists() &&
-			!apply_filters('asp_load_css_js', false) &&
-			!apply_filters('asp_load_js', false);
+		return wd_asp()->instances->exists() &&
+			apply_filters('asp/assets/load', true) &&
+			apply_filters('asp/assets/load/js', true);
 	}
 
-	function getVisibleSearchIds( $html = '' ): array {
+	public function getVisibleSearchIds( $html = '' ): array {
 		$this->instances = $this->getInstancesFromHtml($html);
 		$this->instances = array_merge(
 			$this->instances,
@@ -119,7 +117,7 @@ class Manager {
 		return $this->instances;
 	}
 
-	private function getInstancesFromHtml($out): array {
+	private function getInstancesFromHtml( $out ): array {
 		if ( $out !== false && $out !== '' ) {
 			if ( preg_match_all('/data-asp-id=["\'](\d+)[\'"]\s/', $out, $matches) > 0 ) {
 				foreach ( $matches[1] as $search_id ) {

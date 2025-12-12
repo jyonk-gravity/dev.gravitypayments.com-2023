@@ -6,6 +6,8 @@ use WPDRMS\ASP\Cache\TextCache;
 use WPDRMS\ASP\Database;
 use WPDRMS\ASP\Hooks\Ajax\DeleteCache;
 use WPDRMS\ASP\Patterns\SingletonTrait;
+use WPDRMS\ASP\Statistics\ORM\StatisticsOptions;
+use WPDRMS\ASP\Statistics\StatisticsService;
 use WPDRMS\ASP\Utils\FileManager;
 use WPDRMS\ASP\Utils\Plugin;
 
@@ -37,6 +39,8 @@ class Init {
 
 		// Includes the index table creation as well
 		Database\Manager::getInstance()->create();
+
+		StatisticsService::instance()->createTables();
 
 		$this->activation_only_backwards_compatibility_fixes();
 		FileManager::instance()->createRequiredDirectories();
@@ -112,6 +116,12 @@ class Init {
 	 * Fix known backwards incompatibilities
 	 */
 	public function backwards_compatibility_fixes() {
+		// -------------------------- 4.28 ------------------------------
+		if ( get_option('asp_stat', false) !== false ) {
+			StatisticsOptions::instance()->status->value = true;
+			StatisticsOptions::instance()->save();
+			delete_option('asp_stat');
+		}
 
 		// Index table option fixes
 		$ito = wd_asp()->o['asp_it_options'];
@@ -561,6 +571,7 @@ class Init {
 
 		// Database
 		wd_asp()->db->delete();
+		StatisticsService::instance()->dropTables();
 
 		FileManager::instance()->removeRequiredDirectories();
 

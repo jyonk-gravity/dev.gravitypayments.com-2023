@@ -84,6 +84,9 @@ defined('ABSPATH') or die("You can't access this file directly.");
 <?php endif; ?>
 <?php echo $asp_res_ids; ?>.isotopic .results .item:hover .asp_item_overlay,
 <?php echo $asp_res_ids; ?>.isotopic .results .item:hover .asp_item_overlay_img {
+	<?php if ( $style['results_click_disable'] ): ?>
+		cursor: initial;
+	<?php endif; ?>
 	opacity: 1;
 }
 

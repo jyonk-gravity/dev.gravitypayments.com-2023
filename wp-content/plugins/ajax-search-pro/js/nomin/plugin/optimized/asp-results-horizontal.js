@@ -62,19 +62,35 @@ external_AjaxSearchPro_namespaceObject.plugin.showHorizontalResults = function()
     let $container = $this.n("results");
     $container.get(0).scrollLeft = 0;
     if ($this.o.scrollBar.horizontal.enabled) {
-      let prevDelta = 0, prevTime = Date.now();
-      $container.off("mousewheel");
-      $container.on("mousewheel", function(e) {
-        let deltaFactor = typeof e.deltaFactor != "undefined" ? e.deltaFactor : 65, delta = e.deltaY > 0 ? 1 : -1, diff = Date.now() - prevTime, speed = diff > 100 ? 1 : 3 - 2 * diff / 100;
-        if (prevDelta !== e.deltaY)
-          speed = 1;
-        external_DoMini_namespaceObject(this).animate(false).animate({
-          "scrollLeft": this.scrollLeft + delta * deltaFactor * 2 * speed
-        }, 250, "easeOutQuad");
-        prevDelta = e.deltaY;
-        prevTime = Date.now();
-        if (!(helpers.isScrolledToRight($container.get(0)) && delta === 1 || helpers.isScrolledToLeft($container.get(0)) && delta === -1))
+      $container.off("wheel");
+      let scrollLeft = 0;
+      let wheelTimeout;
+      let wheelJustStarted = true;
+      $container.on("wheel", function(e) {
+        if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+          scrollLeft = this.scrollLeft;
+          return;
+        }
+        if (wheelJustStarted) {
+          scrollLeft = this.scrollLeft;
+        }
+        let deltaY = parseInt(e.deltaY ?? 0);
+        let tolerance = Math.abs(deltaY);
+        if (wheelJustStarted && tolerance > 10) {
+          $container.css("scrollBehavior", "smooth");
+        }
+        scrollLeft += deltaY;
+        scrollLeft = deltaY < 0 && scrollLeft > this.scrollLeft + tolerance ? this.scrollLeft + tolerance : scrollLeft;
+        scrollLeft = scrollLeft < 0 ? 0 : scrollLeft;
+        this.scrollLeft = scrollLeft;
+        wheelJustStarted = false;
+        if (!(helpers.isScrolledToRight($container.get(0)) && e.deltaY > 0 || helpers.isScrolledToLeft($container.get(0)) && e.deltaY <= 0)) {
           e.preventDefault();
+        }
+        clearTimeout(wheelTimeout);
+        wheelTimeout = setTimeout(() => {
+          wheelJustStarted = true;
+        }, 200);
       });
     }
   }

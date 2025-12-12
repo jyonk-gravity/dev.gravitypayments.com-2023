@@ -5,6 +5,6 @@ Donate link: https://ajaxsearchpro.com/
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 4.27.2
+Stable tag: 4.27.4
 
 Most powerful WordPress Search Engine

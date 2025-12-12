@@ -97,12 +97,17 @@ class Server {
 				$variations = array(
 					$domain . '.',
 					$domain . '-',
+					$domain . '_',
 					$domain . '0',
 					$domain . '1',
 					$domain . '2',
 					$domain . '3',
 					$domain . '4',
 					$domain . '5',
+					$domain . '6',
+					$domain . '7',
+					$domain . '8',
+					$domain . '9',
 				);
 				foreach ( $variations as $variation ) {
 					if ( strpos($site_url, '://' . $variation) !== false ) {
@@ -166,5 +171,27 @@ class Server {
 
 		// Not a local environment
 		return false;
+	}
+
+	public static function getCleanUrlPath( string $url ): ?string {
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+		if ( ! $path ) {
+			return null;
+		}
+
+		// Normalize path
+		$path = ltrim( $path, '/' );
+		$path = untrailingslashit( $path );
+
+		return $path === '/' || $path === '' ? null : $path;
+	}
+
+	public static function getCleanReferrerPath(): ?string {
+		$referer = wp_get_referer();
+		if ( ! $referer ) {
+			return null;
+		}
+
+		return self::getCleanUrlPath($referer);
 	}
 }

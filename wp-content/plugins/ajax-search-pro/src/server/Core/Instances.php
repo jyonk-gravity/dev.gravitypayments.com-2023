@@ -60,12 +60,12 @@ class Instances {
 	/**
 	 * Gets the search instance if exists
 	 *
-	 * @param int $id
-	 * @param bool $force_refresh
+	 * @param int      $id
+	 * @param bool     $force_refresh
 	 * @param bool|int $check_ownership
 	 * @return ( $id is positive-int ? SearchInstance : SearchInstance[] )
 	 */
-	public function get(int $id = self::ALL_INSTANCES, bool $force_refresh = false, $check_ownership = false ) {
+	public function get( int $id = self::ALL_INSTANCES, bool $force_refresh = false, $check_ownership = false ) {
 		if ( $this->refresh || $force_refresh ) {
 			$this->init();
 			$this->refresh = false;
@@ -167,7 +167,7 @@ class Instances {
 	 * Create a new search instance with the default options set
 	 *
 	 * @param $name
-	 * @param int  $owner User ID of the owner
+	 * @param int $owner User ID of the owner
 	 * @return bool|int
 	 */
 	public function add( $name, $owner = 0 ) {
@@ -194,7 +194,7 @@ class Instances {
 	 * Import the search from the Lite version, as a new search instance
 	 *
 	 * @param $name
-	 * @param int  $owner User ID of the owner
+	 * @param int $owner User ID of the owner
 	 * @return bool|int
 	 */
 	public function importFromLite( $name, $owner = 0 ) {
@@ -667,8 +667,8 @@ class Instances {
 		return $params;
 	}
 
-	public function add_script_data( $id, $data ) {
-		$this->script_data[ $id ] = $data;
+	public function add_script_data( $id, array $data ) {
+		$this->script_data[ $id ] = wp_json_encode($data);
 		update_site_option('_asp_script_data', $this->script_data);
 	}
 
@@ -720,8 +720,8 @@ class Instances {
 		global $wpdb;
 
 		// Reset both variables, so in case of deleting no remains are left
-		$this->search_instances = array();
-		$this->instances_no_data  = array();
+		$this->search_instances  = array();
+		$this->instances_no_data = array();
 
 		if ( !wd_asp()->db->exists('main') ) {
 			return;
@@ -730,7 +730,7 @@ class Instances {
 		$instances = $wpdb->get_results('SELECT * FROM ' . wd_asp()->db->table('main') . ' ORDER BY id ASC', ARRAY_A);
 
 		foreach ( $instances as $k => $inst ) {
-			$instance                               = new SearchInstance(
+			$instance                                 = new SearchInstance(
 				array(
 					'name' => $inst['name'],
 					'id'   => $inst['id'],
@@ -759,7 +759,7 @@ class Instances {
 				$instance->raw_data
 			);
 			$instance->options                       = new SearchOptions(json_decode($inst['data'], true));
-			$instance->data                          = apply_filters('asp_instance_options', $instance->data  , $instance->id);
+			$instance->data                          = apply_filters('asp_instance_options', $instance->data, $instance->id);
 			$this->search_instances[ $instance->id ] = $instance;
 		}
 	}

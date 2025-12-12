@@ -74,10 +74,10 @@ class IndexTable extends AbstractAjax {
 
 					'attachment_exclude_directories'  =>
 						$options['attachment_exclude_directories']['directories'] ??
-						wd_asp()->options['asp_it_options']['options']->get('attachment_exclude_directories')->directories,
+						wd_asp()->options['asp_it_options']['options']->attachment_exclude_directories->directories,
 					'attachment_include_directories'  =>
 						$options['attachment_include_directories']['directories'] ??
-						wd_asp()->options['asp_it_options']['options']->get('attachment_include_directories')->directories,
+						wd_asp()->options['asp_it_options']['options']->attachment_include_directories->directories,
 
 					'post_statuses'            => $options['it_post_statuses'],
 					'post_password_protected'  => $options['it_post_password_protected'],

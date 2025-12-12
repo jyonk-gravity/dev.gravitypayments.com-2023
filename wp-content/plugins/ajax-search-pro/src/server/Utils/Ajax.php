@@ -13,6 +13,7 @@ class Ajax {
 	 */
 	public static function prepareHeaders( string $content_type = 'text/plain' ): void {
 		$content_type = apply_filters('asp/ajax/headers/content_type', $content_type);
+		ob_end_clean();
 		if ( !headers_sent() ) {
 			header('Content-Type: ' . $content_type);
 		}

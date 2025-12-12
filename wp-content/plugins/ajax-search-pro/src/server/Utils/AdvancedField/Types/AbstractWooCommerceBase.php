@@ -16,6 +16,9 @@ abstract class AbstractWooCommerceBase {
 	}
 
 	private function getProduct( ?stdClass $result ): ?WC_Product {
+		if ( !function_exists('wc_get_product') ) {
+			return null;
+		}
 		if ( is_null($result) || !isset($result->post_type) ) {
 			return null;
 		}

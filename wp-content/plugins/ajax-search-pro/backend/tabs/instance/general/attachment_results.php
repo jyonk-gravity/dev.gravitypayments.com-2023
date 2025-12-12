@@ -116,6 +116,13 @@
 </div>
 <div class="item">
 	<?php
+	$o = new wpdreamsYesNo("attachment_use_lightbox", __('Display images in a lightbox?', 'ajax-search-pro'),
+			$sd['attachment_use_lightbox']);
+	$params[$o->getName()] = $o->getData();
+	?>
+</div>
+<div class="item">
+	<?php
 	$o = new wpdreamsYesNo("search_attachments_cf_filters", __('Allow custom field filters to apply on Attachment results as well?', 'ajax-search-pro'),
 		$sd['search_attachments_cf_filters']);
 	$params[$o->getName()] = $o->getData();

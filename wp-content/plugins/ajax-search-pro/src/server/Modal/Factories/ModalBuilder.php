@@ -72,6 +72,17 @@ class ModalBuilder {
 	}
 
 	/**
+	 * Sets whether the modal should have a close icon displayed
+	 *
+	 * @param bool $show_close_icon
+	 * @return self
+	 */
+	public function setShowCloseIcon( bool $show_close_icon ): self {
+		$this->modal['show_close_icon'] = $show_close_icon;
+		return $this;
+	}
+
+	/**
 	 * Sets whether the modal should close when clicking the background.
 	 *
 	 * @param bool $close_on_background_click

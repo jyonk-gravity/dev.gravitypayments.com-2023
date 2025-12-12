@@ -27,13 +27,15 @@ class ModalFactory implements ModalFactoryInterface {
 			->setHeading('Please verify your license!')
 			->setContent(
 				'
-                Verifying the license ensures that the plugin is secure and automatically up to date.<br>
-                Don\'t worry, it takes only a minute!
+                <p>Verifying the license ensures that the plugin is secure and automatically up to date.</p>
+                <p>Don\'t worry, it takes only a minute!</p>
+				<p>If you need a license, you can grab one on the <a style="font-size:inherit" target="_blank" href="https://ajaxsearchpro.com/pricing/?utm_source=license_activation_modal">pricing page.</a></p>
             '
 			)
 			->setMaxTimesShown(1000)
 			->setFirstDelay(0)
 			->setDelay(0)
+			->setShowCloseIcon(false)
 			->setCloseOnBackgroundClick(false)
 			->setCallback(array( ModalCallbacks::class, 'shouldShowActivateLicense' ))
 			->setType('info')

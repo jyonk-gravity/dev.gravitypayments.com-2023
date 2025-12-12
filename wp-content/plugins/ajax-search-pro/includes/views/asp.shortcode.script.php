@@ -129,6 +129,7 @@ $options_array = array(
 		'width'        => $style['results_width'],
 		'width_tablet' => $style['results_width_tablet'],
 		'width_phone'  => $style['results_width_phone'],
+		'disableClick' => boolval($style['results_click_disable']),
 	),
 	'resultsSnapTo'       => $style['results_snap_to'],
 	'resultsposition'     => $style['resultsposition'],
@@ -153,6 +154,7 @@ $options_array = array(
 	),
 	'settings'            => array(
 		'unselectChildren' => intval($style['frontend_terms_parent_unselect_children']),
+		'unselectParent'   => intval($style['frontend_terms_unselect_parent']),
 		'hideChildren'     => intval($style['frontend_terms_hide_children']),
 	),
 	'settingsHideOnRes'   => intval($style['fss_hide_on_results']),
@@ -167,11 +169,22 @@ $options_array = array(
 		'infinite'      => $style['more_results_infinite'] && $style['more_results_action'] == 'ajax' ? 1 : 0,
 	),
 	'singleHighlight'     => intval($style['single_highlight']),
-	'statistics'          => get_option('asp_stat', 0) ? 0 : 1,
 	'taxArchive'          => array(
 		'useAjax'  => ( \WPDRMS\ASP\Utils\Archive::isTaxonomyArchive() && $style['taxonomy_archive_live_search'] ) ? 1 : 0,
 		'selector' => $style['taxonomy_archive_live_selector'],
 		'url'      => \WPDRMS\ASP\Utils\Archive::getCurrentArchiveURL(),
+	),
+	'lightbox'            => array(
+		'overlay'           => boolval($style['lightbox_overlay']),
+		'overlayOpacity'    => floatval($style['lightbox_overlay_opacity']),
+		'overlayColor'      => $style['lightbox_overlay_color'],
+		'nav'               => boolval($style['lightbox_navigation']),
+		'disableRightClick' => boolval($style['lightbox_disable_right_click']),
+		'close'             => boolval($style['lightbox_close_icon']),
+		'animationSpeed'    => intval($style['lightbox_animation_speed']),
+		'docClose'          => boolval($style['lightbox_doc_close']),
+		'disableScroll'     => boolval($style['lightbox_disable_scroll']),
+		'enableKeyboard'    => boolval($style['lightbox_enable_keyboard']),
 	),
 	'trigger'             => array(
 		'delay'              => $style['trigger_delay'],
@@ -194,12 +207,11 @@ $options_array = array(
 	),
 );
 
-$_asp_script_out = json_encode($options_array);
-wd_asp()->instances->add_script_data($real_id, $_asp_script_out);
+wd_asp()->instances->add_script_data($real_id, $options_array);
 ?>
 <div class="asp_init_data"
 	style="display:none !important;"
-	id="asp_init_id_<?php echo $id; ?>"
-	data-asp-id="<?php echo $real_id; ?>"
-	data-asp-instance="<?php echo self::$perInstanceCount[ $real_id ]; ?>"
-	data-aspdata="<?php echo base64_encode($_asp_script_out); ?>"></div>
+	id="asp_init_id_<?php echo esc_attr($id); ?>"
+	data-asp-id="<?php echo esc_attr($real_id); ?>"
+	data-asp-instance="<?php echo esc_attr(self::$perInstanceCount[ $real_id ]); ?>"
+	data-settings="<?php echo esc_attr(wp_json_encode($options_array)); ?>"></div>

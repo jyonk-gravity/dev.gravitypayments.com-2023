@@ -159,6 +159,9 @@ external_AjaxSearchPro_namespaceObject.plugin.showIsotopicResults = function() {
 };
 external_AjaxSearchPro_namespaceObject.plugin.initIsotopicClick = function() {
   let $this = this;
+  if ($this.o.results.disableClick) {
+    return false;
+  }
   $this.eh.isotopicClickhandle = $this.eh.isotopicClickhandle || function(e) {
     if (!$this.dragging) {
       let $a = external_DoMini_namespaceObject(this).find(".asp_content a.asp_res_url");

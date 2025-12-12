@@ -64,36 +64,55 @@ class Asset extends AbstractFilter {
 		}
 	}
 
-	public function applySelectiveAssetLoader( $exit ) {
-		$comp_settings = wd_asp()->o['asp_compatibility'];
 
-		if ( $comp_settings['selective_enabled'] ) {
-			if ( is_front_page() ) {
-				if ( $comp_settings['selective_front'] == 0 ) {
-					$exit = true;
-				}
-			} elseif ( is_archive() ) {
-				if ( $comp_settings['selective_archive'] == 0 ) {
-					$exit = true;
-				}
-			} elseif ( is_singular() ) {
-				if ( $comp_settings['selective_exin'] != '' ) {
-					global $post;
-					if ( isset($post, $post->ID) ) {
-						$_ids = wpd_comma_separated_to_array($comp_settings['selective_exin']);
-						if ( !empty($_ids) ) {
-							if ( $comp_settings['selective_exin_logic'] == 'exclude' && in_array($post->ID, $_ids) ) {
-								$exit = true;
-							} elseif ( $comp_settings['selective_exin_logic'] == 'include' && !in_array($post->ID, $_ids) ) {
-								$exit = true;
-							}
-						}
-					}
-				}
-			}
+	public function applySelectiveAssetLoader( bool $load ) {
+		$comp_settings = wd_asp()->o['asp_compatibility'];
+		if ( !$comp_settings['selective_enabled'] ) {
+			return $load;
 		}
 
-		return $exit;
+		if ( is_front_page() && !$comp_settings['selective_front'] ) {
+			return false;
+		}
+
+		if ( ( is_search() || is_archive() ) && !$comp_settings['selective_archive'] ) {
+			return false;
+		}
+
+		if ( is_singular() ) {
+			return $this->should_load_on_singular_page($load);
+		}
+
+		return $load;
+	}
+
+	private function should_load_on_singular_page( bool $load ) {
+		$comp_settings = wd_asp()->o['asp_compatibility'];
+
+		if ( $comp_settings['selective_exin'] === '' ) {
+			return $load;
+		}
+
+		global $post;
+		if ( !isset($post, $post->ID) ) {
+			return $load;
+		}
+
+		$selective_ids = array_map('intval', wpd_comma_separated_to_array($comp_settings['selective_exin']));
+		if ( empty($selective_ids) ) {
+			return $load;
+		}
+
+		$post_id    = $post->ID;
+		$is_exclude = $comp_settings['selective_exin_logic'] === 'exclude';
+		$is_include = $comp_settings['selective_exin_logic'] === 'include';
+
+		if ( ( $is_exclude && in_array($post_id, $selective_ids, true) ) ||
+			( $is_include && !in_array($post_id, $selective_ids, true) ) ) {
+			return false;
+		}
+
+		return $load;
 	}
 
 	function handle() {}

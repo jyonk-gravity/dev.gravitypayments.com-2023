@@ -79,6 +79,13 @@ if ( ASP_DEMO ) {
 								);
 								?>
 							</p>
+							<p>
+								<?php echo vsprintf(
+										__('Need a license? You can grab one <a href="%s" target="_blank">via the pricing page</a>.', 'ajax-search-pro'),
+										array("https://ajaxsearchpro.com/pricing/?utm_source=license_activation")
+								);
+								?>
+							</p>
 							<label>
 								<?php echo __('License key', 'ajax-search-pro'); ?>
 							</label>

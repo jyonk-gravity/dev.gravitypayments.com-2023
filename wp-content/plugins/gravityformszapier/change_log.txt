@@ -1,3 +1,7 @@
+### 4.5.1 | 2025-11-18
+- Fixed an issue where attempting to publish a Zap returns a production.ERROR on Zapier.
+- Updated authentication to check for read/write permissions on the REST API Key.
+
 ### 4.5.0 | 2025-09-04
 - Updated "Steps to Connect a Zap" to provide a correction.
 

@@ -69,6 +69,7 @@ class PluginLicense {
 		if ( $data === false || !isset($data['host']) || !isset($data['key']) ) {
 			return false;
 		}
+
 		if ( $remote_check ) {
 			$url      = isset($_SERVER['HTTP_HOST']) ? rawurlencode($_SERVER['HTTP_HOST']) : 'unknown.domain';
 			$key      = rawurlencode( $data['key'] );
@@ -78,6 +79,16 @@ class PluginLicense {
 				return false;
 			}
 			$rdata = json_decode( $response['body'], true );
+			if (
+				isset($rdata['message']) && (
+					str_contains($rdata['message'], 'invalid format') ||
+					str_contains($rdata['message'], 'refunded') ||
+					str_contains($rdata['message'], 'canceled')
+				)
+			) {
+				self::deactivate( false );
+				return false;
+			}
 			return $rdata['status'] ? $data['key'] : false;
 		}
 

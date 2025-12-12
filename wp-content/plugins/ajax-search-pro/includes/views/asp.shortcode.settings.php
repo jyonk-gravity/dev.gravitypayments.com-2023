@@ -40,6 +40,7 @@ if ( function_exists('qtranxf_getLanguage') ) {
 	<?php endif; ?>
     <input type="hidden" name="filters_changed" value="0">
     <input type="hidden" name="filters_initial" value="1">
+    <input type="hidden" name="device" value="1">
     <?php
     do_action('asp_layout_settings_before_first_item', $id);
 

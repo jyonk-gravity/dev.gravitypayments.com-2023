@@ -53,6 +53,7 @@ function safeDecodeURIComponent(uriComponent) {
   }
 }
 
+
 ;// ./node_modules/@wordpress/url/build-module/get-query-string.js
 function getQueryString(url) {
   let query;
@@ -64,6 +65,7 @@ function getQueryString(url) {
     return query;
   }
 }
+
 
 ;// ./node_modules/@wordpress/url/build-module/get-query-args.js
 
@@ -87,9 +89,7 @@ function setPath(object, path, value) {
       object[key] || (isNextKeyArrayIndex ? [] : {})
     );
     if (Array.isArray(object[key]) && !isNextKeyArrayIndex) {
-      object[key] = {
-        ...object[key]
-      };
+      object[key] = { ...object[key] };
     }
     object = object[key];
   }
@@ -104,6 +104,7 @@ function getQueryArgs(url) {
     return accumulator;
   }, /* @__PURE__ */ Object.create(null));
 }
+
 
 ;// ./node_modules/@wordpress/url/build-module/build-query-string.js
 function buildQueryString(data) {
@@ -122,11 +123,12 @@ function buildQueryString(data) {
       if (value === null) {
         value = "";
       }
-      string += "&" + [key, value].map(encodeURIComponent).join("=");
+      string += "&" + [key, String(value)].map(encodeURIComponent).join("=");
     }
   }
   return string.substr(1);
 }
+
 
 ;// ./node_modules/@wordpress/url/build-module/remove-query-args.js
 
@@ -146,6 +148,7 @@ function removeQueryArgs(url, ...args) {
   return updatedUrl + fragment;
 }
 
+
 ;// ./node_modules/@wordpress/url/build-module/get-fragment.js
 function getFragment(url) {
   const matches = /^\S+?(#[^\s\?]*)/.exec(url);
@@ -153,6 +156,7 @@ function getFragment(url) {
     return matches[1];
   }
 }
+
 
 ;// ./node_modules/@wordpress/url/build-module/add-query-args.js
 
@@ -171,6 +175,7 @@ function addQueryArgs(url = "", args) {
   }
   return baseUrl + "?" + buildQueryString(args) + fragment;
 }
+
 
 ;// ./src/client/addons/blocksy.ts
 
