@@ -2,6 +2,7 @@
 
 namespace WPDRMS\ASP\Hooks\Filters;
 
+use stdClass;
 use WP_Block;
 use WPDRMS\ASP\Query\SearchQuery;
 use WPDRMS\ASP\Utils\Search;
@@ -57,7 +58,15 @@ class QueryLoopBlock extends AbstractFilter {
 		return $args;
 	}
 
-	public function queryVars( array $query, WP_Block $block, int $page ) {
+	/**
+	 * Adds a custom 'isDecorative' attribute to all Image blocks.
+	 *
+	 * @param array             $query Query arguments for WP_Query
+	 * @param stdClass|WP_Block $block The block instance (do NOT use WP_Block as type, sometimes it is passed as stdClass)
+	 * @param int               $page
+	 * @return array
+	 */
+	public function queryVars( array $query, $block, int $page ) {
 		if ( !isset($_GET['p_asid'], $block->context['asp_override_id']) ) {
 			return $query;
 		}

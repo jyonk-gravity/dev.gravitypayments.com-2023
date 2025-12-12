@@ -4,12 +4,19 @@ namespace WPDRMS\ASP\Asset\Script;
 defined('ABSPATH') or die("You can't access this file directly.");
 
 class Requirements {
+	private static array $exclude_on_backend_pages = array(
+		'asp_statistics',
+	);
+
 	public static function isRequired( $handle, $instances = false ): bool {
-		if ( wd_asp()->manager->getContext() == "backend" ) {
+		if ( wd_asp()->manager->getContext() === 'backend' ) {
+			if ( isset($_GET['page']) && in_array($_GET['page'], self::$exclude_on_backend_pages, true) ) {
+				return false;
+			}
 			return true;
 		}
 
-		$unused = self::getUnusedAssets(false, $instances);
+		$unused     = self::getUnusedAssets(false, $instances);
 		$wp_scripts = wp_scripts();
 
 		$required = false;
@@ -96,6 +103,11 @@ class Requirements {
 					$required = true;
 				}
 				break;
+			case 'wd-asp-ajaxsearchpro-addon-simplelightbox':
+				if ( !wd_in_array_r('simplelightbox', $unused) ) {
+					$required = true;
+				}
+				break;
 			case 'wd-asp-ajaxsearchpro-addon-divi':
 				if ( function_exists('et_setup_theme') ) {
 					$required = true;
@@ -116,24 +128,38 @@ class Requirements {
 	}
 
 	public static function getUnusedAssets( $return_stored = false, $instances = false ) {
-		$dependencies = array(
-			'vertical', 'horizontal', 'isotopic', 'polaroid', 'noui', 'datepicker', 'autocomplete',
-			'settings', 'compact', 'autopopulate', 'ga'
+		$dependencies          = array(
+			'vertical',
+			'horizontal',
+			'isotopic',
+			'polaroid',
+			'noui',
+			'datepicker',
+			'autocomplete',
+			'settings',
+			'compact',
+			'autopopulate',
+			'ga',
+			'simplelightbox',
 		);
 		$external_dependencies = array(
-			'select2', 'isotope'
+			'select2',
+			'isotope',
 		);
 		if ( $return_stored !== false && $instances === false ) {
-			return get_site_option('asp_unused_assets', array(
-				'internal' => $dependencies,
-				'external' => $external_dependencies
-			));
+			return get_site_option(
+				'asp_unused_assets',
+				array(
+					'internal' => $dependencies,
+					'external' => $external_dependencies,
+				)
+			);
 		}
 
 		// --- Analytics
 		// php 7.4 "string" != 0 -> false, 7.4+ "string" != 0 -> true
-		if ( wd_asp()->o['asp_analytics']['analytics'] !== "0" ) {
-			$dependencies = array_diff($dependencies, array('ga'));
+		if ( wd_asp()->o['asp_analytics']['analytics'] !== '0' ) {
+			$dependencies = array_diff($dependencies, array( 'ga' ));
 		}
 
 		if ( $instances === false ) {
@@ -144,29 +170,34 @@ class Requirements {
 				$search[] = wd_asp()->instances->get($instance);
 			}
 		}
-		if (is_array($search) && count($search)>0) {
-			foreach ($search as $s) {
+		if ( is_array($search) && count($search) >0 ) {
+			foreach ( $search as $s ) {
 				// $style and $id needed in the include
 				$style = $s['data'];
-				$id = $s['id'];
+				$id    = $s['id'];
 
 				// Calculate flags for the generated basic CSS
 				// --- Results type
-				$dependencies = array_diff($dependencies, array($s['data']['resultstype']));
+				$dependencies = array_diff($dependencies, array( $s['data']['resultstype'] ));
 
 				// --- Compact box
 				if ( $s['data']['box_compact_layout'] ) {
-					$dependencies = array_diff($dependencies, array('compact'));
+					$dependencies = array_diff($dependencies, array( 'compact' ));
 				}
 
 				// --- Auto populate
 				if ( $s['data']['auto_populate'] != 'disabled' ) {
-					$dependencies = array_diff($dependencies, array('autopopulate'));
+					$dependencies = array_diff($dependencies, array( 'autopopulate' ));
+				}
+
+				// --- SimpleLightBox
+				if ( $s['data']['return_attachments'] && $s['data']['attachment_use_lightbox'] ) {
+					$dependencies = array_diff($dependencies, array( 'simplelightbox' ));
 				}
 
 				// --- Autocomplete
 				if ( $s['data']['autocomplete'] ) {
-					$dependencies = array_diff($dependencies, array('autocomplete'));
+					$dependencies = array_diff($dependencies, array( 'autocomplete' ));
 				}
 
 				// --- NOUI
@@ -178,59 +209,62 @@ class Requirements {
 				 * can still use the settings shortcode, and that is not possible to check
 				 */
 				if ( count(wd_asp()->front_filters->get()) > 0 ) {
-					$dependencies = array_diff($dependencies, array('settings'));
+					$dependencies = array_diff($dependencies, array( 'settings' ));
 				}
 
-				foreach (wd_asp()->front_filters->get() as $filter) {
-					if ($filter->display_mode == 'slider' || $filter->display_mode == 'range') {
-						$dependencies = array_diff($dependencies, array('noui'));
+				foreach ( wd_asp()->front_filters->get() as $filter ) {
+					if ( $filter->display_mode == 'slider' || $filter->display_mode == 'range' ) {
+						$dependencies = array_diff($dependencies, array( 'noui' ));
 						break;
 					}
 				}
 
 				// --- Datepicker
-				foreach (wd_asp()->front_filters->get() as $filter) {
-					if ($filter->display_mode == 'date' || $filter->display_mode == 'datepicker') {
-						$dependencies = array_diff($dependencies, array('datepicker'));
+				foreach ( wd_asp()->front_filters->get() as $filter ) {
+					if ( $filter->display_mode == 'date' || $filter->display_mode == 'datepicker' ) {
+						$dependencies = array_diff($dependencies, array( 'datepicker' ));
 						break;
 					}
 				}
 				// --- Scrollable filters
-				foreach (wd_asp()->front_filters->get() as $filter) {
+				foreach ( wd_asp()->front_filters->get() as $filter ) {
 					if ( isset($filter->data['visible']) && $filter->data['visible'] == 0 ) {
 						continue;
 					}
-					if ($filter->display_mode == 'checkboxes' || $filter->display_mode == 'radio') {
+					if ( $filter->display_mode == 'checkboxes' || $filter->display_mode == 'radio' ) {
 						break;
 					}
 				}
 				// --- Autocomplete (not used yet)
 
 				// --- Select2
-				foreach (wd_asp()->front_filters->get() as $filter) {
-					if ($filter->display_mode == 'dropdownsearch' || $filter->display_mode == 'multisearch') {
-						$external_dependencies = array_diff($external_dependencies, array('select2'));
+				foreach ( wd_asp()->front_filters->get() as $filter ) {
+					if ( $filter->display_mode == 'dropdownsearch' || $filter->display_mode == 'multisearch' ) {
+						$external_dependencies = array_diff($external_dependencies, array( 'select2' ));
 						break;
 					}
 				}
 
 				// --- Isotope
 				if ( $s['data']['resultstype'] == 'isotopic' || $s['data']['fss_column_layout'] == 'masonry' ) {
-					$external_dependencies = array_diff($external_dependencies, array('isotope'));
+					$external_dependencies = array_diff($external_dependencies, array( 'isotope' ));
 				}
 			}
 		}
 
 		// Store for the init script
 		if ( $instances === false ) {
-			update_site_option('asp_unused_assets', array(
-				'internal' => $dependencies,
-				'external' => $external_dependencies
-			));
+			update_site_option(
+				'asp_unused_assets',
+				array(
+					'internal' => $dependencies,
+					'external' => $external_dependencies,
+				)
+			);
 		}
 		return array(
 			'internal' => $dependencies,
-			'external' => $external_dependencies
+			'external' => $external_dependencies,
 		);
 	}
 }

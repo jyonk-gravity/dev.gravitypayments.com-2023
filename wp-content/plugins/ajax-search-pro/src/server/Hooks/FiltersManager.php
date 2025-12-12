@@ -148,7 +148,7 @@ class FiltersManager {
 			'args'     => 0,
 		),
 		array(
-			'filter'   => 'asp_load_css_js',
+			'filter'   => 'asp/assets/load',
 			'handler'  => array( 'Asset', 'applySelectiveAssetLoader' ),
 			'priority' => 10,
 			'args'     => 1,
@@ -216,7 +216,7 @@ class FiltersManager {
 			'args'     => 2,
 		),
 		array(
-			'filter'   => 'asp_load_js',
+			'filter'   => 'asp/assets/load/js',
 			'handler'  => array( 'EtcFixes', 'fixOxygenEditorJS' ),
 			'priority' => 999,
 			'args'     => 1,
@@ -258,16 +258,16 @@ class FiltersManager {
 			'args'     => 1,
 		),
 		array(
-			'filter'   => 'asp/ajax/headers/content_type',
-			'handler'  => array( 'EtcFixes', 'gTranslateAjaxHeaders' ),
-			'priority' => 10,
-			'args'     => 1,
-		),
-		array(
 			'filter'   => 'attachment_fields_to_edit',
 			'handler'  => 'MediaScreen',
 			'priority' => 9999,
 			'args'     => 2,
+		),
+		array(
+			'filter'   => 'divi_loop_data_before_execution',
+			'handler'  => array( 'Divi', 'loop' ),
+			'priority' => 9999,
+			'args'     => 3,
 		),
 		array(
 			'filter'   => 'et_builder_blog_query',
@@ -288,13 +288,25 @@ class FiltersManager {
 			'args'     => 2,
 		),
 		array(
+			'filter'   => 'ctdqb_post_query_args',
+			'handler'  => array( 'Divi', 'queryBuilder' ),
+			'priority' => 9999,
+			'args'     => 2,
+		),
+		array(
 			'filter'   => 'asp_post_custom_field_before_tokenize',
 			'handler'  => array( 'ACF', 'indexRepeaterAndFlexFields' ),
 			'priority' => 10,
 			'args'     => 3,
 		),
 		array(
-			'filter'   => 'et_builder_ready',
+			'filter'   => 'et_builder_ready', // Divi 4
+			'handler'  => array( 'EtcFixes', 'diviBuilderReady' ),
+			'priority' => 9999,
+			'args'     => 0,
+		),
+		array(
+			'filter'   => 'divi_module_library_modules_dependency_tree', // Divi 5
 			'handler'  => array( 'EtcFixes', 'diviBuilderReady' ),
 			'priority' => 9999,
 			'args'     => 0,

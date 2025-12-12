@@ -39,6 +39,14 @@ var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
 
 "use strict";
 let helpers = external_AjaxSearchPro_namespaceObject.helpers;
+external_AjaxSearchPro_namespaceObject.plugin.updateSettingsDeviceField = function() {
+  const $this = this;
+  let deviceType = 1;
+  if (helpers.isTouchDevice() && helpers.deviceType() !== "desktop") {
+    deviceType = helpers.deviceType() === "phone" ? 3 : 2;
+  }
+  $this.n("searchsettings").find("input[name=device]").val(deviceType);
+};
 external_AjaxSearchPro_namespaceObject.plugin.showSettings = function(animations) {
   let $this = this;
   $this.initSettings?.();
@@ -224,12 +232,51 @@ external_AjaxSearchPro_namespaceObject.plugin.scrollToNextInvalidFacetMessage = 
 external_AjaxSearchPro_namespaceObject.plugin.settingsCheckboxToggle = function($node, checkState) {
   let $this = this;
   checkState = typeof checkState == "undefined" ? true : checkState;
-  let $parent = $node, $checkbox = $node.find('input[type="checkbox"]'), lvl = parseInt($node.data("lvl")) + 1, i = 0;
+  let $parent = $node, $checkbox = $node.find('input[type="checkbox"]'), lvl = parseInt($node.data("lvl")), i = 0, allUnchecked = true;
+  if ($this.o.settings.unselectParent) {
+    while (true) {
+      $parent = $parent.next();
+      if (allUnchecked && $parent.length > 0 && typeof $parent.data("lvl") != "undefined" && parseInt($parent.data("lvl")) >= lvl) {
+        if ($parent.find('input[type="checkbox"]').prop("checked")) {
+          allUnchecked = false;
+        }
+      } else {
+        break;
+      }
+      i++;
+      if (i > 4e3) break;
+    }
+    $parent = $node;
+    while (true) {
+      if ($parent.length > 0 && typeof $parent.data("lvl") != "undefined") {
+        if (parseInt($parent.data("lvl")) < lvl) {
+          if (allUnchecked && $parent.find('input[type="checkbox"]').prop("checked")) {
+            $parent.find('input[type="checkbox"]').prop("checked", false);
+          }
+          break;
+        } else {
+          if (allUnchecked && $parent.find('input[type="checkbox"]').prop("checked")) {
+            allUnchecked = false;
+          }
+        }
+      } else {
+        break;
+      }
+      i++;
+      $parent = $parent.prev();
+      if (i > 4e3) break;
+    }
+  }
+  lvl = lvl + 1;
+  $parent = $node;
   while (true) {
     $parent = $parent.next();
     if ($parent.length > 0 && typeof $parent.data("lvl") != "undefined" && parseInt($parent.data("lvl")) >= lvl) {
       if (checkState && $this.o.settings.unselectChildren) {
         $parent.find('input[type="checkbox"]').prop("checked", $checkbox.prop("checked"));
+      }
+      if (allUnchecked && $parent.find('input[type="checkbox"]').prop("checked")) {
+        allUnchecked = false;
       }
       if ($this.o.settings.hideChildren) {
         if ($checkbox.prop("checked")) {
@@ -242,7 +289,7 @@ external_AjaxSearchPro_namespaceObject.plugin.settingsCheckboxToggle = function(
       break;
     }
     i++;
-    if (i > 400) break;
+    if (i > 4e3) break;
   }
 };
 /* harmony default export */ var settings = ((/* unused pure expression or super */ null && (AjaxSearchPro)));
@@ -259,7 +306,7 @@ let datepicker_helpers = external_AjaxSearchPro_namespaceObject.helpers;
 external_AjaxSearchPro_namespaceObject.plugin.initDatePicker = function() {
   let $this = this;
   external_intervalUntilExecute_namespaceObject(function(_$) {
-    function onSelectEvent(dateText, inst, _this, nochange, nochage) {
+    function onSelectEvent(dateText, inst, _this, nochange) {
       let obj;
       if (_this != null) {
         obj = _$(_this);
@@ -274,8 +321,9 @@ external_AjaxSearchPro_namespaceObject.plugin.initDatePicker = function() {
         newValue = year + "-" + month + "-" + day;
         _$(".asp_datepicker_hidden", _$(obj).parent()).val(newValue);
       }
-      if ((typeof nochage == "undefined" || nochange == null) && newValue !== prevValue)
+      if ((typeof nochange == "undefined" || nochange == null || nochange === false) && newValue !== prevValue) {
         external_DoMini_namespaceObject(obj.get(0)).trigger("change");
+      }
     }
     _$(".asp_datepicker, .asp_datepicker_field", $this.n("searchsettings").get(0)).each(function() {
       let format = _$(".asp_datepicker_format", _$(this).parent()).val(), _this = this, origValue = _$(this).val();
@@ -299,11 +347,17 @@ external_AjaxSearchPro_namespaceObject.plugin.initDatePicker = function() {
       _$(this).on("selectnochange", function() {
         onSelectEvent(null, null, _this, true);
       });
-      _$(this).on("keyup", function() {
+      _$(this).on("keyup", function(e) {
         if (_$(_this).datepicker("getDate") == null) {
           _$(".asp_datepicker_hidden", _$(_this).parent()).val("");
+          _$(_this).datepicker("hide");
+        } else {
+          _$(_this).datepicker("show");
         }
-        _$(_this).datepicker("hide");
+        onSelectEvent(null, null, _this, true);
+        if (e.key === "Enter") {
+          external_DoMini_namespaceObject(_this).trigger("change");
+        }
       });
     });
     if (datepicker_helpers.isMobile() && datepicker_helpers.detectIOS()) {
@@ -333,42 +387,42 @@ external_AjaxSearchPro_namespaceObject.plugin.initDatePicker = function() {
 "use strict";
 let facet_helpers = external_AjaxSearchPro_namespaceObject.helpers;
 external_AjaxSearchPro_namespaceObject.plugin.initFacetEvents = function() {
-  let $this = this, gtagTimer = null, inputCorrectionTimer = null;
-  external_DoMini_namespaceObject(".asp_custom_f input[type=text]:not(.asp_select2-search__field):not(.asp_datepicker_field):not(.asp_datepicker)", $this.n("searchsettings")).on("input", function(e) {
+  let $this = this, gtagTimer = null;
+  external_DoMini_namespaceObject(".asp-number-range[data-asp-type=number]", $this.n("searchsettings")).on("blur keyup", function(e) {
+    if (e.type === "keyup" && e.keyCode !== 13) return;
+    if (this.value === "") {
+      return false;
+    }
+    let inputVal = this.value.replaceAll(external_DoMini_namespaceObject(this).data("asp-tsep"), "");
+    let correctedVal = facet_helpers.inputToFloat(this.value);
+    let _this = this;
+    _this.value = correctedVal;
+    correctedVal = correctedVal < parseFloat(external_DoMini_namespaceObject(this).data("asp-min")) ? external_DoMini_namespaceObject(this).data("asp-min") : correctedVal;
+    correctedVal = correctedVal > parseFloat(external_DoMini_namespaceObject(this).data("asp-max")) ? external_DoMini_namespaceObject(this).data("asp-max") : correctedVal;
+    _this.value = facet_helpers.addThousandSeparators(correctedVal, external_DoMini_namespaceObject(_this).data("asp-tsep"));
+    if (correctedVal.toString() !== inputVal) {
+      return false;
+    }
+  });
+  external_DoMini_namespaceObject(".asp_custom_f input[type=text]:not(.asp_select2-search__field):not(.asp_datepicker_field):not(.asp_datepicker)", $this.n("searchsettings")).on("keyup", function(e) {
     let code = e.keyCode || e.which, _this = this;
     $this.ktype = e.type;
     if (code === 13) {
       e.preventDefault();
       e.stopImmediatePropagation();
-    }
-    if (external_DoMini_namespaceObject(this).data("asp-type") === "number") {
-      if (this.value !== "") {
-        let inputVal = this.value.replaceAll(external_DoMini_namespaceObject(this).data("asp-tsep"), "");
-        let correctedVal = facet_helpers.inputToFloat(this.value);
-        let _this2 = this;
-        _this2.value = correctedVal;
-        correctedVal = correctedVal < parseFloat(external_DoMini_namespaceObject(this).data("asp-min")) ? external_DoMini_namespaceObject(this).data("asp-min") : correctedVal;
-        correctedVal = correctedVal > parseFloat(external_DoMini_namespaceObject(this).data("asp-max")) ? external_DoMini_namespaceObject(this).data("asp-max") : correctedVal;
-        clearTimeout(inputCorrectionTimer);
-        inputCorrectionTimer = setTimeout(function() {
-          _this2.value = facet_helpers.addThousandSeparators(correctedVal, external_DoMini_namespaceObject(_this2).data("asp-tsep"));
-        }, 400);
-        if (correctedVal.toString() !== inputVal) {
-          return false;
-        }
+      clearTimeout(gtagTimer);
+      gtagTimer = setTimeout(function() {
+        $this.gaEvent?.("facet_change", {
+          "option_label": external_DoMini_namespaceObject(_this).closest("fieldset").find("legend").text(),
+          "option_value": external_DoMini_namespaceObject(_this).val()
+        });
+      }, 1400);
+      $this.n("searchsettings").find("input[name=filters_changed]").val(1);
+      $this.setFilterStateInput(65);
+      if ($this.o.trigger.facet) {
+        $this.searchWithCheck(400);
       }
     }
-    clearTimeout(gtagTimer);
-    gtagTimer = setTimeout(function() {
-      $this.gaEvent?.("facet_change", {
-        "option_label": external_DoMini_namespaceObject(_this).closest("fieldset").find("legend").text(),
-        "option_value": external_DoMini_namespaceObject(_this).val()
-      });
-    }, 1400);
-    $this.n("searchsettings").find("input[name=filters_changed]").val(1);
-    $this.setFilterStateInput(65);
-    if ($this.o.trigger.facet)
-      $this.searchWithCheck(240);
   });
   $this.n("searchsettings").find(".asp-number-range[data-asp-tsep]").forEach(function() {
     this.value = facet_helpers.addThousandSeparators(this.value, external_DoMini_namespaceObject(this).data("asp-tsep"));
@@ -660,6 +714,7 @@ external_AjaxSearchPro_namespaceObject.plugin.initSettings = function() {
     this.initDatePicker?.();
     this.initSelect2?.();
     this.initFacetEvents?.();
+    this.updateSettingsDeviceField?.();
   }
 };
 external_AjaxSearchPro_namespaceObject.plugin.initSettingsBox = function() {

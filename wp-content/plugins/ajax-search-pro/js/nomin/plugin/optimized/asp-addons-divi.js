@@ -40,6 +40,7 @@ class DiviAddon {
   init() {
     helpers.Hooks.addFilter("asp/init/etc", this.diviBodyCommerceResultsPage, 10, this);
     helpers.Hooks.addFilter("asp/live_load/finished", this.diviBlogModuleTriggerInit.bind(this), 10, this);
+    helpers.Hooks.addFilter("asp/live_load/finished", this.diviQueryBuilderInit.bind(this), 10, this);
   }
   diviBodyCommerceResultsPage($this) {
     if ($this.o.divi.bodycommerce && $this.o.is_results_page) {
@@ -56,6 +57,11 @@ class DiviAddon {
   diviBlogModuleTriggerInit(url, obj, selector, widget) {
     if (jQuery !== void 0 && jQuery(widget).hasClass("et_pb_module")) {
       jQuery(window).trigger("load");
+    }
+  }
+  diviQueryBuilderInit(url, obj, selector, widget) {
+    if (widget.classList?.contains?.("ctdqb_query_builder")) {
+      document.dispatchEvent(new Event("DOMContentLoaded"));
     }
   }
 }

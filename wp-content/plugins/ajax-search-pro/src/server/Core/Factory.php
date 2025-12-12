@@ -2,19 +2,19 @@
 
 namespace WPDRMS\ASP\Core;
 
-use WPDRMS\ASP\Asset\AssetInterface;
 use WPDRMS\ASP\BlockEditor\ASPBlock;
-use WPDRMS\ASP\BlockEditor\BlockEditorAssets;
-use WPDRMS\ASP\BlockEditor\BlockInterface;
+use WPDRMS\ASP\Hooks\DeprecatedHooks;
 use WPDRMS\ASP\Integration\Imagely\NextGenGallery;
 use WPDRMS\ASP\Options\OptionAssets;
 use WPDRMS\ASP\Options\Routes\DirectoriesRoute;
 use WPDRMS\ASP\Options\Routes\IndexTableOptionsRoute;
 use WPDRMS\ASP\Options\Routes\SearchOptionsRoute;
+use WPDRMS\ASP\Options\Routes\StatisticsComponentsRoute;
 use WPDRMS\ASP\Options\Routes\TaxonomyTermsRoute;
+use WPDRMS\ASP\Options\Routes\UsersRoute;
 use WPDRMS\ASP\Patterns\SingletonTrait;
-use WPDRMS\ASP\Rest\RestInterface;
 use WPDRMS\ASP\Rest\TimedModalRoutes;
+use WPDRMS\ASP\Statistics\StatisticsRoute;
 
 /**
  * Returns all class instances for a given interface name
@@ -29,8 +29,11 @@ class Factory {
 			TimedModalRoutes::class,
 			DirectoriesRoute::class,
 			TaxonomyTermsRoute::class,
+			UsersRoute::class,
+			StatisticsComponentsRoute::class,
 			SearchOptionsRoute::class,
 			IndexTableOptionsRoute::class,
+			StatisticsRoute::class,
 		),
 		'Asset'       => array(
 			OptionAssets::class,
@@ -40,6 +43,9 @@ class Factory {
 		),
 		'Integration' => array(
 			NextGenGallery::class,
+		),
+		'Hook'        => array(
+			DeprecatedHooks::class,
 		),
 	);
 

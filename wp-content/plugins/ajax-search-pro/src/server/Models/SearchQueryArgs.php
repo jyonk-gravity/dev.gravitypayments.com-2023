@@ -3,6 +3,7 @@
 namespace WPDRMS\ASP\Models;
 
 use ArrayAccess;
+use WPDRMS\ASP\Options\Data\SearchOptions;
 use WPDRMS\ASP\Patterns\ObjectAsArrayTrait;
 
 /**
@@ -180,6 +181,14 @@ class SearchQueryArgs implements ArrayAccess {
 	 * @var int
 	 */
 	public int $min_word_length = 2;
+
+	/**
+	 * Search instance options (new)
+	 *
+	 * @var SearchOptions|null
+	 */
+	public ?SearchOptions $search_options;
+
 	// ----------------------------------------------------------------
 
 	// ----------------------------------------------------------------
@@ -891,6 +900,14 @@ class SearchQueryArgs implements ArrayAccess {
 	 */
 	public bool $is_wp_json = false;
 
+
+	/**
+	 * The presumed device type from which the search was initiated from
+	 *
+	 * @var "desktop"|"tablet"|"phone" $device_type
+	 */
+	public string $device_type = "desktop";
+
 	/**
 	 * Number of the consecutive ajax requests with the same configuration triggered by
 	 * clicking on the 'More results...' link
@@ -899,6 +916,13 @@ class SearchQueryArgs implements ArrayAccess {
 	 * @var int
 	 */
 	public int $_call_num                        = 0;
+
+	/**
+	 * When false, the search is not recorded to the statistics db
+	 *
+	 * @var bool
+	 */
+	public bool $record_statistics               = true;
 
 	/**
 	 * Show more results feature enabled (only used via ajax search instance)

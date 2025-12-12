@@ -17,9 +17,6 @@ jQuery(function ($) {
     var post = null;
     var postTimeout = null;
     var indexing = false;
-    var defragmenting = false;
-    var defragCount = 0;
-    var defragInterval = 300000; // Defrag at every X number of keywords found
     var failCount = 0;  // Consecutive failures counter
     var reloadStats = true;
     var statsData = {
@@ -123,7 +120,7 @@ jQuery(function ($) {
     var statsLastTrigger = (new Date()).getTime();
     setInterval(function () {
         var elapsedTime = ( (new Date()).getTime() - statsLastTrigger ) / 1000;
-        if ( reloadStats && elapsedTime > 179 && !indexing && !defragmenting ) {
+        if ( reloadStats && elapsedTime > 179 && !indexing ) {
             stats();
             statsLastTrigger = (new Date()).getTime();
         }
@@ -134,14 +131,14 @@ jQuery(function ($) {
         failures = typeof failures == 'undefined' ? false : failures;
         delay = typeof delay == 'undefined' ? 0 : delay;
 
-        var timeout = 3000;
+        var timeout = 1000;
         if ( failures ) {
             timeout = 15000;
         } else {
             if ( lastRequestDuration >= 10 ) {
-                timeout = 7000;
+                timeout = 3000;
             } else if ( lastRequestDuration <= 4 ) {
-                timeout = 1500;
+                timeout = 500;
             }
         }
         timeout += delay;
@@ -164,35 +161,6 @@ jQuery(function ($) {
                 .done(asp_on_post_success)
                 .fail(asp_on_post_failure);
         }, timeout );
-    }
-
-    function defragment( the_action ) {
-        the_action = typeof the_action == 'undefined' ? false : the_action;
-        defragCount++;
-        var dfStart = (new Date()).getTime();
-        console.log("Optimizing: ", defragCount);
-        defragmenting = true;
-        $.ajax({
-            'url': ajaxurl,
-            'data': {
-                'action': 'asp_indextable_optimize',
-                'asp_it_request_nonce': $('#asp_it_request_nonce').val(),
-            },
-            'method': 'POST',
-            'timeout': 60000
-        }).done(function(r){
-            console.log("[S] Optimizing finished in: ", parseInt(( (new Date()).getTime() - dfStart ) / 1000) );
-            defragmenting = false;
-            if ( the_action !== false ) {
-                index(the_action, false, 15000);
-            }
-        }).fail(function(r){
-            console.log("[F] Optimizing finished in: ", parseInt(( (new Date()).getTime() - dfStart ) / 1000) );
-            defragmenting = false;
-            if ( the_action !== false ) {
-                index(the_action, false, 30000);
-            }
-        });
     }
 
     function asp_on_post_success(response) {
@@ -247,12 +215,7 @@ jQuery(function ($) {
                             the_action = 'switching_blog';
                     }
 
-                    if ( Math.floor( keywords_found / defragInterval) > defragCount ) {
-                        defragment(the_action);
-                    } else {
-                        index(the_action);
-                    }
-
+                    index(the_action);
                     reloadStats = true;
 
                     return;
@@ -263,11 +226,6 @@ jQuery(function ($) {
 
                 // Next indexing starting point
                 statsData.postsIndexedStart += statsData.postsIndexedNow;
-
-                if ( keywords_found > 10000 && defragCount == 0 ) {
-                    // Trigger silent index table alter to prevent fragmentations
-                    defragment(false );
-                }
 
                 stats();
                 hideTimer("#it_timer");
@@ -415,7 +373,7 @@ jQuery(function ($) {
         $error_cont.addClass('hiddend');
         $progress_bar.css('width', "0%");
         $progress_text.html(msg('msg_ini'));
-        $overlay.removeClass('hiddend');
+        $overlay.addClass('hiddend');
         $dontclose.addClass('hiddend');
     });
 

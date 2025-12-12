@@ -11,6 +11,7 @@ use WPDRMS\ASP\Modal\Factories\ModalFactory;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 use WPDRMS\ASP\Rest\RestInterface;
 use WPDRMS\ASP\Modal\Services\TimedModalService;
+use WPDRMS\ASP\Statistics\StatisticsService;
 use WPDRMS\ASP\Updates\Remote as UpdatesRemote;
 
 if ( !defined('ABSPATH') ) {
@@ -388,9 +389,14 @@ class Manager {
 		}
 
 		foreach ( $factory->get('Integration') as $integration ) {
-			$integration->load();
+			$integration->register();
 		}
 
+		foreach ( $factory->get('Hook') as $hook ) {
+			$hook->register();
+		}
+
+		StatisticsService::instance()->loadHooks();
 		FiltersManager::registerAll();
 	}
 

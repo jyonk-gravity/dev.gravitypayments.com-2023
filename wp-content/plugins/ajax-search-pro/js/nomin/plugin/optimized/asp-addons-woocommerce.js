@@ -35,19 +35,22 @@ var external_AjaxSearchPro_namespaceObject = Object(window.WPD)["AjaxSearchPro"]
 
 
 const helpers = external_AjaxSearchPro_namespaceObject.helpers;
+const { Hooks } = helpers;
 class WooCommerceAddToCartAddon {
+  name = "Woo Add To Cart Addon";
   init() {
-    helpers.Hooks.addFilter("asp/search/end", this.finished.bind(this), 10, this);
+    Hooks.addFilter("asp/search/end", this.finished.bind(this), 10, this);
   }
   finished($this) {
     if (typeof wc_add_to_cart_params === "undefined" || typeof jQuery === "undefined") {
-      return;
+      return $this;
     }
     this.requests = [];
     this.addRequest = this.addRequest.bind(this);
     this.run = this.run.bind(this);
     this.$liveRegion = this.createLiveRegion();
     jQuery($this.n("resdrg").get(0)).find(".add-to-cart-button:not(.wc-interactive)").off().on("click", { addToCartHandler: this }, this.onAddToCart);
+    return $this;
   }
   /**
    * Add add-to-cart event to the queue.

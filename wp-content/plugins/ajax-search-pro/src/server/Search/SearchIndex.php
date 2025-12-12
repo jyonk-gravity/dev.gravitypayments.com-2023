@@ -212,7 +212,7 @@ class SearchIndex extends SearchPostTypes {
 
 		/*------------------- Post type based ordering ------------------*/
 		$p_type_priority = '';
-		if ( isset($sd['use_post_type_order']) && $sd['use_post_type_order'] === 1 ) {
+		if ( isset($sd['use_post_type_order']) && $sd['use_post_type_order'] ) {
 			foreach ( $sd['post_type_order'] as $pk => $p_order ) {
 				$p_type_priority .= "
 				WHEN '$p_order' THEN $pk ";
@@ -414,11 +414,11 @@ class SearchIndex extends SearchPostTypes {
 		$words = $_s;
 
 		if ( empty($words) ) {
-			$queries[] = str_replace(array( '{like_query}', '{rmod}', '{limit}', '{group_by}' ), array( '1', 1, $this->getPoolSize(), '' ), $this->query);
+			$queries[] = str_replace(array( '{like_query}', '{rmod}', '{limit}', '{group_by}' ), array( '1', 1, $this->getPoolSize(), 'GROUP BY id' ), $this->query);
 		} elseif ( $kw_logic === 'orex' ) {
-				$rmod       = 1;
-				$like_query = "(asp_index.term = '" . implode("' OR asp_index.term = '", $words) . "') AND asp_index.term_reverse <> ''";
-				$queries[]  = str_replace(array( '{like_query}', '{rmod}', '{limit}', '{group_by}' ), array( $like_query, $rmod, $this->getPoolSize(), '' ), $this->query);
+			$rmod       = 1;
+			$like_query = "(asp_index.term = '" . implode("' OR asp_index.term = '", $words) . "') AND asp_index.term_reverse <> ''";
+			$queries[]  = str_replace(array( '{like_query}', '{rmod}', '{limit}', '{group_by}' ), array( $like_query, $rmod, $this->getPoolSize(), '' ), $this->query);
 		} elseif ( $kw_logic === 'andex' ) {
 			foreach ( $words as $wk => $word ) {
 				$rmod = max(10 - ( $wk * 8 ), 1);
@@ -439,15 +439,15 @@ class SearchIndex extends SearchPostTypes {
 		}
 
 		/*---------------------- Post CPT IDs ---------------------------*/
-		if ( in_array('ids', $args['post_fields'], true) ) {
+		if ( in_array('ids', $args['post_fields'], true) && $s !== '' ) {
 			$queries['doc'] = str_replace(array( '{like_query}', '{rmod}', '{limit}', '{group_by}' ), array( "asp_index.doc LIKE '$s'", 1, $this->getPoolSize(), 'GROUP BY id' ), $this->query);
 		}
 		/*---------------------------------------------------------------*/
 
 		/*----------------------- Improved title and custom field search query ------------------*/
 		if (
-			$args['post_primary_order'] === 'relevance' &&
-			in_array('title', $args['post_fields'], true) && ( MB::strlen($s) > 2 || count($_s) === 0 )
+			str_starts_with($args->post_primary_order, 'relevance') &&
+			in_array('title', $args['post_fields'], true) && ( MB::strlen($s) > 0 || count($_s) === 0 )
 		) {
 			$rmod = 1000;
 
@@ -467,7 +467,7 @@ class SearchIndex extends SearchPostTypes {
 			$single_delimiter     = count($_s) === 1 ? '___' : '';
 			$title_query          = str_replace(
 				array( '{like_query}', '{rmod}', '{limit}', '{group_by}', 'asp_index.doc as id' ),
-				array( "(asp_index.term_reverse = '' AND asp_index.term LIKE '" . $s . $single_delimiter . "')", $rmod * 2, $limit, '', 'DISTINCT asp_index.doc as id' ),
+				array( "(asp_index.term_reverse = '' AND asp_index.term LIKE '" . $s . $single_delimiter . "')", $rmod * 2, $this->getPoolSize(), '', 'DISTINCT asp_index.doc as id' ),
 				$this->query
 			);
 			$results_arr['exact'] = $wpdb->get_results($title_query); // phpcs:ignore
@@ -480,13 +480,13 @@ class SearchIndex extends SearchPostTypes {
 				if ( $kw_logic === 'or' || $kw_logic === 'and' ) {
 					$title_query = str_replace(
 						array( '{like_query}', '{rmod}', '{limit}', '{group_by}', 'asp_index.doc as id' ),
-						array( "(asp_index.term_reverse = '' AND asp_index.term LIKE '$s%')", $rmod, $limit, '', 'DISTINCT asp_index.doc as id' ),
+						array( "(asp_index.term LIKE '$s%')", $rmod, $this->getPoolSize(), '', 'DISTINCT asp_index.doc as id' ),
 						$this->query
 					);
 				} else { // partial query (starting with) until the first keyword for OREX and ANDEX
 					$title_query = str_replace(
 						array( '{like_query}', '{rmod}', '{limit}', '{group_by}', 'asp_index.doc as id' ),
-						array( "(asp_index.term_reverse = '' AND asp_index.term LIKE '$s %')", $rmod, $limit, '', 'DISTINCT asp_index.doc as id' ),
+						array( "(asp_index.term LIKE '$s %')", $rmod, $this->getPoolSize(), '', 'DISTINCT asp_index.doc as id' ),
 						$this->query
 					);
 				}
@@ -500,13 +500,13 @@ class SearchIndex extends SearchPostTypes {
 			}
 		}
 		/*---------------------------------------------------------------*/
-
 		if ( count($queries) > 0 ) {
 			foreach ( $queries as $k => $query ) {
 				$query             = apply_filters('asp_query_indextable', $query, $args, $args['_id'], $args['_ajax_search']);
 				$results_arr[ $k ] = $wpdb->get_results($query); // phpcs:ignore
 			}
 		}
+
 		// Merge results depending on the logic
 		$results_arr = $this->mergeRawResults($results_arr, $kw_logic);
 

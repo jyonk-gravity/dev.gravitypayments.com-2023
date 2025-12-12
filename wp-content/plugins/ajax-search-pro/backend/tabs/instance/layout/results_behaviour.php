@@ -1,4 +1,13 @@
 <div class="item">
+	<?php
+	$o = new wpdreamsYesNo("results_click_disable", __('Disable clicks on results?', 'ajax-search-pro'), $sd['results_click_disable']);
+	$params[$o->getName()] = $o->getData();
+	?>
+	<div class="descMsg item-flex-grow item-flex-100">
+		<?php echo __('Will disable redirection to the result when the user tries to interact with it.', 'ajax-search-pro'); ?>
+	</div>
+</div>
+<div class="item">
     <?php
     $o = new wpdreamsYesNo("results_click_blank", __('When clicking on a result, open it in a new window?', 'ajax-search-pro'), $sd['results_click_blank']);
     $params[$o->getName()] = $o->getData();

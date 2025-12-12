@@ -1,8 +1,6 @@
-<?php
+<?php /** @noinspection PhpFullyQualifiedNameUsageInspection */
 
 namespace WPDRMS\ASP\Patterns;
-
-use stdClass;
 
 /**
  * Trait to allow accessing class attributes via array keys,
@@ -26,10 +24,10 @@ trait ObjectAsArrayTrait {
 	 */
 	public function __construct( array $args = array() ) {
 		foreach ( $args as $property => $value ) {
-			if ( isset($this->{$property}) ) {
+			if ( property_exists($this, $property) ) {
 				$this->{$property} = $value;
 			} else {
-				trigger_error("Property $property passed to constructor does not exist."); // @phpcs:ignore
+				trigger_error("Property $property passed to constructor does not exist in " . static::class); // @phpcs:ignore
 			}
 		}
 	}
@@ -54,7 +52,6 @@ trait ObjectAsArrayTrait {
 	/**
 	 * @param mixed $property
 	 * @return mixed|null
-	 * @noinspection PhpIssetCanBeReplacedWithCoalesceInspection
 	 * @noinspection PhpLanguageLevelInspection
 	 */
 	#[\ReturnTypeWillChange]

@@ -25,7 +25,8 @@ trait JsonSerializablePublicProperties {
 		return Closure::fromCallable('get_object_vars')->__invoke($this);
 	}
 
-	public function jsonSerialize(): array {
+	#[\ReturnTypeWillChange]
+	public function jsonSerialize() {
 		return $this->publicProperties();
 	}
 

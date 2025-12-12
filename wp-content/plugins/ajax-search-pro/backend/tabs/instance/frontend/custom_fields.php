@@ -102,6 +102,9 @@ $cf_tooltip_msg = sprintf( __('One item per line. Use the <strong>{get_values}</
 
         function resetEdit() {
             $('#asp_edit_field input, #asp_edit_field select, #asp_edit_field textarea').each(function(){
+				if ( $(this).attr('name') === undefined ) {
+					return;
+				}
                 $(this).val(resetValues[$(this).attr('name')]);
                 if ( $(this).is(':checkbox')) {
                     $(this).prop('checked', resetValues[$(this).attr('name')]);
@@ -248,6 +251,9 @@ $cf_tooltip_msg = sprintf( __('One item per line. Use the <strong>{get_values}</
             $('#asp_edit_title').text(data.asp_f_title);
 
             $.each(data, function(key, val){
+				if ( key === undefined || key === "undefined" ) {
+					return;
+				}
                 if (val == 'asp_checked') {
                     $('#asp_edit_field *[name=' + key + ']').prop('checked', true);
                 } else if (val == 'asp_unchecked') {
@@ -282,6 +288,9 @@ $cf_tooltip_msg = sprintf( __('One item per line. Use the <strong>{get_values}</
             var data = {};
             $('#asp_edit_field input, #asp_edit_field select, #asp_edit_field textarea').each(function(){
                 if ($(this).parent().hasClass('hiddend')) return;
+				if ( $(this).attr('name') === undefined ) {
+					return;
+				}
 
                 if ($(this).attr('type') == 'checkbox') {
                     if ($(this).prop('checked') == true)

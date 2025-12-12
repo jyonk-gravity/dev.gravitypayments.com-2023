@@ -5,6 +5,8 @@ use stdClass;
 use WPDRMS\ASP\Asset\AssetManager;
 use WPDRMS\ASP\Asset\ManagerInterface;
 use WPDRMS\ASP\Patterns\SingletonTrait;
+use WPDRMS\ASP\Statistics\ORM\StatisticsOptions;
+use WPDRMS\ASP\Statistics\StatisticsService;
 use WPDRMS\ASP\Utils\Html;
 use WPDRMS\ASP\Utils\Script;
 
@@ -53,62 +55,66 @@ class Manager extends AssetManager implements ManagerInterface {
 
 	private $optimized_scripts = array(
 		'wd-asp-ajaxsearchpro' => array(
-			'wd-asp-ajaxsearchpro-prereq'            => array(
+			'wd-asp-ajaxsearchpro-prereq'               => array(
 				'handle' => 'wd-asp-ajaxsearchpro', // Handle alias, for the enqueue
 				'src'    => 'js/{js_source}/plugin/optimized/asp-prereq.js',
 			),
-			'wd-asp-ajaxsearchpro-core'              => array(
+			'wd-asp-ajaxsearchpro-core'                 => array(
 				'src' => 'js/{js_source}/plugin/optimized/asp-core.js',
 			),
-			'wd-asp-ajaxsearchpro-settings'          => array(
+			'wd-asp-ajaxsearchpro-settings'             => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-settings.js',
 				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-compact'           => array(
+			'wd-asp-ajaxsearchpro-compact'              => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-compact.js',
 				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-vertical'          => array(
+			'wd-asp-ajaxsearchpro-vertical'             => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-results-vertical.js',
 				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-horizontal'        => array(
+			'wd-asp-ajaxsearchpro-horizontal'           => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-results-horizontal.js',
 				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-polaroid'          => array(
+			'wd-asp-ajaxsearchpro-polaroid'             => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-results-polaroid.js',
 				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-isotopic'          => array(
+			'wd-asp-ajaxsearchpro-isotopic'             => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-results-isotopic.js',
 				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-ga'                => array(
+			'wd-asp-ajaxsearchpro-ga'                   => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-ga.js',
 				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-live'              => array(
+			'wd-asp-ajaxsearchpro-live'                 => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-live.js',
 				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-autocomplete'      => array(
+			'wd-asp-ajaxsearchpro-autocomplete'         => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-autocomplete.js',
 				'prereq' => array( 'wd-asp-ajaxsearchpro' ),
 			),
-			'wd-asp-ajaxsearchpro-wrapper'           => array(
+			'wd-asp-ajaxsearchpro-wrapper'              => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-wrapper.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
-			'wd-asp-ajaxsearchpro-addon-elementor'   => array(
+			'wd-asp-ajaxsearchpro-addon-elementor'      => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-elementor.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
-			'wd-asp-ajaxsearchpro-addon-bricks'      => array(
+			'wd-asp-ajaxsearchpro-addon-simplelightbox' => array(
+				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-simplelightbox.js',
+				'prereq' => true, // TRUE => previously loaded script
+			),
+			'wd-asp-ajaxsearchpro-addon-bricks'         => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-bricks.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
-			'wd-asp-ajaxsearchpro-addon-divi'        => array(
+			'wd-asp-ajaxsearchpro-addon-divi'           => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-divi.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
@@ -116,7 +122,7 @@ class Manager extends AssetManager implements ManagerInterface {
 				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-blocksy.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
-			'wd-asp-ajaxsearchpro-addon-woocommerce' => array(
+			'wd-asp-ajaxsearchpro-addon-woocommerce'    => array(
 				'src'    => 'js/{js_source}/plugin/optimized/asp-addons-woocommerce.js',
 				'prereq' => true, // TRUE => previously loaded script
 			),
@@ -129,7 +135,9 @@ class Manager extends AssetManager implements ManagerInterface {
 			$this->args['method'] = $this->args['method'] === 'optimized_async' ? 'optimized' :$this->args['method'];
 			$this->earlyFooterEnqueue();
 			$this->initialize();
-			echo $this->inline; // @phpcs:ignore
+			if ( !$force || count($this->prepared) > 0 ) {
+				echo $this->inline; // @phpcs:ignore
+			}
 			foreach ( $this->prepared as $script ) {
 				wp_enqueue_script($script['handle']);
 			}
@@ -280,6 +288,7 @@ class Manager extends AssetManager implements ManagerInterface {
 		}
 		if ( Requirements::isRequired('jquery-ui-datepicker', $instances) ) {
 			wp_enqueue_script('jquery-ui-datepicker');
+			wp_localize_jquery_ui_datepicker();
 		}
 	}
 
@@ -390,6 +399,14 @@ class Manager extends AssetManager implements ManagerInterface {
 			$additional_scripts
 		);
 
+		$statistics_options = StatisticsOptions::instance();
+		$statistics         = array(
+			'enabled'                    => $statistics_options->status->value,
+			'record_results'             => $statistics_options->record_results->value,
+			'record_result_interactions' => $statistics_options->record_result_interactions->value,
+			'results_page_dom_selector'  => $statistics_options->results_page_dom_selector->value,
+		);
+
 		// The new variable is ASP
 		$this->inline = Script::objectToInlineScript(
 			$handle,
@@ -397,6 +414,8 @@ class Manager extends AssetManager implements ManagerInterface {
 			array(
 				'wp_rocket_exception'   => 'DOMContentLoaded',    // WP Rocket hack to prevent the wrapping of the inline script: https://docs.wp-rocket.me/article/1265-load-javascript-deferred
 				'ajaxurl'               => $ajax_url,
+				'home_url'              => home_url('/'),
+				'rest_url'              => apply_filters('asp/rest/base_url/', rest_url()),
 				'backend_ajaxurl'       => admin_url('admin-ajax.php'),
 				'asp_url'               => ASP_URL,
 				'upload_url'            => wd_asp()->upload_url,
@@ -407,7 +426,7 @@ class Manager extends AssetManager implements ManagerInterface {
 				'pageHTML'              => '',
 				'additional_scripts'    => $additional_scripts,
 				'script_async_load'     => $js_async_load,
-				'font_url'              => str_replace('http:', '', plugins_url()) . '/ajax-search-pro/css/fonts/icons/icons2.woff2',
+				'font_url'              => plugins_url() . '/ajax-search-pro/css/fonts/icons/icons2.woff2',
 				'init_only_in_viewport' => boolval( $this->args['init_only_in_viewport']),
 				'highlight'             => array(
 					'enabled' => $single_highlight,
@@ -415,6 +434,7 @@ class Manager extends AssetManager implements ManagerInterface {
 				),
 				'debug'                 => ASP_DEBUG || defined('WP_ASP_TEST_ENV'),
 				'instances'             => new stdClass(),
+				'statistics'            => $statistics,
 				'analytics'             => array(
 					'method'      => $analytics['analytics'],
 					'tracking_id' => $analytics['analytics_tracking_id'],

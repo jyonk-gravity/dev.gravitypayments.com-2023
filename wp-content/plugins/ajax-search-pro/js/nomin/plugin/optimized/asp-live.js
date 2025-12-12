@@ -54,9 +54,6 @@ external_AjaxSearchPro_namespaceObject.plugin.liveLoad = function(origSelector, 
     let parser = new DOMParser();
     let dataNode = parser.parseFromString(data, "text/html");
     let $dataNode = external_DoMini_namespaceObject(dataNode);
-    if ($this.o.statistics) {
-      $this.stat_addKeyword($this.o.id, $this.n("text").val());
-    }
     if (data !== "" && $dataNode.length > 0 && $dataNode.find(selector).length > 0) {
       data = data.replace(/&asp_force_reset_pagination=1/gmi, "");
       data = data.replace(/%26asp_force_reset_pagination%3D1/gmi, "");
@@ -66,6 +63,8 @@ external_AjaxSearchPro_namespaceObject.plugin.liveLoad = function(origSelector, 
       }
       data = helpers.Hooks.applyFilters("asp_live_load_html", data, $this.o.id, $this.o.iid);
       $dataNode = external_DoMini_namespaceObject(parser.parseFromString(data, "text/html"));
+      const newStatisticsID = $dataNode.find("#asp-statistics").data("statistics-id");
+      $this.statisticsID = newStatisticsID === "" ? 0 : parseInt(newStatisticsID);
       let replacementNode = $dataNode.find(selector).get(0);
       replacementNode = helpers.Hooks.applyFilters("asp/live_load/replacement_node", replacementNode, $this, $el.get(0), data);
       if (replacementNode != null) {
@@ -88,6 +87,11 @@ external_AjaxSearchPro_namespaceObject.plugin.liveLoad = function(origSelector, 
         );
       }
       $this.addHighlightString(external_DoMini_namespaceObject(selector).find("a"));
+      if (ASP.statistics.enabled && ASP.statistics.record_results && ASP.statistics.record_result_interactions) {
+        external_DoMini_namespaceObject(selector).find(ASP.getResultsPageResultSelector()).off().on("click", function() {
+          ASP.registerInteraction(this, $this.statisticsID);
+        });
+      }
       helpers.Hooks.applyFilters("asp/live_load/finished", url, $this, selector, $el.get(0));
       ASP.initialize();
       $this.lastSuccesfulSearch = external_DoMini_namespaceObject("form", $this.n("searchsettings")).serialize() + $this.n("text").val().trim();
@@ -214,6 +218,7 @@ external_AjaxSearchPro_namespaceObject.plugin.getLiveURLbyBaseLocation = functio
   if (location.indexOf("?") === -1) {
     start = "?";
   }
+  this.updateSettingsDeviceField?.();
   let final = location + start + url + "&asp_active=1&asp_force_reset_pagination=1&p_asid=" + $this.o.id + "&p_asp_data=1&" + external_DoMini_namespaceObject("form", $this.n("searchsettings")).serialize();
   final = final.replace("?&", "?");
   final = final.replace("&&", "&");
@@ -247,8 +252,10 @@ external_AjaxSearchPro_namespaceObject.plugin.initLiveLoaderPopState = function(
   if (ASP.pageHTML === "") {
     if (typeof ASP._ajax_page_html === "undefined") {
       ASP._ajax_page_html = true;
+      const url = new URL($this.currentPageURL);
+      url.searchParams.append("statistics", 0);
       external_DoMini_namespaceObject.fn.ajax({
-        url: $this.currentPageURL,
+        url,
         method: "GET",
         success: function(data) {
           ASP.pageHTML = data;

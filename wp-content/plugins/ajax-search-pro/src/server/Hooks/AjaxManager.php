@@ -24,11 +24,6 @@ class AjaxManager {
 			"priv"    => true,
 			"nopriv"  => true
 		),
-		"ajaxsearchpro_addkeyword" => array(
-			"handler" => "AddKeyword",
-			"priv"    => true,
-			"nopriv"  => true
-		),
 		"ajaxsearchpro_preview" => array(
 			"handler" => "Preview",
 			"priv"    => true,
@@ -46,11 +41,6 @@ class AjaxManager {
 		),
 		"ajaxsearchpro_deletecache" => array(
 			"handler" => "DeleteCache",
-			"priv"    => true,
-			"nopriv"  => false
-		),
-		"ajaxsearchpro_deletekeyword" => array(
-			"handler" => "DeleteKeyword",
 			"priv"    => true,
 			"nopriv"  => false
 		),

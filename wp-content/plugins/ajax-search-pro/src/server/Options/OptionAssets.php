@@ -2,10 +2,10 @@
 
 namespace WPDRMS\ASP\Options;
 
-use WPDRMS\ASP\Asset\AssetInterface;
+use WPDRMS\ASP\Asset\Asset;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 
-class OptionAssets implements AssetInterface {
+class OptionAssets implements Asset {
 	use SingletonTrait;
 
 	/**

@@ -2,6 +2,7 @@
 
 namespace WPDRMS\ASP\Query;
 
+use Exception;
 use WPDRMS\ASP\Index\Manager;
 use WPDRMS\ASP\Models\SearchQueryArgs;
 use WPDRMS\ASP\Options\Data\SearchOptions;
@@ -19,6 +20,7 @@ class QueryArgs {
 	 * @param array<string, mixed> $args
 	 * @return array<string, mixed>
 	 * @noinspection PhpUndefinedFunctionInspection
+	 * @throws Exception
 	 */
 	public static function get( int $search_id, array $o = array(), array $args = array() ): array {
 
@@ -38,11 +40,11 @@ class QueryArgs {
 		if ( !empty($_POST['asp_preview_options']) && ( current_user_can('manage_options') || ASP_DEMO ) ) {
 			if ( is_array($_POST['asp_preview_options']) ) {
 				$sd = array_merge($sd, $_POST['asp_preview_options']);
-				$search_options->setData( $sd );
+				$search_options->setArgs( $sd );
 			} else {
 				parse_str($_POST['asp_preview_options'], $preview_options);
 				$sd = array_merge($sd, $preview_options);
-				$search_options->setData( $sd );
+				$search_options->setArgs( $sd );
 			}
 		}
 		// phpcs:enable
@@ -251,6 +253,16 @@ class QueryArgs {
 		$args['filters_changed'] = $o['filters_changed'] ?? ( $args['filters_changed'] ?? false );
 		$args['filters_initial'] = $o['filters_initial'] ?? ( $args['filters_initial'] ?? true );
 
+		if ( isset($o['device']) ) {
+			$o['device']         = intval($o['device']);
+			$args['device_type'] = $o['device'] === 2 ? 'tablet' :
+				( $o['device'] === 3 ? 'mobile' : 'desktop' );
+		}
+
+		if ( isset($_GET['statistics']) && boolval($_GET['statistics']) === false ) {
+			$args['record_statistics'] = false;
+		}
+
 		/*--------------------- GENERAL FIELDS --------------------------*/
 		$args['search_type'] = array();
 		$args['post_fields'] = array();
@@ -429,8 +441,8 @@ class QueryArgs {
 		$args['attachment_link_to_secondary'] = $sd['attachment_link_to_secondary'];
 		$args['attachment_pdf_image']         = $sd['attachment_pdf_image'];
 
-		$args['attachment_exclude_directories'] = $search_options->get('attachment_exclude_directories')->directories;
-		$args['attachment_include_directories'] = $search_options->get('attachment_include_directories')->directories;
+		$args['attachment_exclude_directories'] = $search_options->attachment_exclude_directories->directories;
+		$args['attachment_include_directories'] = $search_options->attachment_include_directories->directories;
 
 		if (
 			count($args['attachment_exclude_directories']) > 0 ||
@@ -438,7 +450,7 @@ class QueryArgs {
 		) {
 			$uploads = wp_get_upload_dir();
 			if ( false === $uploads['error'] ) {
-				$uploads_relative_dir =
+				$uploads_relative_dir                   =
 					trailingslashit( str_replace(ABSPATH, '', $uploads['basedir']) );
 				$args['attachment_exclude_directories'] = array_filter(
 					array_map(
@@ -480,8 +492,6 @@ class QueryArgs {
 				);
 			}
 		}
-
-
 
 		// ----------------------------------------------------------------
 		// 3. BLOGS

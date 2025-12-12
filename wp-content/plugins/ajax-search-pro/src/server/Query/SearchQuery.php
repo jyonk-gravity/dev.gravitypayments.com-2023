@@ -867,9 +867,6 @@ class SearchQuery {
 				$results = asp_results_to_wp_obj($results, 0, $args->posts_per_page);
 			}
 			$results = apply_filters('asp_noajax_results', $results, $args->_id, false, $args);
-			if ( get_option('asp_stat', 0) == 1 ) {
-				Statistics::addKeyword($args->_id, $args->s);
-			}
 		}
 
 		if ( isset($results['groups']) ) {
@@ -881,6 +878,8 @@ class SearchQuery {
 		} else {
 			$this->returned_posts = count($results);
 		}
+
+		apply_filters('asp/search/results', $results, $args, $this);
 
 		$this->posts = $results;
 		return $results;
@@ -897,8 +896,10 @@ class SearchQuery {
 			} else {
 				$keywords = $suggestions['keywords'];
 			}
-			$this->args['s'] = $keywords[0];
-			$posts           = $this->get_posts();
+			if ( isset($keywords[0]) && $keywords[0] !== '' ) {
+				$this->args['s'] = $keywords[0];
+				$posts           = $this->get_posts();
+			}
 		}
 
 		if ( count($posts) > 0 ) {

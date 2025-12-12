@@ -4,14 +4,14 @@ namespace WPDRMS\ASP\Integration\Imagely;
 
 use WP_Error;
 use WP_Post;
-use WPDRMS\ASP\Integration\IntegrationInterface;
+use WPDRMS\ASP\Integration\Integration;
 use WPDRMS\ASP\Patterns\SingletonTrait;
 use WPDRMS\ASP\Utils\Imagely\NggImage;
 
-class NextGenGallery implements IntegrationInterface {
+class NextGenGallery implements Integration {
 	use SingletonTrait;
 
-	public function load(): void {
+	public function register(): void {
 		if ( !class_exists('\Imagely\NGG\DataMappers\Image') ) {
 			return;
 		}
@@ -35,7 +35,7 @@ class NextGenGallery implements IntegrationInterface {
 		add_filter('asp_index_terms', array( $this, 'indexTableTerms' ), 10, 3);
 	}
 
-	public function unload(): void {
+	public function deregister(): void {
 		remove_filter('asp_results', array( $this, 'searchResults' ));
 		remove_filter('asp/utils/advanced-field/raw_value', array( $this, 'resultAdvancedFields' ));
 		remove_filter('asp/utils/advanced-field/field-types/taxonomy/args', array( $this, 'resultAdvancedFieldsTaxonomy' ));

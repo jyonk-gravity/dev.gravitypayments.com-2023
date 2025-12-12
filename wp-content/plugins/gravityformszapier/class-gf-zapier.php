@@ -337,7 +337,7 @@ class GF_Zapier extends GFFeedAddOn {
 			$feed = $this->get_current_feed();
 		}
 
-		return (bool) rgar( $feed['meta'], 'legacy' );
+		return (bool) rgars( $feed, 'meta/legacy' );
 	}
 
 	/**

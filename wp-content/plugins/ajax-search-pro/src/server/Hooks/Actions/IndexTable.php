@@ -91,8 +91,8 @@ class IndexTable extends AbstractAction {
 			 * @var IndexTableOptions $new_options
 			 */
 			$new_options                            = $it_options['options'];
-			$args['attachment_exclude_directories'] = $new_options->get('attachment_exclude_directories')->directories;
-			$args['attachment_include_directories'] = $new_options->get('attachment_include_directories')->directories;
+			$args['attachment_exclude_directories'] = $new_options->attachment_exclude_directories->directories;
+			$args['attachment_include_directories'] = $new_options->attachment_include_directories->directories;
 			$it_o                                   = new Manager( $args );
 
 			$post_status      = get_post_status( $post_id );
@@ -190,8 +190,8 @@ class IndexTable extends AbstractAction {
 			 * @var IndexTableOptions $new_options
 			 */
 			$new_options                            = $asp_it_options['options'];
-			$args['attachment_exclude_directories'] = $new_options->get('attachment_exclude_directories')->directories;
-			$args['attachment_include_directories'] = $new_options->get('attachment_include_directories')->directories;
+			$args['attachment_exclude_directories'] = $new_options->attachment_exclude_directories->directories;
+			$args['attachment_include_directories'] = $new_options->attachment_include_directories->directories;
 			$it_obj                                 = new Manager( $args );
 
 			$res = $it_obj->extendIndex( );

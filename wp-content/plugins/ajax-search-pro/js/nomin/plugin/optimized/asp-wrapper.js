@@ -172,9 +172,6 @@ function api() {
   }
 }
 
-;// external "window.WPD.Base64"
-var external_window_WPD_Base64_namespaceObject = window.WPD.Base64;
-var external_window_WPD_Base64_default = /*#__PURE__*/__webpack_require__.n(external_window_WPD_Base64_namespaceObject);
 ;// ./src/client/global/utils/browser.ts
 
 
@@ -370,7 +367,6 @@ const onSafeDocumentReady = (callback) => {
 
 
 
-
 const ASP = window.ASP;
 const ASP_EXTENDED = {
   instances: wrapper_instances,
@@ -403,12 +399,9 @@ const ASP_EXTENDED = {
   getInstances: function() {
     external_DoMini_default().fn._(".asp_init_data").forEach((el) => {
       const id = parseInt(el.dataset["aspId"] || "");
-      let data;
-      if (typeof el.dataset["aspdata"] != "undefined") {
-        data = external_window_WPD_Base64_default().decode(el.dataset["aspdata"]);
+      if (typeof el.dataset["settings"] !== "undefined") {
+        this.instance_args[id] = JSON.parse(el.dataset["settings"]);
       }
-      if (typeof data === "undefined" || data === "") return true;
-      this.instance_args[id] = JSON.parse(data);
     });
     return this.instance_args;
   },
@@ -458,8 +451,76 @@ const ASP_EXTENDED = {
     this.initializeMutateDetector();
     this.initializeHighlight();
     this.initializeOtherEvents();
+    this.initializeStatistics();
     this.initialized = true;
     return true;
+  },
+  initializeStatistics: function() {
+    const $this = this;
+    const s = new URLSearchParams(location.search);
+    const recordInteractions = ASP.statistics.enabled && ASP.statistics.record_results && ASP.statistics.record_result_interactions;
+    if (!this.initialized && s.has("s") && recordInteractions) {
+      external_DoMini_default()($this.getResultsPageResultSelector()).on("click", function() {
+        $this.registerInteraction(this);
+      });
+    }
+  },
+  getResultsPageResultSelector: function() {
+    if (ASP.statistics.results_page_dom_selector !== "") {
+      const $d = external_DoMini_default()(ASP.statistics.results_page_dom_selector);
+      if ($d.length > 0) {
+        return ASP.statistics.results_page_dom_selector;
+      }
+      return "";
+    }
+    const selectors = [
+      "main article",
+      "#main article",
+      "#main-content article",
+      "#main_content article",
+      "#content article",
+      "main li.product",
+      "main div.product",
+      ".wp-block-post"
+    ];
+    for (const s of selectors) {
+      const $d = external_DoMini_default()(s);
+      if ($d.length > 0) {
+        return s;
+      }
+    }
+    return "";
+  },
+  registerInteraction: function(item, statisticsID) {
+    if (statisticsID === void 0) {
+      const containerStatId = external_DoMini_default()("body").find("#asp-statistics").data("statistics-id").replace(/\s/g, "");
+      statisticsID = containerStatId === "" ? 0 : parseInt(containerStatId);
+    }
+    let data = {
+      search_id: statisticsID
+    };
+    if (external_DoMini_default()(item).data("id") !== "" && external_DoMini_default()(item).data("content-type") !== "") {
+      data.result_id = parseInt(external_DoMini_default()(item).data("id"));
+      data.content_type = external_DoMini_default()(item).data("content-type");
+    } else {
+      if (item.nodeName === "A") {
+        data.url = external_DoMini_default()(item).attr("href");
+      } else {
+        data.url = external_DoMini_default()(item).find("a").attr("href");
+      }
+      if (!data.url) {
+        return;
+      }
+    }
+    fetch(ASP.rest_url + "ajax-search-pro/statistics/interaction/add", {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify(data)
+    }).catch((error) => {
+      console.log(error);
+    });
   },
   initializeHighlight: function() {
     if (!ASP.highlight.enabled) {

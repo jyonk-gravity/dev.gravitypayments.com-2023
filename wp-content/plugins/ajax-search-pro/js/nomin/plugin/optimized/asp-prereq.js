@@ -4,18 +4,18 @@
 /***/ 993:
 /***/ (function(module, exports) {
 
-!function(e, t) {
+!(function(e, t) {
   "object" == typeof exports && "object" == typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define("DoMini", [], t) : "object" == typeof exports ? exports.DoMini = t() : e.DoMini = t();
-}(window, () => (() => {
+})(window, (() => (() => {
   "use strict";
   var e = { d: (t2, n2) => {
     for (var i2 in n2) e.o(n2, i2) && !e.o(t2, i2) && Object.defineProperty(t2, i2, { enumerable: true, get: n2[i2] });
   }, o: (e2, t2) => Object.prototype.hasOwnProperty.call(e2, t2) }, t = {};
   let n;
   e.d(t, { default: () => r }), void 0 === window.DoMini ? (n = function(e2, t2) {
-    return void 0 !== arguments[2] ? this.constructor.call(this, e2, t2) : 1 !== arguments.length || "function" != typeof arguments[0] ? new n(e2, t2, true) : void ("complete" === document.readyState || "loaded" === document.readyState || "interactive" === document.readyState ? arguments[0].apply(this, [n]) : window.addEventListener("DOMContentLoaded", () => {
+    return void 0 !== arguments[2] ? this.constructor.call(this, e2, t2) : 1 !== arguments.length || "function" != typeof arguments[0] ? new n(e2, t2, true) : void ("complete" === document.readyState || "loaded" === document.readyState || "interactive" === document.readyState ? arguments[0].apply(this, [n]) : window.addEventListener("DOMContentLoaded", (() => {
       arguments[0].apply(this, [n]);
-    }));
+    })));
   }, n.prototype = n.fn = { constructor: function(e2, t2) {
     if (this.length = 0, void 0 !== t2) {
       if (t2 instanceof n) return t2.find(e2);
@@ -36,19 +36,19 @@
     for (let e2 = 1; e2 < arguments.length; e2++) for (let t2 in arguments[e2]) arguments[e2].hasOwnProperty(t2) && (arguments[0][t2] = arguments[e2][t2]);
     return arguments[0];
   }, i.fn.forEach = function(e2) {
-    return this.get().forEach(function(t2, n2, i2) {
+    return this.get().forEach((function(t2, n2, i2) {
       e2.apply(t2, [t2, n2, i2]);
-    }), this;
+    })), this;
   }, i.fn.each = function(e2) {
-    return this.get().forEach(function(t2, n2, i2) {
+    return this.get().forEach((function(t2, n2, i2) {
       e2.apply(t2, [n2, t2, i2]);
-    }), this;
+    })), this;
   }, i.fn.css = function(e2, t2) {
     for (const n2 of this) if (1 === arguments.length) {
       if ("object" != typeof e2) return window.getComputedStyle(n2)[e2];
-      Object.keys(e2).forEach(function(t3) {
+      Object.keys(e2).forEach((function(t3) {
         n2.style[t3] = e2[t3];
-      });
+      }));
     } else n2.style[e2] = t2;
     return this;
   }, i.fn.hasClass = function(e2) {
@@ -56,22 +56,22 @@
     return null != t2 && t2.classList.contains(e2);
   }, i.fn.addClass = function(e2) {
     let t2 = e2;
-    return "string" == typeof e2 && (t2 = e2.split(" ")), t2 = t2.filter(function(e3) {
+    return "string" == typeof e2 && (t2 = e2.split(" ")), t2 = t2.filter((function(e3) {
       return "" !== e3.trim();
-    }), t2.length > 0 && this.forEach(function(e3) {
+    })), t2.length > 0 && this.forEach((function(e3) {
       e3.classList.add.apply(e3.classList, t2);
-    }), this;
+    })), this;
   }, i.fn.removeClass = function(e2) {
     if (void 0 !== e2) {
       let t2 = e2;
-      "string" == typeof e2 && (t2 = e2.split(" ")), t2 = t2.filter(function(e3) {
+      "string" == typeof e2 && (t2 = e2.split(" ")), t2 = t2.filter((function(e3) {
         return "" !== e3.trim();
-      }), t2.length > 0 && this.forEach(function(e3) {
+      })), t2.length > 0 && this.forEach((function(e3) {
         e3.classList.remove.apply(e3.classList, t2);
-      });
-    } else this.forEach(function(e3) {
+      }));
+    } else this.forEach((function(e3) {
       e3.classList.length > 0 && e3.classList.remove.apply(e3.classList, e3.classList);
-    });
+    }));
     return this;
   }, i.fn.isVisible = function() {
     let e2, t2 = this.get(0), n2 = true;
@@ -93,9 +93,9 @@
       t2 = this;
     } else {
       let e3 = this.get(0);
-      null != e3 && (t2 = "select-multiple" === e3.type ? Array.prototype.map.call(e3.selectedOptions, function(e4) {
+      null != e3 && (t2 = "select-multiple" === e3.type ? Array.prototype.map.call(e3.selectedOptions, (function(e4) {
         return e4.value;
-      }) : e3.value);
+      })) : e3.value);
     }
     return t2;
   }, i.fn.attr = function(e2, t2) {
@@ -106,9 +106,9 @@
         n2 = i2.getAttribute(e2);
         break;
       }
-      Object.keys(e2).forEach(function(t3) {
+      Object.keys(e2).forEach((function(t3) {
         i2.setAttribute(t3, e2[t3]);
-      });
+      }));
     }
     return n2;
   }, i.fn.removeAttr = function(e2) {
@@ -125,9 +125,9 @@
     }
     return 2 === arguments.length ? this : n2;
   }, i.fn.data = function(e2, t2) {
-    const n2 = e2.replace(/-([a-z])/g, function(e3) {
+    const n2 = e2.replace(/-([a-z])/g, (function(e3) {
       return e3[1].toUpperCase();
-    });
+    }));
     if (2 === arguments.length) {
       for (const e3 of this) null != e3 && (e3.dataset[n2] = t2);
       return this;
@@ -206,54 +206,54 @@
     }, n2 = e2[0].split(" ");
     for (let o2 = 0; o2 < n2.length; o2++) {
       let r2 = n2[o2];
-      if ("string" == typeof e2[1]) this.forEach(function(n3) {
+      if ("string" == typeof e2[1]) this.forEach((function(n3) {
         if (!i._fn.hasEventListener(n3, r2, e2[2])) {
           let i2 = t2.bind(n3, e2);
           n3.addEventListener(r2, i2, e2[3]), n3._domini_events = void 0 === n3._domini_events ? [] : n3._domini_events, n3._domini_events.push({ type: r2, selector: e2[1], func: i2, trigger: e2[2], args: e2[3] });
         }
-      });
+      }));
       else for (let t3 = 0; t3 < n2.length; t3++) {
         let o3 = n2[t3];
-        this.forEach(function(t4) {
+        this.forEach((function(t4) {
           i._fn.hasEventListener(t4, o3, e2[1]) || (t4.addEventListener(o3, e2[1], e2[2]), t4._domini_events = void 0 === t4._domini_events ? [] : t4._domini_events, t4._domini_events.push({ type: o3, func: e2[1], trigger: e2[1], args: e2[2] }));
-        });
+        }));
       }
     }
     return this;
   }, i.fn.off = function(e2, t2) {
-    return this.forEach(function(n2) {
+    return this.forEach((function(n2) {
       if (void 0 !== n2._domini_events && n2._domini_events.length > 0) if (void 0 === e2) {
         let e3;
         for (; e3 = n2._domini_events.pop(); ) n2.removeEventListener(e3.type, e3.func, e3.args);
         n2._domini_events = [];
-      } else e2.split(" ").forEach(function(e3) {
+      } else e2.split(" ").forEach((function(e3) {
         let i2, o2 = [];
         for (; i2 = n2._domini_events.pop(); ) i2.type !== e3 || void 0 !== t2 && i2.trigger !== t2 ? o2.push(i2) : n2.removeEventListener(e3, i2.func, i2.args);
         n2._domini_events = o2;
-      });
-    }), this;
+      }));
+    })), this;
   }, i.fn.offForced = function() {
     let e2 = this;
-    return this.forEach(function(t2, n2) {
+    return this.forEach((function(t2, n2) {
       let i2 = t2.cloneNode(true);
       t2.parentNode.replaceChild(i2, t2), e2[n2] = i2;
-    }), this;
+    })), this;
   }, i.fn.trigger = function(e2, t2, n2, o2) {
-    return n2 = n2 || false, o2 = o2 || false, this.forEach(function(r2) {
+    return n2 = n2 || false, o2 = o2 || false, this.forEach((function(r2) {
       let s = false;
       if (o2 && "undefined" != typeof jQuery && void 0 !== jQuery._data && void 0 !== jQuery._data(r2, "events") && void 0 !== jQuery._data(r2, "events")[e2] && (jQuery(r2).trigger(e2, t2), s = true), !s && n2) {
         let n3 = new Event(e2);
         n3.detail = t2, r2.dispatchEvent(n3);
       }
-      if (void 0 !== r2._domini_events) r2._domini_events.forEach(function(n3) {
+      if (void 0 !== r2._domini_events) r2._domini_events.forEach((function(n3) {
         if (n3.type === e2) {
           let i2 = new Event(e2);
           n3.trigger.apply(r2, [i2].concat(t2));
         }
-      });
+      }));
       else {
         let n3 = false, o3 = r2;
-        for (; o3 = o3.parentElement, null != o3 && (void 0 !== o3._domini_events && o3._domini_events.forEach(function(s2) {
+        for (; o3 = o3.parentElement, null != o3 && (void 0 !== o3._domini_events && o3._domini_events.forEach((function(s2) {
           if (void 0 !== s2.selector) {
             let l = i(o3).find(s2.selector);
             if (l.length > 0 && l.get().indexOf(r2) >= 0 && s2.type === e2) {
@@ -261,9 +261,9 @@
               s2.trigger.apply(r2, [i2].concat(t2)), n3 = true;
             }
           }
-        }), !n3); ) ;
+        })), !n3); ) ;
       }
-    }), this;
+    })), this;
   }, i.fn.clear = function() {
     for (const e2 of this) delete e2._domini_events;
     return this;
@@ -354,10 +354,10 @@
     const t2 = new i();
     if ("string" == typeof e2) {
       let n2 = [];
-      this.get().forEach(function(t3) {
+      this.get().forEach((function(t3) {
         const i2 = t3.querySelectorAll?.(e2) ?? [];
         n2 = n2.concat(Array.from(i2));
-      }), n2.length > 0 && t2.add(n2);
+      })), n2.length > 0 && t2.add(n2);
     }
     return t2;
   }, i._fn.bodyTransform = function() {
@@ -386,12 +386,12 @@
     return false;
   }, i._fn.allDescendants = function(e2) {
     let t2 = [], n2 = this;
-    return Array.isArray(e2) || (e2 = [e2]), e2.forEach(function(e3) {
+    return Array.isArray(e2) || (e2 = [e2]), e2.forEach((function(e3) {
       for (let i2 = 0; i2 < e3.childNodes.length; i2++) {
         let o2 = e3.childNodes[i2];
         t2.push(o2), t2 = t2.concat(n2.allDescendants(o2));
       }
-    }), t2;
+    })), t2;
   }, i._fn.createElementsFromHTML = function(e2) {
     let t2 = document.createElement("template");
     return t2.innerHTML = e2.replace(/(\r\n|\n|\r)/gm, ""), [...t2.content.childNodes];
@@ -401,7 +401,7 @@
     else if (e2 instanceof Element) e2 = [e2];
     else {
       if (!(e2 instanceof Array)) return [];
-      e2 = e2.filter((e3) => e3 instanceof Element);
+      e2 = e2.filter(((e3) => e3 instanceof Element));
     }
     return e2;
   }, i._fn.ElementArrayFromAny = i._fn.elementArrayFromAny, i._fn.absolutePosition = function(e2) {
@@ -410,9 +410,9 @@
     return { top: t2.top + n2.pageYOffset, left: t2.left + n2.pageXOffset };
   }, i._fn.plugin = function(e2, t2) {
     i.fn[e2] = function(n2) {
-      return void 0 !== n2 && t2[n2] ? t2[n2].apply(this, Array.prototype.slice.call(arguments, 1)) : this.forEach(function(i2) {
+      return void 0 !== n2 && t2[n2] ? t2[n2].apply(this, Array.prototype.slice.call(arguments, 1)) : this.forEach((function(i2) {
         i2["domini_" + e2] = Object.create(t2).init(n2, i2);
-      });
+      }));
     };
   }, document.dispatchEvent(new Event("domini-dom-core-loaded"));
   const o = i;
@@ -420,18 +420,18 @@
     t2 = t2 || 200, n2 = n2 || "easeInOutQuad";
     for (const o2 of this) {
       let r2, s, l, f, a, c = 0, u = 60, h = {}, d = {};
-      if (l = this.prop("_domini_animations"), l = null == l ? [] : l, false === e2) l.forEach(function(e3) {
+      if (l = this.prop("_domini_animations"), l = null == l ? [] : l, false === e2) l.forEach((function(e3) {
         clearInterval(e3);
-      });
+      }));
       else {
         let p = function() {
-          c++, c > r2 ? clearInterval(f) : (s = a(c / r2), Object.keys(d).forEach(function(e3) {
+          c++, c > r2 ? clearInterval(f) : (s = a(c / r2), Object.keys(d).forEach((function(e3) {
             e3.indexOf("scroll") > -1 ? o2[e3] = h[e3] + d[e3] * s : o2.style[e3] = h[e3] + d[e3] * s + "px";
-          }));
+          })));
         };
-        a = i.fn.animate.easing[n2] ?? i.fn.animate.easing.easeInOutQuad, Object.keys(e2).forEach(function(t3) {
+        a = i.fn.animate.easing[n2] ?? i.fn.animate.easing.easeInOutQuad, Object.keys(e2).forEach((function(t3) {
           t3.indexOf("scroll") > -1 ? (h[t3] = o2[t3], d[t3] = e2[t3] - h[t3]) : (h[t3] = parseInt(window.getComputedStyle(o2)[t3]), d[t3] = e2[t3] - h[t3]);
-        }), r2 = t2 / 1e3 * u, f = setInterval(p, 1e3 / u), l.push(f), this.prop("_domini_animations", l);
+        })), r2 = t2 / 1e3 * u, f = setInterval(p, 1e3 / u), l.push(f), this.prop("_domini_animations", l);
       }
     }
     return this;
@@ -443,18 +443,18 @@
     return 1 - (1 - e2) * (1 - e2);
   } }, i.fn.unhighlight = function(e2) {
     let t2 = { className: "highlight", element: "span" };
-    return i.fn.extend(t2, e2), this.find(t2.element + "." + t2.className).forEach(function() {
+    return i.fn.extend(t2, e2), this.find(t2.element + "." + t2.className).forEach((function() {
       let e3 = this.parentNode;
       e3.replaceChild(this.firstChild, this), e3.normalize();
-    });
+    }));
   }, i.fn.highlight = function(e2, t2) {
     this.defaults = { className: "highlight", element: "span", caseSensitive: false, wordsOnly: false, excludeParents: ".excludeFromHighlight" };
     const n2 = i, o2 = { ...this.defaults, ...t2 };
-    if (e2.constructor === String && (e2 = [e2]), (e2 = e2.filter(function(e3) {
+    if (e2.constructor === String && (e2 = [e2]), (e2 = e2.filter((function(e3) {
       return "" !== e3;
-    })).forEach(function(e3, t3, n3) {
+    }))).forEach((function(e3, t3, n3) {
       n3[t3] = e3.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    }), 0 === e2.length) return this;
+    })), 0 === e2.length) return this;
     let r2 = o2.caseSensitive ? "" : "i", s = "(" + e2.join("|") + ")";
     o2.wordsOnly && (s = "(?:,|^|\\s)" + s + "(?:,|$|\\s)");
     let l = new RegExp(s, r2);
@@ -474,9 +474,9 @@
       } else if (1 === e3.nodeType && e3.childNodes && !/(script|style)/i.test(e3.tagName) && !n2(e3).closest(r3).length > 0 && (e3.tagName !== i2.toUpperCase() || e3.className !== o3)) for (let n3 = 0; n3 < e3.childNodes.length; n3++) n3 += f(e3.childNodes[n3], t3, i2, o3, r3);
       return 0;
     }
-    return this.forEach(function(e3) {
+    return this.forEach((function(e3) {
       f(e3, l, o2.element, o2.className, o2.excludeParents);
-    });
+    }));
   }, i.fn.serialize = function() {
     let e2 = this.get(0);
     if (!e2 || "FORM" !== e2.nodeName) return "";
@@ -542,10 +542,10 @@
       }, t2.open(e2.method.toUpperCase(), e2.url, true), t2.setRequestHeader("Content-type", e2.contentType), t2.setRequestHeader("Accept", e2.accept), t2.send(this.serializeObject(e2.data)), t2;
     }
     {
-      let t2 = "ajax_cb_" + "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(e3) {
+      let t2 = "ajax_cb_" + "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (function(e3) {
         let t3 = 16 * Math.random() | 0;
         return ("x" === e3 ? t3 : 3 & t3 | 8).toString(16);
-      }).replaceAll("-", "");
+      })).replaceAll("-", "");
       i.fn[t2] = function() {
         e2.success.apply(this, arguments), delete i.fn[e2.data.fn];
       }, e2.data.callback = "DoMini.fn." + t2, e2.data.fn = t2;
@@ -557,7 +557,7 @@
   };
   const r = o;
   return t.default;
-})());
+})()));
 
 
 /***/ })

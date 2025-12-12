@@ -112,11 +112,11 @@ class EtcFixes extends AbstractFilter {
 	/**
 	 * Fix for the Oxygen builder plugin editor error console
 	 */
-	function fixOxygenEditorJS( $exit ) {
+	function fixOxygenEditorJS( bool $load ) {
 		if ( isset($_GET['ct_builder']) ) {
-			return true;
+			return false;
 		}
-		return false;
+		return $load;
 	}
 
 	/**
@@ -197,23 +197,5 @@ class EtcFixes extends AbstractFilter {
 	function diviInitModulesOnAjax( $actions ) {
 		$actions[] = 'asp_indextable_admin_ajax';
 		return $actions;
-	}
-
-	/**
-	 * gTranslate plugin auto-translation trigger by changing the ajax headers conten-type
-	 *
-	 * @param string $content_type
-	 * @return string
-	 */
-	public function gTranslateAjaxHeaders( string $content_type ): string {
-		// GTranslate +
-		if (
-			isset($_SERVER['HTTP_X_GT_LANG']) &&
-			!empty(isset($_SERVER['HTTP_X_GT_LANG'])) &&
-			wd_asp()->manager->getContext() === 'ajax'
-		) {
-			return 'text/html';
-		}
-		return $content_type;
 	}
 }

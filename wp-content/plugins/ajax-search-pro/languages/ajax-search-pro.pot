@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Ajax Search Pro plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Pro 4.27.2\n"
+"Project-Id-Version: Ajax Search Pro 4.28.0\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-pro-development\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-25T12:47:29+00:00\n"
+"POT-Creation-Date: 2025-12-09T17:08:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: ajax-search-pro\n"
@@ -220,12 +220,14 @@ msgid "Results click event tracking"
 msgstr ""
 
 #: backend/analytics.php:336
-#: backend/tabs/instance/advanced_options.php:59
+#: backend/tabs/instance/advanced_options.php:66
 #: backend/tabs/instance/autocomplete_options.php:65
 #: backend/tabs/instance/frontend_options.php:72
 #: backend/tabs/instance/general_options.php:133
 #: backend/tabs/instance/layout_options.php:46
 #: backend/tabs/instance/multisite_options.php:39
+#: backend/tabs/instance/relevance_options.php:28
+#: backend/tabs/instance/search_options.php:32
 #: backend/tabs/instance/theme_options.php:105
 msgid "Restore defaults"
 msgstr ""
@@ -260,8 +262,8 @@ msgstr ""
 
 #: backend/cache_settings.php:38
 #: backend/tabs/instance/advanced/content.php:54
-#: backend/tabs/instance/advanced_options.php:19
-#: backend/tabs/instance/advanced_options.php:32
+#: backend/tabs/instance/advanced_options.php:20
+#: backend/tabs/instance/advanced_options.php:33
 #: backend/tabs/instance/autocomplete_options.php:27
 #: backend/tabs/instance/autocomplete_options.php:43
 #: backend/tabs/instance/autocomplete_options.php:56
@@ -414,8 +416,8 @@ msgstr ""
 #: backend/Classes/Options/OptionDefaults.php:223
 #: backend/tabs/instance/general/image_options.php:73
 #: backend/tabs/priorities/priority_groups.php:123
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Custom field"
 msgstr ""
 
@@ -1725,11 +1727,13 @@ msgid "Add new priority group"
 msgstr ""
 
 #: backend/priorities.php:88
-#: backend/tabs/instance/frontend/custom_fields.php:812
+#: backend/tabs/instance/frontend/custom_fields.php:821
 msgid "Save!"
 msgstr ""
 
 #: backend/priorities.php:89
+#: build/js/statistics.js:60
+#: build/js/statistics.js:118
 msgid "Cancel"
 msgstr ""
 
@@ -1777,7 +1781,8 @@ msgstr ""
 #: backend/search.php:363
 #: build/js/block-editor.js:20
 #: build/js/index-table.js:32
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
+#: build/js/statistics.js:60
 msgid "Loading..."
 msgstr ""
 
@@ -2067,8 +2072,8 @@ msgstr ""
 
 #: backend/settings/class/border.class.php:35
 #: backend/settings/class/boxshadow.class.php:36
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Style"
 msgstr ""
 
@@ -2132,6 +2137,8 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/date_from.php:28
 #: backend/settings/class/wd_frontfilters/views/date_to.php:14
 #: backend/settings/class/wd_frontfilters/views/date_to.php:28
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
 msgid "Date"
 msgstr ""
 
@@ -2223,10 +2230,12 @@ msgstr ""
 
 #: backend/settings/class/dateinterval.class.php:28
 #: backend/settings/class/dateinterval.class.php:45
-#: backend/tabs/instance/frontend/custom_fields.php:392
-#: backend/tabs/instance/frontend/custom_fields.php:621
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: backend/tabs/instance/frontend/custom_fields.php:401
+#: backend/tabs/instance/frontend/custom_fields.php:630
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
 msgid "Type"
 msgstr ""
 
@@ -2354,8 +2363,8 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/post_type.php:13
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:13
 #: backend/settings/class/wd_taxonomy_term_select.class.php:118
-#: backend/tabs/instance/frontend/custom_fields.php:396
-#: backend/tabs/instance/frontend/custom_fields.php:625
+#: backend/tabs/instance/frontend/custom_fields.php:405
+#: backend/tabs/instance/frontend/custom_fields.php:634
 #: backend/tabs/instance/frontend/post_and_cpt.php:19
 msgid "Checkboxes"
 msgstr ""
@@ -2485,6 +2494,7 @@ msgid "Type title or ID here.."
 msgstr ""
 
 #: backend/settings/class/wd_cpt_select.class.php:40
+#: build/js/statistics.js:118
 msgid "Results"
 msgstr ""
 
@@ -2513,8 +2523,8 @@ msgstr ""
 
 #: backend/settings/class/wd_draggable_fields.class.php:78
 #: backend/settings/class/wd_taxonomy_term_select.class.php:167
-#: backend/tabs/instance/frontend/custom_fields.php:586
-#: backend/tabs/instance/frontend/custom_fields.php:802
+#: backend/tabs/instance/frontend/custom_fields.php:595
+#: backend/tabs/instance/frontend/custom_fields.php:811
 msgid "Required?"
 msgstr ""
 
@@ -2568,8 +2578,8 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/generic.php:14
 #: backend/settings/class/wd_frontfilters/views/post_type.php:14
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:14
-#: backend/tabs/instance/frontend/custom_fields.php:395
-#: backend/tabs/instance/frontend/custom_fields.php:624
+#: backend/tabs/instance/frontend/custom_fields.php:404
+#: backend/tabs/instance/frontend/custom_fields.php:633
 msgid "Dropdown"
 msgstr ""
 
@@ -2579,8 +2589,8 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/post_type.php:15
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:17
 #: backend/settings/class/wd_taxonomy_term_select.class.php:122
-#: backend/tabs/instance/frontend/custom_fields.php:394
-#: backend/tabs/instance/frontend/custom_fields.php:623
+#: backend/tabs/instance/frontend/custom_fields.php:403
+#: backend/tabs/instance/frontend/custom_fields.php:632
 msgid "Radio"
 msgstr ""
 
@@ -2601,6 +2611,8 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/generic.php:46
 #: backend/settings/class/wd_frontfilters/views/post_type.php:46
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:152
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
 msgid "Desktop"
 msgstr ""
 
@@ -2611,6 +2623,8 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/generic.php:50
 #: backend/settings/class/wd_frontfilters/views/post_type.php:50
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:156
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
 msgid "Tablet"
 msgstr ""
 
@@ -2621,6 +2635,8 @@ msgstr ""
 #: backend/settings/class/wd_frontfilters/views/generic.php:54
 #: backend/settings/class/wd_frontfilters/views/post_type.php:54
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:160
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
 msgid "Mobile"
 msgstr ""
 
@@ -2656,23 +2672,23 @@ msgid "Text:"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:16
-#: backend/tabs/instance/frontend/custom_fields.php:398
-#: backend/tabs/instance/frontend/custom_fields.php:627
+#: backend/tabs/instance/frontend/custom_fields.php:407
+#: backend/tabs/instance/frontend/custom_fields.php:636
 #: backend/tabs/priorities/priority_groups.php:202
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Text"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:17
-#: backend/tabs/instance/frontend/custom_fields.php:397
-#: backend/tabs/instance/frontend/custom_fields.php:626
+#: backend/tabs/instance/frontend/custom_fields.php:406
+#: backend/tabs/instance/frontend/custom_fields.php:635
 msgid "Hidden"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:18
-#: backend/tabs/instance/frontend/custom_fields.php:401
-#: backend/tabs/instance/frontend/custom_fields.php:630
+#: backend/tabs/instance/frontend/custom_fields.php:410
+#: backend/tabs/instance/frontend/custom_fields.php:639
 msgid "Slider"
 msgstr ""
 
@@ -2696,8 +2712,8 @@ msgid ""
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:33
-#: backend/tabs/instance/frontend/custom_fields.php:566
-#: backend/tabs/instance/frontend/custom_fields.php:782
+#: backend/tabs/instance/frontend/custom_fields.php:575
+#: backend/tabs/instance/frontend/custom_fields.php:791
 #: backend/tabs/priorities/priority_groups.php:128
 #: backend/tabs/priorities/priority_groups.php:192
 msgid "Operator"
@@ -2708,26 +2724,26 @@ msgid "Numeric operators"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:54
-#: backend/tabs/instance/frontend/custom_fields.php:415
-#: backend/tabs/instance/frontend/custom_fields.php:640
+#: backend/tabs/instance/frontend/custom_fields.php:424
+#: backend/tabs/instance/frontend/custom_fields.php:649
 msgid "Multiselect?"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:58
-#: backend/tabs/instance/frontend/custom_fields.php:417
-#: backend/tabs/instance/frontend/custom_fields.php:642
+#: backend/tabs/instance/frontend/custom_fields.php:426
+#: backend/tabs/instance/frontend/custom_fields.php:651
 msgid "Searchable?"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:60
-#: backend/tabs/instance/frontend/custom_fields.php:419
-#: backend/tabs/instance/frontend/custom_fields.php:644
+#: backend/tabs/instance/frontend/custom_fields.php:428
+#: backend/tabs/instance/frontend/custom_fields.php:653
 msgid "placeholder"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/custom_field.php:64
-#: backend/tabs/instance/frontend/custom_fields.php:428
-#: backend/tabs/instance/frontend/custom_fields.php:649
+#: backend/tabs/instance/frontend/custom_fields.php:437
+#: backend/tabs/instance/frontend/custom_fields.php:658
 msgid "Drop-down values logic"
 msgstr ""
 
@@ -2758,8 +2774,8 @@ msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/date_from.php:37
 #: backend/settings/class/wd_frontfilters/views/date_to.php:37
-#: backend/tabs/instance/frontend/custom_fields.php:476
-#: backend/tabs/instance/frontend/custom_fields.php:692
+#: backend/tabs/instance/frontend/custom_fields.php:485
+#: backend/tabs/instance/frontend/custom_fields.php:701
 #: backend/tabs/instance/frontend/post_tags.php:32
 msgid "Placeholder text"
 msgstr ""
@@ -2796,8 +2812,8 @@ msgid "Multiselect with search"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:21
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Taxonomy"
 msgstr ""
 
@@ -2862,7 +2878,7 @@ msgid "Hide (collapse) child terms, where the parent checkbox is unchecked?"
 msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:89
-#: backend/tabs/instance/frontend/advanced.php:61
+#: backend/tabs/instance/frontend/advanced.php:69
 msgid "Automatically hides the checkbox options, where the parent terms are unchecked."
 msgstr ""
 
@@ -2916,6 +2932,7 @@ msgstr ""
 
 #: backend/settings/class/wd_frontfilters/views/taxonomy.php:121
 #: backend/tabs/instance/frontend/taxonomy_terms.php:67
+#: build/js/statistics.js:118
 msgid "ID"
 msgstr ""
 
@@ -2967,7 +2984,7 @@ msgid "Deactivate"
 msgstr ""
 
 #: backend/settings/class/wd_ms_license_activator.class.php:28
-#: backend/updates_help.php:87
+#: backend/updates_help.php:94
 msgid "Activate"
 msgstr ""
 
@@ -3166,58 +3183,6 @@ msgstr ""
 
 #: backend/sidebar.php:46
 msgid "Check the <a href=\"%s\">Help & Updates</a> menu for resources."
-msgstr ""
-
-#: backend/statistics.php:86
-msgid "Statistics Options"
-msgstr ""
-
-#: backend/statistics.php:91
-msgid "Enable statistics?"
-msgstr ""
-
-#: backend/statistics.php:97
-#: backend/settings/assets/search_instance.js:1125
-msgid "Are you sure?"
-msgstr ""
-
-#: backend/statistics.php:98
-msgid "Clear search Statistics"
-msgstr ""
-
-#: backend/statistics.php:101
-#: backend/statistics.php:116
-msgid "Statistics for:"
-msgstr ""
-
-#: backend/statistics.php:103
-#: backend/statistics.php:116
-msgid "All"
-msgstr ""
-
-#: backend/statistics.php:109
-msgid "Get Statistics!"
-msgstr ""
-
-#: backend/statistics.php:117
-#: backend/tabs/instance/suggest/suggestions.php:23
-msgid "Keywords"
-msgstr ""
-
-#: backend/statistics.php:127
-msgid "Top 500 keywords"
-msgstr ""
-
-#: backend/statistics.php:168
-msgid "Do yo really want to delete this item?"
-msgstr ""
-
-#: backend/statistics.php:169
-msgid "Top 20 Search Phrases"
-msgstr ""
-
-#: backend/statistics.php:170
-msgid "Last 20 Search Phrases"
 msgstr ""
 
 #: backend/tabs/compatibility/cssjs_loading.php:2
@@ -3486,8 +3451,8 @@ msgstr ""
 #: backend/tabs/index_table/synonyms.php:52
 #: backend/tabs/instance/advanced/content.php:242
 #: backend/tabs/instance/general/image_options.php:237
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Default"
 msgstr ""
 
@@ -3498,6 +3463,8 @@ msgstr ""
 
 #: backend/tabs/index_table/synonyms.php:81
 #: backend/tabs/index_table/synonyms.php:99
+#: build/js/statistics.js:60
+#: build/js/statistics.js:118
 msgid "Delete"
 msgstr ""
 
@@ -3694,8 +3661,8 @@ msgstr ""
 #: backend/tabs/instance/advanced/content.php:86
 #: backend/tabs/instance/advanced/content.php:108
 #: backend/tabs/instance/advanced/content.php:131
-#: backend/tabs/instance/frontend/custom_fields.php:382
-#: backend/tabs/instance/frontend/custom_fields.php:611
+#: backend/tabs/instance/frontend/custom_fields.php:391
+#: backend/tabs/instance/frontend/custom_fields.php:620
 msgid "Custom Field"
 msgstr ""
 
@@ -3865,6 +3832,7 @@ msgid "No grouping"
 msgstr ""
 
 #: backend/tabs/instance/advanced/grouping.php:6
+#: build/js/statistics.js:118
 msgid "Post Type"
 msgstr ""
 
@@ -4008,6 +3976,50 @@ msgstr ""
 msgid "<strong>Comma separated list</strong> of keywords you want to remove or ban. Only matching whole words between word boundaries."
 msgstr ""
 
+#: backend/tabs/instance/advanced/lightbox.php:3
+msgid "Display the lightbox overlay?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:8
+msgid "Overlay Opacity (0-1)"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:14
+msgid "Overlay color"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:20
+msgid "Display arrow navigation?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:26
+msgid "Enable keyboard navigation?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:32
+msgid "Disable right mouse click on images?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:38
+msgid "Display the close icon?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:44
+msgid "Close the lighbox when the user clicks outside of it?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:50
+msgid "Disable document scrolling when lightbox is opened?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:56
+msgid "Animation speed"
+msgstr ""
+
+#: backend/tabs/instance/advanced/lightbox.php:60
+msgid "Default: 250"
+msgstr ""
+
 #: backend/tabs/instance/advanced_options.php:2
 msgid "Content & Fields"
 msgstr ""
@@ -4017,7 +4029,7 @@ msgid "Exclude/Include Results"
 msgstr ""
 
 #: backend/tabs/instance/advanced_options.php:4
-#: backend/tabs/instance/advanced_options.php:29
+#: backend/tabs/instance/advanced_options.php:30
 #: backend/tabs/instance/general/grouping.php:3
 msgid "Grouping"
 msgstr ""
@@ -4027,24 +4039,32 @@ msgid "Animations, Visual & Others"
 msgstr ""
 
 #: backend/tabs/instance/advanced_options.php:6
-#: backend/tabs/instance/advanced_options.php:47
+#: backend/tabs/instance/advanced_options.php:48
 msgid "Keyword exceptions"
 msgstr ""
 
 #: backend/tabs/instance/advanced_options.php:7
-#: backend/tabs/instance/advanced_options.php:53
+#: backend/tabs/instance/advanced_options.php:54
 msgid "Accessibility"
 msgstr ""
 
-#: backend/tabs/instance/advanced_options.php:16
+#: backend/tabs/instance/advanced_options.php:8
+msgid "Lightbox"
+msgstr ""
+
+#: backend/tabs/instance/advanced_options.php:17
 msgid "Exclude/Include results"
 msgstr ""
 
-#: backend/tabs/instance/advanced_options.php:41
+#: backend/tabs/instance/advanced_options.php:42
 msgid "Animations"
 msgstr ""
 
-#: backend/tabs/instance/advanced_options.php:61
+#: backend/tabs/instance/advanced_options.php:60
+msgid "Lightbox Settings"
+msgstr ""
+
+#: backend/tabs/instance/advanced_options.php:68
 #: backend/tabs/instance/theme_options.php:106
 msgid "Save this search!"
 msgstr ""
@@ -4134,33 +4154,41 @@ msgid "When turned <strong>ON</strong> and using Checkbox filters, the child cat
 msgstr ""
 
 #: backend/tabs/instance/frontend/advanced.php:57
+msgid "Uncheck parent terms when all the child terms are unchecked"
+msgstr ""
+
+#: backend/tabs/instance/frontend/advanced.php:60
+msgid "When turned <strong>ON</strong> and using Checkbox filters, the parent category (term) is automatically unchecked when all the children are unchecked."
+msgstr ""
+
+#: backend/tabs/instance/frontend/advanced.php:65
 msgid "Hide child terms, where the parent checkbox is unchecked?"
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:66
+#: backend/tabs/instance/frontend/advanced.php:74
 msgid "Ignore checkbox filters that have nothing selected?"
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:69
+#: backend/tabs/instance/frontend/advanced.php:77
 msgid "When turned <strong>ON</strong> and nothing is checked within a checkbox filter - then the search will ignore it completely - instead of excluding everything unchecked."
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:73
+#: backend/tabs/instance/frontend/advanced.php:81
 msgid "Custom Fields connection Logic"
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:86
+#: backend/tabs/instance/frontend/advanced.php:94
 msgid "Allow results with missing custom fields, when using custom field selectors?"
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:89
+#: backend/tabs/instance/frontend/advanced.php:97
 msgid ""
 "When using custom field selectors (filters), this option will allow displaying posts/pages/cpm where the given custom field is not defined.\n"
 "            <br>For example: You have a custom field filter on \"location\" custom field, but some posts does not have the \"location\" custom field defined. This option\n"
 "            will allow displaying them as results regardless."
 msgstr ""
 
-#: backend/tabs/instance/frontend/advanced.php:105
+#: backend/tabs/instance/frontend/advanced.php:113
 msgid "Field order"
 msgstr ""
 
@@ -4207,333 +4235,334 @@ msgid ""
 "                   <a target=\"_blank\" href=\"%s\">documentation</a>."
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:372
+#: backend/tabs/instance/frontend/custom_fields.php:381
 msgid "Add new item"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:374
-#: backend/tabs/instance/frontend/custom_fields.php:603
+#: backend/tabs/instance/frontend/custom_fields.php:383
+#: backend/tabs/instance/frontend/custom_fields.php:612
 msgid "Title label"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:375
-#: backend/tabs/instance/frontend/custom_fields.php:604
+#: backend/tabs/instance/frontend/custom_fields.php:384
+#: backend/tabs/instance/frontend/custom_fields.php:613
 msgid "Title here.."
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:378
-#: backend/tabs/instance/frontend/custom_fields.php:607
-msgid "Show the label on the frontend?"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:386
-#: backend/tabs/instance/frontend/custom_fields.php:615
-msgid "Post meta"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:387
 #: backend/tabs/instance/frontend/custom_fields.php:616
+msgid "Show the label on the frontend?"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:395
+#: backend/tabs/instance/frontend/custom_fields.php:624
+msgid "Post meta"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:396
+#: backend/tabs/instance/frontend/custom_fields.php:625
 msgid "User meta"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:399
-#: backend/tabs/instance/frontend/custom_fields.php:628
+#: backend/tabs/instance/frontend/custom_fields.php:408
+#: backend/tabs/instance/frontend/custom_fields.php:637
 msgid "DatePicker"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:400
-#: backend/tabs/instance/frontend/custom_fields.php:629
+#: backend/tabs/instance/frontend/custom_fields.php:409
+#: backend/tabs/instance/frontend/custom_fields.php:638
 msgid "Number Range"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:402
-#: backend/tabs/instance/frontend/custom_fields.php:631
+#: backend/tabs/instance/frontend/custom_fields.php:411
+#: backend/tabs/instance/frontend/custom_fields.php:640
 msgid "Range Slider"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:406
-#: backend/tabs/instance/frontend/custom_fields.php:635
+#: backend/tabs/instance/frontend/custom_fields.php:415
+#: backend/tabs/instance/frontend/custom_fields.php:644
 msgid "Radio values"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:421
-#: backend/tabs/instance/frontend/custom_fields.php:646
+#: backend/tabs/instance/frontend/custom_fields.php:430
+#: backend/tabs/instance/frontend/custom_fields.php:655
 msgid "Dropdown values"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:436
-#: backend/tabs/instance/frontend/custom_fields.php:657
+#: backend/tabs/instance/frontend/custom_fields.php:445
+#: backend/tabs/instance/frontend/custom_fields.php:666
 msgid "Checkbox values"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:444
-#: backend/tabs/instance/frontend/custom_fields.php:660
-msgid "Checkbox logic"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:451
-#: backend/tabs/instance/frontend/custom_fields.php:667
-msgid "Hidden value"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:453
 #: backend/tabs/instance/frontend/custom_fields.php:669
+msgid "Checkbox logic"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:460
+#: backend/tabs/instance/frontend/custom_fields.php:676
+msgid "Hidden value"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:462
+#: backend/tabs/instance/frontend/custom_fields.php:678
 msgid "An invisible element. Used for filtering every time without user input."
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:456
-#: backend/tabs/instance/frontend/custom_fields.php:672
-msgid "Text input"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:458
-#: backend/tabs/instance/frontend/custom_fields.php:674
-msgid "A text input element."
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:461
-#: backend/tabs/instance/frontend/custom_fields.php:677
-msgid "Date storage format"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:463
-#: backend/tabs/instance/frontend/custom_fields.php:679
-msgid "MySQL DateTime/ACF datetime field"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:464
-msgid "ACF date "
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:465
 #: backend/tabs/instance/frontend/custom_fields.php:681
-msgid "Timestamp"
+msgid "Text input"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:469
-#: backend/tabs/instance/frontend/custom_fields.php:685
-msgid "NOTICE: The MySql datetime format is <strong>Y-m-d H:i:s</strong>, for example: 2001-03-10 17:16:18"
+#: backend/tabs/instance/frontend/custom_fields.php:467
+#: backend/tabs/instance/frontend/custom_fields.php:683
+msgid "A text input element."
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:470
+#: backend/tabs/instance/frontend/custom_fields.php:686
+msgid "Date storage format"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:472
 #: backend/tabs/instance/frontend/custom_fields.php:688
-msgid "NOTICE: The timestamp is a numeric format, for example <strong>1465111713</strong>. This translates to: 06/05/2016 @ 7:28am (UTC)"
+msgid "MySQL DateTime/ACF datetime field"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:473
+msgid "ACF date "
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:474
+#: backend/tabs/instance/frontend/custom_fields.php:690
+msgid "Timestamp"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:478
+#: backend/tabs/instance/frontend/custom_fields.php:694
+msgid "NOTICE: The MySql datetime format is <strong>Y-m-d H:i:s</strong>, for example: 2001-03-10 17:16:18"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:481
 #: backend/tabs/instance/frontend/custom_fields.php:697
-msgid "Display format"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:484
-#: backend/tabs/instance/frontend/custom_fields.php:700
-msgid "dd/mm/yy is the most used format, <a href=\"%s\" target=\"_blank\">list of accepted params</a>"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:487
-#: backend/tabs/instance/frontend/custom_fields.php:537
-#: backend/tabs/instance/frontend/custom_fields.php:703
-#: backend/tabs/instance/frontend/custom_fields.php:753
-msgid "Default Value"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:489
-#: backend/tabs/instance/frontend/custom_fields.php:705
-msgid "Current date"
+msgid "NOTICE: The timestamp is a numeric format, for example <strong>1465111713</strong>. This translates to: 06/05/2016 @ 7:28am (UTC)"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:490
 #: backend/tabs/instance/frontend/custom_fields.php:706
-msgid "Empty (no date)"
+msgid "Display format"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:491
-#: backend/tabs/instance/frontend/custom_fields.php:707
-msgid "Relative date"
+#: backend/tabs/instance/frontend/custom_fields.php:493
+#: backend/tabs/instance/frontend/custom_fields.php:709
+msgid "dd/mm/yy is the most used format, <a href=\"%s\" target=\"_blank\">list of accepted params</a>"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:492
-#: backend/tabs/instance/frontend/custom_fields.php:708
-msgid "Select date"
+#: backend/tabs/instance/frontend/custom_fields.php:496
+#: backend/tabs/instance/frontend/custom_fields.php:546
+#: backend/tabs/instance/frontend/custom_fields.php:712
+#: backend/tabs/instance/frontend/custom_fields.php:762
+msgid "Default Value"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:498
 #: backend/tabs/instance/frontend/custom_fields.php:714
-msgid "Use <strong>negative values</strong> to indicate date before the current."
+msgid "Current date"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:499
+#: backend/tabs/instance/frontend/custom_fields.php:715
+msgid "Empty (no date)"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:500
+#: backend/tabs/instance/frontend/custom_fields.php:716
+msgid "Relative date"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:501
 #: backend/tabs/instance/frontend/custom_fields.php:717
-msgid "Show results.."
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:503
-#: backend/tabs/instance/frontend/custom_fields.php:719
-msgid "..before the date (to date)"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:504
-#: backend/tabs/instance/frontend/custom_fields.php:720
-msgid "..before the date (to date) inclusive"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:505
-#: backend/tabs/instance/frontend/custom_fields.php:721
-msgid "..after the date (from date)"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:506
-#: backend/tabs/instance/frontend/custom_fields.php:722
-msgid "..after the date (from date) inclusive"
+msgid "Select date"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:507
 #: backend/tabs/instance/frontend/custom_fields.php:723
-msgid "..matching the date"
+msgid "Use <strong>negative values</strong> to indicate date before the current."
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:508
-#: backend/tabs/instance/frontend/custom_fields.php:724
-msgid "..not matching the date"
+#: backend/tabs/instance/frontend/custom_fields.php:510
+#: backend/tabs/instance/frontend/custom_fields.php:726
+msgid "Show results.."
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:512
 #: backend/tabs/instance/frontend/custom_fields.php:728
-msgid "Min/Max Range"
+msgid "..before the date (to date)"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:513
+#: backend/tabs/instance/frontend/custom_fields.php:729
+msgid "..before the date (to date) inclusive"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:514
 #: backend/tabs/instance/frontend/custom_fields.php:730
-msgid "Leave them empty to get the min/max range automatically."
+msgid "..after the date (from date)"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:515
 #: backend/tabs/instance/frontend/custom_fields.php:731
-msgid "Input 1 default"
+msgid "..after the date (from date) inclusive"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:516
+#: backend/tabs/instance/frontend/custom_fields.php:732
+msgid "..matching the date"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:517
 #: backend/tabs/instance/frontend/custom_fields.php:733
-msgid "Input 2 default"
+msgid "..not matching the date"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:519
-#: backend/tabs/instance/frontend/custom_fields.php:735
-msgid "When empty, the placeholder texts are displayed."
+#: backend/tabs/instance/frontend/custom_fields.php:521
+#: backend/tabs/instance/frontend/custom_fields.php:737
+msgid "Min/Max Range"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:520
-#: backend/tabs/instance/frontend/custom_fields.php:736
-msgid "Placeholder Text #1"
-msgstr ""
-
-#: backend/tabs/instance/frontend/custom_fields.php:522
-#: backend/tabs/instance/frontend/custom_fields.php:738
-msgid "Placeholder Text #2"
+#: backend/tabs/instance/frontend/custom_fields.php:523
+#: backend/tabs/instance/frontend/custom_fields.php:739
+msgid "Leave them empty to get the min/max range automatically."
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:524
-#: backend/tabs/instance/frontend/custom_fields.php:540
-#: backend/tabs/instance/frontend/custom_fields.php:560
 #: backend/tabs/instance/frontend/custom_fields.php:740
-#: backend/tabs/instance/frontend/custom_fields.php:756
-#: backend/tabs/instance/frontend/custom_fields.php:776
-msgid "Thousands separator"
+msgid "Input 1 default"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:526
+#: backend/tabs/instance/frontend/custom_fields.php:742
+msgid "Input 2 default"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:528
-#: backend/tabs/instance/frontend/custom_fields.php:546
 #: backend/tabs/instance/frontend/custom_fields.php:744
-#: backend/tabs/instance/frontend/custom_fields.php:762
-msgid "Slider range"
+msgid "When empty, the placeholder texts are displayed."
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:530
-#: backend/tabs/instance/frontend/custom_fields.php:548
-#: backend/tabs/instance/frontend/custom_fields.php:746
-#: backend/tabs/instance/frontend/custom_fields.php:764
-msgid "Leave them empty to get the values automatically."
+#: backend/tabs/instance/frontend/custom_fields.php:529
+#: backend/tabs/instance/frontend/custom_fields.php:745
+msgid "Placeholder Text #1"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:531
-#: backend/tabs/instance/frontend/custom_fields.php:549
 #: backend/tabs/instance/frontend/custom_fields.php:747
-#: backend/tabs/instance/frontend/custom_fields.php:765
-msgid "Step"
+msgid "Placeholder Text #2"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:533
-#: backend/tabs/instance/frontend/custom_fields.php:551
+#: backend/tabs/instance/frontend/custom_fields.php:549
+#: backend/tabs/instance/frontend/custom_fields.php:569
 #: backend/tabs/instance/frontend/custom_fields.php:749
-#: backend/tabs/instance/frontend/custom_fields.php:767
-msgid "Prefix"
+#: backend/tabs/instance/frontend/custom_fields.php:765
+#: backend/tabs/instance/frontend/custom_fields.php:785
+msgid "Thousands separator"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:535
-#: backend/tabs/instance/frontend/custom_fields.php:553
-#: backend/tabs/instance/frontend/custom_fields.php:751
-#: backend/tabs/instance/frontend/custom_fields.php:769
-msgid "Suffix"
+#: backend/tabs/instance/frontend/custom_fields.php:537
+#: backend/tabs/instance/frontend/custom_fields.php:555
+#: backend/tabs/instance/frontend/custom_fields.php:753
+#: backend/tabs/instance/frontend/custom_fields.php:771
+msgid "Slider range"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:539
+#: backend/tabs/instance/frontend/custom_fields.php:557
 #: backend/tabs/instance/frontend/custom_fields.php:755
-msgid "Leave it empty to set the handle automatically."
+#: backend/tabs/instance/frontend/custom_fields.php:773
+msgid "Leave them empty to get the values automatically."
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:540
+#: backend/tabs/instance/frontend/custom_fields.php:558
+#: backend/tabs/instance/frontend/custom_fields.php:756
+#: backend/tabs/instance/frontend/custom_fields.php:774
+msgid "Step"
 msgstr ""
 
 #: backend/tabs/instance/frontend/custom_fields.php:542
-#: backend/tabs/instance/frontend/custom_fields.php:562
+#: backend/tabs/instance/frontend/custom_fields.php:560
 #: backend/tabs/instance/frontend/custom_fields.php:758
+#: backend/tabs/instance/frontend/custom_fields.php:776
+msgid "Prefix"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:544
+#: backend/tabs/instance/frontend/custom_fields.php:562
+#: backend/tabs/instance/frontend/custom_fields.php:760
 #: backend/tabs/instance/frontend/custom_fields.php:778
+msgid "Suffix"
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:548
+#: backend/tabs/instance/frontend/custom_fields.php:764
+msgid "Leave it empty to set the handle automatically."
+msgstr ""
+
+#: backend/tabs/instance/frontend/custom_fields.php:551
+#: backend/tabs/instance/frontend/custom_fields.php:571
+#: backend/tabs/instance/frontend/custom_fields.php:767
+#: backend/tabs/instance/frontend/custom_fields.php:787
 msgid "Decimal places"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:555
-#: backend/tabs/instance/frontend/custom_fields.php:771
+#: backend/tabs/instance/frontend/custom_fields.php:564
+#: backend/tabs/instance/frontend/custom_fields.php:780
 msgid "Track 1 default"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:557
-#: backend/tabs/instance/frontend/custom_fields.php:773
+#: backend/tabs/instance/frontend/custom_fields.php:566
+#: backend/tabs/instance/frontend/custom_fields.php:782
 msgid "Track 2 default"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:559
-#: backend/tabs/instance/frontend/custom_fields.php:775
+#: backend/tabs/instance/frontend/custom_fields.php:568
+#: backend/tabs/instance/frontend/custom_fields.php:784
 msgid "Leave them empty to set the handles automatically."
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:583
+#: backend/tabs/instance/frontend/custom_fields.php:592
 msgid "Use the numeric operators for numeric values and string operators for text values"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:589
-#: backend/tabs/instance/frontend/custom_fields.php:805
+#: backend/tabs/instance/frontend/custom_fields.php:598
+#: backend/tabs/instance/frontend/custom_fields.php:814
 msgid "..text: "
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:592
-#: backend/tabs/instance/frontend/custom_fields.php:808
+#: backend/tabs/instance/frontend/custom_fields.php:601
+#: backend/tabs/instance/frontend/custom_fields.php:817
 msgid "The plugin will not trigger search until the required field is set."
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:595
+#: backend/tabs/instance/frontend/custom_fields.php:604
+#: build/js/statistics.js:60
 msgid "Reset"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:596
+#: backend/tabs/instance/frontend/custom_fields.php:605
 msgid "Add!"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:680
+#: backend/tabs/instance/frontend/custom_fields.php:689
 msgid "ACF date field"
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:799
+#: backend/tabs/instance/frontend/custom_fields.php:808
 msgid "Use the numeric operators for numeric values and string operators for text values."
 msgstr ""
 
-#: backend/tabs/instance/frontend/custom_fields.php:811
+#: backend/tabs/instance/frontend/custom_fields.php:820
 msgid "Back"
 msgstr ""
 
@@ -5070,18 +5099,22 @@ msgid "Use the image of image mime types as the result image?"
 msgstr ""
 
 #: backend/tabs/instance/general/attachment_results.php:119
+msgid "Display images in a lightbox?"
+msgstr ""
+
+#: backend/tabs/instance/general/attachment_results.php:126
 msgid "Allow custom field filters to apply on Attachment results as well?"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:124
+#: backend/tabs/instance/general/attachment_results.php:131
 msgid "This only has effect if you have use any custom field filters."
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:132
+#: backend/tabs/instance/general/attachment_results.php:139
 msgid "Exclude attachment IDs"
 msgstr ""
 
-#: backend/tabs/instance/general/attachment_results.php:136
+#: backend/tabs/instance/general/attachment_results.php:143
 msgid "<strong>Comma separated list</strong> of attachment IDs to exclude."
 msgstr ""
 
@@ -5333,6 +5366,7 @@ msgstr ""
 #: backend/tabs/instance/general/ordering.php:9
 #: backend/tabs/instance/general_options.php:26
 #: backend/tabs/priorities/priorities_individual.php:16
+#: build/js/statistics.js:118
 msgid "Ordering"
 msgstr ""
 
@@ -5430,8 +5464,8 @@ msgstr ""
 #: backend/tabs/instance/general/ordering.php:68
 #: backend/tabs/instance/general/user_search.php:72
 #: backend/tabs/instance/general/user_search.php:111
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Field name"
 msgstr ""
 
@@ -6102,12 +6136,12 @@ msgid "Scroll to the first keyword match if possible?"
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:137
-#: backend/tabs/instance/layout/results_behaviour.php:11
+#: backend/tabs/instance/layout/results_behaviour.php:20
 msgid "scroll offset (px)"
 msgstr ""
 
 #: backend/tabs/instance/layout/highlight_loadmore.php:140
-#: backend/tabs/instance/layout/results_behaviour.php:14
+#: backend/tabs/instance/layout/results_behaviour.php:23
 msgid "A negative offset will move the window upwards, a positive downwards. Default: 0"
 msgstr ""
 
@@ -6124,22 +6158,30 @@ msgid "Optional, but very useful - it tells which element contains exactly the r
 msgstr ""
 
 #: backend/tabs/instance/layout/results_behaviour.php:3
+msgid "Disable clicks on results?"
+msgstr ""
+
+#: backend/tabs/instance/layout/results_behaviour.php:7
+msgid "Will disable redirection to the result when the user tries to interact with it."
+msgstr ""
+
+#: backend/tabs/instance/layout/results_behaviour.php:12
 msgid "When clicking on a result, open it in a new window?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_behaviour.php:9
+#: backend/tabs/instance/layout/results_behaviour.php:18
 msgid "Scroll the browser window to the result list, when the search starts?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_behaviour.php:19
+#: backend/tabs/instance/layout/results_behaviour.php:28
 msgid "Make the whole result area clickable?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_behaviour.php:25
+#: backend/tabs/instance/layout/results_behaviour.php:34
 msgid "Close results when the search loses focus?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_behaviour.php:29
+#: backend/tabs/instance/layout/results_behaviour.php:38
 msgid "Closes the results list when clicking outside the search elements."
 msgstr ""
 
@@ -6383,6 +6425,8 @@ msgid ""
 msgstr ""
 
 #: backend/tabs/instance/layout/search_box_layout.php:89
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
 msgid "Phrase"
 msgstr ""
 
@@ -6461,11 +6505,6 @@ msgstr ""
 
 #: backend/tabs/instance/relevance_options.php:3
 msgid "Index Table Engine"
-msgstr ""
-
-#: backend/tabs/instance/relevance_options.php:28
-#: backend/tabs/instance/search_options.php:32
-msgid "estore defaults"
 msgstr ""
 
 #: backend/tabs/instance/search_options.php:2
@@ -6921,6 +6960,10 @@ msgstr ""
 
 #: backend/tabs/instance/suggest/suggestions.php:13
 msgid "Suggestion text"
+msgstr ""
+
+#: backend/tabs/instance/suggest/suggestions.php:23
+msgid "Keywords"
 msgstr ""
 
 #: backend/tabs/instance/suggest/suggestions.php:27
@@ -7980,35 +8023,39 @@ msgstr ""
 msgid "Check <a href=\"%s\" target=\"_blank\">this documentation</a> to see where you can find your license key."
 msgstr ""
 
-#: backend/updates_help.php:83
+#: backend/updates_help.php:84
+msgid "Need a license? You can grab one <a href=\"%s\" target=\"_blank\">via the pricing page</a>."
+msgstr ""
+
+#: backend/updates_help.php:90
 msgid "License key"
 msgstr ""
 
-#: backend/updates_help.php:91
+#: backend/updates_help.php:98
 msgid "If you activated the plugin <b>with this site before</b>, and you see this activation form, just enter the purchase code again to re-activate."
 msgstr ""
 
-#: backend/updates_help.php:99
+#: backend/updates_help.php:106
 msgid "License verified & auto-updates are activated for this site, with key: "
 msgstr ""
 
-#: backend/updates_help.php:102
+#: backend/updates_help.php:109
 msgid "A license is verified locally on current site."
 msgstr ""
 
-#: backend/updates_help.php:106
+#: backend/updates_help.php:113
 msgid "Remove"
 msgstr ""
 
-#: backend/updates_help.php:108
+#: backend/updates_help.php:115
 msgid "<b>NOTICE:</b> After removal there is a <b>30 minute</b> wait time until you can re-activate the same purchase code to prevent malicious activity."
 msgstr ""
 
-#: backend/updates_help.php:117
+#: backend/updates_help.php:124
 msgid "To see more details about your licenses, you can <a href=\"%s\" target=\"_blank\">login</a> to our support site."
 msgstr ""
 
-#: backend/updates_help.php:125
+#: backend/updates_help.php:132
 msgid "If you don't have an account yet, just create one and <a href='%s' target='_blank'>add</a> your existing licenses. They will be bound to that account."
 msgstr ""
 
@@ -8032,6 +8079,10 @@ msgstr ""
 #: backend/settings/assets/search_instance.js:1156
 #: backend/settings/assets/search_instance.js:1178
 msgid "Okay"
+msgstr ""
+
+#: backend/settings/assets/search_instance.js:1125
+msgid "Are you sure?"
 msgstr ""
 
 #: backend/settings/assets/search_instance.js:1127
@@ -8141,643 +8192,650 @@ msgstr ""
 msgid "Result:"
 msgstr ""
 
-#: build/js/dev.js:69
-#: build/js/search-instance.js:69
+#: build/js/dev.js:64
+#: build/js/search-instance.js:64
+#: build/js/statistics.js:118
+msgid "Warning:"
+msgstr ""
+
+#: build/js/dev.js:70
+#: build/js/search-instance.js:70
 msgid "Paragraph HTML tag"
 msgstr ""
 
-#: build/js/dev.js:69
-#: build/js/search-instance.js:69
+#: build/js/dev.js:70
+#: build/js/search-instance.js:70
 msgid "Div HTML tag"
 msgstr ""
 
-#: build/js/dev.js:69
-#: build/js/search-instance.js:69
+#: build/js/dev.js:70
+#: build/js/search-instance.js:70
 msgid "Span HTML tag"
 msgstr ""
 
-#: build/js/dev.js:69
-#: build/js/search-instance.js:69
+#: build/js/dev.js:70
+#: build/js/search-instance.js:70
 msgid "Strong (bold) HTML tag"
 msgstr ""
 
-#: build/js/dev.js:69
-#: build/js/search-instance.js:69
+#: build/js/dev.js:70
+#: build/js/search-instance.js:70
 msgid "Italic HTML tag"
 msgstr ""
 
-#: build/js/dev.js:69
-#: build/js/search-instance.js:69
+#: build/js/dev.js:70
+#: build/js/search-instance.js:70
 msgid "Emphasis HTML tag"
 msgstr ""
 
-#: build/js/dev.js:69
-#: build/js/search-instance.js:69
+#: build/js/dev.js:70
+#: build/js/search-instance.js:70
 msgid "Line break HTML tag"
-msgstr ""
-
-#: build/js/dev.js:85
-#: build/js/search-instance.js:85
-msgid "Conditional: If field values wrapped in this tag are empty, it returns an empty string."
 msgstr ""
 
 #: build/js/dev.js:86
 #: build/js/search-instance.js:86
+msgid "Conditional: If field values wrapped in this tag are empty, it returns an empty string."
+msgstr ""
+
+#: build/js/dev.js:87
+#: build/js/search-instance.js:87
 msgid "Shortcode escape: To insert a shortcode into the field, wrap with this tag."
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "See documentation"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Do you want to delete this tag?"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Insert Field"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Switch to Text Editor"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Switch to Visual Editor"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Non-webkit browsers may not work correctly for the visual editor! Recommended browser: Chrome"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Custom field (post metadata) content. Supports ACF."
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Enter field name"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Source"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Post Meta or ACF"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "User (author) Meta or ACF"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Relationship to Post Type"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Relationship to Users"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Relationship to Taxonomy Terms"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "PODs field"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Max. length"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Separation"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "How to separate items if the field contains an array of values"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Text with separator"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "HTML List (ul>li)"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Separator"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid " ,"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Separator between the items when the value is an array"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Allow HTML in field output?"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Date Format"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "WordPress Default"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "DateTime format, ex.: \"F j, Y, g:i a\" -> \"March 10, 2001, 5:16 pm\""
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Thousand separator"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Decimals"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Decimal separator"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "List of taxonomy terms (categories, tags etc..)."
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Select taxonomy"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Count"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "5"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Order by"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Order"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Exclude terms"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Select terms to exclude"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Make terms clickable links"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "How to separate the terms?"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Separator between the items if the value is an array"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Term color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Separator color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Open links in new tab?"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
+#: build/js/statistics.js:117
 msgid "Field"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Result ID"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Result Title"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Result Content"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Result Post Type"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Result URL"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Result image URL"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Result date"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Result author (Display name)"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "The default Result Title Field as set in the primary or secondary source."
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "The default Result Content Field as set in the primary or secondary source."
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "The result URL parsed by Ajax Search Pro."
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "The image URL parsed by Ajax Search Pro."
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Price field"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Default Price HTML"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Price without tax"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Price with tax"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Sale Price"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Regular Price Color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Sale Price Color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Stars Size"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Default: 17px"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Ex.: 17px or 1em"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Stars Color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Stars Background Color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Default: Sale!"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Font Size"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Default: 14px"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Ex.: 14px or 1em"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Font Color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Background Color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Position"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Top Right"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Top Left"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Bottom Left"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Bottom Right"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Box"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Capsule"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Round"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Display Quantity Input"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Display only when product is in-stock"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Default quantity"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Default: 1"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Button Color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Button Text Color"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Justification"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Display only on these product statuses"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "All statuses"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "In Stock"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Out of Stock"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "On Backorder"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Display stock count"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Rating custom field name"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Max. rating"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Highest possible rating. Ex.: Users can rate 0-10, then it's 10"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Categories or other Taxonomy Terms"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Title Field (default)"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Description Field (default)"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "WooCommerce: Price"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "WooCommerce: Add to Cart"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "WooCommerce: Sale badge"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "WooCommerce: Star rating"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "WooCommerce: Stock Status"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Star rating field"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Result Field"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Terms"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Price"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Woo Sale Badge"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Woo Star Rating"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Woo Add to Cart"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Woo Stock Status"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Star Rating"
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "Custom field (user metadata) content. Supports ACF."
 msgstr ""
 
-#: build/js/dev.js:87
-#: build/js/search-instance.js:87
+#: build/js/dev.js:88
+#: build/js/search-instance.js:88
 msgid "User Meta or ACF"
 msgstr ""
 
 #: build/js/index-table.js:32
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
 msgid "There was an issue loading the data, please reload the page."
 msgstr ""
 
@@ -8797,34 +8855,611 @@ msgstr ""
 msgid "When selected, only Media Files from the selected directories will be indexed. Exclusions from above will still apply!"
 msgstr ""
 
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
 msgid "Advanced Title Field for Post Type Results"
 msgstr ""
 
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
 msgid "Advanced Description Field for Post Type Results"
 msgstr ""
 
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
 msgid "Advanced title field for User results"
 msgstr ""
 
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
 msgid "Advanced description field for User result"
 msgstr ""
 
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
 msgid "Exclude files from directories"
 msgstr ""
 
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
 msgid "Media files from these directories will be excluded"
 msgstr ""
 
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
 msgid "Include files only from directories"
 msgstr ""
 
-#: build/js/search-instance.js:87
+#: build/js/search-instance.js:88
 msgid "When selected, only Media Files from the selected directories will be returned. Exclusions from above will still apply!"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Do you want to remove all?"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Options saved successfully!"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Options reset successfully!"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "The search statistics data was removed successfully!"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "There are unsaved changes, are you sure you want to leave?"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Error loading options, please reload the page."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "1 Week"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "2 Weeks"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "1 Month"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "3 Months"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "6 Months"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "1 Year"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "2 Year"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Search statistics enabled"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Record result statistics"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Records the results displayed for each search query."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Record result interaction statistics"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Records user interactions with the search results."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Max. search phrase length"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Limits the length of the search phrase (in characters) when logging. Longer phrases will be truncated to this length."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Default: 100, Min.: 1, Max: 255"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Max. number of database rows to save"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Limits the number of rows in the main statistics database. When the limit is reached, the oldest records are deleted."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Default: 1000000, Min.: 1000"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Max. number of results to record per search?"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Limits the number of results to log in the results statistics database for each search."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Default: 50, Min.: 1, Max: 100"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Max. age of database rows to save"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Limits the maximum age of rows in the main statistics database. Wen the limit is reached, the oldest records are deleted."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Default: 1 Year"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Exclude keywords (partial matches)"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "When the search phrase contains ANY of these keywords, it will not be logged."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Tags copied to the clipboard!"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Exclude keywords (full matches)"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "When the search phrase MATCHES EXACTLY ANY of these keywords, it will not be logged."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Realtime stats refresh interval (in seconds)"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Sets how often should the realtime statistics update under the Realtime menu."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Default: 5, Min.: 1, Max: 1800"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Results page elements custom DOM selector"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "DOM selector to the result elements on the results page. It helps registering the interactions."
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Default: empty"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Reset to defaults"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Delete all statistics data"
+msgstr ""
+
+#: build/js/statistics.js:60
+#: build/js/statistics.js:118
+msgid "Confirm"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Are you sure you want to delete all statistics data?"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "This will remove all recorded data and it can't be reverted!"
+msgstr ""
+
+#: build/js/statistics.js:60
+msgid "Are you sure you want to reset the settings to defaults?"
+msgstr ""
+
+#: build/js/statistics.js:102
+msgid "minutes"
+msgstr ""
+
+#: build/js/statistics.js:102
+msgid "hours"
+msgstr ""
+
+#: build/js/statistics.js:113
+msgid "Deleted search instance"
+msgstr ""
+
+#: build/js/statistics.js:113
+msgid "Searches in last 60 minutes"
+msgstr ""
+
+#: build/js/statistics.js:113
+msgid "Searches in last 24 hours"
+msgstr ""
+
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
+msgid "Device"
+msgstr ""
+
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
+msgid "User"
+msgstr ""
+
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
+msgid "Referer"
+msgstr ""
+
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
+msgid "Search ID"
+msgstr ""
+
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
+msgid "Blog ID"
+msgstr ""
+
+#: build/js/statistics.js:113
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Language"
+msgstr ""
+
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
+msgid "Page"
+msgstr ""
+
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
+msgid "Results Displayed"
+msgstr ""
+
+#: build/js/statistics.js:113
+#: build/js/statistics.js:118
+msgid "Results Found"
+msgstr ""
+
+#: build/js/statistics.js:117
+msgid "Filter by referer (type to search)"
+msgstr ""
+
+#: build/js/statistics.js:117
+msgid "Search Phrase"
+msgstr ""
+
+#: build/js/statistics.js:117
+msgid "Referer page"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Search Bar"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Search Type"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Device Type"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Compare to previous period?"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Export current page to CSV"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Export all pages to CSV"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Filter by Device"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Filter by Search Type"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Live"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Redirect"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Filter by Results Status"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Returned at least 1 result"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Returned 0 results"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Filter by User Interaction"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "User clicked a result"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "User did not interact"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Filter by Search Bar"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Filter by Users"
+msgstr ""
+
+#: build/js/statistics.js:117
+msgid "Include empty"
+msgstr ""
+
+#: build/js/statistics.js:117
+msgid "Most popular"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "from"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "to"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "Total Searches"
+msgstr ""
+
+#: build/js/statistics.js:117
+#: build/js/statistics.js:118
+msgid "(vs prev. period)"
+msgstr ""
+
+#: build/js/statistics.js:117
+msgid "Avg. Results/Search"
+msgstr ""
+
+#: build/js/statistics.js:117
+msgid "Avg. Interactions/Search"
+msgstr ""
+
+#: build/js/statistics.js:117
+msgid "Total users"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Filter by phrase (type to search)"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Export to CSV"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Filter by Users (type to search)"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Display 0 search volume dates?"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Search volume"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Total searches"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Total results shown"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Total interactions"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Change"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Total Results Shown"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Total Interactions"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Search instance ID"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "User name"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "There was an error."
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Filter by Search ID"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Latest searches"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Result Page Num."
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Actions"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Show results"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Results:"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Are you sure you want to delete this search statistic row?"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Taxonomy Term"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Multisite blog"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Media File"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Comment"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "BuddyPress Group"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "BuddyPress Activity"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Views"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Interactions"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Criteria"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Filter by Result Type"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Include empty searches"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Most popular results"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Result"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Filter by Page"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Latest results"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "User interacted"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Latest interactions (result clicks)"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Realtime"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Searches"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Volume"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Popular"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "All Searches"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "All Results"
+msgstr ""
+
+#: build/js/statistics.js:118
+msgid "Settings"
 msgstr ""

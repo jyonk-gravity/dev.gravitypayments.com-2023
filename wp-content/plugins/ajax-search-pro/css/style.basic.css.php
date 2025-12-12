@@ -2753,6 +2753,252 @@ div.asp_w .asp_select2-container--flat .asp_select2-selection--single {
 }
 /*[select2]*/
 
+/*[simplelightbox]*/
+body.hidden-scroll {
+	overflow: hidden;
+}
+
+.asp-sl-overlay {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: transparent;
+	display: none;
+	z-index: 999994;
+}
+.sl-wrapper.asp-simple-lightbox {
+	z-index: 999999;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	position: fixed;
+
+	& * {
+		box-sizing: border-box;
+	}
+
+	& button {
+		border: 0 none;
+		background: transparent;
+		font-size: 28px;
+		padding: 0;
+		cursor: pointer;
+
+		&:hover {
+			opacity: 0.7;
+		}
+	}
+
+	& .sl-close {
+		display: none;
+		position: fixed;
+		right: 30px;
+		top: 30px;
+		z-index: 10060;
+		margin-top: -14px;
+		margin-right: -14px;
+		height: 44px;
+		width: 44px;
+		line-height: 44px;
+		font-family: Arial, Baskerville, monospace;
+		color: #000;
+		font-size: 3rem;
+	}
+
+	& .sl-counter {
+		display: none;
+		position: fixed;
+		top: 30px;
+		left: 30px;
+		z-index: 10060;
+		color: #000;
+		font-size: 1rem;
+	}
+
+	& .sl-download {
+		display: none;
+		position: fixed;
+		bottom: 5px;
+		width: 100%;
+		text-align: center;
+		z-index: 10060;
+		color: #fff;
+		font-size: 1rem;
+
+		a {
+			color: #fff;
+		}
+	}
+
+	& .sl-navigation {
+		width: 100%;
+		display: none;
+
+		button {
+			position: fixed;
+			top: 50%;
+			margin-top: -22px;
+			height: 44px;
+			width: 22px;
+			line-height: 44px;
+			text-align: center;
+			display: block;
+			z-index: 10060;
+			font-family: Arial, Baskerville, monospace;
+			color: #000;
+
+			&.sl-next {
+				right: 5px;
+				font-size: 2rem;
+			}
+
+			&.sl-prev {
+				left: 5px;
+				font-size: 2rem;
+			}
+		}
+	}
+
+	& .sl-image {
+		position: fixed;
+		-ms-touch-action: none;
+		touch-action: none;
+		z-index: 10000;
+
+		img {
+			margin: 0;
+			padding: 0;
+			display: block;
+			border: 0 none;
+			width: 100%;
+			height: auto;
+		}
+
+		iframe {
+			background: #000;
+			border: 0 none;
+		}
+
+		.sl-caption {
+			display: none;
+			padding: 10px;
+			color: #fff;
+			background: rgba(0, 0, 0, 0.8);
+			font-size: 1rem;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+
+			&.pos-top {
+				bottom: auto;
+				top: 0;
+			}
+
+			&.pos-outside {
+				bottom: auto;
+			}
+		}
+	}
+
+	/* Media Queries – Nested */
+	@media (min-width: 35.5em) {
+		.sl-navigation button {
+			width: 44px;
+
+			&.sl-next {
+				right: 10px;
+				font-size: 3rem;
+			}
+
+			&.sl-prev {
+				left: 10px;
+				font-size: 3rem;
+			}
+		}
+
+		.sl-image img,
+		.sl-image iframe {
+			border: 0 none;
+		}
+	}
+
+	@media (min-width: 50em) {
+		.sl-navigation button {
+			width: 44px;
+
+			&.sl-next {
+				right: 20px;
+				font-size: 3rem;
+			}
+
+			&.sl-prev {
+				left: 20px;
+				font-size: 3rem;
+			}
+		}
+
+		.sl-image img,
+		.sl-image iframe {
+			border: 0 none;
+		}
+	}
+}
+
+/* RTL support – outside main nesting due to additional class */
+.sl-wrapper.sl-dir-rtl.asp-simple-lightbox {
+	.sl-navigation {
+		direction: ltr;
+	}
+}
+
+/* External elements (not children of wrapper) */
+.sl-spinner.asp-simple-lightbox {
+	display: none;
+	border: 5px solid #333;
+	border-radius: 40px;
+	height: 40px;
+	left: 50%;
+	margin: -20px 0 0 -20px;
+	opacity: 0;
+	position: fixed;
+	top: 50%;
+	width: 40px;
+	z-index: 1007;
+	-webkit-animation: pulsate 1s ease-out infinite;
+	animation: pulsate 1s ease-out infinite;
+}
+
+.sl-scrollbar-measure {
+	position: absolute;
+	top: -9999px;
+	width: 50px;
+	height: 50px;
+	overflow: scroll;
+}
+
+.sl-transition {
+	transition: transform ease 200ms;
+	-webkit-transition: -webkit-transform ease 200ms;
+}
+
+/* Keyframes */
+@keyframes pulsate {
+	0%   { transform: scale(0.1); opacity: 0; }
+	50%  { opacity: 1; }
+	100% { transform: scale(1.2); opacity: 0; }
+}
+
+@-webkit-keyframes pulsate {
+	0%   { -webkit-transform: scale(0.1); opacity: 0; }
+	50%  { opacity: 1; }
+	100% { -webkit-transform: scale(1.2); opacity: 0; }
+}
+/*[simplelightbox]*/
+
 /*  *******************************************************************************************************************\
     15. Misc
 \**********************************************************************************************************************/

@@ -54,6 +54,14 @@
 	</div>
 	<div class="item">
 		<?php
+		$o = new wpdreamsYesNo("frontend_terms_unselect_parent", __('Uncheck parent terms when all the child terms are unchecked', 'ajax-search-pro'), $sd['frontend_terms_unselect_parent']);
+		?>
+		<p class="descMsg">
+			<?php echo __('When turned <strong>ON</strong> and using Checkbox filters, the parent category (term) is automatically unchecked when all the children are unchecked.', 'ajax-search-pro'); ?>
+		</p>
+	</div>
+	<div class="item">
+		<?php
 		$o = new wpdreamsYesNo("frontend_terms_hide_children", __('Hide child terms, where the parent checkbox is unchecked?', 'ajax-search-pro'), $sd['frontend_terms_hide_children']);
 		$params[$o->getName()] = $o->getData();
 		?>

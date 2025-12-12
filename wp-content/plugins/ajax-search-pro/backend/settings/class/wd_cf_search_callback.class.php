@@ -38,7 +38,7 @@ if (!class_exists("wd_CFSearchCallBack")) {
                                                    class="wd_cf_search"
                                                    value="<?php echo (is_array($this->data) && isset($this->data['value'])) ? $this->data['value'] : $this->data; ?>"
                                                    placeholder="<?php esc_attr_e('Search custom fields..', 'ajax-search-pro'); ?>"/>
-                <input type="hidden" class="wd_cf_search_nonce" value="<?php echo wp_create_nonce( 'wd_cf_search_nonce' ); ?>">                                   
+                <input type="hidden" class="wd_cf_search_nonce" value="<?php echo wp_create_nonce( 'wd_cf_search_nonce' ); ?>">
                 <input type='hidden' value="<?php echo base64_encode(json_encode($this->args)); ?>" class="wd_args">
                 <?php if ($this->args['controls_position'] != 'left') $this->printControls(); ?>
                 <div class="wd_cf_search_res"></div>

@@ -1305,7 +1305,8 @@ class SearchPostTypes extends AbstractSearch {
 
 							if ( $a->priority === $b->priority ) {
 
-								if ( !$is_secondary || $a->$primary_field === $b->$primary_field ) {
+								if ( !$is_secondary || (isset($a->$primary_field, $b->$primary_field) && $a->$primary_field === $b->$primary_field) ) {
+									$diff = 0;
 									switch ( $order ) {
 										case 'average_rating DESC':
 											// ceil() is very important here!! as this expects 1, 0, -1 but no values inbetween
@@ -1346,10 +1347,14 @@ class SearchPostTypes extends AbstractSearch {
 											$diff = MB::strcasecmp($a->title, $b->title);
 											break;
 										case 'author DESC':
-											$diff = MB::strcasecmp($b->author, $a->author);
+											if ( isset($a->author, $b->author) ) {
+												$diff = MB::strcasecmp($b->author, $a->author);
+											}
 											break;
 										case 'author ASC':
-											$diff = MB::strcasecmp($a->author, $b->author);
+											if ( isset($a->author, $b->author) ) {
+												$diff = MB::strcasecmp($a->author, $b->author);
+											}
 											break;
 										case 'id DESC':
 											$diff = $b->id - $a->id;
