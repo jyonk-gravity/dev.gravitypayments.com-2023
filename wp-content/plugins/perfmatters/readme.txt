@@ -4,8 +4,8 @@ Donate link: https://perfmatters.io
 Tags: perfmatters
 Requires at least: 5.5
 Requires PHP: 7.2
-Tested up to: 6.8.3
-Stable tag: 2.5.2
+Tested up to: 6.9
+Stable tag: 2.5.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,41 @@ Perfmatters is a lightweight performance plugin developed to speed up your WordP
 Check out our [documentation](https://perfmatters.io/docs/) for more information on how to use Perfmatters.
 
 == Changelog ==
+
+= 2.5.5 - 12.11.2025 =
+* Added new Code Settings options to Import and Export Perfmatters code snippets.
+* Added support to export individual snippets, a subset of snippets through a bulk action, or all stored snippets from the new Code Settings export button.
+* Added code snippets admin bar menu item that will show up if at least one snippet is present.
+* Added frontend footer and admin footer locations for CSS code snippets.
+* Added new PMMU_PLUGIN_DIR constant to allow for manipulation of the MU plugin file location for specific setups where the standard WPMU_PLUGIN_DIR may be altered.
+* Added a REST API exception for Mollie.
+* Added additional built-in CSS selector exclusions for Elementor's background slideshow.
+* Added support for relative path URLs found inside stylesheets printed inline with our perfmatters_rucss_inline_stylesheets filter.
+* Updated previous Separate Block Styles option which will now show up as a Block Style Behavior dropdown for sites running WordPress 6.9+.
+* Fixed an issue in the code snippets editor where lint markers were not always correctly displaying for HTML and CSS snippets.
+* Fixed an issue where the code snippet editor was pushing new lines off screen in some cases and not automatically scrolling to keep things in view.
+* Fixed an issue where HTML code snippets were not able to save a non-default location.
+* Fixed an issue with general Perfmatters admin notices not displaying correctly.
+* Fixed multiple duplicate ID warnings in the plugin UI.
+* Fixed multiple jQuery deprecation warnings in plugin UI JavaScript.
+* Translation updates.
+
+= 2.5.4 - 11.20.2025 =
+* Moved code snippet storage location out of cache directory and into the uploads folder to prevent data loss in certain environments.
+* Fixed a code snippets compatibility issue with servers that don't support PHP OPcache.
+* Fixed an issue where the CodeMirror editor was not always initializing correctly when editing an individual code snippet.
+* Fixed an issue where the code type tag prefix was not updating when changing the code type while creating a new code snippet.
+* Fixed an issue in the error handling class where the exception handler was looping in certain instances and throwing an error.
+
+= 2.5.3 - 11.19.2025 =
+* Added new Code Snippets (BETA) feature, which is now the default view in the Code tab. You can now create and manage PHP, JS, CSS, and HTML code snippets from inside Perfmatters. We store and load code snippets using a flat-file method and directly integrate with all of our existing optimization options for the best performance.
+* Moved the existing header, body, and footer code boxes to Code > Global Scripts.
+* Made style adjustments throughout the plugin UI.
+* Added built-in CSS selector exclusion for GeneratePress mobile menu.
+* Added new get_file_path utility method for use in various functions that need to determine the local file path for an asset loading on the front end.
+* Fixed an issue where missing image dimensions were not getting applied correctly for sites inside a subdirectory.
+* Removed BETA tag from Cloudflare Early Hints option.
+* Updated EDD plugin updater class to version 1.9.4.
 
 = 2.5.2 - 10.23.2025 =
 * Added new perfmatters_rucss_inline_stylesheets filter which allows you to inline any stylesheet already excluded from used CSS.
@@ -199,6 +234,7 @@ Check out our [documentation](https://perfmatters.io/docs/) for more information
 
 = 2.3.6 - 11.21.2024 =
 * Fixed an issue where Delay JS wasn't running correctly in some cases.
+* Updated EDD plugin updater class to version 1.9.2.
 
 = 2.3.5 - 11.21.2024 =
 * Added new local Google Font option to Limit Subsets that are downloaded and included in the stylesheet.

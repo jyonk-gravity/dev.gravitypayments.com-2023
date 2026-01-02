@@ -345,7 +345,7 @@
                                 }
                                 else
                                 {
-                                    echo '<div id="message" class="updated"><p>' . __( 'Invalid Nonce', 'apto' )  . '</p></div>';
+                                    echo '<div id="message" class="error"><p>' . __( 'Invalid Nonce', 'apto' )  . '</p></div>';
                                 } 
                         } 
                     
@@ -445,8 +445,11 @@
                                             '_pagination',
                                             '_pagination_posts_per_page',
                                             '_pagination_offset_posts',
+                                            
                                             '_wpml_synchronize',
                                             '_polylang_synchronize',
+                                            '_qtranslate_synchronize',
+                                            
                                             '_capability'
                                             );
                                             
@@ -457,6 +460,7 @@
                                                                 
                                                                 '_wpml_synchronize'             =>  'no',
                                                                 '_polylang_synchronize'         =>  'no',
+                                                                '_qtranslate_synchronize'       =>  'no'
                                                                 );
                     
                     $post_main_fields               =   array(
@@ -2729,7 +2733,7 @@
                     if (is_array($data_list)    && count($data_list) > 0)
                         {
                             
-                            $this->AjaxProcessSortList($data_list, $args);
+                            $this->AjaxSaveSortList($data_list, $args);
                             
                             
                             //save the sticky data if any
@@ -2766,7 +2770,7 @@
                 }
                 
                 
-            function AjaxProcessSortList($data_list, $args)
+            function AjaxSaveSortList($data_list, $args)
                 {
                     global $wpdb;
                     
@@ -2800,7 +2804,7 @@
                             if ( ($is_hierarhical === TRUE   ||  $is_woocommerce_archive ) &&  ( $sort_view_settings['_view_selection'] == 'archive' ||  $sort_view_settings['_view_selection'] == 'simple') )
                                 {
                                     $current_item_menu_order = '';
-                                    if ( $parent_id > 0 )
+                                    if ( intval ( $parent_id ) > 0 )
                                         {                                          
                                             if ( $is_woocommerce_archive    !== FALSE )
                                                 {
@@ -2968,8 +2972,14 @@
                         
                     if ( defined('POLYLANG_VERSION') )
                         {
-                            $this->wpml_synchronize( $data_list, $args, $_data_sticky_parsed, $_JSON_response );
+                            $this->polylang_synchronize( $data_list, $args, $_data_sticky_parsed, $_JSON_response );
                             return;
+                        }
+                        
+                    if ( defined( 'QTX_VERSION' ) ) 
+                        {
+                            $this->qtranslate_synchronize( $data_list, $args, $_data_sticky_parsed, $_JSON_response );
+                            return;   
                         }                    
                 }
                 
@@ -3123,7 +3133,7 @@
                                                             );
                                     $args['woocommerce_grouped_childs'] =   array();
                         
-                                    $this->AjaxProcessSortList($translated_objects, $args);
+                                    $this->AjaxSaveSortList($translated_objects, $args);
                                     
                                     
                                     //save the sticky data if any
@@ -3286,7 +3296,7 @@
                                                         'reference_sort_view_id'    =>  $reference_sort_view_id
                                                             );
                                     
-                                    $this->AjaxProcessSortList($translated_objects, $args);
+                                    $this->AjaxSaveSortList($translated_objects, $args);
                                     
                                     
                                     //save the sticky data if any
@@ -3299,6 +3309,109 @@
                         }
                     
                 }
+            
+            
+            /**
+            * Synchronize the list for QTranslate
+            * 
+            * @param mixed $data_list
+            * @param mixed $args
+            * @param mixed $_data_sticky_parsed
+            * @param mixed $_JSON_response
+            */
+            function qtranslate_synchronize( $data_list, $args, $_data_sticky_parsed, &$_JSON_response )
+                {
+                    extract($args);
+                                        
+                    //prccess the sorted items for Polylang if syncronized settings 
+                    if(count($data_list) > 0 && $this->get_sort_meta($sortID, '_qtranslate_synchronize') ==  'yes' &&  $_USE_PAGED_AJAX    === FALSE  &&  $is_hierarhical === FALSE)
+                        {
+                            global $sitepress;
+                            
+                            $current_language   =   $this->functions->get_sort_view_language($sort_view_id);
+
+                            $_post_types_are_translatable  =   TRUE;
+                            
+                            //get all languages to be syncronized
+                            $_languages     =   qtranxf_getSortedLanguages();
+                            foreach($_languages as  $_language)
+                                {
+                                                                        
+                                    //skipp if the same language
+                                    if($_language   ==  $current_language)
+                                        continue;
+                                        
+                                    //check if translatable post type
+                                    if($_post_types_are_translatable   === FALSE)
+                                        {
+                                            $_JSON_response['errors'][] =   __( "A syncronization could not be completed", 'apto' ) . ' ' .  __( "as post type is not translatable.", 'apto' );
+                                            break;
+                                        }
+                                        
+                                    $translated_objects =   $data_list;
+                                                                        
+                                    //identify the sort view for this sort and language
+                                    $attr   =   array(
+                                                '_view_selection'   =>  $sort_view_settings['_view_selection'],
+                                                '_view_language'    =>  $_language
+                                                );
+                                    
+                                    $term_id_translation    =   $sort_view_settings['_term_id'];
+                                    
+                                    if($sort_view_settings['_view_selection']   ==  'taxonomy')
+                                        {
+                                            $attr['_taxonomy' ]     =    $sort_view_settings['_taxonomy'];
+                                            $attr['_term_id' ]      =    $term_id_translation;
+                                        }
+                                    
+                                    $lang_sort_view_ID   =   $this->functions->get_sort_view_id_by_attributes($sortID, $attr); 
+                                    
+                                    if(empty($lang_sort_view_ID))
+                                        {
+                                            //create the sort view
+                                            $sort_view_meta     =   array(
+                                                                            '_order_type'               =>  'manual',
+                                                                            '_view_selection'           =>  $sort_view_settings['_view_selection'],
+                                                                            '_view_language'            =>  $_language
+                                                                            );
+                                            if($sort_view_settings['_view_selection']   ==  'taxonomy')
+                                                {
+                                                    $sort_view_meta['_taxonomy']  =   $sort_view_settings['_taxonomy'];
+                                                    $sort_view_meta['_term_id']   =   $term_id_translation;
+                                                }
+                                                
+                                            $lang_sort_view_ID       =   $this->create_view($sortID, $sort_view_meta);     
+                                        }
+                                    
+                                   
+                                    $sort_view_settings         =   $this->functions->get_sort_view_settings($lang_sort_view_ID);    
+                                    $reference_sort_view_id     =   $lang_sort_view_ID;
+                                                                   
+                                    //update the sort for that language too
+                                    $args   =   array(
+                                                        'sortID'                =>  $sortID,
+                                                        'sort_settings'         =>  $sort_settings,
+                                                        
+                                                        'sort_view_id'          =>  $lang_sort_view_ID,
+                                                        'sort_view_settings'    =>  $sort_view_settings,
+                                                        
+                                                        '_USE_PAGED_AJAX'       =>  $_USE_PAGED_AJAX,
+                                                        'is_hierarhical'        =>  $is_hierarhical,
+                                                        'reference_sort_view_id'    =>  $reference_sort_view_id
+                                                            );
+                                    
+                                    $this->AjaxSaveSortList($translated_objects, $args);
+                                    
+                                    //save the sticky data if any
+                                    update_post_meta($lang_sort_view_ID, '_sticky_data', $_data_sticky_parsed);
+                                    
+                                    
+                                }
+                            
+                        }
+                    
+                }
+            
              
         }
 

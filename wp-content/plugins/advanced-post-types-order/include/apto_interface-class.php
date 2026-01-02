@@ -714,7 +714,7 @@ class APTO_interface
                                     <tr id="conditional_rules">
                                         <td class="label">
                                             <label for=""><?php _e( "Conditionals", 'apto' ) ?></label>
-                                            <p class="description"><?php _e( "Apply the order only if conditions are true. For more details check", 'apto' ) ?> <a target="_blank" href="https://www.nsp-code.com/advanced-post-types-order-description-and-usage/using-conditionals-for-sorting-apply/"><?php _e( "Conditionals Usage", 'apto' ) ?></a></p>
+                                            <p class="description"><?php _e( "Apply the order only if conditions are true. For more details check", 'apto' ) ?> <a target="_blank" href="https://www.nsp-code.com/documentation/using-conditionals-for-sorting-apply/"><?php _e( "Conditionals Usage", 'apto' ) ?></a></p>
                                         </td>
                                         <td>
                                             <h4><?php _e( "Apply if", 'apto' ) ?></h4>
@@ -945,8 +945,9 @@ class APTO_interface
                                                         </fieldset>
                                                     </td></tr>
                                                                                                         
-                                                    <?php if(defined('ICL_LANGUAGE_CODE') && defined('ICL_SITEPRESS_VERSION') && $this->sortID !=  '' && $this->interface_helper->get_is_hierarhical_by_settings($this->sortID) === FALSE) { ?>
-                                                    <tr id="_wpml_synchronize" class="visibility_related_option_pagination_invert" <?php if($this->interface_helper->get_sort_meta($this->sortID, '_pagination') == 'yes') { ?>style="display: none"<?php } ?>><td>
+                                                    <?php 
+                                                    if(defined('ICL_LANGUAGE_CODE') && defined('ICL_SITEPRESS_VERSION') && $this->sortID !=  '' && $this->interface_helper->get_is_hierarhical_by_settings($this->sortID) === FALSE) { ?>
+                                                    <tr id="_wpml_synchronize" class="_visibility_related_option_pagination_invert"><td>
                                                         <h4><?php _e( "WPML Synchronize", 'apto' ) ?></h4>
                                                         <p class="description"><?php _e( "Synchronize the order across all other languages. This will overwrite other languages sorting. For this to work, all other languages must contain the same translated objects.", 'apto' ) ?></p>
                                                         <fieldset>
@@ -957,12 +958,24 @@ class APTO_interface
                                                     <?php } ?>
                                                     
                                                     <?php if(defined('POLYLANG_VERSION') && $this->sortID !=  '' && $this->interface_helper->get_is_hierarhical_by_settings($this->sortID) === FALSE) { ?>
-                                                    <tr id="_polylang_synchronize" class="visibility_related_option_pagination_invert" <?php if($this->interface_helper->get_sort_meta($this->sortID, '_pagination') == 'yes') { ?>style="display: none"<?php } ?>><td>
+                                                    <tr id="_polylang_synchronize" class="_visibility_related_option_pagination_invert"><td>
                                                         <h4><?php _e( "Polylang Synchronize", 'apto' ) ?></h4>
                                                         <p class="description"><?php _e( "Synchronize the order across all other languages. This will overwrite other languages sorting. For this to work, all other languages must contain the same translated objects.", 'apto' ) ?></p>
                                                         <fieldset>
                                                             <label><input type="radio" <?php if($this->interface_helper->get_sort_meta($this->sortID, '_polylang_synchronize') == 'yes') { ?>checked="checked"<?php } ?> value="yes" name="interface[_polylang_synchronize]"> <span><?php _e( "Yes", 'apto' ) ?></span></label><br>
                                                             <label><input type="radio" <?php if($this->interface_helper->get_sort_meta($this->sortID, '_polylang_synchronize') == 'no' || $this->interface_helper->get_sort_meta($this->sortID, '_polylang_synchronize') == '') { ?>checked="checked"<?php } ?> value="no" name="interface[_polylang_synchronize]"> <span><?php _e( "No", 'apto' ) ?></span></label><br>
+                                                        </fieldset>
+                                                    </td></tr>
+                                                    <?php } ?>
+                                                    
+                                                    <?php 
+                                                    if(defined('QTX_VERSION') && $this->sortID !=  '' && $this->interface_helper->get_is_hierarhical_by_settings($this->sortID) === FALSE) { ?>
+                                                    <tr id="_qtranslate_synchronize" class="_visibility_related_option_pagination_invert"><td>
+                                                        <h4><?php _e( "QTranslate Synchronize", 'apto' ) ?></h4>
+                                                        <p class="description"><?php _e( "Synchronize the order across all other languages. This will overwrite other languages sorting.", 'apto' ) ?></p>
+                                                        <fieldset>
+                                                            <label><input type="radio" <?php if($this->interface_helper->get_sort_meta($this->sortID, '_qtranslate_synchronize') == 'yes') { ?>checked="checked"<?php } ?> value="yes" name="interface[_qtranslate_synchronize]"> <span><?php _e( "Yes", 'apto' ) ?></span></label><br>
+                                                            <label><input type="radio" <?php if($this->interface_helper->get_sort_meta($this->sortID, '_qtranslate_synchronize') == 'no' || $this->interface_helper->get_sort_meta($this->sortID, '_qtranslate_synchronize') == '') { ?>checked="checked"<?php } ?> value="no" name="interface[_qtranslate_synchronize]"> <span><?php _e( "No", 'apto' ) ?></span></label><br>
                                                         </fieldset>
                                                     </td></tr>
                                                     <?php } ?>

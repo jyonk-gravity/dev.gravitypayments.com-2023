@@ -287,17 +287,41 @@ function perfmatters_settings() {
     );
 
     //separate block styles
-    add_settings_field(
-        'separate_block_styles', 
-        perfmatters_title(__('Separate Block Styles', 'perfmatters'), 'separate_block_styles', 'https://perfmatters.io/docs/separate-core-block-styles-wordpress/'), 
-        'perfmatters_print_input', 
-        'perfmatters_options', 
-        'perfmatters_options', 
-        array(
-            'id' => 'separate_block_styles',
-            'tooltip' => __('Load core block styles only when they are rendered instead of in a global stylesheet.', 'perfmatters')
-        )
-    );
+    if(version_compare(get_bloginfo('version'), '6.9' , '<')) {
+
+        //pre 6.9 toggle
+        add_settings_field(
+            'separate_block_styles', 
+            perfmatters_title(__('Separate Block Styles', 'perfmatters'), 'separate_block_styles', 'https://perfmatters.io/docs/separate-core-block-styles-wordpress/'), 
+            'perfmatters_print_input', 
+            'perfmatters_options', 
+            'perfmatters_options', 
+            array(
+                'id' => 'separate_block_styles',
+                'tooltip' => __('Load core block styles only when they are rendered instead of in a global stylesheet.', 'perfmatters')
+            )
+        );
+    }
+    else {
+
+        //6.9+ dropdown
+        add_settings_field(
+            'separate_block_styles', 
+            perfmatters_title(__('Block Style Behavior', 'perfmatters'), 'separate_block_styles', 'https://perfmatters.io/docs/block-style-behavior/'), 
+            'perfmatters_print_input', 
+            'perfmatters_options', 
+            'perfmatters_options', 
+            array(
+                'id' => 'separate_block_styles',
+                'input' => 'select',
+                'options' => array(
+                    ''           => __('Separate Styles Inline', 'perfmatters') . ' (' . __('Default', 'perfmatters') . ')',
+                    'stylesheet' => __('Load Global Stylesheet', 'perfmatters')
+                ),
+                'tooltip' => __('Choose how WordPress core block styles are loaded.', 'perfmatters')
+            )
+        );
+    }
 
     //disable heartbeat
     add_settings_field(
@@ -1080,7 +1104,7 @@ function perfmatters_settings() {
     //early hints
     add_settings_field(
         'early_hints', 
-        perfmatters_title(__('Cloudflare Early Hints', 'perfmatters') . '<span class="perfmatters-beta">BETA</span>', 'early_hints', 'https://perfmatters.io/docs/early-hints'), 
+        perfmatters_title(__('Cloudflare Early Hints', 'perfmatters'), 'early_hints', 'https://perfmatters.io/docs/early-hints'), 
         'perfmatters_print_input', 
         'perfmatters_options', 
         'preload', 
@@ -2534,15 +2558,13 @@ function perfmatters_print_early_hint_types($args) {
     $options = get_option('perfmatters_options');
     
     $types = array(
-        //'fetch'  => 'Fetch',
         'font'   => 'Font',
         'image'  => 'Image',
         'script' => 'Script',
         'style'  => 'Style'
-        //'track'  => 'Track'
     );
 
-    echo "<div style='margin-bottom: 10px;' id='perfmatters-early-hint-types'>";
+    echo "<div style='margin: 5px auto;' id='perfmatters-early-hint-types'>";
         foreach($types as $key => $name) {
             echo "<label for='perfmatters-early-hint-types-" . $key . "' style='margin-right: 10px; text-wrap: nowrap;'>";
                 echo "<input type='checkbox' name='perfmatters_options[preload][early_hint_types][]' id='perfmatters-early-hint-types-" . $key . "' " . (!empty($options['preload']['early_hint_types']) && in_array($key, $options['preload']['early_hint_types']) ? ' checked' : '') . " value='" . $key . "' />";
@@ -2550,7 +2572,6 @@ function perfmatters_print_early_hint_types($args) {
             echo "</label>";
         }
     echo "</div>";
-    //perfmatters_action_button('purge_meta', __('Purge Meta Options', 'perfmatters'), 'secondary', $args['confirmation'] ?? '');
 
     //tooltip
     if(!empty($args['tooltip'])) {
@@ -2840,7 +2861,7 @@ function perfmatters_title($title, $id = false, $link = false) {
             //tooltip icon + link
             if(!empty($link)) {
                 $tools = get_option('perfmatters_tools');
-                 $var.= "<a" . (!empty($link) ? " href='" . $link . "'" : "") . " class='perfmatters-tooltip'" . (!empty($tools['accessibility_mode']) ? " title='" . __("View Documentation", 'perfmatters') . "'" : "") . " target='_blank'>?</a>";
+                $var.= "<a" . (!empty($link) ? " href='" . $link . "'" : "") . " class='perfmatters-tooltip'" . (!empty($tools['accessibility_mode']) ? " title='" . __("View Documentation", 'perfmatters') . "'" : "") . " target='_blank'>?</a>";
             }
 
         $var.= "</span>";
@@ -2852,7 +2873,7 @@ function perfmatters_title($title, $id = false, $link = false) {
 //action button
 function perfmatters_action_button($action, $label, $type = 'primary', $confirmation = '') {
     echo '<div class="perfmatters-button-container">';
-        echo '<button name="submit" id="submit" class="button button-' . $type . '" data-pm-action="' . $action . '"' . (!empty($confirmation) ? ' data-pm-confirmation="' . $confirmation . '"' : '') . ' style="display: flex; align-items: center;">';
+        echo '<button name="submit" class="button button-' . $type . '" data-pm-action="' . $action . '"' . (!empty($confirmation) ? ' data-pm-confirmation="' . $confirmation . '"' : '') . ' style="display: flex; align-items: center;">';
             echo '<span class="perfmatters-button-text">' . $label . '</span>';
             echo '<svg class="perfmatters-button-spinner" viewBox="0 0 100 100" role="presentation" focusable="false" style="background: rgba(0,0,0,.1); border-radius: 100%; width: 16px; height: 28px; margin: 0px 2px; overflow: visible; opacity: 1; background-color: transparent; display: none;"><circle cx="50" cy="50" r="50" vector-effect="non-scaling-stroke" style="fill: transparent; stroke-width: 1.5px; stroke: #fff;"></circle><path d="m 50 0 a 50 50 0 0 1 50 50" vector-effect="non-scaling-stroke" style="fill: transparent; stroke-width: 1.5px; stroke: #4A89DD; stroke-linecap: round; transform-origin: 50% 50%; animation: 1.4s linear 0s infinite normal both running perfmatters-spinner;"></path></svg>';
         echo '</button>';

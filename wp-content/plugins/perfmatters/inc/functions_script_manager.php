@@ -1258,31 +1258,31 @@ function pmsm_settings_update_process($old_value, $value) {
 		$mu_version_match = false;
 
 		//make sure mu directory exists
-		if(!file_exists(WPMU_PLUGIN_DIR)) {
-			@mkdir(WPMU_PLUGIN_DIR);
+		if(!file_exists(PMMU_PLUGIN_DIR)) {
+			@mkdir(PMMU_PLUGIN_DIR);
 		}
 
 		//remove existing mu plugin file
-		if(file_exists(WPMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
+		if(file_exists(PMMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
 
 			if(!function_exists('get_plugin_data')) {
 		        require_once(ABSPATH . 'wp-admin/includes/plugin.php');
 		    }
 
 		    //get plugin data
-		    $mu_plugin_data = get_plugin_data(WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+		    $mu_plugin_data = get_plugin_data(PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
 
 			if(!empty($mu_plugin_data['Version']) && defined('PERFMATTERS_VERSION') && $mu_plugin_data['Version'] == PERFMATTERS_VERSION) {
 				$mu_version_match = true;
 			}
 			else {
-				@unlink(WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+				@unlink(PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
 			}
 		}
 		
 		//copy current mu plugin file
 		if(file_exists(plugin_dir_path(__FILE__) . "/perfmatters_mu.php") && !$mu_version_match) {
-			@copy(plugin_dir_path(__FILE__) . "/perfmatters_mu.php", WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+			@copy(plugin_dir_path(__FILE__) . "/perfmatters_mu.php", PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
 		}
 	}
 }
@@ -1532,7 +1532,7 @@ function perfmatters_script_manager_mu_notice() {
 	    }
 
 	    //get plugin data
-	    $mu_plugin_data = get_plugin_data(WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+	    $mu_plugin_data = get_plugin_data(PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
 
 		//display mu version mismatch notice
 		if(defined('PERFMATTERS_VERSION') && !empty($mu_plugin_data['Version']) && $mu_plugin_data['Version'] != PERFMATTERS_VERSION) {
@@ -1543,7 +1543,7 @@ function perfmatters_script_manager_mu_notice() {
 				echo "</p>";
 			echo "</div>";
 		}
-		elseif(!file_exists(WPMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
+		elseif(!file_exists(PMMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
 			echo "<div class='notice notice-error'>";
 				echo "<p>";
 					echo "<strong>" . __('Perfmatters Warning', 'perfmatters') . ":</strong> ";

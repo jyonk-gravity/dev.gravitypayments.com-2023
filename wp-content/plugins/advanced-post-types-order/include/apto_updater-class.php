@@ -148,6 +148,7 @@
                                                         
                                                         '_wpml_synchronize'         =>  'no',
                                                         '_polylang_synchronize'     =>  'no',
+                                                        '_qtranslate_synchronize'   =>  'no',
                                                         
                                                         '_capability'           =>  $roles_capability['Administrator']['capability']
                                                         );
@@ -318,6 +319,7 @@
                                                                 
                                                                 '_wpml_synchronize'         =>  'no',
                                                                 '_polylang_synchronize'     =>  'no',
+                                                                '_qtranslate_synchronize'   =>  'no',
                                                                 
                                                                 '_capability'           =>  $capability
                                                                 );

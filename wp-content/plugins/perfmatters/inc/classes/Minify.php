@@ -89,6 +89,7 @@ class Minify
 		    //js
 		    if($type == 'js') {
 		    	self::$data['exclusions']['js'] = array_merge(self::$data['exclusions']['js'], array(
+		    		PERFMATTERS_CACHE_URL,
 		    		'uploads/perfmatters',
 		    		'wp-recipe-maker'
 		    	));
@@ -96,6 +97,7 @@ class Minify
 		    //css
 		    elseif($type == 'css') {
 		    	self::$data['exclusions']['css'] = array_merge(self::$data['exclusions']['css'], array(
+		    		PERFMATTERS_CACHE_URL,
 		    		'/uploads/elementor/css/post-'
 		    	));
 		    }

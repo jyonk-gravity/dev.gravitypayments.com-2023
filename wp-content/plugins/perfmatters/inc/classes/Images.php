@@ -83,12 +83,7 @@ class Images
         }
 
         //get image path
-        $parsed_url = @parse_url($url);
-        if(empty($parsed_url['path'])) {
-            return false;
-        }
-        
-        $image_path = Utilities::get_root_dir_path() . ltrim($parsed_url['path'], '/');
+        $image_path = Utilities::get_file_path($url);
 
         if(file_exists($image_path)) {
 

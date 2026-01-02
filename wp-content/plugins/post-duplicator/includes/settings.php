@@ -1,11 +1,19 @@
 <?php
 namespace Mtphr\PostDuplicator;
 
+use Mtphr\PostDuplicator\Settings;
+
+// Initialize the Settings instance (this registers all WordPress hooks)
+Settings::instance();
+
 /**
  * Initialize things
+ * Hook names are namespace-specific: {NamespaceIdentifier}Settings/init_settings
+ * For Mtphr\PostDuplicator namespace, the hook prefix is: MtphrPostDuplicatorSettings
  */
-add_action( 'mtphrSettings/init_settings', __NAMESPACE__ . '\initialize_settings', 1 );
-add_action( 'mtphrSettings/init_fields', __NAMESPACE__ . '\initialize_fields' );
+add_action( 'MtphrPostDuplicatorSettings/init_settings', __NAMESPACE__ . '\initialize_settings', 1 );
+add_action( 'MtphrPostDuplicatorSettings/init_settings', __NAMESPACE__ . '\initialize_sidebar' );
+add_action( 'MtphrPostDuplicatorSettings/init_fields', __NAMESPACE__ . '\initialize_fields' );
 
 /**
  * Initialize the settings
@@ -13,17 +21,29 @@ add_action( 'mtphrSettings/init_fields', __NAMESPACE__ . '\initialize_fields' );
 function initialize_settings() {
 
   // Add an admin page for your settings page
-  mtphr_settings_add_admin_page( [
+  Settings::admin_page( [
     'page_title' => esc_html__( 'Post Duplicator Settings', 'post-duplicator' ),
     'menu_title' => esc_html__( 'Post Duplicator', 'post-duplicator' ),
     'capability' => 'manage_options',
     'menu_slug'  => 'mtphr_post_duplicator', 
     'parent_slug' => 'options-general.php',
     'position' => 25,
+    //'header_icon' => 'dashicons-heart', // Optional
+		'header_description' => esc_html__( 'Configure default duplication settings, manage user permissions, and set advanced options for post duplication.', 'post-duplicator' ), // Optional
+    'header_version' => 'v' . MTPHR_POST_DUPLICATOR_VERSION, // Optional
   ] );
 
   // Add setting sections.
-  mtphr_settings_add_section( [
+  Settings::section( [
+    'id' => 'mtphr_post_duplicator_general',
+    'slug' => 'general',
+    'label' => __( 'General', 'post-duplicator' ),
+    'option' => 'mtphr_post_duplicator_settings',
+    'menu_slug' => 'mtphr_post_duplicator',
+    'parent_slug' => 'options-general.php',
+  ] );
+
+  Settings::section( [
     'id' => 'mtphr_post_duplicator_defaults',
     'slug' => 'defaults',
     'label' => __( 'Defaults', 'post-duplicator' ),
@@ -32,7 +52,16 @@ function initialize_settings() {
     'parent_slug' => 'options-general.php',
   ] );
 
-  mtphr_settings_add_section( [
+  Settings::section( [
+    'id' => 'mtphr_post_duplicator_post_types',
+    'slug' => 'post_types',
+    'label' => __( 'Post Types', 'post-duplicator' ),
+    'option' => 'mtphr_post_duplicator_settings',
+    'menu_slug' => 'mtphr_post_duplicator',
+    'parent_slug' => 'options-general.php',
+  ] );
+
+  Settings::section( [
     'id' => 'mtphr_post_duplicator_permissions',
     'slug' => 'permissions',
     'label' => __( 'Permissions', 'post-duplicator' ),
@@ -41,7 +70,7 @@ function initialize_settings() {
     'parent_slug' => 'options-general.php',
   ] );
 
-  mtphr_settings_add_section( [
+  Settings::section( [
     'id' => 'mtphr_post_duplicator_advanced',
     'slug' => 'advanced',
     'label' => __( 'Advanced', 'post-duplicator' ),
@@ -51,7 +80,11 @@ function initialize_settings() {
   ] );
 
   // Add default values
-  mtphr_settings_add_default_values( 'mtphr_post_duplicator_settings', [
+  Settings::default_values( 'mtphr_post_duplicator_settings', [
+    'mode' => 'advanced',
+    'single_after_duplication_action' => 'notice',
+    'list_single_after_duplication_action' => 'notice',
+    'list_multiple_after_duplication_action' => 'notice',
     'status' => 'draft',
     'type' => 'same',
     'post_author' => 'current_user',
@@ -68,22 +101,91 @@ function initialize_settings() {
     'duplicate_other_private' => 'enabled',
     'duplicate_other_password' => 'enabled',
     'duplicate_other_future' => 'enabled',
+    'post_types_config' => get_default_post_types_config(),
   ] );
-  mtphr_settings_add_default_values( 'disabled',
+  Settings::default_values( 'disabled',
     user_roles_and_capabilities( 'defaults' )
   );
 
   // Add sanitize settings
-  mtphr_settings_add_sanitize_settings( 'mtphr_post_duplicator_settings', [
+  Settings::sanitize_settings( 'mtphr_post_duplicator_settings', [
     'time_offset' => 'boolval',
     'time_offset_days' => 'intval',
     'time_offset_hours' => 'intval',
     'time_offset_minutes' => 'intval',
     'time_offset_seconds' => 'intval',
   ] );
-  mtphr_settings_add_sanitize_settings( 'disabled',
+  Settings::sanitize_settings( 'disabled',
     user_roles_and_capabilities( 'sanitizers' )
   );
+}
+
+/**
+ * Initialize sidebar
+ * @return void
+ */
+function initialize_sidebar() {
+  Settings::sidebar([
+    'items' => [
+      [
+        'type' => 'group',
+        'id' => 'sidebar_docs',
+        'direction' => 'column',
+        'fields' => [
+          [
+            'type'    => 'heading',
+            'label'   => __( 'Documentation', 'post-duplicator' ),
+            'container' => [
+              'style' => 'simple',
+              'margin' => '0',
+            ],
+          ],
+          [
+            'type' => 'links',
+            'id' => 'sidebar_doc_links',
+            'links' => [
+              [
+                'label' => 'Duplicating Posts',
+                'url' => 'https://www.metaphorcreations.com/article/post-duplicator/general/duplicating-posts/?ref=post-duplicator'
+              ],
+              [
+                'label' => 'Settings',
+                'url' => 'https://www.metaphorcreations.com/article/post-duplicator/general/settings/?ref=post-duplicator'
+              ]
+            ],
+            'container' => 'simple',
+          ],
+        ]
+        ],
+      [
+        'type' => 'group',
+        'id' => 'sidebar_ad',
+        'direction' => 'column',
+        'alignment' => 'center',
+        'spacing' => '0',
+        'backgroundColor' => 'transparent',
+        'container' => 'simple',
+        'fields' => [
+          [
+            'type' => 'ad',
+            'id' => 'email_customizer',
+            'image' => MTPHR_POST_DUPLICATOR_URL . 'assets/img/marketing/email-customizer.png',
+            'link' => 'https://www.metaphorcreations.com/wordpress-plugins/email-customizer/?campaign=post-duplicator-settings&ref=266',
+            'container' => 'simple',
+          ],
+          [
+            'type' => 'ad',
+            'id' => 'ditty_everything',
+            'image' => MTPHR_POST_DUPLICATOR_URL . 'assets/img/marketing/ditty-everything.png',
+            'link' => 'https://www.metaphorcreations.com/ditty/pricing/?campaign=post-duplicator-settings&ref=266',
+            'container' => 'simple',
+          ],
+        ]
+      ]
+    ],
+    'width' => '300px',
+    'main_max_width' => '1000px'
+  ] );
 }
 
 /**
@@ -91,8 +193,78 @@ function initialize_settings() {
  */
 function initialize_fields() {
 
-  // Add some settings
-  mtphr_settings_add_fields( [
+  // Add general fields
+  Settings::fields( [
+    'section' => 'mtphr_post_duplicator_general',
+    'fields'  => [
+      [
+        'type'    => 'selection',
+        'id'      => 'mode',
+        'label'   => __( 'Mode', 'post-duplicator' ),
+        'choices' => [
+          'basic' => [
+            'heading' => esc_html__( 'Basic', 'post-duplicator' ),
+            'description' => esc_html__( 'Quickly duplicate posts based on duplication default settings.', 'post-duplicator' ),
+          ],
+			    'advanced' => [
+            'heading' => esc_html__( 'Advanced', 'post-duplicator' ),
+            'description' => esc_html__( 'Open a modal to adjust duplicated settings for each post before the post is duplicated.', 'post-duplicator' ),
+          ],
+        ],
+      ],
+      [
+        'type'    => 'radio_buttons',
+        'id'      => 'single_after_duplication_action',
+        'label'   => __( 'After Duplication - Edit Post Screen', 'post-duplicator' ),
+        'choices' => [
+			    'new_tab' => esc_html__( 'Open Duplicated Post in New Tab', 'post-duplicator' ),
+          'same_tab' => esc_html__( 'Open Duplicated Post in Same Tab', 'post-duplicator' ),
+          'notice' => esc_html__( 'Display Notice', 'post-duplicator' ),
+        ],
+        'inline' => false,
+        'hide'    => [
+          'id' => 'mode',
+          'value' => 'advanced',
+          'compare' => '='
+        ],
+      ],
+      [
+        'type'    => 'radio_buttons',
+        'id'      => 'list_single_after_duplication_action',
+        'label'   => __( 'After Duplication - Post List Screen (Single Post)', 'post-duplicator' ),
+        'choices' => [
+			    'new_tab' => esc_html__( 'Open Duplicated Post in New Tab', 'post-duplicator' ),
+          'same_tab' => esc_html__( 'Open Duplicated Post in Same Tab', 'post-duplicator' ),
+          'notice' => esc_html__( 'Display Notice', 'post-duplicator' ),
+          'refresh' => esc_html__( 'Refresh Page', 'post-duplicator' )
+        ],
+        'inline' => false,
+        'hide'    => [
+          'id' => 'mode',
+          'value' => 'advanced',
+          'compare' => '='
+        ],
+      ],
+      [
+        'type'    => 'radio_buttons',
+        'id'      => 'list_multiple_after_duplication_action',
+        'label'   => __( 'After Duplication - Post List Screen (Multiple Posts)', 'post-duplicator' ),
+        'choices' => [
+          'notice' => esc_html__( 'Display Notice', 'post-duplicator' ),
+          'refresh' => esc_html__( 'Refresh Page', 'post-duplicator' )
+        ],
+        'inline' => false,
+        'hide'    => [
+          'id' => 'mode',
+          'value' => 'advanced',
+          'compare' => '='
+        ],
+      ],
+    ],
+  ] );
+
+  // Add default fields
+  Settings::fields( [
     'section' => 'mtphr_post_duplicator_defaults',
     'fields' => [
       [
@@ -207,7 +379,38 @@ function initialize_fields() {
     ],
   ] );
 
-  mtphr_settings_add_fields( [
+  Settings::fields( [
+    'section' => 'mtphr_post_duplicator_post_types',
+    'fields'  => [
+      [
+        'type'    => 'heading',
+        'label'   => __( 'Post Types Configuration', 'post-duplicator' ),
+        'help'    => __( 'Configure which post types can be duplicated and which appear in the "Post Type" dropdown menu.', 'post-duplicator' ),
+      ],
+      [
+        'type'    => 'options_matrix',
+        'id'      => 'post_types_config',
+        'item_label' => false,
+        'items'   => get_all_post_types( 'slug' ),
+        'options' => [
+          [
+            'key'   => 'allow_duplication',
+            'type'  => 'checkbox',
+            'label' => __( 'Allow Duplication', 'post-duplicator' ),
+            'help' => __( 'Allow this post type to be duplicated.', 'post-duplicator' ),
+          ],
+          [
+            'key'   => 'allow_in_dropdown',
+            'type'  => 'checkbox',
+            'label' => __( 'Allow Switch', 'post-duplicator' ),
+            'help' => __( 'Allow duplicated posts to be switched to this post type.', 'post-duplicator' ),
+          ],
+        ],
+      ],
+    ],
+  ] );
+
+  Settings::fields( [
     'section' => 'mtphr_post_duplicator_permissions',
     'fields'  => [
       [
@@ -219,7 +422,7 @@ function initialize_fields() {
     ],
   ] );
 
-  mtphr_settings_add_fields( [
+  Settings::fields( [
     'section' => 'mtphr_post_duplicator_advanced',
     'fields' => [
       [
@@ -291,9 +494,7 @@ function initialize_fields() {
  */
 function get_option_value( $key = false, $option = false ) {
   $option = $option ? $option : 'mtphr_post_duplicator_settings';
-  if ( function_exists( 'mtphr_settings_get_option_value' ) ) {
-    return mtphr_settings_get_option_value( $option, $key );
-  }
+  return Settings::get_value( $option, $key );
 }
 
 /**
@@ -301,9 +502,7 @@ function get_option_value( $key = false, $option = false ) {
  */
 function set_option_value( $key, $value = false, $option = false ) {
   $option = $option ? $option : 'mtphr_post_duplicator_settings';
-  if ( function_exists( 'mtphr_settings_set_option_value' ) ) {
-    return mtphr_settings_set_option_value( $option, $key, $value );
-  }
+  return Settings::set_value( $option, $key, $value );
 }
 
 /**
@@ -389,10 +588,10 @@ function update_capabilities( $value, $key, $option, $type ) {
   if ( 'update' == $type ) {
     $role = get_role( $key );
     $active_capabilities = get_active_capabilities( $role );
-    $capability_value = is_array( $value ) ? $value : [];;
-
+    $capability_value = is_array( $value ) ? $value : [];
     $added_capabilities = array_diff( $capability_value, $active_capabilities );
     $removed_capabilities = array_diff( $active_capabilities, $capability_value );
+
     if ( is_array( $added_capabilities ) && count( $added_capabilities ) > 0 ) {
       foreach ( $added_capabilities as $added_capability ) {
         $role->add_cap( esc_attr( $added_capability ) );
@@ -405,4 +604,24 @@ function update_capabilities( $value, $key, $option, $type ) {
     }
   }
   return $value;
+}
+
+/**
+ * Get default post types configuration
+ * All post types enabled for duplication, only post and page for dropdown
+ * 
+ * @return array Default configuration
+ */
+function get_default_post_types_config() {
+  $all_types = get_all_post_types();
+  $config = array();
+  
+  foreach ( $all_types as $type ) {
+    $config[ $type['id'] ] = array(
+      'allow_duplication' => true,
+      'allow_in_dropdown' => in_array( $type['id'], array( 'post', 'page' ) ),
+    );
+  }
+  
+  return $config;
 }

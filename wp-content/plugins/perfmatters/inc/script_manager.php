@@ -343,7 +343,7 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 
 												//mu plugin file check
 												if(!empty($perfmatters_script_manager_settings['mu_mode'])) {
-													if(file_exists(WPMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
+													if(file_exists(PMMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
 
 														//$mu_plugins = get_mu_plugins();
 														if(!function_exists('get_plugin_data')) {
@@ -351,7 +351,7 @@ echo "<div id='perfmatters-script-manager-wrapper'>";
 													    }
 
 													    //get plugin data
-													    $mu_plugin_data = get_plugin_data(WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+													    $mu_plugin_data = get_plugin_data(PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
 
 														if(empty($mu_plugin_data['Version']) || !defined('PERFMATTERS_VERSION') || ($mu_plugin_data['Version'] != PERFMATTERS_VERSION)) {
 															$mu_message = __("MU plugin version mismatch.", 'perfmatters');

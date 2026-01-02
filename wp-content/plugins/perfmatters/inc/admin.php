@@ -1,8 +1,8 @@
-<?php 
+<?php
 //accessibility mode styles
 $tools = get_option('perfmatters_tools');
 if(!empty($tools['accessibility_mode'])) {
-	echo '<style>#perfmatters-admin .perfmatters-tooltip-subtext{display: none;}</style>';
+	echo '<style>#perfmatters-admin .perfmatters-tooltip-subtext{display: none;}.perfmatters-tooltip-container{width: 100%;}</style>';
 }
 
 //settings wrapper
@@ -42,7 +42,7 @@ echo '<div id="perfmatters-admin" class="wrap">';
 						echo '<a href="#fonts" rel="options-fonts"><span class="dashicons dashicons-editor-paste-text"></span>' . __('Fonts', 'perfmatters') . '</a>';
 						echo '<a href="#cdn" rel="options-cdn"><span class="dashicons dashicons-admin-site-alt2"></span>' . __('CDN', 'perfmatters') . '</a>';
 						echo '<a href="#analytics" rel="options-analytics"><span class="dashicons dashicons-chart-bar"></span>' . __('Analytics', 'perfmatters') . '</a>';
-						echo '<a href="#code" rel="options-code"><span class="dashicons dashicons-editor-code"></span>' . __('Code', 'perfmatters') . '</a>';
+						echo '<a href="#code" rel="code-code"><span class="dashicons dashicons-editor-code"></span>' . __('Code', 'perfmatters') . '</a>';
 
 						//spacer
 						echo '<hr style="border-top: 1px solid #f2f2f2; border-bottom: 0px; margin: 10px 0px;" />';
@@ -79,8 +79,8 @@ echo '<div id="perfmatters-admin" class="wrap">';
 
 		echo '</div>';
 
-		echo '<div style="flex-grow: 1;">';
-			echo '<div class="perfmatters-admin-block">';
+		echo '<div style="flex-grow: 1; min-width: 0px;">';
+			echo '<div id="perfmatters-settings" class="perfmatters-admin-block" data-pm-tab="options">';
 
 				//version number
 				echo '<span id="pm-version" class="perfmatters-mobile-hide">' . __('Version', 'perfmatters') . ' ' . PERFMATTERS_VERSION . '</span>';
@@ -88,7 +88,7 @@ echo '<div id="perfmatters-admin" class="wrap">';
 				if(!is_network_admin()) {
 
 					//main settings form
-					echo '<form method="post" id="perfmatters-options-form" enctype="multipart/form-data" data-pm-option="options">';
+					echo '<form method="post" id="perfmatters-options-form" enctype="multipart/form-data" >';
 
 						//options
 						echo '<div id="perfmatters-options"' . (empty($tools['show_advanced']) ? ' class="pm-hide-advanced"' : '') . '>';
@@ -155,9 +155,8 @@ echo '<div id="perfmatters-admin" class="wrap">';
 						    echo '</section>';
 
 						    //code
-						    echo '<section id="options-code" class="section-content">';
-						    	perfmatters_settings_header(__('Code', 'perfmatters'), 'dashicons-editor-code');
-						    	perfmatters_settings_section('perfmatters_options', 'assets_code');
+						    echo '<section id="code-code" class="section-content" data-pm-subnav="code-snippets">';
+						    	require_once('code.php');
 						    echo '</section>';
 
 					    echo '</div>';
@@ -170,7 +169,6 @@ echo '<div id="perfmatters-admin" class="wrap">';
 								perfmatters_settings_section('perfmatters_options', 'assets');
 								perfmatters_settings_section('perfmatters_tools', 'plugin');
 						    	perfmatters_settings_section('perfmatters_tools', 'settings');
-
 						    echo '</section>';
 
 						    echo '<section id="tools-database" class="section-content">';
@@ -180,7 +178,7 @@ echo '<div id="perfmatters-admin" class="wrap">';
 
 						echo '</div>';
 
-							echo '<div id="perfmatters-save" style="margin-top: 20px;">';
+						echo '<div id="perfmatters-save" style="margin-top: 20px;">';
 							perfmatters_action_button('save_settings', __('Save Changes', 'perfmatters'));
 					    echo '</div>';
 
@@ -210,22 +208,58 @@ echo '<div id="perfmatters-admin" class="wrap">';
 					require_once('support.php');
 				echo '</section>';
 
-				//display correct section based on URL anchor
-				echo '<script>
-					!(function (t) {
-					    var a = t.trim(window.location.hash);
-					    if (a) {
-					    	t("#perfmatters-menu > a.active").removeClass("active");
-					    	var selectedNav = t(\'#perfmatters-menu > a[href="\' + a + \'"]\');
-					    	t("#perfmatters-options-form").attr("data-pm-option", selectedNav.attr("rel").split("-")[0]); 
-					    	t(selectedNav).addClass("active");
-					    	var activeSection = t("#perfmatters-options .section-content.active");
-					    	activeSection.removeClass("active");
-					    	t("#" + selectedNav.attr("rel")).addClass("active");
-					    }
-					})(jQuery);
-				</script>';
+				//code snippets
+				echo '<section id="code-snippets" data-pm-parent="code-code" class="section-content pm-child">';	
+					require_once('pmcs.php');
+				echo '</section>';
+				
 			echo '</div>';
 		echo '</div>';
 	echo '</div>';
 echo '</div>';
+
+//display correct section based on URL hash
+?>
+<script>
+	(function($) {
+
+		function pmHashChange() {
+
+			//url hash
+		    var hash = window.location.hash.trim();
+
+		    if(hash) {
+
+		    	//hash variables
+		    	var hashParts = hash.substring(1).split('/');
+		    	var tab = hashParts[0];
+		    	var subnav = hashParts[1];
+
+		    	//deactivate previous active tab
+		    	$('#perfmatters-menu > a.active').removeClass("active");
+				$('#perfmatters-options .section-content.active').removeClass('active');
+
+		    	//activate selected tab
+		    	var selectedNav = $('#perfmatters-menu > a[href="#' + tab + '"]');
+		    	var selectedContent = $('#' + selectedNav.attr('rel'));
+		    	selectedNav.addClass('active');
+		    	selectedContent.addClass('active');
+
+		    	//display selected subnav
+		    	var subNavContent = subnav ? tab + '-' + subnav : selectedContent.data('pm-subnav');
+		    	if(subNavContent) {
+		    		$('#' + subNavContent).addClass('active');
+		    	}
+
+		    	//update selected section in settings container
+		    	$('#perfmatters-settings').attr('data-pm-option', selectedNav.attr('rel').split('-')[0]);
+		    }
+		}
+		pmHashChange();
+
+	    window.addEventListener("hashchange", () => {
+	    	pmHashChange();
+		});
+
+	})(jQuery);
+</script>

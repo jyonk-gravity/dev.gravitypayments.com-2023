@@ -154,7 +154,8 @@ function perfmatters_rest_authentication_errors($result) {
 			'iawp',
 			'sureforms',
 			'surecart',
-			'sliderrevolution'
+			'sliderrevolution',
+			'mollie'
 		));
 		foreach($exceptions as $exception) {
 			if(strpos($rest_route, $exception) !== false) {
@@ -1341,7 +1342,12 @@ if(!empty($perfmatters_options['remove_global_styles'])) {
 /* Separate Block Styles
 /***********************************************************************/
 if(!empty($perfmatters_options['separate_block_styles'])) {
-	add_filter('should_load_separate_core_block_assets', '__return_true');
+	if(version_compare(get_bloginfo('version'), '6.9' , '>=')) {
+		add_filter('should_load_separate_core_block_assets', '__return_false');
+	}
+	else {
+		add_filter('should_load_separate_core_block_assets', '__return_true');
+	}
 }
 
 /* Header Code

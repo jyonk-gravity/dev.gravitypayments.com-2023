@@ -377,9 +377,9 @@ function cptui_manage_taxonomies() {
 										],
 										true
 									) ? esc_html__( '(WP Core)', 'custom-post-type-ui' ) : '';
-									echo $ui->get_check_input( // phpcs:ignore.
+									echo $ui->get_check_input( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 										[
-											'checkvalue' => $post_type->name,
+											'checkvalue' => esc_attr( $post_type->name ),
 											'checked'    => ( ! empty( $current['object_types'] ) && is_array( $current['object_types'] ) && in_array( $post_type->name, $current['object_types'], true ) ) ? 'true' : 'false', // phpcs:ignore.
 											'name'       => esc_attr( $post_type->name ),
 											'namearray'  => 'cpt_post_types',
@@ -1982,6 +1982,10 @@ add_filter( 'cptui_taxonomy_slug_exists', 'cptui_check_existing_taxonomy_slugs',
  * @since 1.4.0
  */
 function cptui_process_taxonomy() {
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
 
 	if ( wp_doing_ajax() ) {
 		return;

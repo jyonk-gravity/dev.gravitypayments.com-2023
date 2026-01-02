@@ -32,6 +32,14 @@
                                             ));
                                             
                     $this->add_rule(array(
+                                            'id'                    =>  'is_ajax',
+                                            'title'                 =>  'AJAX',
+                                            'admin_html'            =>  array($this, 'conditional_rule_ajax_admin_html'),
+                                            'query_check_callback'  =>  array($this, 'conditional_rule_ajax_query_check'),
+                                            'comparison'            =>  array('IS', 'IS NOT')
+                                            ));
+                                            
+                    $this->add_rule(array(
                                             'id'                    =>  'is_url',
                                             'title'                 =>  'URL',
                                             'admin_html'            =>  array($this, 'conditional_rule_is_url_admin_html'),
@@ -79,6 +87,31 @@
                                             'query_check_callback'  =>  array($this, 'conditional_rule_query_is_main_query_query_check'),
                                             'comparison'            =>  array('TRUE', 'FALSE')
                                             ));
+                    
+                    $this->add_rule(array(
+                                            'id'                    =>  'get',
+                                            'title'                 =>  '$_GET',
+                                            'admin_html'            =>  array($this, 'conditional_rule_get_admin_html'),
+                                            'query_check_callback'  =>  array($this, 'conditional_rule_get_query_check'),
+                                            'comparison'            =>  array('Contains', 'Not Contains')
+                                            ));
+                                            
+                    $this->add_rule(array(
+                                            'id'                    =>  'post',
+                                            'title'                 =>  '$_POST',
+                                            'admin_html'            =>  array($this, 'conditional_rule_post_admin_html'),
+                                            'query_check_callback'  =>  array($this, 'conditional_rule_post_query_check'),
+                                            'comparison'            =>  array('Contains', 'Not Contains')
+                                            ));
+                    
+                    $this->add_rule(array(
+                                            'id'                    =>  'request',
+                                            'title'                 =>  '$_REQUEST',
+                                            'admin_html'            =>  array($this, 'conditional_rule_request_admin_html'),
+                                            'query_check_callback'  =>  array($this, 'conditional_rule_request_query_check'),
+                                            'comparison'            =>  array('Contains', 'Not Contains')
+                                            ));
+                                            
                     
                     
                     $files  =   $this->query_caller_is_template_file_get_template_files();
@@ -251,6 +284,25 @@
                 }
                 
                 
+            function conditional_rule_ajax_admin_html($options)
+                {
+                    //no output is required   
+                }
+
+            function conditional_rule_ajax_query_check( $comparison, $value, $query )
+                {
+                    $condition_status = FALSE;
+                    
+                    if ( (defined('DOING_AJAX') && DOING_AJAX) )
+                        $condition_status   =   TRUE;
+                        
+                    if ( $comparison == 'IS NOT' )
+                        $condition_status   =   ( $condition_status ) ?  FALSE : TRUE;
+                           
+                    return $condition_status;   
+                }
+                
+                
             function conditional_rule_is_url_admin_html($options)
                 {
                     $html = '<input type="text" name="conditional_rules['.$options['group_id'].']['.$options['row_id'].'][conditional_value]" class="text" value="'. htmlspecialchars($options['selected_value']) .'">';
@@ -258,7 +310,7 @@
                     return $html;   
                 }
                 
-            function conditional_rule_is_url_query_check($comparison, $value, $query)
+            function conditional_rule_is_url_query_check( $comparison, $value, $query )
                 {
                     $condition_status = FALSE;
                     
@@ -412,6 +464,208 @@
                                   
                     return $condition_status;    
                 }
+            
+            
+            /**
+            * The superglobal $_GET
+            *     
+            * @param mixed $options
+            */
+            function conditional_rule_get_admin_html($options)
+                {
+                    $html = '<input type="text" name="conditional_rules['.$options['group_id'].']['.$options['row_id'].'][conditional_value]" class="text" value="'. htmlspecialchars($options['selected_value']) .'">';
+                                        
+                    return $html;   
+                }
+
+            /**
+            * The superglobal $_REQUEST
+            *     
+            * @param mixed $comparison
+            * @param mixed $value
+            * @param mixed $query
+            * @return {FALSE|TRUE}
+            */
+            function conditional_rule_get_query_check ( $comparison, $value, $query )
+                {
+                    
+                    $condition_status = FALSE;
+                    
+                    parse_str ( $value , $data );
+                    
+                    if ( is_array ( $data ) )
+                        {                                            
+                            if ( $comparison == 'Contains' )
+                                {
+                                    $condition_status = FALSE;
+                                    
+                                    // Determine if all keys and values in $data are found in $_REQUEST
+                                    if ( $this->conditional_rule_request_all_keys_found_recursive($data, $_GET))
+                                        $condition_status = TRUE;   
+                                }
+                                
+                            if ( $comparison == 'Not Contains' )
+                                {
+               
+                                    $condition_status = TRUE;
+
+                                    // Determine if all keys and values in $data are found in $_REQUEST
+                                    if ( $this->conditional_rule_request_all_keys_found_recursive($data, $_GET))
+                                        $condition_status = FALSE;
+   
+                                }                            
+                        }
+                           
+                    return $condition_status;   
+                }
+                
+                
+            /**
+            * The superglobal $_POST
+            *     
+            * @param mixed $options
+            */
+            function conditional_rule_post_admin_html($options)
+                {
+                    $html = '<input type="text" name="conditional_rules['.$options['group_id'].']['.$options['row_id'].'][conditional_value]" class="text" value="'. htmlspecialchars($options['selected_value']) .'">';
+                                        
+                    return $html;   
+                }
+
+            /**
+            * The superglobal $_REQUEST
+            *     
+            * @param mixed $comparison
+            * @param mixed $value
+            * @param mixed $query
+            * @return {FALSE|TRUE}
+            */
+            function conditional_rule_post_query_check ( $comparison, $value, $query )
+                {
+                    
+                    $condition_status = FALSE;
+                    
+                    parse_str ( $value , $data );
+                    
+                    if ( is_array ( $data ) )
+                        {                                            
+                            if ( $comparison == 'Contains' )
+                                {
+                                    $condition_status = FALSE;
+                                    
+                                    // Determine if all keys and values in $data are found in $_REQUEST
+                                    if ( $this->conditional_rule_request_all_keys_found_recursive($data, $_POST ))
+                                        $condition_status = TRUE;   
+                                }
+                                
+                            if ( $comparison == 'Not Contains' )
+                                {
+               
+                                    $condition_status = TRUE;
+
+                                    // Determine if all keys and values in $data are found in $_REQUEST
+                                    if ( $this->conditional_rule_request_all_keys_found_recursive($data, $_POST ))
+                                        $condition_status = FALSE;
+   
+                                }                            
+                        }
+                           
+                    return $condition_status;   
+                }
+            
+                
+                
+            /**
+            * The superglobal $_REQUEST
+            *     
+            * @param mixed $options
+            */
+            function conditional_rule_request_admin_html($options)
+                {
+                    $html = '<input type="text" name="conditional_rules['.$options['group_id'].']['.$options['row_id'].'][conditional_value]" class="text" value="'. htmlspecialchars($options['selected_value']) .'">';
+                                        
+                    return $html;   
+                }
+
+            /**
+            * The superglobal $_REQUEST
+            *     
+            * @param mixed $comparison
+            * @param mixed $value
+            * @param mixed $query
+            * @return {FALSE|TRUE}
+            */
+            function conditional_rule_request_query_check ( $comparison, $value, $query )
+                {
+                    
+                    $condition_status = FALSE;
+                    
+                    parse_str ( $value , $data );
+                    
+                    if ( is_array ( $data ) )
+                        {                                            
+                            if ( $comparison == 'Contains' )
+                                {
+                                    $condition_status = FALSE;
+                                    
+                                    // Determine if all keys and values in $data are found in $_REQUEST
+                                    if ( $this->conditional_rule_request_all_keys_found_recursive($data, $_REQUEST))
+                                        $condition_status = TRUE;   
+                                }
+                                
+                            if ( $comparison == 'Not Contains' )
+                                {
+               
+                                    $condition_status = TRUE;
+
+                                    // Determine if all keys and values in $data are found in $_REQUEST
+                                    if ( $this->conditional_rule_request_all_keys_found_recursive($data, $_REQUEST))
+                                        $condition_status = FALSE;
+   
+                                }                            
+                        }
+                           
+                    return $condition_status;   
+                }
+                
+            
+            /**
+             * Recursively checks if all keys and values from $data are found in $request.
+             * 
+             * @param array $data The data structure to check.
+             * @param array $request The request data (e.g., $_REQUEST).
+             * @return bool Returns true if all keys and values match, false otherwise.
+             */
+            function conditional_rule_request_all_keys_found_recursive($data, $request) 
+                {
+                    foreach ($data as $key => $key_value) 
+                        {
+                            // If the key does not exist in the request, return false
+                            if (!array_key_exists($key, $request))
+                                return false;
+
+                            // If the value is an array, recurse
+                            if (is_array($key_value)) 
+                                {
+                                    if (!is_array($request[$key]))
+                                        return false;
+
+                                    if ( ! $this->conditional_rule_request_all_keys_found_recursive($key_value, $request[$key]))
+                                        return false;
+                                }
+                            else 
+                                {
+                                    if ($request[$key] !== $key_value) {
+                                        return false;
+                                    }
+                                }
+                        }
+                    return true;
+                }    
+                
+                
+                
+                
             
             function query_caller_is_template_file_get_template_files()
                 {

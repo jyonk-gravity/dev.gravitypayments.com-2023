@@ -2,8 +2,8 @@
 Contributors: markhowellsmead, dannyvanholten
 Tags: gravity forms, form, acf, advanced custom fields, sayhellogmbh
 Requires at least: 4.6
-Tested up to: 6.5.3
-Stable tag: 1.3.8
+Tested up to: 6.9.0
+Stable tag: 1.3.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,11 +25,7 @@ The plugin is available from the [WordPress plugin repository](http://www.wordpr
 2. Activate the plugin through the 'Plugins' screen in WordPress.
 3. Add a new field of type 'Forms' to the required ACF field group.
 
-You can also install Advanced Custom Fields: Gravity Forms Add-on using Composer.
-
-`composer require dannyvanholten/acf-gravityforms-add-on`
-
-…or if you make use of WPackagist, …
+You can also install Advanced Custom Fields: Gravity Forms Add-on using Composer from WPackagist.
 
 `composer require wpackagist-plugin/acf-gravityforms-add-on`
 

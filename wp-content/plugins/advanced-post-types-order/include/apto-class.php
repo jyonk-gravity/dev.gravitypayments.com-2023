@@ -94,16 +94,18 @@
                     if ( ! defined('DOING_AJAX') && isset($_GET['orderby']) && $_GET['orderby'] !=  'menu_order' && apply_filters('apto/ignore_get_orderby', TRUE, $orderBy, $query ) )
                         return $orderBy;
                                             
-                    if (isset($query->query_vars['ignore_custom_sort']) && $query->query_vars['ignore_custom_sort'] === TRUE)
+                    if ( isset($query->query_vars['ignore_custom_sort']) && $query->query_vars['ignore_custom_sort'] === TRUE)
                         return $orderBy;
                           
-                    if (apto_is_plugin_active('bbpress/bbpress.php') && isset($query->query_vars['post_type']) && ((is_array($query->query_vars['post_type']) && in_array("reply", $query->query_vars['post_type'])) || ($query->query_vars['post_type'] == "reply")))
+                    if ( apto_is_plugin_active('bbpress/bbpress.php') && isset($query->query_vars['post_type']) && ((is_array($query->query_vars['post_type']) && in_array("reply", $query->query_vars['post_type'])) || ($query->query_vars['post_type'] == "reply")))
                         return $orderBy;
                                            
-                    if( apply_filters('apto/ignore_custom_order', FALSE, $orderBy, $query) )
+                    if ( apply_filters( 'apto/ignore_custom_order', FALSE, $orderBy, $query ) )
                         return $orderBy;
                     
-                    global $wpdb;
+                    //If already sorted by FIELD return as is
+                    if ( preg_match('/FIELD\s*\(/i', $orderBy ))
+                        return( $orderBy );
                                                     
                     //check if menu_order provided through the query params
                     if (    ( isset($query->query['orderby']) && $query->query['orderby'] == 'menu_order' )  ||  ( isset($query->query_vars['orderby']) && $query->query_vars['orderby'] == 'menu_order' ) )

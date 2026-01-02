@@ -120,4 +120,52 @@ class Utilities
         }
         return trailingslashit($root_dir_path);
     }
+
+    //get local file path from url
+    public static function get_file_path($url) {
+        
+        //get image path
+        $parsed_url = @parse_url($url);
+        if(empty($parsed_url['path'])) {
+            return false;
+        }
+
+        //parse base path to strip
+        $base_path = parse_url(home_url('/'), PHP_URL_PATH);
+    
+        //make sure base_path is not empty and ends with a slash
+        $base_path = ($base_path && $base_path !== '/') ? rtrim($base_path, '/') . '/' : '/';
+
+        $file_path = Utilities::get_root_dir_path() . ltrim($parsed_url['path'], $base_path);
+
+        return $file_path;
+    }
+
+    //gets path to uploads directory, can pass in directory or file to add if needed
+    public static function get_uploads_dir($subdir = '') {
+
+        $upload_dir = wp_get_upload_dir(); 
+        //$upload_dir = wp_get_upload_dir(); 
+        $url = $upload_dir['basedir'];
+
+        if ( ! empty( $subdir ) ) {
+            $url = trailingslashit( $url ) . ltrim( $subdir, '/' );
+        }
+
+        return $url;
+    }
+
+    //gets url to uploads directory, can pass in directory or file to add if needed
+    public static function get_uploads_url($subdir = '') {
+
+        $upload_dir = wp_get_upload_dir(); 
+        //$upload_dir = wp_get_upload_dir(); 
+        $url = $upload_dir['baseurl'];
+
+        if ( ! empty( $subdir ) ) {
+            $url = trailingslashit( $url ) . ltrim( $subdir, '/' );
+        }
+
+        return $url;
+    }
 }

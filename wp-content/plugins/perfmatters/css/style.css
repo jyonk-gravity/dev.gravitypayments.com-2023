@@ -3,8 +3,8 @@
   margin-top: 5px;
 }
 .settings_page_perfmatters #wpbody-content>.notice {
-  margin: 15px auto 15px 2px;
-  max-width: 1200px;
+  margin: 15px 20px 15px 0px;
+  max-width: 1600px;
   box-sizing: border-box;
 }
 .settings_page_perfmatters #wpbody-content>.update-nag {
@@ -18,9 +18,9 @@
 }
 
 /* admin wrappers */
-#perfmatters-admin {
-  max-width: 1200px;
-  margin-top: 15px;
+#perfmatters-admin { 
+  max-width: 1600px;
+  margin: 15px 20px 0px 0px;
 }
 #perfmatters-admin-container {
   display: flex; 
@@ -38,8 +38,8 @@
 /* header */
 #perfmatters-admin-header {
   margin-bottom: 10px;
-  width: 220px;
-  min-width: 220px;
+  width: 200px;
+  min-width: 200px;
 }
 #perfmatters-logo-bar {
   display: flex;
@@ -128,7 +128,7 @@
   display: flex;
   align-items: center;
   font-size: 22px;
-  margin: -20px -20px 20px -20px;
+  margin: -20px -21px 20px -21px;
   padding: 20px;
   font-weight: 500;
   background: #282E34;
@@ -173,6 +173,7 @@
   color: #ffffff;
   padding: 5px;
   vertical-align: middle;
+  line-height: normal;
   font-size: 10px;
   margin-left: 5px;
   border-radius: 3px;
@@ -273,7 +274,6 @@
   border: .5px solid #ccc;
 }
 #perfmatters-admin .CodeMirror {
-  max-width: 700px;
   height: 200px;
   border: .5px solid #ccc;
   border-radius: 4px;
@@ -376,7 +376,7 @@
 
 /* buttons */
 #perfmatters-admin-container .button-primary {
-  padding: 3px 10px;
+  padding: 0px 10px;
   background: #4A89DD;
   border-color: #4A89DD;
 }
@@ -409,7 +409,7 @@
   background: #c14552;
   border-color: #c14552;
 }
-#perfmatters-options-form[data-pm-option="license"] #perfmatters-save, #perfmatters-options-form[data-pm-option="support"] #perfmatters-save {
+#perfmatters-settings[data-pm-option="code"] #perfmatters-save, #perfmatters-settings[data-pm-option="license"] #perfmatters-save, #perfmatters-settings[data-pm-option="support"] #perfmatters-save {
   display: none;
 }
 

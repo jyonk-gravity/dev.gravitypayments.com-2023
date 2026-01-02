@@ -3,7 +3,7 @@
 Plugin Name: Table Field Add-on for ACF and SCF
 Plugin URI: https://www.acf-table-field.com
 Description: This free Add-on adds a table field type for the plugins Advanced Custom Fields and Secure Custom Fields.
-Version: 1.3.31
+Version: 1.3.33
 Author: Johann Heyne
 Author URI: http://www.johannheyne.de
 License: GPLv2 or later
@@ -44,6 +44,7 @@ function jh_include_acf_field_table() {
 	}
 
 	require_once __DIR__ . '/class-jh-acf-field-table.php';
+	require_once __DIR__ . '/integrations/polylang/init.php';
 
 	acf_register_field_type( 'jh_acf_field_table' );
 }

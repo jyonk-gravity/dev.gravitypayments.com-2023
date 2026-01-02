@@ -86,7 +86,7 @@
                                 if($post_data->post_type == 'attachment')
                                     $image_id = $post_data->ID;
                                     else
-                                    $image_id = get_post_thumbnail_id( $post_data->ID , 'post-thumbnail' );
+                                    $image_id = get_post_thumbnail_id( $post_data->ID , 'medium' );
                             }
                         else
                             {

@@ -86,6 +86,7 @@
                                             
                                             '_wpml_synchronize'         =>  'no',
                                             '_polylang_synchronize'     =>  'no',
+                                            '_qtranslate_synchronize'   =>  'no',
                                             
                                             '_capability'               =>  'manage_options'
                                         );
@@ -335,7 +336,7 @@
             * @param mixed $query
             * @param mixed $sorts_match_filter  Contain set of filters (cutsto fileld with values) to allos sorts filtering
             */
-            function query_match_sort_id($query, $sorts_match_filter)
+            function query_match_sort_id( $query, $sorts_match_filter = array() )
                 {
                     //check if there is already a query paramether as sort_view_id
                     if(isset($query->query['sort_view_id']))
@@ -397,7 +398,85 @@
                                 }
                         }
                     
-                    return '';
+                    return FALSE;
+                }
+                
+            /**
+            * Retrieve the sort_view_id of the current arguments
+            *     
+            * @param mixed $query_args
+            * 
+            *  example:
+            *            $query_args = array(
+            *                               'post_type'                 => 'product',
+            *                               'tax_query'                 => array(
+            *                                                                       array(
+            *                                                                           'taxonomy'      => 'product_cat',
+            *                                                                           'field'         => 'term_id',
+            *                                                                           'terms'         => 10
+            *                                                                           )
+            *                                                                       )
+            *                               );
+            * 
+            * 
+            * @param mixed $sort_args
+            * 
+            * example
+            *           $sort_args   =   array(
+            *                                    '_autosort' =>  array('yes')  
+            *                                    );
+            * 
+            */
+            static public function get_sort_id_by_arguments ( $query_args, $sort_args = array() )
+                {                    
+                    $sort_view_id   =   self::get_sort_view_id_by_arguments( $query_args, $sort_args );
+                    if ( ! $sort_view_id )
+                        return FALSE;
+                        
+                    $sort_view_post         =   get_post( $sort_view_id );
+                    $sort_ID                =   $sort_view_post->post_parent;
+                    
+                    return $sort_ID;
+                }
+                
+                
+            /**
+            * Retrieve the sort_view_id of the current arguments
+            *     
+            * @param mixed $query_args
+            * 
+            *  example:
+            *            $query_args = array(
+            *                               'post_type'                 => 'product',
+            *                               'tax_query'                 => array(
+            *                                                                       array(
+            *                                                                           'taxonomy'      => 'product_cat',
+            *                                                                           'field'         => 'term_id',
+            *                                                                           'terms'         => 10
+            *                                                                           )
+            *                                                                       )
+            *                               );
+            * 
+            * 
+            * @param mixed $sort_args
+            * 
+            * example
+            *           $sort_args   =   array(
+            *                                    '_autosort' =>  array('yes')  
+            *                                    );
+            * 
+            */
+            static public function get_sort_view_id_by_arguments ( $query_args, $sort_args = array() )
+                {
+                    
+                    $query_object = new WP_Query();          // no query run
+                    $query_object->parse_query( $query_args );
+                    
+                    global $APTO;
+                                         
+                    $sort_view_id   =   $APTO->functions->query_match_sort_id( $query_object, $sort_args );
+                     
+                    return $sort_view_id;   
                 }
                 
             
@@ -1469,7 +1548,12 @@
                         return FALSE;
                     
                     if( /* $partial_match   === TRUE   &&  */  $this->is_woocommerce( $sortID ))
-                        $sort_rules['taxonomy']     =   APTO_compatibility::woocommerce_query_filter_process ( $sort_rules['taxonomy'] );   
+                        {
+                            $sort_rules['taxonomy']     =   APTO_compatibility_woocommerce::woocommerce_query_filter_process ( $sort_rules['taxonomy'] );
+                            
+                            if ( $partial_match   === TRUE )
+                                $query->tax_query->queries  =   APTO_compatibility_woocommerce::woocommerce_query_filter_visibility ( $query->tax_query->queries );
+                        }
                                         
                     //check for query rules match
                     
@@ -1500,16 +1584,16 @@
                     //check for exact taxonomy match
                     if(count($sort_rules['taxonomy']) > 0)
                         {
-                            if(APTO_query_utils::tax_queries_count($query->tax_query->queries) > 0)
+                            if ( APTO_query_utils::tax_queries_count($query->tax_query->queries) > 0 )
                                 {
-                                    if(APTO_query_utils::tax_queries_count($query->tax_query->queries) != count($sort_rules['taxonomy']))
+                                    if ( APTO_query_utils::tax_queries_count($query->tax_query->queries ) != count( $sort_rules['taxonomy'] ) )
                                         return FALSE;
                                     
                                     //check for relation
-                                    if($query->tax_query->relation != $sort_rules['taxonomy_relation'])
+                                    if( APTO_query_utils::tax_queries_count( $query->tax_query->queries )   > 1 &&    $query->tax_query->relation != $sort_rules['taxonomy_relation'])
                                         return FALSE;
                                     
-                                    foreach(APTO_query_utils::get_tax_queries($query->tax_query->queries) as $query_tax)
+                                    foreach ( APTO_query_utils::get_tax_queries ( $query->tax_query->queries ) as $query_tax )
                                         {
                                             $found_match        =   FALSE;
                                             $query_tax_terms    =   array();
@@ -1766,17 +1850,38 @@
                                 return FALSE;        
                         }
                     
+                    $tax_queries    =   array();
                              
                     //check the taxonomy
                     $_view_selection    =   '';
                     //need a single taxonomy to match otherwise a simple sort need to be manually created
                     //fallback on archive;  This may change later and return FALSE !! 
-                    if( APTO_query_utils::tax_queries_count($query->tax_query->queries) < 1 || APTO_query_utils::tax_queries_count($query->tax_query->queries) > 1)
-                        $_view_selection    =   'archive';
+                    if( APTO_query_utils::tax_queries_count($query->tax_query->queries) < 1 || APTO_query_utils::tax_queries_count($query->tax_query->queries) > 1 )
+                        {
+                            if ( $partial_match === TRUE )
+                                {
+                                    if ( APTO_query_utils::tax_queries_count($query->tax_query->queries) < 1 )
+                                        $_view_selection    =   'archive';
+                                        else if ( APTO_query_utils::tax_queries_count($query->tax_query->queries) > 1 )
+                                            {
+                                                //attempt to catch a single term in the list
+                                                $tax_queries    =   APTO_query_utils::get_tax_queries($query->tax_query->queries);
+                                                $tax_queries    =   APTO_query_utils::guess_tax_term_for_multiple_type_sort( $tax_queries, $query );
+                                                
+                                                //if ( count ( $tax_queries ) <   1   ||  count ( $tax_queries ) > 1 )
+                                                if ( count ( $tax_queries ) > 1 )
+                                                    $_view_selection    =   'archive';
+                                            }
+                                }
+                                else
+                                return FALSE;
+                        }
                     
                     if ( empty ( $_view_selection ) )
                         {
-                            $tax_queries    =   APTO_query_utils::get_tax_queries($query->tax_query->queries);
+                            if ( empty ( $tax_queries ) )
+                                $tax_queries    =   APTO_query_utils::get_tax_queries($query->tax_query->queries);
+                                
                             reset($tax_queries);
                             $query_tax      =   current($tax_queries);
                             $taxonomy       =   $query_tax['taxonomy'];
@@ -1863,10 +1968,15 @@
                                         $_view_selection    =   'archive';
                                         else
                                         {
-                                            $_view_selection    =   'taxonomy';
-                                            
-                                            reset($query_tax_terms);
-                                            $term_id    =      current($query_tax_terms);
+                                            if ( in_array($query_tax['operator'], array('IN', 'AND' ) ) )
+                                                {
+                                                    $_view_selection    =   'taxonomy';
+                                                    
+                                                    reset($query_tax_terms);
+                                                    $term_id    =      current($query_tax_terms);
+                                                }
+                                                else
+                                                $_view_selection    =   'archive';
                                         }
                                 }
                                 
@@ -2503,6 +2613,9 @@
                     
                     if ($language == '')
                         $language = 'en';
+                        
+                        
+                    $language   =   apply_filters( 'apto/blog_language', $language );
                     
                     return $language;   
                 }

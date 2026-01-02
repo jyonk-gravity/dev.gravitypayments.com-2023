@@ -1,0 +1,1022 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced Post Types Order\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-21 18:58+0300\n"
+"PO-Revision-Date: 2025-07-21 19:00+0300\n"
+"Last-Translator: NspCode <contact@nsp-code.com>\n"
+"Language-Team: NspCode <contact@nsp-code.com>\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: extends/divi/PostsNavigation.class.php:147
+msgid ""
+"Define custom text for the previous link. You can use the <strong>%title</"
+"strong> variable to include the post title. Leave blank for default."
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:160
+msgid ""
+"Define custom text for the next link. You can use the <strong>%title</"
+"strong> variable to include the post title. Leave blank for default."
+msgstr ""
+"Definer egendefinert tekst for neste lenke. Du kan bruke <strong>%title</"
+"strong> variabelen for Ã¥ inkludere tittelen pÃ¥ innlegget. La stÃ¥ tomt for "
+"standard."
+
+#: include/apto_admin_functions-class.php:90
+msgid "Re-Order"
+msgstr "Omorganiser"
+
+#: include/apto_admin_functions-class.php:297
+msgid ""
+"All interfaces are set to hide, at least a visible is required. You can "
+"change tht from Settings"
+msgstr ""
+"Alle grensesnitt er satt til Ã¥ vÃ¦re skjult, minst ett mÃ¥ vÃ¦re synlig. Du "
+"kan endre dette i Innstillinger"
+
+#: include/apto_admin_functions-class.php:349
+msgid "Advanced Post Types Order - At least one menu has changed:"
+msgstr ""
+"Avansert rekkefÃ¸lge for innholdstyper - Minst ett menyvalg har blitt endret:"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "Notice: There is"
+msgstr "Merk: Det er"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "another"
+msgstr "en annen"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "similar sort"
+msgstr "lignende sortering"
+
+#: include/apto_functions-class.php:2456
+msgid "Subscriber"
+msgstr "Abonnent"
+
+#: include/apto_functions-class.php:2460
+msgid "Contributor"
+msgstr "Bidragsyter"
+
+#: include/apto_functions-class.php:2464 include/apto_interface-class.php:663
+#: include/apto_interface_helper-class.php:1776
+msgid "Author"
+msgstr "Forfatter"
+
+#: include/apto_functions-class.php:2468
+msgid "Editor"
+msgstr "RedaktÃ¸r"
+
+#: include/apto_functions-class.php:2472
+msgid "Administrator"
+msgstr "Administrator"
+
+#: include/apto_functions-class.php:2789 include/apto_functions-class.php:2884
+#, php-format
+msgid "Use commas instead of %s to separate excluded terms."
+msgstr "Bruk komma i stedet for %s for Ã¥ skille utelukkede vilkÃ¥r."
+
+#: include/apto_functions-class.php:3067
+msgid "Previous Post"
+msgstr "Forrige innlegg"
+
+#: include/apto_functions-class.php:3067
+msgid "Next Post"
+msgstr "Neste innlegg"
+
+#: include/apto_interface-class.php:170
+msgid "Re-order"
+msgstr "Omorganiser"
+
+#: include/apto_interface-class.php:174
+msgid ""
+"This plugin can't work without javascript, because it's use drag and drop "
+"and AJAX."
+msgstr ""
+"Dette programtillegget fungerer ikke uten javascript, fordi det bruker dra "
+"og slipp og AJAX."
+
+#: include/apto_interface-class.php:207
+msgid ""
+"WPML: The Sort Rules couldn't be translated automatically. You need to set/"
+"translate this manually for"
+msgstr ""
+"WPML: Sorteringsreglene kunne ikke oversettes automatisk. Du mÃ¥ sette/"
+"oversette dette manuelt for"
+
+#: include/apto_interface-class.php:239
+msgid ""
+"Polylang: The Sort Rules couldn't be translated automatically. You need to "
+"set/translate this manually for"
+msgstr ""
+"Polylang: Sorteringsreglene kunne ikke oversettes automatisk. Du mÃ¥ sette/"
+"oversette dette manuelt for"
+
+#: include/apto_interface-class.php:413
+msgid "Click to toggle"
+msgstr "Klikk for Ã¥ veksle"
+
+#: include/apto_interface-class.php:413 include/apto_interface-class.php:755
+msgid "Sort List Settings"
+msgstr "Innstillinger for sorteringslist"
+
+#: include/apto_interface-class.php:424
+msgid "Query Rules"
+msgstr "SpÃ¸rreregler"
+
+#: include/apto_interface-class.php:425
+msgid ""
+"Create a set of criteria rules which match your query. This will determine "
+"what to show on the following sort list and the order will apply on front "
+"side."
+msgstr ""
+"Opprett et sett med kriterieregler som matcher spÃ¸rringen din. Dette vil "
+"bestemme hva som vises i den fÃ¸lgende sorteringslisten og hvordan "
+"rekkefÃ¸lgen blir pÃ¥ fremsiden."
+
+#: include/apto_interface-class.php:426
+msgid ""
+"All rules are compared to a query using AND operator. For more details check"
+msgstr ""
+"All rules are compared to a query using AND operator. For more details check"
+
+#: include/apto_interface-class.php:426
+msgid "Query Rules examples"
+msgstr "Eksempler pÃ¥ spÃ¸rreregler"
+
+#: include/apto_interface-class.php:447
+msgid "Show Advanced"
+msgstr "Vis avansert"
+
+#: include/apto_interface-class.php:506
+msgid "Add Post Type"
+msgstr "Legg til innholdstype"
+
+#: include/apto_interface-class.php:513 include/apto_interface-class.php:527
+#: include/apto_interface_helper-class.php:1809
+msgid "Taxonomy"
+msgstr "Taksonomi"
+
+#: include/apto_interface-class.php:527 include/apto_interface-class.php:535
+msgid "invalid"
+msgstr "ugyldig"
+
+#: include/apto_interface-class.php:535
+msgid "Term"
+msgstr "Term"
+
+#: include/apto_interface-class.php:562
+msgid "Add Taxonomy"
+msgstr "Legg til taksonomi"
+
+#: include/apto_interface-class.php:570
+msgid "Taxonomy Relation"
+msgstr "Taksonomirelasjon"
+
+#: include/apto_interface-class.php:596
+msgid "Meta"
+msgstr "Meta"
+
+#: include/apto_interface-class.php:630
+msgid "Add Meta"
+msgstr "Legg til meta"
+
+#: include/apto_interface-class.php:638
+msgid "Meta Relation"
+msgstr "Metarelasjon"
+
+#: include/apto_interface-class.php:687
+msgid "Add Author"
+msgstr "Legg til forfatter"
+
+#: include/apto_interface-class.php:701
+msgid ""
+"Certain changes has been done to your site and some of Query Rules cannot be "
+"displayed anymore. You should review the settings Query Rules area and click "
+"Update button."
+msgstr ""
+"Visse endringer har blitt gjort pÃ¥ nettstedet ditt, og noen av "
+"spÃ¸rrereglene kan ikke vises lenger. Du bÃ¸r gjennomgÃ¥ innstillingene for "
+"spÃ¸rrereglene og klikke pÃ¥ Oppdater-knappen."
+
+#: include/apto_interface-class.php:716
+msgid "Conditionals"
+msgstr "Betingelser"
+
+#: include/apto_interface-class.php:717
+msgid "Apply the order only if conditions are true. For more details check"
+msgstr ""
+"Bruk bestillingen bare hvis betingelsene er oppfylt. For mer informasjon, se"
+
+#: include/apto_interface-class.php:717
+msgid "Conditionals Usage"
+msgstr "Bruk av kondisjonaler"
+
+#: include/apto_interface-class.php:720
+msgid "Apply if"
+msgstr "Søk hvis"
+
+#: include/apto_interface-class.php:745
+msgid "Add Group"
+msgstr "Legg til gruppe"
+
+#: include/apto_interface-class.php:754
+msgid "Interface"
+msgstr "Grensesnitt"
+
+#: include/apto_interface-class.php:755
+msgid "This sort interface settings. For more details check"
+msgstr "Dette sorterer grensesnittinnstillinger. For mer informasjon, se"
+
+#: include/apto_interface-class.php:762
+#: include/apto_interface_helper-class.php:1779
+msgid "Title"
+msgstr "Tittel"
+
+#: include/apto_interface-class.php:763
+msgid "Sort list tab title"
+msgstr "Tittel på sorteringslistefanen"
+
+#: include/apto_interface-class.php:767
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: include/apto_interface-class.php:768
+msgid ""
+"Sort list description. This will appear for others (non-admin users) when "
+"doing re-sort, it should include a description for what area this sort will "
+"apply."
+msgstr ""
+"Beskrivelse av sorteringslisten. Denne vises for andre (ikke-admin-brukere) "
+"når de sorterer på nytt, og den bør inneholde en beskrivelse av hvilket "
+"område denne sorteringen gjelder for."
+
+#: include/apto_interface-class.php:772
+msgid "Menu Location"
+msgstr "Menyposisjon"
+
+#: include/apto_interface-class.php:773
+msgid "Relocate this Sort Interface to another menu"
+msgstr "Flytt dette sorteringsgrensesnittet til en annen meny"
+
+#: include/apto_interface-class.php:795
+msgid "Auto Apply Sort"
+msgstr "Sorter automatisk"
+
+#: include/apto_interface-class.php:796
+msgid "Automatically apply the sort to theme queries if match."
+msgstr "Bruk sorteringen automatisk på temaspørringer hvis de samsvarer."
+
+#: include/apto_interface-class.php:798 include/apto_interface-class.php:806
+#: include/apto_interface-class.php:857 include/apto_interface-class.php:912
+#: include/apto_interface-class.php:920 include/apto_interface-class.php:929
+#: include/apto_interface-class.php:954 include/apto_interface-class.php:965
+#: include/apto_interface-class.php:977 include/apto_interface-class.php:1565
+#: include/apto_interface-class.php:1609
+msgid "Yes"
+msgstr "Ja"
+
+#: include/apto_interface-class.php:799 include/apto_interface-class.php:807
+#: include/apto_interface-class.php:858 include/apto_interface-class.php:913
+#: include/apto_interface-class.php:921 include/apto_interface-class.php:930
+#: include/apto_interface-class.php:955 include/apto_interface-class.php:966
+#: include/apto_interface-class.php:978 include/apto_interface-class.php:1562
+#: include/apto_interface-class.php:1606
+msgid "No"
+msgstr "Nei"
+
+#: include/apto_interface-class.php:803
+msgid "Admin Sort"
+msgstr "Admin Sortering"
+
+#: include/apto_interface-class.php:804
+msgid "Automatically apply the sort to admin queries if match."
+msgstr "Bruk sorteringen automatisk på admin-spørringer hvis de samsvarer."
+
+#: include/apto_interface-class.php:812
+msgid "Allow sorting within default post type interface"
+msgstr "Tillat sortering i grensesnittet for standard innleggstype"
+
+#: include/apto_interface-class.php:813
+msgid ""
+"A Drag & Drop functionality is available to be used within default WordPress "
+"post type interface."
+msgstr ""
+"En dra-og-slipp-funksjonalitet er tilgjengelig for bruk i WordPress' "
+"standardgrensesnitt for innleggstyper."
+
+#: include/apto_interface-class.php:869
+msgid "Need to Create Sort first"
+msgstr "Må opprette sortering først"
+
+#: include/apto_interface-class.php:886
+msgid "Not a primary sort, this feature can apply only to"
+msgstr "Denne funksjonen er ikke en primær sortering, og kan bare brukes på"
+
+#: include/apto_interface-class.php:891
+msgid "This feature can't apply when conditionals set"
+msgstr "Denne funksjonen kan ikke brukes når betingelsene er satt"
+
+#: include/apto_interface-class.php:896
+msgid "Admin Sort need to be Yes"
+msgstr "Admin Sort må være Ja"
+
+#: include/apto_interface-class.php:909
+msgid "Send new items to bottom of the list"
+msgstr "Send nye elementer til bunnen av listen"
+
+#: include/apto_interface-class.php:910
+msgid ""
+"All new posts / custom types will append at the end instead top. This will "
+"apply when manual ordering."
+msgstr ""
+"Alle nye innlegg / egendefinerte typer vil legges til på slutten i stedet "
+"for øverst. Dette vil gjelde ved manuell bestilling."
+
+#: include/apto_interface-class.php:917
+msgid "Thumbnails"
+msgstr "Miniatyrbilder"
+
+#: include/apto_interface-class.php:918
+msgid "Show thumbnails on sort list"
+msgstr "Vis miniatyrbilder på sorteringslisten"
+
+#: include/apto_interface-class.php:926
+msgid "Pagination"
+msgstr "Paginering"
+
+#: include/apto_interface-class.php:927
+msgid "Set pagination for sort list"
+msgstr "Angi paginering for sorteringslisten"
+
+#: include/apto_interface-class.php:935
+msgid "Posts Per Page"
+msgstr "Innlegg per side"
+
+#: include/apto_interface-class.php:936
+msgid "The number of posts to show on page"
+msgstr "Antall innlegg som skal vises på siden"
+
+#: include/apto_interface-class.php:942
+msgid "Offset Posts"
+msgstr "Offset innlegg"
+
+#: include/apto_interface-class.php:943
+msgid "The offset number of posts"
+msgstr "Det utlignede antallet innlegg"
+
+#: include/apto_interface-class.php:951
+msgid "WPML Synchronize"
+msgstr "WPML Synkroniser"
+
+#: include/apto_interface-class.php:952 include/apto_interface-class.php:963
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting. For this to work, all other languages must contain the "
+"same translated objects."
+msgstr ""
+"Synkroniser rekkefølgen på tvers av alle andre språk. Dette vil overskrive "
+"sorteringen på andre språk. For at dette skal fungere, må alle andre språk "
+"inneholde de samme oversatte objektene."
+
+#: include/apto_interface-class.php:962
+msgid "Polylang Synchronize"
+msgstr "Polylang Synchronize"
+
+#: include/apto_interface-class.php:974
+#, fuzzy
+#| msgid "Polylang Synchronize"
+msgid "QTranslate Synchronize"
+msgstr "Polylang Synchronize"
+
+#: include/apto_interface-class.php:975
+#, fuzzy
+#| msgid ""
+#| "Synchronize the order across all other languages. This will overwrite "
+#| "other languages sorting. For this to work, all other languages must "
+#| "contain the same translated objects."
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting."
+msgstr ""
+"Synkroniser rekkefølgen på tvers av alle andre språk. Dette vil overskrive "
+"sorteringen på andre språk. For at dette skal fungere, må alle andre språk "
+"inneholde de samme oversatte objektene."
+
+#: include/apto_interface-class.php:984
+msgid "Capability / Role"
+msgstr "Kapasitet/rolle"
+
+#: include/apto_interface-class.php:985
+msgid "Minimum Capability to see this Sort"
+msgstr "Minimumskapasitet for å se denne sorteringen"
+
+#: include/apto_interface-class.php:1009
+msgid "Status"
+msgstr "Status"
+
+#: include/apto_interface-class.php:1010
+msgid "Show objects status"
+msgstr "Vis status for objekter"
+
+#: include/apto_interface-class.php:1038
+msgid "Settings Update"
+msgstr "Oppdatering av innstillinger"
+
+#: include/apto_interface-class.php:1040
+msgid "Create"
+msgstr "Opprett"
+
+#: include/apto_interface-class.php:1053
+msgid "Delete Sort"
+msgstr "Slett sortering"
+
+#: include/apto_interface-class.php:1105
+msgid "Manual Order"
+msgstr "Manuell bestilling"
+
+#: include/apto_interface-class.php:1106
+msgid "Automatic Order"
+msgstr "Automatisk bestilling"
+
+#: include/apto_interface-class.php:1156
+msgid "Select area and customise your order list <br />or switch to automatic"
+msgstr ""
+"Velg område og tilpass bestillingslisten <br />eller bytt til automatisk"
+
+#: include/apto_interface-class.php:1181 include/apto_interface-class.php:1207
+msgid "Archive"
+msgstr "Arkiv"
+
+#: include/apto_interface-class.php:1181
+msgid "Total Archive Objects"
+msgstr "Totalt antall arkivobjekter"
+
+#: include/apto_interface-class.php:1239
+msgid "Taxonomy Title"
+msgstr "Taksonomi Tittel"
+
+#: include/apto_interface-class.php:1239
+msgid "Total"
+msgstr "Total"
+
+#: include/apto_interface-class.php:1239 include/apto_interface-class.php:1366
+msgid "Posts"
+msgstr "Innlegg"
+
+#: include/apto_interface-class.php:1263
+msgid "Too many terms to count"
+msgstr "For mange begreper til å telle"
+
+#: include/apto_interface-class.php:1366
+msgid "Forum Title"
+msgstr "Forumstittel"
+
+#: include/apto_interface-class.php:1366
+msgid "Total Topics"
+msgstr "Totalt antall emner"
+
+#: include/apto_interface-class.php:1546
+msgid "Add Fallback"
+msgstr "Legg til fallback"
+
+#: include/apto_interface-class.php:1557
+msgid "Apply Sticky Posts"
+msgstr "Bruk Sticky Posts"
+
+#: include/apto_interface-class.php:1558
+msgid ""
+"Ensure that the sticky posts from the Manual Order are retained and remain "
+"prominently displayed. This will help preserve important information and "
+"maintain visibility for key updates or messages within the system regardless "
+"of the Automatic Order selection."
+msgstr ""
+"Sørg for at de klistrede innleggene fra den manuelle bestillingen beholdes "
+"og vises tydelig. Dette vil bidra til å bevare viktig informasjon og "
+"opprettholde synligheten for viktige oppdateringer eller meldinger i "
+"systemet, uavhengig av valget av Automatisk bestilling."
+
+#: include/apto_interface-class.php:1593
+msgid "Batch Terms Automatic Update"
+msgstr "Automatisk oppdatering av batchvilkår"
+
+#: include/apto_interface-class.php:1594
+msgid ""
+"<b>WARNING!</b></i> Using this option will update all existing child terms "
+"of the current"
+msgstr ""
+"<b>ADVARSEL!</b></i> Hvis du bruker dette alternativet, oppdateres alle "
+"eksisterende underordnede vilkår i den gjeldende"
+
+#: include/apto_interface-class.php:1602
+msgid ""
+"to Automatic Order, replacing the current settings. Manual sort lists will "
+"be preserved, but their order type will be changed to Automatic Order."
+msgstr ""
+"til Automatisk rekkefølge, og erstatter de gjeldende innstillingene. "
+"Manuelle sorteringslister beholdes, men rekkefølgetypen endres til "
+"Automatisk rekkefølge."
+
+#: include/apto_interface-class.php:1696
+msgid "Show all dates"
+msgstr "Vis Alle datoer"
+
+#: include/apto_interface-class.php:1697
+msgid "Today"
+msgstr "I dag"
+
+#: include/apto_interface-class.php:1698
+msgid "Yesterday"
+msgstr "I går"
+
+#: include/apto_interface-class.php:1699
+msgid "Last Week"
+msgstr "Forrige uke"
+
+#: include/apto_interface-class.php:1745
+msgid "Toggle Thumbnails"
+msgstr "Veksle mellom miniatyrbilder"
+
+#: include/apto_interface-class.php:1754 include/apto_interface-class.php:1865
+msgid "Update"
+msgstr "Oppdater"
+
+#: include/apto_interface-class.php:1767
+msgid "Reverse"
+msgstr "Reversere"
+
+#: include/apto_interface-class.php:1768
+msgid "Title Asc"
+msgstr "Tittel Opp"
+
+#: include/apto_interface-class.php:1769
+msgid "Title Desc"
+msgstr "Tittel Ned"
+
+#: include/apto_interface-class.php:1770
+msgid "Id order Asc"
+msgstr "Id-ordre Asc"
+
+#: include/apto_interface-class.php:1771
+msgid "Id order Desc"
+msgstr "Id rekkefølge Desc"
+
+#: include/apto_interface-class.php:1772
+#: include/apto_interface_helper-class.php:1797
+msgid "Random"
+msgstr "Tilfeldig"
+
+#: include/apto_interface-class.php:1780
+msgid "List view"
+msgstr "Liste"
+
+#: include/apto_interface-class.php:1781
+msgid "Grid view"
+msgstr "Gridvisning"
+
+#: include/apto_interface-class.php:1878
+msgid "Reset Order"
+msgstr "Tilbakestill rekkefølge"
+
+#: include/apto_interface-class.php:1884
+msgid "Are you sure you want to reset the order??"
+msgstr "Er du sikker på at du vil tilbakestille bestillingen?"
+
+#: include/apto_interface_helper-class.php:344
+msgid "Sort order reset successfully"
+msgstr "Sorteringsrekkefølgen ble tilbakestilt"
+
+#: include/apto_interface_helper-class.php:348
+#: include/apto_interface_helper-class.php:2506
+#: include/apto_interface_helper-class.php:2531
+msgid "Invalid Nonce"
+msgstr "Ugyldig Nonce"
+
+#: include/apto_interface_helper-class.php:1181
+msgid ""
+"**WARNING!! This will load all post types objects. Recommended to be used "
+"with Advanced Query Rules"
+msgstr ""
+"**ADVARSEL!!! Dette vil laste inn alle innleggstyper. Anbefales brukt sammen "
+"med Advanced Query Rules"
+
+#: include/apto_interface_helper-class.php:1764
+msgid "Order By"
+msgstr "Sorteringsrekkefølge"
+
+#: include/apto_interface_helper-class.php:1765
+msgid "More details about Order By paramether can be found at"
+msgstr "Mer informasjon om Order By paramether finner du på"
+
+#: include/apto_interface_helper-class.php:1765
+#: include/apto_interface_helper-class.php:1885
+msgid "Order & Orderby Parameters"
+msgstr "Parametere for rekkefølge og rekkefølge etter"
+
+#: include/apto_interface_helper-class.php:1766
+msgid ""
+"Additional details and example of usage for Custom Function can be found at"
+msgstr ""
+"Ytterligere informasjon og eksempler på bruk av Custom Function finner du på"
+
+#: include/apto_interface_helper-class.php:1766
+#: include/apto_interface_helper-class.php:1867
+msgid "Custom Function"
+msgstr "Tilpasset funksjon"
+
+#: include/apto_interface_helper-class.php:1770
+msgid "Default / None"
+msgstr "Standard / Ingen"
+
+#: include/apto_interface_helper-class.php:1773
+msgid "Post ID"
+msgstr "Post-ID"
+
+#: include/apto_interface_helper-class.php:1782
+msgid "Slug"
+msgstr "Slug"
+
+#: include/apto_interface_helper-class.php:1785
+#: include/apto_interface_helper-class.php:1852
+msgid "Date"
+msgstr "Dato"
+
+#: include/apto_interface_helper-class.php:1788
+msgid "Modified"
+msgstr "Endret"
+
+#: include/apto_interface_helper-class.php:1791
+msgid "Menu Order"
+msgstr "Menyrekkefølge"
+
+#: include/apto_interface_helper-class.php:1794
+msgid "Comments Count"
+msgstr "Kommentar teller"
+
+#: include/apto_interface_helper-class.php:1822
+msgid "Custom Field"
+msgstr "Egendefinert felt"
+
+#: include/apto_interface_helper-class.php:1830
+msgid "Field Name"
+msgstr "Feltnavn"
+
+#: include/apto_interface_helper-class.php:1831
+msgid "The name of custom field"
+msgstr "Navnet på det egendefinerte feltet"
+
+#: include/apto_interface_helper-class.php:1836
+msgid "Field Type"
+msgstr "Felttype"
+
+#: include/apto_interface_helper-class.php:1837
+msgid "MySql Type of field, more details at"
+msgstr "MySql Type felt, flere detaljer på"
+
+#: include/apto_interface_helper-class.php:1837
+msgid "Cast Functions and Operators"
+msgstr "Cast-funksjoner og operatorer"
+
+#: include/apto_interface_helper-class.php:1840
+msgid "None / Default"
+msgstr "Ingen / Standard"
+
+#: include/apto_interface_helper-class.php:1843
+msgid "Signed (Integer)"
+msgstr "Fortegnet (heltall)"
+
+#: include/apto_interface_helper-class.php:1846
+msgid "Unsigned (Integer)"
+msgstr "Uten fortegn (heltall)"
+
+#: include/apto_interface_helper-class.php:1849
+msgid "Float (Decimal)"
+msgstr "Flytende tall (desimal)"
+
+#: include/apto_interface_helper-class.php:1855
+msgid "Datetime"
+msgstr "Dato-Tid"
+
+#: include/apto_interface_helper-class.php:1858
+msgid "Time"
+msgstr "Tid"
+
+#: include/apto_interface_helper-class.php:1884
+msgid "Order"
+msgstr "Rekkefølge"
+
+#: include/apto_interface_helper-class.php:1885
+msgid "More details about Order paramether can be found at"
+msgstr "Du finner mer informasjon om Order paramether på"
+
+#: include/apto_interface_helper-class.php:1889
+msgid "Descending"
+msgstr "Synkende"
+
+#: include/apto_interface_helper-class.php:1892
+msgid "Ascending"
+msgstr "Stigende"
+
+#: include/apto_interface_helper-class.php:2765
+msgid "Items Order Updated"
+msgstr "Rekkefølge oppdatert"
+
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3216
+#: include/apto_interface_helper-class.php:3227
+#: include/apto_interface_helper-class.php:3347
+msgid "A syncronization could not be completed"
+msgstr "En synkronisering kunne ikke fullføres"
+
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3347
+msgid "as post type is not translatable."
+msgstr "som innleggstype er ikke oversettbar."
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "A synchronization could not be completed"
+msgstr "En synkronisering kunne ikke fullføres"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "for"
+msgstr "for"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "language"
+msgstr "språk"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "as it contains a different number of objects."
+msgstr "ettersom den inneholder et annet antall objekter."
+
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3216
+msgid "as taxonomy is not translatable."
+msgstr "ettersom taksonomi ikke kan oversettes."
+
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3227
+msgid "as term is not translated."
+msgstr "da begrepet ikke er oversatt."
+
+#: include/apto_options_class.php:99 include/apto_options_class.php:521
+#: include/apto_options_class.php:571 include/apto_options_class.php:623
+msgid "General Settings"
+msgstr "Generelle innstillinger"
+
+#: include/apto_options_class.php:109
+msgid "Show / Hide re-order interface"
+msgstr "Vis / skjul grensesnitt for omorganisering"
+
+#: include/apto_options_class.php:122
+msgid "Show"
+msgstr "Vis"
+
+#: include/apto_options_class.php:123
+msgid "Hide"
+msgstr "Skjul"
+
+#: include/apto_options_class.php:137
+msgid "General"
+msgstr "Generell"
+
+#: include/apto_options_class.php:143
+msgid "Ignore Suppress Filters"
+msgstr "Ignorer undertrykk filtre"
+
+#: include/apto_options_class.php:147
+msgid ""
+"Set FALSE the <b>suppress_filters</b> arguments for get_posts() default "
+"WordPress function. Use this feature if Autosort does not work with your "
+"theme, otherwise you should leave un-checked."
+msgstr ""
+"Sett FALSE <b>undertrykk_filter-argumentene</b> for get_posts() standard "
+"WordPress-funksjon. Bruk denne funksjonen hvis Autosort ikke fungerer med "
+"temaet ditt, ellers bør du la det være ukontrollert."
+
+#: include/apto_options_class.php:152
+msgid "Ignore Sticky Posts"
+msgstr "Ignorer klissete innlegg"
+
+#: include/apto_options_class.php:156
+msgid ""
+"Ignore any Sticky posts, those will not appear on top of the list but per "
+"customised order."
+msgstr ""
+"Ignorer eventuelle klistrete innlegg, de vil ikke vises øverst på listen, "
+"men i tilpasset rekkefølge."
+
+#: include/apto_options_class.php:161
+msgid "Next / Previous Apply"
+msgstr "Neste / Forrige Søk"
+
+#: include/apto_options_class.php:165
+msgid "Apply the sort to default Next / Previous site-wide navigation."
+msgstr ""
+"Bruk sorteringen på standard Neste/ Forrige-navigasjon på hele nettstedet."
+
+#: include/apto_options_class.php:165
+msgid "For advanced Next / Previous navigation check"
+msgstr "For avansert neste/forrige-navigering, sjekk"
+
+#: include/apto_options_class.php:165 include/apto_options_class.php:187
+#: include/apto_options_class.php:196
+msgid "read more"
+msgstr "les mer"
+
+#: include/apto_options_class.php:171
+msgid "bbPress Replies"
+msgstr "bbPress-svar"
+
+#: include/apto_options_class.php:175
+msgid "Reverse the order of bbPress replies, show newest posts first"
+msgstr "Omvendt rekkefølge på bbPress-svar, vis nyeste innlegg først"
+
+#: include/apto_options_class.php:183
+msgid "Use category order for WooCommerce when apply filters"
+msgstr "Bruk kategorirekkefølge for WooCommerce når du bruker filtre"
+
+#: include/apto_options_class.php:187
+msgid "Allow Category order to apply when using visual attribute filters"
+msgstr ""
+"Tillat at kategorirekkefølgen gjelder ved bruk av visuelle attributtfiltre"
+
+#: include/apto_options_class.php:192
+msgid "WooCommerce Up-sells Sort"
+msgstr "WooCommerce opp-salg Sorter"
+
+#: include/apto_options_class.php:196
+msgid "Allow drag & drop for WooCommerce Up-sells products"
+msgstr "Tillat dra og slipp for WooCommerce oppsalg-produkter"
+
+#: include/apto_options_class.php:204
+msgid "Debug Marks"
+msgstr "Feilsøkingsmerker"
+
+#: include/apto_options_class.php:208
+msgid ""
+"Output marks on front side when logged-in, with detailed informations of "
+"every queries to identify the settings to be used for a sort to match. "
+"Ensure to turn off when debug completed."
+msgstr ""
+"Vis merker på forsiden når du er innlogget, med detaljerte opplysninger om "
+"hvert spørring for å identifisere innstillingene som brukes for å matche "
+"sorteringen. Husk å skru av når feilsøkingen er ferdig."
+
+#: include/apto_options_class.php:213
+msgid "Create Logs"
+msgstr "Opprett logger"
+
+#: include/apto_options_class.php:217
+msgid ""
+"Create logs which may be usefull when debug or help to identify applied sort "
+"list."
+msgstr ""
+"Opprett logger som kan være nyttige for feilsøking eller for å "
+"identifisere hvilken sortering som er brukt."
+
+#: include/apto_options_class.php:228
+msgid "Logs"
+msgstr "Logger"
+
+#: include/apto_options_class.php:254
+msgid "Save Settings"
+msgstr "Lagre innstillinger"
+
+#: include/apto_options_class.php:299
+msgid "Settings Saved"
+msgstr "Innstillinger lagret"
+
+#: include/apto_options_class.php:346 include/apto_options_class.php:353
+msgid "Advanced Post Types Order plugin is inactive, please enter your"
+msgstr "Advanced Post Types Order-modulen er inaktiv, vennligst oppgi din"
+
+#: include/apto_options_class.php:346 include/apto_options_class.php:353
+msgid "Licence Key"
+msgstr "Lisensnøkkel"
+
+#: include/apto_options_class.php:385 include/apto_options_class.php:467
+msgid "There was a problem connecting to "
+msgstr "Det oppstod et problem med å koble til "
+
+#: include/apto_options_class.php:393 include/apto_options_class.php:430
+#: include/apto_options_class.php:475 include/apto_options_class.php:507
+msgid "There was a problem with the data block received from "
+msgstr "Det oppstod et problem med datablokken mottatt fra "
+
+#: include/apto_options_class.php:415
+msgid ""
+"There was a problem deactivating the licence on other side, however locally "
+"the key is now removed: "
+msgstr ""
+"Det oppstod et problem ved deaktivering av lisensen på den andre siden, men lokalt "
+"er nøkkelen nå fjernet: "
+
+#: include/apto_options_class.php:446
+msgid "Licence Key can't be empty"
+msgstr "Lisensnøkkelen kan ikke være tom"
+
+#: include/apto_options_class.php:501
+msgid "There was a problem activating the licence: "
+msgstr "Det oppstod et problem ved aktivering av lisensen: "
+
+#: include/apto_options_class.php:525 include/apto_options_class.php:578
+#: include/apto_options_class.php:625
+msgid "Software License"
+msgstr "Programvarelisens"
+
+#: include/apto_options_class.php:534 include/apto_options_class.php:586
+msgid "License Key"
+msgstr "Lisensnøkkel"
+
+#: include/apto_options_class.php:539 include/apto_options_class.php:631
+msgid ""
+"Enter the License Key you got when bought this product. If you lost the key, "
+"you can always retrieve it from"
+msgstr ""
+"Skriv inn lisensnøkkelen du mottok ved kjøp av dette produktet. Hvis du har mistet nøkkelen, "
+"kan du alltid hente den fra"
+
+#: include/apto_options_class.php:539 include/apto_options_class.php:540
+#: include/apto_options_class.php:631 include/apto_options_class.php:632
+msgid "My Account"
+msgstr "Min konto"
+
+#: include/apto_options_class.php:540 include/apto_options_class.php:632
+msgid "More keys can be generate from"
+msgstr "Flere nøkler kan genereres fra"
+
+#: include/apto_options_class.php:549
+msgid "Save"
+msgstr "Lagre"
+
+#: include/apto_options_class.php:601
+msgid "You can generate more keys from"
+msgstr "Du kan generere flere nøkler fra"
+
+#: include/apto_options_class.php:629
+msgid "License Key Required"
+msgstr "Lisensnøkkel påkrevd"
+
+#: include/apto_plugin_updater.class.php:123
+msgid "An error occour when try to identify the pluguin."
+msgstr "Det oppstod en feil ved identifisering av programtillegget."
+
+#: include/apto_plugin_updater.class.php:123
+#: include/apto_plugin_updater.class.php:143
+msgid "Try again"
+msgstr "Prøv igjen"
+
+#: include/apto_plugin_updater.class.php:143
+msgid "An Unexpected HTTP Error occurred during the API request."
+msgstr "En uventet HTTP-feil oppstod under API-forespørselen."
+
+#: include/walkers/post-types-order-walker-class.php:146
+msgid "Move to Top"
+msgstr "Flytt til toppen"
+
+#: include/walkers/post-types-order-walker-class.php:147
+msgid "Move to Bottom"
+msgstr "Flytt til bunnen"
+
+#: include/walkers/post-types-order-walker-class.php:148
+msgid "Make Sticky"
+msgstr "Gjør klebrig"
+
+#: include/walkers/post-types-order-walker-class.php:149
+msgid "Edit"
+msgstr "Rediger"
+
+#: include/walkers/post-types-order-walker-class.php:174
+msgid "Sticky"
+msgstr "Klebrig"
+

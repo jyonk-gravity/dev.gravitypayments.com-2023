@@ -9,6 +9,7 @@ class Preload
     private static $preloads_array = array();
     private static $preloads_ready = array();
     private static $used_srcs = array();
+    public static $snippet_optimizations = [];
 
     //initialize preload functions
     public static function init() 
@@ -26,6 +27,11 @@ class Preload
     {
         self::$fetch_priority = apply_filters('perfmatters_fetch_priority', Config::$options['preload']['fetch_priority'] ?? array());
         self::$preloads = apply_filters('perfmatters_preloads', Config::$options['preload']['preload'] ?? array());
+
+        if(!empty(self::$snippet_optimizations)) {
+            self::$preloads = array_merge(self::$preloads, self::$snippet_optimizations);
+        }
+
         self::$critical_images = apply_filters('perfmatters_preload_critical_images', Config::$options['preload']['critical_images'] ?? 0);
 
         //disable core fetch

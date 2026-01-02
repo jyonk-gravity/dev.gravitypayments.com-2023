@@ -5,6 +5,7 @@ class JS
 {
 	private static $run = [];
 	private static $data = [];
+	public static $snippet_optimizations = [];
 
 	//initialize js
 	public static function init()
@@ -19,7 +20,6 @@ class JS
 		if(!empty(Config::$options['assets']['minify_js'])) {
             Minify::queue_admin_bar();
         }
-
 
 		//ajax actions
 		add_action('wp_ajax_perfmatters_clear_minified_js', array('Perfmatters\JS', 'clear_minified_js_ajax'));
@@ -37,6 +37,9 @@ class JS
 		self::$run['defer'] = !empty(apply_filters('perfmatters_defer_js', !empty(Config::$options['assets']['defer_js']))) && !Utilities::get_post_meta('perfmatters_exclude_defer_js');
 		self::$run['delay'] = !empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js']))) && !Utilities::get_post_meta('perfmatters_exclude_delay_js');
 		self::$run['minify'] = !empty(apply_filters('perfmatters_minify_js', !empty(Config::$options['assets']['minify_js']))) && !Utilities::get_post_meta('perfmatters_exclude_minify_js');
+
+		//pmcs js optimizations
+        self::$run['snippets'] = !empty(self::$snippet_optimizations);
 
 		if(array_filter(self::$run)) {
 
@@ -69,6 +72,8 @@ class JS
 
 		self::populate_data();
 
+		$print_delay_js = false;
+
 		//loop through scripts
 		foreach($matches[0] as $i => $tag) {
 
@@ -80,7 +85,23 @@ class JS
 			}
 
 			$delay_flag = false;
+			$defer_flag = false;
 			$atts_array_new = $atts_array;
+
+			//snippet optimizations
+            if(!empty(self::$snippet_optimizations) && !empty($atts_array['id'])) {
+                if(isset(self::$snippet_optimizations[$atts_array['id']])) {
+
+                    //delay flag
+                    if(self::$snippet_optimizations[$atts_array['id']] == 'delay') {
+                        $delay_flag = true;
+                        $print_delay_js = true;
+                    }
+                    elseif(self::$snippet_optimizations[$atts_array['id']] == 'defer') {
+                    	$defer_flag = true;
+                    }
+                }
+            }
 
 			//minify
 			if(self::$run['minify']) {
@@ -98,13 +119,15 @@ class JS
 			}
 
 			//delay
-			if(self::$run['delay']) {
+			if(self::$run['delay'] || $delay_flag) {
 
-				if(empty(self::$data['delay']['behavior'])) {
-					$delay_flag = Utilities::match_in_array($tag, self::$data['delay']['inclusions']);
-				}
-				else {
-					$delay_flag = !Utilities::match_in_array($tag, self::$data['delay']['exclusions']);
+				if(!$delay_flag) {
+					if(empty(self::$data['delay']['behavior'])) {
+						$delay_flag = Utilities::match_in_array($tag, self::$data['delay']['inclusions']);
+					}
+					else {
+						$delay_flag = !Utilities::match_in_array($tag, self::$data['delay']['exclusions']);
+					}
 				}
 
 				if($delay_flag) {
@@ -127,16 +150,16 @@ class JS
 			}
 
 			//defer
-			if(self::$run['defer'] && !$delay_flag) {
+			if((self::$run['defer'] || $defer_flag) && !$delay_flag) {
 
 				//inline script
 				if(empty($atts_array['src'])) {
 
 					//script content
-					if(!empty(Config::$options['assets']['defer_inline']) && !empty($matches[3][$i])) {
+					if((!empty(Config::$options['assets']['defer_inline']) && !empty($matches[3][$i])) || $defer_flag) {
 					
 						//exclusion check
-						if(!Utilities::match_in_array($tag, self::$data['defer']['exclusions'])) {
+						if(!Utilities::match_in_array($tag, self::$data['defer']['exclusions']) || $defer_flag) {
 							$atts_array_new['defer'] = '';
 							$atts_array_new['src'] = 'data:text/javascript;base64,' . base64_encode($matches[3][$i]);
 							$matches[3][$i] = '';
@@ -150,7 +173,7 @@ class JS
 					if(!isset($atts_array['async']) && (empty($atts_array['data-wp-strategy']) || $atts_array['data-wp-strategy'] != 'async')) {
 						
 						//exclusion check
-						if(!Utilities::match_in_array($tag, self::$data['defer']['exclusions'])) {
+						if(!Utilities::match_in_array($tag, self::$data['defer']['exclusions']) || $defer_flag) {
 							$atts_array_new['defer'] = '';
 						}
 					}
@@ -167,7 +190,7 @@ class JS
 		}
 
 		//print delay js
-		if(self::$run['delay']) {
+		if(self::$run['delay'] || $print_delay_js) {
             $pos = strpos($html, '</body>');
             if($pos !== false) {
             	$html = substr_replace($html, self::print_delay_js() . '</body>', $pos, 7);
@@ -178,6 +201,16 @@ class JS
 	}
 
 	private static function populate_data() {
+
+		self::$data = [
+			'delay' => [
+				'inclusions' => [],
+				'exclusions' => []
+			],
+			'defer' => [
+				'exclusions' => []
+			]
+		];
 
 		//delay exclusions/inclusions
 		if(self::$run['delay']) {
@@ -195,6 +228,7 @@ class JS
 				//exclusions for delay all
 				self::$data['delay']['exclusions'] = array(
 					'perfmatters-delayed-scripts-js',
+					'pmcs-',
 					'lazyload.min.js',
 					'lazyLoadInstance',
 					'lazysizes',
@@ -246,6 +280,7 @@ class JS
 			//base exclusions
 			self::$data['defer']['exclusions'] = array(
 				'perfmatters-lazy-load-js',
+				'pmcs-',
 				'jqueryParams',
 				'cmp.min.js', //ezoic
 				'sa.min.js',
@@ -280,14 +315,14 @@ class JS
 
 		$timeout = apply_filters('perfmatters_delay_js_timeout', !empty(Config::$options['assets']['delay_timeout']) ? 15 : '');
 
-		if(!empty(apply_filters('perfmatters_delay_js_behavior', Config::$options['assets']['delay_js_behavior'] ?? ''))) {
+		if(self::$run['delay'] && (!empty(apply_filters('perfmatters_delay_js_behavior', Config::$options['assets']['delay_js_behavior'] ?? '')))) {
 			$delay_click = (int)apply_filters('perfmatters_delay_js_delay_click', empty(Config::$options['assets']['disable_click_delay']));
 		}
 		else {
 			$delay_click = 0;
 		}
 
-	  	if(!empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js'])))) {
+	  	//if(!empty(apply_filters('perfmatters_delay_js', !empty(Config::$options['assets']['delay_js'])))) {
 
 	  		$script = '<script id="perfmatters-delayed-scripts-js">';
 
@@ -310,7 +345,7 @@ class JS
 		  	$script.= '</script>';
 
 	  		return $script;
-	  	}
+	  	//}
 	}
 
 	//print fastclick js

@@ -166,12 +166,15 @@
                     'sort_id' => array(
                         'label'             => esc_html__( 'Sort ID', 'et_builder' ),
                         'type'              => 'select',
-                        'option_category'   => 'configuration',
                         'options'           => ET_Builder_Module_Apto_Posts_Navigation::get_sorts(),
                         'description'       => esc_html__( 'Choose the sort ID to apply. If the custom post object assigned to a category, the primary will be used when applying for the order.', 'et_builder' ),
                  
-                        'toggle_slug'       => 'sort',
-                        'default'           => 'a',
+                        'default'           => '',
+                        
+                        'toggle_slug'     => 'sort',
+                        'computed_affects' => array(
+                            '__posts_navigation',
+                          ),
                   
                     ),
                     
@@ -183,7 +186,7 @@
                         'description'       => esc_html__( 'Choose the Taxoomy Name from which the order should be used.', 'et_builder' ),
                  
                         'toggle_slug'       => 'sort',
-                        'default'           => 'a',
+                        'default'           => 'category',
                   
                     ),
                     
@@ -285,7 +288,7 @@
                 
                 //get the first term
                 $post_terms =   wp_get_post_terms ( $post->ID, $args['taxonomy_name'] );
-                if ( count ( $post_terms ) > 0 )
+                if ( is_array ( $post_terms ) &&  count ( $post_terms ) > 0 )
                     {
                         reset($post_terms);
                         $first_term =   current($post_terms);

@@ -207,7 +207,8 @@
                                                 foreach($query_tax_terms as $key => $query_tax_term_slug)
                                                     {
                                                           $term_data                =   get_term_by('name', $query_tax_term_slug, $meta_item['taxonomy']);
-                                                          $query_tax_terms[$key]    =   $term_data->term_id;
+                                                          if ( is_object( $term_data )  &&  isset ( $term_data->term_id ) )
+                                                            $query_tax_terms[$key]    =   $term_data->term_id;
                                                     }
 
                                                 break;
@@ -271,6 +272,24 @@
                 }
                 
                 
+            static function guess_tax_term_for_multiple_type_sort( $tax_queries, $query )
+                {
+                    $tax_queries    =   apply_filters('apto/query-utils/guess_tax_term_for_multiple_type_sort', $tax_queries, $query );
+                    
+                    if ( count ( $tax_queries ) <   2 )
+                        return $tax_queries;
+                        
+                    //remove the NOT IN
+                    foreach ( $tax_queries as   $key    =>  $tax_query )
+                        {
+                            if ( isset ( $tax_query['operator'] )   &&  $tax_query['operator']  ==  'NOT IN' )
+                                unset ( $tax_queries[ $key ] );
+                        }
+                    
+                    return $tax_queries;
+                }
+            
+            
                 
             
             static function meta_is_first_order_clause($query)

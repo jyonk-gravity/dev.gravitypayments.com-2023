@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Post Types Order\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-03 12:22+0300\n"
-"PO-Revision-Date: 2024-10-03 12:22+0300\n"
+"POT-Creation-Date: 2025-09-25 14:00+0300\n"
+"PO-Revision-Date: 2025-09-25 14:00+0300\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: NspCode <contact@nsp-code.com>\n"
 "Language: en\n"
@@ -11,10 +11,92 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__;esc_html__;esc_html_e;"
+"esc_attr__;esc_html_e\n"
 "X-Poedit-Basepath: ..\n"
 "X-Generator: Poedit 3.5\n"
 "X-Poedit-SearchPath-0: .\n"
+
+#: extends/divi/PostsNavigation.class.php:6
+msgid "APTO - Post Navigation"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:7
+msgid "APTO - Post Navigations"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:17
+msgid "Text"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:18
+msgid "Sort"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:19
+msgid "Navigation"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:27
+#: extends/divi/PostsNavigation.class.php:79
+msgid "Links"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:83
+#: extends/divi/PostsNavigation.class.php:140
+msgid "Previous Link"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:87
+msgid "Previous Link Arrow"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:91
+#: extends/divi/PostsNavigation.class.php:153
+msgid "Next Link"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:95
+msgid "Next Link Arrow"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:106
+msgid "Show Previous Post Link"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:110
+#: extends/divi/PostsNavigation.class.php:127
+#: include/apto_interface-class.php:798 include/apto_interface-class.php:806
+#: include/apto_interface-class.php:857 include/apto_interface-class.php:912
+#: include/apto_interface-class.php:920 include/apto_interface-class.php:929
+#: include/apto_interface-class.php:954 include/apto_interface-class.php:965
+#: include/apto_interface-class.php:977 include/apto_interface-class.php:1565
+#: include/apto_interface-class.php:1609
+msgid "Yes"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:111
+#: extends/divi/PostsNavigation.class.php:128
+#: include/apto_interface-class.php:799 include/apto_interface-class.php:807
+#: include/apto_interface-class.php:858 include/apto_interface-class.php:913
+#: include/apto_interface-class.php:921 include/apto_interface-class.php:930
+#: include/apto_interface-class.php:955 include/apto_interface-class.php:966
+#: include/apto_interface-class.php:978 include/apto_interface-class.php:1562
+#: include/apto_interface-class.php:1606
+msgid "No"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:118
+msgid "Turn this on to show the previous post link"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:123
+msgid "Show Next Post Link"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:135
+msgid "Turn this on to show the next post link"
+msgstr ""
 
 #: extends/divi/PostsNavigation.class.php:147
 msgid ""
@@ -26,6 +108,34 @@ msgstr ""
 msgid ""
 "Define custom text for the next link. You can use the <strong>%title</"
 "strong> variable to include the post title. Leave blank for default."
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:167
+msgid "Sort ID"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:170
+msgid ""
+"Choose the sort ID to apply. If the custom post object assigned to a "
+"category, the primary will be used when applying for the order."
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:182
+msgid "Sort on Taxonomy"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:186
+msgid "Choose the Taxoomy Name from which the order should be used."
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:317
+#: include/apto_functions-class.php:3067
+msgid "Next Post"
+msgstr ""
+
+#: extends/divi/PostsNavigation.class.php:352
+#: include/apto_functions-class.php:3067
+msgid "Previous Post"
 msgstr ""
 
 #: include/apto_admin_functions-class.php:90
@@ -57,38 +167,30 @@ msgstr ""
 msgid "similar sort"
 msgstr ""
 
-#: include/apto_functions-class.php:2429
+#: include/apto_functions-class.php:2456
 msgid "Subscriber"
 msgstr ""
 
-#: include/apto_functions-class.php:2433
+#: include/apto_functions-class.php:2460
 msgid "Contributor"
 msgstr ""
 
-#: include/apto_functions-class.php:2437 include/apto_interface-class.php:663
-#: include/apto_interface_helper-class.php:1772
+#: include/apto_functions-class.php:2464 include/apto_interface-class.php:663
+#: include/apto_interface_helper-class.php:1776
 msgid "Author"
 msgstr ""
 
-#: include/apto_functions-class.php:2441
+#: include/apto_functions-class.php:2468
 msgid "Editor"
 msgstr ""
 
-#: include/apto_functions-class.php:2445
+#: include/apto_functions-class.php:2472
 msgid "Administrator"
 msgstr ""
 
-#: include/apto_functions-class.php:2759 include/apto_functions-class.php:2854
+#: include/apto_functions-class.php:2789 include/apto_functions-class.php:2884
 #, php-format
 msgid "Use commas instead of %s to separate excluded terms."
-msgstr ""
-
-#: include/apto_functions-class.php:3037
-msgid "Previous Post"
-msgstr ""
-
-#: include/apto_functions-class.php:3037
-msgid "Next Post"
 msgstr ""
 
 #: include/apto_interface-class.php:170
@@ -150,7 +252,7 @@ msgid "Add Post Type"
 msgstr ""
 
 #: include/apto_interface-class.php:513 include/apto_interface-class.php:527
-#: include/apto_interface_helper-class.php:1805
+#: include/apto_interface_helper-class.php:1809
 msgid "Taxonomy"
 msgstr ""
 
@@ -222,7 +324,7 @@ msgid "This sort interface settings. For more details check"
 msgstr ""
 
 #: include/apto_interface-class.php:762
-#: include/apto_interface_helper-class.php:1775
+#: include/apto_interface_helper-class.php:1779
 msgid "Title"
 msgstr ""
 
@@ -255,22 +357,6 @@ msgstr ""
 
 #: include/apto_interface-class.php:796
 msgid "Automatically apply the sort to theme queries if match."
-msgstr ""
-
-#: include/apto_interface-class.php:798 include/apto_interface-class.php:806
-#: include/apto_interface-class.php:857 include/apto_interface-class.php:912
-#: include/apto_interface-class.php:920 include/apto_interface-class.php:929
-#: include/apto_interface-class.php:953 include/apto_interface-class.php:964
-#: include/apto_interface-class.php:1552 include/apto_interface-class.php:1596
-msgid "Yes"
-msgstr ""
-
-#: include/apto_interface-class.php:799 include/apto_interface-class.php:807
-#: include/apto_interface-class.php:858 include/apto_interface-class.php:913
-#: include/apto_interface-class.php:921 include/apto_interface-class.php:930
-#: include/apto_interface-class.php:954 include/apto_interface-class.php:965
-#: include/apto_interface-class.php:1549 include/apto_interface-class.php:1593
-msgid "No"
 msgstr ""
 
 #: include/apto_interface-class.php:803
@@ -349,102 +435,112 @@ msgstr ""
 msgid "The offset number of posts"
 msgstr ""
 
-#: include/apto_interface-class.php:950
+#: include/apto_interface-class.php:951
 msgid "WPML Synchronize"
 msgstr ""
 
-#: include/apto_interface-class.php:951 include/apto_interface-class.php:962
+#: include/apto_interface-class.php:952 include/apto_interface-class.php:963
 msgid ""
 "Synchronize the order across all other languages. This will overwrite other "
 "languages sorting. For this to work, all other languages must contain the "
 "same translated objects."
 msgstr ""
 
-#: include/apto_interface-class.php:961
+#: include/apto_interface-class.php:962
 msgid "Polylang Synchronize"
 msgstr ""
 
-#: include/apto_interface-class.php:971
+#: include/apto_interface-class.php:974
+msgid "QTranslate Synchronize"
+msgstr ""
+
+#: include/apto_interface-class.php:975
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting."
+msgstr ""
+
+#: include/apto_interface-class.php:984
 msgid "Capability / Role"
 msgstr ""
 
-#: include/apto_interface-class.php:972
+#: include/apto_interface-class.php:985
 msgid "Minimum Capability to see this Sort"
 msgstr ""
 
-#: include/apto_interface-class.php:996
+#: include/apto_interface-class.php:1009
 msgid "Status"
 msgstr ""
 
-#: include/apto_interface-class.php:997
+#: include/apto_interface-class.php:1010
 msgid "Show objects status"
 msgstr ""
 
-#: include/apto_interface-class.php:1025
+#: include/apto_interface-class.php:1038
 msgid "Settings Update"
 msgstr ""
 
-#: include/apto_interface-class.php:1027
+#: include/apto_interface-class.php:1040
 msgid "Create"
 msgstr ""
 
-#: include/apto_interface-class.php:1040
+#: include/apto_interface-class.php:1053
 msgid "Delete Sort"
 msgstr ""
 
-#: include/apto_interface-class.php:1092
+#: include/apto_interface-class.php:1105
 msgid "Manual Order"
 msgstr ""
 
-#: include/apto_interface-class.php:1093
+#: include/apto_interface-class.php:1106
 msgid "Automatic Order"
 msgstr ""
 
-#: include/apto_interface-class.php:1143
+#: include/apto_interface-class.php:1156
 msgid "Select area and customise your order list <br />or switch to automatic"
 msgstr ""
 
-#: include/apto_interface-class.php:1168 include/apto_interface-class.php:1194
+#: include/apto_interface-class.php:1181 include/apto_interface-class.php:1207
 msgid "Archive"
 msgstr ""
 
-#: include/apto_interface-class.php:1168
+#: include/apto_interface-class.php:1181
 msgid "Total Archive Objects"
 msgstr ""
 
-#: include/apto_interface-class.php:1226
+#: include/apto_interface-class.php:1239
 msgid "Taxonomy Title"
 msgstr ""
 
-#: include/apto_interface-class.php:1226
+#: include/apto_interface-class.php:1239
 msgid "Total"
 msgstr ""
 
-#: include/apto_interface-class.php:1226 include/apto_interface-class.php:1353
+#: include/apto_interface-class.php:1239 include/apto_interface-class.php:1366
 msgid "Posts"
 msgstr ""
 
-#: include/apto_interface-class.php:1250
+#: include/apto_interface-class.php:1263
 msgid "Too many terms to count"
 msgstr ""
 
-#: include/apto_interface-class.php:1353
+#: include/apto_interface-class.php:1366
 msgid "Forum Title"
 msgstr ""
 
-#: include/apto_interface-class.php:1353
+#: include/apto_interface-class.php:1366
 msgid "Total Topics"
 msgstr ""
 
-#: include/apto_interface-class.php:1533
+#: include/apto_interface-class.php:1546
 msgid "Add Fallback"
 msgstr ""
 
-#: include/apto_interface-class.php:1544
+#: include/apto_interface-class.php:1557
 msgid "Apply Sticky Posts"
 msgstr ""
 
-#: include/apto_interface-class.php:1545
+#: include/apto_interface-class.php:1558
 msgid ""
 "Ensure that the sticky posts from the Manual Order are retained and remain "
 "prominently displayed. This will help preserve important information and "
@@ -452,84 +548,84 @@ msgid ""
 "of the Automatic Order selection."
 msgstr ""
 
-#: include/apto_interface-class.php:1580
+#: include/apto_interface-class.php:1593
 msgid "Batch Terms Automatic Update"
 msgstr ""
 
-#: include/apto_interface-class.php:1581
+#: include/apto_interface-class.php:1594
 msgid ""
 "<b>WARNING!</b></i> Using this option will update all existing child terms "
 "of the current"
 msgstr ""
 
-#: include/apto_interface-class.php:1589
+#: include/apto_interface-class.php:1602
 msgid ""
 "to Automatic Order, replacing the current settings. Manual sort lists will "
 "be preserved, but their order type will be changed to Automatic Order."
 msgstr ""
 
-#: include/apto_interface-class.php:1683
+#: include/apto_interface-class.php:1696
 msgid "Show all dates"
 msgstr ""
 
-#: include/apto_interface-class.php:1684
+#: include/apto_interface-class.php:1697
 msgid "Today"
 msgstr ""
 
-#: include/apto_interface-class.php:1685
+#: include/apto_interface-class.php:1698
 msgid "Yesterday"
 msgstr ""
 
-#: include/apto_interface-class.php:1686
+#: include/apto_interface-class.php:1699
 msgid "Last Week"
 msgstr ""
 
-#: include/apto_interface-class.php:1732
+#: include/apto_interface-class.php:1745
 msgid "Toggle Thumbnails"
 msgstr ""
 
-#: include/apto_interface-class.php:1741 include/apto_interface-class.php:1852
+#: include/apto_interface-class.php:1754 include/apto_interface-class.php:1865
 msgid "Update"
 msgstr ""
 
-#: include/apto_interface-class.php:1754
+#: include/apto_interface-class.php:1767
 msgid "Reverse"
 msgstr ""
 
-#: include/apto_interface-class.php:1755
+#: include/apto_interface-class.php:1768
 msgid "Title Asc"
 msgstr ""
 
-#: include/apto_interface-class.php:1756
+#: include/apto_interface-class.php:1769
 msgid "Title Desc"
 msgstr ""
 
-#: include/apto_interface-class.php:1757
+#: include/apto_interface-class.php:1770
 msgid "Id order Asc"
 msgstr ""
 
-#: include/apto_interface-class.php:1758
+#: include/apto_interface-class.php:1771
 msgid "Id order Desc"
 msgstr ""
 
-#: include/apto_interface-class.php:1759
-#: include/apto_interface_helper-class.php:1793
+#: include/apto_interface-class.php:1772
+#: include/apto_interface_helper-class.php:1797
 msgid "Random"
 msgstr ""
 
-#: include/apto_interface-class.php:1767
+#: include/apto_interface-class.php:1780
 msgid "List view"
 msgstr ""
 
-#: include/apto_interface-class.php:1768
+#: include/apto_interface-class.php:1781
 msgid "Grid view"
 msgstr ""
 
-#: include/apto_interface-class.php:1865
+#: include/apto_interface-class.php:1878
 msgid "Reset Order"
 msgstr ""
 
-#: include/apto_interface-class.php:1871
+#: include/apto_interface-class.php:1884
 msgid "Are you sure you want to reset the order??"
 msgstr ""
 
@@ -538,186 +634,204 @@ msgid "Sort order reset successfully"
 msgstr ""
 
 #: include/apto_interface_helper-class.php:348
-#: include/apto_interface_helper-class.php:2502
-#: include/apto_interface_helper-class.php:2527
+#: include/apto_interface_helper-class.php:2506
+#: include/apto_interface_helper-class.php:2531
 msgid "Invalid Nonce"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1177
+#: include/apto_interface_helper-class.php:1181
 msgid ""
 "**WARNING!! This will load all post types objects. Recommended to be used "
 "with Advanced Query Rules"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1760
+#: include/apto_interface_helper-class.php:1764
 msgid "Order By"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1761
+#: include/apto_interface_helper-class.php:1765
 msgid "More details about Order By paramether can be found at"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1761
-#: include/apto_interface_helper-class.php:1881
+#: include/apto_interface_helper-class.php:1765
+#: include/apto_interface_helper-class.php:1885
 msgid "Order & Orderby Parameters"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1762
+#: include/apto_interface_helper-class.php:1766
 msgid ""
 "Additional details and example of usage for Custom Function can be found at"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1762
-#: include/apto_interface_helper-class.php:1863
+#: include/apto_interface_helper-class.php:1766
+#: include/apto_interface_helper-class.php:1867
 msgid "Custom Function"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1766
+#: include/apto_interface_helper-class.php:1770
 msgid "Default / None"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1769
+#: include/apto_interface_helper-class.php:1773
 msgid "Post ID"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1778
+#: include/apto_interface_helper-class.php:1782
 msgid "Slug"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1781
-#: include/apto_interface_helper-class.php:1848
+#: include/apto_interface_helper-class.php:1785
+#: include/apto_interface_helper-class.php:1852
 msgid "Date"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1784
+#: include/apto_interface_helper-class.php:1788
 msgid "Modified"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1787
+#: include/apto_interface_helper-class.php:1791
 msgid "Menu Order"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1790
+#: include/apto_interface_helper-class.php:1794
 msgid "Comments Count"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1818
+#: include/apto_interface_helper-class.php:1822
 msgid "Custom Field"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1826
+#: include/apto_interface_helper-class.php:1830
 msgid "Field Name"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1827
+#: include/apto_interface_helper-class.php:1831
 msgid "The name of custom field"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1832
+#: include/apto_interface_helper-class.php:1836
 msgid "Field Type"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1833
+#: include/apto_interface_helper-class.php:1837
 msgid "MySql Type of field, more details at"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1833
+#: include/apto_interface_helper-class.php:1837
 msgid "Cast Functions and Operators"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1836
+#: include/apto_interface_helper-class.php:1840
 msgid "None / Default"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1839
+#: include/apto_interface_helper-class.php:1843
 msgid "Signed (Integer)"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1842
+#: include/apto_interface_helper-class.php:1846
 msgid "Unsigned (Integer)"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1845
+#: include/apto_interface_helper-class.php:1849
 msgid "Float (Decimal)"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1851
+#: include/apto_interface_helper-class.php:1855
 msgid "Datetime"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1854
+#: include/apto_interface_helper-class.php:1858
 msgid "Time"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1880
+#: include/apto_interface_helper-class.php:1884
 msgid "Order"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1881
+#: include/apto_interface_helper-class.php:1885
 msgid "More details about Order paramether can be found at"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1885
+#: include/apto_interface_helper-class.php:1889
 msgid "Descending"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:1888
+#: include/apto_interface_helper-class.php:1892
 msgid "Ascending"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:2761
+#: include/apto_interface_helper-class.php:1929
+msgid "Go to the first page"
+msgstr ""
+
+#: include/apto_interface_helper-class.php:1936
+msgid "Go to the previous page"
+msgstr ""
+
+#: include/apto_interface_helper-class.php:1948
+msgid "Go to the next page"
+msgstr ""
+
+#: include/apto_interface_helper-class.php:1955
+msgid "Go to the last page"
+msgstr ""
+
+#: include/apto_interface_helper-class.php:2765
 msgid "Items Order Updated"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:3023
-#: include/apto_interface_helper-class.php:3041
-#: include/apto_interface_helper-class.php:3052
-#: include/apto_interface_helper-class.php:3188
-#: include/apto_interface_helper-class.php:3206
-#: include/apto_interface_helper-class.php:3217
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3216
+#: include/apto_interface_helper-class.php:3227
+#: include/apto_interface_helper-class.php:3347
 msgid "A syncronization could not be completed"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:3023
-#: include/apto_interface_helper-class.php:3188
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3347
 msgid "as post type is not translatable."
 msgstr ""
 
-#: include/apto_interface_helper-class.php:3033
-#: include/apto_interface_helper-class.php:3104
-#: include/apto_interface_helper-class.php:3198
-#: include/apto_interface_helper-class.php:3266
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
 msgid "A synchronization could not be completed"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:3033
-#: include/apto_interface_helper-class.php:3104
-#: include/apto_interface_helper-class.php:3198
-#: include/apto_interface_helper-class.php:3266
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
 msgid "for"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:3033
-#: include/apto_interface_helper-class.php:3104
-#: include/apto_interface_helper-class.php:3198
-#: include/apto_interface_helper-class.php:3266
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
 msgid "language"
 msgstr ""
 
-#: include/apto_interface_helper-class.php:3033
-#: include/apto_interface_helper-class.php:3104
-#: include/apto_interface_helper-class.php:3198
-#: include/apto_interface_helper-class.php:3266
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
 msgid "as it contains a different number of objects."
 msgstr ""
 
-#: include/apto_interface_helper-class.php:3041
-#: include/apto_interface_helper-class.php:3206
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3216
 msgid "as taxonomy is not translatable."
 msgstr ""
 
-#: include/apto_interface_helper-class.php:3052
-#: include/apto_interface_helper-class.php:3217
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3227
 msgid "as term is not translated."
 msgstr ""
 

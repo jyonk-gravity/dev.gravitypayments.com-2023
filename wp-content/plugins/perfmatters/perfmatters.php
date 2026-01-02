@@ -3,7 +3,7 @@
 Plugin Name: Perfmatters
 Plugin URI: https://perfmatters.io/
 Description: Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.
-Version: 2.5.2
+Version: 2.5.5
 Author: forgemedia
 Author URI: https://forgemedia.io/
 License: GPLv2 or later
@@ -18,8 +18,12 @@ Domain Path: /languages
 define('PERFMATTERS_STORE_URL', 'https://perfmatters.io/');
 define('PERFMATTERS_ITEM_ID', 696);
 define('PERFMATTERS_ITEM_NAME', 'perfmatters');
-define('PERFMATTERS_VERSION', '2.5.2');
+define('PERFMATTERS_VERSION', '2.5.5');
 define('PERFMATTERS_PATH', plugin_dir_path(__FILE__ ));
+define('PERFMATTERS_URL', plugin_dir_url(__FILE__));
+if(!defined('PMMU_PLUGIN_DIR')) {
+	define('PMMU_PLUGIN_DIR', WPMU_PLUGIN_DIR);
+}
 
 //plugins loaded
 function perfmatters_plugins_loaded() {
@@ -55,6 +59,9 @@ function perfmatters_plugins_loaded() {
 
 	//initialize ajax
 	new Perfmatters\Ajax();
+
+	//code snippets
+	Perfmatters\PMCS\PMCS::init();
 }
 add_action('plugins_loaded', 'perfmatters_plugins_loaded');
 
@@ -144,12 +151,26 @@ function perfmatters_admin_scripts() {
 			)
 		));
 
-		if(empty($_GET['tab']) || $_GET['tab'] == 'options') {
+		if(empty($_GET['snippet'])) {
 			$cm_settings['codeEditor'] = wp_enqueue_code_editor(array('type' => 'text/html'));
-			wp_localize_script('jquery', 'cm_settings', $cm_settings);
-			wp_enqueue_script('wp-theme-plugin-editor');
-			wp_enqueue_style('wp-codemirror');
+	        wp_add_inline_script(
+	        'code-editor',
+	        sprintf(
+	                'jQuery(function() {
+	                    var $codemirror = jQuery(".perfmatters-codemirror");
+	                    if($codemirror.length) {
+	                        $codemirror.each(function() {
+	                            wp.codeEditor.initialize(this, %1$s);
+	                        });
+	                    }
+	                });',
+	                wp_json_encode($cm_settings)
+	            )
+	        );
+	        wp_enqueue_script('wp-theme-plugin-editor');
+	        wp_enqueue_style('wp-codemirror');
 		}
+		
 	}
 }
 
@@ -212,9 +233,9 @@ function perfmatters_activate() {
 
 	//check if we need to copy mu plugin file
 	$pmsm_settings = get_option('perfmatters_script_manager_settings');
-	if(!empty($pmsm_settings['mu_mode']) && !file_exists(WPMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
+	if(!empty($pmsm_settings['mu_mode']) && !file_exists(PMMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
 		if(file_exists(plugin_dir_path(__FILE__) . "/inc/perfmatters_mu.php")) {
-			@copy(plugin_dir_path(__FILE__) . "/inc/perfmatters_mu.php", WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+			@copy(plugin_dir_path(__FILE__) . "/inc/perfmatters_mu.php", PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
 		}
 	}
 }
@@ -240,15 +261,15 @@ function perfmatters_install() {
     }
 
 	//mu plugin file check
-	if(file_exists(WPMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
+	if(file_exists(PMMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
 
 		//get plugin data
-    	$mu_plugin_data = get_plugin_data(WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+    	$mu_plugin_data = get_plugin_data(PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
 
 		if(!empty($mu_plugin_data['Version']) && $mu_plugin_data['Version'] != PERFMATTERS_VERSION) {
-			@unlink(WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+			@unlink(PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
 			if(file_exists(plugin_dir_path(__FILE__) . "/inc/perfmatters_mu.php")) {
-				@copy(plugin_dir_path(__FILE__) . "/inc/perfmatters_mu.php", WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+				@copy(plugin_dir_path(__FILE__) . "/inc/perfmatters_mu.php", PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
 			}
 		}
 	}
@@ -420,6 +441,30 @@ function perfmatters_install() {
 		update_option('perfmatters_options', $perfmatters_options);
 	}
 
+	//migrate code snippet data from cache to uploads
+	if($perfmatters_version < '2.5.4') {
+	   	
+	   	//cache code snippets directory
+	   	$source = trailingslashit(PERFMATTERS_CACHE_DIR) . 'code-snippets';
+    
+	    //parent perfmatters directory in /uploads/
+	    $upload_dir = wp_get_upload_dir();
+	    $parent_dest = trailingslashit($upload_dir['basedir']) . 'perfmatters';
+	    
+	    //final destination directory
+	    $destination = $parent_dest . '/code-snippets';
+
+	    if(is_dir($source) && !is_dir($destination)) {
+
+	    	//parent folder needs to exist for a rename
+	    	if(!is_dir($parent_dest)) {
+	            wp_mkdir_p($parent_dest);
+	        }
+
+	        @rename($source, $destination);
+	    }
+	}
+
 	//update version
 	if($perfmatters_version != PERFMATTERS_VERSION) {
 		update_option('perfmatters_version', PERFMATTERS_VERSION, false);
@@ -546,8 +591,8 @@ function perfmatters_uninstall() {
 	}
 
 	//remove mu plugin file if needed
-	if(file_exists(WPMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
-   		@unlink(WPMU_PLUGIN_DIR . "/perfmatters_mu.php");
+	if(file_exists(PMMU_PLUGIN_DIR . "/perfmatters_mu.php")) {
+   		@unlink(PMMU_PLUGIN_DIR . "/perfmatters_mu.php");
    	}
 }
 register_uninstall_hook(__FILE__, 'perfmatters_uninstall');

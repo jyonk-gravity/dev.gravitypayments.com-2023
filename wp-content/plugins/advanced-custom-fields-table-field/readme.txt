@@ -2,8 +2,8 @@
 Contributors: jonua
 Tags: acf, table, scf, advanced custom fields, secure custom fields
 Requires at least: 5.3
-Tested up to: 6.8
-Stable tag: 1.3.31
+Tested up to: 6.9
+Stable tag: 1.3.33
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -463,6 +463,39 @@ The table field plugin prevents broken JSON strings to save as a table field dat
 
 `define( "ACF_TABLEFIELD_FILTER_POSTMETA", false );`
 
+= UI Sanitizing Options =
+
+Since version 1.3.33, you can configure the UI sanitizing options.
+
+This requires an admin script, that. You can in your themes `functions.php` file with the following action.
+
+`
+add_action( 'acf/input/admin_enqueue_scripts', function() {
+
+    wp_enqueue_script(
+        'table-field-config', // Table field config script handle
+        get_template_directory_uri() . '/js/table-field-config.js', // Path to the script in the theme
+    );
+});`
+
+The sanitization of the table fields UI is handled by DOMPurify.
+Use the following table field hook in your table field config script to modify the DOMPurify options.
+
+`
+document.addEventListener('tableFieldRegisterHooks', function(){
+
+    ACFTableField.addFilter( 'core', 'sanitize_html', function( options ) {
+
+        // DOMPurify Options, @see: https://github.com/cure53/DOMPurify?tab=readme-ov-file#can-i-configure-dompurify
+
+        options.ADD_ATTR = ['target']; // For instance, the target attribute can be permitted
+
+        return options;
+    });
+});
+`
+
+
 == Installation ==
 
 This software can be used as both a WP plugin and a theme include.
@@ -517,6 +550,17 @@ The Pro plugin can run in parallel and you can change an existing field with fie
 
 
 == Changelog ==
+
+= 1.3.33 =
+* Adds hook registering event "tableFieldRegisterHooks"
+* Changes and fixes example showing how to enqueue an admin script and apply the "sanitize_html" filter.
+
+= 1.3.32 =
+* Adds basic Polylang support
+* Enables loading and executing a admin script between the plugins init script and execute script to use plugins Javascript hooks
+* Adds Javascript filter for DOMPurify options
+* Adds sanitizing for the table caption
+* Fixes none unique HTML element ids
 
 = 1.3.31 =
 * Adds sanitizing table data using wp_kses( $data, 'post' ) during update_field().

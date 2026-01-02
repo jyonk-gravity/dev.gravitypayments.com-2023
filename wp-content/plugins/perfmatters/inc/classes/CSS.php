@@ -20,6 +20,7 @@ class CSS
     private static $url_type;
     private static $used_selectors;
     private static $excluded_selectors;
+    public static $snippet_optimizations = [];
 
     //initialize css functions
     public static function init()
@@ -57,6 +58,9 @@ class CSS
         //setup optimizations to run
         self::$run['rucss'] = !empty(apply_filters('perfmatters_remove_unused_css', !empty(Config::$options['assets']['remove_unused_css']))) && !Utilities::get_post_meta('perfmatters_exclude_unused_css') && !is_user_logged_in() && self::$url_type = self::get_url_type();
         self::$run['minify'] = !empty(apply_filters('perfmatters_minify_css', !empty(Config::$options['assets']['minify_css']))) && !Utilities::get_post_meta('perfmatters_exclude_minify_css');
+
+        //pmcs css optimizations
+        self::$run['snippets'] = !empty(self::$snippet_optimizations);
 
         if(array_filter(self::$run)) {
 
@@ -151,6 +155,18 @@ class CSS
             //copy atts array
             $atts_array_new = $atts_array;
 
+            //snippet optimizations
+            if(!empty(self::$snippet_optimizations) && !empty($atts_array['id'])) {
+                if(isset(self::$snippet_optimizations[$atts_array['id']])) {
+
+                    //async
+                    if(self::$snippet_optimizations[$atts_array['id']] == 'async') {
+                        $atts_array_new['media'] = 'print';
+                        $atts_array_new['onload'] = 'this.media=\'all\';this.onload=null;';
+                    }
+                }
+            }
+
             //minify
             if(self::$run['minify']) {
                 if(!empty($atts_array['href']) && !Utilities::match_in_array($stylesheet[1], Minify::get_exclusions('css')) && $minified_src = Minify::minify($atts_array['href'])) {
@@ -172,7 +188,7 @@ class CSS
                 $skip = false;
 
                 //print check
-                if(!empty($atts_array['media']) && $atts_array['media'] == 'print') {
+                if(!empty($atts_array_new['media']) && $atts_array_new['media'] == 'print') {
                     $skip = true;
                 }
 
@@ -239,8 +255,24 @@ class CSS
                             $content = @file_get_contents($file);
 
                             if($content) {
+
+                                //https://github.com/sabberworm/PHP-CSS-Parser/issues/150
+                                $css = preg_replace('/^\xEF\xBB\xBF/', '', $content);
+
+                                //setup css parser
+                                $settings = Settings::create()->withMultibyteSupport(false);
+                                $parser = new CSSParser($css, $settings);
+                                $parsed_css = $parser->parse();
+
+                                //convert relative urls to full urls
+                                self::fix_relative_urls($atts_array_new['href'], $parsed_css);
+
+                                $content = $parsed_css;
+
+                                //swap inline css in html
                                 $inline_style = '<style' . (!empty($atts_array_new['id']) ? ' id="' . $atts_array_new['id'] . '"' : '') . '>' . $content . '</style>';
                                 $html = str_replace($stylesheet[0], $inline_style, $html);
+
                                 continue;
                             }
                         }
@@ -442,7 +474,10 @@ class CSS
             '.elementor-motion-effects-layer',
             '.animated',
             '.elementor-animated-content',
+            '.elementor-background-slideshow',
+            '.elementor-background-slideshow__slide__image',
             '.gb-menu-container--mobile', //generateblocks
+            '.toggled', //generatepress
             '.splide-initialized', //splide
             '.splide',
             '.splide-slider',

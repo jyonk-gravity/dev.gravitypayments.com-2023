@@ -4,8 +4,8 @@ Donate link: https://yoa.st/1up
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Content analysis, Readability, Schema
-Tested up to: 6.8
-Stable tag: 26.3
+Tested up to: 6.9
+Stable tag: 26.6
 Requires PHP: 7.4
 
 Improve your SEO with real-time feedback, schema, and clear guidance. Upgrade for AI tools, Google Docs integration, and 24/7 support, no hidden fees.
@@ -303,38 +303,50 @@ Your question has most likely been answered on our help center: [yoast.com/help/
 
 == Changelog ==
 
-= 26.3 =
+= 26.6 =
 
-Release date: 2025-11-04
+Release date: 2025-12-15
 
-Yoast SEO 26.3 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
-
-#### Bugfixes
-
-*  Fixes a bug where the llms.txt file template contained a spelling error "can by found" instead of "can be found". Props to [aditya241104](https://github.com/aditya241104).
-
-#### Other
-
-* Introduces the `wpseo_llmstxt_link_description` filter for link descriptions in the `llms.txt` file. Props to @Godzilaa.
-* Removes the external link icon from the `Customize llms.txt file` button in the `Site features` section of the plugin's Settings page.
-
-= 26.2 =
-
-Release date: 2025-10-21
-
-Yoast SEO 26.2 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
+Yoast SEO 26.6 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/releases).
 
 #### Enhancements
 
-* Adds a `Pronouns` field to the user profile and includes these pronouns in the Schema.org output. Props to [jdevalk](https://github.com/jdevalk).
-* Adds edit buttons next to the _keyphrase in meta description_, _keyphrase in slug_, and _keyphrase in SEO title_ assessments when there is no keyphrase and/or no meta description, slug, or SEO title.
-* Improves the _transition words_ assessment for Arabic by expanding the list of recognized transition words. Props to [Reem76-ar](https://github.com/Reem76-ar).
-* Introduces Content blocks collapsible inside Yoast Metabox and Sidebar to improve Yoast custom blocks discoverability.
+* Introduces a task list for reminding site admins about relevant SEO tasks.
+* Improves the llms.txt structure by moving the sitemap mention into an option section at the end of the llms.txt file.
+
+#### Bugfixes
+
+* Fixes a bug where the `Show more` list for categories and content types would collapse when clicking on menu items in the settings sidebar navigation.
+* Fixes a bug where translations for the content analysis were not displayed on WordPress 6.9.
+* Fixes a security bug that would allow users with limited capabilities to read metadata of posts that they should not have access to.
 
 #### Other
 
-* Adapts the behavior of the `Contact our support team` button in the `Support` page to our new Premium and WooCommerce SEO subscription plans.
-* Disables opcache invalidation on plugin upgrade for a subset of the userbase.
+* Highlights the Google Docs & Yoast Duplicate post add-ons on the Plans page.
+* Improves the behavior of the upgrade button in the Yoast sidebar and admin menus.
+* Improves the focus behavior for some buttons and links in the Yoast SEO admin pages.
+* Redesigns the AI Brand Insights button in the Yoast sidebar and admin menus.
+
+= 26.5 =
+
+Release date: 2025-12-02
+
+**New:** Yoast SEO includes the necessary updates to support the Site Kit by Google integration for all Premium users, with Yoast SEO (free) support following soon. [Read the full release post here](https://yoa.st/54u).
+
+#### Enhancements
+
+* Integrates the Yoast SEO tab into the Elementor Editor's Elements panel sidebar to provide enhanced access to SEO settings.
+* Makes the _keyphrase density assessment_ and _keyphrase in subheadings assessment_  available when no content has been added.
+
+#### Bugfixes
+
+* Fixes a bug where table backgrounds in the RSS settings and Semrush related keyphrases tables would expand beyond the rounded corners in Firefox.
+
+#### Other
+
+* Relocates the introduction notification to point to the Yoast SEO tab within the Elements panel sidebar of the Elementor Editor for better user guidance.
+* Sets the _WordPress tested up to_ version to 6.9.
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/yoast-seo-changelog).
+
