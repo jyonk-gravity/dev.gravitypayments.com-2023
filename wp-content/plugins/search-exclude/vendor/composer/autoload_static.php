@@ -12,7 +12,7 @@ class ComposerStaticInit215479e1a405b59e6fd760c93f853b6e
     );
 
     public static $prefixLengthsPsr4 = array (
-        'Q' => 
+        'Q' =>
         array (
             'QuadLayers\\WP_Plugin_Table_Links\\' => 33,
             'QuadLayers\\WP_Plugin_Suggestions\\' => 33,
@@ -23,46 +23,46 @@ class ComposerStaticInit215479e1a405b59e6fd760c93f853b6e
             'QuadLayers\\WP_Dashboard_Widget_News\\' => 36,
             'QuadLayers\\PluginFeedback\\' => 26,
         ),
-        'A' => 
+        'A' =>
         array (
             'Automattic\\Jetpack\\Autoloader\\' => 30,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'QuadLayers\\WP_Plugin_Table_Links\\' => 
+        'QuadLayers\\WP_Plugin_Table_Links\\' =>
         array (
             0 => __DIR__ . '/../..' . '/jetpack_vendor/quadlayers/wp-plugin-table-links/src',
         ),
-        'QuadLayers\\WP_Plugin_Suggestions\\' => 
+        'QuadLayers\\WP_Plugin_Suggestions\\' =>
         array (
             0 => __DIR__ . '/../..' . '/jetpack_vendor/quadlayers/wp-plugin-suggestions/src',
         ),
-        'QuadLayers\\WP_Plugin_Install_Tab\\' => 
+        'QuadLayers\\WP_Plugin_Install_Tab\\' =>
         array (
             0 => __DIR__ . '/../..' . '/jetpack_vendor/quadlayers/wp-plugin-install-tab/src',
         ),
-        'QuadLayers\\WP_Orm\\' => 
+        'QuadLayers\\WP_Orm\\' =>
         array (
             0 => __DIR__ . '/..' . '/franmastromarino/wp-orm/src',
         ),
-        'QuadLayers\\WP_Notice_Plugin_Required\\' => 
+        'QuadLayers\\WP_Notice_Plugin_Required\\' =>
         array (
             0 => __DIR__ . '/../..' . '/jetpack_vendor/quadlayers/wp-notice-plugin-required/src',
         ),
-        'QuadLayers\\WP_Notice_Plugin_Promote\\' => 
+        'QuadLayers\\WP_Notice_Plugin_Promote\\' =>
         array (
             0 => __DIR__ . '/../..' . '/jetpack_vendor/quadlayers/wp-notice-plugin-promote/src',
         ),
-        'QuadLayers\\WP_Dashboard_Widget_News\\' => 
+        'QuadLayers\\WP_Dashboard_Widget_News\\' =>
         array (
             0 => __DIR__ . '/../..' . '/jetpack_vendor/quadlayers/wp-dashboard-widget-news/src',
         ),
-        'QuadLayers\\PluginFeedback\\' => 
+        'QuadLayers\\PluginFeedback\\' =>
         array (
             0 => __DIR__ . '/..' . '/franmastromarino/wp-plugin-feedback/src',
         ),
-        'Automattic\\Jetpack\\Autoloader\\' => 
+        'Automattic\\Jetpack\\Autoloader\\' =>
         array (
             0 => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src',
         ),

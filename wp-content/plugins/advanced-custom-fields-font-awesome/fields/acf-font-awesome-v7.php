@@ -17,7 +17,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 		public function __construct()
 		{
 			$this->version = 'v' . ACFFA_MAJOR_VERSION;
-			$this->name = 'font-awesome';	
+			$this->name = 'font-awesome';
 			$this->label = __( 'Font Awesome Icon', 'acf-font-awesome');
 			$this->category = 'content';
 
@@ -43,7 +43,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			add_filter( 'ACFFA_v5_upgrade_compat_selected_field_sets', [ $this, 'v5_upgrade_compat_selected_field_sets' ], 5, 1 );
 			add_filter( 'ACFFA_v5_upgrade_compat_format_value', [ $this, 'v5_upgrade_compat_format_value' ], 5, 2 );
 		}
-		
+
 		public function render_field_settings( $field )
 		{
 			if ( apply_filters( 'ACFFA_show_fontawesome_pro_blurbs', true ) ) {
@@ -96,6 +96,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				'utility_semisolid'      => __('Utility (Solid)', 'acf-font-awesome'),
 				'utility-duo_semisolid'  => __('Utility Duo (Solid)', 'acf-font-awesome'),
 				'utility-fill_semisolid' => __('Utility Fill (Solid)', 'acf-font-awesome'),
+				'fak'                    => __( 'Uploaded Icons', 'acf-font-awesome' ),
 				'brands'                 => __('Brands', 'acf-font-awesome'),
 				'custom'                 => __('Custom Icon Set', 'acf-font-awesome')
 			];
@@ -215,7 +216,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 		}
 
 		public function render_field( $field )
-		{	
+		{
 			if ( $field['allow_null'] ) {
 				$select_value = $field['value'];
 			} else {
@@ -276,17 +277,17 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			if ( $v5_icon_preselected ) :
 				$previous_icon_info = $this->get_previous_icon_info( $select_value );
 				?>
-				<div class="v5-compat-message" aria-label="<?php _e( 'This FontAwesome v5 Pro icon cannot be automatically translated to its v6 equivalent and will need to be reselected before saving this post/page.', 'acf-font-awesome' ); ?>" data-microtip-size="large" data-microtip-position="top" role="tooltip">
-					<?php echo sprintf (__( 'Please reselect your FontAwesome Icon.', 'acf-font-awesome' ), 'SOLID', 'COFFEE' ); ?> <i class="fas fa-question-circle"></i>
+				<div class="v5-compat-message" aria-label="<?php esc_html_e( 'This FontAwesome v5 Pro icon cannot be automatically translated to its v6 equivalent and will need to be reselected before saving this post/page.', 'acf-font-awesome' ); ?>" data-microtip-size="large" data-microtip-position="top" role="tooltip">
+					<?php echo sprintf (esc_html__( 'Please reselect your FontAwesome Icon.', 'acf-font-awesome' ), 'SOLID', 'COFFEE' ); ?> <i class="fas fa-question-circle"></i>
 					<?php
 						if ( isset( $previous_icon_info['style'] ) && ! empty( $previous_icon_info['style'] ) ) :
 							?>
-							<em><?php _e( 'Style:', 'acf-font-awesome' ); ?></em> <strong><?php echo $previous_icon_info['style']; ?></strong>
+							<em><?php esc_html_e( 'Style:', 'acf-font-awesome' ); ?></em> <strong><?php echo esc_html( $previous_icon_info['style'] ); ?></strong>
 							<?php
 						endif;
 						if ( isset( $previous_icon_info['name'] ) && ! empty( $previous_icon_info['name'] ) ) :
 							?>
-							<em><?php _e( 'Name:', 'acf-font-awesome' ); ?></em> <strong><?php echo $previous_icon_info['name']; ?></strong>
+							<em><?php esc_html_e( 'Name:', 'acf-font-awesome' ); ?></em> <strong><?php echo esc_html( $previous_icon_info['name'] ); ?></strong>
 							<?php
 						endif;
 					?>
@@ -344,7 +345,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				wp_enqueue_style( 'acffa_font-awesome', $fa_url, [], $latest_version );
 			}
 		}
-	
+
 		public function format_value( $value, $post_id, $field )
 		{
 			if ( 'null' == $value ) {
@@ -373,20 +374,20 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 
 				switch ( $field['save_format'] ) {
 					case 'element':
-						$value = '<i class="' . $class . '" aria-hidden="true"></i>';
+						$value = '<i class="' . esc_attr($class) . '" aria-hidden="true"></i>';
 						break;
 
 					case 'unicode':
-						$value = '&#x' . $icon_json->unicode . ';';
+						$value = '&#x' . esc_attr($icon_json->unicode) . ';';
 						break;
 
 					case 'class':
-						$value = $class;
+						$value = esc_attr($class);
 						break;
 
 					case 'object':
 						$object_data = [
-							'element'	=> '<i class="' . $class . '" aria-hidden="true"></i>',
+							'element'	=> '<i class="' . esc_attr($class) . '" aria-hidden="true"></i>',
 							'class'		=> $class,
 							'id'		=> $icon_json->id,
 							'family'	=> $family,

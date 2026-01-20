@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('qlse-store', 'wp-components', 'wp-compose', 'wp-core-data', 'wp-data', 'wp-editor', 'wp-element', 'wp-hooks', 'wp-i18n'), 'version' => '84d04cd0baa6e8ac9357');
+<?php return array('dependencies' => array('qlse-store', 'wp-components', 'wp-compose', 'wp-core-data', 'wp-data', 'wp-editor', 'wp-element', 'wp-hooks', 'wp-i18n'), 'version' => '0b2517e64541e1c86088');

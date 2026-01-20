@@ -3,7 +3,7 @@ Contributors: johnny5
 Donate link: https://redirection.me/donation/
 Tags: redirect, htaccess, 301, 404, apache
 Tested up to: 6.9
-Stable tag: 5.6.0
+Stable tag: 5.6.1
 License: GPLv3
 
 Manage 301 redirects, track 404 errors, and improve your site. No knowledge of Apache or Nginx required.
@@ -184,6 +184,11 @@ The plugin works in a similar manner to how WordPress handles permalinks and sho
 == Changelog ==
 
 A x.1 version increase introduces new or updated features and can be considered to contain 'breaking' changes. A x.x.1 increase is purely a bug fix and introduces no new features, and can be considered as containing no breaking changes.
+
+= 5.6.1 - 17th January 2026 =
+* Fix issue with spaces in Apache .htaccess
+* Add some checks for sites with opcache to help with renamed files
+* Fix inverted caching of unmatched URLs
 
 = 5.6.0 - 1st January 2026 =
 * Streamlined bundle size
