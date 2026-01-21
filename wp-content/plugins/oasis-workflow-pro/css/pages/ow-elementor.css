@@ -1,0 +1,74 @@
+.owf-elementor-hidden {
+    display: none !important;
+}
+#new-workflow-submit-div {
+   overflow: auto;
+}
+#priority-select {
+   width: 150px;
+}
+#submitSave,
+#completeSave,
+#elementorSubmitSave,
+.simplemodal-data .button-primary {
+   width: 100px;
+   background: #007cba;
+   border-color: #007cba;
+   color: #fff;
+   text-decoration: none;
+   text-shadow: none;
+   display: inline-block;
+   text-decoration: none;
+   font-size: 13px;
+   line-height: 2.15384615;
+   min-height: 30px;
+   margin: 0;
+   padding: 0 10px;
+   cursor: pointer;
+   border-width: 1px;
+   border-style: solid;
+   -webkit-appearance: none;
+   border-radius: 3px;
+   white-space: nowrap;
+   box-sizing: border-box;
+}
+
+.simplemodal-data .button-primary {
+    margin-right: 55px;
+    margin-top: 10px;
+}
+.simplemodal-data p.abort-set a,
+.simplemodal-data p.reassign-set a{
+    margin-top: 20px !important;
+}
+.btn-submit-step-group {
+   height: 40px !important;
+}
+.notice, div.updated, div.error {
+   background: #fff;
+   border: 1px solid #ccd0d4;
+   border-left-color: #dc3232;
+   border-left-width: 4px;
+   box-shadow: 0 1px 1px rgba(0,0,0,.04);
+   margin: 5px 15px 2px;
+   padding: 1px 12px;
+}
+.owf-hidden {
+   display:none;
+}
+#im-mon{
+   width: 16% !important;
+}
+.owf-elementor-redirect {
+   background: #007cba;
+   border-color: #007cba;
+   color: #fff;
+   text-decoration: none;
+   text-shadow: none;
+}
+.owf-elementor-redirect:not([disabled]):hover {
+    background-color: #007cba;
+}
+.info-setting {
+    overflow: hidden;
+}

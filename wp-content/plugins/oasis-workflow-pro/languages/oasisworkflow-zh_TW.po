@@ -1,0 +1,3465 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: oasis-workflow\n"
+"POT-Creation-Date: 2026-01-02 06:43+0600\n"
+"PO-Revision-Date: 2026-01-02 06:43+0600\n"
+"Last-Translator: Oasis Workflow <support@oasisworkflow.com>\n"
+"Language-Team: support@oasisworkflow.com\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_c;__ngettext;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: js/lib/textedit\n"
+"X-Poedit-SearchPathExcluded-1: node_modules\n"
+"X-Poedit-SearchPathExcluded-2: src/block.js\n"
+
+#: dist/ow-gutenberg.js:1
+msgid "/oasis-workflow/v1/settings"
+msgstr ""
+
+#: includes/class-ow-api.php:52 includes/class-ow-process-flow.php:79
+#: includes/class-ow-process-flow.php:286
+#: includes/class-ow-process-flow.php:469
+#: includes/class-ow-process-flow.php:544
+#: includes/class-ow-process-flow.php:702
+#: includes/class-ow-process-flow.php:2400
+#: includes/class-ow-process-flow.php:2894
+#: includes/class-ow-process-flow.php:5201
+#: includes/class-ow-process-flow.php:6377
+#: includes/class-ow-process-flow.php:6782
+msgid "You are not allowed to create/edit post."
+msgstr "您無權創建/編輯文章。"
+
+#: includes/class-ow-api.php:68
+msgid "No users found for this workflow. Please check for your workflow setup."
+msgstr "未找到該工作流的用戶。請核查您的工作流設置。"
+
+#: includes/class-ow-api.php:84
+msgid "No users found for this team. Please check for your team setup."
+msgstr "未找到該小隊的用戶。請核查您的小隊設置。"
+
+#: includes/class-ow-auto-submit-settings.php:43 oasis-workflow-pro.php:2694
+msgid "15 minutes"
+msgstr "15分鐘"
+
+#: includes/class-ow-auto-submit-settings.php:44 oasis-workflow-pro.php:2698
+msgid "30 minutes"
+msgstr "30分鐘"
+
+#: includes/class-ow-auto-submit-settings.php:45 oasis-workflow-pro.php:2702
+msgid "45 minutes"
+msgstr "45分鐘"
+
+#: includes/class-ow-auto-submit-settings.php:46
+#: includes/class-ow-email-settings.php:78
+msgid "1 hour"
+msgstr "1小時"
+
+#: includes/class-ow-auto-submit-settings.php:47
+#: includes/class-ow-email-settings.php:80 oasis-workflow-pro.php:2706
+msgid "4 hours"
+msgstr "4小時"
+
+#: includes/class-ow-auto-submit-settings.php:48
+#: includes/class-ow-email-settings.php:81 oasis-workflow-pro.php:2710
+msgid "8 hours"
+msgstr "8小時"
+
+#: includes/class-ow-auto-submit-settings.php:79
+msgid "Auto submit triggered successfully."
+msgstr "自動提交已成功觸發。 "
+
+#: includes/class-ow-auto-submit-settings.php:79
+msgid "posts/page submitted."
+msgstr "提交提交者"
+
+#: includes/class-ow-auto-submit-settings.php:100
+msgid "Please select atleast one Post/Page status."
+msgstr "請選擇至少一項文章/頁面狀態。"
+
+#: includes/class-ow-auto-submit-settings.php:116
+msgid "Please enter a numeric value for due date."
+msgstr "請為到期日期輸入數值資料。"
+
+#: includes/class-ow-auto-submit-settings.php:123
+msgid "Please enter a value for due date."
+msgstr "請輸入到期日期。"
+
+#: includes/class-ow-auto-submit-settings.php:142
+msgid "Please enter a numeric value for post count."
+msgstr "請為文章數量輸入數值資料。"
+
+#: includes/class-ow-auto-submit-settings.php:149
+msgid "Please enter the number of posts/pages to be processed at one time."
+msgstr "請輸入一次同時處理文章/頁面的數目。"
+
+#: includes/class-ow-auto-submit-settings.php:218
+msgid ""
+"Please provide keywords for the workflows to participate in auto submit "
+"process."
+msgstr "請提供工作流的關鍵字以參與自動提交流程。"
+
+#: includes/class-ow-auto-submit-settings.php:271
+msgid "Enable Auto Submit?"
+msgstr "啟用自動提交？"
+
+#: includes/class-ow-auto-submit-settings.php:279
+msgid "Post/Page status(es) to be selected for auto submit:"
+msgstr "用於自動提交的要選擇的文章/頁面狀態："
+
+#: includes/class-ow-auto-submit-settings.php:293
+msgid "Include the following in keyword search:"
+msgstr "在關鍵字搜索中包含下列："
+
+#: includes/class-ow-auto-submit-settings.php:301
+#: includes/class-ow-history-service.php:212
+#: includes/class-ow-history-service.php:225
+#: includes/class-ow-history-service.php:1052
+#: includes/class-ow-report-service.php:281
+#: includes/class-ow-workflow-service.php:1562
+#: includes/pages/subpages/workflow-copy-popup.php:21
+msgid "Title"
+msgstr "標題"
+
+#: includes/class-ow-auto-submit-settings.php:308
+#: includes/pages/revision-compare.php:112
+msgid "Tags"
+msgstr "標籤"
+
+#: includes/class-ow-auto-submit-settings.php:315
+msgid "Categories"
+msgstr "類別"
+
+#: includes/class-ow-auto-submit-settings.php:324
+msgid "Taxonomies / Terms"
+msgstr "分类/条款"
+
+#: includes/class-ow-auto-submit-settings.php:331
+msgid "Set Due date as CURRENT DATE + "
+msgstr "將過期日期設成當前日期+ "
+
+#: includes/class-ow-auto-submit-settings.php:338
+#: includes/class-ow-workflow-settings.php:413
+msgid "day(s)."
+msgstr "天。"
+
+#: includes/class-ow-auto-submit-settings.php:346
+msgid "Auto submit comments:"
+msgstr "自動提交備註："
+
+#: includes/class-ow-auto-submit-settings.php:359
+msgid "Process "
+msgstr "一次處理 "
+
+#: includes/class-ow-auto-submit-settings.php:366
+msgid "posts/pages at one time."
+msgstr "文章/頁面。"
+
+#: includes/class-ow-auto-submit-settings.php:370
+msgid ""
+"(Limit the number of posts/pages to be processed at one time for optimum "
+"server performance.)"
+msgstr "（為了獲得最佳的伺服器性能，需要限制每次同時處理的文章/頁面的數量。）"
+
+#: includes/class-ow-auto-submit-settings.php:377
+msgid "Run Auto Submit Engine every:"
+msgstr "每隔多久運行自動提交引擎："
+
+#: includes/class-ow-auto-submit-settings.php:381
+#: includes/class-ow-email-settings.php:675
+msgid "Please Select"
+msgstr "請選擇"
+
+#: includes/class-ow-auto-submit-settings.php:396
+msgid "(How often do you wish to run the auto submit process?)"
+msgstr "（您想多久運行一次自動提交過程？）"
+
+#: includes/class-ow-auto-submit-settings.php:405
+msgid "Applicable Workflows for auto submit:"
+msgstr "可應用在自動提交上的工作流："
+
+#: includes/class-ow-auto-submit-settings.php:409
+msgid ""
+"(Provide keywords(comma separated) for the workflows to participate in auto "
+"submit process.)"
+msgstr "（為工作流提供英文逗號隔開的關鍵字以參與自動提交流程。）"
+
+#: includes/class-ow-auto-submit-settings.php:413
+msgid "Assigned Workflows"
+msgstr "分配的工作流"
+
+#: includes/class-ow-auto-submit-settings.php:414
+msgid "Keywords"
+msgstr "關鍵字"
+
+#: includes/class-ow-auto-submit-settings.php:425
+#: includes/class-ow-auto-submit-settings.php:447
+msgid "Keywords for Auto Submit(comma separated)"
+msgstr "用於自動提交的關鍵字（英文逗號隔開的）"
+
+#: includes/class-ow-auto-submit-settings.php:457
+msgid ""
+"No applicable workflows found. Click the \"+ Assign Workflow\" button to add "
+"workflows."
+msgstr "未發現可用的工作流。點擊“+分配工作流”按鈕添加工作流。"
+
+#: includes/class-ow-auto-submit-settings.php:462
+msgid "+ Assign Workflow"
+msgstr "+分配工作流"
+
+#: includes/class-ow-auto-submit-settings.php:474
+#: includes/class-ow-document-revision-settings.php:364
+#: includes/class-ow-email-settings.php:750
+#: includes/class-ow-external-user-settings.php:216
+#: includes/class-ow-license-settings.php:132
+#: includes/class-ow-workflow-settings.php:566
+#: includes/pages/subpages/connection-info-content.php:97
+#: includes/pages/subpages/reassign.php:115
+#: includes/pages/subpages/step-info-content.php:587
+#: includes/pages/subpages/workflow-create-popup.php:38
+#: includes/pages/workflow-create.php:364
+#: includes/pages/workflow-create.php:391
+msgid "Save"
+msgstr "保存"
+
+#: includes/class-ow-auto-submit-settings.php:478
+msgid "Trigger Auto Submit - Just One Time"
+msgstr "觸發自動提交-僅一次"
+
+#: includes/class-ow-custom-capabilities.php:201
+#: includes/class-ow-process-flow.php:1780
+#: includes/class-ow-process-flow.php:1964
+#: includes/class-ow-process-flow.php:1998
+#: includes/class-ow-process-flow.php:2173
+#: includes/class-ow-process-flow.php:2739
+#: includes/class-ow-process-flow.php:2870
+#: includes/class-ow-process-flow.php:3162
+#: includes/class-ow-process-flow.php:3312
+#: includes/class-ow-process-flow.php:5068
+#: includes/class-ow-process-flow.php:5351
+#: includes/class-ow-process-flow.php:6313
+#: includes/class-ow-process-flow.php:6474
+#: includes/class-ow-process-flow.php:6587
+#: includes/class-ow-process-flow.php:6661
+#: includes/class-ow-revision-service.php:103
+#: includes/class-ow-revision-service.php:146
+#: includes/class-ow-revision-service.php:275
+#: includes/class-ow-revision-service.php:375
+#: includes/class-ow-revision-service.php:660
+#: includes/class-ow-tools-service.php:1265
+#: includes/class-ow-tools-service.php:1285 includes/class-ow-utility.php:1096
+#: includes/class-ow-workflow-service.php:647
+#: includes/class-ow-workflow-service.php:1267
+msgid "Unauthorized access."
+msgstr "未经授权的访问。"
+
+#: includes/class-ow-custom-capabilities.php:206
+msgid "You are not allowed to invoke this api."
+msgstr "不允许调用此 api。"
+
+#: includes/class-ow-custom-statuses.php:124
+msgid "You are not allowed to create custom statuses."
+msgstr "您無權創建自訂狀態。"
+
+#: includes/class-ow-custom-statuses.php:152
+#: includes/class-ow-custom-statuses.php:212
+msgid "Could not add status: "
+msgstr "無法添加狀態： "
+
+#: includes/class-ow-custom-statuses.php:189
+msgid "You are not allowed to edit/update the custom status."
+msgstr "您無權編輯/更新自訂狀態。"
+
+#: includes/class-ow-custom-statuses.php:230
+msgid "You are not allowed to delete the custom status."
+msgstr "您無權刪除自訂狀態。"
+
+#: includes/class-ow-custom-statuses.php:281
+msgid "Custom status has been added successfully."
+msgstr "自訂狀態已成功添加。"
+
+#: includes/class-ow-custom-statuses.php:293
+msgid "Custom status already exist."
+msgstr "自定义状态已存在。"
+
+#: includes/class-ow-custom-statuses.php:305
+msgid "Custom status has been updated successfully."
+msgstr "自訂狀態已成功更新。"
+
+#: includes/class-ow-custom-statuses.php:317
+#: includes/pages/ow-custom-statuses.php:92
+msgid "Name"
+msgstr "名稱"
+
+#: includes/class-ow-custom-statuses.php:318
+#: includes/pages/ow-custom-statuses.php:101
+msgid "Slug"
+msgstr "Slug"
+
+#: includes/class-ow-custom-statuses.php:320
+#: includes/pages/ow-custom-statuses.php:109
+#: includes/pages/subpages/workflow-copy-popup.php:30
+msgid "Description"
+msgstr "描述"
+
+#: includes/class-ow-document-revision-settings.php:197
+msgid "Activate Revision process?"
+msgstr "啟動版本流程？"
+
+#: includes/class-ow-document-revision-settings.php:204
+msgid "Title prefix:"
+msgstr "標題首碼："
+
+#: includes/class-ow-document-revision-settings.php:211
+msgid ""
+"Prefix to be added before the original title, e.g. \"Copy of\" (blank for no "
+"prefix)"
+msgstr "首碼會加在原始標題前面，如：“克隆自”（留空表示不添加首碼）"
+
+#: includes/class-ow-document-revision-settings.php:217
+msgid "Title suffix:"
+msgstr "標題尾碼："
+
+#: includes/class-ow-document-revision-settings.php:224
+msgid ""
+"Suffix to be added after the original title, e.g. \"(dup)\" (blank for no "
+"suffix)"
+msgstr "尾碼會加在原始標題後面，如：“的副本”（留空表示不添加尾碼）"
+
+#: includes/class-ow-document-revision-settings.php:236
+msgid "Revise children articles on parent revision?"
+msgstr "在父級修訂版上修改子文章？"
+
+#: includes/class-ow-document-revision-settings.php:240
+msgid "(Applicable to hierarchical post types)"
+msgstr "（可用於層級式的（hierarchical）文章類型）"
+
+#: includes/class-ow-document-revision-settings.php:252
+msgid "Preserve the revisions of the revised article?"
+msgstr "保存修改過的文章的修訂版？"
+
+#: includes/class-ow-document-revision-settings.php:255
+msgid "(Useful for strict auditing purposes)"
+msgstr "（對於嚴格審計場景有用）"
+
+#: includes/class-ow-document-revision-settings.php:259
+msgid ""
+"(When updating the published article with revised content, copy the "
+"revisions of the revised article.)"
+msgstr "（當更新帶有修訂內容的已發佈文章時，拷貝修改過的文章的修訂內容。）"
+
+#: includes/class-ow-document-revision-settings.php:272
+msgid "Delete the revision after it's copied over to the original article?"
+msgstr "當原始文章被複製後刪除掉其中的修訂版本？"
+
+#: includes/class-ow-document-revision-settings.php:276
+msgid ""
+"(The workflow history of the revision will get added to the workflow history "
+"of the original article.)"
+msgstr "（該修訂的工作流歷史記錄將被添加到原始文章的工作流歷史記錄中。）"
+
+#: includes/class-ow-document-revision-settings.php:289
+msgid ""
+"Permanently delete the revision immediately after the workflow is completed."
+msgstr "在工作流完成后立即永久删除修订。"
+
+#: includes/class-ow-document-revision-settings.php:300
+msgid "Force to show the preview URL on the revision?"
+msgstr "强制在修订版上显示预览 URL？"
+
+#: includes/class-ow-document-revision-settings.php:304
+msgid ""
+"(If the preview URL is not set, it will be set to the original article URL.)"
+msgstr "（如果未设置预览 URL，则将其设置为原始文章 URL。"
+
+#: includes/class-ow-document-revision-settings.php:314
+msgid "Allow title update on revision?"
+msgstr "允许在修订时更新标题？"
+
+#: includes/class-ow-document-revision-settings.php:319
+msgid ""
+"If the permalink breaks during task submission and sign-off within the "
+"workflow, we can regenerate the post title (post_name) to ensure the "
+"permalink is properly restored for the revision."
+msgstr ""
+"如果在工作流中的任务提交和签署期间永久链接中断，我们可以重新生成帖子标题 "
+"（post_name），以确保永久链接为修订正确恢复。"
+
+#: includes/class-ow-document-revision-settings.php:328
+msgid "Hide Compare Button?"
+msgstr "隱藏比較按鈕？"
+
+#: includes/class-ow-document-revision-settings.php:337
+msgid "Disable workflows for Revisions?"
+msgstr "可應用在自動提交上的工作流："
+
+#: includes/class-ow-document-revision-settings.php:344
+msgid "Make Revision Overlay Message:"
+msgstr "製作修訂重疊消息："
+
+#: includes/class-ow-document-revision-settings.php:348
+msgid ""
+"(For published articles, display a popup window with a message to let users "
+"know that they need to revise the article before making any changes.)"
+msgstr ""
+"（對於已發佈文章，顯示一個彈窗消息，讓使用者知道他們需要修改文章才會對工作流"
+"做出更改。）"
+
+#: includes/class-ow-duplicate-service.php:57
+#: includes/class-ow-duplicate-service.php:81
+#: includes/class-ow-workflow-terminology-settings.php:192
+#: includes/class-ow-workflow-terminology-settings.php:370
+msgid "Duplicate Post"
+msgstr "复制项目"
+
+#: includes/class-ow-duplicate-service.php:124
+msgid "You are not allowed to duplicate the post."
+msgstr "您不允许复制该帖子。"
+
+#: includes/class-ow-duplicate-service.php:144
+msgid "No post for duplication has been supplied!"
+msgstr "没有提供重复的帖子!"
+
+#: includes/class-ow-duplicate-service.php:154
+msgid "You are not allowed to make duplication of post."
+msgstr "你不允许重复邮寄。"
+
+#: includes/class-ow-duplicate-service.php:168
+msgid "Duplication failed, could not find original:"
+msgstr "拷贝失败，未发现源文档："
+
+#: includes/class-ow-email-settings-helper.php:62
+msgid "Post Publish Notification"
+msgstr "文章發佈通知"
+
+#: includes/class-ow-email-settings-helper.php:63
+msgid "Revised Post Published Notification"
+msgstr "修改過的文章已發佈通知"
+
+#: includes/class-ow-email-settings-helper.php:64
+msgid "Unauthorized Update Notification"
+msgstr "未授權的更新提醒"
+
+#: includes/class-ow-email-settings-helper.php:65
+msgid "Task Claimed Notification"
+msgstr "認領任務提醒"
+
+#: includes/class-ow-email-settings-helper.php:66
+msgid "Post Submit Notification"
+msgstr "文章提交提醒"
+
+#: includes/class-ow-email-settings-helper.php:67
+msgid "Workflow Abort Notification"
+msgstr "工作流中止提醒"
+
+#: includes/class-ow-email-settings-helper.php:102
+msgid "Post Author(s)"
+msgstr "文章作者"
+
+#: includes/class-ow-email-settings-helper.php:103
+msgid "Administrator(s)"
+msgstr "管理員"
+
+#: includes/class-ow-email-settings-helper.php:104
+#: includes/class-ow-email-settings-helper.php:857
+#: includes/class-ow-utility.php:742 includes/class-ow-utility.php:1186
+msgid "Post Submitter"
+msgstr "文章提交者"
+
+#: includes/class-ow-email-settings-helper.php:105
+#: includes/class-ow-email-settings-helper.php:862
+msgid "Current Task Assignees"
+msgstr "當前任務任務執行人"
+
+#: includes/class-ow-email-settings-helper.php:166
+msgid " Your article has been published."
+msgstr " 您的文章已發佈。"
+
+#: includes/class-ow-email-settings-helper.php:178
+#: includes/class-ow-email-settings-helper.php:205
+#: includes/class-ow-email-settings-helper.php:232
+#: includes/class-ow-email-settings-helper.php:261
+#: includes/class-ow-email-settings-helper.php:289
+#: includes/class-ow-email-settings-helper.php:317
+msgid "Hello "
+msgstr "您好！ "
+
+#: includes/class-ow-email-settings-helper.php:179
+#: includes/class-ow-email-settings-helper.php:290
+#: includes/class-ow-email-settings-helper.php:318
+msgid "Your article "
+msgstr "您的文章 "
+
+#: includes/class-ow-email-settings-helper.php:180
+#: includes/class-ow-email-settings-helper.php:207
+msgid " has been published on "
+msgstr " 已發佈於 "
+
+#: includes/class-ow-email-settings-helper.php:181
+#: includes/class-ow-email-settings-helper.php:208
+#: includes/class-ow-email-settings-helper.php:237
+#: includes/class-ow-email-settings-helper.php:265
+#: includes/class-ow-email-settings-helper.php:293
+#: includes/class-ow-email-settings-helper.php:323
+msgid "Thanks."
+msgstr "謝謝。"
+
+#: includes/class-ow-email-settings-helper.php:193
+msgid " Your revised article has been published."
+msgstr " 您的修改過的文章已發佈。"
+
+#: includes/class-ow-email-settings-helper.php:206
+msgid "Your revised article "
+msgstr "您的修改過的文章 "
+
+#: includes/class-ow-email-settings-helper.php:220
+msgid " Article was updated outside the workflow."
+msgstr " 文章在工作流之外被更新。"
+
+#: includes/class-ow-email-settings-helper.php:234
+msgid "who is not part of the assignee list has updated the article "
+msgstr "不在任務執行人名單中的某人更新了文章 "
+
+#: includes/class-ow-email-settings-helper.php:236
+msgid " outside the workflow on "
+msgstr " 在工作流之外on "
+
+#: includes/class-ow-email-settings-helper.php:249
+msgid " Task claimed."
+msgstr " 任務已認領。"
+
+#: includes/class-ow-email-settings-helper.php:262
+msgid "Another user has claimed the task for the article "
+msgstr "另一個用戶已認領本文章的此項任務 "
+
+#: includes/class-ow-email-settings-helper.php:264
+msgid " Please ignore the task. "
+msgstr " 請忽略該任務。 "
+
+#: includes/class-ow-email-settings-helper.php:277
+msgid " Your article has been submitted."
+msgstr " 您的文章已提交。"
+
+#: includes/class-ow-email-settings-helper.php:291
+msgid " has been successfully submitted to the workflow on "
+msgstr " 已被成功提交到工作流on "
+
+#: includes/class-ow-email-settings-helper.php:305
+msgid " Workflow has been aborted."
+msgstr " 工作流已被終止。"
+
+#: includes/class-ow-email-settings-helper.php:319
+msgid " has been aborted from the workflow on "
+msgstr " 已從工作流上被終止on "
+
+#: includes/class-ow-email-settings-helper.php:321
+msgid ""
+"If you have further questions regarding your article, please contact the "
+"administrator. "
+msgstr "若您有關於您文章的更多問題，請聯繫... "
+
+#: includes/class-ow-email-settings-helper.php:380
+msgid ""
+"Available template placeholders for email subject and content (Applicable to "
+"email recipients in the 'To' list only):"
+msgstr ""
+"电子邮件主题和内容的可用模板占位符（仅适用于\"收件人\"列表中的电子邮件收件"
+"人）："
+
+#: includes/class-ow-email-settings-helper.php:856
+#: includes/class-ow-utility.php:213 includes/class-ow-utility.php:258
+#: includes/class-ow-utility.php:738 includes/class-ow-utility.php:1185
+#: oasis-workflow-pro.php:404 oasis-workflow-pro.php:1111
+#: oasis-workflow-pro.php:1216
+msgid "Post Author"
+msgstr "文章作者"
+
+#: includes/class-ow-email-settings-helper.php:867
+#: includes/class-ow-utility.php:1189
+msgid "Roles"
+msgstr "角色"
+
+#: includes/class-ow-email-settings-helper.php:901
+#: includes/class-ow-utility.php:1233
+msgid "Users"
+msgstr "用戶"
+
+#: includes/class-ow-email-settings-helper.php:927
+#: includes/class-ow-settings-base.php:52
+msgid "External Users"
+msgstr "外部用户"
+
+#: includes/class-ow-email-settings.php:82 oasis-workflow-pro.php:2714
+msgid "12 hours"
+msgstr "12个小时"
+
+#: includes/class-ow-email-settings.php:239
+msgid ""
+"Please select at least one \"To\" email recipient for \"Post Publish "
+"Notification\"."
+msgstr "请为\"发布后通知\"至少选择一个\"收件人\"电子邮件收件人。"
+
+#: includes/class-ow-email-settings.php:347
+msgid ""
+"Please select at least one \"To\" email recipient for \"Revised Post Publish "
+"Notification\"."
+msgstr "请为\"修订发布通知\"至少选择一个\"收件人\"电子邮件收件人。"
+
+#: includes/class-ow-email-settings.php:392
+msgid ""
+"Please select at least one \"To\" email recipient for \"Post Submit "
+"Notification\"."
+msgstr "请为\"提交后通知\"至少选择一个\"收件人\"电子邮件收件人。"
+
+#: includes/class-ow-email-settings.php:437
+msgid ""
+"Please select at least one \"To\" email recipient for \"Unauthorized Update "
+"Notification\"."
+msgstr "请选择至少一个\"收件人\"电子邮件收件人以进行\"未经授权的更新通知\"。"
+
+#: includes/class-ow-email-settings.php:482
+msgid ""
+"Please select at least one \"To\" email recipient for \"Task Claimed "
+"Notification\"."
+msgstr "请为\"任务声明通知\"至少选择一个\"收件人\"电子邮件收件人。"
+
+#: includes/class-ow-email-settings.php:522
+msgid ""
+"Please select at least one \"To\" email recipient for \"Workflow Abort "
+"Notification\"."
+msgstr "请选择\"工作流中止通知\"至少一个\"收件人\"电子邮件收件人。"
+
+#: includes/class-ow-email-settings.php:570
+msgid "From Name:"
+msgstr "寄件者姓名："
+
+#: includes/class-ow-email-settings.php:577
+msgid ""
+"(Name to be used for sending the workflow related emails. If left blank, the "
+"emails will be sent from the blog name.)"
+msgstr ""
+"（用於發送工作流相關的Email的姓名。若留空，寄件者姓名將被設為網站名。）"
+
+#: includes/class-ow-email-settings.php:583
+msgid "From Email:"
+msgstr "寄件者Email："
+
+#: includes/class-ow-email-settings.php:590
+msgid ""
+"(Email address to be used for sending the workflow related emails. If left "
+"blank, the default email will be used.)"
+msgstr ""
+"（用於發送工作流相關郵件的Email地址。若留空，則網站的默認Email將被使用。）"
+
+#: includes/class-ow-email-settings.php:596
+msgid "Task Assignment/Reminder Settings"
+msgstr "任務分配/提醒設置"
+
+#: includes/class-ow-email-settings.php:605
+msgid "Check this box if you want to send emails when tasks are assigned."
+msgstr "若您要在任務分配後發送通知郵件，請勾選此核取方塊。"
+
+#: includes/class-ow-email-settings.php:616
+msgid ""
+"Check this box if you want to send reminder emails about a pending task."
+msgstr "若您要給掛起任務的涉及人員發送提醒郵件，請勾選此核取方塊。"
+
+#: includes/class-ow-email-settings.php:623
+#: includes/class-ow-email-settings.php:638
+msgid " Send Reminder Email"
+msgstr " 發送提醒郵件"
+
+#: includes/class-ow-email-settings.php:630
+msgid "day(s) before due date."
+msgstr "離到期日期還有的天數。"
+
+#: includes/class-ow-email-settings.php:645
+msgid "day(s) after due date."
+msgstr "過期的天數。"
+
+#: includes/class-ow-email-settings.php:656
+msgid "Enable Digest Email"
+msgstr "啟用摘要郵件"
+
+#: includes/class-ow-email-settings.php:660
+msgid ""
+"(An email digest is an email that combines all assignment emails generated "
+"in the last one hour  into "
+msgstr "（郵件摘要是一封合併了最近一個小時內所有任務分配郵件的內容的"
+
+#: includes/class-ow-email-settings.php:661
+msgid "one single message"
+msgstr "單條消息"
+
+#: includes/class-ow-email-settings.php:666
+msgid ""
+"This will reduce the number of emails your users get from the workflow "
+"system."
+msgstr "這將減少工作流涉及人員收到的郵件的數量。"
+
+#: includes/class-ow-email-settings.php:671
+msgid "Run Email Digest every:"
+msgstr "每一次运行电子邮件摘要:"
+
+#: includes/class-ow-email-settings.php:694
+msgid "Other Email Settings"
+msgstr "其他Email設置"
+
+#: includes/class-ow-email-settings.php:697
+msgid "Select Email Type:"
+msgstr "選擇Email類型："
+
+#: includes/class-ow-email-settings.php:770
+#: includes/class-ow-email-settings.php:961
+#: includes/class-ow-email-settings.php:1152
+#: includes/class-ow-email-settings.php:1346
+#: includes/class-ow-email-settings.php:1535
+#: includes/class-ow-email-settings.php:1724
+msgid "Is Active?:"
+msgstr "啟動的嗎？："
+
+#: includes/class-ow-email-settings.php:784
+#: includes/class-ow-email-settings.php:976
+#: includes/class-ow-email-settings.php:1167
+#: includes/class-ow-email-settings.php:1360
+#: includes/class-ow-email-settings.php:1549
+#: includes/class-ow-email-settings.php:1738
+msgid "Email Recipients:"
+msgstr "电子邮件收件人："
+
+#: includes/class-ow-email-settings.php:791
+#: includes/class-ow-email-settings.php:983
+#: includes/class-ow-email-settings.php:1174
+#: includes/class-ow-email-settings.php:1367
+#: includes/class-ow-email-settings.php:1556
+#: includes/class-ow-email-settings.php:1745
+msgid "To:"
+msgstr "至："
+
+#: includes/class-ow-email-settings.php:832
+#: includes/class-ow-email-settings.php:1021
+#: includes/class-ow-email-settings.php:1214
+#: includes/class-ow-email-settings.php:1406
+#: includes/class-ow-email-settings.php:1595
+#: includes/class-ow-email-settings.php:1785
+msgid "Cc:"
+msgstr "抄送："
+
+#: includes/class-ow-email-settings.php:871
+#: includes/class-ow-email-settings.php:1060
+#: includes/class-ow-email-settings.php:1253
+#: includes/class-ow-email-settings.php:1445
+#: includes/class-ow-email-settings.php:1634
+#: includes/class-ow-email-settings.php:1824
+msgid "Bcc:"
+msgstr "暗抄送:"
+
+#: includes/class-ow-email-settings.php:910
+#: includes/class-ow-email-settings.php:1099
+#: includes/class-ow-email-settings.php:1293
+#: includes/class-ow-email-settings.php:1484
+#: includes/class-ow-email-settings.php:1673
+#: includes/class-ow-email-settings.php:1863
+msgid " Email Subject:"
+msgstr " Email主題："
+
+#: includes/class-ow-email-settings.php:927
+#: includes/class-ow-email-settings.php:1117
+#: includes/class-ow-email-settings.php:1311
+#: includes/class-ow-email-settings.php:1501
+#: includes/class-ow-email-settings.php:1690
+#: includes/class-ow-email-settings.php:1880
+msgid " Email Content:"
+msgstr " Email正文："
+
+#: includes/class-ow-email.php:704
+msgid "You have an assignment"
+msgstr "您有一項任務"
+
+#: includes/class-ow-email.php:706
+msgid "You have an assignment related to post - "
+msgstr "您有一項和文章相關的任務 - "
+
+#: includes/class-ow-email.php:793 includes/class-ow-inbox-service.php:207
+#: includes/class-ow-report-service.php:131
+#: includes/class-ow-workflow-terminology-settings.php:190
+#: includes/class-ow-workflow-terminology-settings.php:354
+#: includes/pages/subpages/submit-step.php:81
+#: includes/pages/subpages/submit-workflow.php:55
+#: src/components/ow-task-priority-select-control.js:19
+msgid "Priority"
+msgstr "優先順序"
+
+#: includes/class-ow-email.php:820 includes/class-ow-email.php:865
+#: includes/class-ow-process-flow.php:2963
+msgid "Additionally,"
+msgstr "另外,"
+
+#: includes/class-ow-email.php:821 includes/class-ow-email.php:866
+#: includes/class-ow-process-flow.php:2964
+msgid "added the following comments"
+msgstr "下列備註/評論已添加"
+
+#: includes/class-ow-email.php:843 includes/class-ow-history-service.php:217
+#: includes/class-ow-history-service.php:229
+#: includes/class-ow-history-service.php:1099
+msgid "Sign off date"
+msgstr "簽署日期"
+
+#: includes/class-ow-email.php:850 includes/class-ow-inbox-service.php:205
+#: includes/class-ow-report-service.php:68
+#: includes/class-ow-workflow-terminology-settings.php:180
+#: includes/class-ow-workflow-terminology-settings.php:279
+#: includes/pages/subpages/submit-step.php:79
+#: includes/pages/subpages/submit-workflow.php:51
+#: src/components/ow-signoff.js:35 src/components/ow-submit-to-workflow.js:52
+msgid "Due Date"
+msgstr "到期日期"
+
+#: includes/class-ow-external-user-settings.php:98
+#: includes/class-ow-external-user-settings.php:104
+msgid "Row "
+msgstr "行 "
+
+#: includes/class-ow-external-user-settings.php:99
+msgid " of external user details requires either First Name or Last Name."
+msgstr " 外部用户详细信息需要名字或姓氏。"
+
+#: includes/class-ow-external-user-settings.php:105
+msgid " of external user details requires Email Address."
+msgstr " 外部用户详细信息需要电子邮件地址。"
+
+#: includes/class-ow-external-user-settings.php:148
+msgid "Manage external users (non-WordPress users) for workflow notifications."
+msgstr "管理外部用户（非 WordPress 用户）的工作流通知。"
+
+#: includes/class-ow-external-user-settings.php:150
+msgid ""
+"These users will be available on the Email tab under \"Other Email "
+"Settings\" section."
+msgstr "这些用户将在\"其他电子邮件设置\"部分下的\"电子邮件\"选项卡上可用。"
+
+#: includes/class-ow-external-user-settings.php:157 oasis-workflow-pro.php:397
+#: oasis-workflow-pro.php:1106 oasis-workflow-pro.php:1210
+msgid "First Name"
+msgstr "名"
+
+#: includes/class-ow-external-user-settings.php:158 oasis-workflow-pro.php:398
+#: oasis-workflow-pro.php:1107 oasis-workflow-pro.php:1211
+msgid "Last Name"
+msgstr "姓"
+
+#: includes/class-ow-external-user-settings.php:159
+#: includes/class-ow-settings-base.php:40
+msgid "Email"
+msgstr "Email"
+
+#: includes/class-ow-external-user-settings.php:202
+msgid ""
+"No external users found. Click the \"+ Add User\" button to add external "
+"users."
+msgstr "未找到外部用户。单击\"+ 添加用户\"按钮以添加外部用户。"
+
+#: includes/class-ow-external-user-settings.php:207
+msgid "+ Add User"
+msgstr "+ 添加用户"
+
+#: includes/class-ow-history-service.php:46
+msgid "You are not allowed to delete workflow history."
+msgstr "您無權刪除工作流歷史記錄。"
+
+#: includes/class-ow-history-service.php:190
+msgid "You are not allowed to download workflow history."
+msgstr "您無權下載工作流歷史記錄。"
+
+#: includes/class-ow-history-service.php:213
+#: includes/class-ow-history-service.php:1066
+msgid "Actor"
+msgstr "任務執行人"
+
+#: includes/class-ow-history-service.php:214
+#: includes/class-ow-history-service.php:226
+msgid "Workflow (version)"
+msgstr "工作流（版本）"
+
+#: includes/class-ow-history-service.php:215
+#: includes/class-ow-history-service.php:227 src/components/ow-signoff.js:762
+#: src/components/ow-submit-to-workflow.js:765
+msgid "Step"
+msgstr "步驟"
+
+#: includes/class-ow-history-service.php:216
+#: includes/class-ow-history-service.php:228
+msgid "Assigned Date"
+msgstr "分配日期"
+
+#: includes/class-ow-history-service.php:218
+#: includes/class-ow-history-service.php:230
+#: includes/class-ow-history-service.php:1100
+msgid "Result"
+msgstr "結果"
+
+#: includes/class-ow-history-service.php:219
+#: includes/class-ow-history-service.php:231
+#: includes/class-ow-history-service.php:1101
+#: includes/class-ow-inbox-service.php:265 src/components/ow-abort.js:199
+#: src/components/ow-reassign.js:405 src/components/ow-signoff-last-step.js:496
+#: src/components/ow-signoff-last-step.js:555 src/components/ow-signoff.js:841
+#: src/components/ow-submit-to-workflow.js:887
+msgid "Comments"
+msgstr "備註/評論"
+
+#: includes/class-ow-history-service.php:220
+#: includes/class-ow-history-service.php:232
+msgid "Workflow Meta"
+msgstr "工作流中繼資料"
+
+#: includes/class-ow-history-service.php:265
+#: includes/class-ow-history-service.php:268
+#: includes/class-ow-history-service.php:350
+msgid "No comments found."
+msgstr "沒有發現備註/評論。"
+
+#: includes/class-ow-history-service.php:275
+#: includes/class-ow-history-service.php:358
+msgid "Pre Publish Checklist: "
+msgstr "發佈前的檢查清單： "
+
+#: includes/class-ow-history-service.php:332
+#: includes/class-ow-process-flow.php:4640
+#: includes/pages/workflow-history.php:345
+msgid "No Action Taken"
+msgstr "未採取行動"
+
+#: includes/class-ow-history-service.php:335
+#: includes/class-ow-process-flow.php:4659
+#: includes/pages/workflow-history.php:348
+msgid "Workflow completed"
+msgstr "工作流已完成"
+
+#: includes/class-ow-history-service.php:338
+#: includes/class-ow-process-flow.php:4662
+#: includes/pages/workflow-history.php:351
+msgid "Cancelled"
+msgstr "已取消"
+
+#: includes/class-ow-history-service.php:452
+msgid "You are not allowed to view workflow history."
+msgstr "您無權查看工作流歷史記錄。"
+
+#: includes/class-ow-history-service.php:1089
+#: includes/class-ow-inbox-service.php:248
+msgid "Workflow [Step]"
+msgstr "工作流[步驟]"
+
+#: includes/class-ow-history-service.php:1095
+msgid "Assigned date"
+msgstr "分配日期"
+
+#: includes/class-ow-inbox-service.php:214
+#: includes/class-ow-report-service.php:97
+msgid "Post/Page"
+msgstr "文章/頁面"
+
+#: includes/class-ow-inbox-service.php:232
+#: includes/class-ow-report-service.php:293
+msgid "Type"
+msgstr "類型"
+
+#: includes/class-ow-inbox-service.php:239
+#: includes/class-ow-report-service.php:305
+msgid "Author"
+msgstr "作者"
+
+#: includes/class-ow-inbox-service.php:245
+msgid "Last Signed off By"
+msgstr "上次注销者"
+
+#: includes/class-ow-inbox-service.php:250
+#: includes/pages/revision-compare.php:128 oasis-workflow-pro.php:401
+#: oasis-workflow-pro.php:1109 oasis-workflow-pro.php:1213
+msgid "Category"
+msgstr "類別"
+
+#: includes/class-ow-inbox-service.php:373
+#: includes/class-ow-process-flow.php:5914 src/components/ow-claim.js:135
+msgid "Claim"
+msgstr "認領"
+
+#: includes/class-ow-inbox-service.php:381
+msgid "Claim and Edit"
+msgstr "索赔和编辑"
+
+#: includes/class-ow-inbox-service.php:388
+#: includes/class-ow-inbox-service.php:673
+msgid "Send a reminder email"
+msgstr " 發送提醒郵件"
+
+#: includes/class-ow-inbox-service.php:391
+#: includes/class-ow-inbox-service.php:674
+msgid "Nudge"
+msgstr "推移"
+
+#: includes/class-ow-inbox-service.php:453
+#: includes/class-ow-report-service.php:169
+#: includes/pages/workflow-history.php:270 includes/pages/workflow-list.php:109
+msgid "Show more details"
+msgstr "显示更多细节"
+
+#: includes/class-ow-inbox-service.php:566
+#: includes/pages/workflow-dashboard-widget.php:36
+msgid " But there are currently "
+msgstr " 但目前有 "
+
+#: includes/class-ow-inbox-service.php:570
+#: includes/pages/workflow-dashboard-widget.php:39
+#: includes/pages/workflow-dashboard-widget.php:44
+msgid " unclaimed task(s)."
+msgstr "无人认领的任务。"
+
+#: includes/class-ow-inbox-service.php:576
+#: includes/class-ow-inbox-service.php:583
+#: includes/pages/workflow-dashboard-widget.php:62
+msgid "Hurray! No assignments."
+msgstr "好啊！沒有任務啦！"
+
+#: includes/class-ow-inbox-service.php:612
+#: includes/class-ow-process-flow.php:5908
+#: includes/class-ow-workflow-terminology-settings.php:172
+#: includes/class-ow-workflow-terminology-settings.php:233
+#: includes/pages/subpages/submit-step.php:75
+#: src/components/ow-signoff-last-step.js:26 src/components/ow-signoff.js:33
+msgid "Sign Off"
+msgstr "簽署"
+
+#: includes/class-ow-inbox-service.php:614
+#: includes/class-ow-process-flow.php:5915
+#: includes/class-ow-process-flow.php:6270
+#: includes/class-ow-workflow-terminology-settings.php:184
+#: includes/class-ow-workflow-terminology-settings.php:309
+#: includes/pages/subpages/abort-workflow-comment.php:5
+#: src/components/ow-abort.js:20
+msgid "Abort Workflow"
+msgstr "中止工作流"
+
+#: includes/class-ow-inbox-service.php:621
+#: includes/class-ow-workflow-service.php:1612
+#: includes/pages/ow-custom-statuses.php:41
+#: includes/pages/workflow-create.php:420
+#: includes/pages/workflow-create.php:428
+msgid "Edit"
+msgstr "編輯"
+
+#: includes/class-ow-inbox-service.php:629
+msgid "Edit with Elementor"
+msgstr "使用 Elementor 编辑"
+
+#: includes/class-ow-inbox-service.php:634
+msgid "View"
+msgstr "查看"
+
+#: includes/class-ow-inbox-service.php:641
+#: includes/class-ow-revision-service.php:1458
+#: includes/class-ow-revision-service.php:1459
+msgid "Compare"
+msgstr "比較"
+
+#: includes/class-ow-inbox-service.php:653
+#: includes/class-ow-process-flow.php:5917
+#: includes/pages/subpages/reassign.php:59 src/components/ow-reassign.js:25
+msgid "Reassign"
+msgstr "重新分配"
+
+#: includes/class-ow-inbox-service.php:667
+msgid "View History"
+msgstr "查看歷史記錄"
+
+#: includes/class-ow-inbox-service.php:691
+#: includes/class-ow-process-flow.php:5897
+msgid "Select a user to reassign the task."
+msgstr "選擇一個用戶重新分配該任務給他/她。"
+
+#: includes/class-ow-inbox-service.php:693
+#: includes/class-ow-process-flow.php:5893
+#: includes/class-ow-process-flow.php:5899
+#: includes/class-ow-process-flow.php:5947
+#: includes/class-ow-process-flow.php:6098
+#: includes/class-ow-process-flow.php:6282 oasis-workflow-pro.php:3100
+msgid "Please add comments."
+msgstr "请添加注释。"
+
+#: includes/class-ow-license-settings.php:64
+msgid ""
+"License cannot be deactivated. Either the license key is invalid or the "
+"licensing server cannot be reached."
+msgstr "授權無法被啟動。授權碼無效，或者授權伺服器無法訪問。"
+
+#: includes/class-ow-license-settings.php:83
+msgid ""
+"License cannot be activated. Either the license key is invalid or your "
+"activation limit is reached."
+msgstr "授權無法被啟動。授權碼無效，或者授權次數限制已達到。"
+
+#: includes/class-ow-license-settings.php:112
+msgid "Oasis Workflow Pro "
+msgstr "Oasis Workflow Pro"
+
+#: includes/class-ow-license-settings.php:112
+msgid "license key"
+msgstr "授權碼"
+
+#: includes/class-ow-license-settings.php:121
+msgid "Deactivate License"
+msgstr "解除授權"
+
+#: includes/class-ow-plugin-updater.php:304
+#, php-format
+msgid ""
+"There is a new version of %1$s available. %2$sView version %3$s details%4$s."
+msgstr "%1$s有新版本可用。 %2$s查看版本 %3$s的詳情%4$s。"
+
+#: includes/class-ow-plugin-updater.php:313
+#, php-format
+msgid ""
+"There is a new version of %1$s available. %2$sView version %3$s details%4$s "
+"or %5$supdate now%6$s."
+msgstr "%1$s有新版本可用。 %2$s查看版本 %3$s的詳情%4$s或者%5$s現在升級%6$s。"
+
+#: includes/class-ow-plugin-updater.php:424
+msgid "You do not have permission to install plugin updates"
+msgstr "您無權升級"
+
+#: includes/class-ow-plugin-updater.php:425
+msgid "Error"
+msgstr "錯誤"
+
+#: includes/class-ow-process-flow.php:136
+#: includes/class-ow-process-flow.php:596
+#: includes/class-ow-process-flow.php:5923
+#: includes/class-ow-process-flow.php:6070 src/components/ow-signoff.js:280
+#: src/components/ow-submit-to-workflow.js:229
+msgid "No users found to assign the task."
+msgstr "未發現分配了此項任務的用戶。"
+
+#: includes/class-ow-process-flow.php:327
+#: includes/class-ow-process-flow.php:809
+#: includes/class-ow-process-flow.php:6424 src/components/ow-signoff.js:426
+#: src/components/ow-submit-to-workflow.js:420
+msgid "Due date must be greater than the current date."
+msgstr "到期日期必須要遲於當前日期。"
+
+#: includes/class-ow-process-flow.php:345
+#: includes/class-ow-workflow-terminology-settings.php:174
+#: includes/class-ow-workflow-terminology-settings.php:218
+#: src/components/ow-submit-to-workflow.js:53
+msgid "Continue to Submit"
+msgstr "继续提交"
+
+#: includes/class-ow-process-flow.php:766
+#: includes/class-ow-process-flow.php:1851
+#, php-format
+msgid "history_table already completed. history_id: %s"
+msgstr "history_table已经完成了。history_id：%s"
+
+#: includes/class-ow-process-flow.php:824
+#: includes/class-ow-process-flow.php:2488
+#: includes/class-ow-workflow-terminology-settings.php:176
+#: includes/class-ow-workflow-terminology-settings.php:248
+msgid "Continue to Sign off"
+msgstr "继续注销"
+
+#: includes/class-ow-process-flow.php:969
+msgid ""
+"No users found for the assigned Team and Workflow role. Please contact the "
+"administrator."
+msgstr "未發現分配的小隊和工作流角色。請聯繫管理員。"
+
+#: includes/class-ow-process-flow.php:1784
+msgid "You are not allowed to signoff."
+msgstr "你是不允许去签名的。"
+
+#: includes/class-ow-process-flow.php:1902
+#: includes/class-ow-process-flow.php:5948
+msgid "The task was successfully signed off."
+msgstr "任务已成功注销。"
+
+#: includes/class-ow-process-flow.php:1969
+msgid "You are not allowed to claim."
+msgstr "你是不允许索赔的。"
+
+#: includes/class-ow-process-flow.php:2002
+msgid "You are not allowed to claim the task."
+msgstr "您不允许声明该任务。"
+
+#: includes/class-ow-process-flow.php:2109
+msgid "Sorry, You can't claim the task. It is already claimed by another user."
+msgstr "很抱歉，您无法申请该任务。它已被其他用户声明。"
+
+#: includes/class-ow-process-flow.php:2124
+msgid "The post was successfully claimed."
+msgstr "该帖被成功认领。"
+
+#: includes/class-ow-process-flow.php:2153
+msgid "Claim Error"
+msgstr "認領錯誤"
+
+#: includes/class-ow-process-flow.php:2178
+#: includes/class-ow-process-flow.php:5355
+msgid "You are not allowed to reassign task."
+msgstr "不允许重新分配任务。"
+
+#: includes/class-ow-process-flow.php:2200
+msgid "You are not allowed to reassign tasks."
+msgstr "您無權重新分配任務。"
+
+#: includes/class-ow-process-flow.php:2275
+#: includes/class-ow-process-flow.php:2317
+#: includes/class-ow-process-flow.php:2359
+msgid "The post was successfully reassigned."
+msgstr "已成功重新分配该员额。"
+
+#: includes/class-ow-process-flow.php:2371
+msgid "The post can not be reassigned."
+msgstr "无法重新分配该帖子。"
+
+#: includes/class-ow-process-flow.php:2744
+msgid "You are not allowed to publish post."
+msgstr "您不允许发布帖子。"
+
+#: includes/class-ow-process-flow.php:2850
+msgid "The workflow is complete."
+msgstr "工作流已完成。"
+
+#: includes/class-ow-process-flow.php:2875
+msgid "You are not allowed to end the workflow process."
+msgstr "不允许您结束工作流过程。"
+
+#: includes/class-ow-process-flow.php:2957
+msgid "Hello"
+msgstr "您好！ "
+
+#: includes/class-ow-process-flow.php:2957
+msgid "The post"
+msgstr "帖子"
+
+#: includes/class-ow-process-flow.php:2957
+msgid "has been cancelled from the workflow"
+msgstr " 已從工作流上被終止on "
+
+#: includes/class-ow-process-flow.php:2968
+msgid "<p>Thanks.</p>"
+msgstr "<p>謝謝。</p>"
+
+#: includes/class-ow-process-flow.php:2979
+msgid "The workflow was successfully aborted from the last step."
+msgstr "从最后一步开始, 工作流已成功中止。"
+
+#: includes/class-ow-process-flow.php:3037
+#: includes/class-ow-process-flow.php:3168
+#: includes/class-ow-process-flow.php:3221
+#: includes/class-ow-process-flow.php:5532
+msgid "You are not allowed to abort the workflow."
+msgstr "您無權中止工作流。"
+
+#: includes/class-ow-process-flow.php:3085
+msgid "You are not allowed to nudge the workflow."
+msgstr "不允许您获取工作流。"
+
+#: includes/class-ow-process-flow.php:3198
+msgid "The workflow was successfully aborted."
+msgstr "工作流已成功中止。"
+
+#: includes/class-ow-process-flow.php:3316
+msgid "You are not allowed delete the post"
+msgstr "您無權刪除自訂狀態。"
+
+#: includes/class-ow-process-flow.php:3389
+msgid ""
+"You cannot claim additional tasks, since you already have more than 2 "
+"assignments."
+msgstr "您不能認領其餘任務，因為您已被分配了2項以上的任務。"
+
+#: includes/class-ow-process-flow.php:4634
+msgid "Submitted"
+msgstr "已提交"
+
+#: includes/class-ow-process-flow.php:4637
+msgid "Aborted"
+msgstr "已中止"
+
+#: includes/class-ow-process-flow.php:4643
+#: includes/pages/workflow-inbox.php:148
+msgid "Unclaimed"
+msgstr "未認領"
+
+#: includes/class-ow-process-flow.php:4646
+msgid "Claimed"
+msgstr "已認領"
+
+#: includes/class-ow-process-flow.php:4649
+#: includes/class-ow-process-flow.php:4703
+msgid "Reassigned"
+msgstr "已重新分配"
+
+#: includes/class-ow-process-flow.php:4677
+#: includes/class-ow-process-flow.php:4721
+msgid "Approved"
+msgstr "已審核通過"
+
+#: includes/class-ow-process-flow.php:4680
+#: includes/class-ow-process-flow.php:4724
+msgid "Rejected"
+msgstr "已拒絕"
+
+#: includes/class-ow-process-flow.php:4685
+msgid "Completed"
+msgstr "已完成"
+
+#: includes/class-ow-process-flow.php:4688
+#: includes/class-ow-process-flow.php:4731
+#: includes/class-ow-workflow-service.php:678
+#: includes/pages/subpages/step-info-content.php:275
+#: includes/pages/subpages/submit-step.php:62
+msgid "Unable to Complete"
+msgstr "未能完成"
+
+#: includes/class-ow-process-flow.php:4728
+#: includes/class-ow-workflow-service.php:670
+#: includes/pages/subpages/step-info-content.php:274
+#: includes/pages/subpages/submit-step.php:56
+msgid "Complete"
+msgstr "完成"
+
+#: includes/class-ow-process-flow.php:5073 src/ow-sidebar.js:277
+#: src/ow-sidebar.js:287
+msgid "You are not allowed to submit to workflow."
+msgstr "您無權中止工作流。"
+
+#: includes/class-ow-process-flow.php:5180
+#: includes/class-ow-process-flow.php:6099
+msgid "The post was successfully submitted to the workflow."
+msgstr "已被成功提交到工作流on"
+
+#: includes/class-ow-process-flow.php:5891 oasis-workflow-pro.php:3097
+msgid "Are you sure to abort the workflow?"
+msgstr "您確認要中止工作流嗎？"
+
+#: includes/class-ow-process-flow.php:5910
+#: includes/class-ow-process-flow.php:6065
+#: includes/class-ow-process-flow.php:6273
+#: includes/class-ow-revision-service.php:155
+msgid ""
+"Preparing the revision compare. If the page doesn't get redirected to the "
+"compare page in 10 seconds,"
+msgstr "正在準備修訂比較。若頁面在10秒內未自動跳轉到比較頁面，"
+
+#: includes/class-ow-process-flow.php:5912
+#: includes/class-ow-process-flow.php:6067
+#: includes/class-ow-process-flow.php:6275
+#: includes/class-ow-revision-service.php:157
+msgid "click here"
+msgstr "點擊此處"
+
+#: includes/class-ow-process-flow.php:5916
+msgid "Go to Workflow Inbox"
+msgstr "訪問工作流收件箱"
+
+#: includes/class-ow-process-flow.php:5919
+msgid ""
+"There are no further steps defined in the workflow.</br> Do you want to "
+"cancel the post/page from the workflow?"
+msgstr "該工作流中未定義更多步驟。</br>您要該工作流中取消文章/頁面嗎？"
+
+#: includes/class-ow-process-flow.php:5921
+msgid ""
+"This is the last step in the workflow. Are you ready to complete the "
+"workflow?"
+msgstr "这是工作流中最后一个步骤。您确信要完成该工作流吗？"
+
+#: includes/class-ow-process-flow.php:5924
+msgid "Please select an action."
+msgstr "請選擇一個操作。"
+
+#: includes/class-ow-process-flow.php:5925
+#: includes/class-ow-process-flow.php:6075 src/components/ow-signoff.js:418
+#: src/components/ow-submit-to-workflow.js:408
+msgid "Please select a step."
+msgstr "請選一個步驟。"
+
+#: includes/class-ow-process-flow.php:5926
+#: includes/class-ow-process-flow.php:6077 src/components/ow-signoff.js:422
+#: src/components/ow-submit-to-workflow.js:412
+msgid "Please enter a due date."
+msgstr "請輸入一個到期日期。"
+
+#: includes/class-ow-process-flow.php:5927
+#: includes/class-ow-process-flow.php:6081 src/components/ow-reassign.js:318
+#: src/components/ow-signoff.js:430 src/components/ow-submit-to-workflow.js:425
+msgid "No assigned actor(s)."
+msgstr "未分配任務執行人。"
+
+#: includes/class-ow-process-flow.php:5928
+#: includes/class-ow-process-flow.php:6071
+msgid "You can select multiple users only for review step. Selected step is"
+msgstr "您可只為複審步驟選擇多個使用者。選中的步驟是"
+
+#: includes/class-ow-process-flow.php:5930
+#: includes/class-ow-process-flow.php:6073
+msgid "step."
+msgstr "步驟。"
+
+#: includes/class-ow-process-flow.php:5934
+msgid ""
+"No users found for the assigned Team and Workflow assignee(s). Please "
+"contact the administrator."
+msgstr "未發現分配的小隊和工作流相關的用戶。請聯繫管理員。"
+
+#: includes/class-ow-process-flow.php:5936
+msgid "No team assigned. Please contact the administrator."
+msgstr "未分配小隊。請聯繫管理員。"
+
+#: includes/class-ow-process-flow.php:5938
+#: includes/class-ow-process-flow.php:6089
+#: includes/class-ow-process-flow.php:6277
+#: src/components/ow-compare-revision.js:56
+msgid "Compare With Original"
+msgstr "和原始文檔比較"
+
+#: includes/class-ow-process-flow.php:5949
+msgid "The task was successfully abort."
+msgstr "工作流已成功中止。"
+
+#: includes/class-ow-process-flow.php:5950
+msgid "The task was successfully reassign."
+msgstr "已成功重新分配该员额。"
+
+#: includes/class-ow-process-flow.php:5951
+msgid "The post was successfully published."
+msgstr "该帖子已成功发布。"
+
+#: includes/class-ow-process-flow.php:5952
+#: includes/class-ow-process-flow.php:6101
+msgid "Exit to Dashboard"
+msgstr "退出仪表板"
+
+#: includes/class-ow-process-flow.php:6060
+#: includes/class-ow-workflow-service.php:1184
+#: includes/class-ow-workflow-terminology-settings.php:170
+#: includes/class-ow-workflow-terminology-settings.php:203
+#: src/components/ow-submit-to-workflow.js:49 src/ow-sidebar.js:237
+msgid "Submit to Workflow"
+msgstr "提交到工作流"
+
+#: includes/class-ow-process-flow.php:6063
+msgid "All steps are not defined.\\n Please check the workflow."
+msgstr "所有步驟都未定義。\\n 請核查工作流。"
+
+#: includes/class-ow-process-flow.php:6068
+msgid "The selected workflow is not valid.\\n Please check this workflow."
+msgstr "選中的工作流無效。\\n 請核查該工作流。"
+
+#: includes/class-ow-process-flow.php:6074
+#: src/components/ow-submit-to-workflow.js:404
+msgid "Please select a workflow."
+msgstr "請選擇一個工作流。"
+
+#: includes/class-ow-process-flow.php:6076
+msgid "This step is not defined."
+msgstr "該步驟未定義。"
+
+#: includes/class-ow-process-flow.php:6078
+msgid "You have not selected any pre publish checklist "
+msgstr "您未選擇預發佈清單"
+
+#: includes/class-ow-process-flow.php:6080
+msgid "Please select all pre publish checklist "
+msgstr "請選擇所有預發佈清單"
+
+#: includes/class-ow-process-flow.php:6086
+msgid "Please select a team."
+msgstr "請選擇一個小隊。"
+
+#: includes/class-ow-process-flow.php:6087
+msgid ""
+"No users found for the given Team and Workflow assignee(s). Please check the "
+"team."
+msgstr "未發現給定的小隊和工作流任務執行人的用戶。請核查小隊。"
+
+#: includes/class-ow-process-flow.php:6115
+#: includes/class-ow-revision-service.php:1417
+#: includes/class-ow-revision-service.php:1438
+#: includes/class-ow-workflow-terminology-settings.php:188
+#: includes/class-ow-workflow-terminology-settings.php:339
+#: includes/pages/subpages/make-revision-overlay.php:18
+#: includes/pages/subpages/make-revision-overlay.php:23
+#: src/components/ow-make-revision.js:22
+msgid "Make Revision"
+msgstr "修改"
+
+#: includes/class-ow-process-flow.php:6278
+msgid "Are you sure to terminate the workflow?"
+msgstr "您確認要終止工作流嗎？"
+
+#: includes/class-ow-process-flow.php:6297
+msgid "Update Published Article"
+msgstr "更新已发布的文章"
+
+#: includes/class-ow-process-flow.php:6318
+#: includes/class-ow-process-flow.php:6479
+#: includes/class-ow-process-flow.php:6592
+#: includes/class-ow-process-flow.php:6665
+msgid "You are not allowed to get workflow step details."
+msgstr "不允许您获取工作流步骤详细信息。"
+
+#: includes/class-ow-report-service.php:86
+msgid "Assigned User"
+msgstr "分配的用戶"
+
+#: includes/class-ow-report-service.php:110
+#: includes/class-ow-settings-base.php:37
+msgid "Workflow"
+msgstr "工作流"
+
+#: includes/class-ow-report-service.php:122
+msgid "Workflow Step"
+msgstr "工作流步驟"
+
+#: includes/class-ow-report-service.php:176
+msgid "- "
+msgstr "- "
+
+#: includes/class-ow-report-service.php:229
+msgid "No current assignments."
+msgstr "無當前分配的任務。"
+
+#: includes/class-ow-report-service.php:317
+msgid "Last Update Date"
+msgstr "上次更新日期"
+
+#: includes/class-ow-report-service.php:376
+msgid "No Posts/Pages found in any workflows."
+msgstr "在任何工作流中都未發現文章/頁面。"
+
+#: includes/class-ow-revision-service.php:109
+msgid "You are not allowed to check for revision."
+msgstr "您不允许检查是否有修订版本"
+
+#: includes/class-ow-revision-service.php:151
+msgid "You are not allowed to compare revision"
+msgstr "您不允许比较修订版本"
+
+#: includes/class-ow-revision-service.php:281
+#: includes/class-ow-revision-service.php:381
+msgid "You are not allowed to create revision of the post."
+msgstr "您不允许创建帖子的修订"
+
+#: includes/class-ow-revision-service.php:519
+#: includes/class-ow-revision-service.php:547
+msgid "You are not allowed to make the revision."
+msgstr "您無權修改。"
+
+#: includes/class-ow-revision-service.php:537
+msgid "No post to copy has been supplied!"
+msgstr "未提供要拷貝的文章！"
+
+#: includes/class-ow-revision-service.php:561
+msgid "Copy failed, could not find original:"
+msgstr "拷貝失敗，未發現來源文件："
+
+#: includes/class-ow-revision-service.php:665
+msgid "You are not allowed to create revision of the post"
+msgstr "您不允许创建帖子的修订"
+
+#: includes/class-ow-revision-service.php:1728
+msgid "Revision Preview URL:"
+msgstr "修订预览网址："
+
+#: includes/class-ow-settings-base.php:34
+msgid "License"
+msgstr "授權"
+
+#: includes/class-ow-settings-base.php:43
+msgid "Auto Submit"
+msgstr "自動提交"
+
+#: includes/class-ow-settings-base.php:46
+msgid "Document Revision"
+msgstr "文檔修訂"
+
+#: includes/class-ow-settings-base.php:49
+msgid "Workflow Terminology"
+msgstr "工作流術語"
+
+#: includes/class-ow-settings-base.php:68
+#: includes/class-ow-settings-base.php:69
+msgid "Settings"
+msgstr "設置"
+
+#: includes/class-ow-tools-service.php:38
+msgid "You are not allowed to export workflows and settings"
+msgstr "不允许导出工作流和设置"
+
+#: includes/class-ow-tools-service.php:54
+msgid "You are not allowed to import workflows and the settings"
+msgstr "不允许导入工作流和设置"
+
+#: includes/class-ow-tools-service.php:672
+msgid "Imported Team - "
+msgstr "进口团队-"
+
+#: includes/class-ow-tools-service.php:693
+#: includes/class-ow-tools-service.php:700
+#: includes/class-ow-tools-service.php:780
+#: includes/class-ow-tools-service.php:787
+msgid "Error - "
+msgstr "错误 -"
+
+#: includes/class-ow-tools-service.php:694
+#: includes/class-ow-tools-service.php:701
+#: includes/class-ow-tools-service.php:781
+#: includes/class-ow-tools-service.php:788
+msgid " not available in the target system."
+msgstr "在目标系统中不可用。"
+
+#: includes/class-ow-tools-service.php:757
+msgid "Imported Group - "
+msgstr "进口集团-"
+
+#: includes/class-ow-tools-service.php:948
+msgid "Imported Workflow - "
+msgstr "导入的工作流-"
+
+#: includes/class-ow-tools-service.php:1015
+msgid "Imported "
+msgstr "成功导入演示数据！"
+
+#: includes/class-ow-tools-service.php:1206
+msgid "Please select at least one option to export."
+msgstr "请至少选择一个工作流来导出。"
+
+#: includes/class-ow-tools-service.php:1217
+msgid "There is no data to export."
+msgstr "没有要导出的数据。"
+
+#: includes/class-ow-tools-service.php:1224
+msgid "No file selected."
+msgstr "未选择文件 。"
+
+#: includes/class-ow-tools-service.php:1232
+msgid "Error uploading file. Please try again."
+msgstr "上传错误"
+
+#: includes/class-ow-tools-service.php:1239
+msgid "Incorrect file type."
+msgstr "不正确的文件类型"
+
+#: includes/class-ow-tools-service.php:1246
+msgid "Import file is empty."
+msgstr "导入文件空"
+
+#: includes/class-ow-tools-service.php:1253
+msgid "Data imported successfully."
+msgstr "导入数据成功"
+
+#: includes/class-ow-tools-service.php:1271
+#: includes/class-ow-workflow-service.php:1273
+msgid "You are not allowed to fetch workflow settings."
+msgstr "不允许获取工作流设置。"
+
+#: includes/class-ow-tools-service.php:1291
+msgid "You are not allowed to view editorial comments."
+msgstr "您不得查看编辑评论。"
+
+#: includes/class-ow-utility.php:568
+#, php-format
+msgid "Displaying %s-%s of %s"
+msgstr "顯示%s-%s of %s"
+
+#: includes/class-ow-utility.php:1054
+msgid "There's something wrong with your code..."
+msgstr "您的代碼有問題..."
+
+#: includes/class-ow-utility.php:1100
+msgid "You are not allowed to get workflow priorities"
+msgstr "不允许您获取工作流优先级。"
+
+#: includes/class-ow-utility.php:1124
+msgid "Low"
+msgstr "低"
+
+#: includes/class-ow-utility.php:1125
+msgid "Normal"
+msgstr "正常"
+
+#: includes/class-ow-utility.php:1126
+msgid "High"
+msgstr "高"
+
+#: includes/class-ow-utility.php:1127
+msgid "Urgent"
+msgstr "緊急"
+
+#: includes/class-ow-utility.php:1157
+msgid "assignment"
+msgstr "分配"
+
+#: includes/class-ow-utility.php:1158
+msgid "review"
+msgstr "评论"
+
+#: includes/class-ow-utility.php:1159
+msgid "publish"
+msgstr "发布"
+
+#: includes/class-ow-utility.php:1364
+msgid "1 Month ago"
+msgstr "1個月前"
+
+#: includes/class-ow-utility.php:1365
+msgid "3 Months ago"
+msgstr "3個月前"
+
+#: includes/class-ow-utility.php:1366
+msgid "6 Months ago"
+msgstr "6個月前"
+
+#: includes/class-ow-utility.php:1367
+msgid "12 Months ago"
+msgstr "12個月前"
+
+#: includes/class-ow-utility.php:1368
+msgid "Since the beginning"
+msgstr "從頭"
+
+#: includes/class-ow-utility.php:1379
+msgid "--Select Workflow--"
+msgstr "--選擇工作流--"
+
+#: includes/class-ow-utility.php:1412
+msgid "No Due Date"
+msgstr "无到期日期"
+
+#: includes/class-ow-utility.php:1413
+#: includes/pages/workflow-dashboard-widget.php:82
+msgid "Overdue"
+msgstr "超期"
+
+#: includes/class-ow-utility.php:1414
+#: includes/pages/workflow-dashboard-widget.php:87
+msgid "Due Today"
+msgstr "今天到期"
+
+#: includes/class-ow-utility.php:1415
+#: includes/pages/workflow-dashboard-widget.php:92
+msgid "Due Tomorrow"
+msgstr "明天到期"
+
+#: includes/class-ow-utility.php:1416
+#: includes/pages/workflow-dashboard-widget.php:97
+msgid "Due in 7 days"
+msgstr "一周後到期"
+
+#: includes/class-ow-utility.php:1467
+#, php-format
+msgid "Please <a href=\"%s\">enter and activate</a> your license key for "
+msgstr "请 <a href=\"%s\">输入并激活</a> 您的许可证密钥 "
+
+#: includes/class-ow-utility.php:1468
+msgid " to enable automatic updates."
+msgstr "以启用自动更新。"
+
+#: includes/class-ow-utility.php:1494
+msgid "Your license for "
+msgstr "您的许可证"
+
+#: includes/class-ow-utility.php:1495
+msgid ""
+" has been expired. Please update to get access for new features, bug fix, "
+"security improvement and our support."
+msgstr "已过期。请更新以访问新功能、错误修复、安全改进和我们的支持。"
+
+#: includes/class-ow-workflow-service.php:59
+msgid "You are not allowed to create workflows."
+msgstr "您無權創建工作流。"
+
+#: includes/class-ow-workflow-service.php:396
+#: includes/class-ow-workflow-service.php:439
+#: includes/class-ow-workflow-service.php:485
+#: includes/class-ow-workflow-service.php:731
+#: includes/class-ow-workflow-service.php:858
+#: includes/class-ow-workflow-service.php:939
+#: includes/class-ow-workflow-service.php:988
+msgid "You are not allowed to create/edit workflows."
+msgstr "您無權創建/編輯工作流。"
+
+#: includes/class-ow-workflow-service.php:567
+#: includes/class-ow-workflow-service.php:590
+msgid "You are not allowed to delete workflows."
+msgstr "您無權刪除工作流。"
+
+#: includes/class-ow-workflow-service.php:652
+msgid "You are not allowed to get step process details."
+msgstr "不允许您获取步骤过程详细信息。"
+
+#: includes/class-ow-workflow-service.php:669
+#: includes/pages/subpages/step-info-content.php:277
+#: includes/pages/subpages/submit-step.php:55
+msgid "Approve"
+msgstr "批准"
+
+#: includes/class-ow-workflow-service.php:677
+#: includes/pages/subpages/step-info-content.php:278
+#: includes/pages/subpages/submit-step.php:61
+msgid "Reject"
+msgstr "拒絕"
+
+#: includes/class-ow-workflow-service.php:1288
+msgid "You are not allowed to get workflows."
+msgstr "不允许您获取工作流。"
+
+#: includes/class-ow-workflow-service.php:1558
+msgid "Workflow ID"
+msgstr "工作流ID"
+
+#: includes/class-ow-workflow-service.php:1567
+msgid "Version"
+msgstr "版本"
+
+#: includes/class-ow-workflow-service.php:1572
+msgid "Start Date"
+msgstr "開始日期"
+
+#: includes/class-ow-workflow-service.php:1580
+msgid "End Date"
+msgstr "結束日期"
+
+#: includes/class-ow-workflow-service.php:1588
+msgid "Post/Pages in workflow"
+msgstr "工作流中的文章/頁面"
+
+#: includes/class-ow-workflow-service.php:1593
+msgid "Is Valid?"
+msgstr "有效嗎？"
+
+#: includes/class-ow-workflow-service.php:1619
+#: includes/pages/ow-custom-statuses.php:55
+#: includes/pages/subpages/delete-workflow.php:27
+#: includes/pages/workflow-create.php:421
+#: includes/pages/workflow-create.php:431
+msgid "Delete"
+msgstr "刪除"
+
+#: includes/class-ow-workflow-service.php:1625
+#: includes/pages/subpages/workflow-copy-popup.php:40
+#: includes/pages/workflow-create.php:372
+#: includes/pages/workflow-create.php:397
+#: includes/pages/workflow-create.php:430
+msgid "Copy"
+msgstr "拷貝"
+
+#: includes/class-ow-workflow-settings.php:151 oasis-workflow-pro.php:3198
+msgid "Please enter a numeric value for default due date."
+msgstr "請為默認到期日期輸入一個數值。"
+
+#: includes/class-ow-workflow-settings.php:156
+msgid "Please enter the number of days for default due date."
+msgstr "請為默認到期日期輸入天數。"
+
+#: includes/class-ow-workflow-settings.php:393
+msgid "Activate Workflow process ?"
+msgstr "啟動工作流處理？"
+
+#: includes/class-ow-workflow-settings.php:397
+msgid ""
+"(After you are done setting up your editorial workflow, make it available "
+"for use by activating the workflow process.)"
+msgstr "（您完成了編輯工作流的設置了嗎？啟動工作流處理後才能使用工作流。）"
+
+#: includes/class-ow-workflow-settings.php:406
+msgid "Set Default Due Date as CURRENT DATE + "
+msgstr "設置默認到期日期為當前日期+"
+
+#: includes/class-ow-workflow-settings.php:421
+msgid "Allow to override the Default Due Date on each step of the workflow."
+msgstr "在工作流每一個步驟上允許覆蓋預設到期日期。"
+
+#: includes/class-ow-workflow-settings.php:446
+msgid "Show Workflow options for the following post/page types:"
+msgstr "為下列文章/頁面類型顯示工作流選項："
+
+#: includes/class-ow-workflow-settings.php:458
+msgid "Roles that can participate in the workflow:"
+msgstr "可參與工作流的角色："
+
+#: includes/class-ow-workflow-settings.php:470
+msgid "Make Workflow Inbox as the dashboard for the following roles:"
+msgstr "將下列角色的儀錶盤頁面設置成工作流收件箱："
+
+#: includes/class-ow-workflow-settings.php:484
+msgid "Enable workflow task priority."
+msgstr "啟用工作流任務優先順序。"
+
+#: includes/class-ow-workflow-settings.php:488
+msgid "(Allows user to specify priority when signing off the task.)"
+msgstr "（在簽署任務時允許用戶指定優先順序。）"
+
+#: includes/class-ow-workflow-settings.php:499
+msgid "Hide Publish Date field on \"Submit to Workflow\"."
+msgstr "在“提交到工作流”中隱藏發佈日期欄位。"
+
+#: includes/class-ow-workflow-settings.php:508
+msgid "Make Workflow comments required."
+msgstr "需要工作流注释。"
+
+#: includes/class-ow-workflow-settings.php:512
+msgid ""
+"(Users will be required to provide comments during submit, sign-off, "
+"reassign, abort action.)"
+msgstr "（用户需要在提交、签署、重新分配、中止操作期间提供注释。"
+
+#: includes/class-ow-workflow-settings.php:523
+msgid "Display Oasis Workflow Sidebar as default for Gutenberg Editor."
+msgstr "将绿洲工作流边栏显示为古腾堡编辑器的默认栏。"
+
+#: includes/class-ow-workflow-settings.php:534
+msgid "Display comment box for the last step of workflow"
+msgstr "显示流程最后一步的评论框"
+
+#: includes/class-ow-workflow-settings.php:545
+msgid "Delete Workflow History for posts/pages which were last updated :"
+msgstr "刪除上次更新過的文章/頁面的工作流歷史記錄："
+
+#: includes/class-ow-workflow-settings.php:557
+msgid ""
+"(A cron job will run once a day to purge the workflow history for completed "
+"workflows.)"
+msgstr "（一項定時任務每天運行一次，以清除已完成的工作流的工作流歷史記錄。）"
+
+#: includes/class-ow-workflow-terminology-settings.php:178
+#: includes/class-ow-workflow-terminology-settings.php:264
+#: includes/pages/subpages/reassign.php:55
+#: includes/pages/subpages/submit-step.php:77
+#: includes/pages/subpages/submit-workflow.php:49
+#: src/components/ow-signoff.js:34 src/components/ow-submit-to-workflow.js:50
+msgid "Assign Actor(s)"
+msgstr "分配任務執行人"
+
+#: includes/class-ow-workflow-terminology-settings.php:182
+#: includes/class-ow-workflow-terminology-settings.php:294
+#: includes/pages/subpages/submit-workflow.php:53 oasis-workflow-pro.php:403
+#: oasis-workflow-pro.php:1215 src/components/ow-submit-to-workflow.js:51
+msgid "Publish Date"
+msgstr "發佈日期"
+
+#: includes/class-ow-workflow-terminology-settings.php:186
+#: includes/class-ow-workflow-terminology-settings.php:324
+#: includes/pages/workflow-history.php:85 oasis-workflow-pro.php:2298
+msgid "Workflow History"
+msgstr "工作流歷史記錄"
+
+#: includes/class-ow-workflow-terminology-settings.php:204
+#: includes/class-ow-workflow-terminology-settings.php:219
+#: includes/class-ow-workflow-terminology-settings.php:234
+#: includes/class-ow-workflow-terminology-settings.php:249
+#: includes/class-ow-workflow-terminology-settings.php:265
+#: includes/class-ow-workflow-terminology-settings.php:280
+#: includes/class-ow-workflow-terminology-settings.php:295
+#: includes/class-ow-workflow-terminology-settings.php:310
+#: includes/class-ow-workflow-terminology-settings.php:325
+#: includes/class-ow-workflow-terminology-settings.php:340
+#: includes/class-ow-workflow-terminology-settings.php:355
+#: includes/class-ow-workflow-terminology-settings.php:371
+msgid " Label"
+msgstr "標籤"
+
+#: includes/class-ow-workflow-terminology-settings.php:211
+msgid "Label for \"Submit to Workflow\" button/link."
+msgstr "“提交到工作流”按鈕/連結的標籤。"
+
+#: includes/class-ow-workflow-terminology-settings.php:226
+msgid "Label for \"Continue to Submit\" button/link."
+msgstr "\"继续提交\"按钮/链接的标签。"
+
+#: includes/class-ow-workflow-terminology-settings.php:241
+msgid "Label for \"Sign Off\" button/link."
+msgstr "“簽署”按鈕/連結的標籤。"
+
+#: includes/class-ow-workflow-terminology-settings.php:257
+msgid "Label for \"Continue to Sign off\" button/link."
+msgstr "\"继续注销\"按钮/链接的标签。"
+
+#: includes/class-ow-workflow-terminology-settings.php:272
+msgid "Label for \"Assign Actor(s)\" field."
+msgstr "“分配任務執行人”欄位的標籤。"
+
+#: includes/class-ow-workflow-terminology-settings.php:287
+msgid "Label for \"Due Date\" field."
+msgstr "“到期日期”欄位的標籤。"
+
+#: includes/class-ow-workflow-terminology-settings.php:302
+msgid "Label for \"Publish Date\" field on the \"Submit to Workflow\" popup."
+msgstr "在“發佈到工作流”彈窗中的“發佈日期”欄位的標籤。"
+
+#: includes/class-ow-workflow-terminology-settings.php:317
+msgid "Label for \"Abort Workflow\" button/link."
+msgstr "“中止工作流”按鈕/連結的標籤。"
+
+#: includes/class-ow-workflow-terminology-settings.php:332
+msgid "Label for \"Workflow History\" menu."
+msgstr "“工作流歷史記錄”按鈕/連結的標籤。"
+
+#: includes/class-ow-workflow-terminology-settings.php:347
+msgid "Label for \"Make Revision\" button/link."
+msgstr "“修改”按鈕/連結的標籤。"
+
+#: includes/class-ow-workflow-terminology-settings.php:362
+msgid ""
+"Label for \"Priority\" field on the \"Submit to Workflow\" and \"Sign Off\" "
+"popup."
+msgstr "在“提交到工作流”和“簽署”彈窗中的“優先順序”欄位的標籤。"
+
+#: includes/class-ow-workflow-terminology-settings.php:378
+msgid "Label for \"Duplicate Post\" link."
+msgstr "\"重复 Post\" 链接的标签。"
+
+#: includes/class-ow-workflow-validator.php:126
+msgid "Start date is required."
+msgstr "開始日期必填。"
+
+#: includes/class-ow-workflow-validator.php:141
+msgid "End date should be greater than the start date."
+msgstr "結束日期應遲於開始日期。"
+
+#: includes/class-ow-workflow-validator.php:201
+msgid "Missing \""
+msgstr "缺失 *"
+
+#: includes/class-ow-workflow-validator.php:203
+msgid "\" step information. Right click on the step to edit step information."
+msgstr "* 步驟資訊。在步驟上右擊以編輯步驟資訊。"
+
+#: includes/class-ow-workflow-validator.php:212
+msgid "No steps found."
+msgstr "未發現步驟。"
+
+#: includes/class-ow-workflow-validator.php:219
+msgid ""
+"The workflow doesn't have a valid exit path. Items in this workflow will "
+"never exit the workflow. Please provide a valid exit path."
+msgstr ""
+"\n"
+"工作流無有效推出路徑。\t該工作流中的項將永遠無法退出。請提供一個有效的推出路"
+"徑。"
+
+#: includes/class-ow-workflow-validator.php:225
+msgid ""
+"Multiple steps marked as first step. Workflow can have only one starting "
+"point."
+msgstr "多個步驟被標識為第一步。工作流只能有一個步驟標識為起點。"
+
+#: includes/class-ow-workflow-validator.php:231
+msgid "Starting step not found. Workflow should have a starting point."
+msgstr "未發現開始步驟。工作流應至少有一個起點。"
+
+#: includes/class-ow-workflow-validator.php:264
+msgid "No connections found."
+msgstr "未發現連接。"
+
+#: includes/class-ow-workflow-validator.php:269
+msgid "Please provide failure path for all steps except the first one."
+msgstr "請為除了第一步之外的所有步驟提供失敗路徑。"
+
+#: includes/pages/ow-custom-statuses.php:20 oasis-workflow-pro.php:2350
+#: oasis-workflow-pro.php:2351
+msgid "Custom Statuses"
+msgstr "自訂狀態"
+
+#: includes/pages/ow-custom-statuses.php:51
+msgid "Are you sure you want to delete the post status?"
+msgstr "您確認要刪除文章狀態嗎？"
+
+#: includes/pages/ow-custom-statuses.php:96
+msgid "The name is used to identify the status. (Max: 20 characters)"
+msgstr "標識狀態的名字（最多20個字元）"
+
+#: includes/pages/ow-custom-statuses.php:104
+msgid ""
+"The slug is the unique ID for the status. It is usually all lowercase and "
+"contains only letters, numbers and hyphens."
+msgstr "Slug是狀態的唯一ID。 它通常都是小寫的，只包含字母、數位和連字號。"
+
+#: includes/pages/ow-custom-statuses.php:114
+msgid ""
+"The description is primarily for administrative use, to give you some "
+"context on what the custom status is to be used for."
+msgstr "該描述主要用於管理用途，如自訂狀態的使用場景。"
+
+#: includes/pages/ow-custom-statuses.php:120
+msgid "Add New Status"
+msgstr "新建"
+
+#: includes/pages/ow-custom-statuses.php:123
+msgid "Update Status"
+msgstr "文章狀態"
+
+#: includes/pages/ow-import-export.php:16
+msgid ""
+"Note: Make sure your environment is identical in terms of plugins, roles, "
+"custom roles and users otherwise, the import might error out."
+msgstr ""
+"注意: 请确保您的环境在插件、角色、自定义角色和用户方面是相同的, 否则导入可能"
+"会出错。"
+
+#: includes/pages/ow-import-export.php:23
+msgid "Export"
+msgstr "导出"
+
+#: includes/pages/ow-import-export.php:25
+msgid ""
+"Use the download button to export to a .json file which you can then import "
+"to another WordPress installation"
+msgstr ""
+"使用 \"下载\" 按钮导出到. json 文件, 然后您可以将其导入到另一个 WordPress 安"
+"装中。"
+
+#: includes/pages/ow-import-export.php:32
+msgid "Workflows (includes Teams and Groups, if any)"
+msgstr "工作流 (包括团队和组 (如果有))"
+
+#: includes/pages/ow-import-export.php:36
+msgid "Settings (includes all the settings)"
+msgstr "设置 (包括所有设置)"
+
+#: includes/pages/ow-import-export.php:40
+msgid "Download Export File"
+msgstr "下载导出文件"
+
+#: includes/pages/ow-import-export.php:50
+#: includes/pages/ow-import-export.php:63
+msgid "Import"
+msgstr "导入"
+
+#: includes/pages/ow-import-export.php:52
+msgid "Select the Oasis Workflow JSON file you would like to import."
+msgstr "选择要导入的绿洲工作流 JSON 文件。"
+
+#: includes/pages/ow-import-export.php:56
+msgid "Choose a file from your computer:"
+msgstr "從您的電腦中選擇一個檔："
+
+#: includes/pages/ow-system-info.php:22
+msgid ""
+"To copy the system info, click below then press Ctrl + C (PC) or Cmd + C "
+"(Mac)."
+msgstr "要复制系统信息，请单击下面的，然后按Ctrl + C（PC）或Cmd + C（Mac）。"
+
+#: includes/pages/revision-compare.php:26
+msgid "Comparison"
+msgstr "比較"
+
+#: includes/pages/revision-compare.php:28
+msgid " Return to Post editor"
+msgstr "返回文章編輯器"
+
+#: includes/pages/revision-compare.php:32
+msgid ""
+"Note : If you made any changes to the post, the updates are being saved "
+"while preparing the compare window. At times, if the \"save\" takes more "
+"time, you may not see the recent changes made to the post.\n"
+"In those cases, simply close this window and click the \"Compare With "
+"Original\"  button again."
+msgstr ""
+"注意：如果您對該文章進行了任何更改，則在準備比較視窗時將保存更改。 有時，如果"
+"“保存”操作需要很多時間，您可能看不到最近對該文章所做的更改。\n"
+"在這些情況下，只需關閉此視窗，然後再次按一下“與原始比較”按鈕。"
+
+#: includes/pages/revision-compare.php:60
+msgid "This is the test revision."
+msgstr "這是測試修訂。"
+
+#: includes/pages/revision-compare.php:65
+msgid "HTML(raw) Compare"
+msgstr "HTML（原始）比較"
+
+#: includes/pages/revision-compare.php:68
+msgid "Text Compare"
+msgstr "文本比較"
+
+#: includes/pages/revision-compare.php:76
+msgid ""
+"Sorry, something went wrong. The requested comparison could not be loaded."
+msgstr "对不起，出事了。无法加载所请求的比较。"
+
+#: includes/pages/revision-compare.php:84
+msgid "Original: "
+msgstr "原始版："
+
+#: includes/pages/revision-compare.php:87
+msgid "Revision: "
+msgstr "修訂版："
+
+#: includes/pages/revision-compare.php:98
+msgid "Contents"
+msgstr "內容"
+
+#: includes/pages/revision-compare.php:144
+msgid "Featured Image"
+msgstr "特色圖片"
+
+#: includes/pages/subpages/abort-workflow-comment.php:14
+#: includes/pages/subpages/reassign.php:106
+msgid "Comments:"
+msgstr "評論："
+
+#: includes/pages/subpages/abort-workflow-comment.php:23
+#: includes/pages/subpages/submit-workflow.php:58
+#: includes/pages/subpages/submit-workflow.php:240
+#: includes/pages/subpages/submit-workflow.php:242
+msgid "Submit"
+msgstr "提交"
+
+#: includes/pages/subpages/abort-workflow-comment.php:25
+#: includes/pages/subpages/connection-info-content.php:100
+#: includes/pages/subpages/delete-history.php:38
+#: includes/pages/subpages/delete-workflow.php:31
+#: includes/pages/subpages/make-revision-overlay.php:35
+#: includes/pages/subpages/make-revision-untrashed.php:56
+#: includes/pages/subpages/make-revision.php:57
+#: includes/pages/subpages/reassign.php:117
+#: includes/pages/subpages/step-info-content.php:589
+#: includes/pages/subpages/submit-step.php:255
+#: includes/pages/subpages/submit-workflow.php:244
+#: includes/pages/subpages/workflow-copy-popup.php:42
+#: includes/pages/subpages/workflow-create-popup.php:40
+#: src/components/ow-abort.js:205
+#: src/components/ow-make-revision-exist-overlay.js:22
+#: src/components/ow-make-revision-overlay.js:17
+#: src/components/ow-reassign.js:411
+msgid "Cancel"
+msgstr "取消"
+
+#: includes/pages/subpages/action-comments.php:98
+msgid "Editorial Comments On: "
+msgstr ""
+"\n"
+"編輯評論于："
+
+#: includes/pages/subpages/action-comments.php:125
+msgid "Signed off on"
+msgstr "簽署於"
+
+#: includes/pages/subpages/action-comments.php:128
+msgid "No Comments"
+msgstr "無評論"
+
+#: includes/pages/subpages/action-comments.php:145
+#: src/components/ow-abort.js:192
+msgid "Close"
+msgstr "關閉"
+
+#: includes/pages/subpages/connection-info-content.php:17
+msgid "Connection Settings"
+msgstr "連接設置"
+
+#: includes/pages/subpages/connection-info-content.php:21
+msgid "Current Connection"
+msgstr "當前連接"
+
+#: includes/pages/subpages/connection-info-content.php:22
+msgid "Source"
+msgstr "源"
+
+#: includes/pages/subpages/connection-info-content.php:28
+msgid "Target"
+msgstr "目標"
+
+#: includes/pages/subpages/connection-info-content.php:38
+msgid "Post Status :"
+msgstr "文章狀態："
+
+#: includes/pages/subpages/connection-info-content.php:76
+msgid "Path :"
+msgstr "路徑："
+
+#: includes/pages/subpages/delete-history.php:17
+#: includes/pages/workflow-history.php:179
+msgid "Delete History"
+msgstr "刪除歷史記錄"
+
+#: includes/pages/subpages/delete-history.php:20
+msgid ""
+"Workflow History for posts/pages that are currently active in a workflow "
+"will NOT be deleted."
+msgstr "工作流中當前處於活動狀態的文章/頁面的工作流歷史記錄不會被刪除。"
+
+#: includes/pages/subpages/delete-history.php:25
+msgid "Delete Workflow History for posts/pages which were last updated : "
+msgstr "刪除上次更新的文章/頁面的工作流歷史記錄："
+
+#: includes/pages/subpages/delete-history.php:36
+msgid "Delete Workflow History"
+msgstr "刪除工作流歷史記錄"
+
+#: includes/pages/subpages/delete-workflow.php:19
+msgid "Confirm Workflow Delete"
+msgstr "確認刪除工作流"
+
+#: includes/pages/subpages/delete-workflow.php:23
+msgid "Do you really want to delete the workflow?"
+msgstr "您真要刪除該工作流嗎？"
+
+#: includes/pages/subpages/make-revision-untrashed.php:38
+#: includes/pages/subpages/make-revision.php:41
+msgid "Revision Already Exists"
+msgstr "修訂已存在"
+
+#: includes/pages/subpages/make-revision-untrashed.php:43
+msgid ""
+"An active revision already exists for this article. Do you want to delete "
+"the existing revised article and use the one being restored?"
+msgstr "該文章的活動修訂已存在。您要刪除當前修改過的文章而使用回退的版本嗎？"
+
+#: includes/pages/subpages/make-revision-untrashed.php:46
+msgid "Restoring this article will trash the current revision."
+msgstr "回退該文章將刪除當前修訂。"
+
+#: includes/pages/subpages/make-revision-untrashed.php:48
+msgid "Cancelling this action will NOT restore the article."
+msgstr "取消該操作不會回退該文章。"
+
+#: includes/pages/subpages/make-revision-untrashed.php:52
+msgid "Use the restored one"
+msgstr "使用回退版本"
+
+#: includes/pages/subpages/make-revision.php:45
+#: src/components/ow-make-revision-exist-overlay.js:15
+msgid ""
+"An active revision already exists for this article. Do you want to delete "
+"the existing revised article and create a new revision?"
+msgstr "該文章已存在活動修訂。您要刪除當前修改過的文章以新建修訂嗎？"
+
+#: includes/pages/subpages/make-revision.php:50
+#: src/components/ow-make-revision-exist-overlay.js:40
+msgid "Yes, delete it and create new one"
+msgstr "是，刪掉並新建"
+
+#: includes/pages/subpages/make-revision.php:54
+#: src/components/ow-make-revision-exist-overlay.js:31
+msgid "No, take me to the revision"
+msgstr "不，讓我訪問修訂"
+
+#: includes/pages/subpages/reassign.php:66
+#: includes/pages/subpages/submit-step.php:141
+#: includes/pages/subpages/submit-workflow.php:154
+msgid "Available"
+msgstr "可用"
+
+#: includes/pages/subpages/reassign.php:94
+#: includes/pages/subpages/submit-step.php:158
+#: includes/pages/subpages/submit-workflow.php:172
+msgid "Assigned"
+msgstr "已分配"
+
+#: includes/pages/subpages/step-info-content.php:47
+msgid "Step Information"
+msgstr "步驟資訊"
+
+#: includes/pages/subpages/step-info-content.php:51
+msgid "Step Name :"
+msgstr "步驟名："
+
+#: includes/pages/subpages/step-info-content.php:59
+msgid "Assignee(s) :"
+msgstr "任務執行人："
+
+#: includes/pages/subpages/step-info-content.php:90
+msgid "Assign to all? : "
+msgstr "分配給所有人？："
+
+#: includes/pages/subpages/step-info-content.php:92
+msgid ""
+"Check this box to assign the task to all the users in this step and hide the "
+"assignee list during the sign off process."
+msgstr ""
+"選中此框可將任務分配給此步驟中的所有使用者，並在簽署過程中隱藏任務執行人列"
+"表。"
+
+#: includes/pages/subpages/step-info-content.php:120
+msgid "Default"
+msgstr "默認"
+
+#: includes/pages/subpages/step-info-content.php:121
+msgid "Due Date:"
+msgstr "過期日期："
+
+#: includes/pages/subpages/step-info-content.php:123
+msgid ""
+"Specify a default due date for this step to be completed. This is an "
+"optional setting."
+msgstr "為此步驟設定一個預設到期日期。可選設置。"
+
+#: includes/pages/subpages/step-info-content.php:137
+msgid " day(s) after the post is submitted to the workflow."
+msgstr "文章提交到工作流後的天數。"
+
+#: includes/pages/subpages/step-info-content.php:148
+msgid "Is first step? : "
+msgstr "是第一步嗎？："
+
+#: includes/pages/subpages/step-info-content.php:156
+msgid "On Submit to Workflow"
+msgstr "在提交到工作流時的："
+
+#: includes/pages/subpages/step-info-content.php:157
+#: includes/pages/subpages/step-info-content.php:188
+msgid "Post Status: "
+msgstr "文章狀態："
+
+#: includes/pages/subpages/step-info-content.php:158
+msgid "Post Status after submit to workflow."
+msgstr "提交到工作流後的文章狀態。"
+
+#: includes/pages/subpages/step-info-content.php:187
+msgid "On Workflow Completion"
+msgstr "工作流完成时"
+
+#: includes/pages/subpages/step-info-content.php:189
+msgid "Set post status after workflow process is complete."
+msgstr "在工作流进程完成后设置开机自检状态。"
+
+#: includes/pages/subpages/step-info-content.php:225
+msgid "Review Settings: "
+msgstr "覆核設置："
+
+#: includes/pages/subpages/step-info-content.php:237
+msgid "Everyone should approve"
+msgstr "每個人都應同意"
+
+#: includes/pages/subpages/step-info-content.php:242
+msgid "More than 50% should approve"
+msgstr "任一人同意即可"
+
+#: includes/pages/subpages/step-info-content.php:248
+msgid "Anyone should approve"
+msgstr "任一人同意即可"
+
+#: includes/pages/subpages/step-info-content.php:261
+msgid "Sign off Action Text: "
+msgstr "签署行动文本："
+
+#: includes/pages/subpages/step-info-content.php:263
+msgid ""
+"Specify the text for sign off actions that should appear when user is "
+"signing off from a given task."
+msgstr "指定用户从给定任务注销时应显示的注销操作的文本。"
+
+#: includes/pages/subpages/step-info-content.php:282
+msgid "For Success"
+msgstr "成功"
+
+#: includes/pages/subpages/step-info-content.php:294
+msgid "For Failure"
+msgstr "对于失败"
+
+#: includes/pages/subpages/step-info-content.php:310
+#: includes/pages/subpages/step-info-content.php:317
+msgid "Assignment Email"
+msgstr "任務分配郵件"
+
+#: includes/pages/subpages/step-info-content.php:312
+#: includes/pages/subpages/step-info-content.php:462
+msgid "Reminder Email"
+msgstr "任務提醒郵件"
+
+#: includes/pages/subpages/step-info-content.php:320
+#: includes/pages/subpages/step-info-content.php:465
+msgid "Placeholder : "
+msgstr "預留位置："
+
+#: includes/pages/subpages/step-info-content.php:330
+#: includes/pages/subpages/step-info-content.php:469
+msgid "--Select--"
+msgstr "--選擇--"
+
+#: includes/pages/subpages/step-info-content.php:342
+#: includes/pages/subpages/step-info-content.php:480
+msgid "Add to subject"
+msgstr "添加到主題"
+
+#: includes/pages/subpages/step-info-content.php:345
+#: includes/pages/subpages/step-info-content.php:483
+msgid "Add to message"
+msgstr "添加到消息"
+
+#: includes/pages/subpages/step-info-content.php:373
+#: includes/pages/subpages/step-info-content.php:490
+msgid "Email Cc : "
+msgstr "郵件主題："
+
+#: includes/pages/subpages/step-info-content.php:410
+#: includes/pages/subpages/step-info-content.php:527
+msgid "Email Bcc : "
+msgstr "郵件主題："
+
+#: includes/pages/subpages/step-info-content.php:447
+#: includes/pages/subpages/step-info-content.php:564
+msgid "Email subject : "
+msgstr "郵件主題："
+
+#: includes/pages/subpages/step-info-content.php:452
+#: includes/pages/subpages/step-info-content.php:569
+msgid "Email message : "
+msgstr "郵件內容："
+
+#: includes/pages/subpages/submit-step.php:90
+msgid "Action : "
+msgstr "操作："
+
+#: includes/pages/subpages/submit-step.php:103
+#: includes/pages/subpages/submit-workflow.php:130
+msgid "Step : "
+msgstr "步驟："
+
+#: includes/pages/subpages/submit-step.php:172
+#: includes/pages/subpages/submit-workflow.php:193
+#: includes/pages/subpages/submit-workflow.php:220
+#: includes/pages/workflow-create.php:215
+#: includes/pages/workflow-create.php:248
+msgid "clear"
+msgstr "清除"
+
+#: includes/pages/subpages/submit-step.php:194
+#: src/components/ow-signoff-last-step.js:472
+msgid "Publish"
+msgstr "發佈"
+
+#: includes/pages/subpages/submit-step.php:213
+msgid "Immediately"
+msgstr "立即"
+
+#: includes/pages/subpages/submit-step.php:235
+#: includes/pages/subpages/submit-workflow.php:231
+msgid "Comments : "
+msgstr "評論："
+
+#: includes/pages/subpages/submit-step.php:242
+#: src/components/ow-signoff-last-step.js:454
+msgid ""
+"Signing off will copy over the contents of this revised article to the "
+"corresponding published/original article. This will happen either "
+"immediately or on the scheduled date/time."
+msgstr ""
+"簽署操作將把本修訂文章的內容複製到相應的已發佈的/原始的文章。 這將立即或在預"
+"定的日期/時間發生。"
+
+#: includes/pages/subpages/submit-workflow.php:62
+msgid "Workflow : "
+msgstr "工作流："
+
+#: includes/pages/subpages/submit-workflow.php:183
+msgid "Specify a date for the assignment to be completed."
+msgstr "指定完成分配的任務的日期："
+
+#: includes/pages/subpages/submit-workflow.php:205
+msgid "Specify a desired publish date for the post."
+msgstr "指定文章的要發佈的日期。"
+
+#: includes/pages/subpages/workflow-copy-popup.php:17
+msgid "Copy Workflow"
+msgstr "拷貝工作流"
+
+#: includes/pages/subpages/workflow-create-popup.php:17
+msgid "Create New Workflow"
+msgstr "新建工作流"
+
+#: includes/pages/subpages/workflow-create-popup.php:21
+#: includes/pages/workflow-create.php:152
+msgid "Title : "
+msgstr "標題："
+
+#: includes/pages/subpages/workflow-create-popup.php:29
+#: includes/pages/workflow-create.php:174
+msgid "Description : "
+msgstr "描述："
+
+#: includes/pages/workflow-addons.php:29
+msgid "Add-ons For Oasis Workflow"
+msgstr "Oasis工作流的外掛程式"
+
+#: includes/pages/workflow-addons.php:33 includes/pages/workflow-addons.php:34
+#: includes/pages/workflow-addons.php:47 includes/pages/workflow-addons.php:48
+msgid "Browse All Add-ons"
+msgstr "流覽所有外掛程式"
+
+#: includes/pages/workflow-addons.php:75
+msgid ""
+"There was an error retrieving the Add-ons list from the server. Please try "
+"again later."
+msgstr "從伺服器下載外掛程式資訊失敗。請稍後重試。"
+
+#: includes/pages/workflow-by-due-date-report.php:37
+#: includes/pages/workflow-inbox.php:204
+msgid "All Due Dates"
+msgstr "所有到期日期"
+
+#: includes/pages/workflow-create.php:80
+msgid "If you want to know more about creating/modifying workflows "
+msgstr "若您要瞭解更多有關創建/修改工作流的資訊 "
+
+#: includes/pages/workflow-create.php:85
+msgid "watch this video."
+msgstr "觀看此視頻。"
+
+#: includes/pages/workflow-create.php:87
+msgid "You can also look up for more tutorial videos about Oasis Workflow on "
+msgstr "您也能瞭解到更多視頻教程從"
+
+#: includes/pages/workflow-create.php:90
+msgid "YouTube."
+msgstr "YouTube。"
+
+#: includes/pages/workflow-create.php:102
+msgid "Processes"
+msgstr "流程"
+
+#: includes/pages/workflow-create.php:104
+msgid ""
+"Drag and Drop the processes into the Workflow Design Canvas to create new "
+"workflow steps."
+msgstr "拖拽流程到工作流設計器中以新建工作流步驟。"
+
+#: includes/pages/workflow-create.php:129
+msgid ""
+"Processes are not available, since there are items (post/pages) in the "
+"workflow.&nbsp;&nbsp;&nbsp;If you want to edit the workflow,&nbsp;&nbsp; "
+"please "
+msgstr ""
+"流程不可用，因為工作流中有專案（文章/頁面）。＆nbsp;＆nbsp;＆nbsp;如果要修改"
+"工作流，＆nbsp;＆nbsp; 請"
+
+#: includes/pages/workflow-create.php:132
+msgid "save it as a new version"
+msgstr "保存為新版本"
+
+#: includes/pages/workflow-create.php:143
+msgid "Workflow Info"
+msgstr "工作流資訊"
+
+#: includes/pages/workflow-create.php:195
+msgid "Start Date :"
+msgstr "開始日期："
+
+#: includes/pages/workflow-create.php:198
+msgid "Specify a date from which this workflow will become available for use."
+msgstr "指定該工作流開始可用的日期。"
+
+#: includes/pages/workflow-create.php:228
+msgid "End date :"
+msgstr "結束日期："
+
+#: includes/pages/workflow-create.php:230
+msgid ""
+"End date is not required. If not specified, the workflow is valid for ever.\n"
+"                                     \t\t\tSpecify an end date, if you want "
+"to retire the workflow."
+msgstr ""
+"結束日期必填。若未指定，工作流永遠無效。\n"
+"                                     \t\t\t若您要下架該工作流，請指定結束日"
+"期。"
+
+#: includes/pages/workflow-create.php:260
+msgid "Workflow Applicable To"
+msgstr "工作流可用於"
+
+#: includes/pages/workflow-create.php:281
+msgid "new posts/pages"
+msgstr "新建文章/頁面"
+
+#: includes/pages/workflow-create.php:289
+msgid "revised posts/pages"
+msgstr "修訂過的文章/頁面"
+
+#: includes/pages/workflow-create.php:301
+msgid "Roles (who can submit to this workflow) :"
+msgstr "能提交到此工作流的角色："
+
+#: includes/pages/workflow-create.php:305
+#: includes/pages/workflow-create.php:329
+msgid " (applicable to all, if none specified)"
+msgstr "（可用於所有，若未指定某個具體的）"
+
+#: includes/pages/workflow-create.php:326
+msgid "Post Types :"
+msgstr "文章類型："
+
+#: includes/pages/workflow-create.php:349
+msgid "Workflow Design Canvas"
+msgstr "工作流設計器"
+
+#: includes/pages/workflow-create.php:351
+msgid "Loading Step..."
+msgstr "狀態步驟..."
+
+#: includes/pages/workflow-create.php:362
+#: includes/pages/workflow-create.php:389
+msgid "Save and Close"
+msgstr "保存并关闭"
+
+#: includes/pages/workflow-create.php:378
+msgid "Clear Workflow"
+msgstr "清除工作流"
+
+#: includes/pages/workflow-create.php:383
+msgid "Save as new version"
+msgstr "另存為新版本"
+
+#: includes/pages/workflow-create.php:422
+#: includes/pages/workflow-create.php:434
+#: includes/pages/workflow-create.php:440
+msgid "Quit"
+msgstr "退出"
+
+#: includes/pages/workflow-create.php:439
+msgid "Paste"
+msgstr "粘貼"
+
+#: includes/pages/workflow-dashboard-widget.php:41
+msgid " and "
+msgstr " 和 "
+
+#: includes/pages/workflow-dashboard-widget.php:52
+msgid "There are currently "
+msgstr "当前有"
+
+#: includes/pages/workflow-dashboard-widget.php:54
+msgid " assignment(s)"
+msgstr "分配"
+
+#: includes/pages/workflow-dashboard-widget.php:72
+msgid "Tasks by Due Date"
+msgstr "按到期日期排列任務"
+
+#: includes/pages/workflow-dashboard-widget.php:151
+msgid "Tasks by Priority"
+msgstr "按優先順序排列任務"
+
+#: includes/pages/workflow-history.php:100
+msgid "Workflow history deleted successfully."
+msgstr "已成功刪除工作流歷史記錄。"
+
+#: includes/pages/workflow-history.php:104
+#: includes/pages/workflow-history.php:116
+msgid "Dismiss this notice."
+msgstr "关闭此通知。"
+
+#: includes/pages/workflow-history.php:112
+msgid "No eligible workflow history found to delete."
+msgstr "未找到符合條件的工作流歷史記錄以刪除。"
+
+#: includes/pages/workflow-history.php:124
+msgid ""
+"There was an error while deleting the history. Try again OR contact your "
+"administrator."
+msgstr "刪除歷史記錄時出錯。請重試或聯繫您的管理員。"
+
+#: includes/pages/workflow-history.php:136
+msgid "View Post/Page Workflow History"
+msgstr "查看文章/頁面工作流歷史記錄"
+
+#: includes/pages/workflow-history.php:163
+#: includes/pages/workflow-inbox.php:214
+msgid "Filter"
+msgstr "篩選"
+
+#: includes/pages/workflow-history.php:170
+msgid "Download Workflow History Report"
+msgstr "下載工作流歷史記錄報告"
+
+#: includes/pages/workflow-history.php:203
+msgid "Show No-Action Activities"
+msgstr "显示不操作活动"
+
+#: includes/pages/workflow-history.php:209
+msgid "Hide No-Action Activities"
+msgstr "隐藏不行动活动"
+
+#: includes/pages/workflow-history.php:383
+msgid "No workflow history data found."
+msgstr "未發現工作歷史記錄資料。"
+
+#: includes/pages/workflow-inbox.php:75 oasis-workflow-pro.php:2291
+#: oasis-workflow-pro.php:2292
+msgid "Inbox"
+msgstr "收件箱"
+
+#: includes/pages/workflow-inbox.php:136 includes/pages/workflow-list.php:65
+msgid "All"
+msgstr "所有"
+
+#: includes/pages/workflow-inbox.php:142
+msgid "Mine"
+msgstr "我的"
+
+#: includes/pages/workflow-inbox.php:166
+msgid "View inbox of "
+msgstr "查看收件箱of"
+
+#: includes/pages/workflow-inbox.php:187
+msgid "Show"
+msgstr "顯示"
+
+#: includes/pages/workflow-inbox.php:209
+msgid "All Priority"
+msgstr "所有优先级"
+
+#: includes/pages/workflow-list.php:41
+msgid "Edit Workflows"
+msgstr "編輯工作流"
+
+#: includes/pages/workflow-list.php:45
+msgid "Add New"
+msgstr "新建"
+
+#: includes/pages/workflow-list.php:69
+msgid "Active"
+msgstr "活動的"
+
+#: includes/pages/workflow-list.php:73
+msgid "Inactive"
+msgstr "不活動的"
+
+#: includes/pages/workflow-list.php:154
+msgid "You don't have any workflows. Let's go "
+msgstr "您沒有任何工作流。來"
+
+#: includes/pages/workflow-list.php:155
+msgid "create one"
+msgstr "新建一個"
+
+#: includes/pages/workflow-list.php:158
+msgid "You don't have "
+msgstr "你没有"
+
+#: includes/pages/workflow-list.php:160
+msgid " workflows"
+msgstr "工作流"
+
+#: includes/pages/workflow-reports.php:30
+msgid "Current Assignments"
+msgstr "當前分配"
+
+#: includes/pages/workflow-reports.php:31
+msgid "Workflow Submissions"
+msgstr "工作流提交結果"
+
+#: includes/pages/workflow-reports.php:32
+msgid "Assignments By Due Date"
+msgstr "按到期日期分配"
+
+#: includes/pages/workflow-submission-report.php:67
+msgid "All Post Types"
+msgstr "文章類型："
+
+#: includes/pages/workflow-submission-report.php:76
+msgid "Select Team"
+msgstr "选择步骤"
+
+#: includes/pages/workflow-submission-report.php:79
+msgid "All Teams"
+msgstr "所有到期日期"
+
+#: includes/pages/workflow-submission-report.php:99
+msgid "Not in Workflow"
+msgstr "不在工作流中"
+
+#: includes/pages/workflow-submission-report.php:102
+msgid "In Workflow"
+msgstr "在工作流中"
+
+#: includes/pages/workflow-submission-report.php:148
+msgid "-- Select Action --"
+msgstr "---選擇操作--"
+
+#: includes/pages/workflow-submission-report.php:149
+msgid "Abort"
+msgstr "中止"
+
+#: includes/pages/workflow-submission-report.php:151
+msgid "Apply"
+msgstr "應用"
+
+#: includes/pages/workflow-tools.php:22
+msgid "Import/Export"
+msgstr "导入/导出"
+
+#: includes/pages/workflow-tools.php:23
+msgid "System Info"
+msgstr "系统信息"
+
+#: js/pages/acf-pro-validator-new.js:119 js/pages/acf-pro-validator-new.js:130
+msgid "Validation failed"
+msgstr "验证失败"
+
+#: js/pages/acf-pro-validator-new.js:121 js/pages/acf-pro-validator-new.js:132
+msgid "1 field requires attention"
+msgstr "1个字段需要注意"
+
+#: js/pages/acf-pro-validator-new.js:123 js/pages/acf-pro-validator-new.js:134
+#, javascript-format
+msgid "%d fields require attention"
+msgstr "%d 字段需要注意"
+
+#: js/pages/acf-pro-validator.js:61
+msgid "validation_failed"
+msgstr "驗證失敗"
+
+#: js/pages/acf-pro-validator.js:107
+msgid "validation_failed_1"
+msgstr "驗證失敗1"
+
+#: js/pages/acf-pro-validator.js:110
+msgid "validation_failed_2"
+msgstr "驗證失敗2"
+
+#: oasis-workflow-pro.php:374
+msgid "Success"
+msgstr "成功"
+
+#: oasis-workflow-pro.php:375
+msgid "Failure"
+msgstr "失敗"
+
+#: oasis-workflow-pro.php:379
+msgid "In Progress"
+msgstr "進行中"
+
+#: oasis-workflow-pro.php:380
+msgid "In Review"
+msgstr "複審中"
+
+#: oasis-workflow-pro.php:381
+msgid "Ready to Publish"
+msgstr "準備好發佈"
+
+#: oasis-workflow-pro.php:385 oasis-workflow-pro.php:1197
+#: oasis-workflow-pro.php:1253
+msgid "first name"
+msgstr "名"
+
+#: oasis-workflow-pro.php:386 oasis-workflow-pro.php:1198
+#: oasis-workflow-pro.php:1254
+msgid "last name"
+msgstr "姓"
+
+#: oasis-workflow-pro.php:387 oasis-workflow-pro.php:1199
+#: oasis-workflow-pro.php:1255
+msgid "post title"
+msgstr "職位頭銜"
+
+#: oasis-workflow-pro.php:388
+msgid "post ID"
+msgstr "没有文章ID/错误的文章ID！"
+
+#: oasis-workflow-pro.php:389 oasis-workflow-pro.php:1200
+#: oasis-workflow-pro.php:1256
+msgid "category"
+msgstr "類別"
+
+#: oasis-workflow-pro.php:390 oasis-workflow-pro.php:1201
+#: oasis-workflow-pro.php:1257
+msgid "last modified date"
+msgstr "上次修改日期"
+
+#: oasis-workflow-pro.php:391 oasis-workflow-pro.php:1202
+#: oasis-workflow-pro.php:1258
+msgid "post author"
+msgstr "文章作者"
+
+#: oasis-workflow-pro.php:392 oasis-workflow-pro.php:1203
+#: oasis-workflow-pro.php:1259
+msgid "blog name"
+msgstr "博客名"
+
+#: oasis-workflow-pro.php:393 oasis-workflow-pro.php:1260
+msgid "post submitter"
+msgstr "提交提交者"
+
+#: oasis-workflow-pro.php:399 oasis-workflow-pro.php:1108
+#: oasis-workflow-pro.php:1212
+msgid "Post Title, this will be displayed as a link"
+msgstr "文章標題，這將顯示為一個連結"
+
+#: oasis-workflow-pro.php:400
+msgid "Post ID"
+msgstr "職位頭銜"
+
+#: oasis-workflow-pro.php:402 oasis-workflow-pro.php:1110
+#: oasis-workflow-pro.php:1214
+msgid "Last Modified Date"
+msgstr "上次修改日期"
+
+#: oasis-workflow-pro.php:405 oasis-workflow-pro.php:1112
+#: oasis-workflow-pro.php:1217
+msgid "Blog Name"
+msgstr "博客名"
+
+#: oasis-workflow-pro.php:406 oasis-workflow-pro.php:1113
+#: oasis-workflow-pro.php:1218
+msgid "Current User"
+msgstr "當前用戶"
+
+#: oasis-workflow-pro.php:1706
+msgid "New idea proposed."
+msgstr "未提出新想法。"
+
+#: oasis-workflow-pro.php:1707
+msgid "An author has been assigned to the post."
+msgstr "已為該文章分配了一位作者。"
+
+#: oasis-workflow-pro.php:1708
+msgid "The post is ready for publication."
+msgstr "該文章已準備好發佈。"
+
+#: oasis-workflow-pro.php:1747 src/components/ow-make-revision.js:26
+msgid ""
+"You may not make changes to this published content. You must first make a "
+"revision and then submit your changes for approval."
+msgstr ""
+"您可能不會更改此此已發佈的內容。 您必須先修改它，然後提交更改以供批准。"
+
+#: oasis-workflow-pro.php:1760
+msgid "Copy of -"
+msgstr "拷貝自 -"
+
+#: oasis-workflow-pro.php:2235
+msgid ""
+"Please deactivate and uninstall the Oasis Workflow \"free\" version, before "
+"installing the \"Pro\" version."
+msgstr "请在安装\"Pro\"版本之前停用并卸载绿洲工作流程\"免费\"版本。"
+
+#: oasis-workflow-pro.php:2241
+msgid "Workflow Tasks At a Glance"
+msgstr "工作流任務概覽"
+
+#: oasis-workflow-pro.php:2282 oasis-workflow-pro.php:2283
+msgid "Workflows"
+msgstr "工作流"
+
+#: oasis-workflow-pro.php:2313 oasis-workflow-pro.php:2314
+msgid "Reports"
+msgstr "報表"
+
+#: oasis-workflow-pro.php:2322 oasis-workflow-pro.php:2323
+msgid "Revisions"
+msgstr "修訂"
+
+#: oasis-workflow-pro.php:2331 oasis-workflow-pro.php:2332
+msgid "All Workflows"
+msgstr "所有工作流"
+
+#: oasis-workflow-pro.php:2341 oasis-workflow-pro.php:2342
+msgid "Add New Workflow"
+msgstr "新建工作流"
+
+#: oasis-workflow-pro.php:2359 oasis-workflow-pro.php:2360
+msgid "Tools"
+msgstr "工具"
+
+#: oasis-workflow-pro.php:2371 oasis-workflow-pro.php:2372
+msgid "Add-ons"
+msgstr "外掛程式"
+
+#: oasis-workflow-pro.php:2503
+msgid "Welcome to Oasis Workflow"
+msgstr "歡迎使用Oasis工作流"
+
+#: oasis-workflow-pro.php:2505
+msgid "To get started with Oasis Workflow follow the steps listed below."
+msgstr "按照以下步驟開始使用Oasis工作流。"
+
+#: oasis-workflow-pro.php:2507
+#, php-format
+msgid ""
+"1. Activate the plugin by providing a valid license key on Workflows %s "
+"Settings, License tab."
+msgstr "1. 在工作流%s設置的授權標籤頁中輸入有效授權碼，啟動外掛程式。"
+
+#: oasis-workflow-pro.php:2510
+msgid ""
+"2. Create a new workflow OR modify/use the sample workflows that come with "
+"the plugin."
+msgstr "2. 创建新工作流或修改/使用插件附带的示例工作流。"
+
+#: oasis-workflow-pro.php:2513
+#, php-format
+msgid ""
+"3. Activate the workflow process by going to Workflows %s Settings, Workflow "
+"tab."
+msgstr "3. 在工作流%s工作流標籤頁中啟動工作流流程。"
+
+#: oasis-workflow-pro.php:2607
+#, php-format
+msgid ""
+"In order to use the \"Pro\" version, you need to deactivate and delete the "
+"free/lite version of Oasis Workflow plugin on the %splugins page%s"
+msgstr ""
+"為了使用專業版，您需要停用並刪除 %s 外掛程式頁 %s上的Oasis 工作流外掛程式的免"
+"費/精簡版本。"
+
+#: oasis-workflow-pro.php:2907
+msgid "Used Revision"
+msgstr "使用的修訂版"
+
+#: oasis-workflow-pro.php:2915
+msgid "Current Revision"
+msgstr "當前修訂版"
+
+#: oasis-workflow-pro.php:2923
+msgid "Scheduled Revision"
+msgstr "計畫的修訂版"
+
+#: oasis-workflow-pro.php:2928
+#, php-format
+msgid "Scheduled Revision <span class=\"count\">(%s)</span>"
+msgstr "预定修订 <span class=\"count\">（ %s ）</span>"
+
+#: oasis-workflow-pro.php:3099
+msgid ""
+"A reminder email about this assignment was sent successfully to the user."
+msgstr "有关此任务的提醒电子邮件已成功发送给用户。"
+
+#: oasis-workflow-pro.php:3140
+msgid "Do you really want to clear all the steps?"
+msgstr "您真要清除所有步驟嗎？"
+
+#: oasis-workflow-pro.php:3141
+msgid "This step is already defined. Do you really want to remove this step?"
+msgstr "該步驟已定義。您真要刪除它嗎？"
+
+#: oasis-workflow-pro.php:3143
+msgid "Please select Post Status."
+msgstr "請選擇文章狀態。"
+
+#: oasis-workflow-pro.php:3144
+msgid "The path between"
+msgstr "路徑位於"
+
+#: oasis-workflow-pro.php:3145
+msgid "step and"
+msgstr "步驟和"
+
+#: oasis-workflow-pro.php:3146
+msgid "step is incorrect."
+msgstr "步驟錯誤。"
+
+#: oasis-workflow-pro.php:3147
+msgid ""
+"To edit/delete the step, right click on the step to access the step menu."
+msgstr "右擊步驟彈出快顯功能表來編輯/刪除步驟。"
+
+#: oasis-workflow-pro.php:3149
+msgid ""
+"To connect to another step drag a line from the \"dot\" to the next step."
+msgstr "從連接點拖拽一條線來連接別的步驟。"
+
+#: oasis-workflow-pro.php:3151
+msgid "Post Status"
+msgstr "文章狀態"
+
+#: oasis-workflow-pro.php:3165
+msgid ""
+"There is an existing workflow with the same name. Please choose another name."
+msgstr "已存在同名工作流。請選用另一個不同的名字。"
+
+#: oasis-workflow-pro.php:3167
+msgid "You have unsaved changes."
+msgstr "您有未保存的更改。"
+
+#: oasis-workflow-pro.php:3184
+msgid "Due date cannot be in the past."
+msgstr "過期日期不能是過去的時間。"
+
+#: oasis-workflow-pro.php:3193
+msgid "Step name is required."
+msgstr "步驟名必填。"
+
+#: oasis-workflow-pro.php:3194
+msgid "Step name already exists. Please use a different name."
+msgstr "已存在同名步驟。請您使用不同的名字。"
+
+#: oasis-workflow-pro.php:3196
+msgid "Please select assignee(s)."
+msgstr "請選擇任務執行人。"
+
+#: oasis-workflow-pro.php:3197
+msgid "Please select a placeholder."
+msgstr "請選擇一個預留位置。"
+
+#: oasis-workflow-pro.php:3199
+msgid "Please enter the number of days for default due date.."
+msgstr "請為默認過期日期輸入天數..."
+
+#: src/components/custom-post-type-support.js:8
+msgid "If this is a custom post type, check this page: "
+msgstr "如果这是自定义帖子类型, 请检查此页:"
+
+#: src/components/custom-post-type-support.js:15
+msgid ""
+" for more information on how to make custom post type work with Gutenberg "
+"Editor."
+msgstr "有关如何使自定义帖子类型与古腾堡编辑器配合使用的详细信息。"
+
+#: src/components/ow-abort.js:105 src/components/ow-reassign.js:322
+#: src/components/ow-signoff-last-step.js:196 src/components/ow-signoff.js:434
+#: src/components/ow-submit-to-workflow.js:429
+msgid "Please enter comments."
+msgstr "请输入注释。"
+
+#: src/components/ow-claim.js:114
+msgid "Other Actions"
+msgstr "其他行為"
+
+#: src/components/ow-claim.js:119 src/components/ow-signoff-response.js:62
+msgid "Take me to List page"
+msgstr "带我到列表页面"
+
+#: src/components/ow-claim.js:124 src/components/ow-signoff-response.js:67
+msgid "Take me to Workflow Inbox"
+msgstr "带我到工作流收件箱"
+
+#: src/components/ow-editorial-comments.js:44
+msgid "Editorial Comments"
+msgstr "编辑评论于"
+
+#: src/components/ow-pre-publish-checklist.js:20
+msgid "Pre Publish Checklist "
+msgstr "发布前的检查清单 "
+
+#: src/components/ow-reassign.js:24
+msgid "Available Actor(s)"
+msgstr "可用参与者"
+
+#: src/components/ow-reassign.js:329 src/components/ow-signoff-last-step.js:203
+#: src/components/ow-signoff.js:441 src/components/ow-submit-to-workflow.js:436
+msgid "Please enter ACF required fields."
+msgstr "請輸入一個到期日期。"
+
+#: src/components/ow-reassign.js:378
+msgid "No users found to reassign"
+msgstr "未發現帶重新分配的用戶"
+
+#: src/components/ow-reassign.js:402
+msgid "select actor(s) to reassign the task"
+msgstr "选择参与者重新分配任务"
+
+#: src/components/ow-signoff-last-step.js:27 src/components/ow-signoff.js:36
+msgid "Continue to Signoff"
+msgstr "继续签号"
+
+#: src/components/ow-signoff-last-step.js:415 src/components/ow-signoff.js:693
+#: src/components/ow-submit-to-workflow.js:699
+msgid "redirecting..."
+msgstr "重 定向。。。"
+
+#: src/components/ow-signoff-last-step.js:446
+msgid ""
+"This is the last step in the workflow. Are you sure to complete the workflow?"
+msgstr "這是工作流中最後一個步驟。您確信要完成該工作流嗎？"
+
+#: src/components/ow-signoff-last-step.js:500 src/components/ow-signoff.js:845
+#: src/components/ow-submit-to-workflow.js:891
+msgid "The comments will be visible throughout the workflow."
+msgstr "注释将在整个工作流中可见。"
+
+#: src/components/ow-signoff-last-step.js:523
+msgid "Publish Immediately?"
+msgstr "立即发布？"
+
+#: src/components/ow-signoff-last-step.js:547
+msgid ""
+"There are no further steps defined in the workflow. Do you want to cancel "
+"the post/page from the workflow?"
+msgstr "該工作流中未定義更多步驟。您要該工作流中取消文章/頁面嗎？"
+
+#: src/components/ow-signoff-response.js:57
+msgid "What’s next?"
+msgstr "下一步是什么？"
+
+#: src/components/ow-signoff.js:194
+msgid "Select Step"
+msgstr "选择步骤"
+
+#: src/components/ow-signoff.js:733
+msgid "Action"
+msgstr "动作"
+
+#: src/components/ow-signoff.js:737
+msgid ""
+"After completing or reviewing the post/article, select appropriate action."
+msgstr "完成或审阅帖子/文章后，选择适当的操作。"
+
+#: src/components/ow-signoff.js:766 src/components/ow-submit-to-workflow.js:769
+msgid "Your action will push the Post/Article to the below listed next step."
+msgstr "您的操作将推动帖子/文章到下面列出的下一步。"
+
+#: src/components/ow-submit-to-workflow.js:555
+#, fuzzy
+#| msgid "Please enter comments."
+msgid "Please enter a title or content."
+msgstr "请输入注释。"
+
+#: src/components/ow-task-priority-select-control.js:75
+msgid "Post/Article Priority"
+msgstr "帖子/文章优先级"
+
+#: src/components/ow-team-select-control.js:18
+msgid "Assign To Team"
+msgstr "分配给团队"
+
+#: src/components/ow-workflow-select-control.js:67
+msgid "Select Workflow"
+msgstr "选择工作流程"
+
+#: src/ow-sidebar.js:86
+msgid "Loading..."
+msgstr "载入中..."
+
+#: src/ow-sidebar.js:273
+msgid "Workflow actions are not available for this post type."
+msgstr "此发布类型的工作流操作不可用。"
+
+#: src/ow-sidebar.js:370 src/ow-sidebar.js:372
+msgid "Oasis Workflow"
+msgstr "Oasis Workflow"
+
+#, fuzzy
+#~| msgid "Workflow History"
+#~ msgid "workflowId is empty"
+#~ msgstr "工作流歷史記錄"
+
+#, javascript-format
+#~ msgid "%1$s List"
+#~ msgstr "%1$s列表"
+
+#~ msgid "Revision content transfer completed."
+#~ msgstr "修订内容传输完成。"
+
+#~ msgid "Back to Inbox"
+#~ msgstr "返回收件箱"
+
+#, php-format
+#~ msgid ""
+#~ "<div>Hello %1$s,</div><p>The post <a href=\"%2$s\" title=\"%3$s\">%3$s</"
+#~ "a> has been cancelled from the workflow.</p>"
+#~ msgstr ""
+#~ "<div>你好%1$s，</div><p>帖子 <a href=\"%2$s\" title=\"%3$s\">%3$s</a> 已從"
+#~ "工作流取消。</p>"
+
+#~ msgid "Browse Revisions"
+#~ msgstr "使用的修订版"
+
+#~ msgid ")"
+#~ msgstr "）"
+
+#, php-format
+#~ msgid ""
+#~ " and <a href=\"admin.php?page=oasiswf-inbox&action=inbox-"
+#~ "unclaimed&user=%s\">%s unclaimed task(s)</a>."
+#~ msgstr ""
+#~ "和<a href=\"admin.php?page=oasiswf-inbox&action=inbox-"
+#~ "unclaimed&user=%s\">%s 无人认领的任务。</a>"
+
+#~ msgid "Hurray! No assignments"
+#~ msgstr "趕快！還未分配任務"
+
+#~ msgid ""
+#~ "Please select Post Publish Notification email settings \"Send Email To:\" "
+#~ "assignees."
+#~ msgstr "请选择\"发布发布通知电子邮件\"设置\"向：受让人发送电子邮件\"。"
+
+#~ msgid ""
+#~ "Please select Revised Post Publish Notification email settings \"Send "
+#~ "Email To:\" assignees."
+#~ msgstr "请选择修订的发布通知电子邮件设置\"向：受让人发送电子邮件\"。"
+
+#~ msgid ""
+#~ "Please select Post Submit Notification email settings \"Send Email To:\" "
+#~ "assignees."
+#~ msgstr "请选择\"提交通知电子邮件\"设置\"向：受让人发送电子邮件\"。"
+
+#~ msgid ""
+#~ "Please select Unauthorized Update Notification email settings \"Send "
+#~ "Email To:\" assignees."
+#~ msgstr ""
+#~ "请选择\"未经授权的更新通知电子邮件\"设置\"向：受让人发送电子邮件\"。"
+
+#~ msgid ""
+#~ "Please select Task Claimed Notification email settings \"Send Email To:\" "
+#~ "assignees."
+#~ msgstr "请选择任务声明通知电子邮件设置\"向：受让人发送电子邮件\"。"
+
+#~ msgid ""
+#~ "Please select Workflow Abort Notification email settings \"Send Email To:"
+#~ "\" assignees."
+#~ msgstr "请选择工作流中止通知电子邮件设置\"向：受让人发送电子邮件\"。"
+
+#~ msgid "Send Email To:"
+#~ msgstr "發送Email到："
+
+#~ msgid "15 Minutes"
+#~ msgstr "15分鐘"
+
+#~ msgid "30 Minutes"
+#~ msgstr "30分鐘"
+
+#~ msgid "45 Minutes"
+#~ msgstr "45分鐘"
+
+#~ msgid "1 Hour"
+#~ msgstr "1小時"
+
+#~ msgid "4 Hours"
+#~ msgstr "4小時"
+
+#~ msgid "8 Hours"
+#~ msgstr "8小時"
+
+#~ msgid "Only one version of the workflow can be exported."
+#~ msgstr "只能到處工作流的一個版本。"
+
+#~ msgid "File not found."
+#~ msgstr "未發現文件。"
+
+#~ msgid "Upload file and import"
+#~ msgstr "上傳文件並導入"
+
+#~ msgid "Instructions:"
+#~ msgstr "說明："
+
+#~ msgid "Go to the workflows list page"
+#~ msgstr "訪問工作流列表頁"
+
+#~ msgid ""
+#~ "Export the required workflows using the bulk action - Export Workflows."
+#~ msgstr "使用批量操作匯出必需的工作流-匯出工作流。"
+
+#~ msgid "Upload the downloaded csv file to import the workflows."
+#~ msgstr "上傳下載的csv文件以導入工作流。"
+
+#~ msgid "Select bulk action"
+#~ msgstr "選擇批量操作"
+
+#~ msgid "Export Workflows"
+#~ msgstr "匯出工作流"
+
+#~ msgid "No Teams found. Contact your administrator."
+#~ msgstr "未發現小隊。聯繫您的管理員。"
+
+#~ msgid "Assign actor : "
+#~ msgstr "分配任務執行人："

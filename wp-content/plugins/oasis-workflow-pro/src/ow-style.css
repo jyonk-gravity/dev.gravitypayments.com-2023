@@ -1,0 +1,78 @@
+/* That SaSS! */
+#owf-error-message,
+#owf-warning-message,
+#owf-success-message {
+    margin: 5px 5px 20px 0;
+    box-shadow: 0px 0px 0px 0px;
+}
+.owf-end-components .edit-post-post-schedule,
+.owf-end-components .components-checkbox-control__input {
+    margin-top: 10px;
+}
+
+.owf-submit-button-div {
+    float: left;
+}
+.owf-submit-button {
+    margin: 2px 2px 0px 2px;
+}
+
+.owf-guten-hidden {
+    display: none;
+}
+.owf-spinner span.components-spinner,
+.owf-reassign span.components-spinner {
+    height: 15px;
+    width: 15px;
+}
+
+.tooltip {
+    display: inline;
+    position: relative;
+}
+
+.tooltip:hover:after {
+    background: #333;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(title);
+    /*    left: 20%;*/
+    margin-left: -50px;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 180px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 18px;
+}
+
+.tooltip:hover:before {
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    margin-left: 3px;
+    position: absolute;
+    z-index: 99;
+}
+
+.help-icon {
+    width: 10px;
+    vertical-align: middle;
+}
+
+.panel-without-label {
+    margin-top: 5px;
+}
+
+.ow-multi-select select {
+    height: fit-content !important;
+}
+
+.ow-select2-wrap {
+    padding-bottom: 15px;
+}
