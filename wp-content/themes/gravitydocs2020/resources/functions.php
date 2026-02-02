@@ -182,3 +182,6 @@ function remove_protected_text() {
     return '%s';
 }
 add_filter('protected_title_format', 'remove_protected_text');
+
+
+add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );
