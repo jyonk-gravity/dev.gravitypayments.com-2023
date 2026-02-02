@@ -42,7 +42,10 @@ echo '<div id="perfmatters-admin" class="wrap">';
 						echo '<a href="#fonts" rel="options-fonts"><span class="dashicons dashicons-editor-paste-text"></span>' . __('Fonts', 'perfmatters') . '</a>';
 						echo '<a href="#cdn" rel="options-cdn"><span class="dashicons dashicons-admin-site-alt2"></span>' . __('CDN', 'perfmatters') . '</a>';
 						echo '<a href="#analytics" rel="options-analytics"><span class="dashicons dashicons-chart-bar"></span>' . __('Analytics', 'perfmatters') . '</a>';
-						echo '<a href="#code" rel="code-code"><span class="dashicons dashicons-editor-code"></span>' . __('Code', 'perfmatters') . '</a>';
+
+						if(!Perfmatters\Config::$code_disabled) {
+							echo '<a href="#code" rel="code-code"><span class="dashicons dashicons-editor-code"></span>' . __('Code', 'perfmatters') . '</a>';
+						}
 
 						//spacer
 						echo '<hr style="border-top: 1px solid #f2f2f2; border-bottom: 0px; margin: 10px 0px;" />';
@@ -155,9 +158,11 @@ echo '<div id="perfmatters-admin" class="wrap">';
 						    echo '</section>';
 
 						    //code
-						    echo '<section id="code-code" class="section-content" data-pm-subnav="code-snippets">';
-						    	require_once('code.php');
-						    echo '</section>';
+						    if(!Perfmatters\Config::$code_disabled) {
+							    echo '<section id="code-code" class="section-content" data-pm-subnav="code-snippets">';
+							    	require_once('code.php');
+							    echo '</section>';
+							}
 
 					    echo '</div>';
 
@@ -209,9 +214,11 @@ echo '<div id="perfmatters-admin" class="wrap">';
 				echo '</section>';
 
 				//code snippets
-				echo '<section id="code-snippets" data-pm-parent="code-code" class="section-content pm-child">';	
-					require_once('pmcs.php');
-				echo '</section>';
+				if(!Perfmatters\Config::$code_disabled) {
+					echo '<section id="code-snippets" data-pm-parent="code-code" class="section-content pm-child">';	
+						require_once('pmcs.php');
+					echo '</section>';
+				}
 				
 			echo '</div>';
 		echo '</div>';
@@ -235,13 +242,21 @@ echo '</div>';
 		    	var tab = hashParts[0];
 		    	var subnav = hashParts[1];
 
+		    	//selected variables
+		    	var selectedNav = $('#perfmatters-menu > a[href="#' + tab + '"]');
+		    	var selectedContent = $('#' + selectedNav.attr('rel'));
+		    	
+		    	//invalid selection
+		    	if(selectedNav.length === 0 && selectedContent.length === 0) {
+		    		return;
+		    	}
+
 		    	//deactivate previous active tab
 		    	$('#perfmatters-menu > a.active').removeClass("active");
 				$('#perfmatters-options .section-content.active').removeClass('active');
 
 		    	//activate selected tab
-		    	var selectedNav = $('#perfmatters-menu > a[href="#' + tab + '"]');
-		    	var selectedContent = $('#' + selectedNav.attr('rel'));
+		    	
 		    	selectedNav.addClass('active');
 		    	selectedContent.addClass('active');
 

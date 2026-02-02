@@ -77,7 +77,7 @@ class Snippet
         	'type' => $_POST['type'] ?? '',
         	'active' => $_POST['active'] ?? 0,
         	'location' => $_POST['location'] ?? '',
-        	'priority' => $_POST['priority'] ? intval($_POST['priority']) : 10,
+        	'priority' => PMCS::get_priority($_POST['priority'] ?? null),
         	'optimizations' => $_POST['optimizations'] ?? [],
         	'tags' => $_POST['tags'] ? array_filter(array_map('trim', explode(',', $_POST['tags']))) : [],
         	'description' => $_POST['description'] ?? '',
@@ -105,7 +105,7 @@ class Snippet
 	        //handle validation error
 	        if(is_wp_error($validated)) {
 
-	            $message = $validated->get_error_message();
+	            $message = ucfirst($validated->get_error_message());
 	            $data = $validated->get_error_data();
 
 	            if($data['line']) {
@@ -116,7 +116,7 @@ class Snippet
 	                $message .= ' on line ' . $lineNumber;
 	            }
 
-	            return PMCS::admin_notice('invalid_code', $message . '<pre>' . print_r($data, true) . '</pre>', 'error');
+	            return PMCS::admin_notice('invalid_code', $message, 'error');
 	        }
         } 
         else if($_POST['type'] == 'js') {
@@ -250,4 +250,24 @@ class Snippet
             'code'   => $code
         ];
     }
+
+    //return docblock line count
+    public static function get_docblock_line_count($file_path) {
+	    
+	    if(!file_exists($file_path)) {
+	        return 0;
+	    }
+
+	    $content = file_get_contents($file_path);
+	    $lines = explode("\n", $content);
+	    
+	    foreach ($lines as $index => $line) {
+	        // Look for your specific "User Code Start" marker or the end of the docblock
+	        if (strpos($line, '<Internal Doc End>') !== false) {
+	            return $index + 2; // Returns the line number where the docblock ends
+	        }
+	    }
+
+	    return 0; 
+	}
 }

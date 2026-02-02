@@ -311,7 +311,7 @@
                         {
                             if(wp_verify_nonce($_POST['nonce'],  'reorder-interface-reset-' . get_current_user_id()))
                                 { 
-                                    $reset_sort_view_ID =   intval($_POST['sort_view_ID']);
+                                    $reset_sort_view_ID =   intval( $_POST['sort_view_ID'] );
                                     
                                     global $wpdb;
                                                         
@@ -330,11 +330,17 @@
                                                 {
                                                     $sort_post_type =   $sort_settings['_rules']['post_type'][0];
                                                     
-                                                    //reset the menu_order
-                                                    $query = "UPDATE `". $wpdb->posts ."`
-                                                                    SET menu_order = 0
-                                                                    WHERE `post_type`    =   '". $sort_post_type ."'";
-                                                    $results = $wpdb->get_results($query);
+                                                    $sort_post_type = sanitize_key( $sort_post_type );
+
+                                                    $mysql_query = $wpdb->prepare( "
+                                                                                    UPDATE {$wpdb->posts}
+                                                                                    SET    menu_order = 0
+                                                                                    WHERE  post_type = %s
+                                                                                      AND  menu_order != 0
+                                                                                    ",
+                                                                                    $sort_post_type );
+
+                                                    $results = $wpdb->get_results( $mysql_query );
                                                 }
                                                 
                                         }
@@ -861,7 +867,7 @@
             */
             function automatic_order_send_to_manual( $sort_view_id )
                 {
-                    
+                    $sort_view_id   =   intval ( $sort_view_id );
                     $args   =   $this->functions->query_arguments_from_sort_settings( $sort_view_id );
                     
                     //we need only the id's
@@ -897,6 +903,8 @@
                     foreach( $objects_list   as  $object_id )
                         {
                             $count++;
+                            
+                            $object_id  =   intval ( $object_id );
                             
                             if  (  $count   ==  $process_block_count )
                                 {
@@ -2498,7 +2506,6 @@
             */
             function saveAjaxTabsOrder()
                 {
-                    global $wpdb, $blog_id;
                     
                     //check for nonce
                     if(! wp_verify_nonce($_POST['nonce'],  'update-sorting-menu-tabs'))
@@ -2507,9 +2514,10 @@
                             die();   
                         }
                         
-                    $menu_location  = $_POST['menu_location'];
+                    $menu_location  = sanitize_text_field ( $_POST['menu_location'] );
                     $order_list     = $_POST['order_list'];
                     $order_list     =   array_filter($order_list);
+                    $order_list     =   array_map( 'intval', (array) $order_list );
                     
                     if(empty($menu_location)    ||  !is_array($order_list)   ||  count($order_list) < 2)
                         die();
@@ -2799,6 +2807,8 @@
                     
                     foreach($data_list as $post_id => $parent_id ) 
                         {
+                            $post_id    =   intval ( $post_id );
+                            $parent_id  =   intval ( $parent_id );
                             
                             $list_objects_ID[]  =   $post_id;
                             if ( ($is_hierarhical === TRUE   ||  $is_woocommerce_archive ) &&  ( $sort_view_settings['_view_selection'] == 'archive' ||  $sort_view_settings['_view_selection'] == 'simple') )

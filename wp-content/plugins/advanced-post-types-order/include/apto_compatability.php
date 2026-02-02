@@ -65,6 +65,9 @@
                     if ( is_plugin_active( 'translatepress-business/index.php' ) || is_plugin_active( 'translatepress-multilingual/index.php' ) )
                         include_once( APTO_PATH . 'include/compatibility/translatepress.php' );
                         
+                    if ( is_plugin_active( 'elementor/elementor.php' ) )
+                        include_once( APTO_PATH . 'include/compatibility/elementor.php' );
+                        
                         
                     if ( is_plugin_active( 'essential-grid/essential-grid.php' ) )
                         {
@@ -190,11 +193,8 @@
                     $posts_list =    $custom_query->posts;
                     
                     if(count($posts_list) > 0)
-                        {
-                            global $wpdb; 
-                            
-                            $options['orderby'] =   " FIELD(p.ID, ". implode(",", $posts_list) .") ASC";
-                            
+                        {                            
+                            $options['orderby'] =   " FIELD(p.ID, ". implode(",", $posts_list) .") ASC";  
                         }
                     
                     return $options;

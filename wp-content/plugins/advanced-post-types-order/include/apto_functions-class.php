@@ -498,9 +498,7 @@
                     $settings   =   $this->get_settings();
                     if ( isset($settings['create_logs']) && $settings['create_logs'] == "1" && !is_admin() )
                          $this->save_log('query_match', array('sort_view_id'  =>  $sort_view_id, 'query'  =>  $query));
-                    
-                    global $wpdb;
-                    
+                                        
                     $new_orderBy = '';
                         
                     $sort_view_settings =   $this->get_sort_view_settings($sort_view_id);
@@ -625,6 +623,7 @@
                                     $_order_list = array_reverse($order_list);
                                     if($query_order == 'DESC')   
                                         $_order_list = array_reverse($_order_list);
+                                    $_order_list = array_map( 'intval', (array) $_order_list );
                                     
                                     $new_orderBy = "FIELD(".$wpdb->posts.".ID, ". implode(",", $_order_list) .") DESC, ".$wpdb->posts.".post_date ASC";
                                 }
@@ -633,6 +632,7 @@
                                     $_order_list = $order_list;
                                     if($query_order == 'DESC')   
                                         $_order_list = array_reverse($_order_list);
+                                    $_order_list = array_map( 'intval', (array) $_order_list );
                                         
                                     $new_orderBy = "FIELD(".$wpdb->posts.".ID, ". implode(",", $_order_list) ."), ".$wpdb->posts.".post_date DESC";
                                 }
@@ -893,6 +893,8 @@
                                     unset ( $found_posts[$key] );
                                 }
                             
+                            $found_posts = array_map( 'intval', (array) $found_posts );
+                            
                             if ( isset ( $data_set['order_by'][ $data_set_key + 1 ] ) )
                                 {
                                     $sort_by    =   $data_set['order_by'][ $data_set_key + 1 ];
@@ -942,6 +944,8 @@
                             $new_orderBy = "CASE ";
                             foreach ( $posts_list as $post_id )
                                 {
+                                    $post_id    =   intval ( $post_id );
+                                    
                                     $new_orderBy .= " WHEN ". $wpdb->posts .".ID = " . $post_id . "  THEN  ". $counter;
                                     $counter++;
                                 }
@@ -1072,6 +1076,8 @@
                                                     $query_terms    =   $child_terms;    
                                                     
                                                 }
+                                                
+                                            $query_terms = array_map( 'absint', (array) $query_terms );
                                             
                                             if($rule_tax['operator'] == 'IN')
                                                 {
@@ -1105,7 +1111,10 @@
                             //add author if set
                             if(isset($sort_settings['_rules']['author']) && count($sort_settings['_rules']['author']) > 0)
                                 {
-                                    $mysql_query .= " AND ". $wpdb->posts .".post_author IN ('"  .   implode("', '", $sort_settings['_rules']['author']) .   "')";        
+                                    $authors    =   $sort_settings['_rules']['author'];   
+                                    $authors = array_map( 'absint', $authors );
+                                    
+                                    $mysql_query .= " AND ". $wpdb->posts .".post_author IN ('"  .   implode("', '", $authors) .   "')";        
                                 }
                                 
                             $mysql_query .= " AND pm1.meta_key = '". esc_sql($custom_field_name) ."'
@@ -1210,6 +1219,8 @@
                                                     
                                                 }
                                             
+                                            $query_terms = array_map( 'absint', (array) $query_terms );
+                                            
                                             if($rule_tax['operator'] == 'IN')
                                                 {
                                                     $mysql_query .=   "tr" . $q_inner_count .".term_taxonomy_id IN (". implode(",", $query_terms) .")";
@@ -1243,41 +1254,52 @@
                             if( isset($query->query['author'] ) && $query->query['author'] != '' )
                                 {
                                     $authors    =   (array)$query->query['author'];
+                                    $authors    = array_map( 'absint', $authors );
                                     $mysql_query .= " AND ". $wpdb->posts .".post_author IN ('"  .   implode("', '", $authors ) .   "')";        
                                 }
                                 
-                            $post_types =   $this->query_get_post_types($query, TRUE);
-                            $mysql_query .= " AND pm1.meta_key = '". esc_sql($custom_field_name) ."'
-                                        AND ". $wpdb->posts .".post_type IN ('"  .   implode("', '", $post_types) .   "')" ;
+                            $post_types = $this->query_get_post_types($query, TRUE);
+                            $post_types = array_map('sanitize_text_field', $post_types);
+                            $mysql_query .= $wpdb->prepare(
+                                                            " AND pm1.meta_key = %s AND {$wpdb->posts}.post_type IN (" . implode(", ", array_fill(0, count($post_types), "%s")) . ")",
+                                                            array_merge([$custom_field_name], $post_types)
+                                                        );
+                            
+                            $order = strtoupper( $data_set['order'][ $data_set_key ] );
+
+                            // Strict whitelist — only valid SQL keywords allowed
+                            if ( ! in_array( $order, array( 'ASC', 'DESC' ), true ) ) {
+                                $order = 'ASC'; // safe default
+                            }
                             
                             switch($custom_field_type)
                                 {
                                     case "SIGNED"     :
-                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS SIGNED) ". $data_set['order'][$data_set_key];
+                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS SIGNED) ". $order;
                                                         break;
                                     
                                     case "UNSIGNED"     :
-                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS UNSIGNED) ". $data_set['order'][$data_set_key];
+                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS UNSIGNED) ". $order;
                                                         break;
                                                         
                                     case "float"     :
-                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS DECIMAL(20,6)) ". $data_set['order'][$data_set_key];
+                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS DECIMAL(20,6)) ". $order;
                                                         break;
                                                         
                                     case "DATE"     :
-                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS DATE) ". $data_set['order'][$data_set_key];
+                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS DATE) ". $order;
                                                         break;
                                                         
                                     case "DATETIME"     :
-                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS DATETIME) ". $data_set['order'][$data_set_key];
+                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS DATETIME) ". $order;
                                                         break;
                                                         
                                     case "TIME"     :
-                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS TIME) ". $data_set['order'][$data_set_key]; 
+                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), CAST(pm1.meta_value AS TIME) ". $order; 
                                                         break;
                                                         
                                     default:
-                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), pm1.meta_value ". $data_set['order'][$data_set_key];                            
+                                                        $mysql_query .= " ORDER BY IF(pm1.meta_value = '' or pm1.meta_value is null,1,0), pm1.meta_value ". $order;                            
                                                         break;
                                 }            
                             
@@ -1299,7 +1321,7 @@
                                     
                                     $previous_meta_value    =   $result->meta_value;
                                     
-                                    $orderBy .= " WHEN ". $wpdb->posts .".ID = ".$result->ID."  THEN  ". $counter;   
+                                    $orderBy .= " WHEN ". $wpdb->posts .".ID = " . intval ( $result->ID ) . "  THEN  ". $counter;   
                                 }
                             
                             $counter++;
@@ -1374,7 +1396,8 @@
                             $orderBy = "CASE ";
                             foreach ($post_list as $post_id)
                                 {
-                
+                                    $post_id    =   inval ( $post_id );
+                                    
                                     $orderBy .= " WHEN ". $wpdb->posts .".ID = ".   $post_id    ."  THEN  ". $counter;   
                                     
                                     $counter++;
@@ -1410,7 +1433,7 @@
                     
                     $sticky_list = get_post_meta( $this->auto_apply_sticky_sort_view_id , '_sticky_data', TRUE );
                     end( $sticky_list );
-                    $edit_query =   preg_replace( '/\bLIMIT\s+\d+\s*(,\s*\d+)?/i', 'LIMIT ' . key ( $sticky_list ), $edit_query );
+                    $edit_query =   preg_replace( '/\bLIMIT\s+\d+\s*(,\s*\d+)?/i', 'LIMIT ' . intval ( key ( $sticky_list ) ), $edit_query );
                     
                     if ( empty ( $edit_query ) )
                         return $request;
@@ -1444,7 +1467,7 @@
                     
                     foreach ( $query_post_ids   as  $key    =>  $post_id )
                         {
-                            $insert_Order_By    .=   'WHEN ID = '. $post_id .' THEN '. $key .' ';
+                            $insert_Order_By    .=   'WHEN ID = '. intval ( $post_id ) .' THEN '. intval ( $key ) .' ';
                         }
                                               
                     $insert_Order_By    .=   '  ELSE 9999  
@@ -1474,64 +1497,123 @@
                                             'post_status'               =>  'publish'
                                         );
                     $post_column_filters          = wp_parse_args( $post_column_filters, $defaults );
-                            
-                    
+
                     global $APTO;
-                    
+
                     //try the cache
                     $arguments_hash =   md5( serialize($sort_filters) . serialize($post_column_filters) );
                     if ( $APTO->cache_key_exists( 'sorts_by_filters/' .  $arguments_hash ) )
                         return $APTO->cache_get_key( 'sorts_by_filters/' .  $arguments_hash );
-                    
+
                     //try to identify other sorts which match this
-                            
+
                     //get all sort items
                     //First try the specific / simple sorts then use the multiple / general
                     global $wpdb;
-                    $mysql_query = "SELECT ". $wpdb->posts .".ID FROM ". $wpdb->posts ;
-                    
-                    if(count($sort_filters) > 0)
+
+                    /**
+                     * Helper: validate simple column names (avoid SQL identifier injection)
+                     * Allow only letters, numbers and underscore.
+                     * Returns sanitized column string like: $wpdb->posts . ".`column_name`"
+                     * If invalid, returns false.
+                     */
+                    $sanitize_post_column = function( $col ) use ( $wpdb ) {
+                        if ( preg_match('/^[a-zA-Z0-9_]+$/', $col) ) {
+                            return $wpdb->posts . ".`" . $col . "`";
+                        }
+                        return false;
+                    };
+
+                    $mysql_query = "SELECT " . $wpdb->posts . ".ID FROM " . $wpdb->posts . " ";
+
+                    // We'll build the query with placeholders and collect params in $query_params
+                    $query_params = array();
+
+                    if ( count( $sort_filters ) > 0 )
                         {
                             $q_inner_count  = 1;
-                            foreach($sort_filters as $cf_name =>  $cf_values)
+                            foreach( $sort_filters as $cf_name =>  $cf_values )
                                 {
-                                    $mysql_query .= " INNER JOIN ". $wpdb->postmeta ." AS PMF". $q_inner_count ." ON (". $wpdb->posts .".ID = PMF" . $q_inner_count ." .post_id) ";
+                                    // Join aliases like PMF1, PMF2, ...
+                                    $mysql_query .= " INNER JOIN " . $wpdb->postmeta . " AS PMF" . $q_inner_count . " ON (" . $wpdb->posts . ".ID = PMF" . $q_inner_count . ".post_id) ";
                                     $q_inner_count++;
                                 }
                         }
-                        
-                    $mysql_query .= " INNER JOIN ". $wpdb->postmeta ." AS PM2 ON (". $wpdb->posts .".ID = PM2.post_id) 
-                                        
+
+                    $mysql_query .= " INNER JOIN " . $wpdb->postmeta . " AS PM2 ON (" . $wpdb->posts . ".ID = PM2.post_id) 
+
                                         WHERE 1 = 1 ";
-                    
-                    foreach($post_column_filters as $post_column    =>  $volumn_value)
+
+                    // Validate post column names and add equality placeholders
+                    foreach( $post_column_filters as $post_column => $volumn_value )
                         {
-                            $mysql_query .= " AND " . $wpdb->posts . "." . $post_column ." = '". $volumn_value  ."'" ;
+                            $sanitized_col = $sanitize_post_column( $post_column );
+                            if ( $sanitized_col === false ) {
+                                // Skip invalid column name (alternatively: throw/trigger error)
+                                continue;
+                            }
+                            $mysql_query .= " AND " . $sanitized_col . " = %s";
+                            $query_params[] = $volumn_value;
                         }
-                     
-                    if(count($sort_filters) > 0)
+
+                    if ( count( $sort_filters ) > 0 )
                         {
                             $q_inner_count  = 1;
-                            foreach($sort_filters as $cf_name =>  $cf_values)
+                            foreach( $sort_filters as $cf_name =>  $cf_values )
                                 {
-                                    $mysql_query .= " AND (PMF" . $q_inner_count ." .meta_key = '" . $cf_name . "' AND CAST(PMF". $q_inner_count ." .meta_value AS CHAR) IN ('". implode("', '", $cf_values)  ."'))";
+                                    // ensure values is an array
+                                    if ( ! is_array( $cf_values ) ) {
+                                        $cf_values = array( $cf_values );
+                                    }
+
+                                    // Build placeholder list for IN ( %s, %s, ... )
+                                    $placeholders = implode( ', ', array_fill( 0, count( $cf_values ), '%s' ) );
+
+                                    // meta_key placeholder + IN placeholders
+                                    $mysql_query .= " AND (PMF" . $q_inner_count . ".meta_key = %s AND CAST(PMF" . $q_inner_count . ".meta_value AS CHAR) IN (" . $placeholders . "))";
+
+                                    // push meta_key then each meta_value into params
+                                    $query_params[] = $cf_name;
+                                    foreach ( $cf_values as $v ) {
+                                        // ensure scalar values only
+                                        if ( is_scalar( $v ) ) {
+                                            $query_params[] = $v;
+                                        } else {
+                                            // convert non-scalars to string safely
+                                            $query_params[] = wp_json_encode( $v );
+                                        }
+                                    }
+
                                     $q_inner_count++;
                                 }
                         }
-                                                
+
                     $mysql_query .= " AND PM2.meta_key = '_view_type'
-                                                
-                                        GROUP BY ". $wpdb->posts .".ID 
-                                        
-                                        ORDER BY FIELD(PM2.meta_value, 'simple', 'multiple'),  ". $wpdb->posts .".ID ASC  ";
-                    $sort_items =   $wpdb->get_results($mysql_query);   
-                    
+
+                                        GROUP BY " . $wpdb->posts . ".ID 
+
+                                        ORDER BY FIELD(PM2.meta_value, 'simple', 'multiple'),  " . $wpdb->posts . ".ID ASC  ";
+
+                    // Prepare the final query with $wpdb->prepare (use call_user_func_array to pass dynamic args array)
+                    if ( ! empty( $query_params ) ) {
+                        // Build args array: first element is query, followed by params
+                        $prepare_args = array_merge( array( $mysql_query ), $query_params );
+                        $prepared_query = call_user_func_array( array( $wpdb, 'prepare' ), $prepare_args );
+                    } else {
+                        // No placeholders used
+                        $prepared_query = $mysql_query;
+                    }
+
+                    // execute safely
+                    $sort_items = $wpdb->get_results( $prepared_query );
+
                     //set a cahce for later usage
                     $APTO->cache_add_key('sorts_by_filters/' . $arguments_hash, $sort_items );
-                    
+
                     return $sort_items;
-                    
+
                 }
+
             
             
             /**
@@ -2157,11 +2239,18 @@
                 }
             
             
-            function sticky_posts_clauses_request($query_pieces, $query)
+            
+            /**
+            * Add the sticky items in the mysql request
+            * 
+            * @param mixed $query_pieces
+            * @param mixed $query
+            */
+            function sticky_posts_clauses_request( $query_pieces, $query )
                 {
-                    global $sorts_match_filter__posts_clauses_request;
+                    global $sorts_match_filter__posts_clauses_request, $wpdb;
                     
-                    //make sure this is applied to correct query; possible a new query has called durring the execution
+                    // Validate query hash
                     if ($sorts_match_filter__posts_clauses_request['query_vars_hash'] != $query->query_vars_hash)
                         return $query_pieces;
                     
@@ -2169,121 +2258,110 @@
                     remove_filter('posts_clauses_request', array($this, 'sticky_posts_clauses_request'), 999);
                     
                     //filter the query for unnecesarelly data;  i.e. empty taxonomy rules
-                    $query          =   $this->query_filter_valid_data($query);
-
+                    $query = $this->query_filter_valid_data($query);
                     
                     //identify the appropiate sort id and sort_view_id which match this query
-                    $sort_view_id   =   $this->query_match_sort_id($query, $sorts_match_filter__posts_clauses_request['filters']);
+                    $sort_view_id = $this->query_match_sort_id($query, $sorts_match_filter__posts_clauses_request['filters']);
                     
-                    global $wpdb;
+                    $sort_view_settings = $this->get_sort_view_settings($sort_view_id);
                     
-                    $sort_view_settings =   $this->get_sort_view_settings($sort_view_id);
+                    $sort_view_data = get_post($sort_view_id);
+                    $sortID = ($sort_view_data->post_parent > 0) ? $sort_view_data->post_parent : $sort_view_id;
+                    $sort_settings = $this->get_sort_settings($sortID);
                     
-                    $sort_view_data     =   get_post($sort_view_id);
-                    if($sort_view_data->post_parent > 0)
-                        $sortID             =   $sort_view_data->post_parent;
-                        else
-                        $sortID             =   $sort_view_id;
-                    $sort_settings      =   $this->get_sort_settings($sortID);
+                    $new_orderBy = $orderBy = $query_pieces['orderby'];
+                    $order_list = $this->get_order_list($sort_view_id);
                     
-                    
-                    $new_orderBy    =   $orderBy    =   $query_pieces['orderby'];
-                    
-                    $order_list     =   $this->get_order_list($sort_view_id);
-                    
-                    if (count($order_list) > 0 )
+                    if (count($order_list) > 0) 
                         {
                             $query_order = isset($query->query['order']) ? strtoupper($query->query['order']) : 'ASC';
                             
-                            //check if the orderby is not menu_order and autosort is turned on to make the order as ASC;  This will fix when use the get_posts() as it send DESC by default
                             if((!isset($query->query['orderby']) || (isset($query->query['orderby']) && $query->query['orderby'] != 'menu_order'))
-                                && $sort_settings['_autosort'] == "yes")
-                                {
-                                    $query_order   =   'ASC';   
-                                }
+                                && $sort_settings['_autosort'] == "yes") {
+                                $query_order = 'ASC';   
+                            }
 
-                            //check for bottom append new posts
-                            $new_items_to_bottom    =   $sort_settings['_new_items_to_bottom'];
-                            $new_items_to_bottom    =   apply_filters('apto/new_items_to_bottom', $new_items_to_bottom, $sort_view_id, $query);
+                            $new_items_to_bottom = $sort_settings['_new_items_to_bottom'];
+                            $new_items_to_bottom = apply_filters('apto/new_items_to_bottom', $new_items_to_bottom, $sort_view_id, $query);
 
-                            if($new_items_to_bottom == "yes")
-                                {
-                                    $_order_list = array_reverse($order_list);
-                                    if($query_order == 'DESC')   
-                                        $_order_list = array_reverse($_order_list);
-                                    
-                                    $new_orderBy = "FIELD(".$wpdb->posts.".ID, ". implode(",", $_order_list) .") DESC, ".$wpdb->posts.".post_date DESC";
-                                }
-                                else
-                                {
-                                    $_order_list = $order_list;
-                                    if($query_order == 'DESC')   
-                                        $_order_list = array_reverse($_order_list);
-                                        
-                                    $new_orderBy = "FIELD(".$wpdb->posts.".ID, ". implode(",", $_order_list) ."), ".$wpdb->posts.".post_date DESC";
-                                }
-                        }
-                        else if($new_orderBy != '')
+                            if($new_items_to_bottom == "yes") {
+                                $_order_list = array_reverse($order_list);
+                                if($query_order == 'DESC')   
+                                    $_order_list = array_reverse($_order_list);
+                                
+                                // Sanitize order list - ensure all IDs are integers
+                                $_order_list = array_map('intval', $_order_list);
+                                $order_list_str = implode(",", $_order_list);
+                                $new_orderBy = "FIELD({$wpdb->posts}.ID, {$order_list_str}) DESC, {$wpdb->posts}.post_date DESC";
+                            } else {
+                                $_order_list = $order_list;
+                                if($query_order == 'DESC')   
+                                    $_order_list = array_reverse($_order_list);
+                                
+                                // Sanitize order list - ensure all IDs are integers
+                                $_order_list = array_map('intval', $_order_list);
+                                $order_list_str = implode(",", $_order_list);
+                                $new_orderBy = "FIELD({$wpdb->posts}.ID, {$order_list_str}), {$wpdb->posts}.post_date DESC";
+                            }
+                        } 
+                        else if($new_orderBy != '') 
                             {
-                                //if use just menu_order, append post_date in case a menu_order haven't been set
                                 $temp_orderBy = $new_orderBy;
                                 $temp_orderBy = str_ireplace("asc", "", $temp_orderBy);
                                 $temp_orderBy = str_ireplace("desc", "", $temp_orderBy);
                                 $temp_orderBy = trim($temp_orderBy);
-                                if($temp_orderBy != $wpdb->posts . '.menu_order')
-                                    {
-                                        unset($temp_orderBy);
+                                
+                                if($temp_orderBy != $wpdb->posts . '.menu_order') {
+                                    unset($temp_orderBy);
+                                } else {
+                                    if ($sort_settings['_view_type'] == 'multiple' && $sort_view_settings['_view_selection'] == 'archive') {
+                                        $new_orderBy = "{$wpdb->posts}.menu_order, {$wpdb->posts}.post_date DESC";
+                                    } else {
+                                        $new_orderBy = "{$wpdb->posts}.post_date DESC";   
                                     }
-                                    else
-                                    {
-                                        //apply order only when in _archive_
-                                        if ($sort_settings['_view_type'] == 'multiple' && $sort_view_settings['_view_selection'] == 'archive')
-                                            {
-                                                $new_orderBy = $wpdb->posts.".menu_order, " . $wpdb->posts.".post_date ";
-                                                //$new_orderBy .= $query->query_vars['order'];
-                                                $new_orderBy .= "DESC";
-                                            }
-                                            else
-                                            {
-                                                $new_orderBy = $wpdb->posts. ".post_date DESC";   
-                                            }
-                                    }
-                                                        
+                                }
+                            } 
+                        else 
+                            {
+                                // Sanitize order value
+                                $order_value = isset($query->query_vars['order']) ? strtoupper($query->query_vars['order']) : 'DESC';
+                                $order_value = in_array($order_value, ['ASC', 'DESC']) ? $order_value : 'DESC';
+                                $new_orderBy = "{$wpdb->posts}.menu_order, {$wpdb->posts}.post_date {$order_value}";
                             }
-                        else
-                        {
-                            $new_orderBy = $wpdb->posts.".menu_order, " . $wpdb->posts.".post_date " . $query->query_vars['order'];
-                        }
                     
+                    $query_groupby = '';
+                    if($query_pieces['groupby'] != '') {
+                        $query_groupby = 'GROUP BY ' . $query_pieces['groupby'];
+                    }
                     
-                    $query_groupby    =   "";
-                    if($query_pieces['groupby'] !=  '')
-                        $query_groupby    =   'GROUP BY ' . $query_pieces['groupby'];
-                        
-                    $query_orderby    =   "";
-                    if($new_orderBy !=  '')
-                        $query_orderby    =   'ORDER BY ' . $new_orderBy;
+                    $query_orderby = '';
+                    if($new_orderBy != '') {
+                        $query_orderby = 'ORDER BY ' . $new_orderBy;
+                    }
                     
-                    //create the sort list
-                    $query_request  = "SELECT ". $query_pieces['distinct'] ." " . $wpdb->posts .".ID FROM " . $wpdb->posts ." " . $query_pieces['join'] ." WHERE 1=1 " . $query_pieces['where'] ." " . $query_groupby . "  " . $query_orderby;
+                    // Build query safely
+                    $query_request = "SELECT " . $query_pieces['distinct'] . " {$wpdb->posts}.ID FROM {$wpdb->posts} " 
+                                   . $query_pieces['join'] . " WHERE 1=1 " . $query_pieces['where'] . " " 
+                                   . $query_groupby . " " . $query_orderby;
+                    
+                    // Use wpdb->get_results with prepared statement if needed
                     $results = $wpdb->get_results($query_request);
                     
-                    $order_list =   array();
-                    foreach ($results as $result)
-                        $order_list[] = $result->ID;
+                    $order_list = array();
+                    foreach ($results as $result) {
+                        $order_list[] = intval($result->ID);
+                    }
                     
-                    //apply sicky
-                    if(isset($sort_view_settings['_sticky_data']) && is_array($sort_view_settings['_sticky_data']) && count($sort_view_settings['_sticky_data']) > 0)
-                        $order_list     =   $this->order_list_apply_sticky_data( $order_list, $sort_view_settings['_sticky_data'], $sort_view_id );
+                    if(isset($sort_view_settings['_sticky_data']) && is_array($sort_view_settings['_sticky_data']) && count($sort_view_settings['_sticky_data']) > 0) {
+                        $order_list = $this->order_list_apply_sticky_data($order_list, $sort_view_settings['_sticky_data'], $sort_view_id);
+                    }
 
-                    $new_orderBy    =   $this->query_get_new_orderBy($orderBy, $query, $sort_view_id, $order_list);
+                    $new_orderBy = $this->query_get_new_orderBy($orderBy, $query, $sort_view_id, $order_list);
+                    $new_orderBy = apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query, $order_list);
                     
-                    $new_orderBy    =   apply_filters('apto/get_orderby', $new_orderBy, $orderBy, $sort_view_id, $query, $order_list );
+                    $query_pieces['orderby'] = $new_orderBy;
                     
-                    //update the orderby piece
-                    $query_pieces['orderby']    =   $new_orderBy;
-                       
-                    return  $query_pieces;   
+                    return $query_pieces;
                 }
                 
             
@@ -2298,6 +2376,8 @@
                         return FALSE;
                         
                     global $wpdb;
+                    
+                    $sort_view_id   =   intval ( $sort_view_id );
                     
                     $order_list = array();
                     
@@ -2434,54 +2514,76 @@
             * @param mixed $sortID      This is the main sort ID holder
             * @param mixed $attr
             */
-            static public function get_sort_view_id_by_attributes( $sortID, $attr )
+            static public function get_sort_view_id_by_attributes( $sortID, $attr ) 
                 {
-                    $defaults   = array (
-                                            '_view_selection'          =>  'archive'
-                                        );
-                    
+                    $defaults = array(
+                        '_view_selection' => 'archive'
+                    );
+
                     // Parse incoming $args into an array and merge it with $defaults
                     $attr = wp_parse_args( $attr, $defaults );
-                    
-                    //try the cache
+
+                    // try the cache
                     global $APTO;
-                    $arguments_hash =   md5( $sortID . serialize($attr) );
-                    if ( $APTO->cache_key_exists( 'sort_view_id_by_attributes/' .  $arguments_hash ) )
-                        return $APTO->cache_get_key( 'sort_view_id_by_attributes/' .  $arguments_hash );
-                    
-                    $sort_view_ID = '';
-                    
+                    $arguments_hash = md5( $sortID . serialize( $attr ) );
+                    if ( $APTO->cache_key_exists( 'sort_view_id_by_attributes/' . $arguments_hash ) ) {
+                        return $APTO->cache_get_key( 'sort_view_id_by_attributes/' . $arguments_hash );
+                    }
+
                     global $wpdb;
-                    
-                    $mysql_query    =   "SELECT ID FROM ". $wpdb->posts;
-                    
-                    $inner_no   =   1;
-                    foreach($attr   as $key =>  $value)
-                        {
-                            $mysql_query    .=  "   INNER JOIN ". $wpdb->postmeta ." AS pm". $inner_no ."  ON (". $wpdb->posts .".ID = pm". $inner_no .".post_id) ";
-                            
-                            $inner_no++;
-                        }
-                    
-                    $mysql_query    .=  " WHERE 1=1 AND ". $wpdb->posts .".post_parent = ". $sortID ."  AND ". $wpdb->posts .".post_type = 'apto_sort' AND (". $wpdb->posts .".post_status = 'publish')";
-                    
-                    $inner_no   =   1;
-                    foreach($attr   as $key =>  $value)
-                        {
-                            $mysql_query    .=  "   AND  (pm". $inner_no .".meta_key = '".  $key ."' AND CAST(pm". $inner_no .".meta_value AS CHAR) = '".   $value  ."') ";
-                            
-                            $inner_no++;
-                        }
-                        
-                    $mysql_query    .=  "  LIMIT 1 ";
-                    
-                    $sort_view_ID = $wpdb->get_var($mysql_query);
-                    
-                    //set a cahce for later usage
-                    $APTO->cache_add_key('sort_view_id_by_attributes/' . $arguments_hash, $sort_view_ID );                     
-                             
-                    return $sort_view_ID;   
-                    
+
+                    // build dynamic JOINs and WHERE fragments (placeholders only)
+                    $join_clauses   = array();
+                    $where_fragments = array();
+                    $prepare_args   = array(); // arguments corresponding to placeholders in the final query
+
+                    $inner_no = 1;
+                    foreach ( $attr as $key => $value ) {
+                        // alias is numeric-based and therefore safe
+                        $alias = 'pm' . $inner_no;
+
+                        // static table names come from $wpdb (safe)
+                        $join_clauses[] = "INNER JOIN {$wpdb->postmeta} AS {$alias} ON ({$wpdb->posts}.ID = {$alias}.post_id)";
+
+                        // add placeholder fragment for this attribute (two placeholders: meta_key, meta_value)
+                        $where_fragments[] = "AND ({$alias}.meta_key = %s AND CAST({$alias}.meta_value AS CHAR) = %s)";
+
+                        // push the values to the prepare-args array (cast to string for safety)
+                        $prepare_args[] = (string) $key;
+                        $prepare_args[] = (string) $value;
+
+                        $inner_no++;
+                    }
+
+                    // base query with placeholders for post_parent, post_type and post_status
+                    $query = "
+                        SELECT ID
+                        FROM {$wpdb->posts}
+                        " . implode( ' ', $join_clauses ) . "
+                        WHERE 1=1
+                          AND {$wpdb->posts}.post_parent = %d
+                          AND {$wpdb->posts}.post_type = %s
+                          AND ({$wpdb->posts}.post_status = %s)
+                        " . implode( ' ', $where_fragments ) . "
+                        LIMIT 1
+                    ";
+
+                    // merge the initial placeholders' args with the attribute args
+                    $all_prepare_args = array_merge(
+                        array( $query, (int) $sortID, 'apto_sort', 'publish' ),
+                        $prepare_args
+                    );
+
+                    // prepare the query with all dynamic values bound safely
+                    $prepared_sql = call_user_func_array( array( $wpdb, 'prepare' ), $all_prepare_args );
+
+                    // execute
+                    $sort_view_ID = $wpdb->get_var( $prepared_sql );
+
+                    // set a cache for later usage
+                    $APTO->cache_add_key( 'sort_view_id_by_attributes/' . $arguments_hash, $sort_view_ID );
+
+                    return $sort_view_ID;
                 }
                 
             
@@ -2490,9 +2592,11 @@
             * 
             * @param mixed $sortID
             */
-            function sort_id_exists($sortID)
+            function sort_id_exists( $sortID )
                 {
-                    if($sortID == '')
+                    $sortID =   intval( $sortID );
+                    
+                    if ( $sortID == '' )
                         return FALSE;
                     
                     global $wpdb;
@@ -2738,9 +2842,11 @@
                     return $language;   
                 }
             
-            static public function delete_sort_list_from_table($sort_view_id)
+            static public function delete_sort_list_from_table( $sort_view_id )
                 {
                     global  $wpdb;
+                    
+                    $sort_view_id   =   intval ( $sort_view_id );
                     
                     $mysql_query = "DELETE FROM `". $wpdb->prefix ."apto_sort_list`
                                         WHERE `sort_view_id`    =   '".     $sort_view_id   ."'";
@@ -2791,9 +2897,11 @@
                 }
             
 
-            function next_previous_get_posts_list($post_type)
+            function next_previous_get_posts_list( $post_type )
                 {
                     global $wpdb;
+                    
+                    $post_type = sanitize_key( $post_type );
                     
                     //check if WPML is active
                     if (defined('ICL_LANGUAGE_CODE') && defined('ICL_SITEPRESS_VERSION'))
@@ -2804,23 +2912,33 @@
                             if(is_object($sitepress))
                                 $language   =   $sitepress->get_current_language();
                             
-                            $query  =   "SELECT ID FROM ". $wpdb->posts ."
-                                            JOIN ". $wpdb->prefix ."icl_translations as wpml_it  ON wpml_it.element_id = ". $wpdb->posts .".ID    
-                                            WHERE post_type =   '". $post_type ."' AND post_status = 'publish'
-                                                    AND wpml_it.language_code = '". $language ."'
-                                            GROUP BY  ". $wpdb->posts .".ID
-                                            ORDER BY menu_order ASC, post_date DESC";
+                            $query = $wpdb->prepare(
+                                                        "SELECT ID FROM " . $wpdb->posts . "
+                                                        JOIN " . $wpdb->prefix . "icl_translations as wpml_it ON wpml_it.element_id = " . $wpdb->posts . ".ID    
+                                                        WHERE post_type = %s 
+                                                        AND post_status = 'publish'
+                                                        AND wpml_it.language_code = %s
+                                                        GROUP BY " . $wpdb->posts . ".ID
+                                                        ORDER BY menu_order ASC, post_date DESC",
+                                                        $post_type,
+                                                        $language
+                                                    );
                             
                         }
                         else
                         {
-                            $query  =   "SELECT ID FROM ". $wpdb->posts ."
-                                            WHERE post_type =   '". $post_type ."' AND post_status = 'publish'
-                                            ORDER BY menu_order ASC, post_date DESC";   
+                            $query = $wpdb->prepare(
+                                                    "SELECT ID FROM " . $wpdb->posts . "
+                                                    WHERE post_type = %s 
+                                                    AND post_status = %s
+                                                    ORDER BY menu_order ASC, post_date DESC",
+                                                    $post_type,
+                                                    'publish'
+                                                );  
                             
                         }
 
-                    $results         =   $wpdb->get_results($query);
+                    $results         =   $wpdb->get_results( $query );
                     
                     $order_list =   array();
                     foreach($results as $item)
@@ -2830,19 +2948,16 @@
                         
                     return $order_list;
                 }
-            
-            
-            
-            
+                        
             
             
             /**
-            * put your comment there...
-            * 
-            * @param mixed $where
-            * @param mixed $in_same_term
-            * @param mixed $excluded_terms
-            */
+             * Get WHERE clause for previous post query with proper SQL sanitization
+             * 
+             * @param mixed $where
+             * @param mixed $in_same_term
+             * @param mixed $excluded_terms
+             */
             function get_previous_post_where($where, $in_same_term, $excluded_terms)
                 {
                     global $post, $wpdb;
@@ -2850,67 +2965,102 @@
                     if ( empty( $post ) )
                         return $where;
                     
-                    //?? WordPress does not pass through this varialbe, so we presume it's category..
+                    // Extract taxonomy from WHERE clause
                     $taxonomy = 'category';
-                    if(preg_match('/ tt.taxonomy = \'([^\']+)\'/i',$where, $match)) 
-                        $taxonomy   =   $match[1]; 
+                    if(preg_match('/ tt.taxonomy = \'([^\']+)\'/i', $where, $match)) 
+                        $taxonomy = sanitize_key($match[1]); 
                     
                     $_join = '';
                     $_where = '';
 
-                                        
                     if ( $in_same_term || ! empty( $excluded_terms ) ) 
+                    {
+                        $_join = $wpdb->prepare(
+                            " INNER JOIN {$wpdb->term_relationships} AS tr ON p.ID = tr.object_id 
+                              INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id"
+                        );
+                        $_where = $wpdb->prepare( "AND tt.taxonomy = %s", $taxonomy );
+
+                        if ( ! empty( $excluded_terms ) && ! is_array( $excluded_terms ) ) 
                         {
-                            $_join = " INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id";
-                            $_where = $wpdb->prepare( "AND tt.taxonomy = %s", $taxonomy );
+                            // Back-compat: handle old " and " separator format
+                            if ( false !== strpos( $excluded_terms, ' and ' ) ) 
+                            {
+                                _deprecated_argument( __FUNCTION__, '3.3', 
+                                    sprintf( __( 'Use commas instead of %s to separate excluded terms.' ), "'and'" ) 
+                                );
+                                $excluded_terms = explode( ' and ', $excluded_terms );
+                            } 
+                            else 
+                            {
+                                $excluded_terms = explode( ',', $excluded_terms );
+                            }
 
-                            if ( ! empty( $excluded_terms ) && ! is_array( $excluded_terms ) ) 
-                                {
-                                    // back-compat, $excluded_terms used to be $excluded_terms with IDs separated by " and "
-                                    if ( false !== strpos( $excluded_terms, ' and ' ) ) 
-                                        {
-                                            _deprecated_argument( __FUNCTION__, '3.3', sprintf( __( 'Use commas instead of %s to separate excluded terms.' ), "'and'" ) );
-                                            $excluded_terms = explode( ' and ', $excluded_terms );
-                                        } 
-                                    else 
-                                        {
-                                            $excluded_terms = explode( ',', $excluded_terms );
-                                        }
+                            $excluded_terms = array_map( 'intval', $excluded_terms );
+                        }
 
-                                    $excluded_terms = array_map( 'intval', $excluded_terms );
-                                }
+                        if ( $in_same_term ) 
+                        {
+                            $term_array = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
 
-                            if ( $in_same_term ) 
-                                {
-                                    $term_array = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
-
-                                    // Remove any exclusions from the term array to include.
-                                    $term_array = array_diff( $term_array, (array) $excluded_terms );
-                                    $term_array = array_map( 'intval', $term_array );
-                            
-                                    $_where .= " AND tt.term_id IN (" . implode( ',', $term_array ) . ")";
-                                }
-
-                            if ( ! empty( $excluded_terms ) ) {
-                                $_where .= " AND p.ID NOT IN ( SELECT tr.object_id FROM $wpdb->term_relationships tr LEFT JOIN $wpdb->term_taxonomy tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id) WHERE tt.term_id IN (" . implode( ',', $excluded_terms ) . ') )';
+                            // Remove exclusions from term array
+                            $term_array = array_diff( $term_array, (array) $excluded_terms );
+                            $term_array = array_map( 'intval', $term_array );
+                        
+                            if ( ! empty( $term_array ) ) {
+                                $placeholders = implode( ',', array_fill( 0, count( $term_array ), '%d' ) );
+                                $_where .= $wpdb->prepare( " AND tt.term_id IN ($placeholders)", $term_array );
                             }
                         }
-                        
-                    $current_menu_order = $post->menu_order;
+
+                        if ( ! empty( $excluded_terms ) ) 
+                        {
+                            $placeholders = implode( ',', array_fill( 0, count( $excluded_terms ), '%d' ) );
+                            $_where .= $wpdb->prepare(
+                                " AND p.ID NOT IN ( 
+                                    SELECT tr.object_id FROM {$wpdb->term_relationships} tr 
+                                    LEFT JOIN {$wpdb->term_taxonomy} tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id) 
+                                    WHERE tt.term_id IN ($placeholders) 
+                                )",
+                                $excluded_terms
+                            );
+                        }
+                    }
                     
-                    $query = "SELECT p.* FROM $wpdb->posts AS p
-                                $_join
-                                WHERE p.post_date < '". $post->post_date ."'  AND p.menu_order = '".$current_menu_order."' AND p.post_type = '". $post->post_type ."' AND p.post_status = 'publish' $_where";
+                    $current_menu_order = intval( $post->menu_order );
+                    $post_date = $post->post_date;
+                    $post_type = sanitize_key( $post->post_type );
+                    $post_status = 'publish';
+
+                    // Build main query with proper prepared statements
+                    $query = $wpdb->prepare(
+                        "SELECT p.* FROM {$wpdb->posts} AS p
+                         $_join
+                         WHERE p.post_date < %s 
+                         AND p.menu_order = %d 
+                         AND p.post_type = %s 
+                         AND p.post_status = %s 
+                         $_where",
+                        $post_date,
+                        $current_menu_order,
+                        $post_type,
+                        $post_status
+                    );
+                    
                     $results = $wpdb->get_results($query);
-                            
-                    if (count($results) > 0)
-                            {
-                                $where .= " AND p.menu_order = '".$current_menu_order."'";
-                            }
-                        else
-                            {
-                                $where = str_replace("p.post_date < '". $post->post_date  ."'", "p.menu_order > '$current_menu_order'", $where);  
-                            }
+                    
+                    if ( count( $results ) > 0 ) 
+                    {
+                        $where .= $wpdb->prepare( " AND p.menu_order = %d", $current_menu_order );
+                    }
+                    else 
+                    {
+                        $where = str_replace(
+                            $wpdb->prepare( "p.post_date < %s", $post_date ),
+                            $wpdb->prepare( "p.menu_order > %d", $current_menu_order ),
+                            $where
+                        );  
+                    }
                     
                     return $where;
                 }
@@ -2932,84 +3082,99 @@
                     return $sort;
                 }
 
+            
             /**
-            * put your comment there...
-            * 
-            * @param mixed $where
-            * @param mixed $in_same_term
-            * @param mixed $excluded_terms
-            */
-            function get_next_post_where($where, $in_same_term, $excluded_terms)
+             * Get WHERE clause for next post query with proper SQL sanitization
+             * 
+             * @param mixed $where
+             * @param mixed $in_same_term
+             * @param mixed $excluded_terms
+             */
+            function get_next_post_where( $where, $in_same_term, $excluded_terms )
                 {
                     global $post, $wpdb;
 
                     if ( empty( $post ) )
                         return $where;
                     
-                    //?? WordPress does not pass through this varialbe, so we presume it's category..
+                    // WordPress does not pass through this variable, so we presume it's category
                     $taxonomy = 'category';
-                    if(preg_match('/ tt.taxonomy = \'([^\']+)\'/i',$where, $match)) 
-                        $taxonomy   =   $match[1]; 
+                    if(preg_match('/ tt.taxonomy = \'([^\']+)\'/i', $where, $match)) 
+                        $taxonomy = sanitize_key( $match[1] );
                     
                     $_join = '';
                     $_where = '';
-                                        
+                                                
                     if ( $in_same_term || ! empty( $excluded_terms ) ) 
+                    {
+                        $_join = " INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id";
+                        $_where = $wpdb->prepare( "AND tt.taxonomy = %s", $taxonomy );
+
+                        if ( ! empty( $excluded_terms ) && ! is_array( $excluded_terms ) ) 
                         {
-                            $_join = " INNER JOIN $wpdb->term_relationships AS tr ON p.ID = tr.object_id INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id";
-                            $_where = $wpdb->prepare( "AND tt.taxonomy = %s", $taxonomy );
+                            // back-compat, $excluded_terms used to be $excluded_terms with IDs separated by " and "
+                            if ( false !== strpos( $excluded_terms, ' and ' ) ) 
+                            {
+                                _deprecated_argument( __FUNCTION__, '3.3', sprintf( __( 'Use commas instead of %s to separate excluded terms.' ), "'and'" ) );
+                                $excluded_terms = explode( ' and ', $excluded_terms );
+                            } 
+                            else 
+                            {
+                                $excluded_terms = explode( ',', $excluded_terms );
+                            }
 
-                            if ( ! empty( $excluded_terms ) && ! is_array( $excluded_terms ) ) 
-                                {
-                                    // back-compat, $excluded_terms used to be $excluded_terms with IDs separated by " and "
-                                    if ( false !== strpos( $excluded_terms, ' and ' ) ) 
-                                        {
-                                            _deprecated_argument( __FUNCTION__, '3.3', sprintf( __( 'Use commas instead of %s to separate excluded terms.' ), "'and'" ) );
-                                            $excluded_terms = explode( ' and ', $excluded_terms );
-                                        } 
-                                    else 
-                                        {
-                                            $excluded_terms = explode( ',', $excluded_terms );
-                                        }
+                            $excluded_terms = array_map( 'intval', $excluded_terms );
+                        }
 
-                                    $excluded_terms = array_map( 'intval', $excluded_terms );
-                                }
+                        if ( $in_same_term ) 
+                        {
+                            $term_array = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
 
-                            if ( $in_same_term ) 
-                                {
-                                    $term_array = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
-
-                                    // Remove any exclusions from the term array to include.
-                                    $term_array = array_diff( $term_array, (array) $excluded_terms );
-                                    $term_array = array_map( 'intval', $term_array );
-                            
-                                    $_where .= " AND tt.term_id IN (" . implode( ',', $term_array ) . ")";
-                                }
-
-                            if ( ! empty( $excluded_terms ) ) {
-                                $_where .= " AND p.ID NOT IN ( SELECT tr.object_id FROM $wpdb->term_relationships tr LEFT JOIN $wpdb->term_taxonomy tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id) WHERE tt.term_id IN (" . implode( ',', $excluded_terms ) . ') )';
+                            // Remove any exclusions from the term array to include.
+                            $term_array = array_diff( $term_array, (array) $excluded_terms );
+                            $term_array = array_map( 'intval', $term_array );
+                        
+                            if ( ! empty( $term_array ) ) {
+                                $placeholders = implode( ',', array_fill( 0, count( $term_array ), '%d' ) );
+                                $_where .= $wpdb->prepare( " AND tt.term_id IN ($placeholders)", $term_array );
                             }
                         }
-                        
-                    $current_menu_order = $post->menu_order;
+
+                        if ( ! empty( $excluded_terms ) ) {
+                            $placeholders = implode( ',', array_fill( 0, count( $excluded_terms ), '%d' ) );
+                            $_where .= $wpdb->prepare( " AND p.ID NOT IN ( SELECT tr.object_id FROM $wpdb->term_relationships tr LEFT JOIN $wpdb->term_taxonomy tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id) WHERE tt.term_id IN ($placeholders) )", $excluded_terms );
+                        }
+                    }
                     
-                    //check if there are more posts with lower menu_order
-                    $query = "SELECT p.* FROM $wpdb->posts AS p
-                                $_join
-                                WHERE p.post_date > '". $post->post_date ."' AND p.menu_order = '".$current_menu_order."' AND p.post_type = '". $post->post_type ."' AND p.post_status = 'publish' $_where";
-                    $results = $wpdb->get_results($query);
-                            
-                    if (count($results) > 0)
-                            {
-                                $where .= " AND p.menu_order = '".$current_menu_order."'";
-                            }
-                        else
-                            {
-                                $where = str_replace("p.post_date > '". $post->post_date  ."'", "p.menu_order < '$current_menu_order'", $where);  
-                            }
+                    $current_menu_order = intval( $post->menu_order );
+                    $post_date = $wpdb->prepare( '%s', $post->post_date );
+                    $post_type = sanitize_key( $post->post_type );
+                    
+                    // Check if there are more posts with lower menu_order
+                    $query = $wpdb->prepare(
+                        "SELECT p.* FROM $wpdb->posts AS p
+                        $_join
+                        WHERE p.post_date > %s AND p.menu_order = %d AND p.post_type = %s AND p.post_status = 'publish' $_where",
+                        $post->post_date,
+                        $current_menu_order,
+                        $post_type
+                    );
+                    
+                    $results = $wpdb->get_results( $query );
+                                    
+                    if ( count( $results ) > 0 ) {
+                        $where .= $wpdb->prepare( " AND p.menu_order = %d", $current_menu_order );
+                    } else {
+                        $where = str_replace(
+                            $wpdb->prepare( "p.post_date > %s", $post->post_date ),
+                            $wpdb->prepare( "p.menu_order < %d", $current_menu_order ),
+                            $where
+                        );  
+                    }
                     
                     return $where;
                 }
+            
 
                 
             /**
@@ -3083,7 +3248,8 @@
                     if (isset($order_list[ ($required_index) ]))
                         {
                             //found
-                            $sort = 'ORDER BY FIELD(p.ID, "'. $order_list[ ($required_index) ] .'") DESC LIMIT 1 ';   
+                            $item_id    =   $order_list[ ($required_index) ];
+                            $sort = 'ORDER BY FIELD(p.ID, "'. $item_id .'") DESC LIMIT 1 ';   
                         }
                         else
                         {
@@ -3430,6 +3596,9 @@
                     global $wpdb;
                     
                     $sort_items =   self::get_sorts_by_filters(array());
+                    
+                    $term   =   intval ( $term );
+                    $taxonomy   =   sanitize_key ( $taxonomy );
                     
                     foreach($sort_items as $sort_item)
                         {

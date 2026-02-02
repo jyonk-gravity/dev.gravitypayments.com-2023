@@ -1,0 +1,1117 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced Post Types Order\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-13 17:13+0200\n"
+"PO-Revision-Date: 2026-01-13 17:13+0200\n"
+"Last-Translator: NspCode <contact@nsp-code.com>\n"
+"Language-Team: NspCode <contact@nsp-code.com>\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__;esc_html__;esc_html_e;"
+"esc_attr__;esc_html_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: extends/divi/PostsNavigation.class.php:6
+msgid "APTO - Post Navigation"
+msgstr "APTO - Navigasi Posting"
+
+#: extends/divi/PostsNavigation.class.php:7
+msgid "APTO - Post Navigations"
+msgstr "APTO - Navigasi Posting"
+
+#: extends/divi/PostsNavigation.class.php:17
+msgid "Text"
+msgstr "Teks"
+
+#: extends/divi/PostsNavigation.class.php:18
+msgid "Sort"
+msgstr "Urutkan"
+
+#: extends/divi/PostsNavigation.class.php:19
+msgid "Navigation"
+msgstr "Navigasi"
+
+#: extends/divi/PostsNavigation.class.php:27
+#: extends/divi/PostsNavigation.class.php:79
+msgid "Links"
+msgstr "Tautan"
+
+#: extends/divi/PostsNavigation.class.php:83
+#: extends/divi/PostsNavigation.class.php:140
+msgid "Previous Link"
+msgstr "Tautan Sebelumnya"
+
+#: extends/divi/PostsNavigation.class.php:87
+msgid "Previous Link Arrow"
+msgstr "Panah Tautan Sebelumnya"
+
+#: extends/divi/PostsNavigation.class.php:91
+#: extends/divi/PostsNavigation.class.php:153
+msgid "Next Link"
+msgstr "Tautan Berikutnya"
+
+#: extends/divi/PostsNavigation.class.php:95
+msgid "Next Link Arrow"
+msgstr "Panah Tautan Berikutnya"
+
+#: extends/divi/PostsNavigation.class.php:106
+msgid "Show Previous Post Link"
+msgstr "Tampilkan Tautan Posting Sebelumnya"
+
+#: extends/divi/PostsNavigation.class.php:110
+#: extends/divi/PostsNavigation.class.php:127
+#: include/apto_interface-class.php:798 include/apto_interface-class.php:806
+#: include/apto_interface-class.php:857 include/apto_interface-class.php:912
+#: include/apto_interface-class.php:920 include/apto_interface-class.php:929
+#: include/apto_interface-class.php:954 include/apto_interface-class.php:965
+#: include/apto_interface-class.php:977 include/apto_interface-class.php:1565
+#: include/apto_interface-class.php:1609
+msgid "Yes"
+msgstr "Ya"
+
+#: extends/divi/PostsNavigation.class.php:111
+#: extends/divi/PostsNavigation.class.php:128
+#: include/apto_interface-class.php:799 include/apto_interface-class.php:807
+#: include/apto_interface-class.php:858 include/apto_interface-class.php:913
+#: include/apto_interface-class.php:921 include/apto_interface-class.php:930
+#: include/apto_interface-class.php:955 include/apto_interface-class.php:966
+#: include/apto_interface-class.php:978 include/apto_interface-class.php:1562
+#: include/apto_interface-class.php:1606
+msgid "No"
+msgstr "Tidak"
+
+#: extends/divi/PostsNavigation.class.php:118
+msgid "Turn this on to show the previous post link"
+msgstr "Nyalakan ini untuk menampilkan tautan posting sebelumnya"
+
+#: extends/divi/PostsNavigation.class.php:123
+msgid "Show Next Post Link"
+msgstr "Tampilkan Tautan Posting Berikutnya"
+
+#: extends/divi/PostsNavigation.class.php:135
+msgid "Turn this on to show the next post link"
+msgstr "Nyalakan ini untuk menampilkan tautan posting berikutnya"
+
+#: extends/divi/PostsNavigation.class.php:147
+msgid ""
+"Define custom text for the previous link. You can use the <strong>%title</"
+"strong> variable to include the post title. Leave blank for default."
+msgstr ""
+"Definisikan teks kustom untuk tautan sebelumnya. Anda dapat menggunakan "
+"variabel <strong>%title</strong> untuk menyertakan judul posting. Biarkan "
+"kosong untuk default."
+
+#: extends/divi/PostsNavigation.class.php:160
+msgid ""
+"Define custom text for the next link. You can use the <strong>%title</"
+"strong> variable to include the post title. Leave blank for default."
+msgstr ""
+"Definisikan teks kustom untuk tautan berikutnya. Anda dapat menggunakan "
+"variabel <strong>%title</strong> untuk menyertakan judul posting. Biarkan "
+"kosong untuk default."
+
+#: extends/divi/PostsNavigation.class.php:167
+msgid "Sort ID"
+msgstr "ID Urutan"
+
+#: extends/divi/PostsNavigation.class.php:170
+msgid ""
+"Choose the sort ID to apply. If the custom post object assigned to a "
+"category, the primary will be used when applying for the order."
+msgstr ""
+"Pilih ID urutan yang akan diterapkan. Jika objek posting kustom ditetapkan "
+"ke kategori, yang utama akan digunakan saat menerapkan urutan."
+
+#: extends/divi/PostsNavigation.class.php:182
+msgid "Sort on Taxonomy"
+msgstr "Urutkan pada Taksonomi"
+
+#: extends/divi/PostsNavigation.class.php:186
+msgid "Choose the Taxoomy Name from which the order should be used."
+msgstr "Pilih Nama Taksonomi yang urutannya akan digunakan."
+
+#: extends/divi/PostsNavigation.class.php:317
+#: include/apto_functions-class.php:3150
+msgid "Next Post"
+msgstr "Posting Berikutnya"
+
+#: extends/divi/PostsNavigation.class.php:352
+#: include/apto_functions-class.php:3150
+msgid "Previous Post"
+msgstr "Posting Sebelumnya"
+
+#: include/apto_admin_functions-class.php:90
+msgid "Re-Order"
+msgstr "Urutkan Ulang"
+
+#: include/apto_admin_functions-class.php:297
+msgid ""
+"All interfaces are set to hide, at least a visible is required. You can "
+"change tht from Settings"
+msgstr ""
+"Semua antarmuka diatur untuk disembunyikan, setidaknya satu yang terlihat "
+"diperlukan. Anda dapat mengubahnya dari Pengaturan"
+
+#: include/apto_admin_functions-class.php:349
+msgid "Advanced Post Types Order - At least one menu has changed:"
+msgstr "Advanced Post Types Order - Setidaknya satu menu telah berubah:"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "Notice: There is"
+msgstr "Pemberitahuan: Ada"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "another"
+msgstr "satu lagi"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "similar sort"
+msgstr "urutan serupa"
+
+#: include/apto_functions-class.php:2539
+msgid "Subscriber"
+msgstr "Pelanggan"
+
+#: include/apto_functions-class.php:2543
+msgid "Contributor"
+msgstr "Kontributor"
+
+#: include/apto_functions-class.php:2547 include/apto_interface-class.php:663
+#: include/apto_interface_helper-class.php:1776
+msgid "Author"
+msgstr "Penulis"
+
+#: include/apto_functions-class.php:2551
+msgid "Editor"
+msgstr "Editor"
+
+#: include/apto_functions-class.php:2555
+msgid "Administrator"
+msgstr "Administrator"
+
+#: include/apto_functions-class.php:2872 include/apto_functions-class.php:2967
+#, php-format
+msgid "Use commas instead of %s to separate excluded terms."
+msgstr "Gunakan koma alih-alih %s untuk memisahkan istilah yang dikecualikan."
+
+#: include/apto_interface-class.php:170
+msgid "Re-order"
+msgstr "Urutkan ulang"
+
+#: include/apto_interface-class.php:174
+msgid ""
+"This plugin can't work without javascript, because it's use drag and drop "
+"and AJAX."
+msgstr ""
+"Plugin ini tidak dapat bekerja tanpa javascript, karena menggunakan drag and "
+"drop dan AJAX."
+
+#: include/apto_interface-class.php:207
+msgid ""
+"WPML: The Sort Rules couldn't be translated automatically. You need to set/"
+"translate this manually for"
+msgstr ""
+"WPML: Aturan Urutan tidak dapat diterjemahkan secara otomatis. Anda perlu "
+"mengatur/menerjemahkannya secara manual untuk"
+
+#: include/apto_interface-class.php:239
+msgid ""
+"Polylang: The Sort Rules couldn't be translated automatically. You need to "
+"set/translate this manually for"
+msgstr ""
+"Polylang: Aturan Urutan tidak dapat diterjemahkan secara otomatis. Anda "
+"perlu mengatur/menerjemahkannya secara manual untuk"
+
+#: include/apto_interface-class.php:413
+msgid "Click to toggle"
+msgstr "Klik untuk beralih"
+
+#: include/apto_interface-class.php:413 include/apto_interface-class.php:755
+msgid "Sort List Settings"
+msgstr "Pengaturan Daftar Urutan"
+
+#: include/apto_interface-class.php:424
+msgid "Query Rules"
+msgstr "Aturan Kueri"
+
+#: include/apto_interface-class.php:425
+msgid ""
+"Create a set of criteria rules which match your query. This will determine "
+"what to show on the following sort list and the order will apply on front "
+"side."
+msgstr ""
+"Buat sekumpulan aturan kriteria yang cocok dengan kueri Anda. Ini akan "
+"menentukan apa yang ditampilkan pada daftar urutan berikutnya dan urutan "
+"akan diterapkan di sisi depan."
+
+#: include/apto_interface-class.php:426
+msgid ""
+"All rules are compared to a query using AND operator. For more details check"
+msgstr ""
+"Semua aturan dibandingkan dengan kueri menggunakan operator AND. Untuk "
+"detail lebih lanjut periksa"
+
+#: include/apto_interface-class.php:426
+msgid "Query Rules examples"
+msgstr "Contoh Aturan Kueri"
+
+#: include/apto_interface-class.php:447
+msgid "Show Advanced"
+msgstr "Tampilkan Lanjutan"
+
+#: include/apto_interface-class.php:506
+msgid "Add Post Type"
+msgstr "Tambah Tipe Posting"
+
+#: include/apto_interface-class.php:513 include/apto_interface-class.php:527
+#: include/apto_interface_helper-class.php:1809
+msgid "Taxonomy"
+msgstr "Taksonomi"
+
+#: include/apto_interface-class.php:527 include/apto_interface-class.php:535
+msgid "invalid"
+msgstr "tidak valid"
+
+#: include/apto_interface-class.php:535
+msgid "Term"
+msgstr "Istilah"
+
+#: include/apto_interface-class.php:562
+msgid "Add Taxonomy"
+msgstr "Tambah Taksonomi"
+
+#: include/apto_interface-class.php:570
+msgid "Taxonomy Relation"
+msgstr "Relasi Taksonomi"
+
+#: include/apto_interface-class.php:596
+msgid "Meta"
+msgstr "Meta"
+
+#: include/apto_interface-class.php:630
+msgid "Add Meta"
+msgstr "Tambah Meta"
+
+#: include/apto_interface-class.php:638
+msgid "Meta Relation"
+msgstr "Relasi Meta"
+
+#: include/apto_interface-class.php:687
+msgid "Add Author"
+msgstr "Tambah Penulis"
+
+#: include/apto_interface-class.php:701
+msgid ""
+"Certain changes has been done to your site and some of Query Rules cannot be "
+"displayed anymore. You should review the settings Query Rules area and click "
+"Update button."
+msgstr ""
+"Beberapa perubahan telah dilakukan pada situs Anda dan beberapa Aturan Kueri "
+"tidak dapat ditampilkan lagi. Anda harus meninjau area pengaturan Aturan "
+"Kueri dan klik tombol Perbarui."
+
+#: include/apto_interface-class.php:716
+msgid "Conditionals"
+msgstr "Kondisional"
+
+#: include/apto_interface-class.php:717
+msgid "Apply the order only if conditions are true. For more details check"
+msgstr ""
+"Terapkan urutan hanya jika kondisi benar. Untuk detail lebih lanjut periksa"
+
+#: include/apto_interface-class.php:717
+msgid "Conditionals Usage"
+msgstr "Penggunaan Kondisional"
+
+#: include/apto_interface-class.php:720
+msgid "Apply if"
+msgstr "Terapkan jika"
+
+#: include/apto_interface-class.php:745
+msgid "Add Group"
+msgstr "Tambah Grup"
+
+#: include/apto_interface-class.php:754
+msgid "Interface"
+msgstr "Antarmuka"
+
+#: include/apto_interface-class.php:755
+msgid "This sort interface settings. For more details check"
+msgstr "Pengaturan antarmuka urutan ini. Untuk detail lebih lanjut periksa"
+
+#: include/apto_interface-class.php:762
+#: include/apto_interface_helper-class.php:1779
+msgid "Title"
+msgstr "Judul"
+
+#: include/apto_interface-class.php:763
+msgid "Sort list tab title"
+msgstr "Judul tab daftar urutan"
+
+#: include/apto_interface-class.php:767
+msgid "Description"
+msgstr "Deskripsi"
+
+#: include/apto_interface-class.php:768
+msgid ""
+"Sort list description. This will appear for others (non-admin users) when "
+"doing re-sort, it should include a description for what area this sort will "
+"apply."
+msgstr ""
+"Deskripsi daftar urutan. Ini akan muncul untuk orang lain (pengguna non-"
+"admin) saat melakukan pengurutan ulang, harus mencakup deskripsi area mana "
+"urutan ini akan diterapkan."
+
+#: include/apto_interface-class.php:772
+msgid "Menu Location"
+msgstr "Lokasi Menu"
+
+#: include/apto_interface-class.php:773
+msgid "Relocate this Sort Interface to another menu"
+msgstr "Pindahkan Antarmuka Urutan ini ke menu lain"
+
+#: include/apto_interface-class.php:795
+msgid "Auto Apply Sort"
+msgstr "Terapkan Urutan Otomatis"
+
+#: include/apto_interface-class.php:796
+msgid "Automatically apply the sort to theme queries if match."
+msgstr "Terapkan urutan secara otomatis ke kueri tema jika cocok."
+
+#: include/apto_interface-class.php:803
+msgid "Admin Sort"
+msgstr "Urutan Admin"
+
+#: include/apto_interface-class.php:804
+msgid "Automatically apply the sort to admin queries if match."
+msgstr "Terapkan urutan secara otomatis ke kueri admin jika cocok."
+
+#: include/apto_interface-class.php:812
+msgid "Allow sorting within default post type interface"
+msgstr "Izinkan pengurutan dalam antarmuka tipe posting default"
+
+#: include/apto_interface-class.php:813
+msgid ""
+"A Drag & Drop functionality is available to be used within default WordPress "
+"post type interface."
+msgstr ""
+"Fungsionalitas Drag & Drop tersedia untuk digunakan dalam antarmuka tipe "
+"posting WordPress default."
+
+#: include/apto_interface-class.php:869
+msgid "Need to Create Sort first"
+msgstr "Perlu Buat Urutan Terlebih Dahulu"
+
+#: include/apto_interface-class.php:886
+msgid "Not a primary sort, this feature can apply only to"
+msgstr "Bukan urutan utama, fitur ini hanya dapat diterapkan pada"
+
+#: include/apto_interface-class.php:891
+msgid "This feature can't apply when conditionals set"
+msgstr "Fitur ini tidak dapat diterapkan saat kondisional diatur"
+
+#: include/apto_interface-class.php:896
+msgid "Admin Sort need to be Yes"
+msgstr "Urutan Admin harus Ya"
+
+#: include/apto_interface-class.php:909
+msgid "Send new items to bottom of the list"
+msgstr "Kirim item baru ke bagian bawah daftar"
+
+#: include/apto_interface-class.php:910
+msgid ""
+"All new posts / custom types will append at the end instead top. This will "
+"apply when manual ordering."
+msgstr ""
+"Semua posting / tipe kustom baru akan ditambahkan di akhir bukan atas. Ini "
+"akan diterapkan saat pengurutan manual."
+
+#: include/apto_interface-class.php:917
+msgid "Thumbnails"
+msgstr "Thumbnail"
+
+#: include/apto_interface-class.php:918
+msgid "Show thumbnails on sort list"
+msgstr "Tampilkan thumbnail pada daftar urutan"
+
+#: include/apto_interface-class.php:926
+msgid "Pagination"
+msgstr "Paginasi"
+
+#: include/apto_interface-class.php:927
+msgid "Set pagination for sort list"
+msgstr "Atur paginasi untuk daftar urutan"
+
+#: include/apto_interface-class.php:935
+msgid "Posts Per Page"
+msgstr "Posting per Halaman"
+
+#: include/apto_interface-class.php:936
+msgid "The number of posts to show on page"
+msgstr "Jumlah posting yang ditampilkan per halaman"
+
+#: include/apto_interface-class.php:942
+msgid "Offset Posts"
+msgstr "Offset Posting"
+
+#: include/apto_interface-class.php:943
+msgid "The offset number of posts"
+msgstr "Jumlah offset posting"
+
+#: include/apto_interface-class.php:951
+msgid "WPML Synchronize"
+msgstr "Sinkronkan WPML"
+
+#: include/apto_interface-class.php:952 include/apto_interface-class.php:963
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting. For this to work, all other languages must contain the "
+"same translated objects."
+msgstr ""
+"Sinkronkan urutan di seluruh bahasa lain. Ini akan menimpa pengurutan bahasa "
+"lain. Untuk ini berfungsi, semua bahasa lain harus berisi objek terjemahan "
+"yang sama."
+
+#: include/apto_interface-class.php:962
+msgid "Polylang Synchronize"
+msgstr "Sinkronkan Polylang"
+
+#: include/apto_interface-class.php:974
+msgid "QTranslate Synchronize"
+msgstr "Sinkronkan QTranslate"
+
+#: include/apto_interface-class.php:975
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting."
+msgstr ""
+"Sinkronkan urutan di seluruh bahasa lain. Ini akan menimpa pengurutan bahasa "
+"lain."
+
+#: include/apto_interface-class.php:984
+msgid "Capability / Role"
+msgstr "Kemampuan / Peran"
+
+#: include/apto_interface-class.php:985
+msgid "Minimum Capability to see this Sort"
+msgstr "Kemampuan Minimum untuk Melihat Urutan Ini"
+
+#: include/apto_interface-class.php:1009
+msgid "Status"
+msgstr "Status"
+
+#: include/apto_interface-class.php:1010
+msgid "Show objects status"
+msgstr "Tampilkan status objek"
+
+#: include/apto_interface-class.php:1038
+msgid "Settings Update"
+msgstr "Perbarui Pengaturan"
+
+#: include/apto_interface-class.php:1040
+msgid "Create"
+msgstr "Buat"
+
+#: include/apto_interface-class.php:1053
+msgid "Delete Sort"
+msgstr "Hapus Urutan"
+
+#: include/apto_interface-class.php:1105
+msgid "Manual Order"
+msgstr "Urutan Manual"
+
+#: include/apto_interface-class.php:1106
+msgid "Automatic Order"
+msgstr "Urutan Otomatis"
+
+#: include/apto_interface-class.php:1156
+msgid "Select area and customise your order list <br />or switch to automatic"
+msgstr ""
+"Pilih area dan sesuaikan daftar urutan Anda <br />atau beralih ke otomatis"
+
+#: include/apto_interface-class.php:1181 include/apto_interface-class.php:1207
+msgid "Archive"
+msgstr "Arsip"
+
+#: include/apto_interface-class.php:1181
+msgid "Total Archive Objects"
+msgstr "Total Objek Arsip"
+
+#: include/apto_interface-class.php:1239
+msgid "Taxonomy Title"
+msgstr "Judul Taksonomi"
+
+#: include/apto_interface-class.php:1239
+msgid "Total Objects"
+msgstr "Total Objek"
+
+#: include/apto_interface-class.php:1263
+msgid "Too many terms to count"
+msgstr "Terlalu banyak istilah untuk dihitung"
+
+#: include/apto_interface-class.php:1366
+msgid "Forum Title"
+msgstr "Judul Forum"
+
+#: include/apto_interface-class.php:1366
+msgid "Total Topics"
+msgstr "Total Topik"
+
+#: include/apto_interface-class.php:1366
+msgid "Posts"
+msgstr "Posting"
+
+#: include/apto_interface-class.php:1546
+msgid "Add Fallback"
+msgstr "Tambah Fallback"
+
+#: include/apto_interface-class.php:1557
+msgid "Apply Sticky Posts"
+msgstr "Terapkan Posting Tetap"
+
+#: include/apto_interface-class.php:1558
+msgid ""
+"Ensure that the sticky posts from the Manual Order are retained and remain "
+"prominently displayed. This will help preserve important information and "
+"maintain visibility for key updates or messages within the system regardless "
+"of the Automatic Order selection."
+msgstr ""
+"Pastikan posting tetap dari Urutan Manual dipertahankan dan tetap "
+"ditampilkan secara menonjol. Ini akan membantu mempertahankan informasi "
+"penting dan menjaga visibilitas untuk pembaruan atau pesan kunci dalam "
+"sistem terlepas dari pilihan Urutan Otomatis."
+
+#: include/apto_interface-class.php:1593
+msgid "Batch Terms Automatic Update"
+msgstr "Perbarui Istilah Secara Batch Otomatis"
+
+#: include/apto_interface-class.php:1594
+msgid ""
+"<b>WARNING!</b></i> Using this option will update all existing child terms "
+"of the current"
+msgstr ""
+"<b>PERINGATAN!</b></i> Menggunakan opsi ini akan memperbarui semua istilah "
+"anak yang ada dari yang saat ini"
+
+#: include/apto_interface-class.php:1602
+msgid ""
+"to Automatic Order, replacing the current settings. Manual sort lists will "
+"be preserved, but their order type will be changed to Automatic Order."
+msgstr ""
+"ke Urutan Otomatis, menggantikan pengaturan saat ini. Daftar urutan manual "
+"akan dipertahankan, tetapi tipe urutannya akan diubah menjadi Urutan "
+"Otomatis."
+
+#: include/apto_interface-class.php:1696
+msgid "Show all dates"
+msgstr "Tampilkan semua tanggal"
+
+#: include/apto_interface-class.php:1697
+msgid "Today"
+msgstr "Hari Ini"
+
+#: include/apto_interface-class.php:1698
+msgid "Yesterday"
+msgstr "Kemarin"
+
+#: include/apto_interface-class.php:1699
+msgid "Last Week"
+msgstr "Minggu Lalu"
+
+#: include/apto_interface-class.php:1745
+msgid "Toggle Thumbnails"
+msgstr "Beralih Thumbnail"
+
+#: include/apto_interface-class.php:1754 include/apto_interface-class.php:1865
+msgid "Update"
+msgstr "Perbarui"
+
+#: include/apto_interface-class.php:1767
+msgid "Reverse"
+msgstr "Balik"
+
+#: include/apto_interface-class.php:1768
+msgid "Title Asc"
+msgstr "Judul Naik"
+
+#: include/apto_interface-class.php:1769
+msgid "Title Desc"
+msgstr "Judul Turun"
+
+#: include/apto_interface-class.php:1770
+msgid "Id order Asc"
+msgstr "ID Urutan Naik"
+
+#: include/apto_interface-class.php:1771
+msgid "Id order Desc"
+msgstr "ID Urutan Turun"
+
+#: include/apto_interface-class.php:1772
+#: include/apto_interface_helper-class.php:1797
+msgid "Random"
+msgstr "Acak"
+
+#: include/apto_interface-class.php:1780
+msgid "List view"
+msgstr "Tampilan Daftar"
+
+#: include/apto_interface-class.php:1781
+msgid "Grid view"
+msgstr "Tampilan Grid"
+
+#: include/apto_interface-class.php:1878
+msgid "Reset Order"
+msgstr "Reset Urutan"
+
+#: include/apto_interface-class.php:1884
+msgid "Are you sure you want to reset the order??"
+msgstr "Apakah Anda yakin ingin mereset urutan??"
+
+#: include/apto_interface_helper-class.php:344
+msgid "Sort order reset successfully"
+msgstr "Urutan urutan direset berhasil"
+
+#: include/apto_interface_helper-class.php:348
+#: include/apto_interface_helper-class.php:2506
+#: include/apto_interface_helper-class.php:2531
+msgid "Invalid Nonce"
+msgstr "Nonce Tidak Valid"
+
+#: include/apto_interface_helper-class.php:1181
+msgid ""
+"**WARNING!! This will load all post types objects. Recommended to be used "
+"with Advanced Query Rules"
+msgstr ""
+"**PERINGATAN!! Ini akan memuat semua objek tipe posting. Disarankan "
+"digunakan dengan Aturan Kueri Lanjutan"
+
+#: include/apto_interface_helper-class.php:1764
+msgid "Order By"
+msgstr "Urutkan Berdasarkan"
+
+#: include/apto_interface_helper-class.php:1765
+msgid "More details about Order By paramether can be found at"
+msgstr "Detail lebih lanjut tentang parameter Order By dapat ditemukan di"
+
+#: include/apto_interface_helper-class.php:1765
+#: include/apto_interface_helper-class.php:1885
+msgid "Order & Orderby Parameters"
+msgstr "Parameter Order & Orderby"
+
+#: include/apto_interface_helper-class.php:1766
+msgid ""
+"Additional details and example of usage for Custom Function can be found at"
+msgstr ""
+"Detail tambahan dan contoh penggunaan untuk Fungsi Kustom dapat ditemukan di"
+
+#: include/apto_interface_helper-class.php:1766
+#: include/apto_interface_helper-class.php:1867
+msgid "Custom Function"
+msgstr "Fungsi Kustom"
+
+#: include/apto_interface_helper-class.php:1770
+msgid "Default / None"
+msgstr "Default / Tidak Ada"
+
+#: include/apto_interface_helper-class.php:1773
+msgid "Post ID"
+msgstr "ID Posting"
+
+#: include/apto_interface_helper-class.php:1782
+msgid "Slug"
+msgstr "Slug"
+
+#: include/apto_interface_helper-class.php:1785
+#: include/apto_interface_helper-class.php:1852
+msgid "Date"
+msgstr "Tanggal"
+
+#: include/apto_interface_helper-class.php:1788
+msgid "Modified"
+msgstr "Dimodifikasi"
+
+#: include/apto_interface_helper-class.php:1791
+msgid "Menu Order"
+msgstr "Urutan Menu"
+
+#: include/apto_interface_helper-class.php:1794
+msgid "Comments Count"
+msgstr "Jumlah Komentar"
+
+#: include/apto_interface_helper-class.php:1822
+msgid "Custom Field"
+msgstr "Kolom Kustom"
+
+#: include/apto_interface_helper-class.php:1830
+msgid "Field Name"
+msgstr "Nama Kolom"
+
+#: include/apto_interface_helper-class.php:1831
+msgid "The name of custom field"
+msgstr "Nama kolom kustom"
+
+#: include/apto_interface_helper-class.php:1836
+msgid "Field Type"
+msgstr "Tipe Kolom"
+
+#: include/apto_interface_helper-class.php:1837
+msgid "MySql Type of field, more details at"
+msgstr "Tipe MySql kolom, detail lebih lanjut di"
+
+#: include/apto_interface_helper-class.php:1837
+msgid "Cast Functions and Operators"
+msgstr "Fungsi Cast dan Operator"
+
+#: include/apto_interface_helper-class.php:1840
+msgid "None / Default"
+msgstr "Tidak Ada / Default"
+
+#: include/apto_interface_helper-class.php:1843
+msgid "Signed (Integer)"
+msgstr "Signed (Integer)"
+
+#: include/apto_interface_helper-class.php:1846
+msgid "Unsigned (Integer)"
+msgstr "Unsigned (Integer)"
+
+#: include/apto_interface_helper-class.php:1849
+msgid "Float (Decimal)"
+msgstr "Float (Desimal)"
+
+#: include/apto_interface_helper-class.php:1855
+msgid "Datetime"
+msgstr "Datetime"
+
+#: include/apto_interface_helper-class.php:1858
+msgid "Time"
+msgstr "Waktu"
+
+#: include/apto_interface_helper-class.php:1884
+msgid "Order"
+msgstr "Urutan"
+
+#: include/apto_interface_helper-class.php:1885
+msgid "More details about Order paramether can be found at"
+msgstr "Detail lebih lanjut tentang parameter Order dapat ditemukan di"
+
+#: include/apto_interface_helper-class.php:1889
+msgid "Descending"
+msgstr "Menurun"
+
+#: include/apto_interface_helper-class.php:1892
+msgid "Ascending"
+msgstr "Menaik"
+
+#: include/apto_interface_helper-class.php:1929
+msgid "Go to the first page"
+msgstr "Pergi ke halaman pertama"
+
+#: include/apto_interface_helper-class.php:1936
+msgid "Go to the previous page"
+msgstr "Pergi ke halaman sebelumnya"
+
+#: include/apto_interface_helper-class.php:1948
+msgid "Go to the next page"
+msgstr "Pergi ke halaman berikutnya"
+
+#: include/apto_interface_helper-class.php:1955
+msgid "Go to the last page"
+msgstr "Pergi ke halaman terakhir"
+
+#: include/apto_interface_helper-class.php:2765
+msgid "Items Order Updated"
+msgstr "Urutan Item Diperbarui"
+
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3216
+#: include/apto_interface_helper-class.php:3227
+#: include/apto_interface_helper-class.php:3347
+msgid "A syncronization could not be completed"
+msgstr "Sinkronisasi tidak dapat diselesaikan"
+
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3347
+msgid "as post type is not translatable."
+msgstr "karena tipe posting tidak dapat diterjemahkan."
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "A synchronization could not be completed"
+msgstr "Sinkronisasi tidak dapat diselesaikan"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "for"
+msgstr "untuk"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "language"
+msgstr "bahasa"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "as it contains a different number of objects."
+msgstr "karena berisi jumlah objek yang berbeda."
+
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3216
+msgid "as taxonomy is not translatable."
+msgstr "karena taksonomi tidak dapat diterjemahkan."
+
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3227
+msgid "as term is not translated."
+msgstr "karena istilah tidak diterjemahkan."
+
+#: include/apto_options_class.php:99 include/apto_options_class.php:521
+#: include/apto_options_class.php:571 include/apto_options_class.php:623
+msgid "General Settings"
+msgstr "Pengaturan Umum"
+
+#: include/apto_options_class.php:109
+msgid "Show / Hide re-order interface"
+msgstr "Tampilkan / Sembunyikan antarmuka urutkan ulang"
+
+#: include/apto_options_class.php:122
+msgid "Show"
+msgstr "Tampilkan"
+
+#: include/apto_options_class.php:123
+msgid "Hide"
+msgstr "Sembunyikan"
+
+#: include/apto_options_class.php:137
+msgid "General"
+msgstr "Umum"
+
+#: include/apto_options_class.php:143
+msgid "Ignore Suppress Filters"
+msgstr "Abaikan Filter Penekan"
+
+#: include/apto_options_class.php:147
+msgid ""
+"Set FALSE the <b>suppress_filters</b> arguments for get_posts() default "
+"WordPress function. Use this feature if Autosort does not work with your "
+"theme, otherwise you should leave un-checked."
+msgstr ""
+"Set FALSE argumen <b>suppress_filters</b> untuk fungsi WordPress default "
+"get_posts(). Gunakan fitur ini jika Autosort tidak bekerja dengan tema Anda, "
+"jika tidak biarkan tidak dicentang."
+
+#: include/apto_options_class.php:152
+msgid "Ignore Sticky Posts"
+msgstr "Abaikan Posting Tetap"
+
+#: include/apto_options_class.php:156
+msgid ""
+"Ignore any Sticky posts, those will not appear on top of the list but per "
+"customised order."
+msgstr ""
+"Abaikan posting Tetap apa pun, yang tersebut tidak akan muncul di atas "
+"daftar tetapi sesuai urutan yang disesuaikan."
+
+#: include/apto_options_class.php:161
+msgid "Next / Previous Apply"
+msgstr "Terapkan Berikutnya / Sebelumnya"
+
+#: include/apto_options_class.php:165
+msgid "Apply the sort to default Next / Previous site-wide navigation."
+msgstr "Terapkan urutan ke navigasi situs default Berikutnya / Sebelumnya."
+
+#: include/apto_options_class.php:165
+msgid "For advanced Next / Previous navigation check"
+msgstr "Untuk navigasi Berikutnya / Sebelumnya lanjutan periksa"
+
+#: include/apto_options_class.php:165 include/apto_options_class.php:187
+#: include/apto_options_class.php:196
+msgid "read more"
+msgstr "baca lebih lanjut"
+
+#: include/apto_options_class.php:171
+msgid "bbPress Replies"
+msgstr "Balasan bbPress"
+
+#: include/apto_options_class.php:175
+msgid "Reverse the order of bbPress replies, show newest posts first"
+msgstr "Balik urutan balasan bbPress, tampilkan posting terbaru pertama"
+
+#: include/apto_options_class.php:183
+msgid "Use category order for WooCommerce when apply filters"
+msgstr "Gunakan urutan kategori untuk WooCommerce saat menerapkan filter"
+
+#: include/apto_options_class.php:187
+msgid "Allow Category order to apply when using visual attribute filters"
+msgstr ""
+"Izinkan urutan Kategori diterapkan saat menggunakan filter atribut visual"
+
+#: include/apto_options_class.php:192
+msgid "WooCommerce Up-sells Sort"
+msgstr "Urutan Up-sells WooCommerce"
+
+#: include/apto_options_class.php:196
+msgid "Allow drag & drop for WooCommerce Up-sells products"
+msgstr "Izinkan drag & drop untuk produk Up-sells WooCommerce"
+
+#: include/apto_options_class.php:204
+msgid "Debug Marks"
+msgstr "Tanda Debug"
+
+#: include/apto_options_class.php:208
+msgid ""
+"Output marks on front side when logged-in, with detailed informations of "
+"every queries to identify the settings to be used for a sort to match. "
+"Ensure to turn off when debug completed."
+msgstr ""
+"Output tanda di sisi depan saat login, dengan informasi detail dari setiap "
+"kueri untuk mengidentifikasi pengaturan yang akan digunakan agar urutan "
+"cocok. Pastikan dimatikan saat debug selesai."
+
+#: include/apto_options_class.php:213
+msgid "Create Logs"
+msgstr "Buat Log"
+
+#: include/apto_options_class.php:217
+msgid ""
+"Create logs which may be usefull when debug or help to identify applied sort "
+"list."
+msgstr ""
+"Buat log yang mungkin berguna saat debug atau membantu mengidentifikasi "
+"daftar urutan yang diterapkan."
+
+#: include/apto_options_class.php:228
+msgid "Logs"
+msgstr "Log"
+
+#: include/apto_options_class.php:254
+msgid "Save Settings"
+msgstr "Simpan Pengaturan"
+
+#: include/apto_options_class.php:299
+msgid "Settings Saved"
+msgstr "Pengaturan Disimpan"
+
+#: include/apto_options_class.php:346 include/apto_options_class.php:353
+msgid "Advanced Post Types Order plugin is inactive, please enter your"
+msgstr "Plugin Advanced Post Types Order tidak aktif, silakan masukkan"
+
+#: include/apto_options_class.php:346 include/apto_options_class.php:353
+msgid "Licence Key"
+msgstr "Kunci Lisensi"
+
+#: include/apto_options_class.php:385 include/apto_options_class.php:467
+msgid "There was a problem connecting to "
+msgstr "Ada masalah koneksi ke "
+
+#: include/apto_options_class.php:393 include/apto_options_class.php:430
+#: include/apto_options_class.php:475 include/apto_options_class.php:507
+msgid "There was a problem with the data block received from "
+msgstr "Ada masalah dengan blok data yang diterima dari "
+
+#: include/apto_options_class.php:415
+msgid ""
+"There was a problem deactivating the licence on other side, however locally "
+"the key is now removed: "
+msgstr ""
+"Ada masalah menonaktifkan lisensi di sisi lain, namun secara lokal kunci "
+"telah dihapus: "
+
+#: include/apto_options_class.php:446
+msgid "Licence Key can't be empty"
+msgstr "Kunci Lisensi tidak boleh kosong"
+
+#: include/apto_options_class.php:501
+msgid "There was a problem activating the licence: "
+msgstr "Ada masalah mengaktifkan lisensi: "
+
+#: include/apto_options_class.php:525 include/apto_options_class.php:578
+#: include/apto_options_class.php:625
+msgid "Software License"
+msgstr "Lisensi Perangkat Lunak"
+
+#: include/apto_options_class.php:534 include/apto_options_class.php:586
+msgid "License Key"
+msgstr "Kunci Lisensi"
+
+#: include/apto_options_class.php:539 include/apto_options_class.php:631
+msgid ""
+"Enter the License Key you got when bought this product. If you lost the key, "
+"you can always retrieve it from"
+msgstr ""
+"Masukkan Kunci Lisensi yang Anda dapatkan saat membeli produk ini. Jika Anda "
+"kehilangan kunci,  Anda selalu dapat mengambilnya dari"
+
+#: include/apto_options_class.php:539 include/apto_options_class.php:540
+#: include/apto_options_class.php:631 include/apto_options_class.php:632
+msgid "My Account"
+msgstr "Akun Saya"
+
+#: include/apto_options_class.php:540 include/apto_options_class.php:632
+msgid "More keys can be generate from"
+msgstr "Kunci lebih banyak dapat dibuat dari"
+
+#: include/apto_options_class.php:549
+msgid "Save"
+msgstr "Simpan"
+
+#: include/apto_options_class.php:601
+msgid "You can generate more keys from"
+msgstr "Anda dapat membuat kunci lebih banyak dari"
+
+#: include/apto_options_class.php:629
+msgid "License Key Required"
+msgstr "Kunci Lisensi Diperlukan"
+
+#: include/apto_plugin_updater.class.php:123
+msgid "An error occour when try to identify the pluguin."
+msgstr "Terjadi kesalahan saat mencoba mengidentifikasi plugin."
+
+#: include/apto_plugin_updater.class.php:123
+#: include/apto_plugin_updater.class.php:143
+msgid "Try again"
+msgstr "Coba lagi"
+
+#: include/apto_plugin_updater.class.php:143
+msgid "An Unexpected HTTP Error occurred during the API request."
+msgstr "Terjadi Kesalahan HTTP Tak Terduga selama permintaan API."
+
+#: include/walkers/post-types-order-walker-class.php:146
+msgid "Move to Top"
+msgstr "Pindah ke Atas"
+
+#: include/walkers/post-types-order-walker-class.php:147
+msgid "Move to Bottom"
+msgstr "Pindah ke Bawah"
+
+#: include/walkers/post-types-order-walker-class.php:148
+msgid "Make Sticky"
+msgstr "Buat Tetap"
+
+#: include/walkers/post-types-order-walker-class.php:149
+msgid "Edit"
+msgstr "Edit"
+
+#: include/walkers/post-types-order-walker-class.php:174
+msgid "Sticky"
+msgstr "Tetap"

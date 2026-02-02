@@ -120,6 +120,8 @@ class Ajax extends \Perfmatters\Ajax
 			}
 
 			$snippet['meta']['active'] = 0;
+			$snippet['meta']['author'] = 0;
+			$snippet['meta']['updated_by'] = 0;
 			$snippet['meta']['created'] = '';
 
 			//doc block

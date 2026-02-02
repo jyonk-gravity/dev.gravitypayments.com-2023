@@ -12,7 +12,7 @@
             * Retrieve licence details
             * 
             */
-            public function get_licence_data()
+            static public function get_licence_data()
                 {
                     $licence_data = get_site_option('apto_license');
                     
@@ -33,7 +33,7 @@
             *     
             * @param mixed $licence_data
             */
-            public function reset_licence_data( $licence_data )
+            static public function reset_licence_data( $licence_data )
                 {
                     if  ( ! is_array( $licence_data ) ) 
                         $licence_data   =   array();
@@ -51,18 +51,18 @@
             *     
             * @param mixed $licence_data
             */
-            public function update_licence_data( $licence_data )
+            static public function update_licence_data( $licence_data )
                 {
                     update_site_option('apto_license', $licence_data);   
                 }
                 
-            function licence_key_verify()
+            static public function licence_key_verify()
                 {
-                    $license_data = $this->get_licence_data();
+                    $license_data = self::get_licence_data();
                     if(!is_array($license_data))
                         $license_data   =   array();
                     
-                    if($this->is_local_instance())
+                    if( self::is_local_instance())
                         return TRUE;
                              
                     if(!isset($license_data['kye']) || $license_data['kye'] == '')
@@ -71,7 +71,7 @@
                     return TRUE;
                 }
                 
-            function is_local_instance()
+            static public function is_local_instance()
                 {
                         
                     if( defined('APTO_REQUIRE_KEY') &&  APTO_REQUIRE_KEY    === TRUE    )

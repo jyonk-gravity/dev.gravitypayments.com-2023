@@ -1,0 +1,1116 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced Post Types Order\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-13 17:06+0200\n"
+"PO-Revision-Date: 2026-01-13 17:06+0200\n"
+"Last-Translator: NspCode <contact@nsp-code.com>\n"
+"Language-Team: NspCode <contact@nsp-code.com>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__;esc_html__;esc_html_e;"
+"esc_attr__;esc_html_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: extends/divi/PostsNavigation.class.php:6
+msgid "APTO - Post Navigation"
+msgstr "APTO - Inläggsnavigering"
+
+#: extends/divi/PostsNavigation.class.php:7
+msgid "APTO - Post Navigations"
+msgstr "APTO - Inläggsnavigeringar"
+
+#: extends/divi/PostsNavigation.class.php:17
+msgid "Text"
+msgstr "Text"
+
+#: extends/divi/PostsNavigation.class.php:18
+msgid "Sort"
+msgstr "Sortera"
+
+#: extends/divi/PostsNavigation.class.php:19
+msgid "Navigation"
+msgstr "Navigering"
+
+#: extends/divi/PostsNavigation.class.php:27
+#: extends/divi/PostsNavigation.class.php:79
+msgid "Links"
+msgstr "Länkar"
+
+#: extends/divi/PostsNavigation.class.php:83
+#: extends/divi/PostsNavigation.class.php:140
+msgid "Previous Link"
+msgstr "Föregående länk"
+
+#: extends/divi/PostsNavigation.class.php:87
+msgid "Previous Link Arrow"
+msgstr "Föregående länkpil"
+
+#: extends/divi/PostsNavigation.class.php:91
+#: extends/divi/PostsNavigation.class.php:153
+msgid "Next Link"
+msgstr "Nästa länk"
+
+#: extends/divi/PostsNavigation.class.php:95
+msgid "Next Link Arrow"
+msgstr "Nästa länkpil"
+
+#: extends/divi/PostsNavigation.class.php:106
+msgid "Show Previous Post Link"
+msgstr "Visa föregående inläggslänk"
+
+#: extends/divi/PostsNavigation.class.php:110
+#: extends/divi/PostsNavigation.class.php:127
+#: include/apto_interface-class.php:798 include/apto_interface-class.php:806
+#: include/apto_interface-class.php:857 include/apto_interface-class.php:912
+#: include/apto_interface-class.php:920 include/apto_interface-class.php:929
+#: include/apto_interface-class.php:954 include/apto_interface-class.php:965
+#: include/apto_interface-class.php:977 include/apto_interface-class.php:1565
+#: include/apto_interface-class.php:1609
+msgid "Yes"
+msgstr "Ja"
+
+#: extends/divi/PostsNavigation.class.php:111
+#: extends/divi/PostsNavigation.class.php:128
+#: include/apto_interface-class.php:799 include/apto_interface-class.php:807
+#: include/apto_interface-class.php:858 include/apto_interface-class.php:913
+#: include/apto_interface-class.php:921 include/apto_interface-class.php:930
+#: include/apto_interface-class.php:955 include/apto_interface-class.php:966
+#: include/apto_interface-class.php:978 include/apto_interface-class.php:1562
+#: include/apto_interface-class.php:1606
+msgid "No"
+msgstr "Nej"
+
+#: extends/divi/PostsNavigation.class.php:118
+msgid "Turn this on to show the previous post link"
+msgstr "Aktivera detta för att visa föregående inläggslänk"
+
+#: extends/divi/PostsNavigation.class.php:123
+msgid "Show Next Post Link"
+msgstr "Visa nästa inläggslänk"
+
+#: extends/divi/PostsNavigation.class.php:135
+msgid "Turn this on to show the next post link"
+msgstr "Aktivera detta för att visa nästa inläggslänk"
+
+#: extends/divi/PostsNavigation.class.php:147
+msgid ""
+"Define custom text for the previous link. You can use the <strong>%title</"
+"strong> variable to include the post title. Leave blank for default."
+msgstr ""
+"Definiera anpassad text för föregående länk. Du kan använda variabeln "
+"<strong>%title</strong> för att inkludera inläggstiteln. Lämna tomt för "
+"standard."
+
+#: extends/divi/PostsNavigation.class.php:160
+msgid ""
+"Define custom text for the next link. You can use the <strong>%title</"
+"strong> variable to include the post title. Leave blank for default."
+msgstr ""
+"Definiera anpassad text för nästa länk. Du kan använda variabeln "
+"<strong>%title</strong> för att inkludera inläggstiteln. Lämna tomt för "
+"standard."
+
+#: extends/divi/PostsNavigation.class.php:167
+msgid "Sort ID"
+msgstr "Sorterings-ID"
+
+#: extends/divi/PostsNavigation.class.php:170
+msgid ""
+"Choose the sort ID to apply. If the custom post object assigned to a "
+"category, the primary will be used when applying for the order."
+msgstr ""
+"Välj sorterings-ID att använda. Om det anpassade inläggsobjektet är "
+"tilldelat en kategori kommer primär att användas vid tillämpning av "
+"ordningen."
+
+#: extends/divi/PostsNavigation.class.php:182
+msgid "Sort on Taxonomy"
+msgstr "Sortera på taxonomi"
+
+#: extends/divi/PostsNavigation.class.php:186
+msgid "Choose the Taxoomy Name from which the order should be used."
+msgstr "Välj taxonomins namn från vilken ordningen ska användas."
+
+#: extends/divi/PostsNavigation.class.php:317
+#: include/apto_functions-class.php:3150
+msgid "Next Post"
+msgstr "Nästa inlägg"
+
+#: extends/divi/PostsNavigation.class.php:352
+#: include/apto_functions-class.php:3150
+msgid "Previous Post"
+msgstr "Föregående inlägg"
+
+#: include/apto_admin_functions-class.php:90
+msgid "Re-Order"
+msgstr "Omsortera"
+
+#: include/apto_admin_functions-class.php:297
+msgid ""
+"All interfaces are set to hide, at least a visible is required. You can "
+"change tht from Settings"
+msgstr ""
+"Alla gränssnitt är inställda på att döljas, minst ett synligt krävs. Du kan "
+"ändra detta från Inställningar"
+
+#: include/apto_admin_functions-class.php:349
+msgid "Advanced Post Types Order - At least one menu has changed:"
+msgstr "Avancerad ordning för inläggstyper - Minst en meny har ändrats:"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "Notice: There is"
+msgstr "Meddelande: Det finns"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "another"
+msgstr "en annan"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "similar sort"
+msgstr "liknande sortering"
+
+#: include/apto_functions-class.php:2539
+msgid "Subscriber"
+msgstr "Prenumerant"
+
+#: include/apto_functions-class.php:2543
+msgid "Contributor"
+msgstr "Medarbetare"
+
+#: include/apto_functions-class.php:2547 include/apto_interface-class.php:663
+#: include/apto_interface_helper-class.php:1776
+msgid "Author"
+msgstr "Författare"
+
+#: include/apto_functions-class.php:2551
+msgid "Editor"
+msgstr "Redigerare"
+
+#: include/apto_functions-class.php:2555
+msgid "Administrator"
+msgstr "Administrator"
+
+#: include/apto_functions-class.php:2872 include/apto_functions-class.php:2967
+#, php-format
+msgid "Use commas instead of %s to separate excluded terms."
+msgstr "Använd komman istället för %s för att separera uteslutna termer."
+
+#: include/apto_interface-class.php:170
+msgid "Re-order"
+msgstr "Omsortera"
+
+#: include/apto_interface-class.php:174
+msgid ""
+"This plugin can't work without javascript, because it's use drag and drop "
+"and AJAX."
+msgstr ""
+"Detta tillägg kan inte fungera utan JavaScript, eftersom det använder drag-"
+"and-drop och AJAX."
+
+#: include/apto_interface-class.php:207
+msgid ""
+"WPML: The Sort Rules couldn't be translated automatically. You need to set/"
+"translate this manually for"
+msgstr ""
+"WPML: Sorteringsreglerna kunde inte översättas automatiskt. Du behöver "
+"ställa in/översätta detta manuellt för"
+
+#: include/apto_interface-class.php:239
+msgid ""
+"Polylang: The Sort Rules couldn't be translated automatically. You need to "
+"set/translate this manually for"
+msgstr ""
+"Polylang: Sorteringsreglerna kunde inte översättas automatiskt. Du behöver "
+"ställa in/översätta detta manuellt för"
+
+#: include/apto_interface-class.php:413
+msgid "Click to toggle"
+msgstr "Klicka för att växla"
+
+#: include/apto_interface-class.php:413 include/apto_interface-class.php:755
+msgid "Sort List Settings"
+msgstr "Sorteringslistinställningar"
+
+#: include/apto_interface-class.php:424
+msgid "Query Rules"
+msgstr "Fråge-regler"
+
+#: include/apto_interface-class.php:425
+msgid ""
+"Create a set of criteria rules which match your query. This will determine "
+"what to show on the following sort list and the order will apply on front "
+"side."
+msgstr ""
+"Skapa ett set av kriterieregler som matchar din fråga. Detta kommer avgöra "
+"vad som visas i följande sorteringslista och ordningen kommer tillämpas på "
+"framsidan."
+
+#: include/apto_interface-class.php:426
+msgid ""
+"All rules are compared to a query using AND operator. For more details check"
+msgstr "Alla regler jämförs med en fråga med AND-operator. För mer detaljer se"
+
+#: include/apto_interface-class.php:426
+msgid "Query Rules examples"
+msgstr "Fråge-regler exempel"
+
+#: include/apto_interface-class.php:447
+msgid "Show Advanced"
+msgstr "Visa avancerat"
+
+#: include/apto_interface-class.php:506
+msgid "Add Post Type"
+msgstr "Lägg till inläggstyp"
+
+#: include/apto_interface-class.php:513 include/apto_interface-class.php:527
+#: include/apto_interface_helper-class.php:1809
+msgid "Taxonomy"
+msgstr "Taxonomi"
+
+#: include/apto_interface-class.php:527 include/apto_interface-class.php:535
+msgid "invalid"
+msgstr "ogiltig"
+
+#: include/apto_interface-class.php:535
+msgid "Term"
+msgstr "Term"
+
+#: include/apto_interface-class.php:562
+msgid "Add Taxonomy"
+msgstr "Lägg till taxonomi"
+
+#: include/apto_interface-class.php:570
+msgid "Taxonomy Relation"
+msgstr "Taxonomi-relation"
+
+#: include/apto_interface-class.php:596
+msgid "Meta"
+msgstr "Meta"
+
+#: include/apto_interface-class.php:630
+msgid "Add Meta"
+msgstr "Lägg till meta"
+
+#: include/apto_interface-class.php:638
+msgid "Meta Relation"
+msgstr "Meta-relation"
+
+#: include/apto_interface-class.php:687
+msgid "Add Author"
+msgstr "Lägg till författare"
+
+#: include/apto_interface-class.php:701
+msgid ""
+"Certain changes has been done to your site and some of Query Rules cannot be "
+"displayed anymore. You should review the settings Query Rules area and click "
+"Update button."
+msgstr ""
+"Vissa ändringar har gjorts på din webbplats och vissa fråge-regler kan inte "
+"längre visas. Du bör granska inställningarna för fråge-regler och klicka på "
+"Uppdatera-knappen."
+
+#: include/apto_interface-class.php:716
+msgid "Conditionals"
+msgstr "Villkor"
+
+#: include/apto_interface-class.php:717
+msgid "Apply the order only if conditions are true. For more details check"
+msgstr "Tillämpa ordningen endast om villkoren är sanna. För mer detaljer se"
+
+#: include/apto_interface-class.php:717
+msgid "Conditionals Usage"
+msgstr "Villkor-användning"
+
+#: include/apto_interface-class.php:720
+msgid "Apply if"
+msgstr "Tillämpa om"
+
+#: include/apto_interface-class.php:745
+msgid "Add Group"
+msgstr "Lägg till grupp"
+
+#: include/apto_interface-class.php:754
+msgid "Interface"
+msgstr "Gränssnitt"
+
+#: include/apto_interface-class.php:755
+msgid "This sort interface settings. For more details check"
+msgstr "Dessa sorteringsgränssnitts inställningar. För mer detaljer se"
+
+#: include/apto_interface-class.php:762
+#: include/apto_interface_helper-class.php:1779
+msgid "Title"
+msgstr "Titel"
+
+#: include/apto_interface-class.php:763
+msgid "Sort list tab title"
+msgstr "Sorteringslistflik titel"
+
+#: include/apto_interface-class.php:767
+msgid "Description"
+msgstr "Beskrivning"
+
+#: include/apto_interface-class.php:768
+msgid ""
+"Sort list description. This will appear for others (non-admin users) when "
+"doing re-sort, it should include a description for what area this sort will "
+"apply."
+msgstr ""
+"Sorteringslistbeskrivning. Detta visas för andra (icke-admin-användare) vid "
+"omsortering, den bör inkludera en beskrivning för vilket område denna "
+"sortering kommer tillämpas på."
+
+#: include/apto_interface-class.php:772
+msgid "Menu Location"
+msgstr "Menyläge"
+
+#: include/apto_interface-class.php:773
+msgid "Relocate this Sort Interface to another menu"
+msgstr "Flytta detta sorteringsgränssnitt till en annan meny"
+
+#: include/apto_interface-class.php:795
+msgid "Auto Apply Sort"
+msgstr "Auto-tillämpa sortering"
+
+#: include/apto_interface-class.php:796
+msgid "Automatically apply the sort to theme queries if match."
+msgstr "Automatiskt tillämpa sorteringen på temats frågor om matchning."
+
+#: include/apto_interface-class.php:803
+msgid "Admin Sort"
+msgstr "Admin-sortering"
+
+#: include/apto_interface-class.php:804
+msgid "Automatically apply the sort to admin queries if match."
+msgstr "Automatiskt tillämpa sorteringen på admin-frågor vid matchning."
+
+#: include/apto_interface-class.php:812
+msgid "Allow sorting within default post type interface"
+msgstr "Tillåt sortering inom standard inläggstyp-gränssnitt"
+
+#: include/apto_interface-class.php:813
+msgid ""
+"A Drag & Drop functionality is available to be used within default WordPress "
+"post type interface."
+msgstr ""
+"Drag & Drop-funktionalitet finns tillgänglig att använda inom standard "
+"WordPress inläggstyp-gränssnitt."
+
+#: include/apto_interface-class.php:869
+msgid "Need to Create Sort first"
+msgstr "Skapa sortering först"
+
+#: include/apto_interface-class.php:886
+msgid "Not a primary sort, this feature can apply only to"
+msgstr "Inte primär sortering, denna funktion kan endast tillämpas på"
+
+#: include/apto_interface-class.php:891
+msgid "This feature can't apply when conditionals set"
+msgstr "Denna funktion kan inte tillämpas när villkor är inställda"
+
+#: include/apto_interface-class.php:896
+msgid "Admin Sort need to be Yes"
+msgstr "Admin-sortering måste vara Ja"
+
+#: include/apto_interface-class.php:909
+msgid "Send new items to bottom of the list"
+msgstr "Skicka nya objekt till listans botten"
+
+#: include/apto_interface-class.php:910
+msgid ""
+"All new posts / custom types will append at the end instead top. This will "
+"apply when manual ordering."
+msgstr ""
+"Alla nya inlägg/anpassade typer kommer läggas till längst ner istället för "
+"upp. Detta kommer tillämpas vid manuell sortering."
+
+#: include/apto_interface-class.php:917
+msgid "Thumbnails"
+msgstr "Miniatyrbilder"
+
+#: include/apto_interface-class.php:918
+msgid "Show thumbnails on sort list"
+msgstr "Visa miniatyrbilder i sorteringslistan"
+
+#: include/apto_interface-class.php:926
+msgid "Pagination"
+msgstr "Sidindelning"
+
+#: include/apto_interface-class.php:927
+msgid "Set pagination for sort list"
+msgstr "Ställ in sidindelning för sorteringslista"
+
+#: include/apto_interface-class.php:935
+msgid "Posts Per Page"
+msgstr "Inlägg per sida"
+
+#: include/apto_interface-class.php:936
+msgid "The number of posts to show on page"
+msgstr "Antalet inlägg att visa per sida"
+
+#: include/apto_interface-class.php:942
+msgid "Offset Posts"
+msgstr "Förskjutna inlägg"
+
+#: include/apto_interface-class.php:943
+msgid "The offset number of posts"
+msgstr "Antalet förskjutna inlägg"
+
+#: include/apto_interface-class.php:951
+msgid "WPML Synchronize"
+msgstr "WPML Synkronisera"
+
+#: include/apto_interface-class.php:952 include/apto_interface-class.php:963
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting. For this to work, all other languages must contain the "
+"same translated objects."
+msgstr ""
+"Synkronisera ordningen över alla andra språk. Detta kommer skriva över andra "
+"språks sortering. För att detta ska fungera måste alla andra språk innehålla "
+"samma översatta objekt."
+
+#: include/apto_interface-class.php:962
+msgid "Polylang Synchronize"
+msgstr "Polylang Synkronisera"
+
+#: include/apto_interface-class.php:974
+msgid "QTranslate Synchronize"
+msgstr "QTranslate Synkronisera"
+
+#: include/apto_interface-class.php:975
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting."
+msgstr ""
+"Synkronisera ordningen över alla andra språk. Detta kommer skriva över andra "
+"språks sortering."
+
+#: include/apto_interface-class.php:984
+msgid "Capability / Role"
+msgstr "Behörighet / Roll"
+
+#: include/apto_interface-class.php:985
+msgid "Minimum Capability to see this Sort"
+msgstr "Minsta behörighet för att se denna sortering"
+
+#: include/apto_interface-class.php:1009
+msgid "Status"
+msgstr "Status"
+
+#: include/apto_interface-class.php:1010
+msgid "Show objects status"
+msgstr "Visa objekts status"
+
+#: include/apto_interface-class.php:1038
+msgid "Settings Update"
+msgstr "Uppdatera inställningar"
+
+#: include/apto_interface-class.php:1040
+msgid "Create"
+msgstr "Skapa"
+
+#: include/apto_interface-class.php:1053
+msgid "Delete Sort"
+msgstr "Radera sortering"
+
+#: include/apto_interface-class.php:1105
+msgid "Manual Order"
+msgstr "Manuell ordning"
+
+#: include/apto_interface-class.php:1106
+msgid "Automatic Order"
+msgstr "Automatisk ordning"
+
+#: include/apto_interface-class.php:1156
+msgid "Select area and customise your order list <br />or switch to automatic"
+msgstr ""
+"Välj område och anpassa din ordningslista <br />eller växla till automatisk"
+
+#: include/apto_interface-class.php:1181 include/apto_interface-class.php:1207
+msgid "Archive"
+msgstr "Arkiv"
+
+#: include/apto_interface-class.php:1181
+msgid "Total Archive Objects"
+msgstr "Totala arkivobjekt"
+
+#: include/apto_interface-class.php:1239
+msgid "Taxonomy Title"
+msgstr "Taxonomi-titel"
+
+#: include/apto_interface-class.php:1239
+msgid "Total Objects"
+msgstr "Totala objekt"
+
+#: include/apto_interface-class.php:1263
+msgid "Too many terms to count"
+msgstr "För många termer att räkna"
+
+#: include/apto_interface-class.php:1366
+msgid "Forum Title"
+msgstr "Forumtitel"
+
+#: include/apto_interface-class.php:1366
+msgid "Total Topics"
+msgstr "Totala ämnen"
+
+#: include/apto_interface-class.php:1366
+msgid "Posts"
+msgstr "Inlägg"
+
+#: include/apto_interface-class.php:1546
+msgid "Add Fallback"
+msgstr "Lägg till reserv"
+
+#: include/apto_interface-class.php:1557
+msgid "Apply Sticky Posts"
+msgstr "Tillämpa klistrade inlägg"
+
+#: include/apto_interface-class.php:1558
+msgid ""
+"Ensure that the sticky posts from the Manual Order are retained and remain "
+"prominently displayed. This will help preserve important information and "
+"maintain visibility for key updates or messages within the system regardless "
+"of the Automatic Order selection."
+msgstr ""
+"Säkerställ att klistrade inlägg från manuell ordning behålls och förblir "
+"framträdande. Detta hjälper till att bevara viktig information och "
+"upprätthålla synlighet för viktiga uppdateringar eller meddelanden inom "
+"systemet oavsett automatisk ordningsval."
+
+#: include/apto_interface-class.php:1593
+msgid "Batch Terms Automatic Update"
+msgstr "Batch-termer automatisk uppdatering"
+
+#: include/apto_interface-class.php:1594
+msgid ""
+"<b>WARNING!</b></i> Using this option will update all existing child terms "
+"of the current"
+msgstr ""
+"<b>VARNING!</b></i> Att använda detta alternativ kommer uppdatera alla "
+"befintliga underordnade termer för aktuell"
+
+#: include/apto_interface-class.php:1602
+msgid ""
+"to Automatic Order, replacing the current settings. Manual sort lists will "
+"be preserved, but their order type will be changed to Automatic Order."
+msgstr ""
+"till automatisk ordning, och ersätta aktuella inställningar. Manuella "
+"sorteringslistor kommer bevaras, men deras ordningstyp kommer ändras till "
+"automatisk ordning."
+
+#: include/apto_interface-class.php:1696
+msgid "Show all dates"
+msgstr "Visa alla datum"
+
+#: include/apto_interface-class.php:1697
+msgid "Today"
+msgstr "Idag"
+
+#: include/apto_interface-class.php:1698
+msgid "Yesterday"
+msgstr "Igår"
+
+#: include/apto_interface-class.php:1699
+msgid "Last Week"
+msgstr "Förra veckan"
+
+#: include/apto_interface-class.php:1745
+msgid "Toggle Thumbnails"
+msgstr "Växla miniatyrbilder"
+
+#: include/apto_interface-class.php:1754 include/apto_interface-class.php:1865
+msgid "Update"
+msgstr "Uppdatera"
+
+#: include/apto_interface-class.php:1767
+msgid "Reverse"
+msgstr "Vänd"
+
+#: include/apto_interface-class.php:1768
+msgid "Title Asc"
+msgstr "Titel stigande"
+
+#: include/apto_interface-class.php:1769
+msgid "Title Desc"
+msgstr "Titel fallande"
+
+#: include/apto_interface-class.php:1770
+msgid "Id order Asc"
+msgstr "ID-ordning stigande"
+
+#: include/apto_interface-class.php:1771
+msgid "Id order Desc"
+msgstr "ID-ordning fallande"
+
+#: include/apto_interface-class.php:1772
+#: include/apto_interface_helper-class.php:1797
+msgid "Random"
+msgstr "Slumpmässig"
+
+#: include/apto_interface-class.php:1780
+msgid "List view"
+msgstr "Listvy"
+
+#: include/apto_interface-class.php:1781
+msgid "Grid view"
+msgstr "Rutnätvy"
+
+#: include/apto_interface-class.php:1878
+msgid "Reset Order"
+msgstr "Återställ ordning"
+
+#: include/apto_interface-class.php:1884
+msgid "Are you sure you want to reset the order??"
+msgstr "Är du säker på att du vill återställa ordningen??"
+
+#: include/apto_interface_helper-class.php:344
+msgid "Sort order reset successfully"
+msgstr "Sorteringsordning återställd framgångsrikt"
+
+#: include/apto_interface_helper-class.php:348
+#: include/apto_interface_helper-class.php:2506
+#: include/apto_interface_helper-class.php:2531
+msgid "Invalid Nonce"
+msgstr "Ogiltig Nonce"
+
+#: include/apto_interface_helper-class.php:1181
+msgid ""
+"**WARNING!! This will load all post types objects. Recommended to be used "
+"with Advanced Query Rules"
+msgstr ""
+"**VARNING!! Detta laddar alla inläggstypsobjekt. Rekommenderas att användas "
+"med avancerade fråge-regler"
+
+#: include/apto_interface_helper-class.php:1764
+msgid "Order By"
+msgstr "Sortera efter"
+
+#: include/apto_interface_helper-class.php:1765
+msgid "More details about Order By paramether can be found at"
+msgstr "Mer detaljer om Order By-parameter finns på"
+
+#: include/apto_interface_helper-class.php:1765
+#: include/apto_interface_helper-class.php:1885
+msgid "Order & Orderby Parameters"
+msgstr "Order & Orderby-parametrar"
+
+#: include/apto_interface_helper-class.php:1766
+msgid ""
+"Additional details and example of usage for Custom Function can be found at"
+msgstr ""
+"Ytterligare detaljer och användningsexempel för anpassad funktion finns på"
+
+#: include/apto_interface_helper-class.php:1766
+#: include/apto_interface_helper-class.php:1867
+msgid "Custom Function"
+msgstr "Anpassad funktion"
+
+#: include/apto_interface_helper-class.php:1770
+msgid "Default / None"
+msgstr "Standard / Ingen"
+
+#: include/apto_interface_helper-class.php:1773
+msgid "Post ID"
+msgstr "Inläggs-ID"
+
+#: include/apto_interface_helper-class.php:1782
+msgid "Slug"
+msgstr "Slug"
+
+#: include/apto_interface_helper-class.php:1785
+#: include/apto_interface_helper-class.php:1852
+msgid "Date"
+msgstr "Datum"
+
+#: include/apto_interface_helper-class.php:1788
+msgid "Modified"
+msgstr "Ändrad"
+
+#: include/apto_interface_helper-class.php:1791
+msgid "Menu Order"
+msgstr "Menyordning"
+
+#: include/apto_interface_helper-class.php:1794
+msgid "Comments Count"
+msgstr "Kommentarantal"
+
+#: include/apto_interface_helper-class.php:1822
+msgid "Custom Field"
+msgstr "Anpassat fält"
+
+#: include/apto_interface_helper-class.php:1830
+msgid "Field Name"
+msgstr "Fältnamn"
+
+#: include/apto_interface_helper-class.php:1831
+msgid "The name of custom field"
+msgstr "Namnet på anpassat fält"
+
+#: include/apto_interface_helper-class.php:1836
+msgid "Field Type"
+msgstr "Fälttyp"
+
+#: include/apto_interface_helper-class.php:1837
+msgid "MySql Type of field, more details at"
+msgstr "MySQL-typ för fält, mer detaljer på"
+
+#: include/apto_interface_helper-class.php:1837
+msgid "Cast Functions and Operators"
+msgstr "Cast-funktioner och operatorer"
+
+#: include/apto_interface_helper-class.php:1840
+msgid "None / Default"
+msgstr "Ingen / Standard"
+
+#: include/apto_interface_helper-class.php:1843
+msgid "Signed (Integer)"
+msgstr "Signerat (heltal)"
+
+#: include/apto_interface_helper-class.php:1846
+msgid "Unsigned (Integer)"
+msgstr "Osignerat (heltal)"
+
+#: include/apto_interface_helper-class.php:1849
+msgid "Float (Decimal)"
+msgstr "Float (decimaltal)"
+
+#: include/apto_interface_helper-class.php:1855
+msgid "Datetime"
+msgstr "Datumtid"
+
+#: include/apto_interface_helper-class.php:1858
+msgid "Time"
+msgstr "Tid"
+
+#: include/apto_interface_helper-class.php:1884
+msgid "Order"
+msgstr "Ordning"
+
+#: include/apto_interface_helper-class.php:1885
+msgid "More details about Order paramether can be found at"
+msgstr "Mer detaljer om Order-parameter finns på"
+
+#: include/apto_interface_helper-class.php:1889
+msgid "Descending"
+msgstr "Fallande"
+
+#: include/apto_interface_helper-class.php:1892
+msgid "Ascending"
+msgstr "Stigande"
+
+#: include/apto_interface_helper-class.php:1929
+msgid "Go to the first page"
+msgstr "Gå till första sidan"
+
+#: include/apto_interface_helper-class.php:1936
+msgid "Go to the previous page"
+msgstr "Gå till föregående sida"
+
+#: include/apto_interface_helper-class.php:1948
+msgid "Go to the next page"
+msgstr "Gå till nästa sida"
+
+#: include/apto_interface_helper-class.php:1955
+msgid "Go to the last page"
+msgstr "Gå till sista sidan"
+
+#: include/apto_interface_helper-class.php:2765
+msgid "Items Order Updated"
+msgstr "Objektordning uppdaterad"
+
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3216
+#: include/apto_interface_helper-class.php:3227
+#: include/apto_interface_helper-class.php:3347
+msgid "A syncronization could not be completed"
+msgstr "En synkronisering kunde inte slutföras"
+
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3347
+msgid "as post type is not translatable."
+msgstr "eftersom inläggstyp inte är översättningsbar."
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "A synchronization could not be completed"
+msgstr "En synkronisering kunde inte slutföras"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "for"
+msgstr "för"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "language"
+msgstr "språk"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "as it contains a different number of objects."
+msgstr "eftersom det innehåller ett annat antal objekt."
+
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3216
+msgid "as taxonomy is not translatable."
+msgstr "eftersom taxonomi inte är översättningsbar."
+
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3227
+msgid "as term is not translated."
+msgstr "eftersom termen inte är översatt."
+
+#: include/apto_options_class.php:99 include/apto_options_class.php:521
+#: include/apto_options_class.php:571 include/apto_options_class.php:623
+msgid "General Settings"
+msgstr "Allmänna inställningar"
+
+#: include/apto_options_class.php:109
+msgid "Show / Hide re-order interface"
+msgstr "Visa / Dölj omsorteringsgränssnitt"
+
+#: include/apto_options_class.php:122
+msgid "Show"
+msgstr "Visa"
+
+#: include/apto_options_class.php:123
+msgid "Hide"
+msgstr "Dölj"
+
+#: include/apto_options_class.php:137
+msgid "General"
+msgstr "Allmänt"
+
+#: include/apto_options_class.php:143
+msgid "Ignore Suppress Filters"
+msgstr "Ignorera undertryckningsfilter"
+
+#: include/apto_options_class.php:147
+msgid ""
+"Set FALSE the <b>suppress_filters</b> arguments for get_posts() default "
+"WordPress function. Use this feature if Autosort does not work with your "
+"theme, otherwise you should leave un-checked."
+msgstr ""
+"Sätt <b>suppress_filters</b>-argumenten till FALSE för get_posts() standard "
+"WordPress-funktion. Använd denna funktion om Autosort inte fungerar med ditt "
+"tema, annars lämna avkryssad."
+
+#: include/apto_options_class.php:152
+msgid "Ignore Sticky Posts"
+msgstr "Ignorera klistrade inlägg"
+
+#: include/apto_options_class.php:156
+msgid ""
+"Ignore any Sticky posts, those will not appear on top of the list but per "
+"customised order."
+msgstr ""
+"Ignorera alla klistrade inlägg, dessa kommer inte visas överst i listan utan "
+"enligt anpassad ordning."
+
+#: include/apto_options_class.php:161
+msgid "Next / Previous Apply"
+msgstr "Nästa / Föregående tillämpning"
+
+#: include/apto_options_class.php:165
+msgid "Apply the sort to default Next / Previous site-wide navigation."
+msgstr ""
+"Tillämpa sorteringen på standard Nästa / Föregående navigering över hela "
+"sajten."
+
+#: include/apto_options_class.php:165
+msgid "For advanced Next / Previous navigation check"
+msgstr "För avancerad Nästa / Föregående navigering se"
+
+#: include/apto_options_class.php:165 include/apto_options_class.php:187
+#: include/apto_options_class.php:196
+msgid "read more"
+msgstr "läs mer"
+
+#: include/apto_options_class.php:171
+msgid "bbPress Replies"
+msgstr "bbPress svar"
+
+#: include/apto_options_class.php:175
+msgid "Reverse the order of bbPress replies, show newest posts first"
+msgstr "Vänd ordningen på bbPress-svar, visa nyaste inlägg först"
+
+#: include/apto_options_class.php:183
+msgid "Use category order for WooCommerce when apply filters"
+msgstr "Använd kategoriordning för WooCommerce vid filtertilllämpning"
+
+#: include/apto_options_class.php:187
+msgid "Allow Category order to apply when using visual attribute filters"
+msgstr "Tillåt kategoriordning vid användning av visuella attributfilter"
+
+#: include/apto_options_class.php:192
+msgid "WooCommerce Up-sells Sort"
+msgstr "WooCommerce Up-sells sortering"
+
+#: include/apto_options_class.php:196
+msgid "Allow drag & drop for WooCommerce Up-sells products"
+msgstr "Tillåt drag & drop för WooCommerce Up-sells produkter"
+
+#: include/apto_options_class.php:204
+msgid "Debug Marks"
+msgstr "Debug-märken"
+
+#: include/apto_options_class.php:208
+msgid ""
+"Output marks on front side when logged-in, with detailed informations of "
+"every queries to identify the settings to be used for a sort to match. "
+"Ensure to turn off when debug completed."
+msgstr ""
+"Visa märken på framsidan när inloggad, med detaljerad information om alla "
+"frågor för att identifiera inställningar som ska användas för matchande "
+"sortering. Säkerställ att stänga av när debug är klart."
+
+#: include/apto_options_class.php:213
+msgid "Create Logs"
+msgstr "Skapa loggar"
+
+#: include/apto_options_class.php:217
+msgid ""
+"Create logs which may be usefull when debug or help to identify applied sort "
+"list."
+msgstr ""
+"Skapa loggar som kan vara användbara vid felsökning eller för att "
+"identifiera tillämpad sorteringslista."
+
+#: include/apto_options_class.php:228
+msgid "Logs"
+msgstr "Loggar"
+
+#: include/apto_options_class.php:254
+msgid "Save Settings"
+msgstr "Spara inställningar"
+
+#: include/apto_options_class.php:299
+msgid "Settings Saved"
+msgstr "Inställningar sparade"
+
+#: include/apto_options_class.php:346 include/apto_options_class.php:353
+msgid "Advanced Post Types Order plugin is inactive, please enter your"
+msgstr "Advanced Post Types Order-tillägget är inaktivt, vänligen ange din"
+
+#: include/apto_options_class.php:346 include/apto_options_class.php:353
+msgid "Licence Key"
+msgstr "Licensnyckel"
+
+#: include/apto_options_class.php:385 include/apto_options_class.php:467
+msgid "There was a problem connecting to "
+msgstr "Det uppstod ett problem med att ansluta till "
+
+#: include/apto_options_class.php:393 include/apto_options_class.php:430
+#: include/apto_options_class.php:475 include/apto_options_class.php:507
+msgid "There was a problem with the data block received from "
+msgstr "Det uppstod ett problem med datablocket mottaget från "
+
+#: include/apto_options_class.php:415
+msgid ""
+"There was a problem deactivating the licence on other side, however locally "
+"the key is now removed: "
+msgstr ""
+"Det uppstod ett problem med att avaktivera licensen på andra sidan, men "
+"lokalt är nyckeln nu borttagen: "
+
+#: include/apto_options_class.php:446
+msgid "Licence Key can't be empty"
+msgstr "Licensnyckel får inte vara tom"
+
+#: include/apto_options_class.php:501
+msgid "There was a problem activating the licence: "
+msgstr "Det uppstod ett problem med att aktivera licensen: "
+
+#: include/apto_options_class.php:525 include/apto_options_class.php:578
+#: include/apto_options_class.php:625
+msgid "Software License"
+msgstr "Programlicens"
+
+#: include/apto_options_class.php:534 include/apto_options_class.php:586
+msgid "License Key"
+msgstr "Licensnyckel"
+
+#: include/apto_options_class.php:539 include/apto_options_class.php:631
+msgid ""
+"Enter the License Key you got when bought this product. If you lost the key, "
+"you can always retrieve it from"
+msgstr ""
+"Ange licensnyckeln du fick när du köpte denna produkt. Om du tappat bort "
+"nyckeln kan du alltid hämta den från"
+
+#: include/apto_options_class.php:539 include/apto_options_class.php:540
+#: include/apto_options_class.php:631 include/apto_options_class.php:632
+msgid "My Account"
+msgstr "Mitt konto"
+
+#: include/apto_options_class.php:540 include/apto_options_class.php:632
+msgid "More keys can be generate from"
+msgstr "Fler nycklar kan genereras från"
+
+#: include/apto_options_class.php:549
+msgid "Save"
+msgstr "Spara"
+
+#: include/apto_options_class.php:601
+msgid "You can generate more keys from"
+msgstr "Du kan generera fler nycklar från"
+
+#: include/apto_options_class.php:629
+msgid "License Key Required"
+msgstr "Licensnyckel krävs"
+
+#: include/apto_plugin_updater.class.php:123
+msgid "An error occour when try to identify the pluguin."
+msgstr "Ett fel uppstod när plugin försöktes identifieras."
+
+#: include/apto_plugin_updater.class.php:123
+#: include/apto_plugin_updater.class.php:143
+msgid "Try again"
+msgstr "Försök igen"
+
+#: include/apto_plugin_updater.class.php:143
+msgid "An Unexpected HTTP Error occurred during the API request."
+msgstr "Ett oväntat HTTP-fel uppstod under API-förfrågan."
+
+#: include/walkers/post-types-order-walker-class.php:146
+msgid "Move to Top"
+msgstr "Flytta till toppen"
+
+#: include/walkers/post-types-order-walker-class.php:147
+msgid "Move to Bottom"
+msgstr "Flytta till botten"
+
+#: include/walkers/post-types-order-walker-class.php:148
+msgid "Make Sticky"
+msgstr "Gör klistrad"
+
+#: include/walkers/post-types-order-walker-class.php:149
+msgid "Edit"
+msgstr "Redigera"
+
+#: include/walkers/post-types-order-walker-class.php:174
+msgid "Sticky"
+msgstr "Klistrad"

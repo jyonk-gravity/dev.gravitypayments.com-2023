@@ -413,15 +413,24 @@
                                                     
                                                     
                                                 }
+                                             
+                                     // Validate and sanitize inputs
+                                    $blog_id = absint($blog_id);  // Ensure it's a positive integer
+                                    $post_type = sanitize_text_field($post_type);
+                 
+                                    // Use prepared statement
+                                    $mysql_query = $wpdb->prepare(
+                                        "SELECT term_id, taxonomy FROM {$wpdb->base_prefix}apto
+                                        WHERE blog_id = %d AND post_type = %s
+                                        GROUP BY term_id",
+                                        $blog_id,
+                                        $post_type
+                                    );
+
+                                    $post_type_terms = $wpdb->get_results($mysql_query);
                                      
-                                     //process data in the table
-                                     $mysql_query   =   "SELECT term_id, taxonomy FROM " . $wpdb->base_prefix ."apto
-                                                            WHERE blog_id = '". $blog_id ."' AND post_type =   '" . $post_type  . "'
-                                                            GROUP BY term_id";
-                                     $post_type_terms       =   $wpdb->get_results($mysql_query);
                                      
-                                     
-                                     foreach ($post_type_terms as $data)
+                                    foreach ($post_type_terms as $data)
                                         {
                                             //check if is set as autosort
                                             //allow in case user change his mind and switch back to manual sort
@@ -439,10 +448,30 @@
                                                     //process each language as there can be sort for each
                                                     foreach($sort_languages as $language)
                                                         { 
-                                                            $mysql_query   =   "SELECT post_id FROM " . $wpdb->base_prefix ."apto
-                                                                                    WHERE blog_id = '". $blog_id ."' AND post_type =   '" . $post_type  . "' AND term_id ='".$data->term_id ."' AND taxonomy = '".$data->taxonomy."' AND lang = '".$language."'
-                                                                                    ORDER BY id ASC";
-                                                            $post_type_term_sort_data      =   $wpdb->get_results($mysql_query);
+                                                            // Validate and sanitize all inputs
+                                                            $blog_id = absint($blog_id);
+                                                            $post_type = sanitize_text_field($post_type);
+                                                            $term_id = intval($data->term_id);
+                                                            $taxonomy = sanitize_text_field($data->taxonomy);
+                                                            $language = sanitize_text_field($language);
+                                 
+                                                            // Use prepared statement
+                                                            $mysql_query = $wpdb->prepare(
+                                                                "SELECT post_id FROM {$wpdb->base_prefix}apto
+                                                                WHERE blog_id = %d 
+                                                                AND post_type = %s 
+                                                                AND term_id = %d 
+                                                                AND taxonomy = %s 
+                                                                AND lang = %s
+                                                                ORDER BY id ASC",
+                                                                $blog_id,
+                                                                $post_type,
+                                                                $term_id,
+                                                                $taxonomy,
+                                                                $language
+                                                            );
+
+                                                            $post_type_term_sort_data = $wpdb->get_results($mysql_query);
                                                             
                                                             if(count($post_type_term_sort_data) < 1)
                                                                 continue;
@@ -463,6 +492,8 @@
                                                                                                     );    
                                                                     $sort_view_id       =   APTO_interface_helper::create_view($sort_id, $sort_view_meta);   
                                                                 }
+                                                                
+                                                            $sort_view_id   =   intval ( $sort_view_id );
                                                             
                                                             //create the entries within the apto_sort_list table
                                                             $mysql_query    =   "INSERT INTO `". $wpdb->prefix ."apto_sort_list`
@@ -476,7 +507,7 @@
                                                                         else
                                                                         $mysql_query    .=  ", \n";
                                                                         
-                                                                    $mysql_query  .= "(null, ". $sort_view_id .", ". $sort_post_data->post_id .")";
+                                                                    $mysql_query  .= "(null, ". $sort_view_id .", ". intval ( $sort_post_data->post_id ) .")";
                                                                 }
                                                             $results = $wpdb->get_results($mysql_query);
                                                         }
@@ -484,10 +515,27 @@
                                                 else
                                                 {
                                                     //create the sort entries for this
-                                                    $mysql_query   =   "SELECT post_id FROM " . $wpdb->base_prefix ."apto
-                                                                            WHERE blog_id = '". $blog_id ."' AND post_type =   '" . $post_type  . "' AND term_id ='".$data->term_id ."' AND taxonomy = '".$data->taxonomy."'
-                                                                            ORDER BY id ASC";
-                                                    $post_type_term_sort_data      =   $wpdb->get_results($mysql_query);
+                                                    // Validate and sanitize all inputs
+                                                    $blog_id = absint($blog_id);
+                                                    $post_type = sanitize_text_field($post_type);
+                                                    $term_id = intval($data->term_id);
+                                                    $taxonomy = sanitize_text_field($data->taxonomy);
+                                         
+                                                    // Use prepared statement
+                                                    $mysql_query = $wpdb->prepare(
+                                                        "SELECT post_id FROM {$wpdb->base_prefix}apto
+                                                        WHERE blog_id = %d 
+                                                        AND post_type = %s 
+                                                        AND term_id = %d 
+                                                        AND taxonomy = %s
+                                                        ORDER BY id ASC",
+                                                        $blog_id,
+                                                        $post_type,
+                                                        $term_id,
+                                                        $taxonomy
+                                                    );
+
+                                                    $post_type_term_sort_data = $wpdb->get_results($mysql_query);
                                                     
                                                     
                                                     $sort_view_meta     =   array(
@@ -499,6 +547,8 @@
                                                                             );
                                                     
                                                     $sort_view_id       =   APTO_interface_helper::create_view($sort_id, $sort_view_meta);
+                                                    
+                                                    $sort_view_id       =   intval ( $sort_view_id );
                                                     
                                                     //create the entries within the apto_sort_list table
                                                     $mysql_query    =   "INSERT INTO `". $wpdb->prefix ."apto_sort_list`
@@ -512,16 +562,16 @@
                                                                 else
                                                                 $mysql_query    .=  ", \n";
                                                                 
-                                                            $mysql_query  .= "(null, ". $sort_view_id .", ". $sort_post_data->post_id .")";
+                                                            $mysql_query  .= "(null, ". $sort_view_id .", ". intval ( $sort_post_data->post_id ) .")";
                                                         }
                                                     $results = $wpdb->get_results($mysql_query);
                                                 }
 
                                             
                                         }
-                                        
-                                     //mark as show this menu where post type reside
-                                     $settings['show_reorder_interfaces'][$post_type_menu_item] =   'show';
+
+                                    //mark as show this menu where post type reside
+                                    $settings['show_reorder_interfaces'][$post_type_menu_item] =   'show';
                                 }   
                             
                         }

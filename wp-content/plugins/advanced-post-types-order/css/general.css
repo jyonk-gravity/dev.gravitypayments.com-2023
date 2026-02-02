@@ -1,1 +1,21 @@
 .menu_pto {display: inline;    margin-right: 4px; margin-top: -1px;    vertical-align: middle;}
+#form_data .pt-list {display:flex; flex-wrap: wrap;}
+#form_data .pt-item {flex-basis: calc(25% - 10px);  flex-grow: 0;  margin: 5px;}
+#form_data .pt-list::after {  content: "";  flex-basis: calc(25% - 10px);  flex-grow: 1;  margin: 5px;}
+.start-container {    background-color: #fff;    border-left: 4px solid #cc99c2;    overflow: hidden;    padding: 25px 20px 20px 30px;    position: relative;}
+.start-container::before {    color: #eee2ec;      content: "\f112";    display: block;    font-family: dashicons;    font-size: 150px;    line-height: 1;    position: absolute;    right: 0;    text-align: center;    top: 10%;    width: 1em; z-index: 1}
+.start-container h2, .start-container form {position: relative; z-index: 2}
+.start-container .text-input {width: 100%; padding: 5px 5px; margin: 0px;}
+.start-container .explain {padding-top: 10px; color: gray; font-style: italic; font-size: 11px; line-height: 17px;}
+@media screen and (max-width: 1350px) {
+  #form_data .pt-item {flex-basis: calc(33% - 10px);}
+  #form_data .pt-list::after { flex-basis: calc(33% - 10px);}
+}
+@media screen and (max-width: 1100px) {
+  #form_data .pt-item {flex-basis: calc(50% - 10px);}
+  #form_data .pt-list::after { flex-basis: calc(50% - 10px);}
+}
+@media screen and (max-width: 782px) {
+  #form_data .pt-item {flex-basis: calc(100% - 10px);}
+  #form_data .pt-list::after { flex-basis: calc(100% - 10px);}
+}

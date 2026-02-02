@@ -1,0 +1,1103 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Advanced Post Types Order\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-13 16:54+0200\n"
+"PO-Revision-Date: 2026-01-13 17:16+0200\n"
+"Last-Translator: NspCode <contact@nsp-code.com>\n"
+"Language-Team: NspCode <contact@nsp-code.com>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__;esc_html__;esc_html_e;"
+"esc_attr__;esc_html_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: extends/divi/PostsNavigation.class.php:6
+msgid "APTO - Post Navigation"
+msgstr "APTO - पोस्ट नेविगेशन"
+
+#: extends/divi/PostsNavigation.class.php:7
+msgid "APTO - Post Navigations"
+msgstr "APTO - पोस्ट नेविगेशन"
+
+#: extends/divi/PostsNavigation.class.php:17
+msgid "Text"
+msgstr "पाठ"
+
+#: extends/divi/PostsNavigation.class.php:18
+msgid "Sort"
+msgstr "क्रमबद्ध करें"
+
+#: extends/divi/PostsNavigation.class.php:19
+msgid "Navigation"
+msgstr "नेविगेशन"
+
+#: extends/divi/PostsNavigation.class.php:27
+#: extends/divi/PostsNavigation.class.php:79
+msgid "Links"
+msgstr "लिंक"
+
+#: extends/divi/PostsNavigation.class.php:83
+#: extends/divi/PostsNavigation.class.php:140
+msgid "Previous Link"
+msgstr "पिछला लिंक"
+
+#: extends/divi/PostsNavigation.class.php:87
+msgid "Previous Link Arrow"
+msgstr "पिछला लिंक तीर"
+
+#: extends/divi/PostsNavigation.class.php:91
+#: extends/divi/PostsNavigation.class.php:153
+msgid "Next Link"
+msgstr "अगला लिंक"
+
+#: extends/divi/PostsNavigation.class.php:95
+msgid "Next Link Arrow"
+msgstr "अगला लिंक तीर"
+
+#: extends/divi/PostsNavigation.class.php:106
+msgid "Show Previous Post Link"
+msgstr "पिछला पोस्ट लिंक दिखाएं"
+
+#: extends/divi/PostsNavigation.class.php:110
+#: extends/divi/PostsNavigation.class.php:127
+#: include/apto_interface-class.php:798 include/apto_interface-class.php:806
+#: include/apto_interface-class.php:857 include/apto_interface-class.php:912
+#: include/apto_interface-class.php:920 include/apto_interface-class.php:929
+#: include/apto_interface-class.php:954 include/apto_interface-class.php:965
+#: include/apto_interface-class.php:977 include/apto_interface-class.php:1565
+#: include/apto_interface-class.php:1609
+msgid "Yes"
+msgstr "हाँ"
+
+#: extends/divi/PostsNavigation.class.php:111
+#: extends/divi/PostsNavigation.class.php:128
+#: include/apto_interface-class.php:799 include/apto_interface-class.php:807
+#: include/apto_interface-class.php:858 include/apto_interface-class.php:913
+#: include/apto_interface-class.php:921 include/apto_interface-class.php:930
+#: include/apto_interface-class.php:955 include/apto_interface-class.php:966
+#: include/apto_interface-class.php:978 include/apto_interface-class.php:1562
+#: include/apto_interface-class.php:1606
+msgid "No"
+msgstr "नहीं"
+
+#: extends/divi/PostsNavigation.class.php:118
+msgid "Turn this on to show the previous post link"
+msgstr "पिछला पोस्ट लिंक दिखाने के लिए इसे चालू करें"
+
+#: extends/divi/PostsNavigation.class.php:123
+msgid "Show Next Post Link"
+msgstr "अगला पोस्ट लिंक दिखाएं"
+
+#: extends/divi/PostsNavigation.class.php:135
+msgid "Turn this on to show the next post link"
+msgstr "अगला पोस्ट लिंक दिखाने के लिए इसे चालू करें"
+
+#: extends/divi/PostsNavigation.class.php:147
+msgid ""
+"Define custom text for the previous link. You can use the <strong>%title</"
+"strong> variable to include the post title. Leave blank for default."
+msgstr ""
+"पिछले लिंक के लिए कस्टम टेक्स्ट परिभाषित करें। आप <strong>%title</"
+"strong> वेरिएबल का उपयोग पोस्ट शीर्षक शामिल करने के लिए कर सकते हैं। डिफ़ॉल्ट के लिए खाली छोड़ दें।"
+
+#: extends/divi/PostsNavigation.class.php:160
+msgid ""
+"Define custom text for the next link. You can use the <strong>%title</"
+"strong> variable to include the post title. Leave blank for default."
+msgstr ""
+"अगले लिंक के लिए कस्टम टेक्स्ट परिभाषित करें। आप <strong>%title</"
+"strong> वेरिएबल का उपयोग पोस्ट शीर्षक शामिल करने के लिए कर सकते हैं। डिफ़ॉल्ट के लिए खाली छोड़ दें।"
+
+#: extends/divi/PostsNavigation.class.php:167
+msgid "Sort ID"
+msgstr "क्रमबद्ध आईडी"
+
+#: extends/divi/PostsNavigation.class.php:170
+msgid ""
+"Choose the sort ID to apply. If the custom post object assigned to a "
+"category, the primary will be used when applying for the order."
+msgstr ""
+"लागू करने के लिए क्रमबद्ध आईडी चुनें। यदि कस्टम पोस्ट ऑब्जेक्ट को किसी "
+"श्रेणी में सौंपा गया है, तो प्राथमिक का उपयोग क्रम लागू करते समय किया जाएगा।"
+
+#: extends/divi/PostsNavigation.class.php:182
+msgid "Sort on Taxonomy"
+msgstr "टैक्सोनॉमी पर क्रमबद्ध करें"
+
+#: extends/divi/PostsNavigation.class.php:186
+msgid "Choose the Taxoomy Name from which the order should be used."
+msgstr "उस टैक्सोनॉमी नाम को चुनें जिसका क्रम उपयोग किया जाना चाहिए।"
+
+#: extends/divi/PostsNavigation.class.php:317
+#: include/apto_functions-class.php:3150
+msgid "Next Post"
+msgstr "अगला पोस्ट"
+
+#: extends/divi/PostsNavigation.class.php:352
+#: include/apto_functions-class.php:3150
+msgid "Previous Post"
+msgstr "पिछला पोस्ट"
+
+#: include/apto_admin_functions-class.php:90
+msgid "Re-Order"
+msgstr "पुनः क्रमबद्ध करें"
+
+#: include/apto_admin_functions-class.php:297
+msgid ""
+"All interfaces are set to hide, at least a visible is required. You can "
+"change tht from Settings"
+msgstr ""
+"सभी इंटरफेस छिपाने के लिए सेट किए गए हैं, कम से कम एक दृश्य आवश्यक है। आप "
+"सेटिंग्स से इसे बदल सकते हैं"
+
+#: include/apto_admin_functions-class.php:349
+msgid "Advanced Post Types Order - At least one menu has changed:"
+msgstr "एडवांस्ड पोस्ट टाइप्स ऑर्डर - कम से कम एक मेनू बदला गया:"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "Notice: There is"
+msgstr "सूचना: वहाँ है"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "another"
+msgstr "एक और"
+
+#: include/apto_admin_functions-class.php:539
+#: include/apto_admin_functions-class.php:600
+msgid "similar sort"
+msgstr "समान क्रमबद्धता"
+
+#: include/apto_functions-class.php:2539
+msgid "Subscriber"
+msgstr "सदस्य"
+
+#: include/apto_functions-class.php:2543
+msgid "Contributor"
+msgstr "योगदानकर्ता"
+
+#: include/apto_functions-class.php:2547 include/apto_interface-class.php:663
+#: include/apto_interface_helper-class.php:1776
+msgid "Author"
+msgstr "लेखक"
+
+#: include/apto_functions-class.php:2551
+msgid "Editor"
+msgstr "संपादक"
+
+#: include/apto_functions-class.php:2555
+msgid "Administrator"
+msgstr "प्रशासक"
+
+#: include/apto_functions-class.php:2872 include/apto_functions-class.php:2967
+#, php-format
+msgid "Use commas instead of %s to separate excluded terms."
+msgstr "%s के बजाय अल्पविराम का उपयोग बहिष्कृत शब्दों को अलग करने के लिए करें।"
+
+#: include/apto_interface-class.php:170
+msgid "Re-order"
+msgstr "पुनः क्रमबद्ध करें"
+
+#: include/apto_interface-class.php:174
+msgid ""
+"This plugin can't work without javascript, because it's use drag and drop "
+"and AJAX."
+msgstr ""
+"यह प्लगइन जावास्क्रिप्ट के बिना काम नहीं कर सकता, क्योंकि यह ड्रैग एंड ड्रॉप "
+"और AJAX का उपयोग करता है।"
+
+#: include/apto_interface-class.php:207
+msgid ""
+"WPML: The Sort Rules couldn't be translated automatically. You need to set/"
+"translate this manually for"
+msgstr ""
+"WPML: सॉर्ट नियमों को स्वचालित रूप से अनुवादित नहीं किया जा सका। आपको इसे मैन्युअल रूप से सेट/"
+"अनुवाद करना होगा"
+
+#: include/apto_interface-class.php:239
+msgid ""
+"Polylang: The Sort Rules couldn't be translated automatically. You need to "
+"set/translate this manually for"
+msgstr ""
+"Polylang: सॉर्ट नियमों को स्वचालित रूप से अनुवादित नहीं किया जा सका। आपको इसे मैन्युअल रूप से सेट/"
+"अनुवाद करना होगा"
+
+#: include/apto_interface-class.php:413
+msgid "Click to toggle"
+msgstr "स्विच करने के लिए क्लिक करें"
+
+#: include/apto_interface-class.php:413 include/apto_interface-class.php:755
+msgid "Sort List Settings"
+msgstr "सॉर्ट सूची सेटिंग्स"
+
+#: include/apto_interface-class.php:424
+msgid "Query Rules"
+msgstr "क्वेरी नियम"
+
+#: include/apto_interface-class.php:425
+msgid ""
+"Create a set of criteria rules which match your query. This will determine "
+"what to show on the following sort list and the order will apply on front "
+"side."
+msgstr ""
+"अपनी क्वेरी से मेल खाने वाले मानदंड नियमों का सेट बनाएं। यह निर्धारित करेगा "
+"कि अगली सॉर्ट सूची में क्या दिखाना है और क्रम सामने की तरफ लागू होगा।"
+
+#: include/apto_interface-class.php:426
+msgid ""
+"All rules are compared to a query using AND operator. For more details check"
+msgstr ""
+"सभी नियमों की तुलना AND ऑपरेटर का उपयोग करके क्वेरी से की जाती है। अधिक विवरण के लिए जांचें"
+
+#: include/apto_interface-class.php:426
+msgid "Query Rules examples"
+msgstr "क्वेरी नियम उदाहरण"
+
+#: include/apto_interface-class.php:447
+msgid "Show Advanced"
+msgstr "उन्नत दिखाएं"
+
+#: include/apto_interface-class.php:506
+msgid "Add Post Type"
+msgstr "पोस्ट प्रकार जोड़ें"
+
+#: include/apto_interface-class.php:513 include/apto_interface-class.php:527
+#: include/apto_interface_helper-class.php:1809
+msgid "Taxonomy"
+msgstr "टैक्सोनॉमी"
+
+#: include/apto_interface-class.php:527 include/apto_interface-class.php:535
+msgid "invalid"
+msgstr "अमान्य"
+
+#: include/apto_interface-class.php:535
+msgid "Term"
+msgstr "शब्द"
+
+#: include/apto_interface-class.php:562
+msgid "Add Taxonomy"
+msgstr "टैक्सोनॉमी जोड़ें"
+
+#: include/apto_interface-class.php:570
+msgid "Taxonomy Relation"
+msgstr "टैक्सोनॉमी संबंध"
+
+#: include/apto_interface-class.php:596
+msgid "Meta"
+msgstr "मेटा"
+
+#: include/apto_interface-class.php:630
+msgid "Add Meta"
+msgstr "मेटा जोड़ें"
+
+#: include/apto_interface-class.php:638
+msgid "Meta Relation"
+msgstr "मेटा संबंध"
+
+#: include/apto_interface-class.php:687
+msgid "Add Author"
+msgstr "लेखक जोड़ें"
+
+#: include/apto_interface-class.php:701
+msgid ""
+"Certain changes has been done to your site and some of Query Rules cannot be "
+"displayed anymore. You should review the settings Query Rules area and click "
+"Update button."
+msgstr ""
+"आपकी साइट में कुछ परिवर्तन किए गए हैं और कुछ क्वेरी नियम अब प्रदर्शित नहीं किए जा सकते। "
+"आपको सेटिंग्स क्वेरी नियम क्षेत्र की समीक्षा करनी चाहिए और अपडेट बटन पर क्लिक करना चाहिए।"
+
+#: include/apto_interface-class.php:716
+msgid "Conditionals"
+msgstr "शर्तें"
+
+#: include/apto_interface-class.php:717
+msgid "Apply the order only if conditions are true. For more details check"
+msgstr "क्रम केवल तभी लागू करें जब शर्तें सत्य हों। अधिक विवरण के लिए जांचें"
+
+#: include/apto_interface-class.php:717
+msgid "Conditionals Usage"
+msgstr "शर्तों का उपयोग"
+
+#: include/apto_interface-class.php:720
+msgid "Apply if"
+msgstr "यदि लागू करें"
+
+#: include/apto_interface-class.php:745
+msgid "Add Group"
+msgstr "समूह जोड़ें"
+
+#: include/apto_interface-class.php:754
+msgid "Interface"
+msgstr "इंटरफेस"
+
+#: include/apto_interface-class.php:755
+msgid "This sort interface settings. For more details check"
+msgstr "यह सॉर्ट इंटरफेस सेटिंग्स। अधिक विवरण के लिए जांचें"
+
+#: include/apto_interface-class.php:762
+#: include/apto_interface_helper-class.php:1779
+msgid "Title"
+msgstr "शीर्षक"
+
+#: include/apto_interface-class.php:763
+msgid "Sort list tab title"
+msgstr "सॉर्ट सूची टैब शीर्षक"
+
+#: include/apto_interface-class.php:767
+msgid "Description"
+msgstr "विवरण"
+
+#: include/apto_interface-class.php:768
+msgid ""
+"Sort list description. This will appear for others (non-admin users) when "
+"doing re-sort, it should include a description for what area this sort will "
+"apply."
+msgstr ""
+"सॉर्ट सूची विवरण। यह दूसरों (गैर-प्रशासक उपयोगकर्ताओं) के लिए दिखाई देगा जब "
+"वे पुनः क्रमबद्ध कर रहे हों, इसमें उस क्षेत्र का विवरण होना चाहिए जहां यह क्रम लागू होगा।"
+
+#: include/apto_interface-class.php:772
+msgid "Menu Location"
+msgstr "मेनू स्थान"
+
+#: include/apto_interface-class.php:773
+msgid "Relocate this Sort Interface to another menu"
+msgstr "इस सॉर्ट इंटरफेस को दूसरे मेनू में स्थानांतरित करें"
+
+#: include/apto_interface-class.php:795
+msgid "Auto Apply Sort"
+msgstr "स्वचालित रूप से क्रम लागू करें"
+
+#: include/apto_interface-class.php:796
+msgid "Automatically apply the sort to theme queries if match."
+msgstr "यदि मेल खाता है तो थीम क्वेरीज़ पर स्वचालित रूप से क्रम लागू करें।"
+
+#: include/apto_interface-class.php:803
+msgid "Admin Sort"
+msgstr "प्रशासक क्रम"
+
+#: include/apto_interface-class.php:804
+msgid "Automatically apply the sort to admin queries if match."
+msgstr "यदि मेल खाता है तो प्रशासक क्वेरीज़ पर स्वचालित रूप से क्रम लागू करें।"
+
+#: include/apto_interface-class.php:812
+msgid "Allow sorting within default post type interface"
+msgstr "डिफ़ॉल्ट पोस्ट प्रकार इंटरफेस के अंदर क्रमबद्ध करने की अनुमति दें"
+
+#: include/apto_interface-class.php:813
+msgid ""
+"A Drag & Drop functionality is available to be used within default WordPress "
+"post type interface."
+msgstr ""
+"डिफ़ॉल्ट वर्डप्रेस पोस्ट प्रकार इंटरफेस के अंदर उपयोग के लिए ड्रैग एंड ड्रॉप कार्यक्षमता उपलब्ध है।"
+
+#: include/apto_interface-class.php:869
+msgid "Need to Create Sort first"
+msgstr "पहले क्रम बनाना आवश्यक है"
+
+#: include/apto_interface-class.php:886
+msgid "Not a primary sort, this feature can apply only to"
+msgstr "प्राथमिक क्रम नहीं है, यह सुविधा केवल लागू हो सकती है"
+
+#: include/apto_interface-class.php:891
+msgid "This feature can't apply when conditionals set"
+msgstr "जब शर्तें सेट की गई हों तो यह सुविधा लागू नहीं हो सकती"
+
+#: include/apto_interface-class.php:896
+msgid "Admin Sort need to be Yes"
+msgstr "प्रशासक क्रम हाँ होना चाहिए"
+
+#: include/apto_interface-class.php:909
+msgid "Send new items to bottom of the list"
+msgstr "नए आइटम को सूची के नीचे भेजें"
+
+#: include/apto_interface-class.php:910
+msgid ""
+"All new posts / custom types will append at the end instead top. This will "
+"apply when manual ordering."
+msgstr ""
+"सभी नए पोस्ट / कस्टम प्रकार शीर्ष के बजाय अंत में जुड़ जाएंगे। यह मैनुअल क्रमबद्धन के दौरान "
+"लागू होगा।"
+
+#: include/apto_interface-class.php:917
+msgid "Thumbnails"
+msgstr "थंबनेल"
+
+#: include/apto_interface-class.php:918
+msgid "Show thumbnails on sort list"
+msgstr "सॉर्ट सूची पर थंबनेल दिखाएं"
+
+#: include/apto_interface-class.php:926
+msgid "Pagination"
+msgstr "पृष्ठीकरण"
+
+#: include/apto_interface-class.php:927
+msgid "Set pagination for sort list"
+msgstr "सॉर्ट सूची के लिए पृष्ठीकरण सेट करें"
+
+#: include/apto_interface-class.php:935
+msgid "Posts Per Page"
+msgstr "प्रति पृष्ठ पोस्ट"
+
+#: include/apto_interface-class.php:936
+msgid "The number of posts to show on page"
+msgstr "पृष्ठ पर दिखाने के लिए पोस्ट की संख्या"
+
+#: include/apto_interface-class.php:942
+msgid "Offset Posts"
+msgstr "ऑफसेट पोस्ट"
+
+#: include/apto_interface-class.php:943
+msgid "The offset number of posts"
+msgstr "पोस्ट की ऑफसेट संख्या"
+
+#: include/apto_interface-class.php:951
+msgid "WPML Synchronize"
+msgstr "WPML समन्वयित करें"
+
+#: include/apto_interface-class.php:952 include/apto_interface-class.php:963
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting. For this to work, all other languages must contain the "
+"same translated objects."
+msgstr ""
+"सभी अन्य भाषाओं में क्रम को समन्वयित करें। यह अन्य भाषाओं की क्रमबद्धता को ओवरराइट "
+"कर देगा। इसके काम करने के लिए, सभी अन्य भाषाओं में एक ही अनुवादित ऑब्जेक्ट्स होने चाहिए।"
+
+#: include/apto_interface-class.php:962
+msgid "Polylang Synchronize"
+msgstr "Polylang समन्वयित करें"
+
+#: include/apto_interface-class.php:974
+msgid "QTranslate Synchronize"
+msgstr "QTranslate समन्वयित करें"
+
+#: include/apto_interface-class.php:975
+msgid ""
+"Synchronize the order across all other languages. This will overwrite other "
+"languages sorting."
+msgstr ""
+"सभी अन्य भाषाओं में क्रम को समन्वयित करें। यह अन्य भाषाओं की क्रमबद्धता को ओवरराइट कर देगा।"
+
+#: include/apto_interface-class.php:984
+msgid "Capability / Role"
+msgstr "क्षमता / भूमिका"
+
+#: include/apto_interface-class.php:985
+msgid "Minimum Capability to see this Sort"
+msgstr "इस क्रम को देखने के लिए न्यूनतम क्षमता"
+
+#: include/apto_interface-class.php:1009
+msgid "Status"
+msgstr "स्थिति"
+
+#: include/apto_interface-class.php:1010
+msgid "Show objects status"
+msgstr "ऑब्जेक्ट्स की स्थिति दिखाएं"
+
+#: include/apto_interface-class.php:1038
+msgid "Settings Update"
+msgstr "सेटिंग्स अपडेट"
+
+#: include/apto_interface-class.php:1040
+msgid "Create"
+msgstr "बनाएं"
+
+#: include/apto_interface-class.php:1053
+msgid "Delete Sort"
+msgstr "क्रम हटाएं"
+
+#: include/apto_interface-class.php:1105
+msgid "Manual Order"
+msgstr "मैनुअल क्रम"
+
+#: include/apto_interface-class.php:1106
+msgid "Automatic Order"
+msgstr "स्वचालित क्रम"
+
+#: include/apto_interface-class.php:1156
+msgid "Select area and customise your order list <br />or switch to automatic"
+msgstr "क्षेत्र चुनें और अपना क्रम सूची को कस्टमाइज़ करें <br />या स्वचालित पर स्विच करें"
+
+#: include/apto_interface-class.php:1181 include/apto_interface-class.php:1207
+msgid "Archive"
+msgstr "आर्काइव"
+
+#: include/apto_interface-class.php:1181
+msgid "Total Archive Objects"
+msgstr "कुल आर्काइव ऑब्जेक्ट्स"
+
+#: include/apto_interface-class.php:1239
+msgid "Taxonomy Title"
+msgstr "टैक्सोनॉमी शीर्षक"
+
+#: include/apto_interface-class.php:1239
+msgid "Total Objects"
+msgstr "कुल ऑब्जेक्ट्स"
+
+#: include/apto_interface-class.php:1263
+msgid "Too many terms to count"
+msgstr "गिनने के लिए बहुत सारे शब्द"
+
+#: include/apto_interface-class.php:1366
+msgid "Forum Title"
+msgstr "फोरम शीर्षक"
+
+#: include/apto_interface-class.php:1366
+msgid "Total Topics"
+msgstr "कुल विषय"
+
+#: include/apto_interface-class.php:1366
+msgid "Posts"
+msgstr "पोस्ट"
+
+#: include/apto_interface-class.php:1546
+msgid "Add Fallback"
+msgstr "फ़ॉलबैक जोड़ें"
+
+#: include/apto_interface-class.php:1557
+msgid "Apply Sticky Posts"
+msgstr "स्टिकी पोस्ट लागू करें"
+
+#: include/apto_interface-class.php:1558
+msgid ""
+"Ensure that the sticky posts from the Manual Order are retained and remain "
+"prominently displayed. This will help preserve important information and "
+"maintain visibility for key updates or messages within the system regardless "
+"of the Automatic Order selection."
+msgstr ""
+"मैनुअल ऑर्डर से स्टिकी पोस्ट को बनाए रखें और प्रमुख रूप से प्रदर्शित रखें। "
+"यह महत्वपूर्ण जानकारी को संरक्षित करने और स्वचालित क्रम चयन की परवाह किए बिना "
+"कुंजी अपडेट्स या संदेशों की दृश्यता बनाए रखने में मदद करेगा।"
+
+#: include/apto_interface-class.php:1593
+msgid "Batch Terms Automatic Update"
+msgstr "बैच शब्द स्वचालित अपडेट"
+
+#: include/apto_interface-class.php:1594
+msgid ""
+"<b>WARNING!</b></i> Using this option will update all existing child terms "
+"of the current"
+msgstr ""
+"<b>चेतावनी!</b></i> इस विकल्प का उपयोग करने से वर्तमान के सभी मौजूदा चाइल्ड शब्द "
+"अपडेट हो जाएंगे"
+
+#: include/apto_interface-class.php:1602
+msgid ""
+"to Automatic Order, replacing the current settings. Manual sort lists will "
+"be preserved, but their order type will be changed to Automatic Order."
+msgstr ""
+"स्वचालित क्रम में, वर्तमान सेटिंग्स को बदलते हुए। मैनुअल सॉर्ट सूचियाँ संरक्षित "
+"रहेंगी, लेकिन उनका क्रम प्रकार स्वचालित क्रम में बदल जाएगा।"
+
+#: include/apto_interface-class.php:1696
+msgid "Show all dates"
+msgstr "सभी तिथियाँ दिखाएँ"
+
+#: include/apto_interface-class.php:1697
+msgid "Today"
+msgstr "आज"
+
+#: include/apto_interface-class.php:1698
+msgid "Yesterday"
+msgstr "कल"
+
+#: include/apto_interface-class.php:1699
+msgid "Last Week"
+msgstr "पिछला सप्ताह"
+
+#: include/apto_interface-class.php:1745
+msgid "Toggle Thumbnails"
+msgstr "थंबनेल टॉगल करें"
+
+#: include/apto_interface-class.php:1754 include/apto_interface-class.php:1865
+msgid "Update"
+msgstr "अपडेट"
+
+#: include/apto_interface-class.php:1767
+msgid "Reverse"
+msgstr "उल्टा"
+
+#: include/apto_interface-class.php:1768
+msgid "Title Asc"
+msgstr "शीर्षक आरोही"
+
+#: include/apto_interface-class.php:1769
+msgid "Title Desc"
+msgstr "शीर्षक अवरोही"
+
+#: include/apto_interface-class.php:1770
+msgid "Id order Asc"
+msgstr "आईडी क्रम आरोही"
+
+#: include/apto_interface-class.php:1771
+msgid "Id order Desc"
+msgstr "आईडी क्रम अवरोही"
+
+#: include/apto_interface-class.php:1772
+#: include/apto_interface_helper-class.php:1797
+msgid "Random"
+msgstr "यादृच्छिक"
+
+#: include/apto_interface-class.php:1780
+msgid "List view"
+msgstr "सूची दृश्य"
+
+#: include/apto_interface-class.php:1781
+msgid "Grid view"
+msgstr "ग्रिड दृश्य"
+
+#: include/apto_interface-class.php:1878
+msgid "Reset Order"
+msgstr "क्रम रीसेट करें"
+
+#: include/apto_interface-class.php:1884
+msgid "Are you sure you want to reset the order??"
+msgstr "क्या आप वाकई क्रम रीसेट करना चाहते हैं??"
+
+#: include/apto_interface_helper-class.php:344
+msgid "Sort order reset successfully"
+msgstr "सॉर्ट क्रम सफलतापूर्वक रीसेट हो गया"
+
+#: include/apto_interface_helper-class.php:348
+#: include/apto_interface_helper-class.php:2506
+#: include/apto_interface_helper-class.php:2531
+msgid "Invalid Nonce"
+msgstr "अमान्य नॉन्स"
+
+#: include/apto_interface_helper-class.php:1181
+msgid ""
+"**WARNING!! This will load all post types objects. Recommended to be used "
+"with Advanced Query Rules"
+msgstr ""
+"**चेतावनी!! यह सभी पोस्ट प्रकार ऑब्जेक्ट्स लोड करेगा। उन्नत क्वेरी नियमों "
+"के साथ उपयोग करने की सिफारिश की जाती है"
+
+#: include/apto_interface_helper-class.php:1764
+msgid "Order By"
+msgstr "इसके अनुसार क्रम"
+
+#: include/apto_interface_helper-class.php:1765
+msgid "More details about Order By paramether can be found at"
+msgstr "ऑर्डर बाय पैरामीटर के बारे में अधिक विवरण यहाँ मिल सकते हैं"
+
+#: include/apto_interface_helper-class.php:1765
+#: include/apto_interface_helper-class.php:1885
+msgid "Order & Orderby Parameters"
+msgstr "ऑर्डर और ऑर्डरबाय पैरामीटर्स"
+
+#: include/apto_interface_helper-class.php:1766
+msgid ""
+"Additional details and example of usage for Custom Function can be found at"
+msgstr ""
+"कस्टम फंक्शन के लिए अतिरिक्त विवरण और उपयोग का उदाहरण यहाँ मिल सकते हैं"
+
+#: include/apto_interface_helper-class.php:1766
+#: include/apto_interface_helper-class.php:1867
+msgid "Custom Function"
+msgstr "कस्टम फंक्शन"
+
+#: include/apto_interface_helper-class.php:1770
+msgid "Default / None"
+msgstr "डिफ़ॉल्ट / कोई नहीं"
+
+#: include/apto_interface_helper-class.php:1773
+msgid "Post ID"
+msgstr "पोस्ट आईडी"
+
+#: include/apto_interface_helper-class.php:1782
+msgid "Slug"
+msgstr "स्लग"
+
+#: include/apto_interface_helper-class.php:1785
+#: include/apto_interface_helper-class.php:1852
+msgid "Date"
+msgstr "तारीख"
+
+#: include/apto_interface_helper-class.php:1788
+msgid "Modified"
+msgstr "संशोधित"
+
+#: include/apto_interface_helper-class.php:1791
+msgid "Menu Order"
+msgstr "मेनू क्रम"
+
+#: include/apto_interface_helper-class.php:1794
+msgid "Comments Count"
+msgstr "टिप्पणियाँ गिनती"
+
+#: include/apto_interface_helper-class.php:1822
+msgid "Custom Field"
+msgstr "कस्टम फ़ील्ड"
+
+#: include/apto_interface_helper-class.php:1830
+msgid "Field Name"
+msgstr "फ़ील्ड नाम"
+
+#: include/apto_interface_helper-class.php:1831
+msgid "The name of custom field"
+msgstr "कस्टम फ़ील्ड का नाम"
+
+#: include/apto_interface_helper-class.php:1836
+msgid "Field Type"
+msgstr "फ़ील्ड प्रकार"
+
+#: include/apto_interface_helper-class.php:1837
+msgid "MySql Type of field, more details at"
+msgstr "फ़ील्ड का MySql प्रकार, अधिक विवरण यहाँ"
+
+#: include/apto_interface_helper-class.php:1837
+msgid "Cast Functions and Operators"
+msgstr "कास्ट फंक्शन्स और ऑपरेटर्स"
+
+#: include/apto_interface_helper-class.php:1840
+msgid "None / Default"
+msgstr "कोई नहीं / डिफ़ॉल्ट"
+
+#: include/apto_interface_helper-class.php:1843
+msgid "Signed (Integer)"
+msgstr "हस्ताक्षरित (पूर्णांक)"
+
+#: include/apto_interface_helper-class.php:1846
+msgid "Unsigned (Integer)"
+msgstr "अहस्ताक्षरित (पूर्णांक)"
+
+#: include/apto_interface_helper-class.php:1849
+msgid "Float (Decimal)"
+msgstr "फ्लोट (दशमलव)"
+
+#: include/apto_interface_helper-class.php:1855
+msgid "Datetime"
+msgstr "दिनांक समय"
+
+#: include/apto_interface_helper-class.php:1858
+msgid "Time"
+msgstr "समय"
+
+#: include/apto_interface_helper-class.php:1884
+msgid "Order"
+msgstr "क्रम"
+
+#: include/apto_interface_helper-class.php:1885
+msgid "More details about Order paramether can be found at"
+msgstr "ऑर्डर पैरामीटर के बारे में अधिक विवरण यहाँ मिल सकते हैं"
+
+#: include/apto_interface_helper-class.php:1889
+msgid "Descending"
+msgstr "अवरोही"
+
+#: include/apto_interface_helper-class.php:1892
+msgid "Ascending"
+msgstr "आरोही"
+
+#: include/apto_interface_helper-class.php:1929
+msgid "Go to the first page"
+msgstr "पहले पृष्ठ पर जाएँ"
+
+#: include/apto_interface_helper-class.php:1936
+msgid "Go to the previous page"
+msgstr "पिछले पृष्ठ पर जाएँ"
+
+#: include/apto_interface_helper-class.php:1948
+msgid "Go to the next page"
+msgstr "अगले पृष्ठ पर जाएँ"
+
+#: include/apto_interface_helper-class.php:1955
+msgid "Go to the last page"
+msgstr "अंतिम पृष्ठ पर जाएँ"
+
+#: include/apto_interface_helper-class.php:2765
+msgid "Items Order Updated"
+msgstr "आइटम क्रम अपडेट हो गया"
+
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3216
+#: include/apto_interface_helper-class.php:3227
+#: include/apto_interface_helper-class.php:3347
+msgid "A syncronization could not be completed"
+msgstr "समन्वयन पूरा नहीं हो सका"
+
+#: include/apto_interface_helper-class.php:3033
+#: include/apto_interface_helper-class.php:3198
+#: include/apto_interface_helper-class.php:3347
+msgid "as post type is not translatable."
+msgstr "क्योंकि पोस्ट प्रकार अनुवाद योग्य नहीं है।"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "A synchronization could not be completed"
+msgstr "समन्वयन पूरा नहीं हो सका"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "for"
+msgstr "के लिए"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "language"
+msgstr "भाषा"
+
+#: include/apto_interface_helper-class.php:3043
+#: include/apto_interface_helper-class.php:3114
+#: include/apto_interface_helper-class.php:3208
+#: include/apto_interface_helper-class.php:3276
+msgid "as it contains a different number of objects."
+msgstr "क्योंकि इसमें ऑब्जेक्ट्स की भिन्न संख्या है।"
+
+#: include/apto_interface_helper-class.php:3051
+#: include/apto_interface_helper-class.php:3216
+msgid "as taxonomy is not translatable."
+msgstr "क्योंकि टैक्सोनॉमी अनुवाद योग्य नहीं है।"
+
+#: include/apto_interface_helper-class.php:3062
+#: include/apto_interface_helper-class.php:3227
+msgid "as term is not translated."
+msgstr "क्योंकि शब्द अनुवादित नहीं है।"
+
+#: include/apto_options_class.php:99 include/apto_options_class.php:521
+#: include/apto_options_class.php:571 include/apto_options_class.php:623
+msgid "General Settings"
+msgstr "सामान्य सेटिंग्स"
+
+#: include/apto_options_class.php:109
+msgid "Show / Hide re-order interface"
+msgstr "पुनः क्रमबद्ध इंटरफेस दिखाएँ / छिपाएँ"
+
+#: include/apto_options_class.php:122
+msgid "Show"
+msgstr "दिखाएँ"
+
+#: include/apto_options_class.php:123
+msgid "Hide"
+msgstr "छिपाएँ"
+
+#: include/apto_options_class.php:137
+msgid "General"
+msgstr "सामान्य"
+
+#: include/apto_options_class.php:143
+msgid "Ignore Suppress Filters"
+msgstr "दबाव फ़िल्टरों को नजरअंदाज करें"
+
+#: include/apto_options_class.php:147
+msgid ""
+"Set FALSE the <b>suppress_filters</b> arguments for get_posts() default "
+"WordPress function. Use this feature if Autosort does not work with your "
+"theme, otherwise you should leave un-checked."
+msgstr ""
+"get_posts() डिफ़ॉल्ट वर्डप्रेस फंक्शन के लिए <b>suppress_filters</b> तर्कों को FALSE सेट करें। "
+"यदि ऑटोसॉर्ट आपके थीम के साथ काम नहीं कर रहा तो इस सुविधा का उपयोग करें, "
+"अन्यथा इसे अनचेक छोड़ दें।"
+
+#: include/apto_options_class.php:152
+msgid "Ignore Sticky Posts"
+msgstr "स्टिकी पोस्ट को नजरअंदाज करें"
+
+#: include/apto_options_class.php:156
+msgid ""
+"Ignore any Sticky posts, those will not appear on top of the list but per "
+"customised order."
+msgstr ""
+"किसी भी स्टिकी पोस्ट को नजरअंदाज करें, वे सूची के ऊपर नहीं दिखेंगे बल्कि "
+"कस्टमाइज़्ड क्रम के अनुसार।"
+
+#: include/apto_options_class.php:161
+msgid "Next / Previous Apply"
+msgstr "अगला / पिछला लागू करें"
+
+#: include/apto_options_class.php:165
+msgid "Apply the sort to default Next / Previous site-wide navigation."
+msgstr "डिफ़ॉल्ट अगला / पिछला साइट-वाइड नेविगेशन पर क्रम लागू करें।"
+
+#: include/apto_options_class.php:165
+msgid "For advanced Next / Previous navigation check"
+msgstr "उन्नत अगला / पिछला नेविगेशन के लिए जांचें"
+
+#: include/apto_options_class.php:165 include/apto_options_class.php:187
+#: include/apto_options_class.php:196
+msgid "read more"
+msgstr "और पढ़ें"
+
+#: include/apto_options_class.php:171
+msgid "bbPress Replies"
+msgstr "bbPress प्रतिक्रियाएँ"
+
+#: include/apto_options_class.php:175
+msgid "Reverse the order of bbPress replies, show newest posts first"
+msgstr "bbPress प्रतिक्रियाओं का क्रम उल्टा करें, नवीनतम पोस्ट पहले दिखाएँ"
+
+#: include/apto_options_class.php:183
+msgid "Use category order for WooCommerce when apply filters"
+msgstr "फ़िल्टर लागू करते समय WooCommerce के लिए श्रेणी क्रम का उपयोग करें"
+
+#: include/apto_options_class.php:187
+msgid "Allow Category order to apply when using visual attribute filters"
+msgstr "दृश्य गुण फ़िल्टर का उपयोग करते समय श्रेणी क्रम लागू करने की अनुमति दें"
+
+#: include/apto_options_class.php:192
+msgid "WooCommerce Up-sells Sort"
+msgstr "WooCommerce अप-सेल्स क्रम"
+
+#: include/apto_options_class.php:196
+msgid "Allow drag & drop for WooCommerce Up-sells products"
+msgstr "WooCommerce अप-सेल्स उत्पादों के लिए ड्रैग एंड ड्रॉप की अनुमति दें"
+
+#: include/apto_options_class.php:204
+msgid "Debug Marks"
+msgstr "डिबग चिह्न"
+
+#: include/apto_options_class.php:208
+msgid ""
+"Output marks on front side when logged-in, with detailed informations of "
+"every queries to identify the settings to be used for a sort to match. "
+"Ensure to turn off when debug completed."
+msgstr ""
+"लॉगिन होने पर सामने की तरफ चिह्न आउटपुट करें, हर क्वेरी का विस्तृत "
+"सूचना के साथ सॉर्ट से मेल खाने के लिए उपयोग की जाने वाली सेटिंग्स की पहचान करने के लिए। "
+"डिबग पूरा होने पर इसे बंद करना सुनिश्चित करें।"
+
+#: include/apto_options_class.php:213
+msgid "Create Logs"
+msgstr "लॉग बनाएँ"
+
+#: include/apto_options_class.php:217
+msgid ""
+"Create logs which may be usefull when debug or help to identify applied sort "
+"list."
+msgstr ""
+"लॉग बनाएँ जो डिबग के दौरान उपयोगी हो सकते हैं या लागू सॉर्ट सूची की पहचान करने में मदद करें।"
+
+#: include/apto_options_class.php:228
+msgid "Logs"
+msgstr "लॉग"
+
+#: include/apto_options_class.php:254
+msgid "Save Settings"
+msgstr "सेटिंग्स सहेजें"
+
+#: include/apto_options_class.php:299
+msgid "Settings Saved"
+msgstr "सेटिंग्स सहेज ली गईं"
+
+#: include/apto_options_class.php:346 include/apto_options_class.php:353
+msgid "Advanced Post Types Order plugin is inactive, please enter your"
+msgstr "एडवांस्ड पोस्ट टाइप्स ऑर्डर प्लगइन निष्क्रिय है, कृपया अपना दर्ज करें"
+
+#: include/apto_options_class.php:346 include/apto_options_class.php:353
+msgid "Licence Key"
+msgstr "लाइसेंस कुंजी"
+
+#: include/apto_options_class.php:385 include/apto_options_class.php:467
+msgid "There was a problem connecting to "
+msgstr "कनेक्ट करने में समस्या थी "
+
+#: include/apto_options_class.php:393 include/apto_options_class.php:430
+#: include/apto_options_class.php:475 include/apto_options_class.php:507
+msgid "There was a problem with the data block received from "
+msgstr "से प्राप्त डेटा ब्लॉक में समस्या थी "
+
+#: include/apto_options_class.php:415
+msgid ""
+"There was a problem deactivating the licence on other side, however locally "
+"the key is now removed: "
+msgstr ""
+"दूसरी तरफ लाइसेंस निष्क्रिय करने में समस्या थी, हालांकि स्थानीय रूप से "
+"कुंजी अब हटा दी गई है: "
+
+#: include/apto_options_class.php:446
+msgid "Licence Key can't be empty"
+msgstr "लाइसेंस कुंजी खाली नहीं हो सकती"
+
+#: include/apto_options_class.php:501
+msgid "There was a problem activating the licence: "
+msgstr "लाइसेंस सक्रिय करने में समस्या थी: "
+
+#: include/apto_options_class.php:525 include/apto_options_class.php:578
+#: include/apto_options_class.php:625
+msgid "Software License"
+msgstr "सॉफ्टवेयर लाइसेंस"
+
+#: include/apto_options_class.php:534 include/apto_options_class.php:586
+msgid "License Key"
+msgstr "लाइसेंस कुंजी"
+
+#: include/apto_options_class.php:539 include/apto_options_class.php:631
+msgid ""
+"Enter the License Key you got when bought this product. If you lost the key, "
+"you can always retrieve it from"
+msgstr ""
+"इस उत्पाद को खरीदते समय मिली लाइसेंस कुंजी दर्ज करें। यदि आप कुंजी खो चुके हैं, "
+"तो आप हमेशा इसे यहाँ से पुनः प्राप्त कर सकते हैं"
+
+#: include/apto_options_class.php:539 include/apto_options_class.php:540
+#: include/apto_options_class.php:631 include/apto_options_class.php:632
+msgid "My Account"
+msgstr "मेरा खाता"
+
+#: include/apto_options_class.php:540 include/apto_options_class.php:632
+msgid "More keys can be generate from"
+msgstr "अधिक कुंजियाँ यहाँ से बनाई जा सकती हैं"
+
+#: include/apto_options_class.php:549
+msgid "Save"
+msgstr "सहेजें"
+
+#: include/apto_options_class.php:601
+msgid "You can generate more keys from"
+msgstr "आप अधिक कुंजियाँ यहाँ से बना सकते हैं"
+
+#: include/apto_options_class.php:629
+msgid "License Key Required"
+msgstr "लाइसेंस कुंजी आवश्यक"
+
+#: include/apto_plugin_updater.class.php:123
+msgid "An error occour when try to identify the pluguin."
+msgstr "प्लगइन की पहचान करने का प्रयास करते समय त्रुटि हुई।"
+
+#: include/apto_plugin_updater.class.php:123
+#: include/apto_plugin_updater.class.php:143
+msgid "Try again"
+msgstr "पुनः प्रयास करें"
+
+#: include/apto_plugin_updater.class.php:143
+msgid "An Unexpected HTTP Error occurred during the API request."
+msgstr "API अनुरोध के दौरान अप्रत्याशित HTTP त्रुटि हुई।"
+
+#: include/walkers/post-types-order-walker-class.php:146
+msgid "Move to Top"
+msgstr "ऊपर ले जाएँ"
+
+#: include/walkers/post-types-order-walker-class.php:147
+msgid "Move to Bottom"
+msgstr "नीचे ले जाएँ"
+
+#: include/walkers/post-types-order-walker-class.php:148
+msgid "Make Sticky"
+msgstr "स्टिकी बनाएँ"
+
+#: include/walkers/post-types-order-walker-class.php:149
+msgid "Edit"
+msgstr "संपादित करें"
+
+#: include/walkers/post-types-order-walker-class.php:174
+msgid "Sticky"
+msgstr "स्टिकी"
+

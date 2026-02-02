@@ -3,31 +3,42 @@ namespace Perfmatters;
 
 class CDN
 {
+    private static $cdn_url;
+
     //initialize cdn
     public static function init() 
     {
-        add_action('perfmatters_queue', array('Perfmatters\CDN', 'queue'));
+        add_action('perfmatters_queue', array(__CLASS__, 'queue'));
     }
 
     //queue functions
     public static function queue() 
     {
+        //cdn rewrite enabled
+        if(self::is_enabled()) {
 
-        //add cdn rewrite to the buffer
-        if(!empty(Config::$options['cdn']['enable_cdn']) && !empty(Config::$options['cdn']['cdn_url'])) {
-            add_action('perfmatters_output_buffer', array('Perfmatters\CDN', 'rewrite'));
+            //cdn url
+            if(!empty(self::$cdn_url = self::get_cdn_url())) {
+
+                //add cdn rewrite to the buffer
+                add_action('perfmatters_output_buffer', array(__CLASS__, 'rewrite'));
+            }
         }
+    }
+
+    //return cdn rewrite enabled status
+    public static function is_enabled() {
+        return apply_filters('perfmatters_cdn', !empty(Config::$options['cdn']['enable_cdn']));
+    }
+
+    //return cdn url
+    public static function get_cdn_url() {
+        return apply_filters('perfmatters_cdn_url', Config::$options['cdn']['cdn_url'] ?? '');
     }
 
     //rewrite urls in html
     public static function rewrite($html) 
     {
-
-        //filter check
-        if(!apply_filters('perfmatters_cdn', true)) {
-            return $html;
-        }
-
         //prep site url
         $siteURL  = '//' . ((!empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : parse_url(home_url(), PHP_URL_HOST));
         $escapedSiteURL = quotemeta($siteURL);
@@ -77,7 +88,7 @@ class CDN
         }
 
         //set cdn url
-        $cdnURL = untrailingslashit(Config::$options['cdn']['cdn_url']);
+        $cdnURL = untrailingslashit(self::$cdn_url);
 
         //replace urls
         $html = preg_replace_callback($regEx, function($url) use ($siteURL, $cdnURL, $exclusions) {

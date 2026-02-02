@@ -124,8 +124,6 @@
                     if (is_admin() && !defined('DOING_AJAX'))
                             {
 
-                                //force to use the custom order
-                                //$orderBy = $wpdb->posts.".menu_order, " . $wpdb->posts.".post_date DESC"; 
                                 $args   =   array(
                                                     '_adminsort' =>  array('yes')  
                                                     );

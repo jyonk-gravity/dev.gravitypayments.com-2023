@@ -106,24 +106,39 @@
                                        
                                        <form id="form_data" name="form" method="post">   
                                             <br />
-                                            <h2 class="subtitle"><?php _e( "Show / Hide re-order interface", 'apto' ) ?></h2>                              
+                                            <h2 class="subtitle"><?php _e( "General", 'apto' ) ?></h2>                              
                                             <table class="form-table">
                                                 <tbody>
                                                         <?php
                                                         
-                                                            foreach ($this->admin_functions->get_available_menu_locations() as $location    =>  $location_data)
+
                                                                 {
-                                                                    ?>
+                                                                    ?>  
                                                                         <tr valign="top">
-                                                                            <th scope="row"></th>
+                                                                            <th scope="row" style="text-align: right;"><label><?php _e( "Show / Hide re-order interface", 'apto' ) ?></label></th>
+                                                                            
                                                                             <td>
-                                                                            <label>
-                                                                                <select name="show_reorder_interfaces[<?php echo $location ?>]">
-                                                                                    <option value="show" <?php if(isset($options['show_reorder_interfaces'][$location]) && $options['show_reorder_interfaces'][$location] == 'show') {echo ' selected="selected"';} ?>><?php _e( "Show", 'apto' ) ?></option>
-                                                                                    <option value="hide" <?php if(isset($options['show_reorder_interfaces'][$location]) && $options['show_reorder_interfaces'][$location] == 'hide') {echo ' selected="selected"';} ?>><?php _e( "Hide", 'apto' ) ?></option>
-                                                                                </select> &nbsp;&nbsp;<?php echo $location_data['name'] ?>
-                                                                            </label>          
+                                                                                <p><?php esc_html_e("Show the Re-Order interface for the selected post types.", 'advanced-taxonomy-terms-order') ?></p>
+                                                                                <br />
+                                                                                <div class="pt-list">
+                                                                                <?php
+                                                                            
+                                                                                    foreach ($this->admin_functions->get_available_menu_locations() as $location    =>  $location_data)
+                                                                                        {
+                                                                                            ?>
+                                                                                            <p class="pt-item"><label>
+                                                                                                <select name="show_reorder_interfaces[<?php echo $location ?>]">
+                                                                                                    <option value="show" <?php if(isset($options['show_reorder_interfaces'][$location]) && $options['show_reorder_interfaces'][$location] == 'show') {echo ' selected="selected"';} ?>><?php _e( "Show", 'apto' ) ?></option>
+                                                                                                    <option value="hide" <?php if(isset($options['show_reorder_interfaces'][$location]) && $options['show_reorder_interfaces'][$location] == 'hide') {echo ' selected="selected"';} ?>><?php _e( "Hide", 'apto' ) ?></option>
+                                                                                                </select> &nbsp;&nbsp;<?php echo $location_data['name'] ?>
+                                                                                            </label> <br />&nbsp;</p>
+                                                                                            <?php
+                                                                                        }
+                                                                                
+                                                                                ?>
+                                                                                </div>
                                                                             </td>
+                                                                 
                                                                         </tr>
                                                                     <?php
                                                                 }
@@ -134,7 +149,7 @@
                                             </table>
                                             
                                             <br />
-                                            <h2 class="subtitle"><?php _e( "General", 'apto' ) ?></h2>                              
+                         
                                             <table class="form-table">
                                                 <tbody>
                                         
@@ -517,102 +532,82 @@
                 {
                     ?>
                         <div class="wrap"> 
-                            <div id="icon-settings" class="icon32"></div>
-                            <h2><?php _e( "General Settings", 'apto' ) ?></h2>
-                            
-                            
-                            <form id="form_data" name="form" method="post">
-                                <h2 class="subtitle"><?php _e( "Software License", 'apto' ) ?></h2>
-                                <div class="postbox">
+                            <h2><?php esc_html_e( "Advanced Post Types Order License", 'advanced-taxonomy-terms-order' ) ?></h2>
+                            <br />
+                            <div class="start-container">
+                                <h3><?php esc_html_e( "Licence Key", 'advanced-taxonomy-terms-order' ) ?></h3>
+                                <form id="form_data" name="form" method="post">
+                             
+                                            <?php wp_nonce_field('apto_license','apto_license_nonce'); ?>
+                                            <input type="hidden" name="apto_licence_form_submit" value="true" />
+             
+                                            <div class="section section-text ">
+                                                <div class="option">
+                                                    <div class="controls">
+                                                        <input type="text" value="" name="license_key" class="text-input">
+                                                    </div>
+                                                    <div class="explain"><?php _e( "Enter the License Key you got when bought this product. If you lost the key, you can always retrieve it from", 'apto' ) ?> <a href="https://www.nsp-code.com/premium-plugins/my-account/" target="_blank"><?php _e( "My Account", 'apto' ) ?></a><br />
+                                                    <?php _e( "More keys can be generate from", 'apto' ) ?> <a href="https://www.nsp-code.com/premium-plugins/my-account/" target="_blank"><?php _e( "My Account", 'apto' ) ?></a> 
+                                                    </div>
+                                                </div> 
+                                            </div>
                                     
-                                        <?php wp_nonce_field('apto_license','apto_license_nonce'); ?>
-                                        <input type="hidden" name="apto_licence_form_submit" value="true" />
-                                           
-                                        
-
-                                         <div class="section section-text ">
-                                            <h4 class="heading"><?php _e( "License Key", 'apto' ) ?></h4>
-                                            <div class="option">
-                                                <div class="controls">
-                                                    <input type="text" value="" name="license_key" class="text-input">
-                                                </div>
-                                                <div class="explain"><?php _e( "Enter the License Key you got when bought this product. If you lost the key, you can always retrieve it from", 'apto' ) ?> <a href="https://www.nsp-code.com/premium-plugins/my-account/" target="_blank"><?php _e( "My Account", 'apto' ) ?></a><br />
-                                                <?php _e( "More keys can be generate from", 'apto' ) ?> <a href="https://www.nsp-code.com/premium-plugins/my-account/" target="_blank"><?php _e( "My Account", 'apto' ) ?></a> 
-                                                </div>
-                                            </div> 
-                                        </div>
-
-                                    
-                                </div>
-                                
-                                <p class="submit">
-                                    <input type="submit" name="Submit" class="button-primary" value="<?php _e('Save', 'apto') ?>">
-                                </p>
-                            </form> 
+                                    <p class="submit">
+                                        <input type="submit" name="Submit" class="button-primary" value="<?php esc_html_e('Save', 'apto') ?>">
+                                    </p>
+                                </form> 
+                            </div>
                         </div> 
-                    <?php  
-     
+                    <?php 
+        
                 }
             
             function licence_deactivate_form()
                 {
                     global $wp_version;
                     
-                    $license_data = get_site_option('apto_license');
-                    
-                    if(!is_array($license_data))
-                        $license_data   =   array();
-                    
-                    if(is_multisite())
-                        {
-                            ?>
-                                <div class="wrap"> 
-                                    <div id="icon-settings" class="icon32"></div>
-                                    <h2><?php _e( "General Settings", 'apto' ) ?></h2>
-                            <?php
-                        }
-                        
-                    
-                    ?>
-                        <div id="form_data">
-                        <h2 class="subtitle"><?php _e( "Software License", 'apto' ) ?></h2>
-                        <div class="postbox">
-                            <form id="form_data" name="form" method="post">    
-                                <?php wp_nonce_field('apto_license','apto_license_nonce'); ?>
-                                <input type="hidden" name="apto_licence_form_submit" value="true" />
-                                <input type="hidden" name="apto_licence_deactivate" value="true" />
+                    $license_data = APTO_licence::get_licence_data();
 
-                                 <div class="section section-text ">
-                                    <h4 class="heading"><?php _e( "License Key", 'apto' ) ?></h4>
-                                    <div class="option">
-                                        <div class="controls">
-                                            <?php  
-                                                if($this->licence->is_local_instance())
-                                                {
-                                                ?>
-                                                <p>Local instance, no key applied.</p>
-                                                <?php   
-                                                }
-                                                else {
-                                                ?>
-                                            <p><b><?php echo substr($license_data['kye'], 0, 20) ?>-xxxxxxxx-xxxxxxxx</b> &nbsp;&nbsp;&nbsp;<a class="button-secondary" title="Deactivate" href="javascript: void(0)" onclick="jQuery(this).closest('form').submit();">Deactivate</a></p>
-                                            <?php } ?>
-                                        </div>
-                                        <div class="explain"><?php _e( "You can generate more keys from", 'apto' ) ?> <a href="https://www.nsp-code.com/premium-plugins/my-account/" target="_blank">My Account</a> 
-                                        </div>
-                                    </div> 
+                        
+                        
+                    ?>
+                        <div class="wrap"> 
+                            <br />
+                            <div class="start-container">
+                                <h3><?php esc_html_e( "Licence Key", 'apto' ) ?></h3>
+                                <div id="form_data">
+                                    
+
+                                        <form id="form_data" name="form" method="post">    
+                                            <?php wp_nonce_field('apto_license','apto_license_nonce'); ?>
+                                            <input type="hidden" name="apto_licence_form_submit" value="true" />
+                                            <input type="hidden" name="apto_licence_deactivate" value="true" />
+
+                                            <div class="section section-text ">
+                                                <div class="option">
+                                                    <div class="controls">
+                                                        <?php  
+                                                            if($this->licence->is_local_instance())
+                                                            {
+                                                            ?>
+                                                            <p>Local instance, no key applied.</p>
+                                                            <?php   
+                                                            }
+                                                            else {
+                                                            ?>
+                                                            <p><b><?php echo substr($license_data['kye'], 0, 20) ?>-xxxxxxxx-xxxxxxxx</b> &nbsp;&nbsp;&nbsp;<a class="button-secondary" title="Deactivate" href="javascript: void(0)" onclick="jQuery(this).closest('form').submit();">Deactivate</a></p>
+                                                        <?php } ?>
+                                                    </div>
+                                                    <div class="explain"><a href="<?php echo esc_url('https://www.nsp-code.com/premium-plugins/my-account/') ?>" target="_blank"><?php esc_html_e( 'My Account', 'apto' ) ?></a></div>
+                                                </div> 
+                                            </div>
+                                        </form>
+
                                 </div>
-                             </form>
-                        </div>
+                            </div>
                         </div> 
-                    <?php  
-     
-                    if(is_multisite())
-                        {
-                            ?>
-                                </div>
-                            <?php
-                        }
+                    <?php
+               
                 }
                 
             function licence_multisite_require_nottice()

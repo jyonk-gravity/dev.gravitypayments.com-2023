@@ -13,7 +13,8 @@
                                                                         }
                                                                     },
                                                         
-                                                        'items': 'tr', 
+                                                        'items': 'tr',
+                                                        'handle': '.apto-dd-icon', 
                                                         'axis': 'y',
                                                         'update' : function(e, ui) {
                                                            

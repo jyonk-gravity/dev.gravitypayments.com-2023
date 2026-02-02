@@ -273,46 +273,27 @@ class PhpValidator
             }
         }
 
+        //lock our error class to prevent it from catching exceptions during eval
+        \Perfmatters\PMCS\Error::set_processing(true);
+        
         //check for runtime error
-        $code = $this->code;
-        // Remove the opening PHP tag.
-        $code = preg_replace('/^<\?php/', '', $code);
-
-        ob_start();
         try {
-            $result = eval($code); // phpcs:ignore Squiz.PHP.Eval.Discouraged
-        } 
-        catch (\ParseError $error) {
-            $result = new \WP_Error('runtime_error', $error->getMessage(), array(
-                'line' => $error->getLine(),
-            ));
+
+            //wrap the code in a function definition so it is PARSED but NOT executed
+            $syntax_test = 'return; ' . preg_replace('/^<\?php/', '', $this->code);
+            eval($syntax_test); 
+        }
+        catch (\Throwable $e) {
+
+            //unlock error class
+            \Perfmatters\PMCS\Error::set_processing(false);
+
+            //return error details
+            return new \WP_Error('parse_error', $e->getMessage(), ['line' => $e->getLine()]);
         }
 
-        $output = ob_get_clean();
-
-        if (is_wp_error($result)) {
-            return $result;
-        }
-
-        if($output) {
-            return new \WP_Error(
-                'has_buffer',
-                'PHP code should not have print / echo statement',
-                array(
-                    'line' => 0,
-                    'output' => $output
-                ));
-        }
-
-        if ($result) {
-            return new \WP_Error(
-                'has_buffer',
-                'PHP code should not have print / echo statement',
-                array(
-                    'line' => 0,
-                    'output' => $result
-                ));
-        }
+        //unlock error class
+        \Perfmatters\PMCS\Error::set_processing(false);
 
         return true;
     }

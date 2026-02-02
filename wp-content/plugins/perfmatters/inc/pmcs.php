@@ -37,7 +37,7 @@ echo '<div class="perfmatters-settings-section">';
 				echo '<div style="display: flex; align-items: center;">';
 					echo '<a href="?page=perfmatters#code" style="text-decoration: none;">' . esc_html__('All Snippets', 'perfmatters') . '</a><span class="perfmatters-beta">BETA</span>';
 					echo '<span style="margin: 0px 7px;">/</span>';
-					echo '<span id="pmcs-snippet-name">' . ($snippet['name'] ?? '<span style="opacity: .2;">' . esc_html__('Example Snippet', 'perfmatters') . '</span>') . '</span>';
+					echo '<span id="pmcs-snippet-name">' . (!empty($snippet['name']) ? esc_html__($snippet['name']) : '<span style="opacity: .2;">' . esc_html__('Example Snippet', 'perfmatters') . '</span>') . '</span>';
 
 					if(!empty($snippet['type'])) {
 						echo '<a class="pmcs-snippet-type-badge" data-snippet-type="' . $snippet['type'] . '" style="margin-left: 7px; font-size: 12px; height: 26px; box-sizing: border-box; display: flex; align-items: center; padding: 0px 8px;">' . $snippet['type'] . '</a>';
@@ -158,7 +158,7 @@ echo '<div class="perfmatters-settings-section">';
 						echo '<div>';
 							echo '<label for="pmcs-priority" class="perfmatters-inline-label-input">';
 								echo '<span>' . esc_html__('Priority', 'perfmatters') . '</span>';
-								echo '<input type="text" id="pmcs-priority" name="priority" value="' . ($snippet['priority'] ?? 10) . '" style="max-width: 75px;">';
+								echo '<input type="number" id="pmcs-priority" name="priority" value="' . esc_attr(Perfmatters\PMCS\PMCS::get_priority($snippet['priority'] ?? null)) . '" style="max-width: 75px;">';
 							echo '</label>';
 						echo '</div>';
 
@@ -373,7 +373,7 @@ echo '<div class="perfmatters-settings-section">';
 
 		                    	if(!empty($snippet['tags'])) {
 		                    		foreach($snippet['tags'] as $tag) {
-		                    			echo '<div class="pmcs-tag" data-tag-name="' . $tag . '">' . $tag . '<span class="pmcs-tag-close">×</span></div>';
+		                    			echo '<div class="pmcs-tag" data-tag-name="' . $tag . '">' . esc_html($tag) . '<span class="pmcs-tag-close">×</span></div>';
 		                    		}
 		                    	}
 

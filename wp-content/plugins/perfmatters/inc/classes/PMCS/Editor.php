@@ -22,10 +22,10 @@ class Editor
 		}
 
 		//set up gutters
-		$gutters = array('CodeMirror-foldgutter'); 
+		$gutters = array('CodeMirror-linenumbers', 'CodeMirror-foldgutter'); 
 
 		//lint gutter for non-php types
-		if($code_type !== 'php') {
+		if(self::is_lint_enabled($code_type)) {
 		    array_unshift($gutters, 'CodeMirror-lint-markers');
 		}
 
@@ -40,7 +40,7 @@ class Editor
 				'foldGutter'                => true,
 				'autoCloseBrackets'         => true,
 				'highlightSelectionMatches' => true,
-				'lint'                      => $code_type !== 'php'
+				'lint'                      => self::is_lint_enabled($code_type)
 			)
 		);
 
@@ -70,7 +70,6 @@ class Editor
 	public static function load_hint_scripts()
 	{
 		wp_enqueue_script('jshint');
-		wp_enqueue_script('csslint');
 		wp_enqueue_script('htmlhint');
 	}
 
@@ -110,5 +109,10 @@ class Editor
 		}
 
 		return $mime;
+	}
+
+	//get lint status for code type
+	public static function is_lint_enabled($code_type) {
+		return in_array($code_type, array('js', 'html'));
 	}
 }

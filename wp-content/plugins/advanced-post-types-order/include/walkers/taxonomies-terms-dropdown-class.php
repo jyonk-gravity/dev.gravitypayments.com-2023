@@ -11,8 +11,25 @@
             function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
                     $pad = str_repeat('&nbsp;', $depth * 2);
                     $cat_name = apply_filters('list_cats', $category->name, $category);
+                                        
+                    global $wpdb;
                     
-                    $term_objects  =   get_objects_in_term(array($category->term_id),$category->taxonomy);
+                    $sort_settings  =   APTO_functions::get_sort_settings( $args['sortID'] );
+                    
+                    $object_ids =   array();
+                    
+                    if ( isset ( $sort_settings['_rules'] ) &&  isset ( $sort_settings['_rules']['post_type'] )   &&  count ( $sort_settings['_rules']['post_type'] ) > 0 )
+                        {
+                            $post_type  = "'" . implode( "', '", array_map( 'esc_sql', $sort_settings['_rules']['post_type'] ) ) . "'";
+                            $taxonomy   = "'" . implode( "', '", array_map( 'esc_sql', (array)$args['taxonomy'] ) ) . "'";
+                            $term_id    = "'" . implode( "', '", (array)$category->term_id ) . "'";
+                            $sql        = "SELECT tr.object_id FROM $wpdb->term_relationships AS tr 
+                                                INNER JOIN $wpdb->term_taxonomy AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id 
+                                                INNER JOIN $wpdb->posts AS p ON tr.object_id = p.ID
+                                                
+                                                WHERE tt.taxonomy IN ($taxonomy) AND tt.term_id IN ($term_id) AND p.post_type IN ($post_type)";
+                            $object_ids = $wpdb->get_col( $sql );
+                        }
           
                     $link_argv  =   array(
                                             'sort_id'           =>  $args['sortID'],
@@ -40,8 +57,10 @@
                     $output .= '>';
                     $output .= $pad . $cat_name;
                     
+             
                     if ( $args['show_count'] )
-                        $output .= '&nbsp;&nbsp;('. count($term_objects) .')';
+                        $output .= '&nbsp;&nbsp;('. count( $object_ids ) .')';
+             
 
                     $output .= "</option>\n";
                 }

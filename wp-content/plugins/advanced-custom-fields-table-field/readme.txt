@@ -3,7 +3,7 @@ Contributors: jonua
 Tags: acf, table, scf, advanced custom fields, secure custom fields
 Requires at least: 5.3
 Tested up to: 6.9
-Stable tag: 1.3.33
+Stable tag: 1.3.34
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -467,7 +467,7 @@ The table field plugin prevents broken JSON strings to save as a table field dat
 
 Since version 1.3.33, you can configure the UI sanitizing options.
 
-This requires an admin script, that. You can in your themes `functions.php` file with the following action.
+This requires a script to be enqueued as an ACF admin script. You can enqueue it in your theme’s `functions.php` file using the following action.
 
 `
 add_action( 'acf/input/admin_enqueue_scripts', function() {
@@ -487,8 +487,6 @@ document.addEventListener('tableFieldRegisterHooks', function(){
     ACFTableField.addFilter( 'core', 'sanitize_html', function( options ) {
 
         // DOMPurify Options, @see: https://github.com/cure53/DOMPurify?tab=readme-ov-file#can-i-configure-dompurify
-
-        options.ADD_ATTR = ['target']; // For instance, the target attribute can be permitted
 
         return options;
     });
@@ -550,6 +548,10 @@ The Pro plugin can run in parallel and you can change an existing field with fie
 
 
 == Changelog ==
+
+= 1.3.34 =
+* Allows the target="_blank" attribute on links
+* Adds a filter that ensures links using target="_blank" are automatically given rel="noopener"
 
 = 1.3.33 =
 * Adds hook registering event "tableFieldRegisterHooks"

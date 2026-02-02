@@ -1,5 +1,13 @@
-#the-list.ui-sortable tr:hover { cursor: move;}
 #the-list.ui-sortable tr.alternate { background-color: #F9F9F9; }
 #the-list.ui-sortable tr.ui-sortable-helper { background-color: #ffffff;  outline: 1px solid #dfdfdf;} 
 
 #the-list.ui-sortable .ui-sortable-placeholder td{border-color:#bbb;background-color:#FCFCFC; height:32px; background-image: none; -moz-border-radius: 6px 6px 6px 6px; border: 3px dashed #E6E6E6; -webkit-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px; box-sizing: border-box;}
+
+.wp-list-table .apto-dd-icon { max-width: 15px; cursor:grab; }
+.wp-list-table .column-apto_sort {    width: 15px; text-align: center; padding: 11px 12px;}
+.manage-column.column-apto_sort span {transform: rotate(90deg);}
+
+@media screen and (max-width: 782px) {
+    .wp-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before { content:  ""}
+    
+}

@@ -113,6 +113,8 @@ class APTO_interface
             {
                 global $wpdb;
                 
+                $sort_id    =   intval ( $sort_id );
+                
                 $mysql_query    =   $wpdb->prepare( "SELECT ID FROM "   .   $wpdb->posts . "
                                                         WHERE ID    =   %d  and post_type   =   'apto_sort'", $sort_id );
                 $found_sort     =   $wpdb->get_var( $mysql_query );
@@ -1236,7 +1238,7 @@ class APTO_interface
                 <table cellspacing="0" class="wp-list-taxonomy widefat fixed">
                     <thead>
                     <tr>
-                        <th style="" class="column-cb check-column" scope="col">&nbsp;</th><th style="" class="" scope="col"><?php _e( "Taxonomy Title", 'apto' ) ?></th><th style="" class="manage-column" scope="col"><?php _e( "Total", 'apto' ) ?> <?php _e( "Posts", 'apto' ) ?></th>    </tr>
+                        <th style="" class="column-cb check-column" scope="col">&nbsp;</th><th style="" class="" scope="col"><?php _e( "Taxonomy Title", 'apto' ) ?></th><th style="" class="manage-column" scope="col"><?php _e( "Total Objects", 'apto' ) ?></th>    </tr>
                     </thead>
              
                     <tbody id="the-list">
@@ -1264,15 +1266,36 @@ class APTO_interface
                                             }
                                             else
                                             {
-                                                $term_ids = array_map('intval', $taxonomy_terms_ids );
-                                                                                                              
-                                                $term_ids = "'" . implode( "', '", $term_ids ) . "'";
-                                                                                                                         
-                                                $query = "SELECT COUNT(DISTINCT tr.object_id) as count FROM $wpdb->term_relationships AS tr 
-                                                                INNER JOIN $wpdb->term_taxonomy AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id 
-                                                                INNER JOIN $wpdb->posts as posts ON tr.object_id = posts.ID
-                                                                WHERE tt.taxonomy IN ('$taxonomy') AND tt.term_id IN ($term_ids) AND  posts.post_type IN ('". implode("', '", $this->sort_settings['_rules']['post_type'])   ."') AND posts.post_status NOT IN('auto-draft', 'trash')" ;
+                     
+                                                // Sanitize and validate inputs
+                                                $term_ids   = array_map('intval', $taxonomy_terms_ids);
+                                                $post_types = array_map('sanitize_text_field', $this->sort_settings['_rules']['post_type']);
+
+                                                // Prepare placeholders for term_ids
+                                                $term_placeholders = implode(',', array_fill(0, count($term_ids), '%d'));
+
+                                                // Prepare placeholders for post_types
+                                                $post_type_placeholders = implode(',', array_fill(0, count($post_types), '%s'));
+
+                                                // Build the query with placeholders
+                                                $query = $wpdb->prepare(
+                                                    "SELECT COUNT(DISTINCT tr.object_id) as count 
+                                                    FROM {$wpdb->term_relationships} AS tr 
+                                                    INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id 
+                                                    INNER JOIN {$wpdb->posts} AS posts ON tr.object_id = posts.ID
+                                                    WHERE tt.taxonomy = %s 
+                                                    AND tt.term_id IN ({$term_placeholders}) 
+                                                    AND posts.post_type IN ({$post_type_placeholders}) 
+                                                    AND posts.post_status NOT IN('auto-draft', 'trash')",
+                                                    array_merge(
+                                                        [$taxonomy],
+                                                        $term_ids,
+                                                        $post_types
+                                                    )
+                                                );
+
                                                 $count = $wpdb->get_var($query);
+
                                             }
                                     }
                                     else
@@ -1683,8 +1706,8 @@ class APTO_interface
                                                 }
                                                 else
                                                 {
-                                        
-                                                    $arc_query  = "SELECT DISTINCT YEAR(post_date) AS yyear, MONTH(post_date) AS mmonth FROM $wpdb->posts WHERE post_type IN ('". implode("', '", $this->sort_settings['_rules']['post_type'])   ."') ORDER BY post_date DESC";
+                                                    $post_types = array_map('sanitize_text_field', $this->sort_settings['_rules']['post_type']);
+                                                    $arc_query  = "SELECT DISTINCT YEAR(post_date) AS yyear, MONTH(post_date) AS mmonth FROM $wpdb->posts WHERE post_type IN ('". implode("', '", $post_types )   ."') ORDER BY post_date DESC";
                                                     $arc_result = $wpdb->get_results( $arc_query );
 
                                                     $month_count = count($arc_result);

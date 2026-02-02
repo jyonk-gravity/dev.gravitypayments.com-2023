@@ -77,7 +77,7 @@ class JS
 		//loop through scripts
 		foreach($matches[0] as $i => $tag) {
 
-			$atts_array = !empty($matches[2][$i]) ? Utilities::get_atts_array($matches[2][$i]) : array();
+			$atts_array = Utilities::get_atts_array($matches[2][$i] ?? '');
 			
 			//skip if type is not javascript
 			if(isset($atts_array['type']) && !Utilities::match_in_array($atts_array['type'], array('javascript', 'module'))) {

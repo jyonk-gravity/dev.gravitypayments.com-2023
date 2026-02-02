@@ -34,10 +34,23 @@ class PMCS
     //init
     public static function init()
     {
+        //check for disable constant
+        if(\Perfmatters\Config::$code_disabled) {
+            return;
+        }
+
+        //guard against unwanted static asset requests
+        if(isset($_SERVER['REQUEST_URI'])) {
+            $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            if(preg_match('/\.(map|js|css|mjs|json|png|jpg|jpeg|gif|svg|woff2?|ttf)$/i', $path)) {
+                return; 
+            }
+        }
+
         //add pmcs settings loader to perfmatters settings page
         add_action('admin_menu', function() {
             global $perfmatters_settings_page;
-            add_action('load-' . $perfmatters_settings_page, array('Perfmatters\PMCS\PMCS', 'settings_load'));
+            add_action('load-' . $perfmatters_settings_page, array(__CLASS__, 'settings_load'));
         }, 10);
 
         //filter screen options
@@ -46,7 +59,7 @@ class PMCS
         }, 10, 3);
 
         //data handler
-        add_action('admin_init', array('Perfmatters\PMCS\PMCS', 'action_handler'));
+        add_action('admin_init', array(__CLASS__, 'action_handler'));
 
         new Ajax();
 
@@ -85,19 +98,19 @@ class PMCS
                 'code_types' => array(
                     'php' => array(
                         'mime' => Editor::get_mime_for_code_type('php'),
-                        'lint' => false
+                        'lint' => Editor::is_lint_enabled('php')
                     ),
                     'js' => array(
                         'mime' => Editor::get_mime_for_code_type('js'),
-                        'lint' => true
+                        'lint' => Editor::is_lint_enabled('js')
                     ),
                     'css' => array(
                         'mime' => Editor::get_mime_for_code_type('css'),
-                        'lint' => true
+                        'lint' => Editor::is_lint_enabled('css')
                     ),
                     'html' => array(
                         'mime' => Editor::get_mime_for_code_type('html'),
-                        'lint' => true
+                        'lint' => Editor::is_lint_enabled('html')
                     )
                 )
             );
@@ -197,28 +210,7 @@ class PMCS
 
             //export snippet
             if(!empty($_GET['export'])) {
-
                 self::export($_GET['export']);
-
-                //vars
-                /*$file_name = $_GET['export'];
-                $file = self::get_storage_dir() . '/' . $file_name;
-
-                //file not found
-                if(!is_file($file) || $file_name === 'index.php') {
-                    self::admin_notice_redirect('export', 'file_not_found');
-                }
-
-                $snippet_data = Snippet::get($_GET['export']);
-
-
-                $filename = sanitize_title($snippet_data['meta']['name']) . '.json';
-                $json_output = json_encode(array($snippet_data), JSON_PRETTY_PRINT);
-
-
-                // 3. Initiate Download (with cleanup if needed) and Exit
-                self::force_download('pmcs-export-' . $filename, $json_output);*/
-
             }
 
             //delete snippet
@@ -421,7 +413,7 @@ class PMCS
         }
         $meta['modified'] = $now;
 
-        $meta['priority'] = (!is_numeric($meta['priority']) || $meta['priority'] < 1) ? 10 : (int) $meta['priority'];
+        $meta['priority'] = self::get_priority($meta['priority'] ?? null);
 
         //filter optimizations
         if(isset($meta['optimizations']) && is_array($meta['optimizations'])) {
@@ -834,12 +826,11 @@ PHP;
                         //load snippet file
                         require_once($file);
 
-                    }, $snippet['priority'] ?? 10);
+                    }, self::get_priority($snippet['priority'] ?? null));
 
                     break;
 
                 case 'js':
-                case 'css':
 
                     $method = $snippet['optimizations']['method'] ?? '';
                     $minify = $snippet['optimizations']['minify'] ?? 0;
@@ -853,33 +844,28 @@ PHP;
                     if(file_exists($cached_file_path)) {
 
                     	//action variables
-                		$location = $snippet['location'] ?? ($snippet['type'] == 'js' ? 'wp_footer' : 'wp_head');
+                		$location = $snippet['location'] ?? 'wp_footer';
                 		$cached_file_url = '';
-                        $is_footer = false;
+                        $is_footer = ($location == 'wp_footer' || $location == 'admin_footer');
 
                         //file method adjustments
                         if($method == 'file') {
 
                         	//cached file url
                     	 	if($cached_file_url = self::get_cached_file_url($cached_file_name, $snippet['type'])) {
-            	 		 		$is_footer = ($location == 'wp_footer' || $location == 'admin_footer');
-                                //$location = ($location == 'admin_head' || $location == 'admin_footer') ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
+
+                                $location = ($location == 'admin_head' || $location == 'admin_footer') ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
 
                                 //file method behaviors
                                 if(!empty($snippet['optimizations']['behavior'])) {
 
-                                    //js/css preload behavior
+                                    //preload behavior
                                     if($snippet['optimizations']['behavior'] == 'preload') {
 
                                         \Perfmatters\Preload::$snippet_optimizations[] = array(
-                                            'as' => $snippet['type'] == 'js' ? 'script' : 'style',
+                                            'as' => 'script',
                                             'url' => 'pmcs-' . $script_name
                                         );
-                                    }
-                                    //css async behavior
-                                    elseif($snippet['optimizations']['behavior'] == 'async') {
-
-                                        \Perfmatters\CSS::$snippet_optimizations['pmcs-' . $script_name . '-css'] = 'async';
                                     }
                                 }
                     	 	}
@@ -895,51 +881,8 @@ PHP;
                             }
                         }
 
-
-
-
-
-
-
-
-                        if($snippet['type'] == 'css' && $is_footer) {
-
-
-
-                            add_action($location, function() use($snippet, $method, $script_name, $cached_file_url) {
-
-                                if($method == 'file') {
-
-                                    wp_register_style('pmcs-' . $script_name, $cached_file_url, [], strtotime($snippet['modified']));
-
-
-
-
-                                    echo '<link rel="stylesheet" id="pmcs-' . $script_name . '-css" href="' . $cached_file_url . '" media="all">';
-                                }
-                                else {
-                                    $code = file_get_contents($cached_file_path);
-                                    if($code) {
-                                        
-                                        echo '<style id="pmcs-' . $script_name . '-css">' . $code . '</style>';
-                                    }
-                                    
-
-                                }
-
-                            }, $snippet['priority'] ?? 10);
-
-                            break;
-
-                        }
-
-
-
-
-
-                        //action hook
-                        $enqueue_hook = ($location == 'admin_head' || $location == 'admin_footer') ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
-                        add_action($enqueue_hook, function() use($snippet, $script_name, $cached_file_url, $cached_file_path, $is_footer) {
+                        //script enqueues
+                        add_action($location, function() use($snippet, $method, $script_name, $cached_file_url, $cached_file_path, $is_footer) {
 
                             //condition check
                             if(!Conditions::evaluate($snippet['conditions'])) {
@@ -947,13 +890,8 @@ PHP;
                             }
 
                             //enqueue cached file
-                            if($cached_file_url) {
-                                if($snippet['type'] == 'js') {
-                                	wp_enqueue_script('pmcs-' . $script_name, $cached_file_url, [], strtotime($snippet['modified']), $is_footer);
-                                }
-                                else {
-                                	wp_enqueue_style('pmcs-' . $script_name, $cached_file_url, [], strtotime($snippet['modified']));
-                                }
+                            if($method == 'file') {
+                                wp_enqueue_script('pmcs-' . $script_name, $cached_file_url, [], strtotime($snippet['modified']), $is_footer);
                             } 
 
                             //print cached file inline
@@ -961,12 +899,102 @@ PHP;
                                 $code = file_get_contents($cached_file_path);
                                 if($code) {
                                 	$tag = $snippet['type'] == 'js' ? 'script' : 'style';
-                                	echo '<' . $tag . ' id="pmcs-' . $script_name . '-' . $snippet['type'] . '">' . $code . '</' . $tag . '>';
+                                	echo '<script id="pmcs-' . $script_name . '-' . $snippet['type'] . '">' . $code . '</script>';
                                 }
                             }
 
-                        }, $snippet['priority'] ?? 10);
+                        }, self::get_priority($snippet['priority'] ?? null));
                 	}
+
+                    break;
+
+                case 'css':
+
+                    $method = $snippet['optimizations']['method'] ?? '';
+                    $minify = $snippet['optimizations']['minify'] ?? 0;
+
+                    //cached file + path
+                    $script_name = str_replace('.php', '', $file_name);
+                    $cached_file_name = $script_name . ($minify ? '.min' : '') . '.' . $snippet['type'];
+                    $cached_file_path = self::get_storage_dir() . '/' . $snippet['type'] . '/' . $cached_file_name;
+
+                    //cached file exists
+                    if(file_exists($cached_file_path)) {
+
+                        //action variables
+                        $location = $snippet['location'] ?? 'wp_head';
+                        $cached_file_url = '';
+                        $is_footer = ($location == 'wp_footer' || $location == 'admin_footer');
+
+                        //file method adjustments
+                        if($method == 'file') {
+
+                            //cached file url
+                            if($cached_file_url = self::get_cached_file_url($cached_file_name, 'css')) {
+
+                                //file method behaviors
+                                if(!empty($snippet['optimizations']['behavior'])) {
+
+                                    //css preload behavior
+                                    if($snippet['optimizations']['behavior'] == 'preload') {
+
+                                        \Perfmatters\Preload::$snippet_optimizations[] = array(
+                                            'as' => 'style',
+                                            'url' => 'pmcs-' . $script_name
+                                        );
+                                    }
+                                    //css async behavior
+                                    elseif($snippet['optimizations']['behavior'] == 'async') {
+
+                                        \Perfmatters\CSS::$snippet_optimizations['pmcs-' . $script_name . '-css'] = 'async';
+                                    }
+                                }
+                            }
+                        }
+
+                        //enqueue css file
+                        if($method == 'file' && !$is_footer) {
+
+                            $enqueue_hook = ($location == 'admin_head') ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
+                            add_action($enqueue_hook, function() use($snippet, $script_name, $cached_file_url) {
+
+                                //condition check
+                                if(!Conditions::evaluate($snippet['conditions'])) {
+                                    return;
+                                }
+                                
+                                //enqueue stylesheet
+                                wp_enqueue_style('pmcs-' . $script_name, $cached_file_url, [], strtotime($snippet['modified']));
+
+                            }, self::get_priority($snippet['priority'] ?? null));
+
+                            break;
+                        }
+
+                        //print css on action hook
+                        add_action($location, function() use($snippet, $method, $script_name, $cached_file_url, $cached_file_path) {
+
+                            //condition check
+                            if(!Conditions::evaluate($snippet['conditions'])) {
+                                return;
+                            }
+
+                            //file
+                            if($method == 'file') {
+                                wp_register_style('pmcs-' . $script_name, $cached_file_url, [], strtotime($snippet['modified']));
+                                echo '<link rel="stylesheet" id="pmcs-' . $script_name . '-css" href="' . $cached_file_url . '" media="all">';
+                            }
+
+                            //inline
+                            else {
+                                $code = file_get_contents($cached_file_path);
+                                if($code) {
+                                    echo '<style id="pmcs-' . $script_name . '-css">' . $code . '</style>';
+                                }
+                            }
+
+                        }, self::get_priority($snippet['priority'] ?? null));
+                    }
 
                     break;
 
@@ -985,7 +1013,7 @@ PHP;
 
                             require_once $file;
 
-                        }, $snippet['priority']);
+                        }, self::get_priority($snippet['priority'] ?? null));
                     }
 
                     //content filters
@@ -1017,7 +1045,7 @@ PHP;
                                 return $content . $result;
                             }
                             return $content;
-                        }, $snippet['priority'] ?? 10);
+                        }, self::get_priority($snippet['priority'] ?? null));
                     }
 
                 default:
@@ -1136,13 +1164,12 @@ PHP;
         }
 
         if(count($snippet_data) > 1) {
-            $download_name = 'perfmatters-snippets-bulk-export-' . date('Y-m-d') . '.json';
+            $download_name = 'perfmatters-snippets-bulk-export-' . $_SERVER['HTTP_HOST'] . '-' . date('Y-m-d') . '.json';
         }
         else {
             $download_name = 'perfmatters-snippet-' . preg_replace('/\.php$/', '', key($snippet_data)) . '-' . date('Y-m-d') . '.json';
         }
 
-        //$download_name = 'perfmatters-snippets-bulk-export-' . date('Y-m-d') . '.json';
         $json_output = json_encode($snippet_data, JSON_PRETTY_PRINT);
 
 
@@ -1184,5 +1211,10 @@ PHP;
         );
 
         $wp_admin_bar->add_menu($menu_item);
+    }
+
+    //check and validate snippet priority value
+    public static function get_priority($priority, $default = 10) {
+        return is_numeric($priority) ? (int) $priority : $default;
     }
 }

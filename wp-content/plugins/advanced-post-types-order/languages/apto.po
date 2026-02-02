@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Post Types Order\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-25 14:00+0300\n"
-"PO-Revision-Date: 2025-09-25 14:00+0300\n"
+"POT-Creation-Date: 2026-01-13 16:54+0200\n"
+"PO-Revision-Date: 2026-01-13 16:54+0200\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: NspCode <contact@nsp-code.com>\n"
 "Language: en\n"
@@ -129,12 +129,12 @@ msgid "Choose the Taxoomy Name from which the order should be used."
 msgstr ""
 
 #: extends/divi/PostsNavigation.class.php:317
-#: include/apto_functions-class.php:3067
+#: include/apto_functions-class.php:3150
 msgid "Next Post"
 msgstr ""
 
 #: extends/divi/PostsNavigation.class.php:352
-#: include/apto_functions-class.php:3067
+#: include/apto_functions-class.php:3150
 msgid "Previous Post"
 msgstr ""
 
@@ -167,28 +167,28 @@ msgstr ""
 msgid "similar sort"
 msgstr ""
 
-#: include/apto_functions-class.php:2456
+#: include/apto_functions-class.php:2539
 msgid "Subscriber"
 msgstr ""
 
-#: include/apto_functions-class.php:2460
+#: include/apto_functions-class.php:2543
 msgid "Contributor"
 msgstr ""
 
-#: include/apto_functions-class.php:2464 include/apto_interface-class.php:663
+#: include/apto_functions-class.php:2547 include/apto_interface-class.php:663
 #: include/apto_interface_helper-class.php:1776
 msgid "Author"
 msgstr ""
 
-#: include/apto_functions-class.php:2468
+#: include/apto_functions-class.php:2551
 msgid "Editor"
 msgstr ""
 
-#: include/apto_functions-class.php:2472
+#: include/apto_functions-class.php:2555
 msgid "Administrator"
 msgstr ""
 
-#: include/apto_functions-class.php:2789 include/apto_functions-class.php:2884
+#: include/apto_functions-class.php:2872 include/apto_functions-class.php:2967
 #, php-format
 msgid "Use commas instead of %s to separate excluded terms."
 msgstr ""
@@ -513,11 +513,7 @@ msgid "Taxonomy Title"
 msgstr ""
 
 #: include/apto_interface-class.php:1239
-msgid "Total"
-msgstr ""
-
-#: include/apto_interface-class.php:1239 include/apto_interface-class.php:1366
-msgid "Posts"
+msgid "Total Objects"
 msgstr ""
 
 #: include/apto_interface-class.php:1263
@@ -530,6 +526,10 @@ msgstr ""
 
 #: include/apto_interface-class.php:1366
 msgid "Total Topics"
+msgstr ""
+
+#: include/apto_interface-class.php:1366
+msgid "Posts"
 msgstr ""
 
 #: include/apto_interface-class.php:1546

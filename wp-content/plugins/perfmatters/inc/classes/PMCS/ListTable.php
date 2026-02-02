@@ -91,7 +91,7 @@ class ListTable extends \WP_List_Table
 				if(!empty($item['file_name'])) {
 
 					$output = '<a href="?page=' . $_REQUEST['page'] . '&snippet=' . esc_attr($item['file_name']) . '#code">';
-						$output.= $item['name'];
+						$output.= esc_html($item['name']);
 					$output.= '</a>';
 					
 					$actions = array(
@@ -157,7 +157,7 @@ class ListTable extends \WP_List_Table
 
 				//default column value
 				if(!empty($item[$column_name])) {
-					return $item[$column_name];
+					return esc_html($item[$column_name]);
 				}
 				
 				break;
@@ -333,7 +333,7 @@ class ListTable extends \WP_List_Table
 
 		    	//selected tag
 			    if(!empty($_GET['tag'])) {
-			    	echo '<a href="' . remove_query_arg('tag') . '#code" class="pmcs-tag" style="color: #333; text-decoration: none; margin-right: 10px;">' . $_GET['tag'] . '<span class="pmcs-tag-close">×</span></a>';
+			    	echo '<a href="' . remove_query_arg('tag') . '#code" class="pmcs-tag" style="color: #333; text-decoration: none; margin-right: 10px;">' . esc_html($_GET['tag']) . '<span class="pmcs-tag-close">×</span></a>';
 			    }
 
 		        //screen options toggle

@@ -20,6 +20,25 @@
                     if ( ! is_array ( $post_ids ) ||    count ( $post_ids ) < 1 )
                         return $post_ids;
                         
+                    //check if using a menu_order sort by
+                    if ( isset ( $class->template['query_obj'] )    &&  isset ( $class->template['query_obj']['orderby'] ) )
+                        {
+                            $facet_order    =   $class->template['query_obj']['orderby'];
+                            
+                            if ( is_array ( $facet_order )  &&  count ( $facet_order ) > 0 )
+                                {
+                                    $found  =   FALSE;
+                                    foreach ( $facet_order  as  $facet_order_item )    
+                                        {
+                                            if ( $facet_order_item['key']   === 'menu_order' )
+                                                $found  =   TRUE;
+                                        }
+                                        
+                                    if ( ! $found )
+                                        return $post_ids;
+                                }
+                        }
+                        
                     //attempt to identify if using a taxonomy term
                     $facets =   $class->facets;
                     

@@ -22,7 +22,21 @@
                     
                     add_action( 'wp_ajax_update-post-type-interface-sort',  array(&$this, 'savePostTypeInterfaceOrder') );
                     
+                    if ( wp_doing_ajax() )
+                        add_action( 'admin_init', array( $this, 'ajax_init' ) );
+                    
                 }
+                
+            
+            /**
+            * Register the custom columns when AJAX action
+            *     
+            */
+            function ajax_init()
+                {
+                    $this->register_custom_columns();
+                }
+                
             
             /**
             * Attempt to return a sort id which match the current
@@ -76,7 +90,7 @@
                                         '_pto_interface_sort'   =>  array('yes')
                                         );
                                   
-                    $matched_sort_id    =   $this->get_sort_match($screen->post_type, $args);
+                    $matched_sort_id    =   $this->get_sort_match( $screen->post_type, $args );
                     
                     if (empty($matched_sort_id))
                         return;
@@ -112,7 +126,8 @@
                     //Provide a way to disable the drag & drop in certain scenarios
                     if ( ! apply_filters( 'apto/default_interface_sort/allow', TRUE, $matched_sort_id ) )
                         return;
-                    
+
+                    $this->register_custom_columns( array ( $screen->post_type ) );
                     
                     global $wp_query;
                     
@@ -201,6 +216,69 @@
                     wp_localize_script( 'cpt', 'APTO_vars', $vars );
                     
                 }
+                
+                
+                
+            /**
+            * Register the custom column for the post type
+            * 
+            */
+            function register_custom_columns( $post_types = array() )
+                {
+                    if ( count ( $post_types ) < 1 )
+                        {
+                            // register columns for all post types that show a UI
+                            $post_types = get_post_types( array( 'show_ui' => true ), 'names' );
+                        }
+
+                    foreach ( $post_types as $post_type ) 
+                        {
+                            // add/modify columns
+                            add_filter( "manage_{$post_type}_posts_columns", array( $this, 'post_columns' ) );
+
+                            // output column content: receives ($column, $post_id)
+                            add_action( "manage_{$post_type}_posts_custom_column", array( $this, 'post_columns_content' ), 10, 2 );
+
+                        }             
+                }
+                
+                
+            /**
+            * callback to register columns (filter receives $columns array)
+            * 
+            * @param mixed $columns
+            */
+            public function post_columns( $columns ) 
+                {
+                    // Find the position of "cb-select" column
+                    $cb_select_position = array_search('cb', array_keys($columns));
+
+                    // Insert the new column before "cb-select"
+                    $columns = array_slice($columns, 0, $cb_select_position, true) +
+                               array('apto_sort' => '<span class="hidden">' . __('Sort ', 'apto') . '</span><span class="dashicons dashicons-editor-code"></span>') +
+                               array_slice($columns, $cb_select_position, null, true);
+
+                    return $columns;
+                }
+
+            
+            /**
+            * callback to output content (action receives $column, $post_id)
+            * 
+            * @param mixed $column_name
+            * @param mixed $post_id
+            */
+            public function post_columns_content( $column_name, $post_id ) 
+                {
+                    $content = '';
+                    
+                    if ($column_name == 'apto_sort') 
+                        $content    =   '<img class="apto-dd-icon" src="' . APTO_URL . '/images/grip_icon.png" />';   
+                            
+                    echo $content;
+                }
+
+                
                 
             
             /**
@@ -344,11 +422,15 @@
                     $query = "INSERT INTO `". $wpdb->prefix ."apto_sort_list` 
                                 (`sort_view_id`, `object_id`) 
                                 VALUES ";
+                    
+                    $sort_view_id   =   intval ( $sort_view_id );
                                 
                     foreach( $objects_ids as $menu_order   =>  $id ) 
                         {
                             if ($menu_order >   0)
                                 $query  .=  ",\n";
+                            
+                            $id =   intval ( $id );
                                 
                             $query  .=  "('".$sort_view_id."', '".$id."')";
                         }

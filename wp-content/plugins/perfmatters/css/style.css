@@ -255,7 +255,7 @@
 #perfmatters-admin input:checked + .perfmatters-slider:before {
   transform: translateX(20px);
 }
-#perfmatters-admin input[type="text"], #perfmatters-admin select, #perfmatters-admin input[type="file"] {
+#perfmatters-admin input[type="text"], #perfmatters-admin select, #perfmatters-admin input[type="file"], #perfmatters-admin input[type="number"] {
   min-width: 300px;
   margin: 0px;
   border: .5px solid #ccc;

@@ -377,7 +377,7 @@ jQuery(function($) {
 				var day = d.getDate();
 				var dateString = d.getFullYear() + '-' + (month<10 ? '0' : '') + month + '-' + (day<10 ? '0' : '') + day;
 
-			    link.download = 'perfmatters-' + action.split('_').reverse().join('-') + '-' + dateString + '.json';
+			    link.download = 'perfmatters-' + action.split('_').reverse().join('-') + '-' + location.hostname + '-' + dateString + '.json';
 			    link.click();
 	    	}
 

@@ -79,8 +79,7 @@ class LazyLoad
 
 				//try rendering youtube preview placeholder if we need to
 				if(!empty(Config::$options['lazyload']['youtube_preview_thumbnails'])) {
-					$iframe['src'] = trim($iframe_atts['src']);
-					$iframe_lazyload = self::lazyload_youtube_iframe($iframe);
+					$iframe_lazyload = self::lazyload_youtube_iframe($iframe, $iframe_atts);
 				}
 						
 				//default iframe placeholder
@@ -96,7 +95,7 @@ class LazyLoad
 					$iframe_lazyload = str_replace($iframe[1], ' ' . Utilities::get_atts_string($iframe_atts), $iframe[0]);
 					
 					//add noscript original iframe
-					if(apply_filters('perfmatters_lazyload_noscript', true)) {
+					if(apply_filters('perfmatters_lazyload_noscript', false)) {
 						$iframe_lazyload.= '<noscript>' . $iframe[0] . '</noscript>';
 					}
 				}
@@ -112,14 +111,14 @@ class LazyLoad
 	}
 
 	//prep youtube iframe for lazy loading
-	public static function lazyload_youtube_iframe($iframe) {
+	public static function lazyload_youtube_iframe($iframe, $iframe_atts = []) {
 
-		if(!$iframe) {
+		if(!$iframe || empty($iframe_atts['src'])) {
 			return false;
 		}
 
 		//attempt to get the id based on url
-		$result = preg_match('#^(?:https?:)?(?://)?(?:www\.)?(?:youtu\.be|youtube\.com|youtube-nocookie\.com)/(?:embed/|v/|watch/?\?v=)?([\w-]{11})#iU', $iframe['src'], $matches);
+		$result = preg_match('#^(?:https?:)?(?://)?(?:www\.)?(?:youtu\.be|youtube\.com|youtube-nocookie\.com)/(?:embed/|v/|watch/?\?v=)?([\w-]{11})#iU', $iframe_atts['src'], $matches);
 
 		//return false if there is no usable id
 		if(!$result || $matches[1] === 'videoseries') {
@@ -129,13 +128,21 @@ class LazyLoad
 		$youtube_id = $matches[1];
 
 		//parse iframe src url
-		$query = wp_parse_url(htmlspecialchars_decode($iframe['src']), PHP_URL_QUERY);
+		$parsed_url = wp_parse_url(htmlspecialchars_decode($iframe_atts['src']));
 
-		//clean up the url
-		$parsed_url = wp_parse_url($iframe['src'], -1);
+		//adjust query string
+		$query = '';
+		if(!empty($parsed_url['query'])) {
+			$query_params = [];
+		    parse_str($parsed_url['query'], $query_params);
+		    unset($query_params['autoplay']);
+		    $query = http_build_query($query_params);
+		}
+		
+		//reconstruct base url
 		$scheme = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '//';
-		$host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
-		$path = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+		$host   = $parsed_url['host'] ?? '';
+		$path   = $parsed_url['path'] ?? '';
 		$youtube_url = $scheme . $host . $path;
 
 		//thumbnail resolutions
@@ -166,7 +173,7 @@ class LazyLoad
 		$resolution = apply_filters('perfmatters_lazyload_youtube_thumbnail_resolution', 'hqdefault');
 
 		//finished youtube lazy output
-		$youtube_lazyload = '<div class="perfmatters-lazy-youtube" data-src="' . esc_attr($youtube_url) . '" data-id="' . esc_attr($youtube_id) . '" data-query="' . esc_attr($query) . '" onclick="perfmattersLazyLoadYouTube(this);">';
+		$youtube_lazyload = '<div class="perfmatters-lazy-youtube" data-src="' . esc_attr($youtube_url) . '" data-id="' . esc_attr($youtube_id) . '" data-query="' . esc_attr($query) . '" data-referrerpolicy="' . ($iframe_atts['referrerpolicy'] ?? '') . '" onclick="perfmattersLazyLoadYouTube(this);">';
 			$youtube_lazyload.= '<div>';
 				$youtube_lazyload.= '<img src="https://i.ytimg.com/vi/' . esc_attr($youtube_id) .'/' . $resolution . '.jpg" alt="YouTube ' . __('video', 'perfmatters') . '" width="' . $resolutions[$resolution]['width'] . '" height="' . $resolutions[$resolution]['height'] . '" data-pin-nopin="true" nopin="nopin">';
 				$youtube_lazyload.= '<div class="play"></div>';
@@ -174,7 +181,7 @@ class LazyLoad
 		$youtube_lazyload.= '</div>';
 
 		//noscript tag
-		if(apply_filters('perfmatters_lazyload_noscript', true)) {
+		if(apply_filters('perfmatters_lazyload_noscript', false)) {
 			$youtube_lazyload.= '<noscript>' . $iframe[0] . '</noscript>';
 		}
 
@@ -233,7 +240,7 @@ class LazyLoad
 				$video_lazyload  = str_replace($video[1], ' ' . Utilities::get_atts_string($video_atts), $video[0]);
 
 				//add noscript original video
-				if(apply_filters('perfmatters_lazyload_noscript', true)) {
+				if(apply_filters('perfmatters_lazyload_noscript', false)) {
 					$video_lazyload .= '<noscript>' . $video[0] . '</noscript>';
 				}
 
@@ -330,7 +337,7 @@ class LazyLoad
 	public static function lazyload_css() {
 
 		//print noscript styles
-		if(apply_filters('perfmatters_lazyload_noscript', true)) {
+		if(apply_filters('perfmatters_lazyload_noscript', false)) {
 			echo '<noscript><style>.perfmatters-lazy[data-src]{display:none !important;}</style></noscript>';
 		}
 
@@ -384,7 +391,7 @@ class LazyLoad
 		//youtube thumbnails
 		if(!empty(Config::$options['lazyload']['lazy_loading_iframes']) && !empty(Config::$options['lazyload']['youtube_preview_thumbnails'])) {
 			$autoplay = apply_filters('perfmatters_lazyload_youtube_autoplay', true);
-			$output.= 'function perfmattersLazyLoadYouTube(e){var t=document.createElement("iframe"),r="ID?";r+=0===e.dataset.query.length?"":e.dataset.query+"&"' . ($autoplay ? ',r+="autoplay=1"' : '') . ',t.setAttribute("src",r.replace("ID",e.dataset.src)),t.setAttribute("frameborder","0"),t.setAttribute("allowfullscreen","1"),t.setAttribute("allow","accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"),e.replaceChild(t,e.firstChild)}';
+			$output.= 'function perfmattersLazyLoadYouTube(e){var t=document.createElement("iframe"),r="ID?";r+=0===e.dataset.query.length?"":e.dataset.query+"&"' . ($autoplay ? ',r+="autoplay=1"' : '') . ',t.setAttribute("src",r.replace("ID",e.dataset.src)),e.dataset.referrerpolicy && t.setAttribute("referrerpolicy",e.dataset.referrerpolicy),t.setAttribute("frameborder","0"),t.setAttribute("allowfullscreen","1"),t.setAttribute("allow","accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"),e.replaceChild(t,e.firstChild)}';
 		}
 		return $output;
 	}
@@ -612,6 +619,11 @@ class LazyLoad
 			
 			//migrate sizes
 			if(!empty($image_atts['sizes'])) {
+
+				if(!wp_sizes_attribute_includes_valid_auto($image_atts['sizes'])) {
+					$image_atts['sizes'] = 'auto, ' . $image_atts['sizes'];
+				}
+
 				$image_atts['data-sizes'] = $image_atts['sizes'];
 				unset($image_atts['sizes']);
 			}
@@ -626,7 +638,7 @@ class LazyLoad
 		$output = sprintf('<img %1$s />', Utilities::get_atts_string($image_atts));
 
 		//original noscript image
-		if(apply_filters('perfmatters_lazyload_noscript', true)) {
+		if(apply_filters('perfmatters_lazyload_noscript', false)) {
 			$output.= "<noscript>" . $image[0] . "</noscript>";
 		}
 		

@@ -748,6 +748,7 @@ function perfmatters_settings() {
             'id' => 'fastclick',
             'section' => 'assets',
             'tooltip' => __('Load the FastClick library locally to fix the double-click issue on iOS.', 'perfmatters'),
+            'confirmation' => __('Using FastClick is not recommended for most modern mobile browsers and enabling it can sometimes cause problems.', 'perfmatters'),
             'class' => 'assets-delay_js' . (empty($perfmatters_options['assets']['delay_js']) ? ' hidden' : ''). ' pm-advanced-option'
         )
     );

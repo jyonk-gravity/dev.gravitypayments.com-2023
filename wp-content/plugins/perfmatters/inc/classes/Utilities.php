@@ -38,18 +38,19 @@ class Utilities
     //get array of element attributes from attribute string
     public static function get_atts_array($atts_string) {
     
-        if(!empty($atts_string)) {
-            $atts_array = array_map(
-                function(array $attribute) {
-                    return $attribute['value'];
-                },
-                wp_kses_hair($atts_string, self::wp_allowed_protocols())
-            );
+        $atts_array = [];
 
-            return $atts_array;
+        if(!empty($atts_string)) {
+
+            //identify key="value" patterns
+            preg_match_all('/([a-zA-Z0-9-:]+)\s*=\s*(["\'])(.*?)\2/', $atts_string, $matches, PREG_SET_ORDER);
+
+            foreach($matches as $match) {
+                $atts_array[$match[1]] = $match[3];
+            }
         }
 
-        return false;
+        return $atts_array;
     }
 
     //get attribute string from array of element attributes

@@ -152,18 +152,31 @@
                 }
                 
                 
-            function get_tabs($menu_location)
+            function get_tabs( $menu_location )
                 {                    
                     global $wpdb;
                     
                     $tabs   =   array();
                     
-                    $mysql_query = "SELECT * FROM ". $wpdb->posts ."
-                                        INNER JOIN ". $wpdb->postmeta ." AS PM ON (". $wpdb->posts .".ID = PM.post_id)
-                                        WHERE ". $wpdb->posts .".post_parent = 0  
-                                                AND ". $wpdb->posts .".post_type = 'apto_sort' 
-                                                AND ". $wpdb->posts .".post_status = 'publish' 
-                                                AND PM.meta_key = '_location' AND PM.meta_value = '".$menu_location."'";
+                    $menu_location  =   sanitize_text_field ( $menu_location );
+                    
+                    $mysql_query = $wpdb->prepare(
+                                            "
+                                            SELECT p.*
+                                            FROM   {$wpdb->posts}     AS p
+                                            INNER JOIN {$wpdb->postmeta} AS pm
+                                                    ON ( p.ID = pm.post_id
+                                                         AND pm.meta_key   = %s
+                                                         AND pm.meta_value = %s )
+                                            WHERE  p.post_parent = 0
+                                              AND  p.post_type   = %s
+                                              AND  p.post_status = %s
+                                            ",
+                                            '_location',
+                                            $menu_location,
+                                            'apto_sort',
+                                            'publish'
+                                        );
                     $results =   $wpdb->get_results($mysql_query); 
                     
                     foreach($results as $result)

@@ -5,7 +5,7 @@
 * Description: Order Post Types Objects using a Drag and Drop Sortable javascript capability
 * Author: Nsp Code
 * Author URI: http://www.nsp-code.com 
-* Version: 5.8.3
+* Version: 5.9
 * Requires PHP: 5.2
 * Requires at least: 4.1
 * PHP tested up to: 8.4
@@ -16,7 +16,7 @@
     define('APTO_URL_PROTOCOL',     plugins_url('', __FILE__));
     define('APTO_URL',              str_replace(array('https:', 'http:'), "", APTO_URL_PROTOCOL));
 
-    define('APTO_VERSION',          '5.8.3');
+    define('APTO_VERSION',          '5.9');
     define('APTO_DB_VERSION',       '1.1');
     define('APTO_APP_API_URL',      'https://api.nsp-code.com/index.php'); 
     

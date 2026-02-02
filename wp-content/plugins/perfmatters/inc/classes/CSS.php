@@ -145,7 +145,7 @@ class CSS
         foreach($stylesheets as $key => $stylesheet) {
 
             //get attribute array
-            $atts_array = !empty($stylesheet[1]) ? Utilities::get_atts_array($stylesheet[1]) : array();
+            $atts_array = Utilities::get_atts_array($stylesheet[1] ?? '');
 
             //stylesheet check
             if(empty($atts_array['rel']) || $atts_array['rel'] != 'stylesheet') {
@@ -384,7 +384,21 @@ class CSS
                 $type = 'home';
             }
             elseif($wp_query->is_single) {
-                $type = get_post_type() !== false ? get_post_type() : 'single';
+
+                //single post type
+                $post_type = get_post_type();
+                $type = $post_type ?: 'single';
+
+                //add wocommerce product type
+                if($post_type === 'product' && function_exists('wc_get_product')) {
+                    $product = wc_get_product(get_the_ID());
+                    if($product) {
+                        $product_type = $product->get_type();
+                        if(in_array($product_type, ['variable', 'grouped', 'external'])) {
+                            $type.= '-' . $product_type;
+                        }
+                    } 
+                }
             }
             elseif($wp_query->is_category) {
                 $type = 'category';
